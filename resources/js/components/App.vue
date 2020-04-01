@@ -142,7 +142,7 @@
 		display: block;
 	}
 	.app__input-checkbox-wrapper .app__custom-checkbox:after {
-		left: 5px;
+		left: 4px;
 		top: 1px;
 		width: 6px;
 		height: 10px;

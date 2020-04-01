@@ -1,14 +1,14 @@
-		<p>asdfadsfasdfasdfsdf</p>
 		<div class="app">
 			<div id="authorization">
-				<Authorization></Authorization>
+				<authorization></authorization>
 			</div>
 			<div id="presentation">
-				<Presentation></Presentation>
+				<presentation></presentation>
 			</div>
 			<div id="styles">
 				<Styles></Styles>
 			</div>
 		</div>
+		<script type="text/javascript" src="js/app.js"></script>
 	</body>
 </html>

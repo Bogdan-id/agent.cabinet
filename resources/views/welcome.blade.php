@@ -1,4 +1,4 @@
-		<div class="app">
+		<div class="app" id="app">
 			<div id="authorization">
 				<authorization></authorization>
 			</div>

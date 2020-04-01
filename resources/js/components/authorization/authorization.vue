@@ -17,11 +17,14 @@
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
-						class="app__input-text" 
+						class="app__input-text"
+						id="phone"
+						@input="applyMask()"
 						type="text" 
-						placeholder="Телефон"
+						placeholder="+38 (0__) ___ __ __"
 						v-model="phone"
 						/>
+						<span v-if="phoneErrors" class="app__input-errors"> {{ errors.phone }} </span>
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
@@ -57,7 +60,85 @@ export default {
 		name: null,
 		email: null,
 		phone: null,
-		rememberMe: false
+		rememberMe: false,
+		errors: {
+			phone: [
+				'Some error'
+			]
+		}
 	}),
+	methods: {
+		applyMask() {
+			const el = document.getElementById('phone')
+			const event = new Event('input', {bubbles: true})
+
+			// '#' - is place where the real sign (number character) will be substituted
+			// You can add any other characters between first and last '#' below (exclude numbers)
+			// Also you can edit quantity of '#'
+			const mask = '+38 (0##) ### - ## - ##'
+			const sign = '#'
+
+			const numLengthRe = /[^#\d+]/g
+			const notDigit = /[^\d]/g
+
+			const firstIndex = mask.indexOf(sign)
+			const countryCode = mask.slice(0, firstIndex)
+			const numLength = mask.slice(firstIndex).replace(numLengthRe, '').length
+			const number = this.phone.replace(countryCode, '').replace(numLengthRe, '')
+			const cCpresent = this.phone.indexOf(countryCode)
+
+			let splitMask = mask.split('')
+			let indexes = []
+
+			splitMask.forEach((val, i) => {
+				val === sign ? indexes.push(i) : false
+			})
+			let fillMask = (val) => {
+				val.split('').forEach((val, i) => {
+						indexes[i] ? splitMask[indexes[i]] = val : false
+				})
+			}
+			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
+				fillMask(
+					this.phone
+						.replace(countryCode, '')
+						.replace(numLengthRe, '')
+						.slice(number.length - numLength)
+				)
+			} else if(number.length >= numLength && cCpresent === -1) {
+				fillMask(
+					this.phone
+						.replace(numLengthRe, '')
+						.slice(number.length - numLength)
+				)
+			} else if (this.phone.length > 1){
+				fillMask(
+					this.phone
+						.slice(firstIndex)
+						.replace(notDigit, '')
+				)
+			} else if (this.phone.length <= 1) {
+				fillMask(
+					this.phone
+						.replace(notDigit, '')
+				)
+			}
+
+			const joinMask = splitMask.join('').replace(/[^\d]+$/, '')
+
+			if(el.value !== joinMask) {
+				el.value = joinMask
+				el.setSelectionRange(splitMask.indexOf(sign), splitMask.indexOf(sign))
+				el.dispatchEvent(event)
+			}
+			
+			this.pasteEvent = false
+		},
+	},
+	computed: {
+		phoneErrors() {
+			return this.errors.phone.length > 0
+		}
+	}
 }
 </script>

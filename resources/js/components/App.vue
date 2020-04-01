@@ -67,6 +67,7 @@
 			0 10px 40px 0 rgba(0,46,103,.07)
 			, 0 2px 9px 0 rgba(0,46,103, .07);
 		background: #fff;
+		border-radius: 3px;
 	}
 	.app__form-logo-wrapper {
 		display: none;
@@ -90,6 +91,7 @@
 	}
 	.app__input-text-wrapper {
 		position: relative;
+		margin-bottom: 15px;
 	}
 	.app__input-text {
 		font-size: 14px;
@@ -98,7 +100,12 @@
 		padding-left: 16px;
 		border: 1px solid #ced4da;
 		border-radius: 3px;
-		margin-bottom: 15px;
+	}
+	.app__input-errors {
+		color: #f44336;
+		font-size: 7px;
+		margin: 3px 0 0 5px;
+		display: block;
 	}
 	.app__input-text:focus {
 		border: 1px solid #00aeef;

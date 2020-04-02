@@ -74,15 +74,10 @@
 				</div>
 				<div class="app__button-wrapper">
 					<button @click="submit()" class="app__sign-in-btn">Зареєструватися</button>
-					<!-- <div class="app__sign-navigate">
-						<a class="app__sign-navigate-link" href="#">Забули пароль?</a>
-						<a class="app__sign-navigate-link" href="#">Регистрация</a>
-					</div> -->
 				</div>
 				<p class="app__login-footer">
 					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на <a class="--link" href="#">сторінці авторизації</a>
 				</p>
-				<!-- <button @click="test()">TEST</button> -->
 			</div>
 		</div>
 	</div>
@@ -98,6 +93,7 @@ import {
 	minLength,
 	maxLength
 	} from 'vuelidate/lib/validators'
+import { minPassLength, maxPassLength} from '../../variables'
 
 const passMinLength = 6
 const passMaxLength = 24
@@ -131,14 +127,16 @@ export default {
 		},
 		password: {
 			required,
-			minLength: minLength(6),
-			maxLength: maxLength(24),
+			minLength: minLength(minPassLength()),
+			maxLength: maxLength(maxPassLength()),
 		},
 		repeatPassword: {
 			sameAsPassword: sameAs('password')
 		}
 	},
 	methods: {
+		minPassLength,
+		maxPassLength,
 		submit() {
 			!this.$v.$invalid 
 			&& this.$v.$dirty 
@@ -152,7 +150,7 @@ export default {
 				'email': this.email,
 				'number': this.number,
 				'password': this.password,
-				'repeatedPassword': this.repeatPassword
+				'repeatedPassword': this.repeatPassword,
 			}
 		},
 		applyMask() {

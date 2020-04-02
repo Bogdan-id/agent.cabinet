@@ -1,6 +1,6 @@
 		<div class="app" id="app">
-			<div id="registration">
-				<registration></registration>
+			<div id="authorization">
+				<authorization></authorization>
 			</div>
 			<div id="presentation">
 				<presentation></presentation>

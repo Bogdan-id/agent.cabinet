@@ -8,11 +8,11 @@
 	.--link {
 		transition: color 0.2s;
 		text-decoration: none;
-		color: #00aeef;
+		color: #17a2b8;
 	}
 	.--link:hover {
 		transition: color 0.2s;
-		color: #8fcdf0;
+		color: #00aeef;
 	}
 
 

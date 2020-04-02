@@ -41,7 +41,15 @@
 			-webkit-box-sizing: border-box;
 			box-sizing: border-box;
 	}
-	#app {
+
+
+	/* Styles */
+	.app {
+		display: flex;
+		width: 100%;
+		height: 100vh;
+		flex-direction: row;
+		flex-wrap: wrap;
 		font-family: Avenir, Helvetica, Arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
@@ -51,17 +59,6 @@
 		line-height: 1.5;
 		letter-spacing: 0.0125em;
 		font-stretch: ultra-expanded;
-	}
-
-
-	/* Styles */
-	.app {
-		display: flex;
-		/* background: green; */
-		width: 100%;
-		height: 100vh;
-		flex-direction: row;
-		flex-wrap: wrap;
 	}
 
 	/* Form block */
@@ -208,6 +205,7 @@
 	.app__login-footer {
 		font-size: 12px;
 	}
+	
 
 
 	/* Presentation Block */

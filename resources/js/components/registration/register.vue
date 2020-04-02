@@ -95,9 +95,6 @@ import {
 	} from 'vuelidate/lib/validators'
 import { minPassLength, maxPassLength} from '../../variables'
 
-const passMinLength = 6
-const passMaxLength = 24
-
 export default {
 	mixins: [validationMixin],
 	data: () => ({

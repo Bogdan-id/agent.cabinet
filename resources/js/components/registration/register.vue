@@ -20,10 +20,10 @@
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text"
-						id="phone"
+						id="number"
 						type="text" 
 						placeholder="+38 (0__) ___ __ __"
-						v-model="phone"
+						v-model="number"
 						@paste="pasteEvent = true"
 						@input=" applyMask()"
 						/>
@@ -39,20 +39,41 @@
 						@input="$v.email.$touch()"
 						/>
 				</div>
+				<div class="app__input-text-wrapper">
+					<input 
+						class="app__input-text" 
+						type="password" 
+						placeholder="Пароль"
+						v-model="password"
+						@blur="$v.password.$touch()"
+						@input="$v.password.$touch()"
+						/>
+				</div>
+				<div class="app__input-text-wrapper">
+					<input 
+						class="app__input-text" 
+						type="password" 
+						placeholder="Повторіть пароль"
+						v-model="repeatPassword"
+						@blur="$v.repeatPassword.$touch()"
+						@input="$v.repeatPassword.$touch()"
+						/>
+				</div>
 				<div class="app__register-checkbox-wrapper">
 					<input
 						class="app__register-checkbox"
 						id="register-checkbox"
 						type="checkbox"
-						v-model="rememberMe"
+						v-model="consent"
 						/>
 					<span class="app__custom-checkbox"></span>
 					<label for="register-checkbox" class="app__regiser-checkbox-label">
-						Даю свою згоду на обробку моїх персональних даних у відповідності з <a class="--link" href="#">політикою конфіденційності</a>
+						Даю свою згоду на обробку моїх персональних даних у відповідності з 
+						<a class="--link" href="#">політикою конфіденційності</a>
 					</label>
 				</div>
 				<div class="app__button-wrapper">
-					<button class="app__sign-in-btn">Зареєструватися</button>
+					<button @click="submit()" class="app__sign-in-btn">Зареєструватися</button>
 					<!-- <div class="app__sign-navigate">
 						<a class="app__sign-navigate-link" href="#">Забули пароль?</a>
 						<a class="app__sign-navigate-link" href="#">Регистрация</a>
@@ -69,33 +90,73 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, email, alpha } from 'vuelidate/lib/validators'
+import { 
+	required, 
+	email, 
+	alpha, 
+	sameAs,
+	minLength,
+	maxLength
+	} from 'vuelidate/lib/validators'
+
+const passMinLength = 6
+const passMaxLength = 24
 
 export default {
 	mixins: [validationMixin],
 	data: () => ({
+		// inputs
 		name: null,
 		email: null,
-		phone: null,
-		rememberMe: false,
+		number: null,
+		password: null,
+		repeatPassword: null,
+		consent: false,
+
+		// apply mask checker
 		pasteEvent: false,
+
+		// errors
 		errors: {}
 	}),
+
 	validations: {
-		email: {
-			required,
-			email
-		},
 		name: {
 			required,
 			alpha
 		},
-		phone: {
+		email: {
+			required,
+			email
+		},
+		password: {
+			required,
+			minLength: minLength(6),
+			maxLength: maxLength(24),
+		},
+		repeatPassword: {
+			sameAsPassword: sameAs('password')
 		}
 	},
 	methods: {
+		submit() {
+			!this.$v.$invalid 
+			&& this.$v.$dirty 
+			&& this.consent
+				? console.log(this.getRegObject())
+				: false
+		},
+		getRegObject() {
+			return {
+				'name': this.name,
+				'email': this.email,
+				'number': this.number,
+				'password': this.password,
+				'repeatedPassword': this.repeatPassword
+			}
+		},
 		applyMask() {
-			const el = document.getElementById('phone')
+			const el = document.getElementById('number')
 			const event = new Event('input', {bubbles: true})
 			const mask = '+38 (0##) ### - ## - ##'
 			const sign = '#'
@@ -106,8 +167,8 @@ export default {
 			const firstIndex = mask.indexOf(sign)
 			const countryCode = mask.slice(0, firstIndex)
 			const numLength = mask.slice(firstIndex).replace(numLengthRe, '').length
-			const number = this.phone.replace(countryCode, '').replace(numLengthRe, '')
-			const cCpresent = this.phone.indexOf(countryCode)
+			const number = this.number.replace(countryCode, '').replace(numLengthRe, '')
+			const cCpresent = this.number.indexOf(countryCode)
 
 			let splitMask = mask.split('')
 			let indexes = []
@@ -122,26 +183,26 @@ export default {
 			}
 			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
 				fillMask(
-					this.phone
+					this.number
 						.replace(countryCode, '')
 						.replace(numLengthRe, '')
 						.slice(number.length - numLength)
 				)
 			} else if(number.length >= numLength && cCpresent === -1) {
 				fillMask(
-					this.phone
+					this.number
 						.replace(numLengthRe, '')
 						.slice(number.length - numLength)
 				)
-			} else if (this.phone.length > 1){
+			} else if (this.number.length > 1){
 				fillMask(
-					this.phone
+					this.number
 						.slice(firstIndex)
 						.replace(notDigit, '')
 				)
-			} else if (this.phone.length <= 1) {
+			} else if (this.number.length <= 1) {
 				fillMask(
-					this.phone
+					this.number
 						.replace(notDigit, '')
 				)
 			}
@@ -160,7 +221,7 @@ export default {
 	computed: {
 		phoneErrors() {
 			return this.errors.phone.length > 0
-		}
+		},
 	},
 }
 </script>

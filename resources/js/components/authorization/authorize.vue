@@ -4,19 +4,9 @@
 			<div class="app__form-logo-wrapper">
 				<div class="app__header-logo-card"></div>
 			</div>
-			<p class="app__login-form-title">Зареєструватися по номеру телефону</p>
-			<p class="app__login-form-subtitle">Реєстрація</p>
+			<p class="app__login-form-title">Авторизація</p>
+			<p class="app__login-form-subtitle">Вхід до особистого кабінету</p>
 			<div class="app__form">
-				<div class="app__input-text-wrapper">
-					<input 
-						class="app__input-text" 
-						type="text" 
-						placeholder="Ім'я"
-						v-model="name"
-						@input="$v.name.$touch()"
-						@blur="$v.name.$touch()"
-						/>
-				</div>
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text"
@@ -25,18 +15,17 @@
 						placeholder="+38 (0__) ___ __ __"
 						v-model="phone"
 						@paste="pasteEvent = true"
-						@input=" applyMask()"
+						@input="applyMask()"
 						/>
-						<!-- <span v-if="phoneErrors" class="app__input-errors"> {{ errors.phone }} </span> -->
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text" 
 						type="text" 
-						placeholder="Email"
-						v-model="email"
-						@blur="$v.email.$touch()"
-						@input="$v.email.$touch()"
+						placeholder="Пароль"
+						v-model="password"
+						@blur="$v.password.$touch()"
+						@input="$v.password.$touch()"
 						/>
 				</div>
 				<div class="app__register-checkbox-wrapper">
@@ -48,19 +37,16 @@
 						/>
 					<span class="app__custom-checkbox"></span>
 					<label for="register-checkbox" class="app__regiser-checkbox-label">
-						{{ 'Даю свою згоду на обробку моїх персональних даних у відповідності з політикою конфіденційності' }}
+						Запам'ятати мене
 					</label>
 				</div>
 				<div class="app__button-wrapper">
 					<button class="app__sign-in-btn">Зареєструватися</button>
-					<!-- <div class="app__sign-navigate">
-						<a class="app__sign-navigate-link" href="#">Забули пароль?</a>
-						<a class="app__sign-navigate-link" href="#">Регистрация</a>
-					</div> -->
+					<div class="app__sign-navigate">
+						<a class="app__sign-navigate-link --link" href="#">Забули пароль?</a>
+						<a class="app__sign-navigate-link --link" href="#">Регистрация</a>
+					</div>
 				</div>
-				<p class="app__login-footer">
-					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на <a class="--link" href="#">сторінці авторизації</a>
-				</p>
 				<!-- <button @click="test()">TEST</button> -->
 			</div>
 		</div>
@@ -71,36 +57,20 @@
 import { validationMixin } from 'vuelidate'
 import { required, email, alpha } from 'vuelidate/lib/validators'
 
-const numCharLength = (val) => {
-	return new Promise((resolve) => {
-		let length = 12
-		if(val !== null) {
-			resolve(val.replace(/[^\d]/g, '').length === length)
-		}
-	}).then(v => {console.log(v); return v = !v})
-}
-
 export default {
 	mixins: [validationMixin],
 	data: () => ({
-		name: null,
-		email: null,
+		password: null,
 		phone: null,
 		rememberMe: false,
 		pasteEvent: false,
 		errors: {}
 	}),
 	validations: {
-		email: {
+		password: {
 			required,
-			email
-		},
-		name: {
-			required,
-			alpha
 		},
 		phone: {
-			numCharLength
 		}
 	},
 	methods: {

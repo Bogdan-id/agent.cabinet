@@ -6,7 +6,7 @@
 			<div class="app__body-content">
 				<h1 class="app__body-content-header">Заощаджуємо час та гроші —</h1>
 				<h1 class="app__body-content-subheader">легко переходимо на лізинг онлайн!</h1>
-				<p>
+				<p class="app__presentation-para">
 					Проводячи операцію з придбання майна в лізинг з використанням продуктів компанії
 					Best Leasing в онлайн-режимі, Ви відчуєте всі переваги електронного
 					документообігу:

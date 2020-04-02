@@ -6,8 +6,13 @@
 <style>
 	/* Modifiers */
 	.--link {
+		transition: color 0.2s;
 		text-decoration: none;
 		color: #00aeef;
+	}
+	.--link:hover {
+		transition: color 0.2s;
+		color: #8fcdf0;
 	}
 
 
@@ -70,7 +75,7 @@
 		background: #f5f9ff;
 	}
 	.app__login-form {
-		margin: 0 35px;
+		margin: 0 45px;
 		text-align: left;
 		width: 450px;
 		padding: 30px 50px;
@@ -133,7 +138,7 @@
 		position: relative;
 		padding-left: 35px;
 		cursor: pointer;
-		font-size: 10px;
+		font-size: 11px;
 		user-select: none;
 	}
 	/* hide checkbox */
@@ -147,9 +152,9 @@
 	.app__custom-checkbox {
 		border: 1px solid grey;
 		position: absolute;
-		top: 5px;
+		top: 2px;
 		left: 0;
-		height: 14px;
+		height: 15px;
 		width: 15px;
 		background-color: #fff;
 		transition: all 0.5s;
@@ -178,7 +183,8 @@
 	}
 	.app__button-wrapper {
 		display: flex;
-		margin: 11px 0;
+		align-items: flex-start;
+		margin: 15px 0;
 	}
 	.app__sign-in-btn {
 		transition: all 0.3s;
@@ -196,8 +202,6 @@
 		margin: 0 0 0 12px;
 	}
 	.app__sign-navigate-link {
-		text-decoration: none;
-		color: #3fb3ef;
 		display: block;
 		font-size: 12px;
 	}
@@ -252,23 +256,30 @@
     transform: translate3d(-50%,-40%,0);
 	}
 	.app__body-content-header {
-		font-size: 25px; 
+		font-size: 29px; 
 		margin-top: 0;
+		line-height: 30px;
 	}
 	.app__body-content-subheader {
-		font-size: 22px; 
+		line-height: 25px;
+		font-size: 25px; 
 		font-weight: 400;
+	}
+	.app__presentation-para {
+		font-size: 15px;
 	}
 	.app__presentation-block-ul {
 		list-style-type: disc; 
-		margin-bottom: 15px;
+		margin-bottom: 25px;
 	}
 	.app__presentation-block-li {
 		margin: 5px 0;
+		font-size: 15px;
 	}
 	.app__presentation-block-btn-reg {
 		transition: all 0.2s;
 		margin-top: 15px;
+		font-size: 16px;
 		cursor: pointer;
 		padding: 8px 16px;
 		background: #00aeef;

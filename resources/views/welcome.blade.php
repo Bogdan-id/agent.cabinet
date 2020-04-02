@@ -1,6 +1,6 @@
 		<div class="app" id="app">
-			<div id="authorization">
-				<authorization></authorization>
+			<div id="recovery-password">
+				<recovery></recovery>
 			</div>
 			<div id="presentation">
 				<presentation></presentation>

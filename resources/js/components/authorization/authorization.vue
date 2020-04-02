@@ -4,77 +4,109 @@
 			<div class="app__form-logo-wrapper">
 				<div class="app__header-logo-card"></div>
 			</div>
-			<p class="app__login-form-title">Авторизация</p>
-			<p class="app__login-form-subtitle">Вход в личный кабинет</p>
+			<p class="app__login-form-title">Зареєструватися по номеру телефону</p>
+			<p class="app__login-form-subtitle">Реєстрація</p>
 			<div class="app__form">
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text" 
 						type="text" 
-						placeholder="Имя"
+						placeholder="Ім'я"
 						v-model="name"
+						@input="$v.name.$touch()"
+						@blur="$v.name.$touch()"
 						/>
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text"
 						id="phone"
-						@input="applyMask()"
 						type="text" 
 						placeholder="+38 (0__) ___ __ __"
 						v-model="phone"
+						@paste="pasteEvent = true"
+						@input=" applyMask()"
 						/>
-						<span v-if="phoneErrors" class="app__input-errors"> {{ errors.phone }} </span>
+						<!-- <span v-if="phoneErrors" class="app__input-errors"> {{ errors.phone }} </span> -->
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text" 
 						type="text" 
-						placeholder="Email" 
+						placeholder="Email"
 						v-model="email"
+						@blur="$v.email.$touch()"
+						@input="$v.email.$touch()"
 						/>
 				</div>
-				<label class="app__input-checkbox-wrapper">
-					{{ 'Запомнить меня' }}
-					<input 
+				<div class="app__register-checkbox-wrapper">
+					<input
+						class="app__register-checkbox"
+						id="register-checkbox"
 						type="checkbox"
 						v-model="rememberMe"
 						/>
 					<span class="app__custom-checkbox"></span>
-				</label>
-				<div class="app__button-wrapper">
-					<button class="app__sign-in-btn">Войти</button>
-					<div class="app__sign-navigate">
-						<a class="app__sign-navigate-link" href="#">Забыли пароль?</a>
-						<a class="app__sign-navigate-link" href="#">Регистрация</a>
-					</div>
+					<label for="register-checkbox" class="app__regiser-checkbox-label">
+						{{ 'Даю свою згоду на обробку моїх персональних даних у відповідності з політикою конфіденційності' }}
+					</label>
 				</div>
+				<div class="app__button-wrapper">
+					<button class="app__sign-in-btn">Зареєструватися</button>
+					<!-- <div class="app__sign-navigate">
+						<a class="app__sign-navigate-link" href="#">Забули пароль?</a>
+						<a class="app__sign-navigate-link" href="#">Регистрация</a>
+					</div> -->
+				</div>
+				<p class="app__login-footer">
+					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на <a class="--link" href="#">сторінці авторизації</a>
+				</p>
+				<!-- <button @click="test()">TEST</button> -->
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import { required, email, alpha } from 'vuelidate/lib/validators'
+
+const numCharLength = (val) => {
+	return new Promise((resolve) => {
+		let length = 12
+		if(val !== null) {
+			resolve(val.replace(/[^\d]/g, '').length === length)
+		}
+	}).then(v => {console.log(v); return v = !v})
+}
+
 export default {
+	mixins: [validationMixin],
 	data: () => ({
 		name: null,
 		email: null,
 		phone: null,
 		rememberMe: false,
-		errors: {
-			phone: [
-				'Some error'
-			]
-		}
+		pasteEvent: false,
+		errors: {}
 	}),
+	validations: {
+		email: {
+			required,
+			email
+		},
+		name: {
+			required,
+			alpha
+		},
+		phone: {
+			numCharLength
+		}
+	},
 	methods: {
 		applyMask() {
 			const el = document.getElementById('phone')
 			const event = new Event('input', {bubbles: true})
-
-			// '#' - is place where the real sign (number character) will be substituted
-			// You can add any other characters between first and last '#' below (exclude numbers)
-			// Also you can edit quantity of '#'
 			const mask = '+38 (0##) ### - ## - ##'
 			const sign = '#'
 
@@ -139,6 +171,6 @@ export default {
 		phoneErrors() {
 			return this.errors.phone.length > 0
 		}
-	}
+	},
 }
 </script>

@@ -4,6 +4,14 @@
 </template>
 
 <style>
+	/* Modifiers */
+	.--link {
+		text-decoration: none;
+		color: #00aeef;
+	}
+
+
+	/* Predefined styles */
 	.styles {
 		display: none;
 	}
@@ -37,7 +45,11 @@
 		font-weight: 400;
 		line-height: 1.5;
 		letter-spacing: 0.0125em;
+		font-stretch: ultra-expanded;
 	}
+
+
+	/* Styles */
 	.app {
 		display: flex;
 		/* background: green; */
@@ -46,7 +58,6 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 	}
-
 
 	/* Form block */
 	.app__form-block {
@@ -82,12 +93,14 @@
 	}
 	.app__login-form-subtitle {
 		font-size: 20px;
+		margin: 0 0 8px 0;
+	}
+	.app__login-form-subtitle-2 {
+		font-size: 16px;
+		margin: 0 0 8px 0;
 	}
 	.app__form {
 		/*  */
-	}
-	.app__login-form-subtitle {
-		margin: 0 0 8px 0;
 	}
 	.app__input-text-wrapper {
 		position: relative;
@@ -103,22 +116,28 @@
 	}
 	.app__input-errors {
 		color: #f44336;
-		font-size: 7px;
+		font-size: 10px;
 		margin: 3px 0 0 5px;
 		display: block;
 	}
 	.app__input-text:focus {
 		border: 1px solid #00aeef;
 	}
-	.app__input-checkbox-wrapper {
+	.app__register-checkbox-wrapper {
+		position: relative;
+	}
+	.app__regiser-checkbox-label {
 		display: block;
+		padding-top: 0;
+		margin-top: 0;
 		position: relative;
 		padding-left: 35px;
 		cursor: pointer;
-		font-size: 12px;
+		font-size: 10px;
 		user-select: none;
 	}
-	.app__input-checkbox-wrapper input {
+	/* hide checkbox */
+	.app__register-checkbox {
 		position: absolute;
 		opacity: 0;
 		cursor: pointer;
@@ -128,14 +147,14 @@
 	.app__custom-checkbox {
 		border: 1px solid grey;
 		position: absolute;
-		top: 0;
+		top: 5px;
 		left: 0;
 		height: 14px;
 		width: 15px;
 		background-color: #fff;
 		transition: all 0.5s;
 	}
-	.app__input-checkbox-wrapper input:checked ~ .app__custom-checkbox {
+	input:checked ~ .app__custom-checkbox {
 		transition: all 0.5s;
 		border: 0;
 		background-color: #00aeef;
@@ -145,11 +164,11 @@
 		position: absolute;
 		display: none;
 	}
-	.app__input-checkbox-wrapper input:checked ~ .app__custom-checkbox:after {
+	input:checked ~ .app__custom-checkbox:after {
 		display: block;
 	}
-	.app__input-checkbox-wrapper .app__custom-checkbox:after {
-		left: 4px;
+	.app__custom-checkbox:after {
+		left: 5px;
 		top: 1px;
 		width: 6px;
 		height: 10px;
@@ -180,6 +199,9 @@
 		text-decoration: none;
 		color: #3fb3ef;
 		display: block;
+		font-size: 12px;
+	}
+	.app__login-footer {
 		font-size: 12px;
 	}
 

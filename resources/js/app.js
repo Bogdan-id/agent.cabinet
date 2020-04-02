@@ -2,6 +2,9 @@ require('./bootstrap')
 
 window.Vue = require('vue')
 
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
+
 import Styles from './components/App.vue'
 import Presentation from './components/present-block.vue'
 import Authorization from './components/authorization/authorization.vue'

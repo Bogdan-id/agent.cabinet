@@ -4,17 +4,36 @@
 			<div class="app__form-logo-wrapper">
 				<div class="app__header-logo-card"></div>
 			</div>
-			<p class="app__login-form-title">Зареєструватися по номеру телефону</p>
-			<p class="app__login-form-subtitle">Реєстрація</p>
+			<p class="app__login-form-title">Реєстрація</p>
 			<div class="app__form">
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text" 
 						type="text" 
+						placeholder="Прізвище"
+						v-model="lastName"
+						@input="$v.lastName.$touch()"
+						@blur="$v.lastName.$touch()"
+						/>
+				</div>
+				<div class="app__input-text-wrapper">
+					<input 
+						class="app__input-text" 
+						type="text" 
 						placeholder="Ім'я"
-						v-model="name"
-						@input="$v.name.$touch()"
-						@blur="$v.name.$touch()"
+						v-model="firstName"
+						@input="$v.firstName.$touch()"
+						@blur="$v.firstName.$touch()"
+						/>
+				</div>
+				<div class="app__input-text-wrapper">
+					<input 
+						class="app__input-text" 
+						type="text" 
+						placeholder="По батькові"
+						v-model="patronymic"
+						@input="$v.patronymic.$touch()"
+						@blur="$v.patronymic.$touch()"
 						/>
 				</div>
 				<div class="app__input-text-wrapper">
@@ -84,6 +103,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import { 
 	required, 
@@ -99,7 +119,9 @@ export default {
 	mixins: [validationMixin],
 	data: () => ({
 		// inputs
-		name: null,
+		firstName: null,
+		lastName: null,
+		patronymic: null,
 		email: null,
 		number: null,
 		password: null,
@@ -114,7 +136,15 @@ export default {
 	}),
 
 	validations: {
-		name: {
+		firstName: {
+			required,
+			alpha
+		},
+		lastName: {
+			required,
+			alpha
+		},
+		patronymic: {
 			required,
 			alpha
 		},
@@ -135,19 +165,35 @@ export default {
 		minPassLength,
 		maxPassLength,
 		submit() {
-			!this.$v.$invalid 
-			&& this.$v.$dirty 
-			&& this.consent
-				? console.log(this.getRegObject())
-				: false
+			console.log(JSON.stringify(this.getRegObject()))
+			// console.log(this.$v)
+			// !this.$v.$invalid 
+			// && this.$v.$dirty 
+			// && this.consent
+			// 	? console.log(this.getRegObject())
+			// 	: false
+			const token = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR'
+			const email = 'test@test.com'
+			const password = 12341234
+			axios.post(`/register`, {
+      	body: JSON.stringify(this.getRegObject(password, email))
+			})
+			.then(response => {
+				console.log(response)
+			})
+			.catch(e => {
+				console.log(e)
+			})
 		},
-		getRegObject() {
+		getRegObject(password, email) {
 			return {
-				'name': this.name,
-				'email': this.email,
-				'number': this.number,
-				'password': this.password,
-				'repeatedPassword': this.repeatPassword,
+				'first_name': this.firstName,
+				'last_name': this.lastName,
+				'patronymic': this.patronymic,
+				'email': email,
+				'phone': this.number,
+				'password': password,
+				'password_confirmation': password,
 			}
 		},
 		applyMask() {

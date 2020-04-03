@@ -2175,11 +2175,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _variables__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../variables */ "./resources/js/variables.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _variables__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../variables */ "./resources/js/variables.js");
 //
 //
 //
@@ -2265,15 +2267,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [vuelidate__WEBPACK_IMPORTED_MODULE_0__["validationMixin"]],
+  mixins: [vuelidate__WEBPACK_IMPORTED_MODULE_1__["validationMixin"]],
   data: function data() {
     return {
       // inputs
-      name: null,
+      firstName: null,
+      lastName: null,
+      patronymic: null,
       email: null,
       number: null,
       password: null,
@@ -2286,36 +2310,62 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   validations: {
-    name: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-      alpha: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["alpha"]
+    firstName: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+      alpha: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["alpha"]
+    },
+    lastName: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+      alpha: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["alpha"]
+    },
+    patronymic: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+      alpha: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["alpha"]
     },
     email: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-      email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["email"]
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+      email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["email"]
     },
     password: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
-      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["minLength"])(Object(_variables__WEBPACK_IMPORTED_MODULE_2__["minPassLength"])()),
-      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(Object(_variables__WEBPACK_IMPORTED_MODULE_2__["maxPassLength"])())
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["minLength"])(Object(_variables__WEBPACK_IMPORTED_MODULE_3__["minPassLength"])()),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["maxLength"])(Object(_variables__WEBPACK_IMPORTED_MODULE_3__["maxPassLength"])())
     },
     repeatPassword: {
-      sameAsPassword: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["sameAs"])('password')
+      sameAsPassword: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["sameAs"])('password')
     }
   },
   methods: {
-    minPassLength: _variables__WEBPACK_IMPORTED_MODULE_2__["minPassLength"],
-    maxPassLength: _variables__WEBPACK_IMPORTED_MODULE_2__["maxPassLength"],
+    minPassLength: _variables__WEBPACK_IMPORTED_MODULE_3__["minPassLength"],
+    maxPassLength: _variables__WEBPACK_IMPORTED_MODULE_3__["maxPassLength"],
     submit: function submit() {
-      !this.$v.$invalid && this.$v.$dirty && this.consent ? console.log(this.getRegObject()) : false;
+      console.log(JSON.stringify(this.getRegObject())); // console.log(this.$v)
+      // !this.$v.$invalid 
+      // && this.$v.$dirty 
+      // && this.consent
+      // 	? console.log(this.getRegObject())
+      // 	: false
+
+      var token = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR';
+      var email = 'test@test.com';
+      var password = 12341234;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/register", {
+        body: JSON.stringify(this.getRegObject(password, email))
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (e) {
+        console.log(e);
+      });
     },
-    getRegObject: function getRegObject() {
+    getRegObject: function getRegObject(password, email) {
       return {
-        'name': this.name,
-        'email': this.email,
-        'number': this.number,
-        'password': this.password,
-        'repeatedPassword': this.repeatPassword
+        'first_name': this.firstName,
+        'last_name': this.lastName,
+        'patronymic': this.patronymic,
+        'email': email,
+        'phone': this.number,
+        'password': password,
+        'password_confirmation': password
       };
     },
     applyMask: function applyMask() {
@@ -6918,7 +6968,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\t/* Modifiers */\n.\\--link {\n\t\ttransition: color 0.2s;\n\t\ttext-decoration: none;\n\t\tcolor: #17a2b8;\n}\n.\\--link:hover {\n\t\ttransition: color 0.2s;\n\t\tcolor: #00aeef;\n}\n\n\n\t/* Predefined styles */\n.styles {\n\t\tdisplay: none;\n}\n.html, body {\n\t\tmargin: 0;\n}\ninput, button {\n\t\tborder: 0;\n\t\toutline: none;\n\t\tpadding: 0;\n\t\tmargin: 0;\n}\nbutton {\n\t\tcursor: pointer;\n}\n::-moz-selection {\n    background-color: #b3d4fc;\n    color: #000;\n    text-shadow: none;\n}\n::selection {\n    background-color: #b3d4fc;\n    color: #000;\n    text-shadow: none;\n}\n*, :after, :before {\n\t\t\tbox-sizing: border-box;\n}\n\n\n\t/* Styles */\n.app {\n\t\tdisplay: flex;\n\t\twidth: 100%;\n\t\theight: 100vh;\n\t\tflex-direction: row;\n\t\tflex-wrap: wrap;\n\t\tfont-family: Avenir, Helvetica, Arial, sans-serif;\n\t\t-webkit-font-smoothing: antialiased;\n\t\t-moz-osx-font-smoothing: grayscale;\n\t\ttext-align: center;\n\t\tcolor: #2c3e50;\n\t\tfont-weight: 400;\n\t\tline-height: 1.5;\n\t\tletter-spacing: 0.0125em;\n\t\tfont-stretch: ultra-expanded;\n}\n\n\t/* Form block */\n.app__form-block {\n\t\twidth: auto;\n\t\theight: 100vh;\n\t\tdisplay: flex;\n\t\tflex-wrap: wrap;\n\t\tjustify-content: center;\n\t\talign-items: center;\n\t\tbackground: #f5f9ff;\n}\n.app__login-form {\n\t\tmargin: 0 45px;\n\t\ttext-align: left;\n\t\twidth: 450px;\n\t\tpadding: 30px 50px;\n\t\tbox-shadow: \n\t\t\t0 10px 40px 0 rgba(0,46,103,.07)\n\t\t\t, 0 2px 9px 0 rgba(0,46,103, .07);\n\t\tbackground: #fff;\n\t\tborder-radius: 3px;\n}\n.app__form-logo-wrapper {\n\t\tdisplay: none;\n\t\twidth: 100%;\n\t\tjustify-content: center;\n\t\tmargin-bottom: 25px;\n}\n.app__login-form-title {\n\t\tfont-size: 18px;\n\t\tcolor: #002e67;\n\t\tmargin: 0;\n}\n.app__login-form-subtitle {\n\t\tfont-size: 20px;\n\t\tmargin: 0 0 8px 0;\n}\n.app__login-form-subtitle-2 {\n\t\tfont-size: 16px;\n\t\tmargin: 0 0 8px 0;\n}\n.app__form {\n\t\t/*  */\n}\n.app__input-text-wrapper {\n\t\tposition: relative;\n\t\tmargin-bottom: 15px;\n}\n.app__input-text {\n\t\tfont-size: 14px;\n\t\theight: 45px;\n\t\twidth: 100%;\n\t\tpadding-left: 16px;\n\t\tborder: 1px solid #ced4da;\n\t\tborder-radius: 3px;\n}\n.app__input-errors {\n\t\tcolor: #f44336;\n\t\tfont-size: 10px;\n\t\tmargin: 3px 0 0 5px;\n\t\tdisplay: block;\n}\n.app__input-text:focus {\n\t\tborder: 1px solid #00aeef;\n}\n.app__register-checkbox-wrapper {\n\t\tposition: relative;\n}\n.app__regiser-checkbox-label {\n\t\tdisplay: block;\n\t\tpadding-top: 0;\n\t\tmargin-top: 0;\n\t\tposition: relative;\n\t\tpadding-left: 35px;\n\t\tcursor: pointer;\n\t\tfont-size: 11px;\n\t\t-webkit-user-select: none;\n\t\t   -moz-user-select: none;\n\t\t    -ms-user-select: none;\n\t\t        user-select: none;\n}\n\t/* hide checkbox */\n.app__register-checkbox {\n\t\tposition: absolute;\n\t\topacity: 0;\n\t\tcursor: pointer;\n\t\theight: 0;\n\t\twidth: 0;\n}\n.app__custom-checkbox {\n\t\tborder: 1px solid grey;\n\t\tposition: absolute;\n\t\ttop: 2px;\n\t\tleft: 0;\n\t\theight: 15px;\n\t\twidth: 15px;\n\t\tbackground-color: #fff;\n\t\ttransition: all 0.5s;\n}\ninput:checked ~ .app__custom-checkbox {\n\t\ttransition: all 0.5s;\n\t\tborder: 0;\n\t\tbackground-color: #00aeef;\n}\n.app__custom-checkbox:after {\n\t\tcontent: \"\";\n\t\tposition: absolute;\n\t\tdisplay: none;\n}\ninput:checked ~ .app__custom-checkbox:after {\n\t\tdisplay: block;\n}\n.app__custom-checkbox:after {\n\t\tleft: 5px;\n\t\ttop: 1px;\n\t\twidth: 6px;\n\t\theight: 10px;\n\t\tborder: solid white;\n\t\tborder-width: 0 3px 3px 0;\n\t\ttransform: rotate(45deg);\n}\n.app__button-wrapper {\n\t\tdisplay: flex;\n\t\talign-items: flex-start;\n\t\tmargin: 15px 0;\n}\n.app__sign-in-btn {\n\t\ttransition: all 0.3s;\n\t\tcursor: pointer;\n\t\tpadding: 10px 25px;\n\t\tcolor: #fff;\n\t\tbackground: #00aeef;\n}\n.app__sign-in-btn:hover {\n\t\ttransition: all 0.3s;\n\t\tbackground: #039dd4;\n\t\tbox-shadow: 0px 3px 6px -1px rgba(0,174,239,1);\n}\n.app__sign-navigate {\n\t\tmargin: 0 0 0 12px;\n}\n.app__sign-navigate-link {\n\t\tdisplay: block;\n\t\tfont-size: 12px;\n}\n.app__login-footer {\n\t\tfont-size: 12px;\n}\n\t\n\n\n\t/* Presentation Block */\n.app__presentation-block {\n\t\tflex: 1 1 auto;\n\t\twidth: auto;\n\t\tdisplay: flex;\n\t\tflex-direction: column;\n\t\tbackground-image: url(" + escape(__webpack_require__(/*! ../assets/auto.png */ "./resources/js/assets/auto.png")) + "),\n\t\t\tlinear-gradient(180deg,#32a3dc 0,#fff);\n    background-repeat: no-repeat;\n    background-position: 0 100%;\n    background-size: 150%;\n}\n.app__presentation-block-wrapper {\n\t\tposition: relative; \n\t\theight: 100%;\n}\n.app__header-logo {\n\t\tmargin: 35px 0 0 35px;\n\t\tbackground: url(" + escape(__webpack_require__(/*! ../assets/best-leasing-logo.png */ "./resources/js/assets/best-leasing-logo.png")) + ");\n\t\tbackground-size: 160px 45px;\n\t\twidth: 160px;\n\t\theight: 45px;\n}\n.app__header-logo-card {\n\t\tbackground: url(" + escape(__webpack_require__(/*! ../assets/best-leasing-logo.png */ "./resources/js/assets/best-leasing-logo.png")) + ");\n\t\tbackground-size: 160px 45px;\n\t\twidth: 160px;\n\t\theight: 45px;\n}\n.app__body-content {\n\t\tline-height: 160%;\n\t\tfont-weight: lighter;\n\t\tfont-size: 13px;\n\t\ttop: 50%;   \n\t\tleft: 50%;\n    width: 80%;\n\t\tpadding: 35px;\n\t\tborder-radius: 4px;\n\t\t-webkit-backdrop-filter: blur(5px);\n\t\t        backdrop-filter: blur(5px);\n\t\tbackground-color: rgba(0,46,103,.5);\n\t\tcolor: #fff;\n\t\ttext-align: left;\n\t\tposition: absolute;  \n    transform: translate3d(-50%,-40%,0);\n}\n.app__body-content-header {\n\t\tfont-size: 29px; \n\t\tmargin-top: 0;\n\t\tline-height: 30px;\n}\n.app__body-content-subheader {\n\t\tline-height: 25px;\n\t\tfont-size: 25px; \n\t\tfont-weight: 400;\n}\n.app__presentation-para {\n\t\tfont-size: 15px;\n}\n.app__presentation-block-ul {\n\t\tlist-style-type: disc; \n\t\tmargin-bottom: 25px;\n}\n.app__presentation-block-li {\n\t\tmargin: 5px 0;\n\t\tfont-size: 15px;\n}\n.app__presentation-block-btn-reg {\n\t\ttransition: all 0.2s;\n\t\tmargin-top: 15px;\n\t\tfont-size: 16px;\n\t\tcursor: pointer;\n\t\tpadding: 8px 16px;\n\t\tbackground: #00aeef;\n}\n.app__presentation-block-btn-reg:hover {\n\t\ttransition: all 0.2s;\n\t\tbackground: #039dd4;\n\t\tbox-shadow: 0px 3px 6px -1px rgba(0,174,239,1);\n}\n@media(min-width: 1200px) {\n.app__presentation-block {\n\t\t\tbackground-size: 100%;\n\t\t\tbackground-position: 0 100%;\n}\n}\n@media (max-width: 893px), screen and (max-height: 593px) {\n.app__presentation-block {\n\t\t\tdisplay: none;\n}\n.app__form-block {\n\t\t\twidth: 100%;\n\t\t\tbackground-image: url(" + escape(__webpack_require__(/*! ../assets/auto.png */ "./resources/js/assets/auto.png")) + "),\n\t\t\tlinear-gradient(180deg,#32a3dc 0,#fff);\n\t\t\tbackground-repeat: no-repeat;\n\t\t\tbackground-position: 0 100%;\n\t\t\tbackground-size: 150%;\n}\n.app__form-logo-wrapper {\n\t\t\tdisplay: flex;\n}\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\t/* Modifiers */\n.\\--link {\n\t\ttransition: color 0.2s;\n\t\ttext-decoration: none;\n\t\tcolor: #17a2b8;\n}\n.\\--link:hover {\n\t\ttransition: color 0.2s;\n\t\tcolor: #00aeef;\n}\n\n\n\t/* Predefined styles */\n.styles {\n\t\tdisplay: none;\n}\n.html, body {\n\t\tmargin: 0;\n}\ninput, button {\n\t\tborder: 0;\n\t\toutline: none;\n\t\tpadding: 0;\n\t\tmargin: 0;\n}\nbutton {\n\t\tcursor: pointer;\n}\n::-moz-selection {\n    background-color: #b3d4fc;\n    color: #000;\n    text-shadow: none;\n}\n::selection {\n    background-color: #b3d4fc;\n    color: #000;\n    text-shadow: none;\n}\n*, :after, :before {\n\t\t\tbox-sizing: border-box;\n}\n\n\n\t/* Styles */\n.app {\n\t\tdisplay: flex;\n\t\twidth: 100%;\n\t\theight: 100vh;\n\t\tflex-direction: row;\n\t\tflex-wrap: wrap;\n\t\tfont-family: Avenir, Helvetica, Arial, sans-serif;\n\t\t-webkit-font-smoothing: antialiased;\n\t\t-moz-osx-font-smoothing: grayscale;\n\t\ttext-align: center;\n\t\tcolor: #2c3e50;\n\t\tfont-weight: 400;\n\t\tline-height: 1.5;\n\t\tletter-spacing: 0.0125em;\n\t\tfont-stretch: ultra-expanded;\n}\n\n\t/* Form block */\n.app__form-block {\n\t\twidth: auto;\n\t\theight: 100vh;\n\t\tdisplay: flex;\n\t\tflex-wrap: wrap;\n\t\tjustify-content: center;\n\t\talign-items: center;\n\t\tbackground: #f5f9ff;\n}\n.app__login-form {\n\t\tmargin: 0 45px;\n\t\ttext-align: left;\n\t\twidth: 450px;\n\t\tpadding: 30px 50px;\n\t\tbox-shadow: \n\t\t\t0 10px 40px 0 rgba(0,46,103,.07)\n\t\t\t, 0 2px 9px 0 rgba(0,46,103, .07);\n\t\tbackground: #fff;\n\t\tborder-radius: 3px;\n}\n.app__form-logo-wrapper {\n\t\tdisplay: none;\n\t\twidth: 100%;\n\t\tjustify-content: center;\n}\n.app__login-form-title {\n\t\tfont-size: 20px;\n\t\tcolor: #002e67;\n\t\tmargin: 0;\n\t\tline-height: 38px;\n}\n.app__login-form-subtitle-2 {\n\t\tfont-size: 16px;\n\t\tmargin: 0 0 8px 0;\n}\n.app__form {\n\t\t/*  */\n}\n.app__input-text-wrapper {\n\t\tposition: relative;\n\t\tmargin-bottom: 15px;\n}\n.app__input-text {\n\t\tfont-size: 14px;\n\t\theight: 45px;\n\t\twidth: 100%;\n\t\tpadding-left: 16px;\n\t\tborder: 1px solid #ced4da;\n\t\tborder-radius: 3px;\n}\n.app__input-errors {\n\t\tcolor: #f44336;\n\t\tfont-size: 10px;\n\t\tmargin: 3px 0 0 5px;\n\t\tdisplay: block;\n}\n.app__input-text:focus {\n\t\tborder: 1px solid #00aeef;\n}\n.app__register-checkbox-wrapper {\n\t\tposition: relative;\n}\n.app__regiser-checkbox-label {\n\t\tdisplay: block;\n\t\tpadding-top: 0;\n\t\tmargin-top: 0;\n\t\tposition: relative;\n\t\tpadding-left: 35px;\n\t\tcursor: pointer;\n\t\tfont-size: 11px;\n\t\t-webkit-user-select: none;\n\t\t   -moz-user-select: none;\n\t\t    -ms-user-select: none;\n\t\t        user-select: none;\n}\n\t/* hide checkbox */\n.app__register-checkbox {\n\t\tposition: absolute;\n\t\topacity: 0;\n\t\tcursor: pointer;\n\t\theight: 0;\n\t\twidth: 0;\n}\n.app__custom-checkbox {\n\t\tborder: 1px solid grey;\n\t\tposition: absolute;\n\t\ttop: 2px;\n\t\tleft: 0;\n\t\theight: 15px;\n\t\twidth: 15px;\n\t\tbackground-color: #fff;\n\t\ttransition: all 0.5s;\n}\ninput:checked ~ .app__custom-checkbox {\n\t\ttransition: all 0.5s;\n\t\tborder: 0;\n\t\tbackground-color: #00aeef;\n}\n.app__custom-checkbox:after {\n\t\tcontent: \"\";\n\t\tposition: absolute;\n\t\tdisplay: none;\n}\ninput:checked ~ .app__custom-checkbox:after {\n\t\tdisplay: block;\n}\n.app__custom-checkbox:after {\n\t\tleft: 5px;\n\t\ttop: 1px;\n\t\twidth: 6px;\n\t\theight: 10px;\n\t\tborder: solid white;\n\t\tborder-width: 0 3px 3px 0;\n\t\ttransform: rotate(45deg);\n}\n.app__button-wrapper {\n\t\tdisplay: flex;\n\t\talign-items: flex-start;\n\t\tmargin: 15px 0;\n}\n.app__sign-in-btn {\n\t\ttransition: all 0.3s;\n\t\tcursor: pointer;\n\t\tpadding: 10px 25px;\n\t\tcolor: #fff;\n\t\tbackground: #00aeef;\n}\n.app__sign-in-btn:hover {\n\t\ttransition: all 0.3s;\n\t\tbackground: #039dd4;\n\t\tbox-shadow: 0px 3px 6px -1px rgba(0,174,239,1);\n}\n.app__sign-navigate {\n\t\tmargin: 0 0 0 12px;\n}\n.app__sign-navigate-link {\n\t\tdisplay: block;\n\t\tfont-size: 12px;\n}\n.app__login-footer {\n\t\tfont-size: 12px;\n}\n\t\n\n\n\t/* Presentation Block */\n.app__presentation-block {\n\t\tflex: 1 1 auto;\n\t\twidth: auto;\n\t\tdisplay: flex;\n\t\tflex-direction: column;\n\t\tbackground-image: url(" + escape(__webpack_require__(/*! ../assets/auto.png */ "./resources/js/assets/auto.png")) + "),\n\t\t\tlinear-gradient(180deg,#32a3dc 0,#fff);\n    background-repeat: no-repeat;\n    background-position: 0 100%;\n    background-size: 150%;\n}\n.app__presentation-block-wrapper {\n\t\tposition: relative; \n\t\theight: 100%;\n}\n.app__header-logo {\n\t\tmargin: 35px 0 0 35px;\n\t\tbackground: url(" + escape(__webpack_require__(/*! ../assets/best-leasing-logo.png */ "./resources/js/assets/best-leasing-logo.png")) + ");\n\t\tbackground-size: 160px 45px;\n\t\twidth: 160px;\n\t\theight: 45px;\n}\n.app__header-logo-card {\n\t\tbackground: url(" + escape(__webpack_require__(/*! ../assets/best-leasing-logo.png */ "./resources/js/assets/best-leasing-logo.png")) + ");\n\t\tbackground-size: 160px 45px;\n\t\twidth: 160px;\n\t\theight: 45px;\n}\n.app__body-content {\n\t\tline-height: 160%;\n\t\tfont-weight: lighter;\n\t\tfont-size: 13px;\n\t\ttop: 50%;   \n\t\tleft: 50%;\n    width: 80%;\n\t\tpadding: 35px;\n\t\tborder-radius: 4px;\n\t\t-webkit-backdrop-filter: blur(5px);\n\t\t        backdrop-filter: blur(5px);\n\t\tbackground-color: rgba(0,46,103,.5);\n\t\tcolor: #fff;\n\t\ttext-align: left;\n\t\tposition: absolute;  \n    transform: translate3d(-50%,-40%,0);\n}\n.app__body-content-header {\n\t\tfont-size: 29px; \n\t\tmargin-top: 0;\n\t\tline-height: 30px;\n}\n.app__body-content-subheader {\n\t\tline-height: 25px;\n\t\tfont-size: 25px; \n\t\tfont-weight: 400;\n}\n.app__presentation-para {\n\t\tfont-size: 15px;\n}\n.app__presentation-block-ul {\n\t\tlist-style-type: disc; \n\t\tmargin-bottom: 25px;\n}\n.app__presentation-block-li {\n\t\tmargin: 5px 0;\n\t\tfont-size: 15px;\n}\n.app__presentation-block-btn-reg {\n\t\ttransition: all 0.2s;\n\t\tmargin-top: 15px;\n\t\tfont-size: 16px;\n\t\tcursor: pointer;\n\t\tpadding: 8px 16px;\n\t\tbackground: #00aeef;\n}\n.app__presentation-block-btn-reg:hover {\n\t\ttransition: all 0.2s;\n\t\tbackground: #039dd4;\n\t\tbox-shadow: 0px 3px 6px -1px rgba(0,174,239,1);\n}\n@media(min-width: 1200px) {\n.app__presentation-block {\n\t\t\tbackground-size: 100%;\n\t\t\tbackground-position: 0 100%;\n}\n}\n@media (max-width: 893px), screen and (max-height: 702px) {\n.app__presentation-block {\n\t\t\tdisplay: none;\n}\n.app__form-block {\n\t\t\twidth: 100%;\n\t\t\theight: auto;\n\t\t\tbackground-image: url(" + escape(__webpack_require__(/*! ../assets/auto.png */ "./resources/js/assets/auto.png")) + "),\n\t\t\tlinear-gradient(180deg,#32a3dc 0,#fff);\n\t\t\tbackground-repeat: no-repeat;\n\t\t\tbackground-position: 0 100%;\n\t\t\tbackground-size: 150%;\n}\n.app__form-logo-wrapper {\n\t\t\tdisplay: flex;\n\t\t\tpadding-bottom: 8px;\n}\n.app__login-form {\n\t\t\tmargin: 60px 45px;\n\t\t\tpadding: 25px 30px 10px 30px;\n\t\t\twidth: 400px;\n}\n.app__input-text-wrapper {\n\t\t\tmargin-bottom: 13px;\n}\n.app__input-text {\n\t\t\theight: 40px;\n}\n}\n", ""]);
 
 // exports
 
@@ -36201,13 +36251,7 @@ var render = function() {
     _c("div", { staticClass: "app__login-form" }, [
       _vm._m(0),
       _vm._v(" "),
-      _c("p", { staticClass: "app__login-form-title" }, [
-        _vm._v("Зареєструватися по номеру телефону")
-      ]),
-      _vm._v(" "),
-      _c("p", { staticClass: "app__login-form-subtitle" }, [
-        _vm._v("Реєстрація")
-      ]),
+      _c("p", { staticClass: "app__login-form-title" }, [_vm._v("Реєстрація")]),
       _vm._v(" "),
       _c("div", { staticClass: "app__form" }, [
         _c("div", { staticClass: "app__input-text-wrapper" }, [
@@ -36216,27 +36260,91 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.name,
-                expression: "name"
+                value: _vm.lastName,
+                expression: "lastName"
               }
             ],
             staticClass: "app__input-text",
-            attrs: { type: "text", placeholder: "Ім'я" },
-            domProps: { value: _vm.name },
+            attrs: { type: "text", placeholder: "Прізвище" },
+            domProps: { value: _vm.lastName },
             on: {
               input: [
                 function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.name = $event.target.value
+                  _vm.lastName = $event.target.value
                 },
                 function($event) {
-                  return _vm.$v.name.$touch()
+                  return _vm.$v.lastName.$touch()
                 }
               ],
               blur: function($event) {
-                return _vm.$v.name.$touch()
+                return _vm.$v.lastName.$touch()
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "app__input-text-wrapper" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.firstName,
+                expression: "firstName"
+              }
+            ],
+            staticClass: "app__input-text",
+            attrs: { type: "text", placeholder: "Ім'я" },
+            domProps: { value: _vm.firstName },
+            on: {
+              input: [
+                function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.firstName = $event.target.value
+                },
+                function($event) {
+                  return _vm.$v.firstName.$touch()
+                }
+              ],
+              blur: function($event) {
+                return _vm.$v.firstName.$touch()
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "app__input-text-wrapper" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.patronymic,
+                expression: "patronymic"
+              }
+            ],
+            staticClass: "app__input-text",
+            attrs: { type: "text", placeholder: "По батькові" },
+            domProps: { value: _vm.patronymic },
+            on: {
+              input: [
+                function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.patronymic = $event.target.value
+                },
+                function($event) {
+                  return _vm.$v.patronymic.$touch()
+                }
+              ],
+              blur: function($event) {
+                return _vm.$v.patronymic.$touch()
               }
             }
           })

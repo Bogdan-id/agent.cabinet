@@ -86,16 +86,12 @@
 		display: none;
 		width: 100%;
 		justify-content: center;
-		margin-bottom: 25px;
 	}
 	.app__login-form-title {
-		font-size: 18px;
+		font-size: 20px;
 		color: #002e67;
 		margin: 0;
-	}
-	.app__login-form-subtitle {
-		font-size: 20px;
-		margin: 0 0 8px 0;
+		line-height: 38px;
 	}
 	.app__login-form-subtitle-2 {
 		font-size: 16px;
@@ -293,12 +289,13 @@
 			background-position: 0 100%;
 		}
 	}
-	@media (max-width: 893px), screen and (max-height: 593px) {
+	@media (max-width: 893px), screen and (max-height: 702px) {
 		.app__presentation-block {
 			display: none;
 		}
 		.app__form-block {
 			width: 100%;
+			height: auto;
 			background-image: url('../assets/auto.png'),
 			linear-gradient(180deg,#32a3dc 0,#fff);
 			background-repeat: no-repeat;
@@ -307,6 +304,18 @@
 		}
 		.app__form-logo-wrapper {
 			display: flex;
+			padding-bottom: 8px;
+		}
+		.app__login-form {
+			margin: 60px 45px;
+			padding: 25px 30px 10px 30px;
+			width: 400px;
+		}
+		.app__input-text-wrapper {
+			margin-bottom: 13px;
+		}
+		.app__input-text {
+			height: 40px;
 		}
 	}
 </style>

@@ -37,7 +37,7 @@
     color: #000;
     text-shadow: none;
 	}
-	*, :after, :before {
+	*, ::after, ::before {
 			-webkit-box-sizing: border-box;
 			box-sizing: border-box;
 	}
@@ -134,6 +134,7 @@
 		font-size: 11px;
 		user-select: none;
 	}
+
 	/* hide checkbox */
 	.app__register-checkbox {
 		position: absolute;
@@ -145,8 +146,7 @@
 	.app__custom-checkbox {
 		border: 1px solid grey;
 		position: absolute;
-		top: 2px;
-		left: 0;
+		margin: 0.2rem 0.5rem 0 0.5rem;
 		height: 15px;
 		width: 15px;
 		background-color: #fff;
@@ -157,15 +157,15 @@
 		border: 0;
 		background-color: #00aeef;
 	}
-	.app__custom-checkbox:after {
+	.app__custom-checkbox::after {
 		content: "";
 		position: absolute;
 		display: none;
 	}
-	input:checked ~ .app__custom-checkbox:after {
+	input:checked ~ .app__custom-checkbox::after {
 		display: block;
 	}
-	.app__custom-checkbox:after {
+	.app__custom-checkbox::after {
 		left: 5px;
 		top: 1px;
 		width: 6px;
@@ -174,6 +174,7 @@
 		border-width: 0 3px 3px 0;
 		transform: rotate(45deg);
 	}
+
 	.app__button-wrapper {
 		display: flex;
 		align-items: flex-start;

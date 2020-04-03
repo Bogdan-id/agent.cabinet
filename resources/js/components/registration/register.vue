@@ -95,7 +95,7 @@
 					<button @click="submit()" class="app__sign-in-btn">Зареєструватися</button>
 				</div>
 				<p class="app__login-footer">
-					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на <a class="--link" href="#">сторінці авторизації</a>
+					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на <a class="--link" href="/login">сторінці авторизації</a>
 				</p>
 			</div>
 		</div>
@@ -103,7 +103,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import { 
 	required, 
@@ -114,6 +113,8 @@ import {
 	maxLength
 	} from 'vuelidate/lib/validators'
 import { minPassLength, maxPassLength} from '../../variables'
+
+import axios from 'axios'
 
 export default {
 	mixins: [validationMixin],
@@ -138,15 +139,12 @@ export default {
 	validations: {
 		firstName: {
 			required,
-			alpha
 		},
 		lastName: {
 			required,
-			alpha
 		},
 		patronymic: {
 			required,
-			alpha
 		},
 		email: {
 			required,
@@ -162,39 +160,40 @@ export default {
 		}
 	},
 	methods: {
+		getCsrf() {
+			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+		},
 		minPassLength,
 		maxPassLength,
 		submit() {
-			console.log(JSON.stringify(this.getRegObject()))
-			// console.log(this.$v)
-			// !this.$v.$invalid 
-			// && this.$v.$dirty 
-			// && this.consent
-			// 	? console.log(this.getRegObject())
-			// 	: false
-			const token = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR'
-			const email = 'test@test.com'
-			const password = 12341234
-			axios.post(`/register`, {
-      	body: JSON.stringify(this.getRegObject(password, email))
-			})
+			!this.$v.$invalid 
+			&& this.$v.$dirty 
+			&& this.consent
+				? this.userRegister(this.getRegObject())
+				: false
+			// const tokenLogIn = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR'
+			// const tokenLogOut =  'T9wegtoS1EgWYAPRCPtLV8IavuUL6rbaTIPPxo82'
+		},
+		getRegObject() {
+			return {
+				'first_name': this.firstName,
+				'last_name': this.lastName,
+				'patronymic': this.patronymic,
+				'phone': this.number,
+				'email': this.email,
+				'password': this.password,
+				'password_confirmation': this.repeatPassword,
+				'_token': this.getCsrf(),
+			}
+		},
+		userRegister(userObj) {
+			axios.post(`/register`, userObj)
 			.then(response => {
 				console.log(response)
 			})
 			.catch(e => {
 				console.log(e)
 			})
-		},
-		getRegObject(password, email) {
-			return {
-				'first_name': this.firstName,
-				'last_name': this.lastName,
-				'patronymic': this.patronymic,
-				'email': email,
-				'phone': this.number,
-				'password': password,
-				'password_confirmation': password,
-			}
 		},
 		applyMask() {
 			const el = document.getElementById('number')
@@ -255,7 +254,6 @@ export default {
 				el.setSelectionRange(splitMask.indexOf(sign), splitMask.indexOf(sign))
 				el.dispatchEvent(event)
 			}
-			
 			this.pasteEvent = false
 		},
 	},

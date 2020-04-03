@@ -1,4 +1,4 @@
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="app">
 <div id="registration">
     <registration></registration>

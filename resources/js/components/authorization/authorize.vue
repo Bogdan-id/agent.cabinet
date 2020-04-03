@@ -10,12 +10,11 @@
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text"
-						id="number"
 						type="text" 
-						placeholder="+38 (0__) ___ __ __"
-						v-model="number"
-						@paste="pasteEvent = true"
-						@input="applyMask()"
+						placeholder="email"
+						v-model="email"
+						@paste="$v.email.$touch()"
+						@input="$v.email.$touch()"
 						/>
 				</div>
 				<div class="app__input-text-wrapper">
@@ -33,7 +32,7 @@
 						class="app__register-checkbox"
 						id="register-checkbox"
 						type="checkbox"
-						v-model="rememberMe"
+						v-model="consent"
 						/>
 					<span class="app__custom-checkbox"></span>
 					<label for="register-checkbox" class="app__regiser-checkbox-label">
@@ -41,10 +40,10 @@
 					</label>
 				</div>
 				<div class="app__button-wrapper">
-					<button @click="submit()" class="app__sign-in-btn">Зареєструватися</button>
+					<button @click="submit()" class="app__sign-in-btn">Увiйти</button>
 					<div class="app__sign-navigate">
 						<a class="app__sign-navigate-link --link" href="#">Забули пароль?</a>
-						<a class="app__sign-navigate-link --link" href="#">Регистрация</a>
+						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
 					</div>
 				</div>
 			</div>
@@ -54,15 +53,17 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
 import { minPassLength, maxPassLength} from '../../variables'
+
+import axios from 'axios'
 
 export default {
 	mixins: [validationMixin],
 	data: () => ({
 		password: null,
-		number: null,
-		rememberMe: false,
+		email: null,
+		consent: false,
 		pasteEvent: false,
 		errors: {}
 	}),
@@ -72,89 +73,42 @@ export default {
 			minLength: minLength(minPassLength()),
 			maxLength: maxLength(maxPassLength())
 		},
+		email: {
+			email,
+			required
+		}
 	},
 	methods: {
 		minPassLength,
 		maxPassLength,
+		getCsrf() {
+			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+		},
 		submit() {
 			!this.$v.$invalid 
 			&& this.$v.$dirty 
-				? console.log(this.getRegObject())
+			&& this.consent
+				? this.userRegister(this.getRegObject())
 				: false
+			// const tokenLogIn = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR'
+			// const tokenLogOut =  'T9wegtoS1EgWYAPRCPtLV8IavuUL6rbaTIPPxo82'
 		},
 		getRegObject() {
 			return {
-				'number': this.number,
+				'email': this.email,
 				'password': this.password,
+				'_token': this.getCsrf(),
 			}
 		},
-		applyMask() {
-			const el = document.getElementById('number')
-			const event = new Event('input', {bubbles: true})
-			const mask = '+38 (0##) ### - ## - ##'
-			const sign = '#'
-
-			const numLengthRe = /[^#\d+]/g
-			const notDigit = /[^\d]/g
-
-			const firstIndex = mask.indexOf(sign)
-			const countryCode = mask.slice(0, firstIndex)
-			const numLength = mask.slice(firstIndex).replace(numLengthRe, '').length
-			const number = this.number.replace(countryCode, '').replace(numLengthRe, '')
-			const cCpresent = this.number.indexOf(countryCode)
-
-			let splitMask = mask.split('')
-			let indexes = []
-
-			splitMask.forEach((val, i) => {
-				val === sign ? indexes.push(i) : false
+		userRegister(userObj) {
+			axios.post(`/login`, userObj)
+			.then(response => {
+				console.log(response)
 			})
-			let fillMask = (val) => {
-				val.split('').forEach((val, i) => {
-						indexes[i] ? splitMask[indexes[i]] = val : false
-				})
-			}
-			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
-				fillMask(
-					this.number
-						.replace(countryCode, '')
-						.replace(numLengthRe, '')
-						.slice(number.length - numLength)
-				)
-			} else if(number.length >= numLength && cCpresent === -1) {
-				fillMask(
-					this.number
-						.replace(numLengthRe, '')
-						.slice(number.length - numLength)
-				)
-			} else if (this.number.length > 1){
-				fillMask(
-					this.number
-						.slice(firstIndex)
-						.replace(notDigit, '')
-				)
-			} else if (this.number.length <= 1) {
-				fillMask(
-					this.number
-						.replace(notDigit, '')
-				)
-			}
-
-			const joinMask = splitMask.join('').replace(/[^\d]+$/, '')
-
-			if(el.value !== joinMask) {
-				el.value = joinMask
-				el.setSelectionRange(splitMask.indexOf(sign), splitMask.indexOf(sign))
-				el.dispatchEvent(event)
-			}
-			
-			this.pasteEvent = false
+			.catch(e => {
+				console.log(e)
+			})
 		},
-	},
-	computed: {
-		phoneErrors() {
-			return this.errors.phone.length > 0
-		}
 	},
 }
 </script>

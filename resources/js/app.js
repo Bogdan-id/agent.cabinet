@@ -8,6 +8,8 @@ import Registration from './components/registration/register.vue'
 import Authorization from './components/authorization/authorize.vue'
 import Recovery from './components/recovery-password/recovery.vue'
 
+import Logout from './components/logout/log-out.vue'
+
 new Vue({
 	render: h => h(Styles)
 }).$mount('#styles')
@@ -27,3 +29,7 @@ new Vue({
 new Vue({
 	render: h => h(Recovery)
 }).$mount('#recovery-password')
+
+new Vue({
+	render: h => h(Logout)
+}).$mount('#log-out')

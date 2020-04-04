@@ -1,10 +1,40 @@
 <template>
-<div class="app">
+<div :class="{'app nav-open': $sidebar.showSidebar}">
+	<notifications></notifications>
   <router-view></router-view>
 </div>
 </template>
 
-<style>
+<style lang="scss">
+	/* Dashboard styles */
+	.vue-notifyjs.notifications {
+		.alert {
+			z-index: 10000;
+		}
+		.list-move {
+			transition: transform 0.3s, opacity 0.4s;
+		}
+		.list-item {
+			display: inline-block;
+			margin-right: 10px;
+		}
+		.list-enter-active {
+			transition: transform 0.2s ease-in, opacity 0.4s ease-in;
+		}
+		.list-leave-active {
+			transition: transform 1s ease-out, opacity 0.4s ease-out;
+		}
+
+		.list-enter {
+			opacity: 0;
+			transform: scale(1.1);
+		}
+		.list-leave-to {
+			opacity: 0;
+			transform: scale(1.2, 0.7);
+		}
+	}
+
 	/* Modifiers */
 	.--link {
 		transition: color 0.2s;
@@ -228,6 +258,7 @@
 		background-size: 160px 45px;
 		width: 160px;
 		height: 45px;
+		z-index: 3;
 	}
 	.app__header-logo-card {
 		background: url('../assets/best-leasing-logo.png');

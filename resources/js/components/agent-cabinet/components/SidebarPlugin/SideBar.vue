@@ -8,13 +8,9 @@
         -->
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
-      <div class="logo">
-        <a href="#" class="simple-text">
-            <div class="logo-img">
-                <img src="@/assets/img/vue-logo.png" alt="">
-            </div>
-          {{title}}
-        </a>
+      <div style="background: #f4f3ef; z-index: 1; padding: 22px 0; margin-top: 25px;">
+        <div class="app__header-logo" style="margin: 0 0 0 25px;">
+        </div>
       </div>
       <slot>
 

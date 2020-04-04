@@ -37,12 +37,21 @@
               </p>
             </a>
           </li>
+          <p-button @click.native="signOut()" type="info" simple size="sm">
+            Log out
+          </p-button>
         </ul>
       </div>
     </div></nav>
 </template>
 <script>
+import {Button as PButton} from '../../components'
+import axios from 'axios'
+
 export default {
+  components: {
+    PButton
+  },
   computed: {
     routeName() {
       console.log(this.$route)
@@ -56,6 +65,22 @@ export default {
     };
   },
   methods: {
+    signOut() {
+      console.log('logout')
+      this.logOut(this.getCsrf())
+    },
+    getCsrf() {
+			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    logOut(token) {
+			axios.post(`/logout`, token)
+			.then(() => {
+				this.$router.push('login')
+			})
+			.catch(e => {
+				console.log(e)
+			})
+		},
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },

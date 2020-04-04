@@ -8,7 +8,7 @@
         -->
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
-      <div style="background: #f4f3ef; z-index: 1; padding: 22px 0; margin-top: 25px;">
+      <div class="vue-paper-sidebar__logo-wrapper">
         <div class="app__header-logo" style="margin: 0 0 0 25px;">
         </div>
       </div>
@@ -129,4 +129,13 @@ export default {
 };
 </script>
 <style>
+  .--sidebar-margin {
+    
+  }
+  .vue-paper-sidebar__logo-wrapper {
+    background: #f4f3ef; 
+    z-index: 1; 
+    padding: 22px 0; 
+    margin-top: 25px;
+  }
 </style>

@@ -32,7 +32,7 @@
 						class="app__register-checkbox"
 						id="register-checkbox"
 						type="checkbox"
-						v-model="consent"
+						v-model="remember"
 						/>
 					<span class="app__custom-checkbox"></span>
 					<label for="register-checkbox" class="app__regiser-checkbox-label">
@@ -63,7 +63,7 @@ export default {
 	data: () => ({
 		password: null,
 		email: null,
-		consent: false,
+		remember: false,
 		pasteEvent: false,
 		errors: {}
 	}),
@@ -87,7 +87,6 @@ export default {
 		submit() {
 			!this.$v.$invalid 
 			&& this.$v.$dirty 
-			&& this.consent
 				? this.userRegister(this.getRegObject())
 				: false
 			// const tokenLogIn = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR'

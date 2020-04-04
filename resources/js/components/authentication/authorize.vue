@@ -101,6 +101,7 @@ export default {
 			}
 		},
 		userRegister(userObj) {
+			console.log(userObj)
 			axios.post(`/login`, userObj)
 			.then(response => {
 				console.log(response)

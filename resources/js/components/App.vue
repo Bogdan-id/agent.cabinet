@@ -1,6 +1,7 @@
 <template>
-  <div class="styles">
-  </div>
+<div class="app">
+  <router-view></router-view>
+</div>
 </template>
 
 <style>

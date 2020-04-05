@@ -40,7 +40,7 @@
 					</label>
 				</div>
 				<div class="app__button-wrapper">
-					<button @click="submit()" class="app__sign-in-btn">Увiйти</button>
+					<button @click="submit()" class="app__btn-primary">Увiйти</button>
 					<div class="app__sign-navigate">
 						<a class="app__sign-navigate-link --link" href="#">Забули пароль?</a>
 						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>

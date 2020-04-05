@@ -1,11 +1,10 @@
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
 import Registration from '../components/authentication/Registration'
-// import LogOut from '../components/authentication/TEMP-logout' // this component is temporary exist
 
 /* Dashboard components */
 import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout.vue"
-import NotFound from "../components/agent-cabinet//pages/NotFoundPage.vue"
+// import NotFound from "../components/agent-cabinet//pages/NotFoundPage.vue"
 import Dashboard from "../components/agent-cabinet/pages/Dashboard.vue"
 import UserProfile from "../components/agent-cabinet/pages/UserProfile.vue"
 import Notifications from "../components/agent-cabinet/pages/Notifications.vue"

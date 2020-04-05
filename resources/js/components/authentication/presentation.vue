@@ -16,7 +16,7 @@
 					<li class="app__presentation-block-li">при цьому знизите кількість помилок при введенні даних;</li>
 					<li class="app__presentation-block-li">і заощадите на витратних матеріалах і послугах кур'єра.</li>
 				</ul>
-				<a class="app__presentation-block-btn-reg">Хочу легкий лізинг</a>
+				<a class="app__btn-primary">Хочу легкий лізинг</a>
 			</div>
 		</div>
 	</div>

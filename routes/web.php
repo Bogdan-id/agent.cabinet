@@ -25,3 +25,5 @@ Route::get('/verification',  function () {
     return view('verification');
 });
 
+Route::get('/verification/accept/{id}', 'VerificationController@acceptAgent');
+Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');

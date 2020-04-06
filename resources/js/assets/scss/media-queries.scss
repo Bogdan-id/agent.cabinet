@@ -1,0 +1,45 @@
+@media(min-width: 1200px) {
+  .app__presentation-block {
+    background-size: 100%;
+    background-position: 0 100%;
+  }
+}
+@media (max-width: 893px), screen and (max-height: 702px) {
+  .app__presentation-block {
+    display: none;
+  }
+  .app__form-block {
+    width: 100%;
+    height: auto;
+    background-image: url('../assets/images/auto.png'),
+    linear-gradient(180deg,#32a3dc 0,$white);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 150%;
+  }
+  .app__form-logo-wrapper {
+    display: flex;
+    padding-bottom: 8px;
+  }
+  .app__login-form {
+    margin: 60px 45px;
+    padding: 25px 30px 10px 30px;
+    width: 400px;
+  }
+  // .app__input-text-wrapper {
+  //   margin-bottom: 13px;
+  // }
+  .app__input-text {
+    height: 40px;
+  }
+  .app__input-text-wrapper {
+    height: 55px;
+  }
+}
+
+/* Wait-answer */
+@media(max-width: 557px) {
+  .label__block-wrapper {
+    width: 85%;
+  }
+}

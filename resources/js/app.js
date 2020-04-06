@@ -1,32 +1,17 @@
-require('./bootstrap')
+// require('./bootstrap')
 
 window.Vue = require('vue')
 
-import Vuelidate from 'vuelidate'
-Vue.use(Vuelidate)
+import router from './router/router'
+import App from './components/App'
 
-import Styles from './components/App.vue'
-import Presentation from './components/present-block.vue'
-import Registration from './components/registration/register.vue'
-import Authorization from './components/authorization/authorize.vue'
-import Recovery from './components/recovery-password/recovery.vue'
+import PaperDashboard from "./components/agent-cabinet/plugins/paperDashboard"
+import "vue-notifyjs/themes/default.css"
 
-const styles = new Vue({
-	render: h => h(Styles)
-}).$mount('#styles')
+Vue.use(PaperDashboard);
 
-const presentblock = new Vue({
-	render: h => h(Presentation)
-}).$mount('#presentation')
+new Vue({
+	router,
+	render: h => h(App)
+}).$mount('#app')
 
-const registration = new Vue({
-	render: h => h(Registration)
-}).$mount('#registration')
-
-const authorization = new Vue({
-	render: h => h(Authorization)
-}).$mount('#authorization')
-
-const recover = new Vue({
-	render: h => h(Recovery)
-}).$mount('#recovery-password')

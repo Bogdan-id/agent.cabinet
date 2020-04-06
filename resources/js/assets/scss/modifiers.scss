@@ -1,0 +1,9 @@
+.--link {
+  transition: color 0.2s;
+  text-decoration: none;
+  color: $blue;
+}
+.--link:hover {
+  transition: color 0.2s;
+  color: $primary;
+}

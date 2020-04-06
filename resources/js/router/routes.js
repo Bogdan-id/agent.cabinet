@@ -15,9 +15,10 @@ import Typography from "../components/agent-cabinet/pages/Typography.vue"
 import TableList from "../components/agent-cabinet/pages/TableList.vue"
 
 const routes = [
-  { path: '/', component: WaitAnswer },
+  { path: '/', component: Authorization },
 	{ path: '/login', component: Authorization },
-	{ path: '/register', component: Registration},
+  { path: '/register', component: Registration},
+  { path: '/verification', component: WaitAnswer },
 	{ 
 		path: '/home', 
     component: DashboardLayout,

@@ -16,7 +16,7 @@
 						@blur="$v.lastName.$touch()"
 						/>
 						<span 
-							:class="lastNameErrors.length > 0 
+							:class="lastNameError
 								? 'app__input-error input-error--active' 
 								: 'app__input-error'"> 
 							{{ lastNameErrors[0] }}
@@ -32,7 +32,7 @@
 						@blur="$v.firstName.$touch()"
 						/>
 						<span 
-							:class="firstNameErrors.length > 0 
+							:class="firstNameError
 								? 'app__input-error input-error--active' 
 								: 'app__input-error'"> 
 							{{ firstNameErrors[0] }}
@@ -48,7 +48,7 @@
 						@blur="$v.patronymic.$touch()"
 						/>
 						<span 
-							:class="patronymicErrors.length > 0 
+							:class="patronymicError
 								? 'app__input-error input-error--active' 
 								: 'app__input-error'"> 
 							{{ patronymicErrors[0] }}
@@ -64,7 +64,6 @@
 						@paste="pasteEvent = true"
 						@input=" applyMask()"
 						/>
-						<!-- <span v-if="phoneErrors" class="app__input-errors"> {{ errors.phone }} </span> -->
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
@@ -76,7 +75,7 @@
 						@input="$v.email.$touch()"
 						/>
 						<span 
-							:class="emailErrors.length > 0 
+							:class="emailError
 								? 'app__input-error input-error--active' 
 								: 'app__input-error'"> 
 							{{ emailErrors[0] }}
@@ -92,7 +91,7 @@
 						@input="$v.password.$touch()"
 						/>
 						<span 
-							:class="passwordErrors.length > 0 
+							:class="passwordError
 								? 'app__input-error input-error--active' 
 								: 'app__input-error'"> 
 							{{ passwordErrors[0] }}
@@ -108,7 +107,7 @@
 						@input="$v.repeatPassword.$touch()"
 						/>
 						<span 
-							:class="repeatPasswordErrors.length > 0 
+							:class="repeatPasswordErrors
 								? 'app__input-error input-error--active' 
 								: 'app__input-error'"> 
 							{{ repeatPasswordErrors[0] }}
@@ -207,8 +206,6 @@ export default {
 			&& this.consent
 				? this.userRegister(this.getRegObject())
 				: false
-			// const tokenLogIn = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR'
-			// const tokenLogOut =  'T9wegtoS1EgWYAPRCPtLV8IavuUL6rbaTIPPxo82'
 		},
 		getRegObject() {
 			return {
@@ -336,6 +333,24 @@ export default {
 			if (!this.$v.repeatPassword.$error) return errors
 			!this.$v.repeatPassword.sameAsPassword && errors.push('Паролі не співпадають')
 			return errors
+		},
+		emailError() {
+			return this.emailErrors.length > 0 
+		},
+		lastNameError() {
+			return this.lastNameErrors.length > 0 
+		},
+		firstNameError() {
+			return this.firstNameErrors.length > 0 
+		},
+		patronymicError() {
+			return this.patronymicErrors.length > 0
+		},
+		passwordError() {
+			return this.passwordErrors.length > 0 
+		},
+		repeatPasswordError() {
+			return this.repeatPasswordErrors.length > 0 
 		}
 	},
 }

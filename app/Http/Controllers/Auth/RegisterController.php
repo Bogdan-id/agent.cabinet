@@ -74,7 +74,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        Mail::to(env('ADMIN_EMAIL'))->send(new VerificationAgentMail($user));
+        //Mail::to(env('ADMIN_EMAIL'))->send(new VerificationAgentMail($user));
 
         return $user;
     }

@@ -32,7 +32,8 @@ class VerificationAgentMail extends Mailable
     {
         $subject = 'Новая заявка на регистрацию агента';
 
-        return $this->view('emails.verification_agent')->subject($subject);
+        return $this->from('agent.bestleasing@gmail.com')
+        ->view('emails.verification_agent')->subject($subject);
 
     }
 }

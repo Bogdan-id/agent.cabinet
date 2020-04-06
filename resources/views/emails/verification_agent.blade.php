@@ -5,13 +5,17 @@
     </head>
     <body>
         <h2>
-            Привет {{$data['name']}}, мы рады, что ты с нами! Ниже приведены данные вашего аккаунта:
+            Новый запрос на регистрацию в личном кабинете агента
         </h2>
         <br>
         <h3>Email: </h3>
-        <p>{{$data['email']}}</p>
-        <h3>Username: </h3>
-        <p>{{$data['username']}}</p>
-        <h3>Phone: </h3><p>{{$data['phone']}}</p>
+        <p>{{$user->email}}</p>
+        <h3>Имя: </h3>
+        <p>{{$user->name}}</p>
+        <h3>Телефон: </h3><p>{{$user->phone}}</p>
+        <h3>Принять: </h3>
+        <button href="{{ url('verification/accept/5') }}" type="button" class="btn btn-default">Принять</button>
+        <h3>Отклонить: </h3>
+        <button href="{{ url('verification/reject/5') }}" type="button" class="btn btn-default">Отклонить</button>
     </body>
 </html>

@@ -15,24 +15,39 @@ class VerificationController extends Controller
     public function acceptAgent($id)
     {
         $user = User::find($id);
-        $user->is_active = 1;
-        $user->save();
+        if($user){
+            $user->is_active = 1;
+            $user->save();
+    
+            Mail::to($user->email)->send(new AgentAcceptMail($user));
+            $response = [
+                'status' => 200
+            ];
+        }else{
+            $response = [
+                'error' => 'Пользователь не найден'
+            ];
+        }
 
-        Mail::to($user->email)->send(new AgentAcceptMail($user));
-
-        return response()->json([
-            'status' => 200
-        ]);
+        return response()->json($response);
     }
 
     public function rejectAgent($id)
     {
         $user = User::find($id);
-
-        Mail::to($user->email)->send(new AgentRejectMail($user));
-
-        return response()->json([
-            'status' => 200
-        ]);
+        if($user){
+            $user->is_active = 0;
+            $user->save();
+            Mail::to($user->email)->send(new AgentRejectMail($user));
+            $response = [
+                'status' => 200
+            ];
+        }else{
+            $response = [
+                'error' => 'Пользователь не найден'
+            ];
+        }
+        
+        return response()->json($response);
     }
 }

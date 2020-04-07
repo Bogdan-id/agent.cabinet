@@ -5,6 +5,7 @@
 				<div class="app__header-logo-card"></div>
 			</div>
 			<p class="app__login-form-title">Реєстрація</p>
+			<p class="app__login-form-subtitle">Зареєструватися за номером телефону</p>
 			<div class="app__form">
 				<div class="app__input-text-wrapper">
 					<input 
@@ -167,7 +168,7 @@ export default {
 		minPassLength,
 		maxPassLength,
 		submit() {
-			if(!this.$v.$invalid && this.$v.$dirty && !this.consent){
+			if(!this.$v.$invalid && this.$v.$dirty && this.consent){
 				this.userRegister(this.getRegObject())
 			} else {
 				this.$notify({

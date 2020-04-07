@@ -1,6 +1,6 @@
 <template>
   <component :is="tag"
-             @click.native="hideSidebar; getCurrentPath()"
+             @click.native="hideSidebar; addRouteToLocalStorage()"
              class="nav-item"
              v-bind="$attrs"
              tag="li">
@@ -46,7 +46,7 @@ export default {
         this.addLink(this)
       }
     },
-    getCurrentPath() {
+    addRouteToLocalStorage() {
       const route = this.$router.currentRoute.name
       const routeStorage = window.localStorage
       routeStorage.setItem('route', route)

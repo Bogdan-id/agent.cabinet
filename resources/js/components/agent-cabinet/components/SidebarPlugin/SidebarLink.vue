@@ -16,6 +16,7 @@
 export default {
   name: "sidebar-link",
   inheritAttrs: false,
+  // children component receive object from parrent SideBar.vue
   inject: {
     autoClose: {
       default: true
@@ -47,6 +48,7 @@ export default {
   },
   mounted() {
     if (this.addLink) {
+      console.log(this.addLink(this))
       this.addLink(this);
     }
   },

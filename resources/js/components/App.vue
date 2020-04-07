@@ -1,5 +1,5 @@
 <template>
-	<div :class="{ 'app nav-open': $sidebar.showSidebar }">
+	<div :class="{ 'nav-open': $sidebar.showSidebar }">
 		<notifications></notifications>
 		<router-view></router-view>
 	</div>
@@ -17,4 +17,5 @@
 	@import "../assets/scss/wait-answer.scss";
 	@import "../assets/scss/check-box.scss";
 	@import "../assets/scss/media-queries.scss";
+	@import "../assets/scss/loader.scss";
 </style>

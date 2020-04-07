@@ -10,22 +10,6 @@
 					<input 
 						class="app__input-text" 
 						type="text" 
-						placeholder="Прізвище"
-						v-model="lastName"
-						@input="$v.lastName.$touch()"
-						@blur="$v.lastName.$touch()"
-						/>
-						<span 
-							:class="lastNameError
-								? 'app__input-error input-error--active' 
-								: 'app__input-error'"> 
-							{{ lastNameErrors[0] }}
-						</span>
-				</div>
-				<div class="app__input-text-wrapper">
-					<input 
-						class="app__input-text" 
-						type="text" 
 						placeholder="Ім'я"
 						v-model="firstName"
 						@input="$v.firstName.$touch()"
@@ -36,22 +20,6 @@
 								? 'app__input-error input-error--active' 
 								: 'app__input-error'"> 
 							{{ firstNameErrors[0] }}
-						</span>
-				</div>
-				<div class="app__input-text-wrapper">
-					<input 
-						class="app__input-text" 
-						type="text" 
-						placeholder="По батькові"
-						v-model="patronymic"
-						@input="$v.patronymic.$touch()"
-						@blur="$v.patronymic.$touch()"
-						/>
-						<span 
-							:class="patronymicError
-								? 'app__input-error input-error--active' 
-								: 'app__input-error'"> 
-							{{ patronymicErrors[0] }}
 						</span>
 				</div>
 				<div class="app__input-text-wrapper">
@@ -127,7 +95,10 @@
 					</label>
 				</div>
 				<div class="app__button-wrapper">
-					<button @click="submit()" class="app__btn-primary">Зареєструватися</button>
+					<button @click="submit()" class="app__btn-primary">
+						<span v-if="!request">Зареєструватися</span>
+						<div v-if="request" class="lds-dual-ring"></div>
+					</button>
 				</div>
 				<p class="app__login-footer">
 					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на 
@@ -156,8 +127,6 @@ export default {
 	data: () => ({
 		// inputs
 		firstName: null,
-		lastName: null,
-		patronymic: null,
 		email: null,
 		number: null,
 		password: null,
@@ -168,17 +137,14 @@ export default {
 		pasteEvent: false,
 
 		// errors
-		errors: {}
+		errors: {},
+
+		// boolean
+		request: false
 	}),
 
 	validations: {
 		firstName: {
-			required,
-		},
-		lastName: {
-			required,
-		},
-		patronymic: {
 			required,
 		},
 		email: {
@@ -201,17 +167,19 @@ export default {
 		minPassLength,
 		maxPassLength,
 		submit() {
-			!this.$v.$invalid 
-			&& this.$v.$dirty 
-			&& this.consent
-				? this.userRegister(this.getRegObject())
-				: false
+			if(!this.$v.$invalid || this.$v.$dirty || !this.consent){
+				this.userRegister(this.getRegObject())
+			} else {
+				this.$notify({
+					message: 'Форма заповнена не невірно',
+					type: 'info',
+					horizontalAlign: 'center'
+				})
+			}
 		},
 		getRegObject() {
 			return {
-				'first_name': this.firstName,
-				'last_name': this.lastName,
-				'patronymic': this.patronymic,
+				'name': this.firstName,
 				'phone': this.number,
 				'email': this.email,
 				'password': this.password,
@@ -220,13 +188,44 @@ export default {
 			}
 		},
 		userRegister(userObj) {
+			this.request = true
 			console.log(userObj)
 			axios.post(`/register`, userObj)
-			.then(response => {
-				console.log(response)
-			})
-			.catch(e => {
-				console.log(e)
+			.then(response => { 
+			console.log(response)
+			this.request = false
+			this.$router.push('/verification')
+		})
+		.catch(e => {
+			this.request = false
+				if(e.response.status == 422) {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: 'Невірний логін або пароль',
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				} else if (e.response.status == 429) {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини',
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				} else {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: `Код помилки: ${e.response.status} \n ${e.response.data.message}`,
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				}
 			})
 		},
 		applyMask() {
@@ -302,22 +301,10 @@ export default {
 			!this.$v.email.required && errors.push('Поле імейл обов\'язков для заповнення')
 			return errors
 		},
-		lastNameErrors() {
-			const errors = []
-			if (!this.$v.lastName.$error) return errors
-			!this.$v.email.required && errors.push('Поле "Прізвище" - обов\'язкове для заповнення')
-			return errors
-		},
 		firstNameErrors() {
 			const errors = []
 			if (!this.$v.firstName.$error) return errors
 			!this.$v.firstName.required && errors.push('Поле "Ім\'я" - обов\'язкове для заповнення')
-			return errors
-		},
-		patronymicErrors() {
-			const errors = []
-			if (!this.$v.patronymic.$error) return errors
-			!this.$v.patronymic.required && errors.push('Поле "По батькові" - обов\'язкове для заповнення')
 			return errors
 		},
 		passwordErrors() {
@@ -337,14 +324,8 @@ export default {
 		emailError() {
 			return this.emailErrors.length > 0 
 		},
-		lastNameError() {
-			return this.lastNameErrors.length > 0 
-		},
 		firstNameError() {
 			return this.firstNameErrors.length > 0 
-		},
-		patronymicError() {
-			return this.patronymicErrors.length > 0
 		},
 		passwordError() {
 			return this.passwordErrors.length > 0 

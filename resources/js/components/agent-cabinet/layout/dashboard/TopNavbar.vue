@@ -37,8 +37,15 @@
               </p>
             </a>
           </li>
-          <p-button @click.native="signOut()" type="info" simple size="sm">
-            Log out
+          <p-button 
+            @click.native="signOut()" 
+            type="primary" 
+            size="sm"
+            >
+            <div v-if="btnLogOut" class="lds__wrapper">
+              <div class="lds-dual-ring"></div>
+            </div>
+            <span v-if="!btnLogOut">Log out</span>
           </p-button>
         </ul>
       </div>
@@ -58,25 +65,34 @@ export default {
       return this.capitalizeFirstLetter(name);
     }
   },
-  data() {
-    return {
-      activeNotifications: false
-    };
-  },
+  data:() => ({
+    btnLogOut: false,
+    activeNotifications: false
+  }),
   methods: {
     signOut() {
+      this.btnLogOut = true
       this.logOut(this.getCsrf())
     },
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     logOut(token) {
-			axios.post(`/logout`, token)
+      axios.post(`/logout`, token)
 			.then(() => {
-				this.$router.push('login')
+        this.btnLogOut = false
+        this.$router.push({ name: 'authorization', params: { reload: true }})
 			})
 			.catch(e => {
-				console.log(e)
+        this.btnLogOut = false
+        this.$notify({
+          message: e.response.data.message,
+          type: 'warning',
+          horizontalAlign: 'center'
+        })
+				console.log(e.response.data)
+        console.log(e.response.status)
+        console.log(e.response.headers)
 			})
 		},
     capitalizeFirstLetter(string) {
@@ -94,7 +110,7 @@ export default {
     hideSidebar() {
       this.$sidebar.displaySidebar(false);
     }
-  }
+  },
 };
 </script>
 <style>

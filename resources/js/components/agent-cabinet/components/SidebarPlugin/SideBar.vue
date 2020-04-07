@@ -18,17 +18,16 @@
       <ul class="nav">
         <!--By default vue-router adds an active class to each route link. This way the links are colored when clicked-->
         <slot name="links">
-          <sidebar-link v-for="(link,index) in sidebarLinks"
-                        :key="index"
-                        :to="link.path"
-                        :name="link.name"
-                        :icon="link.icon">
+          <sidebar-link 
+            v-for="(link, index) in sidebarLinks"
+            :key="index"
+            :to="link.path"
+            :name="link.name"
+            :icon="link.icon">
           </sidebar-link>
         </slot>
       </ul>
-      <moving-arrow :move-y="arrowMovePx">
-
-      </moving-arrow>
+      <moving-arrow :move-y="arrowMovePx"></moving-arrow>
     </div>
   </div>
 </template>
@@ -72,6 +71,7 @@ export default {
       default: true
     }
   },
+  // parent component give access for all children component to object below
   provide() {
     return {
       autoClose: this.autoClose,
@@ -94,7 +94,7 @@ export default {
   },
   data() {
     return {
-      linkHeight: 65,
+      linkHeight: 33,
       activeLinkIndex: 0,
       windowWidth: 0,
       isWindows: false,
@@ -111,6 +111,7 @@ export default {
       });
     },
     addLink(link) {
+      // console.log(this.$slots)
       const index = this.$slots.links.indexOf(link.$vnode);
       this.links.splice(index, 0, link);
     },
@@ -129,13 +130,9 @@ export default {
 };
 </script>
 <style>
-  .--sidebar-margin {
-    
-  }
   .vue-paper-sidebar__logo-wrapper {
     background: #f4f3ef; 
     z-index: 1; 
-    padding: 22px 0; 
-    margin-top: 25px;
+    padding: 45px 0 22px 0; 
   }
 </style>

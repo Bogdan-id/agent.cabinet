@@ -16,7 +16,7 @@ import TableList from "../components/agent-cabinet/pages/TableList.vue"
 
 const routes = [
   { path: '/', component: Authorization },
-	{ path: '/login', component: Authorization },
+	{ path: '/login', component: Authorization, props: true, name: 'authorization' },
   { path: '/register', component: Registration},
   { path: '/verification', component: WaitAnswer },
 	{ 

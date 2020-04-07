@@ -167,7 +167,7 @@ export default {
 		minPassLength,
 		maxPassLength,
 		submit() {
-			if(!this.$v.$invalid || this.$v.$dirty || !this.consent){
+			if(!this.$v.$invalid && this.$v.$dirty && !this.consent){
 				this.userRegister(this.getRegObject())
 			} else {
 				this.$notify({

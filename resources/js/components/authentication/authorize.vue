@@ -72,6 +72,7 @@ export default {
 	props: ['reload'],
 	mixins: [validationMixin],
 	data: () => ({
+		pageLoad: window.performance,
 		password: null,
 		number: null,
 		remember: false,
@@ -92,7 +93,7 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 		},
 		submit() {
-			if(!this.$v.$invalid || this.$v.$dirty ){
+			if(!this.$v.$invalid && this.$v.$dirty ){
 				this.userRegister(this.getRegObject())
 			} else {
 				this.$notify({
@@ -212,6 +213,11 @@ export default {
 			this.pasteEvent = false
 		},
 	},
+	watch: {
+		pageLoad(val) {
+			console.log(val)
+		}
+	},
 	computed: {
 		passwordErrors() {
 			const errors = []
@@ -223,6 +229,7 @@ export default {
 		}
 	},
 	mounted() {
+		console.log(this.pageLoad)
 		this.reload
 			? this.$router.go()
 			: false

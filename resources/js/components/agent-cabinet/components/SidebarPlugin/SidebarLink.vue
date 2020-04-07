@@ -1,6 +1,6 @@
 <template>
   <component :is="tag"
-             @click.native="hideSidebar"
+             @click.native="hideSidebar; getCurrentPath()"
              class="nav-item"
              v-bind="$attrs"
              tag="li">
@@ -16,6 +16,9 @@
 export default {
   name: "sidebar-link",
   inheritAttrs: false,
+  data: () => ({
+    path: null,
+  }),
   // children component receive object from parrent SideBar.vue
   inject: {
     autoClose: {
@@ -37,6 +40,29 @@ export default {
     }
   },
   methods: {
+    addLinkToSideBar() {
+      if (this.addLink) {
+        // console.log(this.addLink(this))
+        this.addLink(this)
+      }
+    },
+    getCurrentPath() {
+      const route = this.$router.currentRoute.name
+      const routeStorage = window.localStorage
+      routeStorage.setItem('route', route)
+    },
+    readRootFromStorage() {
+      const routeStorage = window.localStorage
+      const route = routeStorage.getItem('route')
+      if(route !== 'home' || route !== 'dashboard') {
+        this.$router.push({ name: route})
+        // eslint-disable-next-line
+          .catch(err => {
+            // catch needed because routs rewrites each other
+          })
+        routeStorage.removeItem('route')
+      }
+    },
     hideSidebar() {
       if (this.autoClose) {
         this.$sidebar.displaySidebar(false);
@@ -46,19 +72,18 @@ export default {
       return this.$el.classList.contains("active");
     }
   },
+  created() {
+    this.readRootFromStorage()
+    this.addLinkToSideBar()
+  },
   mounted() {
-    if (this.addLink) {
-      console.log(this.addLink(this))
-      this.addLink(this);
-    }
+    this.addLinkToSideBar()
   },
   beforeDestroy() {
     if (this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el)
     }
-    if (this.removeLink) {
-      this.removeLink(this);
-    }
+    this.addLinkToSideBar()
   }
 };
 </script>

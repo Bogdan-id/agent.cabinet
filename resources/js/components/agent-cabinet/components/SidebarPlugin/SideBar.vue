@@ -92,16 +92,14 @@ export default {
       return this.linkHeight * this.activeLinkIndex;
     }
   },
-  data() {
-    return {
-      linkHeight: 33,
+  data:() => ({
+      linkHeight: 32.5,
       activeLinkIndex: 0,
       windowWidth: 0,
       isWindows: false,
       hasAutoHeight: false,
       links: []
-    };
-  },
+  }),
   methods: {
     findActiveLink() {
       this.links.forEach((link, index) => {

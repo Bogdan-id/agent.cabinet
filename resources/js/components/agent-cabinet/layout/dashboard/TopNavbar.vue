@@ -82,6 +82,8 @@ export default {
 			.then(() => {
         this.btnLogOut = false
         this.$router.push({ name: 'authorization', params: { reload: true }})
+        const routeStorage = window.localStorage
+        routeStorage.setItem('user', false)
 			})
 			.catch(e => {
         this.btnLogOut = false

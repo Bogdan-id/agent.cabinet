@@ -72,7 +72,6 @@ export default {
 	props: ['reload'],
 	mixins: [validationMixin],
 	data: () => ({
-		pageLoad: window.performance,
 		password: null,
 		number: null,
 		remember: false,
@@ -112,12 +111,12 @@ export default {
 		},
 		userRegister(userObj) {
 			this.request = true
-			console.log(userObj)
 			axios.post(`/login`, userObj)
-			.then(response => {
+			.then(() => {
 				this.request = false
-				console.log(response)
 				this.$router.push('/home')
+				const routeStorage = window.localStorage
+				routeStorage.setItem('user', true)
 			})
 			.catch(e => {
 				this.request = false
@@ -213,11 +212,6 @@ export default {
 			this.pasteEvent = false
 		},
 	},
-	watch: {
-		pageLoad(val) {
-			console.log(val)
-		}
-	},
 	computed: {
 		passwordErrors() {
 			const errors = []
@@ -228,8 +222,12 @@ export default {
 			return errors
 		}
 	},
+	created() {
+		const routeStorage = window.localStorage
+		const user = routeStorage.getItem('user')
+		if(user === true) this.$router.push('/home')
+	},
 	mounted() {
-		console.log(this.pageLoad)
 		this.reload
 			? this.$router.go()
 			: false

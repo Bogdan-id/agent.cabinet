@@ -1,6 +1,7 @@
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
 import Registration from '../components/authentication/Registration'
+import WaitAnswer from '../components/authentication/Wait-answer'
 
 /* Dashboard components */
 import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout.vue"
@@ -15,8 +16,9 @@ import TableList from "../components/agent-cabinet/pages/TableList.vue"
 
 const routes = [
   { path: '/', component: Authorization },
-	{ path: '/login', component: Authorization },
-	{ path: '/register', component: Registration},
+	{ path: '/login', component: Authorization, props: true, name: 'authorization' },
+  { path: '/register', component: Registration},
+  { path: '/verification', component: WaitAnswer },
 	{ 
 		path: '/home', 
     component: DashboardLayout,

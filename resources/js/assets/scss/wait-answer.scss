@@ -1,0 +1,67 @@
+.label__block {
+  background: #2c3e50; 
+  background: linear-gradient(to left, #3498db, #2c3e50);
+  min-height: 100vh; 
+  width: 100%;
+}
+.label__block-wrapper {
+  font-family: "Roboto", sans-serif;
+  line-height: 160%;
+  border-radius: 4px;
+  box-shadow: -5px 7px 20px -4px rgba(0,0,0,0.75);
+  background-color: #fff;
+  text-align: center; 
+  padding: 25px 25px 50px 25px;
+  margin: 50px 0;
+  width: 450px; 
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 120px;
+}
+.label__logo-wrapper {
+  padding: 18px 0 14px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.label__logo {
+  background: url('../assets/images/best-leasing-logo.png');
+  background-size: 130px 35px;
+  width: 130px;
+  height: 35px;
+  z-index: 3;
+}
+.label__hr {
+  width: 65%;
+  height: 10px;
+  padding: 1px;
+  border-bottom: 1px solid #6c757d;
+  margin-right: auto;
+  margin-left: auto;
+}
+.label__header {
+  font-size: 26px; 
+  color: #0d161f;
+  font-family: "Roboto", "sens-serif";
+  margin: 16px 0 0 0;
+}
+.label__header-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.label__header-svg {
+  margin-bottom: 3px; 
+  margin-right: 5px;
+}
+.label__subheader {
+  margin: 0;
+  font-size: 19px; 
+  font-family: "Roboto", "sens-serif";
+  line-height: 35px;
+}
+.label__paragraph {
+  font-size: 16px;
+  margin: 20px 0 0 0;
+  font-family: "Roboto", "sens-serif";
+}

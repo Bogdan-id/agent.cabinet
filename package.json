@@ -1,7 +1,6 @@
 {
     "private": true,
     "scripts": {
-        "lint": "vue-cli-service lint",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
         "watch-poll": "npm run watch -- --watch-poll",
@@ -31,12 +30,12 @@
     "dependencies": {
         "bootstrap": "^4.0.0",
         "chartist": "^0.11.0",
-        "es6-promise": "^4.2.4",
-        "vue-clickaway": "^2.1.0",
-        "vue-notifyjs": "^0.3.0",
         "core-js": "^3.6.4",
+        "es6-promise": "^4.2.4",
         "vue": "^2.6.11",
+        "vue-clickaway": "^2.1.0",
         "vue-loader": "^15.9.1",
+        "vue-notifyjs": "^0.3.0",
         "vue-router": "^3.1.6",
         "vuelidate": "^0.7.5"
     },

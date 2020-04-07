@@ -38,7 +38,8 @@
 }
 .app__input-text-wrapper {
   position: relative;
-  margin-bottom: 15px;
+  height: 60px;
+  // margin-bottom: 15px;
 }
 .app__input-text {
   font-size: 14px;
@@ -48,11 +49,21 @@
   border: 1px solid #ced4da;
   border-radius: 3px;
 }
-.app__input-errors {
+.app__input-error {
+  transition: opacity 0.7s;
+  opacity: 0;
+  position: absolute;
+  bottom: 0;
+  left: 2px;
   color: $danger;
   font-size: 10px;
   margin: 3px 0 0 5px;
   display: block;
+  font-weight: bold;
+}
+.input-error--active {
+  transition: opacity 0.7s;
+  opacity: 1;
 }
 .app__input-text:focus {
   border: 1px solid $primary;
@@ -80,5 +91,8 @@
 }
 .app__sign-navigate-link {
   display: block;
+  font-size: 12px;
+}
+.app__login-footer {
   font-size: 12px;
 }

@@ -10,11 +10,12 @@
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text"
+						id="number"
 						type="text" 
-						placeholder="email"
-						v-model="email"
-						@paste="$v.email.$touch()"
-						@input="$v.email.$touch()"
+						placeholder="+38 (0__) ___ __ __"
+						v-model="number"
+						@paste="pasteEvent = true"
+						@input=" applyMask()"
 						/>
 				</div>
 				<div class="app__input-text-wrapper">
@@ -26,6 +27,12 @@
 						@blur="$v.password.$touch()"
 						@input="$v.password.$touch()"
 						/>
+						<span 
+						:class="passwordErrors.length > 0 
+							? 'app__input-error input-error--active' 
+							: 'app__input-error'"> 
+						{{ passwordErrors[0] }}
+					</span>
 				</div>
 				<div class="app__register-checkbox-wrapper">
 					<input
@@ -40,7 +47,10 @@
 					</label>
 				</div>
 				<div class="app__button-wrapper">
-					<button @click="submit()" class="app__btn-primary">Увiйти</button>
+					<button @click="submit()" class="app__btn-primary">
+						<span v-if="!request">Увiйти</span>
+						<div v-if="request" class="lds-dual-ring"></div>
+					</button>
 					<div class="app__sign-navigate">
 						<a class="app__sign-navigate-link --link" href="#">Забули пароль?</a>
 						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
@@ -53,19 +63,21 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
+import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 import { minPassLength, maxPassLength} from '../../variables'
 
 import axios from 'axios'
 
 export default {
+	props: ['reload'],
 	mixins: [validationMixin],
 	data: () => ({
+		pageLoad: window.performance,
 		password: null,
-		email: null,
+		number: null,
 		remember: false,
 		pasteEvent: false,
-		errors: {}
+		request: false,
 	}),
 	validations: {
 		password: {
@@ -73,10 +85,6 @@ export default {
 			minLength: minLength(minPassLength()),
 			maxLength: maxLength(maxPassLength())
 		},
-		email: {
-			email,
-			required
-		}
 	},
 	methods: {
 		minPassLength,
@@ -85,30 +93,146 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 		},
 		submit() {
-			!this.$v.$invalid 
-			&& this.$v.$dirty 
-				? this.userRegister(this.getRegObject())
-				: false
-			// const tokenLogIn = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR'
-			// const tokenLogOut =  'T9wegtoS1EgWYAPRCPtLV8IavuUL6rbaTIPPxo82'
+			if(!this.$v.$invalid && this.$v.$dirty ){
+				this.userRegister(this.getRegObject())
+			} else {
+				this.$notify({
+						message: 'Форма заповнена не невірно',
+						type: 'info',
+						horizontalAlign: 'center'
+					})
+			}
 		},
 		getRegObject() {
 			return {
-				'email': this.email,
+				'phone': this.number,
 				'password': this.password,
 				'_token': this.getCsrf(),
 			}
 		},
 		userRegister(userObj) {
+			this.request = true
 			console.log(userObj)
 			axios.post(`/login`, userObj)
 			.then(response => {
+				this.request = false
 				console.log(response)
+				this.$router.push('/home')
 			})
 			.catch(e => {
-				console.log(e)
+				this.request = false
+				if(e.response.status == 422) {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: 'Невірний логін або пароль',
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				} else if (e.response.status == 429) {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини',
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				} else {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: `Код помилки: ${e.response.status} \n ${e.response.data.message}`,
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				}
 			})
 		},
+		applyMask() {
+			const el = document.getElementById('number')
+			const event = new Event('input', {bubbles: true})
+			const mask = '+38 (0##) ### - ## - ##'
+			const sign = '#'
+
+			const numLengthRe = /[^#\d+]/g
+			const notDigit = /[^\d]/g
+
+			const firstIndex = mask.indexOf(sign)
+			const countryCode = mask.slice(0, firstIndex)
+			const numLength = mask.slice(firstIndex).replace(numLengthRe, '').length
+			const number = this.number.replace(countryCode, '').replace(numLengthRe, '')
+			const cCpresent = this.number.indexOf(countryCode)
+
+			let splitMask = mask.split('')
+			let indexes = []
+
+			splitMask.forEach((val, i) => {
+				val === sign ? indexes.push(i) : false
+			})
+			let fillMask = (val) => {
+				val.split('').forEach((val, i) => {
+						indexes[i] ? splitMask[indexes[i]] = val : false
+				})
+			}
+			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
+				fillMask(
+					this.number
+						.replace(countryCode, '')
+						.replace(numLengthRe, '')
+						.slice(number.length - numLength)
+				)
+			} else if(number.length >= numLength && cCpresent === -1) {
+				fillMask(
+					this.number
+						.replace(numLengthRe, '')
+						.slice(number.length - numLength)
+				)
+			} else if (this.number.length > 1){
+				fillMask(
+					this.number
+						.slice(firstIndex)
+						.replace(notDigit, '')
+				)
+			} else if (this.number.length <= 1) {
+				fillMask(
+					this.number
+						.replace(notDigit, '')
+				)
+			}
+
+			const joinMask = splitMask.join('').replace(/[^\d]+$/, '')
+
+			if(el.value !== joinMask) {
+				el.value = joinMask
+				el.setSelectionRange(splitMask.indexOf(sign), splitMask.indexOf(sign))
+				el.dispatchEvent(event)
+			}
+			this.pasteEvent = false
+		},
 	},
+	watch: {
+		pageLoad(val) {
+			console.log(val)
+		}
+	},
+	computed: {
+		passwordErrors() {
+			const errors = []
+			if (!this.$v.password.$error) return errors
+			!this.$v.password.required && errors.push('Поле пароль обов\'язкове для заповнення')
+			!this.$v.password.minLength && errors.push(`Мінімальна кількість знаків ${this.minPassLength()}`)
+			!this.$v.password.maxLength && errors.push(`Максимальна кількість знаків ${this.maxPassLength()}`)
+			return errors
+		}
+	},
+	mounted() {
+		console.log(this.pageLoad)
+		this.reload
+			? this.$router.go()
+			: false
+	}
 }
 </script>

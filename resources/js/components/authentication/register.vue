@@ -10,31 +10,17 @@
 					<input 
 						class="app__input-text" 
 						type="text" 
-						placeholder="Прізвище"
-						v-model="lastName"
-						@input="$v.lastName.$touch()"
-						@blur="$v.lastName.$touch()"
-						/>
-				</div>
-				<div class="app__input-text-wrapper">
-					<input 
-						class="app__input-text" 
-						type="text" 
 						placeholder="Ім'я"
 						v-model="firstName"
 						@input="$v.firstName.$touch()"
 						@blur="$v.firstName.$touch()"
 						/>
-				</div>
-				<div class="app__input-text-wrapper">
-					<input 
-						class="app__input-text" 
-						type="text" 
-						placeholder="По батькові"
-						v-model="patronymic"
-						@input="$v.patronymic.$touch()"
-						@blur="$v.patronymic.$touch()"
-						/>
+						<span 
+							:class="firstNameError
+								? 'app__input-error input-error--active' 
+								: 'app__input-error'"> 
+							{{ firstNameErrors[0] }}
+						</span>
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
@@ -46,7 +32,6 @@
 						@paste="pasteEvent = true"
 						@input=" applyMask()"
 						/>
-						<!-- <span v-if="phoneErrors" class="app__input-errors"> {{ errors.phone }} </span> -->
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
@@ -57,6 +42,12 @@
 						@blur="$v.email.$touch()"
 						@input="$v.email.$touch()"
 						/>
+						<span 
+							:class="emailError
+								? 'app__input-error input-error--active' 
+								: 'app__input-error'"> 
+							{{ emailErrors[0] }}
+						</span>
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
@@ -67,6 +58,12 @@
 						@blur="$v.password.$touch()"
 						@input="$v.password.$touch()"
 						/>
+						<span 
+							:class="passwordError
+								? 'app__input-error input-error--active' 
+								: 'app__input-error'"> 
+							{{ passwordErrors[0] }}
+						</span>
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
@@ -77,6 +74,12 @@
 						@blur="$v.repeatPassword.$touch()"
 						@input="$v.repeatPassword.$touch()"
 						/>
+						<span 
+							:class="repeatPasswordErrors
+								? 'app__input-error input-error--active' 
+								: 'app__input-error'"> 
+							{{ repeatPasswordErrors[0] }}
+						</span>
 				</div>
 				<div class="app__register-checkbox-wrapper">
 					<input
@@ -92,10 +95,14 @@
 					</label>
 				</div>
 				<div class="app__button-wrapper">
-					<button @click="submit()" class="app__sign-in-btn">Зареєструватися</button>
+					<button @click="submit()" class="app__btn-primary">
+						<span v-if="!request">Зареєструватися</span>
+						<div v-if="request" class="lds-dual-ring"></div>
+					</button>
 				</div>
 				<p class="app__login-footer">
-					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на <a class="--link" href="/login">сторінці авторизації</a>
+					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на 
+					<a class="--link" href="/login">сторінці авторизації</a>
 				</p>
 			</div>
 		</div>
@@ -107,7 +114,6 @@ import { validationMixin } from 'vuelidate'
 import { 
 	required, 
 	email, 
-	alpha, 
 	sameAs,
 	minLength,
 	maxLength
@@ -121,8 +127,6 @@ export default {
 	data: () => ({
 		// inputs
 		firstName: null,
-		lastName: null,
-		patronymic: null,
 		email: null,
 		number: null,
 		password: null,
@@ -133,17 +137,14 @@ export default {
 		pasteEvent: false,
 
 		// errors
-		errors: {}
+		errors: {},
+
+		// boolean
+		request: false
 	}),
 
 	validations: {
 		firstName: {
-			required,
-		},
-		lastName: {
-			required,
-		},
-		patronymic: {
 			required,
 		},
 		email: {
@@ -166,19 +167,19 @@ export default {
 		minPassLength,
 		maxPassLength,
 		submit() {
-			!this.$v.$invalid 
-			&& this.$v.$dirty 
-			&& this.consent
-				? this.userRegister(this.getRegObject())
-				: false
-			// const tokenLogIn = 'fL9h15mSfNFxye321P68ZRCpWioDJfV9EXhc6cjR'
-			// const tokenLogOut =  'T9wegtoS1EgWYAPRCPtLV8IavuUL6rbaTIPPxo82'
+			if(!this.$v.$invalid && this.$v.$dirty && !this.consent){
+				this.userRegister(this.getRegObject())
+			} else {
+				this.$notify({
+					message: 'Форма заповнена не невірно',
+					type: 'info',
+					horizontalAlign: 'center'
+				})
+			}
 		},
 		getRegObject() {
 			return {
-				'first_name': this.firstName,
-				'last_name': this.lastName,
-				'patronymic': this.patronymic,
+				'name': this.firstName,
 				'phone': this.number,
 				'email': this.email,
 				'password': this.password,
@@ -187,13 +188,44 @@ export default {
 			}
 		},
 		userRegister(userObj) {
+			this.request = true
 			console.log(userObj)
 			axios.post(`/register`, userObj)
-			.then(response => {
-				console.log(response)
-			})
-			.catch(e => {
-				console.log(e)
+			.then(response => { 
+			console.log(response)
+			this.request = false
+			this.$router.push('/verification')
+		})
+		.catch(e => {
+			this.request = false
+				if(e.response.status == 422) {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: 'Невірний логін або пароль',
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				} else if (e.response.status == 429) {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини',
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				} else {
+					console.log(e.response.data)
+					console.log(e.response.status)
+					console.log(e.response.headers)
+					this.$notify({
+						message: `Код помилки: ${e.response.status} \n ${e.response.data.message}`,
+						type: 'warning',
+						horizontalAlign: 'center'
+					})
+				}
 			})
 		},
 		applyMask() {
@@ -262,6 +294,45 @@ export default {
 		phoneErrors() {
 			return this.errors.phone.length > 0
 		},
+		emailErrors() {
+			const errors = []
+			if (!this.$v.email.$error) return errors
+			!this.$v.email.email && errors.push('Невірний імейл')
+			!this.$v.email.required && errors.push('Поле імейл обов\'язков для заповнення')
+			return errors
+		},
+		firstNameErrors() {
+			const errors = []
+			if (!this.$v.firstName.$error) return errors
+			!this.$v.firstName.required && errors.push('Поле "Ім\'я" - обов\'язкове для заповнення')
+			return errors
+		},
+		passwordErrors() {
+			const errors = []
+			if (!this.$v.password.$error) return errors
+			!this.$v.password.required && errors.push('Поле "Пароль" - обов\'язкове для заповнення')
+			!this.$v.password.minLength && errors.push(`Мінімальна кількість знаків ${this.minPassLength()}`)
+			!this.$v.password.maxLength && errors.push(`Максимальна кількість знаків ${this.maxPassLength()}`)
+			return errors
+		},
+		repeatPasswordErrors() {
+			const errors = []
+			if (!this.$v.repeatPassword.$error) return errors
+			!this.$v.repeatPassword.sameAsPassword && errors.push('Паролі не співпадають')
+			return errors
+		},
+		emailError() {
+			return this.emailErrors.length > 0 
+		},
+		firstNameError() {
+			return this.firstNameErrors.length > 0 
+		},
+		passwordError() {
+			return this.passwordErrors.length > 0 
+		},
+		repeatPasswordError() {
+			return this.repeatPasswordErrors.length > 0 
+		}
 	},
 }
 </script>

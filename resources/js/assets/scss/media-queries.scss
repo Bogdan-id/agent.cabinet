@@ -26,10 +26,20 @@
     padding: 25px 30px 10px 30px;
     width: 400px;
   }
-  .app__input-text-wrapper {
-    margin-bottom: 13px;
-  }
+  // .app__input-text-wrapper {
+  //   margin-bottom: 13px;
+  // }
   .app__input-text {
     height: 40px;
+  }
+  .app__input-text-wrapper {
+    height: 55px;
+  }
+}
+
+/* Wait-answer */
+@media(max-width: 557px) {
+  .label__block-wrapper {
+    width: 85%;
   }
 }

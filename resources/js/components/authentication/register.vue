@@ -171,11 +171,8 @@ export default {
 			if(!this.$v.$invalid && this.$v.$dirty && this.consent){
 				this.userRegister(this.getRegObject())
 			} else {
-				this.$notify({
-					message: 'Форма заповнена не невірно',
-					type: 'info',
-					horizontalAlign: 'center'
-				})
+				let error = 'Форма заповнена не невірно'
+				this.simpleNotify(error, 'warning')
 			}
 		},
 		getRegObject() {
@@ -200,33 +197,53 @@ export default {
 		.catch(e => {
 			this.request = false
 				if(e.response.status == 422) {
-					console.log(e.response.data)
-					console.log(e.response.status)
-					console.log(e.response.headers)
-					this.$notify({
-						message: 'Невірний логін або пароль',
-						type: 'warning',
-						horizontalAlign: 'center'
-					})
+					this.error422(e)
 				} else if (e.response.status == 429) {
-					console.log(e.response.data)
-					console.log(e.response.status)
-					console.log(e.response.headers)
-					this.$notify({
-						message: 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини',
-						type: 'warning',
-						horizontalAlign: 'center'
-					})
+					this.error429(e)
 				} else {
-					console.log(e.response.data)
-					console.log(e.response.status)
-					console.log(e.response.headers)
-					this.$notify({
-						message: `Код помилки: ${e.response.status} \n ${e.response.data.message}`,
-						type: 'warning',
-						horizontalAlign: 'center'
-					})
+					this.otherErrors(e)
 				}
+			})
+		},
+		error422(e) {
+			this.consoleError(e)
+			const checkEmail = 'The email has already been taken.'
+			const checkNumber = 'The phone has already been taken.'
+			const emailError = 'Зазначена вами електронна пошта вже зареєстрована у нашому сервісі'
+			const numberError = 'Зазначений вами номер телефону вже зареєстрований у нашому сервісі'
+			let errorObj = e.response.data.errors
+			if (Object.keys(errorObj).length > 0) {
+				if(errorObj.hasOwnProperty('email')) {
+					errorObj.email[0] == checkEmail
+						? this.simpleNotify(emailError, 'warning')
+						: this.simpleNotify(errorObj.message, 'warning')
+				} else if (errorObj.hasOwnProperty('phone')) {
+					errorObj.phone[0] == checkNumber
+						? this.simpleNotify(numberError ,'warning')
+						: this.simpleNotify(errorObj.message, 'warning')
+				}	
+			}
+		},
+		consoleError(e) {
+			console.log(e.response.data)
+			console.log(e.response.status)
+			console.log(e.response.headers)
+		},
+		error429(e) {
+			this.consoleError(e)
+			const error = 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини'
+			this.simpleNotify(error, 'warning')
+		},
+		otherErrors(e) {
+			this.consoleError(e)
+			const error = `Код помилки: ${e.response.status} \n ${e.response.data.message}`
+			this.simpleNotify(error, 'warning')
+		},
+		simpleNotify(message, type) {
+			this.$notify({
+				message: message,
+				type: type,
+				horizontalAlign: 'center'
 			})
 		},
 		applyMask() {

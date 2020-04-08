@@ -67,6 +67,9 @@ export default {
         this.$sidebar.displaySidebar(false);
       }
     }
+  },
+  mounted() {
+    console.log(this.$sidebar)
   }
 };
 </script>

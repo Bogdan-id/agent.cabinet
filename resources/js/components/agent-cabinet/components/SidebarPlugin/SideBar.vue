@@ -47,6 +47,10 @@ export default {
       links: [],
   }),
   props: {
+    headerLogo: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       default: "Paper Dashboard"
@@ -127,6 +131,7 @@ export default {
     this.$watch("$route", this.findActiveLink, {
       immediate: true
     });
+    console.log(this.$refs)
   }
 };
 </script>
@@ -139,29 +144,38 @@ export default {
   .sidebar {
     transition: all 0.5s!important;
     overflow-y: scroll!important;
-    background: #f4f3ef;
+    background: #212120;
   }
-  ::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 5px;
+  ::-webkit-scrollbar-track
+  {
+    border-radius: 10px;
+    background-color: #F5F5F5;
   }
-  ::-webkit-scrollbar-thumb {
-      border-radius: 4px;
-      background-color: rgba(0,0,0,.5);
-      -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+
+  ::-webkit-scrollbar
+  {
+    width: 8px;
+    background-color: #F5F5F5;
+  }
+
+  ::-webkit-scrollbar-thumb
+  {
+    border-radius: 10px;
+    background-color: #555;
+  }
+  .nav {
+    overflow-y: visible!important;
   }
   .sidebar-wrapper {
     transition: all 0.5s !important;
-    overflow-y: visible!important;
-    background: #212120;
   }
 
   /* modifiers */
-  .sidebar-wrapper--hide {
+  .sidebar--hide {
     transition: all 0.5s;
     width: var(--sidebar-collapsed)!important;
   }
-  .sidebar--hide {
+  .sidebar--hide .sidebar-wrapper {
     transition: all 0.5s;
     width: var(--sidebar-collapsed)!important;
   }
@@ -185,7 +199,7 @@ export default {
     position: absolute;
     padding-left: 42px;
   }
-  .nav-paragraph--hide {
+  .sidebar--hide .nav-item-title {
     transition: all 0.3s;
     display: opacity 0.3s;
     opacity: 0;
@@ -193,9 +207,9 @@ export default {
   .moving-arrow {
     transition: all 0.5s;
   }
-  .moving-arrow--collapse {
+  .sidebar--hide .moving-arrow {
     transition: all 0.5s;
-    left: 73px!important;
+    left: 67px!important;
   }
 
   /* main-panel */
@@ -210,19 +224,27 @@ export default {
   }
 
   .app__header-logo {
-    transition: all 0.8s ease-out!important;
-    opacity: 1!important;
   }
-  .header-logo--hide {
-    transition: all 0.4s!important;
-    opacity: 0!important;
+  .sidebar--hide .app__header-logo {
+    transition: all 0.3s;
+    margin-right: auto!important;
+    margin-left: auto!important;
+    background: url('../../../../assets/images/best-leasing-logo-small.png');
+    background-size: 60px 60px;
+    width: 60px;
+    height: 60px;
+    z-index: 3;
+  }
+  .sidebar--hide .vue-paper-sidebar__logo-wrapper {
+    padding: 30px 0 22px 0;
   }
 
   /* other styles */
   .vue-paper-sidebar__logo-wrapper {
     background: #f4f3ef; 
+    width: 100%;
     z-index: 1; 
-    padding: 45px 0 22px 0; 
+    padding: 35px 0 32px 0; 
   }
   .sidebar__toggle-icon {
     transition: all 0.5s ease-in-out;

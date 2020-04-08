@@ -80,25 +80,13 @@ export default {
   methods: {
     toggleCustomSidebar() {
       let sidebar = document.querySelector('.sidebar')
-      let sidebarWrapper = document.querySelector('.sidebar-wrapper')
-      let navItems = document.querySelectorAll('.nav-item-title')
-      let movingArrow = document.querySelector('.moving-arrow')
       let mainPanel = document.querySelector('.main-panel')
-      let appHeaderLogo = document.querySelector('.app__header-logo')
       if(this.showSidebar) {
-        appHeaderLogo.classList.add('header-logo--hide')
         mainPanel.classList.add('main-panel--expand')
-        movingArrow.classList.add('moving-arrow--collapse')
-        navItems.forEach(async v => await v.classList.add('nav-paragraph--hide'))
-        sidebarWrapper.classList.add('sidebar-wrapper--hide')
         sidebar.classList.add('sidebar--hide')
         this.showSidebar = false
       } else if(!this.showSidebar) {
-        appHeaderLogo.classList.remove('header-logo--hide')
         mainPanel.classList.remove('main-panel--expand')
-        movingArrow.classList.remove('moving-arrow--collapse')
-        navItems.forEach(async v => await v.classList.remove('nav-paragraph--hide'))
-        sidebarWrapper.classList.remove('sidebar-wrapper--hide')
         sidebar.classList.remove('sidebar--hide')
         this.showSidebar = true
       }

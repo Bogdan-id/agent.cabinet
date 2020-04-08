@@ -175,7 +175,7 @@ export default {
     transition: all 0.5s;
     width: var(--sidebar-collapsed)!important;
   }
-  .sidebar--hide ~ .sidebar-wrapper {
+  .sidebar--hide .sidebar-wrapper {
     transition: all 0.5s;
     width: var(--sidebar-collapsed)!important;
   }
@@ -209,7 +209,7 @@ export default {
   }
   .sidebar--hide .moving-arrow {
     transition: all 0.5s;
-    left: 73px!important;
+    left: 67px!important;
   }
 
   /* main-panel */
@@ -224,12 +224,19 @@ export default {
   }
 
   .app__header-logo {
-    transition: all 0.8s ease-out!important;
-    opacity: 1!important;
   }
   .sidebar--hide .app__header-logo {
-    transition: all 0.4s!important;
-    opacity: 0!important;
+    transition: all 0.3s;
+    margin-right: auto!important;
+    margin-left: auto!important;
+    background: url('../../../../assets/images/best-leasing-logo-small.png');
+    background-size: 60px 60px;
+    width: 60px;
+    height: 60px;
+    z-index: 3;
+  }
+  .sidebar--hide .vue-paper-sidebar__logo-wrapper {
+    padding: 30px 0 22px 0;
   }
 
   /* other styles */
@@ -237,7 +244,7 @@ export default {
     background: #f4f3ef; 
     width: 100%;
     z-index: 1; 
-    padding: 45px 0 22px 0; 
+    padding: 35px 0 32px 0; 
   }
   .sidebar__toggle-icon {
     transition: all 0.5s ease-in-out;

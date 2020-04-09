@@ -116,7 +116,7 @@ export default {
       });
     },
     addLink(link) {
-      // console.log(this.$slots)
+      console.log(this.$slots)
       const index = this.$slots.links.indexOf(link.$vnode);
       this.links.splice(index, 0, link);
     },

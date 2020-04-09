@@ -2,68 +2,31 @@
     <div class="row">
       <div class="col-12">
         <div class="calculator__btn-wrapper">
-            <p-button 
-              @click.native="newCalculation = !newCalculation"
-              type="success" 
-              size="sm">Новий розрахунок
-            </p-button>
-            <p-button 
-              @click.native="test()"
-              type="success" 
-              size="sm">test()
-            </p-button>
-          </div>
+          <p-button 
+            @click.native="newCalculation = !newCalculation"
+            type="success" 
+            size="sm">Новий розрахунок
+          </p-button>
+        </div>
         <card class="card-cust">
           <div v-if="newCalculation" class="calculator__new-calculation">
-            <drop-down :title="itemType" @change="dataUpdate($event)" tag="div">
-              <a class="dropdown-item">Легкові та комерційні авто</a>
-              <a class="dropdown-item">СПЕЦІАЛЬНІ ТЗ</a>
-              <a class="dropdown-item">Вантажні авто</a>
-              <!-- (При виборі пункту обладнання, марка і модель показувати “Інше”) -->
-              <a class="dropdown-item">Обладнання</a>
-              <a class="dropdown-item">Причепи та Напівпричепи</a>
-              <a class="dropdown-item">Сільгосптехніка</a>
-            </drop-down>
-            <drop-down :title="itemCondition" v-model="calculation.itemCondition" tag="div">
-              <a class="dropdown-item">Новий</a>
-              <a class="dropdown-item">б/у</a>
-            </drop-down>
-            <drop-down :title="itemBrand" v-model="calculation.itemBrand" tag="div">
-              <a class="dropdown-item">Audi</a>
-              <a class="dropdown-item">Renault</a>
-              <a class="dropdown-item">ВАЗ</a>
-            </drop-down>
-            <drop-down :title="itemYear" v-model="calculation.itemYear" tag="div">
-              <a class="dropdown-item">2020</a>
-              <a class="dropdown-item">2019</a>
-            </drop-down>
-            <div class="calculator__input">
-              <span class="calculator__input-title">Об'єм</span>
-              <fg-input 
-                placeholder="Об'єм" 
-                v-model="calculation.itemEngineCapacity"
-                type="number"
-                class="cust-form-group form-group--sm">
-              </fg-input>
-            </div>
-            <drop-down :title="clientType" v-model="calculation.clientType" tag="div">
-              <a class="dropdown-item">Юридична особа</a>
-              <a class="dropdown-item">Фізична особа</a>
-            </drop-down>
-            <drop-down :title="agreementCurrency" v-model="calculation.agreementCurrency" tag="div">
-              <a class="dropdown-item">UAH</a>
-              <a class="dropdown-item">USD</a>
-              <a class="dropdown-item">EUR</a>
-            </drop-down>
-            <div class="calculator__input">
-              <span class="calculator__input-title">Вартість</span>
-              <fg-input 
-                placeholder="Вартість" 
-                v-model="calculation.itemCost" 
-                type="number" 
-                class="cust-form-group form-group--sm">
-              </fg-input>
-            </div>
+            <!-- (При виборі пункту обладнання, марка і модель показувати “Інше”) -->
+            <v-select id="" dense :items="itemType" v-model="calculation.itemType" label="Тип">
+            </v-select>
+            <v-select dense :items="itemCondition" v-model="calculation.itemCondition" label="Стан">
+            </v-select>
+            <v-select dense :items="itemBrand" v-model="calculation.itemBrand" label="Марка">
+            </v-select>
+            <v-select dense :items="itemYear" v-model="calculation.itemYear" label="Рік">
+            </v-select>
+            <v-text-field dense v-model="calculation.itemEngineCapacity" placeholder="Об'єм двигуна">
+            </v-text-field>
+            <v-select dense :items="clientType" v-model="calculation.clientType" label="Суб'єкт">
+            </v-select>
+            <v-select dense :items="agreementCurrency" v-model="calculation.agreementCurrency" label="Валюта договору лізингу">
+            </v-select>
+            <v-text-field dense v-model="calculation.itemCost" placeholder="Вартість">
+            </v-text-field>
           </div>
         </card>
         <card :title="table.title" :subTitle="table.subTitle">
@@ -85,11 +48,7 @@
   // subTitle: "(Розрахунки за місяць)",
   // №	Дата	Тип	Клієнт	Марка	Модель	Cума	Детально
 import { PaperTable } from "../components"
-import { 
-  Button as PButton, 
-  DropDown,
-  FormGroupInput as FgInput,
-  } from "../components"
+import { Button as PButton } from "../components"
 const tableColumns = ["№", "Дата", "Тип", "Клієнт", "Марка", "Модель", "Сума", "Детально"]
 const tableData = [
   {
@@ -147,8 +106,6 @@ export default {
   components: {
     PaperTable,
     PButton,
-    DropDown,
-    FgInput
   },
   data:() => ({
     table: {
@@ -157,7 +114,19 @@ export default {
       columns: [...tableColumns],
       data: [...tableData]
     },
-
+    itemCondition: [ "Новий", "б/у" ],
+    itemType: [
+      "Легкові та комерційні авто",
+      "СПЕЦІАЛЬНІ ТЗ",
+      "Вантажні авто",
+      "Обладнання",
+      "Причепи та Напівпричепи",
+      "Сільгосптехніка"
+    ],
+    itemBrand: [ "Audi", "Renault", "ВАЗ" ],
+    clientType: [ "Юридична особа", "Фізична особа" ],
+    agreementCurrency: [ "UAH", "USD", "EUR" ],
+    itemYear: [ "2019", "2020" ],
     calculation: {
       itemType: null,
       itemCondition: null,
@@ -179,39 +148,20 @@ export default {
       console.log(e)
     }
   },
-  computed: {
-    itemType() {
-      return this.calculation.itemType === null ? 'Тип' : this.calculation.itemType
-    },
-    itemCondition() {
-      return this.calculation.itemCondition === null ? 'Стан' :this.calculation.itemCondition
-    },
-    itemBrand() {
-      return this.calculation.itemBrand === null ? 'Марка' : this.calculation.itemBrand
-    },
-    itemYear() {
-      return this.calculation.itemYear === null ? 'Рік' : this.calculation.itemYear
-    },
-    clientType() {
-      return this.calculation.clientType === null ? 'Тип клієнта' : this.calculation.clientType
-    },
-    agreementCurrency() {
-      return this.calculation.agreementCurrency == null ? 'Валюта договору лізингу' : this.calculation.agreementCurrency
-    },
-  }
 }
 </script>
 <style lang="scss">
   .calculator__new-calculation {
-    /* */
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
-  .calculator__input {
-    display: flex; 
-    align-items: center;
+  .calculator__new-calculation .v-input {
+    display: inline-block;
+    width: 28%;
+    margin: 0 11px;
   }
-  .calculator__input-title {
-    /*  */
-  }
+
   .cust-form-group .form-control {
     border-bottom: 1px solid black;
     border-radius: 0;
@@ -222,20 +172,23 @@ export default {
     padding: 7px 8px;
     margin: 0 4px;
   }
-  .calculator__input .cust-form-group {
-    margin: 0;
-  }
+
   .calculator__btn-wrapper {
     display: block;
-    margin: 12px 0;
+    margin: 12px 10px;
   }
-  .card-cust 
-    .dropdown,
-    .calculator__input {
-      display: inline-flex;
-      padding: 10px 8px;
-    }
   .card-cust .card-body {
     transition: all 0.2s;
+  }
+
+  @media(max-width: 757px) {
+    .calculator__new-calculation .v-input {
+      width: 40%;
+    }
+  }
+  @media(max-width: 637px) {
+    .calculator__new-calculation .v-input {
+      width: 90%;
+    }
   }
 </style>

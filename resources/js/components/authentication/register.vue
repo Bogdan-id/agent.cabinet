@@ -316,7 +316,7 @@ export default {
 			const errors = []
 			if (!this.$v.email.$error) return errors
 			!this.$v.email.email && errors.push('Невірний імейл')
-			!this.$v.email.required && errors.push('Поле імейл обов\'язков для заповнення')
+			!this.$v.email.required && errors.push('Поле імейл обов\'язкове для заповнення')
 			return errors
 		},
 		firstNameErrors() {

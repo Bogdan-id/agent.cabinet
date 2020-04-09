@@ -63,8 +63,7 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
-import { minPassLength, maxPassLength} from '../../variables'
+import { required } from 'vuelidate/lib/validators'
 
 import axios from 'axios'
 
@@ -81,13 +80,9 @@ export default {
 	validations: {
 		password: {
 			required,
-			minLength: minLength(minPassLength()),
-			maxLength: maxLength(maxPassLength())
 		},
 	},
 	methods: {
-		minPassLength,
-		maxPassLength,
 		getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 		},
@@ -121,34 +116,31 @@ export default {
 			.catch(e => {
 				this.request = false
 				if(e.response.status == 422) {
-					console.log(e.response.data)
-					console.log(e.response.status)
-					console.log(e.response.headers)
-					this.$notify({
-						message: 'Невірний логін або пароль',
-						type: 'warning',
-						horizontalAlign: 'center'
-					})
+					this.consoleErrors(e)
+					const error = 'Невірний логін або пароль'
+					this.simpleNotify(error, 'warning')
 				} else if (e.response.status == 429) {
-					console.log(e.response.data)
-					console.log(e.response.status)
-					console.log(e.response.headers)
-					this.$notify({
-						message: 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини',
-						type: 'warning',
-						horizontalAlign: 'center'
-					})
+					this.consoleErrors(e)
+					const error = 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини'
+					this.simpleNotify(error, 'warning')
 				} else {
-					console.log(e.response.data)
-					console.log(e.response.status)
-					console.log(e.response.headers)
-					this.$notify({
-						message: `Код помилки: ${e.response.status} \n ${e.response.data.message}`,
-						type: 'warning',
-						horizontalAlign: 'center'
-					})
+					this.consoleErrors(e)
+					const error = `Код помилки: ${e.response.status} \n ${e.response.data.message}`
+					this.simpleNotify(error, 'warning')
 				}
 			})
+		},
+		simpleNotify(error, type) {
+			this.$notify({
+				message: error,
+				type: type,
+				horizontalAlign: 'center'
+			})
+		},
+		consoleErrors(e) {
+			console.log(e.response.data)
+			console.log(e.response.status)
+			console.log(e.response.headers)
 		},
 		applyMask() {
 			const el = document.getElementById('number')
@@ -217,8 +209,6 @@ export default {
 			const errors = []
 			if (!this.$v.password.$error) return errors
 			!this.$v.password.required && errors.push('Поле пароль обов\'язкове для заповнення')
-			!this.$v.password.minLength && errors.push(`Мінімальна кількість знаків ${this.minPassLength()}`)
-			!this.$v.password.maxLength && errors.push(`Максимальна кількість знаків ${this.maxPassLength()}`)
 			return errors
 		}
 	},

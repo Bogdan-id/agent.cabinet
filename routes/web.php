@@ -38,3 +38,5 @@ Route::post('/agent/create', 'AgentsController@create');
 
 Route::get('/getManagers', 'ManagerController@getManagers');
 
+Route::get('/getCurrentUser', 'UserController@getCurrentUser');
+

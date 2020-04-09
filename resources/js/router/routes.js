@@ -12,7 +12,7 @@ import Notifications from "../components/agent-cabinet/pages/Notifications.vue"
 import Icons from "../components/agent-cabinet/pages/Icons.vue"
 import Maps from "../components/agent-cabinet/pages/Maps.vue"
 import Typography from "../components/agent-cabinet/pages/Typography.vue"
-import TableList from "../components/agent-cabinet/pages/TableList.vue"
+import Calculator from "../components/agent-cabinet/pages/Calculator.vue"
 
 const routes = [
   { path: '/', component: Authorization },
@@ -55,9 +55,9 @@ const routes = [
         component: Typography
       },
       {
-        path: '/table-list',
-        name: 'table-list',
-        component: TableList
+        path: '/calculator',
+        name: 'Калькулятор лізинг',
+        component: Calculator
       }
     ]
   },

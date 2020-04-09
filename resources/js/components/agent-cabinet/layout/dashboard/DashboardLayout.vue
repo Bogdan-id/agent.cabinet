@@ -3,12 +3,12 @@
     <side-bar>
       <template slot="links">
         <sidebar-link to="/dashboard" name="Dashboard" icon="ti-panel"/>
-        <sidebar-link to="/stats" name="Калькулятор лізингу" icon="ti-user"/>
-        <sidebar-link to="/table-list" name="Оформити заявку" icon="ti-view-list-alt"/>
+        <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="ti-view-list-alt"/>
+        <sidebar-link to="/stats" name="Оформити заявку" icon="ti-user"/>
         <sidebar-link to="/typography" name="Звітність" icon="ti-text"/>
         <sidebar-link to="/icons" name="Корисні матеріали" icon="ti-pencil-alt2"/>
-        <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/>
-        <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/> -->
+        <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->
+        <!-- <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/> -->
       </template>
       <mobile-menu>
         <li class="nav-item">

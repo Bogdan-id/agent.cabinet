@@ -13,6 +13,7 @@
     "chartist": "^0.11.0",
     "core-js": "^3.6.4",
     "es6-promise": "^4.2.4",
+    "v-mask": "^2.1.0",
     "vue": "^2.6.11",
     "vue-clickaway": "^2.1.0",
     "vue-loader": "^15.9.1",
@@ -22,6 +23,7 @@
     "vuetify": "^2.2.21"
   },
   "devDependencies": {
+    "@mdi/font": "^5.0.45",
     "@vue/cli-plugin-babel": "~4.3.0",
     "@vue/cli-plugin-eslint": "~4.3.0",
     "@vue/cli-service": "~4.3.0",

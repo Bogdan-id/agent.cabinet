@@ -1,7 +1,8 @@
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
 import Registration from '../components/authentication/Registration'
-import WaitAnswer from '../components/authentication/Wait-answer'
+// import WaitAnswer from '../components/authentication/Wait-answer' <-- Uncomment here
+import CompleteRegistration from '../components/authentication/CompleteRegistration'
 
 /* Dashboard components */
 import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout.vue"
@@ -18,7 +19,8 @@ const routes = [
   { path: '/', component: Authorization },
 	{ path: '/login', component: Authorization, props: true, name: 'authorization' },
   { path: '/register', component: Registration},
-  { path: '/verification', component: WaitAnswer },
+  /* { path: '/verification', component: WaitAnswer }, */
+  { path: '/verification', component: CompleteRegistration },
 	{ 
 		path: '/home', 
     component: DashboardLayout,

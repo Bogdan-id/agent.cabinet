@@ -23,11 +23,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/verification',  function () {
     return view('verification');
-});
+})->middleware('dont_user_active');
 
-// Route::get('/createAgent', function () {
-//     return view('verification');
-// });
+Route::get('/registration', function () {
+    return view('create_agent');
+});
 
 Route::get('/verification/accept/{id}', 'VerificationController@acceptAgent');
 Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');

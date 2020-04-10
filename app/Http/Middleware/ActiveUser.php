@@ -27,8 +27,6 @@ class ActiveUser
             return $next($request);
         }else{
             return $next($request);
-        }
-       
-        
+        }      
     }
 }

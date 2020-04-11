@@ -91,7 +91,9 @@
               </div>
               <div v-show="nextPage">
               <div class="d-flex justify-space-between pt-7">
-                <span class="subtitle-1 font-weight-bold complete-reg-form-sub-title">Оберіть тип паспорту:</span>
+                <span class="subtitle-1 font-weight-bold complete-reg-form-sub-title">
+                    Оберіть тип паспорту:
+                </span>
                 <v-radio-group 
                     :error-messages="passportTypeErrors" 
                     @input="$v.passportType.$touch()" 

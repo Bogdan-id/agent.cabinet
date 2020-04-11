@@ -118,23 +118,23 @@ export default {
 				if(e.response.status == 422) {
 					this.consoleErrors(e)
 					const error = 'Невірний логін або пароль'
-					this.simpleNotify(error, 'warning')
+					this.simpleNotify('Помилка', error, 'error')
 				} else if (e.response.status == 429) {
 					this.consoleErrors(e)
 					const error = 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини'
-					this.simpleNotify(error, 'warning')
+					this.simpleNotify('Помилка', error, 'error')
 				} else {
 					this.consoleErrors(e)
 					const error = `Код помилки: ${e.response.status} \n ${e.response.data.message}`
-					this.simpleNotify(error, 'warning')
+					this.simpleNotify('Помилка', error, 'error')
 				}
 			})
 		},
-		simpleNotify(error, type) {
+		simpleNotify(title, text, group) {
 			this.$notify({
-				message: error,
-				type: type,
-				horizontalAlign: 'center'
+				group: group || 'standard',
+				title: title,
+				text: text,
 			})
 		},
 		consoleErrors(e) {

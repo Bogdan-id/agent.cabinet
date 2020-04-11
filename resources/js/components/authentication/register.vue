@@ -172,7 +172,7 @@ export default {
 				this.userRegister(this.getRegObject())
 			} else {
 				let error = 'Форма заповнена не невірно'
-				this.simpleNotify(error, 'warning')
+				this.simpleNotify('Помилка', error, 'error')
 			}
 		},
 		getRegObject() {
@@ -187,10 +187,8 @@ export default {
 		},
 		userRegister(userObj) {
 			this.request = true
-			console.log(userObj)
 			axios.post(`/register`, userObj)
-			.then(response => { 
-			console.log(response)
+			.then(() => { 
 			this.request = false
 			this.$router.push('/verification')
 		})
@@ -215,12 +213,12 @@ export default {
 			if (Object.keys(errorObj).length > 0) {
 				if(errorObj.hasOwnProperty('email')) {
 					errorObj.email[0] == checkEmail
-						? this.simpleNotify(emailError, 'warning')
-						: this.simpleNotify(errorObj.message, 'warning')
+						? this.simpleNotify('Помилка', emailError, 'error')
+						: this.simpleNotify('Помилка', errorObj.message, 'error')
 				} else if (errorObj.hasOwnProperty('phone')) {
 					errorObj.phone[0] == checkNumber
-						? this.simpleNotify(numberError ,'warning')
-						: this.simpleNotify(errorObj.message, 'warning')
+						? this.simpleNotify('Помилка', numberError, 'error')
+						: this.simpleNotify('Помилка', errorObj.message, 'error')
 				}	
 			}
 		},
@@ -232,18 +230,18 @@ export default {
 		error429(e) {
 			this.consoleError(e)
 			const error = 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини'
-			this.simpleNotify(error, 'warning')
+			this.simpleNotify('Помилка', error, 'error')
 		},
 		otherErrors(e) {
 			this.consoleError(e)
 			const error = `Код помилки: ${e.response.status} \n ${e.response.data.message}`
-			this.simpleNotify(error, 'warning')
+			this.simpleNotify('Помилка', error, 'error')
 		},
-		simpleNotify(message, type) {
+		simpleNotify(title, text, group) {
 			this.$notify({
-				message: message,
-				type: type,
-				horizontalAlign: 'center'
+				group: group || 'standard',
+				title: title,
+				text: text,
 			})
 		},
 		applyMask() {

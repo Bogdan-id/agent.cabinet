@@ -15,7 +15,8 @@
                       :error-messages="lastNameErrors" 
                       @blur="$v.lastName.$touch()" 
                       @input="$v.lastName.$touch(); trimReplaceNum('crf-last-name')"
-                      v-model="lastName" 
+                      v-model="lastName"
+                      :maxlength="lastNameMaxLength"
                       id="crf-last-name"
                       label="Прізвище" 
                       outlined dense clearable>
@@ -28,7 +29,8 @@
                       :error-messages="patronymicErrors" 
                       @blur="$v.patronymic.$touch()" 
                       @input="$v.patronymic.$touch(); trimReplaceNum('crf-patronymic')"
-                      v-model="patronymic" 
+                      v-model="patronymic"
+                      :maxlength="patronymicMaxLength"
                       id="crf-patronymic"
                       label="По батькові"
                       outlined dense clearable>
@@ -64,6 +66,7 @@
                         @blur="$v.companyName.$touch()" 
                         @input="$v.companyName.$touch()" 
                         v-model="companyName" 
+                        :maxlength="companyNameMaxLength"
                         label="Назва компанії" 
                         outlined dense clearable>
                     </v-text-field>
@@ -71,7 +74,8 @@
                         :error-messages="positionErrors" 
                         @blur="$v.position.$touch()" 
                         @input="$v.position.$touch()" 
-                        v-model="position" 
+                        v-model="position"
+                        :maxlength="positionMaxLength"
                         label="Посада" 
                         outlined dense clearable>
                     </v-text-field>
@@ -114,7 +118,7 @@
                         v-model="passportSeries" 
                         class="passport-serries" 
                         id="passwordS" 
-                        maxlength="2"  
+                        :maxlength="passportSeriesMaxLength"  
                         hint="Серія паспорта"
                         label="Серія" 
                         dense outlined counter persistent-hint>
@@ -128,7 +132,7 @@
                         v-model="passportNumber" 
                         class="passport-number"
                         label="Номер"
-                        maxlength="6"
+                        :maxlength="passportNumberMaxLength"
                         hint="Номер паспорта"
                         outlined counter dense persistent-hint>
                     </v-text-field>
@@ -142,7 +146,7 @@
                         class="passport-number"
                         label="УНЗР"
                         hint="Унікальний номер запису у реєстрі"
-                        maxlength="14" 
+                        :maxlength="unzrMaxLength" 
                         outlined dense counter clearable>
                     </v-text-field>
                     <v-text-field
@@ -154,7 +158,7 @@
                         v-mask="bioPassportNumberMask" 
                         class="passport-serries"
                         label="Номер документа"
-                        maxlength="9"
+                        :maxlength="bioPassportNumberMaxLength"
                         hint="Номер документа"
                         outlined counter dense persistent-hint>
                     </v-text-field>
@@ -168,7 +172,7 @@
                         v-model="inn" 
                         prepend-inner-icon="mdi-account-outline"
                         label="Ідентифікаційний код" 
-                        maxlength="10" 
+                        :maxlength="innMaxLength" 
                         outlined dense counter clearable>
                     </v-text-field>
                     <v-dialog
@@ -188,8 +192,8 @@
                           @change="save"
                           v-model="choosedDate"  
                           ref="picker"
-                          min="1930-04-20" 
-                          max="2002-04-10">
+                          :min="hundredYears" 
+                          :max="eighteenYearsAgo">
                       </v-date-picker>
                     </v-dialog>
                     <v-text-field 
@@ -280,6 +284,17 @@ export default {
 
     /* temporary data */
     choosedDate: null,
+
+    /* max-length values */
+    passportSeriesMaxLength: 2,
+    lastNameMaxLength: 46,
+    patronymicMaxLength: 46,
+    companyNameMaxLength: 120,
+    positionMaxLength: 120,
+    innMaxLength: 10,
+    bioPassportNumberMaxLength: 9,
+    passportNumberMaxLength: 6,
+    unzrMaxLength: 14,
   }),
   validations: {
     lastName: {
@@ -429,6 +444,20 @@ export default {
     }
   },
   computed: {
+    eighteenYearsAgo() {
+      let currentDate = new Date()
+      let month = currentDate.getUTCMonth() //months from 1-12
+      let day = currentDate.getUTCDate()
+      let year = currentDate.getUTCFullYear()
+      return new Date(year - 18, month, day).toISOString().substr(0, 10)
+    },
+    hundredYears() {
+      let currentDate = new Date()
+      let month = currentDate.getUTCMonth() //months from 1-12
+      let day = currentDate.getUTCDate()
+      let year = currentDate.getUTCFullYear()
+      return new Date(year - 100, month, day).toISOString().substr(0, 10)
+    },
     expandCompany() {
       return this.companyType !== null 
         ? 'complete-reg-form__expand --expand-active' 
@@ -583,7 +612,7 @@ export default {
   created() {
     /* Authorize the user (if not authorized) before filling out the form */
     this.getCurrentUser()
-  }
+  },
 }
 </script>
 <style scoped>

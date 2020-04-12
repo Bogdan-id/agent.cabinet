@@ -1,38 +1,39 @@
-.app__register-checkbox {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-.app__custom-checkbox {
-  border: 1px solid grey;
-  position: absolute;
-  // padding: 0.2rem 0.5rem 0 0.5rem;
-  height: 15px;
-  width: 15px;
-  background-color: $white;
-  transition: all 0.5s;
-}
-input:checked ~ .app__custom-checkbox {
-  transition: all 0.5s;
-  border: 0;
-  background-color: $primary;
-}
-.app__custom-checkbox::after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-input:checked ~ .app__custom-checkbox::after {
-  display: block;
-}
-.app__custom-checkbox::after {
-  left: 5px;
-  top: 1px;
-  width: 6px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  transform: rotate(45deg);
+.app__register-checkbox-wrapper {
+  position: relative;
+  margin: 0.5rem;
+  & .app__register-checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  & .app__custom-checkbox {
+    border: 1px solid grey;
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    background-color: $white;
+    transition: background-color 0.5s;
+  }
+  & .app__custom-checkbox::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(40deg);
+  }
+  & input:checked + .app__custom-checkbox {
+    transition: background-color 0.5s;
+    border: 0;
+    background-color: $primary;
+  }
+  & input:checked ~ .app__custom-checkbox::after {
+    display: block;
+  }
 }

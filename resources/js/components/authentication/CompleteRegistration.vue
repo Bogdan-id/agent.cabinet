@@ -50,7 +50,7 @@
                   <span class="title font-italic font-weight-light complete-reg-form-sub-title">Ви є -&nbsp;</span>
                   <v-radio-group 
                       @input="$v.companyType.$touch()" 
-                      @change="$v.companyType.$touch()" 
+                      @change="$v.companyType.$touch(); scrollToId('input-67')" 
                       :error-messages="companyTypeErrors" 
                       v-model="companyType"
                       class="complete-reg-form__radio" 
@@ -63,7 +63,7 @@
                   <div class="input__text">
                     <v-text-field 
                         :error-messages="companyNameErrors" 
-                        @blur="$v.companyName.$touch()" 
+                        @blur="$v.companyName.$touch();" 
                         @input="$v.companyName.$touch()" 
                         v-model="companyName" 
                         :maxlength="companyNameMaxLength"
@@ -73,7 +73,7 @@
                     <v-text-field 
                         :error-messages="positionErrors" 
                         @blur="$v.position.$touch()" 
-                        @input="$v.position.$touch()" 
+                        @input="$v.position.$touch(); scrollToId('btn-next')" 
                         v-model="position"
                         :maxlength="positionMaxLength"
                         label="Посада" 
@@ -84,7 +84,8 @@
                 <div :class="showBtnNextPage">
                   <span>
                     <v-btn @click="nextPage = !nextPage" 
-                        class="d-block" 
+                        class="d-block"
+                        id="btn-next" 
                         color="primary"
                         :disabled="!firstPageValid">
                         Далi&nbsp;
@@ -352,8 +353,8 @@ export default {
   },
   methods: {
     getCsrf() {
-			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-		},
+      return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
     submit() {
       if(this.dataValid) {
         // console.log(this.finalObj())
@@ -433,6 +434,12 @@ export default {
 				text: text,
 			})
 		},
+    scrollToId(id) {
+      const el = document.getElementById(id)
+      setTimeout(() => {
+        el.scrollIntoView({behavior: "smooth"})
+      }, 250)
+    }
   },
   watch: {
     modal(val) {
@@ -446,14 +453,14 @@ export default {
   computed: {
     eighteenYearsAgo() {
       let currentDate = new Date()
-      let month = currentDate.getUTCMonth() //months from 1-12
+      let month = currentDate.getUTCMonth()
       let day = currentDate.getUTCDate()
       let year = currentDate.getUTCFullYear()
       return new Date(year - 18, month, day).toISOString().substr(0, 10)
     },
     hundredYears() {
       let currentDate = new Date()
-      let month = currentDate.getUTCMonth() //months from 1-12
+      let month = currentDate.getUTCMonth()
       let day = currentDate.getUTCDate()
       let year = currentDate.getUTCFullYear()
       return new Date(year - 100, month, day).toISOString().substr(0, 10)

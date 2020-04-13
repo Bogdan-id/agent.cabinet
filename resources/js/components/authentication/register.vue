@@ -189,19 +189,19 @@ export default {
 			this.request = true
 			axios.post(`/register`, userObj)
 			.then(() => { 
-			this.request = false
-			this.$router.push('/verification')
-		})
-		.catch(e => {
-			this.request = false
-				if(e.response.status == 422) {
-					this.error422(e)
-				} else if (e.response.status == 429) {
-					this.error429(e)
-				} else {
-					this.otherErrors(e)
-				}
+				this.request = false
+				this.$router.go()
 			})
+			.catch(e => {
+				this.request = false
+					if(e.response.status == 422) {
+						this.error422(e)
+					} else if (e.response.status == 429) {
+						this.error429(e)
+					} else {
+						this.otherErrors(e)
+					}
+				})
 		},
 		error422(e) {
 			this.consoleError(e)

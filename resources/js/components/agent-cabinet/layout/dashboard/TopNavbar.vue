@@ -102,7 +102,7 @@ export default {
       axios.post(`/logout`, token)
 			.then(() => {
         this.btnLogOut = false
-        this.$router.push({ name: 'authorization', params: { reload: true }})
+        this.$router.go()
         const routeStorage = window.localStorage
         routeStorage.setItem('user', false)
 			})

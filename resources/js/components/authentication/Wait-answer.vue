@@ -15,8 +15,8 @@
             Ваше звернення в обробці
           </h1>
         </div>
-        <h1 class="label__subheader">Чекайте</h1>
-        <p class="label__paragraph">
+        <h1 class="title">Чекайте</h1>
+        <p class="subtitle-1">
           Ми зв'яжемося з вами, найближчим часом
         </p>
       </div>

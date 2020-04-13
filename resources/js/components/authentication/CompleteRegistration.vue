@@ -359,8 +359,9 @@ export default {
       if(this.dataValid) {
         // console.log(this.finalObj())
         this.request = true
-        axios.post(`/register`, this.finalObj)
-          .then(() => {
+        axios.post(`/agent/create`, this.finalObj())
+          .then((response) => {
+            console.log(response)
             const message = 'Зараз вас буде перенаправлено до вашого остобистого кабiнету'
             this.simpleNotify('Успiшно', message, 'success')
             setTimeout(() => {
@@ -369,8 +370,8 @@ export default {
             this.request = false
           })
           .catch(error => {
-            // console.log(error.response)
-            this.simpleNotify('Помилка', error.response.data.message, 'warning')
+            console.log(error.response)
+            this.simpleNotify('Помилка', error.response.statusText, 'warning')
             this.request = false
           })
       }

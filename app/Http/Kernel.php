@@ -22,6 +22,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\ActiveUser::class,
         \App\Http\Middleware\DontActiveUser::class,
+        \App\Http\Middleware\UserAgent::class,
+        \App\Http\Middleware\DontUserAgent::class,
     ];
 
     /**
@@ -66,5 +68,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'user_active' => \App\Http\Middleware\ActiveUser::class,
         'dont_user_active' => \App\Http\Middleware\DontActiveUser::class,
+        'user_agent' => \App\Http\Middleware\UserAgent::class,
+        'dont_user_agent' => \App\Http\Middleware\DontUserAgent::class,
     ];
 }

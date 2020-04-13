@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Agent;
 use App\User;
 
-class UserAgent
+class DontUserAgent
 {
     /**
      * Handle an incoming request.
@@ -20,14 +20,14 @@ class UserAgent
     {
         if(Auth::user()){
             $agent = Agent::where('user_id', '=', Auth::user()->id)->first();
-           if(!$agent){
-               return redirect('finish-register');
+           if($agent){
+               return redirect('home');
            }
 
            return $next($request);
        }else{
            
            return $next($request);
-       }      
+       }    
     }
 }

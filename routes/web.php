@@ -25,7 +25,7 @@ Route::get('/verification',  function () {
     return view('verification');
 })->middleware('dont_user_active');
 
-Route::get('/registration', function () {
+Route::get('/finish-register', function () {
     return view('create_agent');
 });
 

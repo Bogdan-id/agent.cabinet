@@ -1,7 +1,7 @@
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
 import Registration from '../components/authentication/Registration'
-// import WaitAnswer from '../components/authentication/Wait-answer' <-- Uncomment here
+import WaitAnswer from '../components/authentication/Wait-answer'
 import CompleteRegistration from '../components/authentication/CompleteRegistration'
 
 /* Dashboard components */
@@ -19,8 +19,8 @@ const routes = [
   { path: '/', component: Authorization },
 	{ path: '/login', component: Authorization, props: true, name: 'authorization' },
   { path: '/register', component: Registration},
-  /* { path: '/verification', component: WaitAnswer }, */
-  { path: '/verification', component: CompleteRegistration },
+  { path: '/verification', component: WaitAnswer },
+  { path: '/finish-register', component: CompleteRegistration },
 	{ 
 		path: '/home', 
     component: DashboardLayout,

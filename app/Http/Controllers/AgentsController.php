@@ -65,22 +65,25 @@ class AgentsController extends Controller
     {
         $user = Auth::user();
         $agent = Agent::where('user_id', '=', $user->id)->first();
-        
+        if($agent){
+            switch ($agent->passport_type_id) {
+                case 1:
+                    $document = Passport::where('agent_id', '=', $agent->id)->first();
+                    break;
+                case 2:
+                    $document = IdCard::where('agent_id', '=', $agent->id)->first();
+                    break;
+            }
+
+            $agent->document = $document;
+            $agent->manager - null;
+        }
+
+
         return response()->json([
             'user' => $user,
             'agent' => $agent
         ]);
-    }
-
-    public function getAgent($id)
-    {
-     
-        // $agent = Agent::find($id);
-        
-        // return response()->json([
-        //     'user' => $user,
-        //     'agent' => $agent
-        // ]);
     }
 
 }

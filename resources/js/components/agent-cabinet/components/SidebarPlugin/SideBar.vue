@@ -181,8 +181,8 @@ export default {
   }
 
   /* navigations */
-  .nav {
-    
+  .sidebar-wrapper .nav {
+    padding: 0;
   }
   .nav-link {
     margin: 4px 0px!important;

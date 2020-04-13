@@ -1,13 +1,19 @@
 <template>
+<v-app>
 	<div :class="{ 'nav-open': $sidebar.showSidebar }">
-		<notifications></notifications>
-		<router-view></router-view>
+		<notifications group="standard" position="top center" />
+		<notifications group="error" position="top center" classes="vue-notification error" />
+		<notifications group="warning" position="top center" classes="vue-notification warn" />
+		<notifications group="success" position="top center" classes="vue-notification success" />
+		<transition name="fade" mode="out-in">
+			<router-view></router-view>
+		</transition>
 	</div>
+</v-app>
 </template>
 
 <style lang="scss">
 	@import "../assets/scss/fonts.scss";
-	@import "../assets/scss/vue-notify-notifications.scss";
 	@import "../assets/scss/colors.scss";
 	@import "../assets/scss/modifiers.scss";
 	@import "../assets/scss/app-predefined.scss";

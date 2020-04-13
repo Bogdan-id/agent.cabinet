@@ -11,8 +11,8 @@
   .app__form-block {
     width: 100%;
     height: auto;
-    background-image: url('../assets/images/auto.png'),
-    linear-gradient(180deg,#32a3dc 0,$white);
+    background-image: url('../assets/images/auto-medium.png'),
+    linear-gradient(180deg, #32a3dc 0, $white);
     background-repeat: no-repeat;
     background-position: 0 100%;
     background-size: 150%;
@@ -41,5 +41,9 @@
 @media(max-width: 557px) {
   .label__block-wrapper {
     width: 85%;
+  }
+  .app__form-block {
+    background-image: url('../assets/images/auto-small.png'),
+    linear-gradient(180deg, #32a3dc 0, $white);
   }
 }

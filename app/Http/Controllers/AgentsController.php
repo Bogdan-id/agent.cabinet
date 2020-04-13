@@ -71,4 +71,16 @@ class AgentsController extends Controller
             'agent' => $agent
         ]);
     }
+
+    public function getAgent($id)
+    {
+     
+        // $agent = Agent::find($id);
+        
+        // return response()->json([
+        //     'user' => $user,
+        //     'agent' => $agent
+        // ]);
+    }
+
 }

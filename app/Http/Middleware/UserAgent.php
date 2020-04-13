@@ -18,16 +18,16 @@ class UserAgent
      */
     public function handle($request, Closure $next)
     {
-    //     if(Auth::user()){
-    //         $user = User::find(Auth::user()->id);
-      
-    //        if($user->is_active === 0){
-    //            return redirect('verification');
-    //        }
+        if(Auth::user()){
+            $agent = Agent::where('user_id', '=', Auth::user()->id)->first();
+           if(!$agent){
+               return redirect('finish-register');
+           }
+
+           return $next($request);
+       }else{
            
-    //        return $next($request);
-    //    }else{
-    //        return $next($request);
-    //    }      
+           return $next($request);
+       }      
     }
 }

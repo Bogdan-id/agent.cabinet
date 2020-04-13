@@ -167,16 +167,16 @@ export default {
     overflow-y: visible!important;
   }
   .sidebar-wrapper {
-    transition: all 0.5s !important;
+    transition: width 0.5s !important;
   }
 
   /* modifiers */
   .sidebar--hide {
-    transition: all 0.5s;
+    transition: width 0.5s;
     width: var(--sidebar-collapsed)!important;
   }
   .sidebar--hide .sidebar-wrapper {
-    transition: all 0.5s;
+    transition: width 0.5s;
     width: var(--sidebar-collapsed)!important;
   }
 
@@ -192,7 +192,7 @@ export default {
     padding: 8px 0 11px 0!important;
   }
   .nav-item-title {
-    transition: all 1s!important;
+    // transition: all 1s!important;
     opacity: 1;
     transition: opacity 0.3s;
     white-space: nowrap;
@@ -200,26 +200,25 @@ export default {
     padding-left: 42px;
   }
   .sidebar--hide .nav-item-title {
-    transition: all 0.3s;
-    display: opacity 0.3s;
+    transition: opacity 0.3s;
     opacity: 0;
   }
   .moving-arrow {
-    transition: all 0.5s;
+    transition: left 0.5s;
   }
   .sidebar--hide .moving-arrow {
-    transition: all 0.5s;
+    transition: left 0.5s;
     left: 67px!important;
   }
 
   /* main-panel */
   .main-panel {
-    transition: all 0.5s!important;
+    transition: width 0.5s!important;
     width: calc(100% - var(--sidebar-expanded))!important;
 
   }
   .main-panel--expand { 
-    transition: all 0.5s!important;
+    transition: width 0.5s!important;
     width: calc(100% - var(--sidebar-collapsed))!important;
   }
 
@@ -247,11 +246,11 @@ export default {
     padding: 35px 0 32px 0; 
   }
   .sidebar__toggle-icon {
-    transition: all 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
   }
   .--toggle-icon-active {
-    transition: all 0.5s ease-in-out;
-    transform: rotate(540deg)
+    transition: transform 0.5s ease-in-out;
+    transform: rotate(180deg)
   }
   .sidebar__toggle-icon:hover {
     cursor: pointer;

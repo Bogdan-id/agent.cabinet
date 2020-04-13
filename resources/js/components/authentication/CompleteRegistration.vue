@@ -357,17 +357,19 @@ export default {
     },
     submit() {
       if(this.dataValid) {
-        // console.log(this.finalObj())
         this.request = true
         axios.post(`/agent/create`, this.finalObj())
           .then((response) => {
-            console.log(response)
-            const message = 'Зараз вас буде перенаправлено до вашого остобистого кабiнету'
-            this.simpleNotify('Успiшно', message, 'success')
-            setTimeout(() => {
-              this.$router.push('/home')
-            }, 5000)
-            this.request = false
+            if(response.status === 200) {
+              const message = 'Зараз вас буде перенаправлено до остобистого кабiнету'
+              this.simpleNotify('Успiшно', message, 'success')
+              setTimeout(() => { this.$router.go() }, 5000)
+              this.request = false
+            } else {
+              const message = `Не вдалося зареєструвати. Оновiть сторінку і 
+                спробуйте знову, або повторiть - завершення реєстрації через кілька хвилин`
+              this.simpleNotify('Помилка', message, 'warning')
+            }
           })
           .catch(error => {
             console.log(error.response)

@@ -88,7 +88,7 @@ export default {
 		},
 		submit() {
 			if(!this.$v.$invalid && this.$v.$dirty ){
-				this.userRegister(this.getRegObject())
+				this.signIn(this.getRegObject())
 			} else {
 				this.$notify({
 						message: 'Форма заповнена не невірно',
@@ -104,14 +104,36 @@ export default {
 				'_token': this.getCsrf(),
 			}
 		},
-		userRegister(userObj) {
+		checkUser() {
+			axios.get(`/getUserAgent`)
+				.then(response => {
+					// user has registered account and the application is approved
+					if(response.data.user.is_active === 1) {
+						this.checkUserAgent(response.data)
+					// user has registered an account. Application at the verification stage
+					} else if(response.data.user.is_active === 0) {
+						this.$router.push('/verification')
+					}
+				})
+				.catch(error => {
+					console.log(error.response.statusText)
+				})
+		},
+		checkUserAgent(response) {
+			// user is tied to an agent. Pass to dashboard
+			if(response.agent !== null) {
+				this.$router.push('/home')
+			// Application approved. Fill the form (complete register)
+			} else {
+				this.$router.push('/finish-register')
+			}
+		},
+		signIn(userObj) {
 			this.request = true
 			axios.post(`/login`, userObj)
 			.then(() => {
 				this.request = false
-				this.$router.push('/home')
-				const routeStorage = window.localStorage
-				routeStorage.setItem('user', true)
+				this.$router.go()
 			})
 			.catch(e => {
 				this.request = false
@@ -213,14 +235,7 @@ export default {
 		}
 	},
 	created() {
-		const routeStorage = window.localStorage
-		const user = routeStorage.getItem('user')
-		if(user === true) this.$router.push('/home')
+		this.checkUser()
 	},
-	mounted() {
-		this.reload
-			? this.$router.go()
-			: false
-	}
 }
 </script>

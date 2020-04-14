@@ -23,11 +23,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/verification',  function () {
     return view('verification');
-})->middleware('dont_user_active');
+})->middleware('auth', 'dont_user_active');
 
 Route::get('/finish-register', function () {
     return view('create_agent');
-})->middleware(['user_active', 'dont_user_agent']);
+})->middleware(['auth', 'user_active', 'dont_user_agent']);
 
 Route::get('/verification/accept/{id}', 'VerificationController@acceptAgent');
 Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');
@@ -40,3 +40,8 @@ Route::get('/getManagers', 'ManagerController@getManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
 
+Route::post('/runCalculate', 'CalculateController@create');
+
+Route::get('/models', 'ModelController@index');
+
+Route::get('/mark', 'MarkController@index');

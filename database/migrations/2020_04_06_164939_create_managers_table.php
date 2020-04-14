@@ -15,6 +15,7 @@ class CreateManagersTable extends Migration
     {
         Schema::create('managers', function (Blueprint $table) {
             $table->id();
+            $table->string('bitrix_id');
             $table->string('name');
             $table->string('phone');
             $table->string('email');

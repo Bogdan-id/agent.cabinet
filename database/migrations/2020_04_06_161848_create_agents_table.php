@@ -16,6 +16,7 @@ class CreateAgentsTable extends Migration
         Schema::create('agents', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->unique();
+            $table->string('bitrix_id')->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('patronymic');

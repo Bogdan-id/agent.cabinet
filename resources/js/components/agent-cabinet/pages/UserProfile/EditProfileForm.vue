@@ -1,131 +1,194 @@
 <template>
-  <card class="card" title="Edit Profile">
+  <v-card class="edit-profile-card">
+    <v-card-title>
+      Профiль
+    </v-card-title>
+    <v-card-text>
     <div>
       <form @submit.prevent>
+        <!--  -->
         <div class="row">
-          <div class="col-md-5">
+          <div class="col-md-4">
             <fg-input type="text"
-                      label="Company"
-                      :disabled="true"
-                      placeholder="Paper dashboard"
-                      v-model="user.company">
+                label="Прізвище"
+                :placeholder="agent.last_name">
+            </fg-input>
+          </div>
+          <div class="col-md-4">
+            <fg-input type="text"
+                label="Ім'я"
+                :placeholder="agent.first_name">
+            </fg-input>
+          </div>
+          <div class="col-md-4">
+            <fg-input type="text"
+                label="По батькові"
+                :placeholder="agent.patronymic">
+            </fg-input>
+          </div>
+        </div>
+        <!--  -->
+        <div class="row">
+          <div class="col-md-6">
+            <fg-input type="text"
+                label="Телефон"
+                :placeholder="user.phone">
+            </fg-input>
+          </div>
+          <div class="col-md-6">
+            <fg-input type="email"
+                label="Email"
+                :placeholder="user.email">
+            </fg-input>
+          </div>
+        </div>
+        <!--  -->
+        <div class="row">
+          <div class="col-md-3">
+            <fg-input type="text"
+                label="Місце роботи"
+                :placeholder="agent.company_type">
             </fg-input>
           </div>
           <div class="col-md-3">
-
             <fg-input type="text"
-                      label="Username"
-                      placeholder="Username"
-                      v-model="user.username">
+                label="Статус"
+                :placeholder="agent.status || ''">
             </fg-input>
           </div>
-          <div class="col-md-4">
-            <fg-input type="email"
-                      label="Username"
-                      placeholder="Email"
-                      v-model="user.email">
+          <div class="col-md-3">
+            <fg-input type="text"
+                label="Посада"
+                :placeholder="agent.position">
             </fg-input>
           </div>
         </div>
-
+        <!--  -->
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-3">
             <fg-input type="text"
-                      label="First Name"
-                      placeholder="First Name"
-                      v-model="user.firstName">
+                label="Тип паспорту"
+                :placeholder="passportType">
             </fg-input>
           </div>
-          <div class="col-md-6">
-            <fg-input type="text"
-                      label="Last Name"
-                      placeholder="Last Name"
-                      v-model="user.lastName">
+          <div class="col-md-3">
+            <fg-input v-show="!bioPassport" type="text"
+                label="Серiя паспорту"
+                placeholder="Серія паспорту">
+            </fg-input>
+            <fg-input v-show="bioPassport" type="number"
+                label="Номер УНЗР"
+                placeholder="номер УНЗР">
+            </fg-input>
+          </div>
+          <div class="col-md-3">
+            <fg-input v-show="!bioPassport" type="number"
+                label="Номер паспорту"
+                placeholder="номер паспорту">
+            </fg-input>
+            <fg-input v-show="bioPassport" type="number"
+                label="Номер документа"
+                placeholder="номер документа">
             </fg-input>
           </div>
         </div>
-
+        <!--  -->
         <div class="row">
           <div class="col-md-12">
-            <fg-input type="text"
-                      label="Address"
-                      placeholder="Home Address"
-                      v-model="user.address">
-            </fg-input>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-4">
-            <fg-input type="text"
-                      label="City"
-                      placeholder="City"
-                      v-model="user.city">
-            </fg-input>
-          </div>
-          <div class="col-md-4">
-            <fg-input type="text"
-                      label="Country"
-                      placeholder="Country"
-                      v-model="user.country">
-            </fg-input>
-          </div>
-          <div class="col-md-4">
             <fg-input type="number"
-                      label="Postal Code"
-                      placeholder="ZIP Code"
-                      v-model="user.postalCode">
+                label="Ідентифікаційний код"
+                :placeholder="agent.inn">
             </fg-input>
           </div>
         </div>
-
+        <!--  -->
         <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label>About Me</label>
-              <textarea rows="5" class="form-control border-input"
-                        placeholder="Here can be your description"
-                        v-model="user.aboutMe">
-
-              </textarea>
-            </div>
+          <div class="col-md-6">
+            <fg-input type="text"
+                label="Дата народження"
+                :placeholder="agent.birth">
+            </fg-input>
+          </div>
+          <div class="col-md-6">
+            <fg-input type="text"
+                label="Реквiзити картки"
+                :placeholder="agent.card_number">
+            </fg-input>
+          </div>
+        </div>
+        <!--  -->
+        <div class="row">
+          <div class="col-md-6">
+            <fg-input type="text"
+                label="Розмiр АВ"
+                placeholder="">
+            </fg-input>
+          </div>
+          <div class="col-md-6">
+            <fg-input type="text"
+                label="Куратор"
+                placeholder="">
+            </fg-input>
           </div>
         </div>
         <div class="text-center">
           <p-button type="info"
-                    round
-                    @click.native.prevent="updateProfile">
-            Update Profile
+              round
+              @click.native.prevent="updateProfile">
+              Оновити профіль
           </p-button>
         </div>
         <div class="clearfix"></div>
       </form>
     </div>
-  </card>
+    </v-card-text>
+  </v-card>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      user: {
-        company: "Paper Dashboard",
-        username: "michael23",
-        email: "",
-        firstName: "Chet",
-        lastName: "Faker",
-        address: "Melbourne, Australia",
-        city: "Melbourne",
-        postalCode: "",
-        aboutMe: `We must accept finite disappointment, but hold on to infinite hope.`
-      }
-    };
-  },
+  props: ['user', 'agent'],
   methods: {
     updateProfile() {
-      alert("Your data: " + JSON.stringify(this.user));
+      /* */
+    },
+  },
+  computed: {
+    passportType() {
+      return this.agent.passport_type_id === 1
+        ? "Книжкового зразка" 
+        : "Бiо-паспорт"
+    },
+    bioPassport() {
+      return this.agent.passport_type_id === 2
     }
   }
-};
+}
 </script>
-<style>
+<style lang="scss">
+  .edit-profile-card {
+    ::-webkit-input-placeholder 
+    { 
+      color: black!important;
+    }
+    ::-moz-placeholder {
+      color: black!important;
+    }
+    :-ms-input-placeholder {
+      color: black!important;
+    }
+    :-moz-placeholder {
+      color: black!important;
+    }
+  }
+  .edit-profile-card {
+    .form-control {
+      border-bottom: 1px solid #7b7b7b;
+      border-radius: 0;
+    }
+  }
+  .edit-profile-card {
+    .btn {
+      text-transform: capitalize;
+    }
+  }
 </style>

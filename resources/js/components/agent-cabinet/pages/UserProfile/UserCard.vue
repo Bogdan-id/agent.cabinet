@@ -34,24 +34,23 @@
 </template>
 <script>
 export default {
-  data() {
-    return {
-      details: [
-        {
-          title: "12",
-          subTitle: "Files"
-        },
-        {
-          title: "2GB",
-          subTitle: "Used"
-        },
-        {
-          title: "24,6$",
-          subTitle: "Spent"
-        }
-      ]
-    };
-  },
+  props: ['user'],
+  data:() => ({
+    details: [
+      {
+        title: "12",
+        subTitle: "Files"
+      },
+      {
+        title: "2GB",
+        subTitle: "Used"
+      },
+      {
+        title: "24,6$",
+        subTitle: "Spent"
+      }
+    ]
+  }),
   methods: {
     getClasses(index) {
       var remainder = index % 3;
@@ -63,8 +62,11 @@ export default {
         return "col-lg-3";
       }
     }
+  },
+  mounted() {
+    console.log(this.user)
   }
-};
+}
 </script>
 <style>
 </style>

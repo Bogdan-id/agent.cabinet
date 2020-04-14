@@ -40,3 +40,8 @@ Route::get('/getManagers', 'ManagerController@getManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
 
+Route::post('/runCalculate', 'CalculateController@create');
+
+Route::get('/models', 'ModelController@index');
+
+Route::get('/mark', 'MarkController@index');

@@ -1,18 +1,25 @@
 <template>
     <div class="row">
       <div class="col-12">
-        <v-row justify="center">
-          <v-dialog v-model="newCalculationModal" max-width="600px">
-            <template v-slot:activator="{ on }">
-              <div class="calculator__btn-wrapper">
-                <v-btn 
-                    v-on="on"
-                    color="success" 
-                    small
-                    >Новий розрахунок
-                </v-btn>
-              </div>
-            </template>
+        <v-card class="pb-4">
+        <v-card-title>
+          Калькулятор лiзингу
+        </v-card-title>
+        <v-card-actions>
+          
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+              <v-btn
+                  v-on="on"
+                  @click.stop="newCalculationModal = true"
+                  color="success" 
+                  large fab dark>
+                  <v-icon dark>mdi-plus-thick</v-icon>
+              </v-btn>
+              </template>
+                <span>Новий розрахунок</span>
+              </v-tooltip>
+            <v-dialog v-model="newCalculationModal" max-width="600px">
             <v-card class="card-cust pt-5">
               <v-card-title class="headline">
                 {{ 'Новый розрахунок' }}
@@ -110,7 +117,7 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-        </v-row>
+        </v-card-actions>
         <card :title="table.title" :subTitle="table.subTitle">
           <div slot="raw-content" class="table-responsive">
             <paper-table 
@@ -122,6 +129,7 @@
             </paper-table>
           </div>
         </card>
+        </v-card>
       </div>
     </div>
 </template>

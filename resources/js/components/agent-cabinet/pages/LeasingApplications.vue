@@ -31,7 +31,7 @@
             </v-col>
           </v-card-text>
           <v-card-actions class="justify-center">
-            <span><v-btn color="grey darken-2 white--text">сторити</v-btn></span>
+            <span><v-btn color="grey darken-1 white--text">сторити</v-btn></span>
           </v-card-actions>
         </v-card>
       </v-dialog>

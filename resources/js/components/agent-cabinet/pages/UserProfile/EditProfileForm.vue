@@ -171,11 +171,12 @@
           </div>
         </div>
         <div class="text-center">
-          <p-button type="info"
-              round
+          <v-btn
+              dark
+              color="grey darken-1"
               @click.native.prevent="updateProfile">
               Оновити профіль
-          </p-button>
+          </v-btn>
         </div>
         <div class="clearfix"></div>
       </form>

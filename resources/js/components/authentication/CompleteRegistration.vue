@@ -369,6 +369,7 @@ export default {
               const message = `Не вдалося зареєструвати. Оновiть сторінку і 
                 спробуйте знову, або повторiть - завершення реєстрації через кілька хвилин`
               this.simpleNotify('Помилка', message, 'warning')
+              this.request = false
             }
           })
           .catch(error => {
@@ -479,10 +480,10 @@ export default {
         : 'complete-reg-form__expand'
     },
     getPassportCode() {
-      return this.passportType === 1 ? this.passportSeries : this.unzr.replace(/[^\d]/g, '')
+      return this.passportType === "1" ? this.passportSeries : this.unzr.replace(/[^\d]/g, '')
     },
     getPassportNumber() {
-      return this.passportType === 1 ? this.passportNumber : this.bioPassportNumber
+      return this.passportType === "1" ? this.passportNumber : this.bioPassportNumber
     },
     lastNameErrors() {
 			const errors = []

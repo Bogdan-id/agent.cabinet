@@ -1,6 +1,6 @@
 <template>
-  <v-card class="edit-profile-card">
-    <v-card-title>
+  <v-card class="edit-profile">
+    <v-card-title class="headline">
       Профiль
     </v-card-title>
     <v-card-text>
@@ -9,126 +9,165 @@
         <!--  -->
         <div class="row">
           <div class="col-md-4">
-            <fg-input type="text"
+            <v-text-field
+                v-model="user.last_name"
                 label="Прізвище"
-                :placeholder="agent.last_name">
-            </fg-input>
+                :placeholder="user.last_name"
+                >
+            </v-text-field>
           </div>
           <div class="col-md-4">
-            <fg-input type="text"
+            <v-text-field
+                v-model="user.first_name"
                 label="Ім'я"
-                :placeholder="agent.first_name">
-            </fg-input>
+                :placeholder="user.first_name">
+            </v-text-field>
           </div>
           <div class="col-md-4">
-            <fg-input type="text"
+            <v-text-field
+                v-model="user.patronymic"
                 label="По батькові"
-                :placeholder="agent.patronymic">
-            </fg-input>
+                :placeholder="user.patronymic">
+            </v-text-field>
           </div>
         </div>
         <!--  -->
         <div class="row">
-          <div class="col-md-6">
-            <fg-input type="text"
+          <div class="col-md-4">
+            <v-text-field
+                v-model="user.phone"
                 label="Телефон"
                 :placeholder="user.phone">
-            </fg-input>
+            </v-text-field>
           </div>
-          <div class="col-md-6">
-            <fg-input type="email"
+          <div class="col-md-4">
+            <v-text-field
+                v-model="user.email"
                 label="Email"
                 :placeholder="user.email">
-            </fg-input>
+            </v-text-field>
           </div>
         </div>
         <!--  -->
         <div class="row">
           <div class="col-md-3">
-            <fg-input type="text"
+            <v-dialog
+                v-model="modal"
+                ref="modal"
+                width="290px">
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                  v-model="user.birth"
+                  v-on="on"
+                  label="Дата народження"
+                  :placeholder="user.birth"
+                  dense readonly>
+              </v-text-field>
+            </template>
+            <v-date-picker 
+                @change="save"
+                v-model="choosedDate"  
+                ref="picker"
+                :min="hundredYears" 
+                :max="eighteenYearsAgo">
+            </v-date-picker>
+          </v-dialog>
+          </div>
+        </div>
+        <!--  -->
+        <div class="row">
+          <div class="col-md-3">
+            <v-select
+                v-model="user.company_type"
+                append-icon=""
                 label="Місце роботи"
-                :placeholder="agent.company_type">
-            </fg-input>
+                :placeholder="companyType"
+                :items="companyTypes">
+            </v-select>
           </div>
           <div class="col-md-3">
-            <fg-input type="text"
+            <v-text-field
+                v-model="user.satus"
                 label="Статус"
-                :placeholder="agent.status || ''">
-            </fg-input>
+                :placeholder="user.status || 'Статус'">
+            </v-text-field>
           </div>
           <div class="col-md-3">
-            <fg-input type="text"
+            <v-text-field
+                v-model="user.position"
                 label="Посада"
-                :placeholder="agent.position">
-            </fg-input>
+                :placeholder="user.position">
+            </v-text-field>
           </div>
         </div>
         <!--  -->
         <div class="row">
-          <div class="col-md-3">
-            <fg-input type="text"
+          <div class="col-md-4">
+            <v-select
+                v-model="user.passport_type_id"
+                append-icon=""
                 label="Тип паспорту"
-                :placeholder="passportType">
-            </fg-input>
+                :placeholder="showPassportType"
+                :items="pasportItems">
+            </v-select>
           </div>
           <div class="col-md-3">
-            <fg-input v-show="!bioPassport" type="text"
+            <v-text-field v-if="!bioPassport"
+                v-model="user.serie"
                 label="Серiя паспорту"
                 placeholder="Серія паспорту">
-            </fg-input>
-            <fg-input v-show="bioPassport" type="number"
+            </v-text-field>
+            <v-text-field v-if="bioPassport"
                 label="Номер УНЗР"
-                placeholder="номер УНЗР">
-            </fg-input>
+                placeholder="номер УНЗР"
+                v-model="user.unzr_number">
+            </v-text-field>
           </div>
-          <div class="col-md-3">
-            <fg-input v-show="!bioPassport" type="number"
+          <div class="col-md-4">
+            <v-text-field v-if="!bioPassport"
+                v-model="user.passport_number"
                 label="Номер паспорту"
                 placeholder="номер паспорту">
-            </fg-input>
-            <fg-input v-show="bioPassport" type="number"
+            </v-text-field>
+            <v-text-field v-if="bioPassport"
+                v-model="user.id_card_number"
                 label="Номер документа"
                 placeholder="номер документа">
-            </fg-input>
+            </v-text-field>
           </div>
         </div>
         <!--  -->
         <div class="row">
-          <div class="col-md-12">
-            <fg-input type="number"
+          <div class="col-md-4">
+            <v-text-field
+                v-model="user.inn"
                 label="Ідентифікаційний код"
-                :placeholder="agent.inn">
-            </fg-input>
+                :placeholder="user.inn">
+            </v-text-field>
           </div>
-        </div>
-        <!--  -->
-        <div class="row">
-          <div class="col-md-6">
-            <fg-input type="text"
-                label="Дата народження"
-                :placeholder="agent.birth">
-            </fg-input>
-          </div>
-          <div class="col-md-6">
-            <fg-input type="text"
+          <div class="col-md-5">
+            <v-text-field
+                v-model="user.card_number"
                 label="Реквiзити картки"
-                :placeholder="agent.card_number">
-            </fg-input>
+                :placeholder="user.card_number">
+            </v-text-field>
           </div>
         </div>
         <!--  -->
         <div class="row">
           <div class="col-md-6">
-            <fg-input type="text"
+            <v-text-field
+                v-model="user.ab_size"
                 label="Розмiр АВ"
-                placeholder="">
-            </fg-input>
+                placeholder="Розмiр АВ">
+            </v-text-field>
           </div>
           <div class="col-md-6">
-            <fg-input type="text"
+            <v-text-field
+                v-model="user.manager_id"
                 label="Куратор"
-                placeholder="">
-            </fg-input>
+                placeholder="Куратор">
+            </v-text-field>
           </div>
         </div>
         <div class="text-center">
@@ -146,49 +185,135 @@
 </template>
 <script>
 export default {
-  props: ['user', 'agent'],
+  props: ['userData'],
+  data: () => ({
+    user: {
+      id: null,
+      name: null,
+      email: null,
+      phone: null,
+      is_active: 1,
+      user_id: 5,
+      first_name: null,
+      last_name: null,
+      patronymic: null,
+      company_type: null,
+      company_name: null,
+      position: null,
+      status: null,
+      passport_type_id: null,
+      inn: null,
+      birth: null,
+      card_number: null,
+      ab_size: null,
+      manager_id: null,
+      agent_id: null,
+      unzr_number: null,
+      id_card_number: null
+    },
+    /* temp data */
+    choosedDate: null,
+
+    /* item v-model */
+    passportType: null,
+
+    /* item types */
+    pasportItems: [
+      { text: 'Био-паспорт', value: '2' },
+      { text: 'Книжкового зразка', value: '1' }
+    ],
+    companyTypes: [
+      { text: 'Салон', value: 'salon' },
+      { text: 'Дилер', value: 'dealer' }
+    ],
+
+    /* modals */
+    modal: false,
+  }),
   methods: {
     updateProfile() {
       /* */
     },
+    save (date) {
+      this.$refs.modal.save(date)
+    },
   },
   computed: {
-    passportType() {
-      return this.agent.passport_type_id === 1
+    showPassportType() {
+      return parseInt(this.user.passport_type_id) === 1
         ? "Книжкового зразка" 
         : "Бiо-паспорт"
     },
+    userEditPassword() {
+      return this.passportType !== null
+    },
     bioPassport() {
-      return this.agent.passport_type_id === 2
+      return parseInt(this.user.passport_type_id) === 2
+    },
+    companyType() {
+      return this.user.company_type === 'salon'
+        ? 'Салон'
+        : 'Дилер'
+    },
+    eighteenYearsAgo() {
+      let currentDate = new Date()
+      let month = currentDate.getUTCMonth()
+      let day = currentDate.getUTCDate()
+      let year = currentDate.getUTCFullYear()
+      return new Date(year - 18, month, day).toISOString().substr(0, 10)
+    },
+    hundredYears() {
+      let currentDate = new Date()
+      let month = currentDate.getUTCMonth()
+      let day = currentDate.getUTCDate()
+      let year = currentDate.getUTCFullYear()
+      return new Date(year - 100, month, day).toISOString().substr(0, 10)
+    },
+  },
+  watch: {
+    modal(val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR')) 
+    },
+		choosedDate(val) {
+			const [year, month, day] = val.split('-')
+			this.user.birth = `${day}.${month}.${year}`
     }
-  }
+  },
+  mounted() {
+    Object.assign(this.user, this.userData)
+    console.log(this.user)
+  },
 }
 </script>
 <style lang="scss">
-  .edit-profile-card {
-    ::-webkit-input-placeholder 
-    { 
-      color: black!important;
+  // .edit-profile {
+  //   ::-webkit-input-placeholder 
+  //   { 
+  //     color: black!important;
+  //   }
+  //   ::-moz-placeholder {
+  //     color: black!important;
+  //   }
+  //   :-ms-input-placeholder {
+  //     color: black!important;
+  //   }
+  //   :-moz-placeholder {
+  //     color: black!important;
+  //   }
+  // }
+  .edit-profile {
+    .v-text-field input {
+      padding-left: 10px!important;
     }
-    ::-moz-placeholder {
-      color: black!important;
-    }
-    :-ms-input-placeholder {
-      color: black!important;
-    }
-    :-moz-placeholder {
-      color: black!important;
-    }
-  }
-  .edit-profile-card {
+    // .btn {
+    //   text-transform: capitalize;
+    // }
     .form-control {
-      border-bottom: 1px solid #7b7b7b;
+      border-bottom: 1px solid #a8a6a6;
       border-radius: 0;
     }
-  }
-  .edit-profile-card {
-    .btn {
-      text-transform: capitalize;
+    .v-text-field__slot .v-label--active, .v-label {
+      font-size: 20px!important;
     }
   }
 </style>

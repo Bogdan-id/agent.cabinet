@@ -14,6 +14,7 @@ import Icons from "../components/agent-cabinet/pages/Icons.vue"
 import Maps from "../components/agent-cabinet/pages/Maps.vue"
 import Typography from "../components/agent-cabinet/pages/Typography.vue"
 import Calculator from "../components/agent-cabinet/pages/Calculator.vue"
+import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications.vue"
 
 const routes = [
   { path: '/', component: Authorization },
@@ -60,7 +61,13 @@ const routes = [
         path: '/calculator',
         name: 'Калькулятор лізинг',
         component: Calculator
+      },
+      {
+        path: '/leasing-requests',
+        name: 'leasing-requests',
+        component: LeasingApplications
       }
+      
     ]
   },
 ]

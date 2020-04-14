@@ -8,7 +8,7 @@
       <form @submit.prevent>
         <!--  -->
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.last_name"
                 label="Прізвище"
@@ -16,14 +16,14 @@
                 >
             </v-text-field>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.first_name"
                 label="Ім'я"
                 :placeholder="user.first_name">
             </v-text-field>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.patronymic"
                 label="По батькові"
@@ -33,14 +33,14 @@
         </div>
         <!--  -->
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.phone"
                 label="Телефон"
                 :placeholder="user.phone">
             </v-text-field>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.email"
                 label="Email"
@@ -102,7 +102,7 @@
         </div>
         <!--  -->
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <v-select
                 v-model="user.passport_type_id"
                 append-icon=""
@@ -123,7 +123,7 @@
                 v-model="user.unzr_number">
             </v-text-field>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <v-text-field v-if="!bioPassport"
                 v-model="user.passport_number"
                 label="Номер паспорту"
@@ -138,14 +138,14 @@
         </div>
         <!--  -->
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.inn"
                 label="Ідентифікаційний код"
                 :placeholder="user.inn">
             </v-text-field>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.card_number"
                 label="Реквiзити картки"
@@ -155,14 +155,14 @@
         </div>
         <!--  -->
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.ab_size"
                 label="Розмiр АВ"
                 placeholder="Розмiр АВ">
             </v-text-field>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-3">
             <v-text-field
                 v-model="user.manager_id"
                 label="Куратор"

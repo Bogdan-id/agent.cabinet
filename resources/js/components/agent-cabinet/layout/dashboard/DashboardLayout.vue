@@ -5,6 +5,7 @@
         <sidebar-link to="/dashboard" name="Dashboard" icon="ti-panel"/>
         <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="ti-view-list-alt"/>
         <sidebar-link to="/stats" name="Редагувати профiль" icon="ti-user"/>
+        <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="ti-pencil-alt2"/>
         <sidebar-link to="/typography" name="Звітність" icon="ti-text"/>
         <sidebar-link to="/icons" name="Корисні матеріали" icon="ti-pencil-alt2"/>
         <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->

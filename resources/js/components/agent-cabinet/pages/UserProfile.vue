@@ -1,7 +1,7 @@
 <template>
-    <div class="row">
+    <div class="row user-profile">
       <v-row v-if="!hasUser" style="position: relative!important;">
-        <v-progress-circular style="position: absolute; right: 15px; top: 5px;" indeterminate size="24"
+        <v-progress-circular class="user-profile-loader" indeterminate size="34"
         color="primary"></v-progress-circular>
       </v-row>
       <div class="col-12" v-if="hasUser">
@@ -39,6 +39,12 @@ export default {
   }
 }
 </script>
-<style>
-
+<style lang="scss">
+  .user-profile {
+    .user-profile-loader {
+      position: absolute; 
+      right: 15px; 
+      top: 5px;
+    }
+  }
 </style>

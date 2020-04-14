@@ -1,31 +1,50 @@
 <template>
-    <div class="row">
-      <div class="col-xl-4 col-lg-5 col-md-6">
-        <user-card>
-
-        </user-card>
-        <members-card>
-
-        </members-card>
-      </div>
-      <div class="col-xl-8 col-lg-7 col-md-6">
-        <edit-profile-form>
-
-        </edit-profile-form>
+    <div class="row user-profile">
+      <v-row v-if="!hasUser" style="position: relative!important;">
+        <v-progress-circular class="user-profile-loader" indeterminate size="34"
+        color="primary"></v-progress-circular>
+      </v-row>
+      <div class="col-12" v-if="hasUser">
+        <edit-profile-form :userData="user" />
       </div>
     </div>
 </template>
+
 <script>
-import EditProfileForm from "./UserProfile/EditProfileForm.vue";
-import UserCard from "./UserProfile/UserCard.vue";
-import MembersCard from "./UserProfile/MembersCard.vue";
+import EditProfileForm from "./UserProfile/EditProfileForm.vue"
+import axios from 'axios'
+
 export default {
   components: {
     EditProfileForm,
-    UserCard,
-    MembersCard
+  },
+  data: () => ({
+    user: {},
+  }),
+  computed: {
+    hasUser() {
+      return Object.keys(this.user).length > 0
+    }
+  },
+  created() {
+  axios.get('/getUserAgent')
+    .then(response => {
+      let user = response.data.user
+      let {document, ...userAgent} = response.data.agent
+      this.user = Object.assign(user, userAgent, document)
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
   }
-};
+}
 </script>
-<style>
+<style lang="scss">
+  .user-profile {
+    .user-profile-loader {
+      position: absolute; 
+      right: 15px; 
+      top: 5px;
+    }
+  }
 </style>

@@ -12,7 +12,7 @@
                     v-on="on"
                     to="/calculator/new"
                     color="error" 
-                    large fab dark>
+                    fab dark>
                     <v-icon dark>mdi-plus-thick</v-icon>
                 </v-btn>
               </template>

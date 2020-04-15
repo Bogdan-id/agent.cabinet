@@ -6,7 +6,7 @@
     <v-card-actions>
       <v-tooltip right>
         <template v-slot:activator="{ on }">
-          <v-btn class="mx-2" fab dark large v-on="on" @click.stop="newLeasingAplication = true" color="error">
+          <v-btn class="mx-2" fab dark v-on="on" @click.stop="newLeasingAplication = true" color="error">
             <v-icon dark>mdi-plus-thick</v-icon>
           </v-btn>
         </template>

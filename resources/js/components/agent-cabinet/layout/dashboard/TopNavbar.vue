@@ -21,24 +21,23 @@
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="ti-panel"></i>
-              <p>Stats</p>
+              <p>Статистика</p>
             </a>
           </li>
           <drop-down class="nav-item"
-                     title="5 Notifications"
+                     title="Повiдомлення"
                      title-classes="nav-link"
                      icon="ti-bell">
-            <a class="dropdown-item" href="#">Notification 1</a>
-            <a class="dropdown-item" href="#">Notification 2</a>
-            <a class="dropdown-item" href="#">Notification 3</a>
-            <a class="dropdown-item" href="#">Notification 4</a>
-            <a class="dropdown-item" href="#">Another notification</a>
+            <a class="dropdown-item" href="#">Повiдомлення 1</a>
+            <a class="dropdown-item" href="#">Повiдомлення 2</a>
+            <a class="dropdown-item" href="#">Повiдомлення 3</a>
+            <a class="dropdown-item" href="#">Повiдомлення 4</a>
           </drop-down>
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="ti-settings"></i>
               <p>
-                Settings
+                Налаштування
               </p>
             </a>
           </li>

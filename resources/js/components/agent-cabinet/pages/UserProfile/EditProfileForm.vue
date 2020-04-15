@@ -186,7 +186,6 @@
 </template>
 <script>
 export default {
-  props: ['userData'],
   data: () => ({
     user: {
       id: null,
@@ -281,7 +280,7 @@ export default {
     }
   },
   mounted() {
-    Object.assign(this.user, this.userData)
+    Object.assign(this.user, this.$store.state.user)
     console.log(this.user)
   },
 }

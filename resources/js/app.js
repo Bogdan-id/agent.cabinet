@@ -10,7 +10,7 @@ import PaperDashboard from "./components/agent-cabinet/plugins/paperDashboard"
 import Notifications from 'vue-notification'
 import vuetify from './vuetify'
 import VueMask from 'v-mask'
-
+import store from './store/store'
 
 /* eslint-disable */
 Vue.use(PaperDashboard)
@@ -18,6 +18,7 @@ Vue.use(VueMask)
 Vue.use(Notifications)
 
 new Vue({
+	store,
 	vuetify,
 	router,
 	render: h => h(App)

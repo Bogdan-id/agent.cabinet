@@ -5,37 +5,25 @@
         color="error"></v-progress-circular>
       </v-row>
       <div class="col-12" v-if="hasUser">
-        <edit-profile-form :userData="user" />
+        <edit-profile-form />
       </div>
     </div>
 </template>
 
 <script>
 import EditProfileForm from "./UserProfile/EditProfileForm.vue"
-import axios from 'axios'
 
 export default {
   components: {
     EditProfileForm,
   },
-  data: () => ({
-    user: {},
-  }),
   computed: {
     hasUser() {
-      return Object.keys(this.user).length > 0
+      return Object.keys(this.$store.state.user).length > 0
     }
   },
   created() {
-  axios.get('/getUserAgent')
-    .then(response => {
-      let user = response.data.user
-      let {document, ...userAgent} = response.data.agent
-      this.user = Object.assign(user, userAgent, document)
-    })
-    .catch(error => {
-      console.log(error.response)
-    })
+
   }
 }
 </script>

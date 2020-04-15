@@ -50,10 +50,14 @@
 </template>
 
 <script>
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import DashboardContent from "./Content.vue";
-import MobileMenu from "./MobileMenu";
+import TopNavbar from "./TopNavbar.vue"
+import ContentFooter from "./ContentFooter.vue"
+import DashboardContent from "./Content.vue"
+import MobileMenu from "./MobileMenu"
+
+import axios from "axios"
+import 'es6-promise/auto'
+
 export default {
   components: {
     TopNavbar,
@@ -66,7 +70,21 @@ export default {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);
       }
-    }
+    },
+    getCurrentUser() {
+      axios.get('/getUserAgent')
+      .then(response => {
+        let user = response.data.user
+        let {document, ...userAgent} = response.data.agent
+        this.$store.dispatch('add_user', Object.assign(user, userAgent, document))
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+    },
   },
-};
+  created() {
+    this.getCurrentUser()
+  }
+}
 </script>

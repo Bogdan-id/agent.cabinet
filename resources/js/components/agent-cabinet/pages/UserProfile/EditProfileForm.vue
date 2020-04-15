@@ -279,9 +279,9 @@ export default {
 			this.user.birth = `${day}.${month}.${year}`
     }
   },
-  mounted() {
-    Object.assign(this.user, this.$store.state.user)
-    console.log(this.user)
+  created() {
+    console.log(this.$store.state.user)
+    this.user = this.$store.state.user
   },
 }
 </script>

@@ -19,12 +19,11 @@ export default {
   },
   computed: {
     hasUser() {
+      console.log(this.$store.state.user)
+      console.log(Object.keys(this.$store.state.user).length > 0)
       return Object.keys(this.$store.state.user).length > 0
     }
   },
-  created() {
-
-  }
 }
 </script>
 <style lang="scss">

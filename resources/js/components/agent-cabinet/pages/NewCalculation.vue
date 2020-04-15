@@ -249,8 +249,7 @@ export default {
   },
   methods: {
     test() {
-      this.$v.itemCost.$touch()
-      console.log(Object.keys(this.brandItems).length === 0)
+      console.log(this.carModel)
     },
     getMarksByType() {
       axios.get(`/mark?category=${this.LeasedAssetType.itemValue}`)
@@ -333,8 +332,5 @@ export default {
 			return errors
     }
   },
-  mounted() {
-    console.log(this.$v)
-  }
 }
 </script>

@@ -15,6 +15,8 @@ import Maps from "../components/agent-cabinet/pages/Maps.vue"
 import Typography from "../components/agent-cabinet/pages/Typography.vue"
 import Calculator from "../components/agent-cabinet/pages/Calculator.vue"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications.vue"
+import NewCalculaton from '../components/agent-cabinet/pages/NewCalculation.vue'
+import CalculationDetail from '../components/agent-cabinet/pages/CalculationDetail.vue'
 
 const routes = [
   { path: '/', component: Authorization },
@@ -29,12 +31,12 @@ const routes = [
 		children: [
       {
         path: '/dashboard',
-        name: 'dashboard',
+        name: 'Головна',
         component: Dashboard
       },
       {
-        path: '/stats',
-        name: 'stats',
+        path: '/agent-profile',
+        name: 'Профiль',
         component: UserProfile
       },
       {
@@ -54,17 +56,27 @@ const routes = [
       },
       {
         path: '/typography',
-        name: 'typography',
+        name: 'Звiтнiсть',
         component: Typography
       },
       {
         path: '/calculator',
-        name: 'Калькулятор лізинг',
-        component: Calculator
+        name: 'Калькулятор лізингу',
+        component: Calculator,
+      },
+      {
+        path: '/calculator/new',
+        name: 'Новий розрахунок',
+        component: NewCalculaton
+      },
+      {
+        path: '/calculator/detail',
+        name: 'Детально',
+        component: CalculationDetail
       },
       {
         path: '/leasing-requests',
-        name: 'leasing-requests',
+        name: 'Заявки на лiзинг',
         component: LeasingApplications
       }
       

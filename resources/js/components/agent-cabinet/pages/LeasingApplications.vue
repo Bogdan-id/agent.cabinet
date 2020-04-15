@@ -6,7 +6,7 @@
     <v-card-actions>
       <v-tooltip right>
         <template v-slot:activator="{ on }">
-          <v-btn class="mx-2" fab dark large v-on="on" @click.stop="newLeasingAplication = true" color="green darken-1">
+          <v-btn class="mx-2" fab dark large v-on="on" @click.stop="newLeasingAplication = true" color="error">
             <v-icon dark>mdi-plus-thick</v-icon>
           </v-btn>
         </template>
@@ -16,22 +16,25 @@
         v-model="newLeasingAplication"
         max-width="490">
         <v-card class="pb-1">
-          <v-card-title class="headline green lighten-1 white--text">Нова заявка</v-card-title>
+          <v-card-title class="headline red lighten-1 white--text">Нова заявка</v-card-title>
           <v-card-text>
             <v-col cols="12">
               <v-text-field
+                  color="dark"
                   label="Клієнт">
               </v-text-field>
               <v-text-field
+                  color="dark"
                   label="Марка">
               </v-text-field>
               <v-text-field
+                  color="dark"
                   label="Модель">
               </v-text-field>
             </v-col>
           </v-card-text>
           <v-card-actions class="justify-center">
-            <span><v-btn color="grey darken-1 white--text">сторити</v-btn></span>
+            <span><v-btn color="grey darken-1 white--text">створити</v-btn></span>
           </v-card-actions>
         </v-card>
       </v-dialog>

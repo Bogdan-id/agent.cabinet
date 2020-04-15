@@ -2,7 +2,7 @@
     <div class="row user-profile">
       <v-row v-if="!hasUser" style="position: relative!important;">
         <v-progress-circular class="user-profile-loader" indeterminate size="34"
-        color="primary"></v-progress-circular>
+        color="error"></v-progress-circular>
       </v-row>
       <div class="col-12" v-if="hasUser">
         <edit-profile-form :userData="user" />

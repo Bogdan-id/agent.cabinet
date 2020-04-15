@@ -13,21 +13,23 @@
                 v-model="user.last_name"
                 label="Прізвище"
                 :placeholder="user.last_name"
-                >
+                outlined dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field
                 v-model="user.first_name"
                 label="Ім'я"
-                :placeholder="user.first_name">
+                :placeholder="user.first_name"
+                outlined dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field
                 v-model="user.patronymic"
                 label="По батькові"
-                :placeholder="user.patronymic">
+                :placeholder="user.patronymic"
+                outlined dense>
             </v-text-field>
           </div>
         </div>
@@ -37,14 +39,16 @@
             <v-text-field
                 v-model="user.phone"
                 label="Телефон"
-                :placeholder="user.phone">
+                :placeholder="user.phone"
+                outlined dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field
                 v-model="user.email"
                 label="Email"
-                :placeholder="user.email">
+                :placeholder="user.email"
+                outlined dense>
             </v-text-field>
           </div>
         </div>
@@ -61,7 +65,8 @@
                   v-on="on"
                   label="Дата народження"
                   :placeholder="user.birth"
-                  dense readonly>
+                  dense readonly
+                  outlined>
               </v-text-field>
             </template>
             <v-date-picker 
@@ -82,21 +87,24 @@
                 append-icon=""
                 label="Місце роботи"
                 :placeholder="companyType"
-                :items="companyTypes">
+                :items="companyTypes"
+                outlined dense>
             </v-select>
           </div>
           <div class="col-md-3">
             <v-text-field
                 v-model="user.satus"
                 label="Статус"
-                :placeholder="user.status || 'Статус'">
+                :placeholder="user.status || 'Статус'"
+                outlined dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field
                 v-model="user.position"
                 label="Посада"
-                :placeholder="user.position">
+                :placeholder="user.position"
+                outlined dense>
             </v-text-field>
           </div>
         </div>
@@ -108,31 +116,36 @@
                 append-icon=""
                 label="Тип паспорту"
                 :placeholder="showPassportType"
-                :items="pasportItems">
+                :items="pasportItems"
+                outlined dense>
             </v-select>
           </div>
           <div class="col-md-3">
             <v-text-field v-if="!bioPassport"
                 v-model="user.serie"
                 label="Серiя паспорту"
-                placeholder="Серія паспорту">
+                placeholder="Серія паспорту"
+                outlined dense>
             </v-text-field>
             <v-text-field v-if="bioPassport"
                 label="Номер УНЗР"
                 placeholder="номер УНЗР"
-                v-model="user.unzr_number">
+                v-model="user.unzr_number"
+                outlined dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field v-if="!bioPassport"
                 v-model="user.passport_number"
                 label="Номер паспорту"
-                placeholder="номер паспорту">
+                placeholder="номер паспорту"
+                outlined dense>
             </v-text-field>
             <v-text-field v-if="bioPassport"
                 v-model="user.id_card_number"
                 label="Номер документа"
-                placeholder="номер документа">
+                placeholder="номер документа"
+                outlined dense>
             </v-text-field>
           </div>
         </div>
@@ -142,14 +155,16 @@
             <v-text-field
                 v-model="user.inn"
                 label="Ідентифікаційний код"
-                :placeholder="user.inn">
+                :placeholder="user.inn"
+                outlined dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field
                 v-model="user.card_number"
                 label="Реквiзити картки"
-                :placeholder="user.card_number">
+                :placeholder="user.card_number"
+                outlined dense>
             </v-text-field>
           </div>
         </div>
@@ -159,14 +174,16 @@
             <v-text-field
                 v-model="user.ab_size"
                 label="Розмiр АВ"
-                placeholder="Розмiр АВ">
+                placeholder="Розмiр АВ"
+                outlined dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field
                 v-model="user.manager_id"
                 label="Куратор"
-                placeholder="Куратор">
+                placeholder="Куратор"
+                outlined dense>
             </v-text-field>
           </div>
         </div>
@@ -186,7 +203,6 @@
 </template>
 <script>
 export default {
-  props: ['userData'],
   data: () => ({
     user: {
       id: null,
@@ -280,9 +296,9 @@ export default {
 			this.user.birth = `${day}.${month}.${year}`
     }
   },
-  mounted() {
-    Object.assign(this.user, this.userData)
-    console.log(this.user)
+  created() {
+    console.log(this.$store.state.user)
+    this.user = this.$store.state.user
   },
 }
 </script>

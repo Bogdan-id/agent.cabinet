@@ -3,11 +3,11 @@
     <side-bar>
       <template slot="links">
         <sidebar-link to="/dashboard" name="Dashboard" icon="ti-panel"/>
-        <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="ti-view-list-alt"/>
-        <sidebar-link to="/stats" name="Редагувати профiль" icon="ti-user"/>
-        <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="ti-pencil-alt2"/>
-        <sidebar-link to="/typography" name="Звітність" icon="ti-text"/>
-        <sidebar-link to="/icons" name="Корисні матеріали" icon="ti-pencil-alt2"/>
+        <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="ti-agenda"/>
+        <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="ti-clipboard"/>
+        <sidebar-link to="/reporting" name="Звітність" icon="ti-widget-alt"/>
+        <sidebar-link to="/useful-materials" name="Корисні матеріали" icon="ti-bookmark-alt"/>
+        <sidebar-link to="/agent-profile" name="профiль" icon="ti-user"/>
         <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->
         <!-- <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/> -->
       </template>
@@ -50,10 +50,14 @@
 </template>
 
 <script>
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import DashboardContent from "./Content.vue";
-import MobileMenu from "./MobileMenu";
+import TopNavbar from "./TopNavbar.vue"
+import ContentFooter from "./ContentFooter.vue"
+import DashboardContent from "./Content.vue"
+import MobileMenu from "./MobileMenu"
+
+import axios from "axios"
+import 'es6-promise/auto'
+
 export default {
   components: {
     TopNavbar,
@@ -66,7 +70,21 @@ export default {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);
       }
-    }
+    },
+    getCurrentUser() {
+      axios.get('/getUserAgent')
+      .then(response => {
+        let user = response.data.user
+        let {document, ...userAgent} = response.data.agent
+        this.$store.dispatch('add_user', Object.assign(user, userAgent, document))
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+    },
   },
-};
+  created() {
+    this.getCurrentUser()
+  }
+}
 </script>

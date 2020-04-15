@@ -5,118 +5,19 @@
         <v-card-title>
           Калькулятор лiзингу
         </v-card-title>
-        <v-card-actions>
-          
+          <v-card-actions>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
-              <v-btn
-                  v-on="on"
-                  @click.stop="newCalculationModal = true"
-                  color="success" 
-                  large fab dark>
-                  <v-icon dark>mdi-plus-thick</v-icon>
-              </v-btn>
+                <v-btn
+                    v-on="on"
+                    to="/calculator/new"
+                    color="error" 
+                    fab dark>
+                    <v-icon dark>mdi-plus-thick</v-icon>
+                </v-btn>
               </template>
-                <span>Новий розрахунок</span>
-              </v-tooltip>
-            <v-dialog v-model="newCalculationModal" max-width="600px">
-            <v-card class="card-cust pt-5">
-              <v-card-title class="headline">
-                {{ 'Новый розрахунок' }}
-              </v-card-title>
-              <v-card-text>
-                <div class="calculator__new-calculation pt-4">
-                  <!-- (При виборі пункту обладнання, марка і модель показувати “Інше”) -->
-                  <v-select
-                      v-model="itemType"
-                      :items="itemTypes" 
-                      color="green darken-3" 
-                      label="Тип" 
-                      dense>
-                  </v-select>
-                  <v-select
-                      v-model="itemCondition"
-                      :items="itemConditions" 
-                      color="green darken-3"   
-                      label="Стан" 
-                      dense>
-                  </v-select>
-                  <v-select 
-                      v-model="brand"
-                      :items="itemBrand" 
-                      color="green darken-3"    
-                      label="Марка"
-                      dense>
-                  </v-select>
-                  <v-select
-                      v-model="itemYear" 
-                      :items="itemYears"
-                      color="green darken-3"  
-                      label="Рік" 
-                      dense>
-                  </v-select>
-                  <v-text-field
-                      v-model="engineCapacity"
-                      placeholder="Об'єм двигуна" 
-                      color="green darken-3" 
-                      dense>
-                  </v-text-field>
-                  <v-divider></v-divider>
-                  <v-select
-                      v-model="clientType"
-                      :items="clientTypes" 
-                      color="green darken-3" 
-                      label="Суб'єкт"
-                      dense>
-                  </v-select>
-                  <v-select
-                      v-model="agreementCurrency"
-                      :items="agreementCurrencys" 
-                      color="green darken-3"
-                      label="Валюта договору лізингу"
-                      dense>
-                  </v-select>
-                  <v-text-field
-                      v-model="itemCost" 
-                      color="green darken-3"
-                      placeholder="Вартість"
-                      dense>
-                  </v-text-field>
-                  <v-select
-                      v-model="chartType" 
-                      color="green darken-3"
-                      :items="chartTypes"
-                      placeholder="Тип графіка"
-                      dense>
-                  </v-select>
-                  <v-slider
-                      v-model="advancePayment"
-                      label="Авансовий платіж"
-                      min="20"
-                      max="70"
-                      thumb-label>
-                  </v-slider>
-                  <v-slider
-                      v-model="leasingTime"
-                      label="Термін лізингу"
-                      min="12"
-                      max="72"
-                      thumb-label>
-                  </v-slider>
-                  <v-select
-                      v-model="vehicleTax" 
-                      color="green darken-3"
-                      :items="vehicleTaxItems"
-                      placeholder="Податок з власників ТЗ"
-                      dense>
-                  </v-select>
-                </div>
-              </v-card-text>
-              <v-card-actions class="d-flex justify-center new-calculation-btn">
-                <span><v-btn class="mb-3" color="error">Розрахувати</v-btn></span>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+              <span>Новий розрахунок</span>
+            </v-tooltip>
         </v-card-actions>
         <card :title="table.title" :subTitle="table.subTitle">
           <div slot="raw-content" class="table-responsive">
@@ -126,6 +27,35 @@
               :title="table.title" 
               :sub-title="table.subTitle" 
               type="hover">
+              <template slot-scope="{row}">
+                <td>{{row.id}}</td>
+                <td>{{row.дата}}</td>
+                <td>{{row.тип}}</td>
+                <td>{{row.клієнт}}</td>
+                <td>{{row.марка}}</td>
+                <td>{{row.модель}}</td>
+                <td>{{row.сума}}</td>
+              <td>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn 
+                        color="grey" 
+                        v-on="on " 
+                        icon 
+                        :to="{ 
+                            name: 'Детально', 
+                            params: {
+                              table: table,
+                              id: row.id
+                            } 
+                        }">
+                      <v-icon v-text="'mdi-card-bulleted-outline'"></v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Детально</span>
+                </v-tooltip>
+              </td>
+            </template>
             </paper-table>
           </div>
         </card>
@@ -138,70 +68,20 @@
   // subTitle: "(Розрахунки за місяць)",
   // №	Дата	Тип	Клієнт	Марка	Модель	Cума	Детально
 import { PaperTable } from "../components"
-const tableColumns = ["№", "Дата", "Тип", "Клієнт", "Марка", "Модель", "Сума", "Детально"]
-const tableData = [
-  {
-    '№': 223,
-    'дата': "26.06.19",
-    'тип': "Легкові та комерційні авто",
-    'клієнт': "Иванов В.М.",
-    'марка': "Renault",
-    'модель': "Dokker",
-    'сума': "$11.789",
-    'детально': "edit"
-  },
-  {
-    '№': 227,
-    'дата': "26.06.19",
-    'тип': "СПЕЦІАЛЬНІ ТЗ",
-    'клієнт': "Зубенко В.М.",
-    'марка': "Ваз",
-    'модель': "21.011",
-    'сума': "$23.789",
-    'детально': "edit"
-  },
-  {
-    '№': 290,
-    'дата': "26.06.19",
-    'тип': "Вантажні авто",
-    'клієнт': "Иванов В.М.",
-    'марка': "Djeep",
-    'модель': "hunter",
-    'сума': "$27.789",
-    'детально': "edit"
-  },
-  {
-    '№': 301,
-    'дата': "26.01.20",
-    'тип': "Обладнання",
-    'клієнт': "Иванов В.М.",
-    'марка': "Renault",
-    'модель': "Dokker",
-    'сума': "$23.789",
-    'детально': "edit"
-  },
-  {
-    '№': 324,
-    'дата': "26.02.20",
-    'тип': "Сільгосптехніка",
-    'клієнт': "Бабенко Л.Н",
-    'марка': "Opel",
-    'модель': "Astrra",
-    'сума': "$13.789",
-    'детально': "edit"
-  }
-];
+import { tableColumns, tableData } from "./calculator-temp-data.js"
 export default {
   components: {
     PaperTable,
   },
   data:() => ({
+    /* items */
     table: {
       title: "Історія розрахунків",
       subTitle: "Розрахунки за місяць",
       columns: [...tableColumns],
       data: [...tableData]
     },
+    
     itemConditions: [ "Новий", "б/у" ],
     itemTypes: [
       "Легкові та комерційні авто",
@@ -212,17 +92,44 @@ export default {
       "Сільгосптехніка"
     ],
     itemBrand: [ "Audi", "Renault", "ВАЗ" ],
-    clientTypes: [ "Юридична особа", "Фізична особа" ],
-    agreementCurrencys: [ "UAH", "USD", "EUR" ],
+    clientTypes: [ 
+      {text: "Юридична особа", value: 2}, 
+      {text: "Фізична особа", value: 1}
+    ],
+    currencys: [ "UAH", "USD", "EUR" ],
     itemYears: [ "2019", "2020" ],
+    oldItemYers: [ '2013', '2014', '2015', '2016', '2017', '2018', '2019' ],
     chartTypes: [
       // якщо вибраний індивідуальний графік на сервер прихована передаються дані в калькулято
       "Класичний",
       "Ануїтет",
       "Індивідуальний"
     ],
-    pensionFundVal: ["так", "нi"],
-    vehicleTaxItems: ["так", "нi"],
+    yesOrNo: [
+      {text: "Так", value: 1},
+      {text: "Нi", value: 2}
+    ],
+    gpsTrackers: [
+      'Antenor з блокувань', 
+      'ні', 
+      'Benish Logistic з Блокування',
+      'Premium Benish Guard',
+      'Benish GuardPlatinum',
+      'Benish Universal з Блокування'
+    ],
+    insurancePrograms: [
+      'Стандарт',
+      'Обережно',
+      'Таксі',
+      'Тотал / крадіжка'
+    ],
+    franchises: [
+      {text: '0%', value: '0%'},
+      {text: '0.3%', value: '0.3%'},
+      {text: '0.5%', value: '0.5%'},
+      {text: '1%', value: '1%'},
+      {text: '2%', value: '2%'},
+    ],
 
     /* new calculation data */
     itemType: null,
@@ -240,20 +147,20 @@ export default {
     leasingTime: null,
     pensionFund: null,
     vehicleTax: null,
+    pensionFundTax: null,
+    gpsTracker: null,
+    insuranceProgram: null,
+    franchise: null,
+
+    //physical person
+
+    // legarl person
 
     /* modals */
     newCalculationModal: false,
 
     newCalculation: false
   }),
-  methods: {
-    test() {
-      console.log(this.itemEngineCapacity)
-    },
-    dataUpdate(e) {
-      console.log(e)
-    }
-  },
 }
 </script>
 <style lang="scss">

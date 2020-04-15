@@ -68,7 +68,7 @@
   // subTitle: "(Розрахунки за місяць)",
   // №	Дата	Тип	Клієнт	Марка	Модель	Cума	Детально
 import { PaperTable } from "../components"
-import { tableColumns, tableData, regions } from "./calculator-temp-data.js"
+import { tableColumns, tableData } from "./calculator-temp-data.js"
 export default {
   components: {
     PaperTable,
@@ -81,6 +81,7 @@ export default {
       columns: [...tableColumns],
       data: [...tableData]
     },
+    
     itemConditions: [ "Новий", "б/у" ],
     itemTypes: [
       "Легкові та комерційні авто",
@@ -129,7 +130,6 @@ export default {
       {text: '1%', value: '1%'},
       {text: '2%', value: '2%'},
     ],
-    urkRegions: regions,
 
     /* new calculation data */
     itemType: null,
@@ -161,13 +161,6 @@ export default {
 
     newCalculation: false
   }),
-  methods: {
-    removeColumn(value) {
-      const index = this.table.columns.indexOf('Детально');
-      let arr =  this.table.columns.splice(index, 1);
-      console.log(value)
-    }
-  }
 }
 </script>
 <style lang="scss">

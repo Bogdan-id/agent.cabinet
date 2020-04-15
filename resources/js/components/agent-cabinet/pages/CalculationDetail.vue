@@ -35,10 +35,12 @@ export default {
     }
   },
   created() {
-    const id = this.$router.currentRoute.params.id
-    const data = this.$router.currentRoute.params.table.data
+    const data = this.$router.currentRoute.params
+    const index = data.table.columns.indexOf('Детально')
+    data.table.columns.splice(index, 1)
+    const id = data.id
     Object.assign(this.table, this.$router.currentRoute.params.table)
-    this.tableData = this.filterData(data, id)
+    this.tableData = this.filterData(data.table.data, id)
   }
 }
 </script>

@@ -50,7 +50,7 @@
             <div v-if="btnLogOut" class="lds__wrapper">
               <div class="lds-dual-ring"></div>
             </div>
-            <span v-if="!btnLogOut">Log out</span>
+            <span v-if="!btnLogOut">Вихiд</span>
           </p-button>
         </ul>
       </div>

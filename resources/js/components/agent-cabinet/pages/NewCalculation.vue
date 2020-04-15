@@ -11,34 +11,63 @@
             <v-card-text>
               <v-select 
                   v-model="itemType"
-                  :items="itemConditions" 
+                  :items="selects.itemConditions" 
                   label="Тип авто"
                   color="grey darken-3"
                   dense outlined>
               </v-select>
-              <v-select 
-                  v-model="brand"
-                  :items="itemBrand" 
-                  label="Марка"
+              <v-select
+                  @change="getMarksByType()"
+                  v-model="LeasedAssetType"
+                  return-object
+                  :items="selects.itemTypes"
+                  item-text="text"
+                  item-value="text"
+                  label="Тип предмета лізингу"
+                  color="grey darken-3"
+                  :disabled="!typeOfCar"
                   dense outlined>
               </v-select>
+              <v-autocomplete
+                  @change="getModelByMark()"
+                  v-model="modelItem"
+                  :items="brandItems"
+                  item-text="name"
+                  item-value="value"
+                  label="Марка"
+                  :disabled="!leasedOfAssetType || noBrandItems"
+                  dense outlined>
+              </v-autocomplete>
+              <v-autocomplete
+                  @change="test()"
+                  v-model="carModel"
+                  :items="modelItems"
+                  item-text="name"
+                  item-value="value"
+                  label="Модель"
+                  :disabled="!modelOfItem || noModelItems"
+                  dense outlined>
+              </v-autocomplete>
               <v-select
                   v-if="itemType === 1"
                   v-model="itemYear" 
-                  :items="itemYears"
-                  label="Рік" 
+                  :items="selects.itemYears"
+                  label="Рік"
+                  :disabled="!typeOfModel"
                   dense outlined>
               </v-select>
               <v-select
                   v-if="itemType === 2"
                   v-model="itemYear" 
-                  :items="oldItemYers"
-                  label="Рік" 
+                  :items="selects.oldItemYers"
+                  label="Рік"
+                  :disabled="!typeOfModel"
                   dense outlined>
               </v-select>
               <v-text-field
                   v-model="engineCapacity"
                   placeholder="Об'єм двигуна" 
+                  :disabled="!yearOfModel"
                   dense outlined>
               </v-text-field>
             </v-card-text>
@@ -50,57 +79,66 @@
               <v-card-text>
                 <v-select
                     v-model="clientType"
-                    :items="clientTypes" 
+                    :items="selects.clientTypes" 
                     label="Суб'єкт"
                     dense outlined>
                 </v-select>
                 <v-select
                     v-model="agreementCurrency"
-                    :items="currencys" 
+                    :items="selects.currencys" 
                     label="Валюта договору лізингу"
                     dense outlined>
                 </v-select>
                 <v-text-field
+                    @change="$v.itemCost.$touch()"
+                    @input="$v.itemCost.$touch()"
+                    :error-messages="itemCostErrors"
                     v-model="itemCost" 
                     placeholder="Вартість"
                     dense outlined>
                 </v-text-field>
                 <v-select
-                    v-model="chartType" 
-                    :items="chartTypes"
+                    v-model="chartType"
+                    :items="selects.chartTypes"
                     placeholder="Тип графіка"
-                    dense outlined>
+                    dense outlined multiple>
                 </v-select>
-                <div style="display: flex;">
-                  <div class="body-1 mr-2">Авансовий платiж (%):</div>
-                    <v-slider
-                      v-model="advancePayment"
-                      min="20"
-                      max="70"
-                      thumb-label>
-                      <template v-slot:prepend>
-                        <span>20%</span>
-                      </template>
-                      <template v-slot:append>
-                        <span>70%</span>
-                      </template>
-                    </v-slider>
-                </div>
-                <div style="display: flex;">
-                  <div class="body-1 mr-2">Термiн лiзингу (мic):</div>
-                  <v-slider
-                    v-model="leasingTime"
-                    min="12"
-                    max="72"
-                    thumb-label>
-                    <template v-slot:prepend>
-                      <span>12</span>
-                    </template>
-                    <template v-slot:append>
-                      <span>72</span>
-                    </template>
-                  </v-slider>
-                </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="11">
+          <v-card>
+            <v-card-text>
+              <div style="display: flex;">
+                <div class="body-1 mr-2">Авансовий платiж (%):</div>
+                <v-slider
+                  v-model="advancePayment"
+                  min="20"
+                  max="70"
+                  thumb-label>
+                  <template v-slot:prepend>
+                    <span>20%</span>
+                  </template>
+                  <template v-slot:append>
+                    <span>70%</span>
+                  </template>
+                </v-slider>
+              </div>
+              <div style="display: flex;">
+                <div class="body-1 mr-2">Термiн лiзингу (мic):</div>
+                <v-slider
+                  v-model="leasingTime"
+                  min="12"
+                  max="72"
+                  thumb-label>
+                  <template v-slot:prepend>
+                    <span>12</span>
+                  </template>
+                  <template v-slot:append>
+                    <span>72</span>
+                  </template>
+                </v-slider>
+              </div>
             </v-card-text>
           </v-card>
         </v-col>
@@ -112,216 +150,82 @@
             <v-card-text>
               <v-select
                   v-model="vehicleTax" 
-                  :items="yesOrNo"
+                  :items="selects.yesOrNo"
                   label="Податок з власників ТЗ"
                   dense outlined>
               </v-select>
               <v-select
                   v-model="pensionFundTax" 
-                  :items="yesOrNo"
+                  :items="selects.yesOrNo"
                   label="Податок в ПФ"
                   dense outlined>
               </v-select>
               <v-select
                   v-model="gpsTracker" 
-                  :items="gpsTrackers"
+                  :items="selects.gpsTrackers"
                   label="GPS-трекер"
                   dense outlined>
               </v-select>
               <v-select
                   v-model="insuranceProgram" 
-                  :items="insurancePrograms"
+                  :items="selects.insurancePrograms"
                   label="Програма страхування"
                   dense outlined>
               </v-select>
               <v-select
                   v-model="franchise" 
-                  :items="franchises"
+                  :items="selects.franchises"
                   label="Франшиза"
                   dense outlined>
               </v-select>
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="6">
-          <!-- Physical person -->
-          <!-- v-if -->
-          <v-card v-if="clientType === 1">
-            <v-card-title>
-              Фiзична особа
-            </v-card-title>
-            <v-card-text>
-              <v-text-field
-                  label="Прізвище"
-                  dense outlined>
-              </v-text-field>
-              <v-text-field
-                  label="Ім'я"
-                  dense outlined>
-              </v-text-field>
-              <v-text-field
-                  label="По батьковi"
-                  dense outlined>
-              </v-text-field>
-              <v-text-field
-                  label="Телефон"
-                  dense outlined>
-              </v-text-field>
-              <v-text-field
-                  label="Email"
-                  dense outlined>
-              </v-text-field>
-              <v-text-field
-                  label="ІПН"
-                  dense outlined>
-              </v-text-field>
-              <v-select
-                  label="Область"
-                  :items="urkRegions"
-                  dense outlined>
-              </v-select>
-              <!-- monthly income -->
-              <v-text-field
-                  label="Середньомісячний дохід, грн*"
-                  dense outlined>
-              </v-text-field>
-              <v-text-field
-                  label="Платіж по кредитам (міс. / грн)"
-                  dense outlined>
-              </v-text-field>
-              <v-select
-                  label="Мета придбання авто"
-                  dense outlined>
-              </v-select>
-            </v-card-text>
-          </v-card>
-          <!-- Legal person -->
-          <!-- v-if -->
-          <v-card v-if="clientType === 2">
-            <v-card-title>
-              Юридична особа
-            </v-card-title>
-            <v-card-text>
-                <v-text-field
-                  label="Прізвище"
-                  dense outlined>
-                </v-text-field>
-                <v-text-field
-                    label="Ім'я"
-                    dense outlined>
-                </v-text-field>
-                <v-text-field
-                    label="По батьковi"
-                    dense outlined>
-                </v-text-field>
-                <v-text-field
-                    label="ЄДРПОУ"
-                    dense outlined>
-                </v-text-field>
-                <v-text-field
-                    label="Назва компанії"
-                    dense outlined>
-                </v-text-field>
-                <v-select
-                    label="Область"
-                    :items="urkRegions"
-                    dense outlined>
-                </v-select>
-                <v-text-field
-                    label="Власний капітал (Розділ І Пасиву Балансу), за 2019 р"
-                    dense outlined>
-                </v-text-field>
-                <v-text-field
-                    label="Валюта Балансу"
-                    :items="currencys"
-                    dense outlined>
-                </v-text-field>
-                <v-text-field
-                    label="Щомісячний платіж по кредитам та ін. кредитним зобов'язанням, тис. грн"
-                    :items="currencys"
-                    dense outlined>
-                </v-text-field>
-            </v-card-text>
-          </v-card>
-        </v-col>
       </v-row>
     </v-card-text>
     <v-card-actions class="d-flex justify-center new-calculation-btn">
-      <span><v-btn class="mb-3" dark color="grey darken-1">Розрахувати</v-btn></span>
+      <span><v-btn @click="submit()" class="mb-3" dark color="grey darken-1">Розрахувати</v-btn></span>
+      <v-btn @click="test()">test</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-  // title: "",
-  // subTitle: "(Розрахунки за місяць)",
-  // №	Дата	Тип	Клієнт	Марка	Модель	Cума	Детально
-import { regions } from "./calculator-temp-data.js"
-export default {
-  data:() => ({
-    /* items */
-    itemConditions: [
-      {text: 'Новий', value: 1},
-      {text: 'Б/У', value: 2}
-    ],
-    itemTypes: [
-      "Легкові та комерційні авто",
-      "СПЕЦІАЛЬНІ ТЗ",
-      "Вантажні авто",
-      "Обладнання",
-      "Причепи та Напівпричепи",
-      "Сільгосптехніка"
-    ],
-    itemBrand: [ "Audi", "Renault", "ВАЗ" ],
-    clientTypes: [ 
-      {text: "Юридична особа", value: 2}, 
-      {text: "Фізична особа", value: 1}
-    ],
-    currencys: [ "UAH", "USD", "EUR" ],
-    itemYears: [ "2019", "2020" ],
-    oldItemYers: [ '2013', '2014', '2015', '2016', '2017', '2018', '2019' ],
-    chartTypes: [
-      // якщо вибраний індивідуальний графік на сервер прихована передаються дані в калькулято
-      "Класичний",
-      "Ануїтет",
-      "Індивідуальний"
-    ],
-    yesOrNo: [
-      {text: "Так", value: 1},
-      {text: "Нi", value: 2}
-    ],
-    gpsTrackers: [
-      'Antenor з блокувань', 
-      'ні', 
-      'Benish Logistic з Блокування',
-      'Premium Benish Guard',
-      'Benish GuardPlatinum',
-      'Benish Universal з Блокування'
-    ],
-    insurancePrograms: [
-      'Стандарт',
-      'Обережно',
-      'Таксі',
-      'Тотал / крадіжка'
-    ],
-    franchises: [
-      {text: '0%', value: '0%'},
-      {text: '0.3%', value: '0.3%'},
-      {text: '0.5%', value: '0.5%'},
-      {text: '1%', value: '1%'},
-      {text: '2%', value: '2%'},
-    ],
-    urkRegions: regions,
+import axios from 'axios'
+import selectsItemAndVAlue from './selectItems'
+import { validationMixin } from 'vuelidate'
+import { numeric } from 'vuelidate/lib/validators'
 
+export default {
+  mixins: [validationMixin],
+  data:() => ({
+    /* select items & values */
+    selects: selectsItemAndVAlue,
+    
+    /* temporary arrays */
+    brandItems: [],
+    modelItems: [],
+
+    /* hidden data to server */
+    data: null,
+    gpsTrackerQuantity: 1, // gps-tracker-quantity = 1 (GPS маячок)
+    urkAssistService: 1, // assist-service = 1 (UKRASSIST-Service)
+    discount: {
+      'rate-manipulate': 0.1,
+      'agent-commission': 1,
+      'commission-manipulate': -0.5, // 0.5% від вартості
+      'commission-lk': 0.5 //сума (0.5% від вартості) 
+    },
     /* new calculation data */
+
+    modelItem: null,
+    carModel: null,
     itemType: null,
+    LeasedAssetType: null,
     itemCondition: null,
-    brand: null,
     itemYear: null,
     engineCapacity: null,
-
     clientType: null,
-
     agreementCurrency: null,
     itemCost: null,
     chartType: null,
@@ -334,14 +238,103 @@ export default {
     insuranceProgram: null,
     franchise: null,
 
-    //physical person
+    /* min-max values */
 
-    // legarl person
-
-    /* modals */
-    newCalculationModal: false,
-
-    newCalculation: false
   }),
+  validations: {
+    itemCost: {
+      minCost: val => parseInt(val.replace(/[^\d]/g, '')) >= 150000,
+      numeric
+    }
+  },
+  methods: {
+    test() {
+      this.$v.itemCost.$touch()
+      console.log(Object.keys(this.brandItems).length === 0)
+    },
+    getMarksByType() {
+      axios.get(`/mark?category=${this.LeasedAssetType.itemValue}`)
+        .then(response => {
+          this.brandItems = response.data
+        })
+        .catch(error => {
+          let message = error.response.statusText
+          this.notify('Помилка', message, 'error')
+        })
+    },
+    getModelByMark() {
+      let categorieId = this.LeasedAssetType.itemValue
+      axios.get(`/models?category=${categorieId}&mark=${this.modelItem}`)
+        .then(response => {
+          this.modelItems = response.data
+        })
+        .catch(error => {
+          let message = error.response.statusText
+          this.notify('Помилка', message, 'error')
+        })
+    },
+    notify(title, text, group) {
+			this.$notify({
+				group: group || 'standard',
+				title: title,
+				text: text,
+			})
+    },
+    submit() {
+      console.log(this.modelItem)
+      console.log(this.carModel)
+      console.log(this.itemType)
+      console.log(this.LeasedAssetType)
+      console.log(this.itemCondition)
+      console.log(this.itemYear)
+      console.log(this.engineCapacity)
+      console.log(this.clientType)
+      console.log(this.agreementCurrency)
+      console.log(this.itemCost)
+      console.log(this.chartType)
+      console.log(this.advancePayment)
+      console.log(this.leasingTime)
+      console.log(this.pensionFund)
+      console.log(this.vehicleTax)
+      console.log(this.pensionFundTax)
+      console.log(this.gpsTracker)
+      console.log(this.insuranceProgram)
+      console.log(this.franchise)
+    }
+  },
+  computed: {
+    typeOfCar() {
+      return this.itemType !== null
+    },
+    leasedOfAssetType() {
+      return this.LeasedAssetType !== null
+    },
+    modelOfItem() {
+      return this.modelItem !== null
+    },
+    typeOfModel() {
+      return this.carModel !== null
+    },
+    yearOfModel() {
+      return this.itemYear !== null
+    },
+    noBrandItems() {
+      return Object.keys(this.brandItems).length === 0
+    },
+    noModelItems() {
+      return Object.keys(this.modelItems).length === 0
+    },
+    /* vuelidate error handlers */
+    itemCostErrors() {
+      const errors = []
+      if (!this.$v.itemCost.$error) return errors
+      !this.$v.itemCost.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
+      !this.$v.itemCost.numeric && errors.push(`Числове поле`)
+			return errors
+    }
+  },
+  mounted() {
+    console.log(this.$v)
+  }
 }
 </script>

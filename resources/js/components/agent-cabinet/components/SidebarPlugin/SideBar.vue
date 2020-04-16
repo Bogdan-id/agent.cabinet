@@ -144,8 +144,8 @@ export default {
   .sidebar {
     transition: all 0.5s!important;
     overflow-y: scroll!important;
-    background: #212120;
-  }
+    background: repeating-linear-gradient(60deg, #e2746f, #eb443d 35%, #f31d13 50%);
+    }
   ::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: #F5F5F5;
@@ -252,4 +252,5 @@ export default {
   .sidebar__toggle-icon:hover {
     cursor: pointer;
   }
+
 </style>

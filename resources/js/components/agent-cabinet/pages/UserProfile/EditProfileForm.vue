@@ -1,7 +1,8 @@
 <template>
   <v-card class="edit-profile">
-    <v-card-title class="headline">
-      Профiль
+    <v-card-title class="d-block">
+      <div>Профiль</div>
+      <v-divider></v-divider>
     </v-card-title>
     <v-card-text>
     <div>

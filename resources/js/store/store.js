@@ -5,11 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
-    user: {}
+    user: {},
+    loader: false,
   },
   mutations: {
     addUser(state, value) {
       state.user = value
+    },
+    toggleSpinner(state, value) {
+      state.loader = value
     }
   },
   actions: {

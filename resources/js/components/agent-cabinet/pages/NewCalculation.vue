@@ -291,24 +291,30 @@ export default {
   },
   methods: {
     getMarksByType() {
+      this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.LeasedAssetType.itemValue}`)
         .then(response => {
           this.brandItems = response.data
+          this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
+          this.$store.commit('toggleSpinner', false)
         })
     },
     getModelByMark() {
+      this.$store.commit('toggleSpinner', true)
       let categorieId = this.LeasedAssetType.itemValue
       axios.get(`/models?category=${categorieId}&mark=${this.modelItem.value}`)
         .then(response => {
           this.modelItems = response.data
+          this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
+          this.$store.commit('toggleSpinner', false)
         })
     },
     notify(title, text, group) {
@@ -327,6 +333,7 @@ export default {
     submit() {
       axios
         .post('/calculate', this.calculationObj())
+          this.$store.commit('toggleSpinner', true)
           .then(response => {
             console.log(response)
           })
@@ -334,6 +341,7 @@ export default {
             console.log(error.response)
             const message = error.response.statusText
             this.notify('Помилка', message, 'error')
+            this.$store.commit('toggleSpinner', false)
           })
     },
 

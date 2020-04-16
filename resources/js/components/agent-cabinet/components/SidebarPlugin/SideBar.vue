@@ -146,20 +146,17 @@ export default {
     overflow-y: scroll!important;
     background: #212120;
   }
-  ::-webkit-scrollbar-track
-  {
+  ::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: #F5F5F5;
   }
 
-  ::-webkit-scrollbar
-  {
-    width: 8px;
+  ::-webkit-scrollbar {
+    width: 6px;
     background-color: #F5F5F5;
   }
 
-  ::-webkit-scrollbar-thumb
-  {
+  ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: #555;
   }

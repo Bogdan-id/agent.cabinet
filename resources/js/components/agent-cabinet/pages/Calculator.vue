@@ -2,8 +2,9 @@
     <div class="row">
       <div class="col-12">
         <v-card class="pb-4">
-        <v-card-title>
-          Калькулятор лiзингу
+        <v-card-title class="d-block">
+          <div>Калькулятор лiзингу</div>
+          <v-divider></v-divider>
         </v-card-title>
           <v-card-actions>
             <v-tooltip right>

@@ -92,11 +92,13 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     logOut(token) {
+      this.$store.commit('toggleSpinner', true)
       axios.post(`/logout`, token)
 			.then(() => {
         this.$router.go()
         const routeStorage = window.localStorage
         routeStorage.setItem('user', false)
+        this.$store.commit('toggleSpinner', false)
 			})
 			.catch(e => {
         this.$notify({
@@ -104,6 +106,7 @@ export default {
           type: 'warning',
           horizontalAlign: 'center'
         })
+        this.$store.commit('toggleSpinner', false)
 				console.log(e.response.data)
         console.log(e.response.status)
         console.log(e.response.headers)

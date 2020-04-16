@@ -187,7 +187,7 @@ export default {
   .nav-link {
     margin: 4px 0px!important;
   }
-  .nav-item {
+  .sidebar-wrapper .nav-item {
     position: relative!important;
     padding: 8px 0 11px 0!important;
   }
@@ -246,10 +246,10 @@ export default {
     padding: 35px 0 32px 0; 
   }
   .sidebar__toggle-icon {
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.25s ease;
   }
   .--toggle-icon-active {
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.25s ease;
     transform: rotate(180deg)
   }
   .sidebar__toggle-icon:hover {

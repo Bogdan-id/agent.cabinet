@@ -7,7 +7,7 @@
         >
       </toggleIcon>
       <a class="navbar-brand" href="#">{{routeName}}</a>
-      <button class="navbar-toggler navbar-burger"
+      <!-- <button class="navbar-toggler navbar-burger"
               type="button"
               @click="toggleSidebar"
               :aria-expanded="$sidebar.showSidebar"
@@ -15,15 +15,9 @@
         <span class="navbar-toggler-bar"></span>
         <span class="navbar-toggler-bar"></span>
         <span class="navbar-toggler-bar"></span>
-      </button>
+      </button> -->
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-panel"></i>
-              <p>Статистика</p>
-            </a>
-          </li>
           <drop-down class="nav-item"
                      title="Повiдомлення"
                      title-classes="nav-link"
@@ -41,38 +35,39 @@
               </p>
             </a>
           </li>
-          <p-button 
-            @click.native="signOut()" 
-            type="primary" 
-            size="sm"
-            >
-            <div v-if="btnLogOut" class="lds__wrapper">
-              <div class="lds-dual-ring"></div>
-            </div>
-            <span v-if="!btnLogOut">Вихiд</span>
-          </p-button>
         </ul>
       </div>
+      <v-tooltip bottom>
+        <template #activator="{ on }">
+          <v-btn @click="signOut()" v-on="on" icon x-large>
+            <v-icon large v-text="'mdi-logout'"></v-icon>
+          </v-btn>
+        </template>
+        <span>Вихiд</span>
+      </v-tooltip>
     </div></nav>
 </template>
 <script>
-import {Button as PButton} from '../../components'
 import toggleIcon from "../../assets/svg-icons/arrow.vue"
 import axios from 'axios'
 
 export default {
   components: {
-    PButton,
     toggleIcon
   },
   computed: {
     routeName() {
       const { name } = this.$route;
-      return this.capitalizeFirstLetter(name);
+      return this.capitalizeFirstLetter(name)
+    },
+    smAndDown() {
+      return this.$vuetify.breakpoint.smAndDown
+    },
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp
     }
   },
   data:() => ({
-    btnLogOut: false,
     activeNotifications: false,
     showSidebar: true
   }),
@@ -91,7 +86,6 @@ export default {
       }
     },
     signOut() {
-      this.btnLogOut = true
       this.logOut(this.getCsrf())
     },
     getCsrf() {
@@ -100,13 +94,11 @@ export default {
     logOut(token) {
       axios.post(`/logout`, token)
 			.then(() => {
-        this.btnLogOut = false
         this.$router.go()
         const routeStorage = window.localStorage
         routeStorage.setItem('user', false)
 			})
 			.catch(e => {
-        this.btnLogOut = false
         this.$notify({
           message: e.response.data.message,
           type: 'warning',
@@ -120,20 +112,35 @@ export default {
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
-    toggleNotificationDropDown() {
-      this.activeNotifications = !this.activeNotifications;
+    // toggleNotificationDropDown() {
+    //   this.activeNotifications = !this.activeNotifications;
+    // },
+    // closeDropDown() {
+    //   this.activeNotifications = false
+    // },
+    // toggleSidebar() {
+    //   this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
+    // },
+    // hideSidebar() {
+    //   this.$sidebar.displaySidebar(false);
+    // },
+  },
+  watch: {
+    smAndDown(val) {
+      val && this.showSidebar
+        ? this.toggleCustomSidebar()
+        : false
     },
-    closeDropDown() {
-      this.activeNotifications = false;
-    },
-    toggleSidebar() {
-      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
-    },
-    hideSidebar() {
-      this.$sidebar.displaySidebar(false);
+    mdAndUp(val) {
+      val && !this.showSidebar
+        ? this.toggleCustomSidebar()
+        : false
     }
   },
-};
+  mounted() {
+    this.smAndDown ? this.toggleCustomSidebar() : false
+  }
+}
 </script>
 <style>
 </style>

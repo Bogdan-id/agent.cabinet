@@ -190,7 +190,7 @@
         <div class="text-center">
           <v-btn
               dark
-              color="grey darken-1"
+              color="red darken-1"
               @click.native.prevent="updateProfile">
               Оновити профіль
           </v-btn>

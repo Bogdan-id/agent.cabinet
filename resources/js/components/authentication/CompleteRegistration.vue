@@ -1,15 +1,21 @@
 <template>
   <div class="app">
-    <v-content>
-      <v-container class="fill-height" fluid>
+    <v-content class="label__block">
+      <!-- rhombus to background -->
+      <div class="rhombus-1"></div>
+      <div class="rhombus-2"></div>
+      <div class="rhombus-3"></div>
+      <v-container class="fill-height pa-11" fluid>
         <v-row align="center" justify="center">
-          <v-col cols="12" sm="7" md="5" lg="4" xl="3">
+          <v-col cols="12" sm="11" md="8" lg="6" xl="4">
             <v-card class="elevation-9 form-card" flat>
-              <div class="complete-reg-form__title headline indigo white--text">
+              <div class="complete-reg-form__title title">
                 <div class="complete-reg-form__title-logo"></div>
-                <span class="d-block headline">Заповніть особові дані</span>
+                <span class="d-block headline">Заповніть особові дані:</span>
               </div>
-              <div class="pt-12" v-show="!nextPage">
+          <v-row class="pl-5 pr-5 pb-5">
+            <v-col cols="12" sm="6" md="6" lg="6" xl="6">
+              <div class="pt-6">
                 <div class="input__text">
                   <v-text-field 
                       :error-messages="lastNameErrors" 
@@ -46,20 +52,20 @@
                       outlined dense readonly>
                   </v-text-field>
                 </div>
-                <div class="d-flex justify-space-around">
-                  <span class="title font-italic font-weight-light complete-reg-form-sub-title">Ви є -&nbsp;</span>
-                  <v-radio-group 
+                <div>
+                  <span class="title">Мiсце роботи</span>
+                  <v-radio-group
+                      style="margin-top: 0;"
                       @input="$v.companyType.$touch()" 
-                      @change="$v.companyType.$touch(); scrollToId('input-67')" 
+                      @change="$v.companyType.$touch()" 
                       :error-messages="companyTypeErrors" 
                       v-model="companyType"
-                      class="complete-reg-form__radio" 
-                      dense>
-                    <v-radio label="Салон" color="light-blue darken-4" value="salon"></v-radio>
-                    <v-radio label="Дилер" color="light-blue darken-4" value="dealer"></v-radio>
+                      dense row>
+                    <v-radio label="Салон" color="black" value="salon"></v-radio>
+                    <v-radio label="Дилер" color="black" value="dealer"></v-radio>
                   </v-radio-group>
                 </div>
-                <div :class="expandCompany">
+                <div>
                   <div class="input__text">
                     <v-text-field 
                         :error-messages="companyNameErrors" 
@@ -73,7 +79,7 @@
                     <v-text-field 
                         :error-messages="positionErrors" 
                         @blur="$v.position.$touch()" 
-                        @input="$v.position.$touch(); scrollToId('btn-next')" 
+                        @input="$v.position.$touch()" 
                         v-model="position"
                         :maxlength="positionMaxLength"
                         label="Посада" 
@@ -81,36 +87,21 @@
                     </v-text-field>
                   </div>
                 </div>
-                <div :class="showBtnNextPage">
-                  <span>
-                    <v-btn @click="nextPage = !nextPage" 
-                        class="d-block"
-                        id="btn-next" 
-                        color="primary"
-                        :disabled="!firstPageValid">
-                        Далi&nbsp;
-                        <v-icon v-text="'mdi-arrow-right-bold-circle'"></v-icon>
-                   </v-btn>
-                  </span>
-                </div>
               </div>
-              <div v-show="nextPage">
-              <div class="d-flex justify-space-between pt-7">
-                <span class="subtitle-1 font-weight-bold complete-reg-form-sub-title">
-                    Оберіть тип паспорту:
-                </span>
-                <v-radio-group 
-                    :error-messages="passportTypeErrors" 
-                    @input="$v.passportType.$touch()" 
-                    v-model="passportType"
-                    class="complete-reg-form__radio"
-                    dense>
-                  <v-radio label="ID - картка" color="primary" value="2"></v-radio>
-                  <v-radio  label="Книжковий" color="primary" value="1"></v-radio>
-                </v-radio-group>
-              </div>
-                <div :class="expandPassport">
-                  <div class="d-flex password-wrapper">
+            </v-col>
+
+            <v-col cols="12" sm="6" md="6" lg="6" xl="6">
+                  <div>
+                    <span class="title d-block mt-3">Тип паспорту</span>
+                    <v-radio-group
+                      style="margin-top: 0;"
+                      :error-messages="passportTypeErrors" 
+                      @input="$v.passportType.$touch()" 
+                      v-model="passportType"
+                      dense row>
+                      <v-radio label="ID - картка" color="black" value="2"></v-radio>
+                      <v-radio label="Книжковий" color="black" value="1"></v-radio>
+                    </v-radio-group>
                     <v-text-field
                         v-show="passportType === '1'" 
                         :error-messages="passportSeriesErrors" 
@@ -194,7 +185,8 @@
                           v-model="choosedDate"  
                           ref="picker"
                           :min="hundredYears" 
-                          :max="eighteenYearsAgo">
+                          :max="eighteenYearsAgo"
+                          color="red">
                       </v-date-picker>
                     </v-dialog>
                     <v-text-field 
@@ -208,28 +200,23 @@
                         outlined dense>
                     </v-text-field>
                   </div>
-                </div>
-                <div class="d-flex justify-space-around pb-6 pt-3">
-                  <span>
-                    <v-btn @click="nextPage = !nextPage" class="d-block" color="primary">
-                      <v-icon v-text="'mdi-arrow-left-bold-circle'">
-                      </v-icon>
-                      &nbsp;Назад
-                    </v-btn>
-                  </span>
-                  <span>
-                    <v-btn @click="submit()" 
-                        :disabled="!dataValid"
-                        :loading="request"
-                        class="d-block" 
-                        color="primary">
-                      <v-icon v-text="'mdi-check-bold'">
-                      </v-icon>
-                      &nbsp;Зберегти
-                    </v-btn>
-                  </span>
-                </div>
-              </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col class="d-flex justify-center pb-6 pt-3">
+                <span>
+                  <v-btn @click="submit()" 
+                      :disabled="!dataValid"
+                      :loading="request"
+                      class="d-block white--text" 
+                      color="grey darken-3">
+                    <v-icon v-text="'mdi-check-bold'">
+                    </v-icon>
+                    &nbsp;Зберегти
+                  </v-btn>
+                </span>
+              </v-col>
+            </v-row>
             </v-card>
           </v-col>
         </v-row>
@@ -256,7 +243,6 @@ export default {
 
     /* boolean */
     modal: false,
-    nextPage: false,
     request: false,
 
     /* masks */
@@ -337,17 +323,18 @@ export default {
       minLength: minLength(10)
     },
     cardNumber: {
-      required,
       minLength: minLength(16),
+      required,
       lunValid: function luhn(array) {
-        return function (number) {
+        return number => {
+          if(number === null) return false
           let pureNum = number.replace(/[^\d]/g, '')
           let len = pureNum ? pureNum.length : 0, bit = 1, sum = 0;
           while (len--) {sum += !(bit ^= 1) 
             ? parseInt(pureNum[len], 10) 
             : array[pureNum[len]]}
           return sum % 10 === 0 && sum > 0;
-        }
+        } 
       }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9])
     }
   },
@@ -438,12 +425,12 @@ export default {
 				text: text,
 			})
 		},
-    scrollToId(id) {
-      const el = document.getElementById(id)
-      setTimeout(() => {
-        el.scrollIntoView({behavior: "smooth"})
-      }, 250)
-    }
+    // scrollToId(id) {
+    //   const el = document.getElementById(id)
+    //   setTimeout(() => {
+    //     el.scrollIntoView({behavior: "smooth"})
+    //   }, 250)
+    // }
   },
   watch: {
     modal(val) {
@@ -468,16 +455,6 @@ export default {
       let day = currentDate.getUTCDate()
       let year = currentDate.getUTCFullYear()
       return new Date(year - 100, month, day).toISOString().substr(0, 10)
-    },
-    expandCompany() {
-      return this.companyType !== null 
-        ? 'complete-reg-form__expand --expand-active' 
-        : 'complete-reg-form__expand'
-    },
-    expandPassport() {
-      return this.passportType !== null 
-        ? 'complete-reg-form__expand --expand-active mt-2' 
-        : 'complete-reg-form__expand'
     },
     getPassportCode() {
       return this.passportType === "1" ? this.passportSeries : this.unzr.replace(/[^\d]/g, '')
@@ -540,8 +517,8 @@ export default {
     cardNumberErrors() {
 			const errors = []
       if (!this.$v.cardNumber.$error) return errors
-      !this.$v.cardNumber.minLength && errors.push(`Поле "Карта для виплат" - має складатися з 12 цифр`)
       !this.$v.cardNumber.required && errors.push('Поле "Карта для виплат" - обов\'язкове для заповнення (Цифри)')
+      !this.$v.cardNumber.minLength && errors.push('Поле "Карта для виплат" - має складатися з 16 цифр')
       !this.$v.cardNumber.lunValid && errors.push('Не вiрна картка')
 			return errors
     },
@@ -614,11 +591,6 @@ export default {
         : false
       return check
     },
-    showBtnNextPage() {
-      return this.firstPageValid 
-        ? 'complete-reg-form__btn btn-expanded--active'
-        : 'complete-reg-form__btn'
-    },
   },
   created() {
     /* Authorize the user (if not authorized) before filling out the form */
@@ -626,76 +598,19 @@ export default {
   },
 }
 </script>
-<style scoped>
-  .app {
-    background: #fafafa;
-  }
-</style>
-
 <style>
+  .v-radio .v-label {
+    margin: 0;
+  }
   .form-card {
     text-align: left;
+    z-index: 5;
   }
   .complete-reg-form__title {
     padding: 15px 35px;
   }
-  .input__text .v-input {
-    padding: 0 35px!important;
-  }
   .form-card .v-card__title {
     word-break: keep-all;
-  }
-  .form-card .complete-reg-form__radio {
-    margin: 0;
-    min-width: 60%;
-    display: flex;
-    justify-content: center;
-  }
-  .complete-reg-form-sub-title {
-    display: inline-block;
-    padding: 0 0 0 35px;
-  }
-  .complete-reg-form__radio .v-label {
-    font-size: 1.2rem;
-    margin: 0;
-  }
-  .complete-reg-form__expand {
-    padding-top: 8px;
-    transition: height 0.25s ease-in;
-    max-height: 0;
-    overflow: hidden;
-  }
-  .--expand-active {
-    max-height: 500px;
-    transition: max-height 0.25s ease-in;
-  }
-  .form-card .complete-reg-form__radio {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .password-wrapper {
-     padding: 0 35px 10px 35px;
-     display: flex;
-     justify-content: space-between;
-  }
-  .passport-serries {
-    max-width: 38%!important;
-  }
-  .passport-number {
-    max-width: 59%!important;
-  }
-  .complete-reg-form__btn {
-    transition: max-height 0.25s ease-in;
-    display: flex;
-    position: relative;
-    justify-content: center;
-    max-height: 0;
-    overflow: hidden;
-  }
-  .btn-expanded--active {
-    transition: max-height 0.25s ease-in;
-    max-height: 150px;
-    padding: 0 0 18px 0;
   }
   #crf-last-name, #crf-patronymic {
     text-transform: capitalize;

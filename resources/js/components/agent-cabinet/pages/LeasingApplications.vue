@@ -1,7 +1,8 @@
 <template>
   <v-card>
-    <v-card-title> 
-      Заявки на лiзинг
+    <v-card-title class="d-block"> 
+      <div>Заявки на лiзинг</div>
+      <v-divider></v-divider>
     </v-card-title>
     <v-card-actions>
       <v-tooltip right>

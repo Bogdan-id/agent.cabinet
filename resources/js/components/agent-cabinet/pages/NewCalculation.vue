@@ -1,11 +1,11 @@
 <template>
-  <v-card class="card-cust">
+  <v-card>
     <v-card-title class="headline">
       Новий розрахунок
     </v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="6">
+        <v-col cols="12" xs="12" sm="12" md="6" lg="6" xl="4">
           <v-card>
             <v-card-title>Загальна iнформацiя</v-card-title>
             <v-card-text>
@@ -74,7 +74,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="12" xs="12"  sm="12" md="6" lg="6" xl="4">
           <v-card>
             <v-card-title>Суб'єкт</v-card-title>
               <v-card-text>
@@ -106,8 +106,11 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="11">
+        <v-col cols="12" xs="12"  sm="12" md="8" lg="8" xl="8">
           <v-card>
+            <v-card-title>
+              Тип графiку
+            </v-card-title>
             <v-card-text>
               <v-select
                 v-model="chartType"
@@ -116,21 +119,21 @@
                 dense outlined multiple>
               </v-select>
               <v-row v-show="hasAnnuity">
-                <v-col cols="4">
+                <v-col cols="12" xs="12" sm="12" md="4" lg="4" xl="4">
                   <v-text-field
                     v-model="gainEvenGraphicMonths" 
                     placeholder="Кiлькiсть мiсяцiв"
                     dense outlined>
                   </v-text-field>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="12" xs="12"  sm="12" md="4" lg="4" xl="4">
                   <v-text-field
                     v-model="gainEvenGraphicPercent" 
                     placeholder="Вiдстоток посилення"
                     dense outlined>
                   </v-text-field>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="12" xs="12"  sm="12" md="4" lg="4" xl="4">
                   <v-text-field
                     v-model="UnsrMonths" 
                     placeholder="УНСПР, місяцiв"
@@ -138,7 +141,7 @@
                   </v-text-field>
                 </v-col>
               </v-row>
-              <div style="display: flex; flex-column">
+              <div :class="`d-flex flex-${smAndDown ? 'column' : 'row'}`">
                 <div class="body-1 mr-2">Авансовий платiж (%):</div>
                   <v-slider
                     v-model="advancePayment"
@@ -153,25 +156,25 @@
                     </template>
                   </v-slider>
                 </div>
-                <div style="display: flex;">
+              <div :class="`d-flex flex-${smAndDown ? 'column' : 'row'}`">
                 <div class="body-1 mr-2">Термiн лiзингу (мic):</div>
-                  <v-slider
-                    v-model="leasingTime"
-                    min="12"
-                    max="72"
-                    thumb-label>
-                    <template v-slot:prepend>
-                      <span>12</span>
-                    </template>
-                    <template v-slot:append>
-                      <span>72</span>
-                    </template>
-                  </v-slider>
+                <v-slider
+                  v-model="leasingTime"
+                  min="12"
+                  max="72"
+                  thumb-label>
+                  <template v-slot:prepend>
+                    <span>12</span>
+                  </template>
+                  <template v-slot:append>
+                    <span>72</span>
+                  </template>
+                </v-slider>
               </div>
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="12" xs="12"  sm="12" md="6" lg="6" xl="5">
           <v-card>
             <v-card-title>
               Податок
@@ -216,7 +219,7 @@
       </v-row>
     </v-card-text>
     <v-card-actions class="d-flex justify-center new-calculation-btn">
-      <span><v-btn @click="submit()" class="mb-3" dark color="grey darken-1">Розрахувати</v-btn></span>
+      <span><v-btn @click="submit()" class="mb-3" dark color="red darken-1">Розрахувати</v-btn></span>
       <!-- <v-btn @click="test()">test</v-btn> -->
     </v-card-actions>
   </v-card>
@@ -288,24 +291,30 @@ export default {
   },
   methods: {
     getMarksByType() {
+      this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.LeasedAssetType.itemValue}`)
         .then(response => {
           this.brandItems = response.data
+          this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
+          this.$store.commit('toggleSpinner', false)
         })
     },
     getModelByMark() {
+      this.$store.commit('toggleSpinner', true)
       let categorieId = this.LeasedAssetType.itemValue
       axios.get(`/models?category=${categorieId}&mark=${this.modelItem.value}`)
         .then(response => {
           this.modelItems = response.data
+          this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
+          this.$store.commit('toggleSpinner', false)
         })
     },
     notify(title, text, group) {
@@ -324,6 +333,7 @@ export default {
     submit() {
       axios
         .post('/calculate', this.calculationObj())
+          this.$store.commit('toggleSpinner', true)
           .then(response => {
             console.log(response)
           })
@@ -331,6 +341,7 @@ export default {
             console.log(error.response)
             const message = error.response.statusText
             this.notify('Помилка', message, 'error')
+            this.$store.commit('toggleSpinner', false)
           })
     },
 
@@ -376,6 +387,9 @@ export default {
     }
   },
   computed: {
+    smAndDown() {
+      return this.$vuetify.breakpoint.smAndDown
+    },
     typeOfCar() {
       return this.itemType !== null
     },

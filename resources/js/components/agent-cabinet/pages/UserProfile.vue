@@ -1,9 +1,5 @@
 <template>
     <div class="row user-profile">
-      <v-row v-if="!hasUser" style="position: relative!important;">
-        <v-progress-circular class="user-profile-loader" indeterminate size="34"
-        color="error"></v-progress-circular>
-      </v-row>
       <div class="col-12" v-if="hasUser">
         <edit-profile-form />
       </div>
@@ -19,8 +15,6 @@ export default {
   },
   computed: {
     hasUser() {
-      console.log(this.$store.state.user)
-      console.log(Object.keys(this.$store.state.user).length > 0)
       return Object.keys(this.$store.state.user).length > 0
     }
   },

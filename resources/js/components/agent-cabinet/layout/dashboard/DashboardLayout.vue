@@ -39,11 +39,8 @@
     </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>
-
       <dashboard-content @click.native="toggleSidebar">
-
       </dashboard-content>
-
       <content-footer></content-footer>
     </div>
   </div>
@@ -72,14 +69,17 @@ export default {
       }
     },
     getCurrentUser() {
+      this.$store.commit('toggleSpinner', true)
       axios.get('/getUserAgent')
       .then(response => {
         let user = response.data.user
         let {document, ...userAgent} = response.data.agent
         this.$store.dispatch('add_user', Object.assign(user, userAgent, document))
+        this.$store.commit('toggleSpinner', false)
       })
       .catch(error => {
         console.log(error.response)
+        this.$store.commit('toggleSpinner', false)
       })
     },
   },

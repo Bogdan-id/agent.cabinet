@@ -1,7 +1,8 @@
 <template>
   <v-card class="edit-profile">
-    <v-card-title class="headline">
-      Профiль
+    <v-card-title class="d-block">
+      <div>Профiль</div>
+      <v-divider></v-divider>
     </v-card-title>
     <v-card-text>
     <div>
@@ -190,7 +191,7 @@
         <div class="text-center">
           <v-btn
               dark
-              color="grey darken-1"
+              color="red darken-1"
               @click.native.prevent="updateProfile">
               Оновити профіль
           </v-btn>

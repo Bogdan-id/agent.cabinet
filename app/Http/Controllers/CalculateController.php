@@ -13,9 +13,18 @@ use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
 use Mpdf\Mpdf;
 use GuzzleHttp\Psr7;
+use App\Repositories\CalculationRepository;
+use App\Models\Calculation;
 
 class CalculateController extends Controller
 {
+
+    public function __construct()
+    {
+        //$this->middleware('auth');
+
+    }
+    
     /**
      * @param CalculatorDataService $calculatorDataService
      * @param CalculateClient $calculateClient
@@ -24,16 +33,20 @@ class CalculateController extends Controller
      * @throws \Mpdf\MpdfException
      * @throws \Throwable
      */
-    public function create (CalculatorDataService $calculatorDataService, CalculateClient $calculateClient, BitrixClient $bitrixClient) {
+    public function create (CalculatorDataService $calculatorDataService, 
+        CalculateClient $calculateClient,
+        BitrixClient $bitrixClient,
+        CalculationRepository $calculationRepository
+     ) {
         try {
             $data = $calculatorDataService->getRequestData();
-
+           
             $params = array_merge($calculateClient->runCalculate(
                 $data
             ), [
                 'params' => $data
             ]);
-
+            $calculation = $calculationRepository->create($params);
            // $bitrixClient->addQuoteFromCalculator($calculatorDataService, $params); //Пока нет надобности отправлять предложения
         } catch (RequestException $e) {
             $message = Psr7\str($e->getRequest());
@@ -46,7 +59,7 @@ class CalculateController extends Controller
             abort($message);
         }
 
-        return $params;
+        return $calculation;
     }
 
     /**
@@ -105,5 +118,17 @@ class CalculateController extends Controller
         );
 
         $mpdf->Output();
+    }
+
+    public function getCalculationByAgent($agent_id)
+    {
+        $agentCalculations = Calculation::where('agent_id', '=', $agent_id)->get();
+
+        return response()->json($agentCalculations);
+    }
+
+    public function getCalculationById($id)
+    {
+        //
     }
 }

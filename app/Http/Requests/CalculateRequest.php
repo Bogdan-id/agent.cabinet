@@ -61,6 +61,7 @@ class CalculateRequest extends JsonRequest
             'gpsTrackerModel' => 'required',
             'insuranceProgram' => 'required',
             'insuranceFranchise' => 'required',
+            'insuranceVehicleType' => 'required',
         ];
     }
 }

@@ -15,6 +15,7 @@ import Calculator from "../components/agent-cabinet/pages/Calculator.vue"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications.vue"
 import NewCalculaton from '../components/agent-cabinet/pages/NewCalculation.vue'
 import CalculationDetail from '../components/agent-cabinet/pages/CalculationDetail.vue'
+import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMaterialsDetail.vue'
 
 const routes = [
   { path: '/', component: Authorization },
@@ -41,6 +42,11 @@ const routes = [
         path: '/useful-materials',
         name: 'Кориснi матерiали',
         component: UsefulMaterials
+      },
+      {
+        path: '/useful-materials/:detail',
+        name: 'Кориснi матерiали вiд Best-leasing',
+        component: UsefulMaterialsDetail
       },
       {
         path: '/reporting',

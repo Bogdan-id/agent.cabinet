@@ -8,14 +8,23 @@
             </div>
           <v-divider></v-divider>
           </v-card-title>
-          <v-card-text>
-            <div 
-              v-for="(item, key) in articles"
+          <v-card-text v-if="routes !== null">
+            <div
+              v-for="(item, key) in sections"
               :key="key"
               class="useful-materials__article">
-              <div class="headline"><a href="#">{{ item.title }}</a></div>
-              <span class="article-title">{{ item.date }}</span>
-              <p>{{ item.text }}<a :href="item.link"></a></p>
+              <div class="headline">
+                <router-link 
+                  :to="routeObject(item.route, item)"
+                  >{{ item.title }}
+                </router-link>
+              </div>
+              <p>{{ item.text }}
+                <router-link 
+                  :to="routeObject(item.route, item)">
+                </router-link>
+              </p>
+              <!-- <p>{{ item.text }}<a :href="item.link"></a></p> -->
             </div>
           </v-card-text>
         </v-card>
@@ -25,27 +34,49 @@
 <script>
 export default {
   data: () => ({
-    articles: [
+    sections: [
       {
-        date: 'Березень 2019',
-        title: "Iнформацiя про нас",
-        link: '#',
-        text: `Компанія Best Leasing завжди пропонує для своїх Партнерів та 
-          Клієнтів найкращі умови лізингу! А ще найкращий сервіс, індивідуальний підхід, 
-          спеціальні пропозиції, розіграші, професійну підтримку від найкращої команди 
-          професіоналів, програма лояльності та ще купа додаткових бонусів.`
+        title: 'Інформація про нас', 
+        text: 'Текст генератор для роздiлу Інформація про нас',
+        route: 'about-us'
       },
       {
-        date: 'Квiтень 2019',
-        title: "Тренінги",
-        link: '#',
-        text: `Компанія Best Leasing завжди пропонує для своїх Партнерів та 
-          Клієнтів найкращі умови лізингу! А ще найкращий сервіс, індивідуальний підхід, 
-          спеціальні пропозиції, розіграші, професійну підтримку від найкращої команди 
-          професіоналів, програма лояльності та ще купа додаткових бонусів. Генеатор тексту`
-      }
-    ]
+        title: 'Тренінги', 
+        text: 'Генератор тексту для роздулу Тренінги',
+        route: 'trainings'
+      },
+      {
+        title: 'Відеоогляди', 
+        text: 'Текст генератор для роздiлу Відеоогляди',
+        route: 'video-review'
+      },
+      {
+        title: 'Законодавство', 
+        text: 'Текст генератор для роздiлу Законодавство',
+        route: 'legislation'
+      },
+      {
+        title: 'Страхові пакети', 
+        text: 'Генератор тексту для роздулу Страхові пакети',
+        route: 'insurance-packages'
+      },
+      {
+        title: 'Асистанс', 
+        text: 'Текст генератор для роздiлу Асистанс',
+        route: 'assistance'
+      },
+    ],
+    routes: null,
   }),
+  methods: {
+    routeObject(route, data) {
+      return {name: 'Кориснi матерiали вiд Best-leasing', params: {detail: route, data: data}}
+    }
+  },
+  mounted() {
+    this.routes = this.$router.currentRoute.path
+    console.log(this.routes)
+  }
 }
 </script>
 <style lang="scss">
@@ -77,5 +108,4 @@ export default {
       }
     }
   }
-  
 </style>

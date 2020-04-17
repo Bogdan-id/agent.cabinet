@@ -129,6 +129,8 @@ class CalculateController extends Controller
 
     public function getCalculationById($id)
     {
-        //
+        $calculation = Calculation::find($id);
+
+        return response()->json($calculation);
     }
 }

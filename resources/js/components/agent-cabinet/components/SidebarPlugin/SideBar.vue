@@ -1,16 +1,13 @@
 <template>
   <div class="sidebar"
        :data-background-color="backgroundColor"
-       :data-active-color="activeColor">
-    <!--
-            Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black | darkblue"
-            Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-        -->
-    <!-- -->
+       :data-active-color="'black'">
+      <!-- Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black | darkblue" -->
+      <!-- Tip 2: you can change the color of the active button using the data-active-color="primary | (now also black) | info | success | warning | danger" -->
     <!-- below id="style-3" -->
     <div class="sidebar-wrapper"> 
       <div class="vue-paper-sidebar__logo-wrapper">
-        <div class="app__header-logo" style="margin: 0 0 0 25px;">
+        <div class="sidebar__header-logo">
         </div>
       </div>
       <slot>
@@ -70,6 +67,7 @@ export default {
         let acceptedValues = [
           "primary",
           "info",
+          "black",
           "success",
           "warning",
           "danger"
@@ -111,146 +109,67 @@ export default {
     findActiveLink() {
       this.links.forEach((link, index) => {
         if (link.isActive()) {
-          this.activeLinkIndex = index;
+          this.activeLinkIndex = index
         }
-      });
+      })
     },
     addLink(link) {
       console.log(this.$slots)
-      const index = this.$slots.links.indexOf(link.$vnode);
-      this.links.splice(index, 0, link);
+      const index = this.$slots.links.indexOf(link.$vnode)
+      this.links.splice(index, 0, link)
     },
     removeLink(link) {
-      const index = this.links.indexOf(link);
+      const index = this.links.indexOf(link)
       if (index > -1) {
-        this.links.splice(index, 1);
+        this.links.splice(index, 1)
       }
     }
   },
   mounted() {
     this.$watch("$route", this.findActiveLink, {
       immediate: true
-    });
-    console.log(this.$refs)
+    })
   }
 };
 </script>
 <style lang="scss">
-  /* sidebar */
-  :root {
-    --sidebar-collapsed: 85px;
-    --sidebar-expanded: 260px;
-  }
-  .sidebar {
-    transition: all 0.5s!important;
-    overflow-y: scroll!important;
-    background: repeating-linear-gradient(60deg, #e2746f, #eb443d 35%, #f31d13 50%);
-    }
-  ::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background-color: #F5F5F5;
-  }
-
-  ::-webkit-scrollbar {
-    width: 6px;
-    background-color: #F5F5F5;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: #555;
-  }
-  .nav {
-    overflow-y: visible!important;
-  }
+  /* sidebar-wrapper nav items */
   .sidebar-wrapper {
-    transition: width 0.5s !important;
+    padding-bottom: 22px;
+    .nav-item-title {
+      opacity: 1;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      position: absolute;
+      padding-left: 42px;
+    }
+    .sidebar__header-logo {
+      transition: all 0.3s;
+      margin: 0 0 0 25px;
+      background: url('../../../../assets/images/best-leasing-logo.png');
+      background-size: 160px 45px;
+      width: 160px;
+      height: 45px;
+      z-index: 3;
+    }
+    .vue-paper-sidebar__logo-wrapper {
+      background: #f4f3ef; 
+      width: 100%;
+      z-index: 1; 
+      padding: 35px 0 32px 0; 
+    }
   }
 
-  /* modifiers */
-  .sidebar--hide {
-    transition: width 0.5s;
-    width: var(--sidebar-collapsed)!important;
-  }
-  .sidebar--hide .sidebar-wrapper {
-    transition: width 0.5s;
-    width: var(--sidebar-collapsed)!important;
-  }
-
-  /* navigations */
-  .sidebar-wrapper .nav {
-    padding: 0;
-  }
-  .nav-link {
-    margin: 4px 0px!important;
-  }
-  .sidebar-wrapper .nav-item {
-    position: relative!important;
-    padding: 8px 0 11px 0!important;
-  }
-  .nav-item-title {
-    // transition: all 1s!important;
-    opacity: 1;
-    transition: opacity 0.3s;
-    white-space: nowrap;
-    position: absolute;
-    padding-left: 42px;
-  }
-  .sidebar--hide .nav-item-title {
-    transition: opacity 0.3s;
-    opacity: 0;
-  }
-  .moving-arrow {
-    transition: left 0.5s;
-  }
-  .sidebar--hide .moving-arrow {
-    transition: left 0.5s;
-    left: 67px!important;
-  }
-
-  /* main-panel */
+  /* toggle icon */
   .main-panel {
-    transition: width 0.5s!important;
-    width: calc(100% - var(--sidebar-expanded))!important;
-
+    .--toggle-icon-active {
+      transform: rotate(180deg)
+    }
+    .sidebar__toggle-icon {
+      transition: transform 0.25s ease;
+    }
+    .sidebar__toggle-icon:hover {
+      cursor: pointer;
+    }
   }
-  .main-panel--expand { 
-    transition: width 0.5s!important;
-    width: calc(100% - var(--sidebar-collapsed))!important;
-  }
-
-  .app__header-logo {
-  }
-  .sidebar--hide .app__header-logo {
-    transition: all 0.3s;
-    margin-right: auto!important;
-    margin-left: auto!important;
-    background: url('../../../../assets/images/best-leasing-logo-small.png');
-    background-size: 60px 60px;
-    width: 60px;
-    height: 60px;
-    z-index: 3;
-  }
-  .sidebar--hide .vue-paper-sidebar__logo-wrapper {
-    padding: 30px 0 22px 0;
-  }
-
-  /* other styles */
-  .vue-paper-sidebar__logo-wrapper {
-    background: #f4f3ef; 
-    width: 100%;
-    z-index: 1; 
-    padding: 35px 0 32px 0; 
-  }
-  .sidebar__toggle-icon {
-    transition: transform 0.25s ease;
-  }
-  .--toggle-icon-active {
-    transition: transform 0.25s ease;
-    transform: rotate(180deg)
-  }
-  .sidebar__toggle-icon:hover {
-    cursor: pointer;
-  }
-
 </style>

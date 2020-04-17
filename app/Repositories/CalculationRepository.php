@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Articles\Repositories;
+namespace App\Repositories;
 
-use App\Repositories\Interfaces\ArticleRepositoryInterface;
+use App\Repositories\Interfaces\CalculationRepositoryInterface;
 use App\Repositories\BaseRepository;
+use App\Models\Calculation;
 
-class CalculationRepository extends BaseRepository implements ArticleRepositoryInterface
+class CalculationRepository extends BaseRepository implements CalculationRepositoryInterface
 {
     protected $model;
   

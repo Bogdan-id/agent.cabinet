@@ -20,6 +20,29 @@
     width: var(--sidebar-expanded);
     z-index: 4;
     box-shadow: inset -1px 0px 0px 0px $medium-gray;
+    padding-bottom: 22px;
+    .nav-item-title {
+      opacity: 1;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      position: absolute;
+      padding-left: 42px;
+    }
+    .sidebar__header-logo {
+      transition: all 0.3s;
+      margin: 0 0 0 25px;
+      background: url('../../../../assets/images/best-leasing-logo.png');
+      background-size: 160px 45px;
+      width: 160px;
+      height: 45px;
+      z-index: 3;
+    }
+    .vue-paper-sidebar__logo-wrapper {
+      background: #f4f3ef; 
+      width: 100%;
+      z-index: 1; 
+      padding: 35px 0 32px 0; 
+    }
   }
   .sidebar-background {
     position: absolute;
@@ -86,8 +109,7 @@
       font-weight: $font-weight-bold;
       line-height: 40px;
       text-align: left;
-
-      .logo-img{
+      .logo-img {
           width: 40px;
           display: inline-block;
           height: 40px;
@@ -96,8 +118,8 @@
           background: white;
           border-radius: 40px;
           text-align: center;
-        img{
-            max-width: 21px;
+        img {
+          max-width: 21px;
         }
       }
     }
@@ -188,7 +210,15 @@
     min-height: 40px;
     align-items: center;
   }
-
+  .--toggle-icon-active {
+    transform: rotate(180deg)
+  }
+  .sidebar__toggle-icon {
+    transition: transform 0.25s ease;
+  }
+  .sidebar__toggle-icon:hover {
+    cursor: pointer;
+  }
   .navbar {
     margin-bottom: 0;
   }

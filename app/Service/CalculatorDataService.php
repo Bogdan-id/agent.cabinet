@@ -40,7 +40,6 @@ class CalculatorDataService
      * @throws \Exception
      */
     public function getRequestData () {
-        dd($this->calculateRequest->leasingTerm);
         return [
             'leasing-object-type' => $this->getObjType(),
             'leasing-program' => $this->getProgram(),
@@ -50,10 +49,26 @@ class CalculatorDataService
             'leased-assert-mark' => ($this->calculateRequest->leasedAssertMark ?? [])['name'] ?? null,
             'leased-assert-model' => ($this->calculateRequest->leasedAssertModel ?? [])['name'] ?? null,
             'leased-assert-engine' => (int) $this->calculateRequest->leasedAssertEngine,
+            'client-type' => (int) $this->calculateRequest->leasingClientType,    
+            'client-type' => (int) $this->calculateRequest->leasingClientType,
+            'currency' => $this->getCurrency(),
+            'payment-PF' => (int) $this->calculateRequest->paymentPf,
+            'vehicle-owner-tax' => (int) $this->calculateRequest->vehicleOwnerTax,
+            'gps-tracker-model' =>(int) $this->calculateRequest->gpsTrackerModel, 
+            'leasing-rest' => 0,
+            'request-source' => 2,
+            'gps-tracker-quantity' => 1,
+            'assist-service' => 1,
+            'rate-manipulate' => 0.1,
+            'agent-commission' => 1,
+            'commission-manipulate' => -0.5,
+            'commission-lk' => (int) $this->calculateRequest->leasingAmount * 0.005,
             'insurance-franchise' => $this->calculateRequest->insuranceFranchise,
             'insurance-program' => $this->getInsuranceProgram(),
-            'leasing-rest' => $this->calculateRequest->left / 100,
-            'currency' => $this->calculateRequest->currency === 'usd' ? 1 : 3,
+           // 'gain-even-graphic-months' => TODO:
+           // 'gain-even-graphic-percent' => TODO:
+           // 'UNSPR-months' => TODO:
+            //'leasing-rest' => $this->calculateRequest->left / 100,
             'output' => [
                 'sets' => [
                     'even-plus'
@@ -116,6 +131,21 @@ class CalculatorDataService
                 return 14;
             default:
                 return 1;
+        }
+    }
+
+    /**
+     * @return int
+     */
+    protected function getCurrency(): int
+    {
+        switch ( $this->calculateRequest->currency ?? null) {
+            case 'usd':
+                return 1;
+            case 'euro':
+                return 2;
+            case 'uah':
+                return 3;
         }
     }
 

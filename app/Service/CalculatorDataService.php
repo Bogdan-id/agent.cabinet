@@ -70,9 +70,7 @@ class CalculatorDataService
            // 'UNSPR-months' => TODO:
             //'leasing-rest' => $this->calculateRequest->left / 100,
             'output' => [
-                'sets' => [
-                    'even-plus'
-                ]
+                'sets' => $this->calculateRequest->graphType
             ]
         ];
     }
@@ -140,11 +138,11 @@ class CalculatorDataService
     protected function getCurrency(): int
     {
         switch ( $this->calculateRequest->currency ?? null) {
-            case 'usd':
+            case 'USD':
                 return 1;
-            case 'euro':
+            case 'EURO':
                 return 2;
-            case 'uah':
+            case 'UAH':
                 return 3;
         }
     }

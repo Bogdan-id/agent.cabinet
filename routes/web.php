@@ -34,6 +34,9 @@ Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');
 
 Route::get('/getUserAgent', 'AgentsController@getUserAgent');
 Route::post('/agent/create', 'AgentsController@create');
+Route::get('calculations/agent/{id}', 'CalculateController@getCalculationByAgent');
+Route::get('calculation/{id}', 'CalculateController@getCalculationById');
+
 
 Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');

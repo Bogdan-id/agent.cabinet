@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Articles\Repositories;
+namespace App\Repositories;
 
-use App\Repositories\Interfaces\ArticleRepositoryInterface;
+use App\Repositories\Interfaces\CalculationRepositoryInterface;
 use App\Repositories\BaseRepository;
+use App\Models\Calculation;
 
-class CalculationRepository extends BaseRepository implements ArticleRepositoryInterface
+class CalculationRepository extends BaseRepository implements CalculationRepositoryInterface
 {
     protected $model;
   
@@ -24,6 +25,12 @@ class CalculationRepository extends BaseRepository implements ArticleRepositoryI
      */
     public function create(array $attributes)
     {
-        return $this->model->create($attributes);
+        $this->model->agent_id = $attributes['params']['agent_id'];
+        $this->model->request_id = $attributes['requestId'];
+        $this->model->result_data = json_encode($attributes);
+        $this->model->save();
+
+        return $this->model;
     }
+  
 }

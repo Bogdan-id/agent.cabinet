@@ -42,6 +42,7 @@ class CalculateRequest extends JsonRequest
     public function rules()
     {
         return [
+            'agent_id' => 'required',
             'leasingObjectType' => 'required',
             'leasedAssertMark' => 'required',
             'leasedAssertModel' => 'required',

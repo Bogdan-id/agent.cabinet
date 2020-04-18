@@ -1,6 +1,6 @@
 <template>
   <footer class="footer flex-column">
-    <div :class="`footer__nav justify-space-between pa-3 ${xSmall ? 'flex-column align-center' : 'flex-row'}`">
+    <div :class="`footer__nav pa-3 ${xSmall ? 'flex-column align-center' : 'flex-row'}`">
       <bestLLogo :width="'140px'" :height="'40px'" :customStyle="'margin-bottom: 10px;'"/>
       <div class="footer__contacts">
         <ul class="footer__contacts-wrapper">
@@ -46,44 +46,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-  .footer {
-    .footer__nav {
-      width: 100%;
-      border-bottom: 1px solid #cdcdcd;
-      display: flex;
-    }
-    .footer__contacts-wrapper {
-      list-style: none;
-      .contact-title {
-        position: relative;
-        padding: 1px 0;
-        .icon-position {
-          position: absolute; 
-          top: 4px; 
-          left: -20px;
-        }
-      }
-    }
-    .footer__custom-btn {
-      transition: all 0.25s ease;
-      white-space: pre;
-      color: white;
-      background: #f44336;
-      font-size: 13px;
-      line-height: 30px;
-      display: block;
-      padding: 0 13px;
-      &:hover {
-        color: white;
-        background: #df473d;
-        box-shadow: 0px 7px 13px -6px rgba(230,101,101,1);
-      }
-    }
-    .footer__feedback {
-      display: flex;
-      align-items: center;
-    }
-  }
-</style>

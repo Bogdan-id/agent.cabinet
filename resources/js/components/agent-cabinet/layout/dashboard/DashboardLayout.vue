@@ -2,7 +2,7 @@
   <div class="wrapper">
     <side-bar>
       <template slot="links">
-        <sidebar-link to="/dashboard" name="Dashboard" icon="ti-panel"/>
+        <sidebar-link to="/dashboard" name="Головна" icon="ti-panel"/>
         <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="ti-agenda"/>
         <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="ti-clipboard"/>
         <sidebar-link to="/reporting" name="Звітність" icon="ti-widget-alt"/>

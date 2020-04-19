@@ -130,5 +130,5 @@ export default {
       immediate: true
     })
   }
-};
+}
 </script>

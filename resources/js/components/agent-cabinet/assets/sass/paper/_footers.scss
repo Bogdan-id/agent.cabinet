@@ -31,7 +31,7 @@
     background: #f44336;
     font-size: 13px;
     line-height: 32px;
-    display: flex;
+    display: block;
     padding: 0 15px;
     &:hover {
       color: white;
@@ -41,6 +41,7 @@
   }
   .footer__feedback {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     width: 47%;
@@ -106,6 +107,9 @@
       display: flex;
       justify-content: center;
     }
+    .feedback__text {
+      text-align: center;
+    }
   }
   @media(max-width: 796px) {
     .contact-wrapper {
@@ -131,6 +135,12 @@
     }
     .contact-wrapper {
       align-items: center;
+      .footer__feedback {
+        width: 100%;
+      }
+    }
+    .footer__contacts-wrapper {
+      margin-left: 10px;
     }
   }
 }

@@ -7,7 +7,7 @@
       <div class="contact-wrapper">
         <div class="footer__contacts">
           <ul class="footer__contacts-wrapper">
-            <li class="contact-title body-1">
+            <li class="contact-title body-1" style="font-family: Montserrat,sans-serif,Arial;">
               <v-icon class="icon-position" small v-text="'mdi-cellphone-iphone'"></v-icon>
               +38 (044) 359-03-99
             </li>
@@ -22,7 +22,7 @@
           </ul>
         </div>
         <div class="footer__feedback">
-          <div class="d-flex flex-column pa-1">
+          <div class="d-flex flex-column pa-1 feedback__text">
             <span>Перейти на сайт</span>
             <a href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
           </div>
@@ -32,7 +32,7 @@
     </div>
     <div class="container-fluid d-flex flex-wrap justify-content-between pt-2 pb-2">
       <div>
-        <router-link class="--dark" :to="{path:'/home'}">© 2020 ТОВ «Бест Лизинг»</router-link>
+        <router-link class="--dark" :to="{path:'/dashboard'}">© 2020 ТОВ «Бест Лизинг»</router-link>
       </div>
     </div>
   </footer>

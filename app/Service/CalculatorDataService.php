@@ -41,7 +41,7 @@ class CalculatorDataService
      */
     public function getRequestData () {
         return [
-            'agent_id' => $this->calculateRequest->agent_id,
+            'agent_id' => $this->calculateRequest->agentId,
             'leasing-object-type' => $this->getObjType(),
             'leasing-program' => $this->getProgram(),
             'leasing-term' => (int) $this->calculateRequest->leasingTerm,

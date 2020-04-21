@@ -70,7 +70,6 @@ class CalculatorDataService
             'insurance-franchise' => $this->calculateRequest->insuranceFranchise,
             'insurance-program' => $this->getInsuranceProgram(),
             'leasing-start-date' => $this->getStartDate(),
-            //'leasing-rest' => $this->calculateRequest->left / 100,
         ];
        
         $graphType = $this->calculateRequest->graphType;
@@ -168,6 +167,10 @@ class CalculatorDataService
         $date = new DateTime(date("Y-m-d"));
 
         switch (date("d")) {
+            case '28':
+                $daysPlus = date("t") - 27;
+                $date->modify("+{$daysPlus} day");
+             break;
             case '29':
                $daysPlus = date("t") - 28;
                $date->modify("+{$daysPlus} day");

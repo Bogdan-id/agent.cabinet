@@ -17,6 +17,7 @@ class CreateCalculationsTable extends Migration
             $table->id();
             $table->integer('agent_id');
             $table->string('request_id');
+            $table->json('request_data');
             $table->json('result_data');
             $table->timestamps();
         });

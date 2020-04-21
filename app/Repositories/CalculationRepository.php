@@ -25,9 +25,10 @@ class CalculationRepository extends BaseRepository implements CalculationReposit
      */
     public function create(array $attributes)
     {
-        $this->model->agent_id = $attributes['params']['agent_id'];
-        $this->model->request_id = $attributes['requestId'];
-        $this->model->result_data = json_encode($attributes);
+        $this->model->agent_id = $attributes['request_data']['agent_id'];
+        $this->model->request_id = $attributes['result_data']['requestId'];
+        $this->model->result_data = json_encode($attributes['result_data']);
+        $this->model->request_data = json_encode($attributes['request_data']);
         $this->model->save();
 
         return $this->model;

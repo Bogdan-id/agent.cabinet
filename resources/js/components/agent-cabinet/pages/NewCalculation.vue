@@ -1,226 +1,331 @@
 <template>
   <v-card>
-    <v-card-title class="headline">
-      Новий розрахунок
-    </v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-col cols="12" xs="12" sm="12" md="6" lg="6" xl="4">
-          <v-card>
-            <v-card-title>Загальна iнформацiя</v-card-title>
-            <v-card-text>
-              <v-select 
-                  v-model="itemType"
-                  :items="selects.itemConditions" 
-                  label="Тип авто"
-                  color="grey darken-3"
-                  dense outlined>
-              </v-select>
-              <v-select
-                  @change="getMarksByType()"
-                  v-model="LeasedAssetType"
-                  :items="selects.itemTypes"
-                  item-text="text"
-                  item-value="text"
-                  return-object
-                  label="Тип предмета лізингу"
-                  color="grey darken-3"
-                  :disabled="!typeOfCar"
-                  dense outlined>
-              </v-select>
-              <v-autocomplete
-                  @change="getModelByMark()"
-                  v-model="modelItem"
-                  :items="brandItems"
-                  item-text="name"
-                  item-value="value"
-                  return-object
-                  label="Марка"
-                  :disabled="!leasedOfAssetType || noBrandItems"
-                  dense outlined>
-              </v-autocomplete>
-              <v-autocomplete
-                  v-model="carModel"
-                  :items="modelItems"
-                  item-text="name"
-                  item-value="value"
-                  return-object
-                  label="Модель"
-                  :disabled="!modelOfItem || noModelItems"
-                  dense outlined>
-              </v-autocomplete>
-              <v-select
-                  v-if="itemType === true"
-                  v-model="itemYear" 
-                  :items="selects.itemYears"
-                  label="Рік"
-                  :disabled="!typeOfModel"
-                  dense outlined>
-              </v-select>
-              <v-select
-                  v-if="itemType === false"
-                  v-model="itemYear" 
-                  :items="selects.oldItemYers"
-                  label="Рік"
-                  :disabled="!typeOfModel"
-                  dense outlined>
-              </v-select>
-              <v-text-field
-                  v-model="engineCapacity"
-                  placeholder="Об'єм двигуна" 
-                  :disabled="!yearOfModel"
-                  dense outlined>
-              </v-text-field>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="12" xs="12"  sm="12" md="6" lg="6" xl="4">
-          <v-card>
-            <v-card-title>Суб'єкт</v-card-title>
-              <v-card-text>
-                <v-select
-                    v-model="clientType"
-                    :items="selects.clientTypes" 
-                    label="Суб'єкт"
-                    dense outlined>
+    <v-tabs 
+      v-model="currentTab"
+      class="d-inline-flex"
+      slider-color="grey darken-3"
+      background-color="red lighten-1"
+      slider-size="7"
+      dark>
+      <v-tab key="page-one">Cторiнка 1</v-tab>
+      <v-tab key="page-two">Cторiнка 2</v-tab>
+    </v-tabs>
+    
+    <v-tabs-items v-model="currentTab">
+      <v-tab-item key="page-one">
+        <v-card-text>
+          <div>
+            <v-row>
+              <v-col cols="12" md="7">
+                <v-radio-group class="calculator-radio" v-model="clientType" row>
+                  <v-radio label="Фiзична особа" value="2" color="black"></v-radio>
+                  <v-radio label="Юридична особа" value="1" color="black"></v-radio>
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md=3>
+                <v-select 
+                    v-model="itemType"
+                    :items="selects.itemConditions" 
+                    label="Тип авто"
+                    color="red darken-4"
+                    dense outlined :disabled="!isClientType">
                 </v-select>
+              </v-col>
+              <v-col cols="12" md="3">
                 <v-select
                     v-model="agreementCurrency"
                     :items="selects.currencys" 
                     label="Валюта договору лізингу"
+                    color="red darken-4"
+                    dense outlined :disabled="!isClientType">
+                </v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="3">
+                <v-select
+                    @change="getMarksByType()"
+                    v-model="LeasedAssetType"
+                    :items="selects.itemTypes"
+                    item-text="text"
+                    item-value="text"
+                    return-object
+                    label="Тип предмета лізингу"
+                    :disabled="!typeOfCar"
+                    color="red darken-4"
                     dense outlined>
                 </v-select>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-autocomplete
+                    @change="getModelByMark()"
+                    v-model="modelItem"
+                    :items="brandItems"
+                    item-text="name"
+                    item-value="value"
+                    return-object
+                    label="Марка"
+                    :disabled="!leasedOfAssetType || noBrandItems"
+                    color="red darken-4"
+                    dense outlined>
+                </v-autocomplete>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-autocomplete
+                    v-model="carModel"
+                    :items="modelItems"
+                    item-text="name"
+                    item-value="value"
+                    return-object
+                    label="Модель"
+                    :disabled="!modelOfItem || noModelItems"
+                    color="red darken-4"
+                    dense outlined>
+                </v-autocomplete>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="3" v-if="itemType === false">
+                <v-select
+                    v-model="itemYear" 
+                    :items="selects.oldItemYers"
+                    label="Рік"
+                    :disabled="!typeOfModel"
+                    color="red darken-4"
+                    dense outlined>
+                </v-select>
+              </v-col>
+              <v-col cols="12" md="3">
                 <v-text-field
-                    v-model="carQuantity" 
-                    placeholder="Кiлькiсть"
+                    v-model="engineCapacity"
+                    placeholder="Об'єм двигуна" 
+                    :disabled="!yearOfModel"
+                    color="red darken-4"
                     dense outlined>
                 </v-text-field>
+              </v-col>
+              <v-col cols="12" md="3">
                 <v-text-field
                     @change="$v.itemCost.$touch()"
                     @input="$v.itemCost.$touch()"
                     :error-messages="itemCostErrors"
                     v-model="itemCost" 
                     placeholder="Вартість"
+                    color="red darken-4"
                     dense outlined>
                 </v-text-field>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="12" xs="12"  sm="12" md="8" lg="8" xl="8">
-          <v-card>
-            <v-card-title>
-              Тип графiку
-            </v-card-title>
-            <v-card-text>
-              <v-select
-                v-model="chartType"
-                :items="selects.chartTypes"
-                placeholder="Тип графіка"
-                dense outlined multiple>
-              </v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="3">
+                <v-select
+                    :items="selects.currencys" 
+                    placeholder="Валюта"
+                    color="red darken-4"
+                    dense>
+                </v-select>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field
+                    v-model="currencyCourse" 
+                    placeholder="Курс"
+                    color="red darken-4"
+                    dense readonly>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field
+                    v-model="carQuantity" 
+                    placeholder="Кiлькiсть"
+                    min="1"
+                    type="number"
+                    color="red darken-4"
+                    dense>
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </div>
+        </v-card-text>
+      </v-tab-item>
+
+      <!-- Уточни валюта договора и просто валюта -->
+      <v-tab-item key="page-two">
+        <v-card-text>
+          <div>
+            <v-row>
+              <v-col cols="12" md="9" class="pb-0">
+                <v-select
+                  v-model="chartType"
+                  :items="selects.chartTypes"
+                  placeholder="Тип графіка"
+                  color="red darken-4"
+                  dense outlined multiple>
+                </v-select>
+              </v-col>
+            </v-row>
+            <v-card v-show="hasAnnuity" class="d-inline-block mb-3">
+            <v-card-title v-show="hasAnnuity" class="headline">Посилання для рiвномiрного графiку</v-card-title>
+            <v-card-text class="pb-0" v-show="hasAnnuity">
               <v-row v-show="hasAnnuity">
-                <v-col cols="12" xs="12" sm="12" md="4" lg="4" xl="4">
+                <v-col cols="9" md="4">
                   <v-text-field
                     v-model="gainEvenGraphicMonths" 
                     placeholder="Кiлькiсть мiсяцiв"
+                    color="red darken-4"
                     dense outlined>
                   </v-text-field>
                 </v-col>
-                <v-col cols="12" xs="12"  sm="12" md="4" lg="4" xl="4">
+                <v-col cols="9" md="4">
                   <v-text-field
                     v-model="gainEvenGraphicPercent" 
                     placeholder="Вiдстоток посилення"
+                    color="red darken-4"
                     dense outlined>
                   </v-text-field>
                 </v-col>
-                <v-col cols="12" xs="12"  sm="12" md="4" lg="4" xl="4">
+                <v-col cols="9" md="4">
                   <v-text-field
                     v-model="UnsrMonths" 
                     placeholder="УНСПР, місяцiв"
+                    color="red darken-4"
                     dense outlined>
                   </v-text-field>
                 </v-col>
               </v-row>
-              <div :class="`d-flex flex-${smAndDown ? 'column' : 'row'}`">
-                <div class="body-1 mr-2">Авансовий платiж (%):</div>
+              </v-card-text>
+            </v-card>
+            <v-row>
+              <v-col cols="12" md="10">
+              <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
+                <div class="body-1 mr-2"><span class="title">Авансовий платiж&nbsp;</span>(<b>%</b>):</div>
                   <v-slider
                     v-model="advancePayment"
                     min="20"
                     max="70"
+                    color="black"
+                    track-color="grey"
+                    persistent-hint
                     thumb-label>
-                    <template v-slot:prepend>
-                      <span>20%</span>
+                    <template #prepend>
+                      <span class="slider-prepend">20&nbsp;%</span>
                     </template>
-                    <template v-slot:append>
-                      <span>70%</span>
+                    <template #append>
+                      <span class="slider-prepend">70&nbsp;%</span>
                     </template>
                   </v-slider>
                 </div>
-              <div :class="`d-flex flex-${smAndDown ? 'column' : 'row'}`">
-                <div class="body-1 mr-2">Термiн лiзингу (мic):</div>
-                <v-slider
-                  v-model="leasingTime"
-                  min="12"
-                  max="72"
-                  thumb-label>
-                  <template v-slot:prepend>
-                    <span>12</span>
-                  </template>
-                  <template v-slot:append>
-                    <span>72</span>
-                  </template>
-                </v-slider>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="12" xs="12"  sm="12" md="6" lg="6" xl="5">
-          <v-card>
-            <v-card-title>
-              Податок
-            </v-card-title>
-            <v-card-text>
-              <v-select
-                  v-model="vehicleTax" 
-                  :items="selects.yesOrNo"
-                  label="Податок з власників ТЗ"
-                  dense outlined>
-              </v-select>
-              <v-select
-                  v-model="pensionFundTax" 
-                  :items="selects.yesOrNo"
-                  label="Податок в ПФ"
-                  dense outlined>
-              </v-select>
-              <v-select
-                  v-model="gpsTracker" 
-                  :items="selects.gpsTrackers"
-                  label="GPS-трекер"
-                  dense outlined>
-              </v-select>
-              <v-select
-                  v-model="insuranceProgram" 
-                  :items="selects.insurancePrograms"
-                  item-text="text"
-                  item-value="text"
-                  return-object=""
-                  label="Програма страхування"
-                  dense outlined>
-              </v-select>
-              <v-select
-                  v-model="franchise" 
-                  :items="selects.franchises"
-                  label="Франшиза"
-                  dense outlined>
-              </v-select>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-card-text>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="10">
+                <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
+                  <div class="body-1 mr-2"><span class="title">Термiн лiзингу&nbsp;</span>(<b>мic</b>):</div>
+                  <v-slider
+                    v-model="leasingTime"
+                    min="12"
+                    max="72"
+                    color="black"
+                    track-color="grey"
+                    persistent-hint
+                    thumb-label>
+                    <template v-slot:prepend>
+                      <span class="slider-prepend">12&nbsp;<span class="body-2">мiс</span></span>
+                    </template>
+                    <template v-slot:append>
+                      <span class="slider-prepend">72&nbsp;<span class="body-2">мiс</span></span>
+                    </template>
+                  </v-slider>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="8">
+                <div class="content__switch">
+                  <div class="content__switch-title-wrapper">
+                    <span class="content__switch-title body-1">Податок з власникiв транспортних засобiв:</span>
+                  </div>
+                  <div class="content__switch-wrapper">
+                    <v-switch
+                        v-model="vehicleTax"
+                        dense
+                        >
+                        <template #prepend>
+                          <span class="switch-label-prepend">Нi</span>
+                        </template>
+                        <template #append>
+                          <span class="switch-label-prepend">Так</span>
+                        </template>
+                    </v-switch>
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="8">
+                <div class="content__switch">
+                  <div class="content__switch-title-wrapper">
+                    <span class="content__switch-title body-1">Податок в пенсiйний фонд:</span>
+                  </div>
+                  <div class="content__switch-wrapper">
+                    <v-switch
+                        v-model="pensionFundTax"
+                        dense
+                        >
+                        <template #prepend>
+                          <span class="switch-label-prepend">Нi</span>
+                        </template>
+                        <template #append>
+                          <span class="switch-label-prepend">Так</span>
+                        </template>
+                    </v-switch>
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="3">
+                <v-select
+                    v-model="gpsTracker" 
+                    :items="selects.gpsTrackers"
+                    label="GPS-трекер"
+                    color="red darken-4"
+                    dense outlined>
+                </v-select>
+              </v-col>
+            </v-row>
+            <v-card-title class="headline">Страхування</v-card-title>
+            <v-row>
+              <v-col cols="12" md="4">
+                <v-select
+                    v-model="insuranceProgram" 
+                    :items="selects.insurancePrograms"
+                    item-text="text"
+                    item-value="text"
+                    return-object=""
+                    label="Програма страхування"
+                    color="red darken-4"
+                    dense outlined>
+                </v-select>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-select
+                    v-model="franchise" 
+                    :items="selects.franchises"
+                    label="Франшиза"
+                    color="red darken-4"
+                    dense outlined>
+                </v-select>
+              </v-col>
+            </v-row>
+          </div>
+        </v-card-text>
+      </v-tab-item>
+    </v-tabs-items>
     <v-card-actions class="d-flex justify-center new-calculation-btn">
-      <span><v-btn @click="submit()" class="mb-3" dark color="red darken-1">Розрахувати</v-btn></span>
-      <!-- <v-btn @click="test()">test</v-btn> -->
+      <span><v-btn @click="submit()" class="mb-3" dark color="grey darken-3">Розрахувати</v-btn></span>
+    <!-- <v-btn @click="test()">test</v-btn> -->
     </v-card-actions>
   </v-card>
 </template>
@@ -234,12 +339,16 @@ import { numeric } from 'vuelidate/lib/validators'
 export default {
   mixins: [validationMixin],
   data:() => ({
+
+    active_tab: 1,
     /* select items & values */
     selects: selectsItemAndVAlue,
     
     /* temporary arrays */
     brandItems: [],
     modelItems: [],
+
+    currentTab: null,
 
     /* hidden data to server */
     data: null, // КУДА ПЕРЕДАВАТЬ
@@ -269,6 +378,7 @@ export default {
     engineCapacity: null,
     clientType: null,
     agreementCurrency: null,
+    currencyCourse: null,
     itemCost: null,
     chartType: null,
     advancePayment: null,
@@ -280,7 +390,8 @@ export default {
     insuranceProgram: null,
     franchise: null,
 
-    /* min-max values */
+    /* booleans */
+    
 
   }),
   validations: {
@@ -422,6 +533,9 @@ export default {
     hasAnnuity() {
       if(this.chartType === null) return false
       return this.chartType.indexOf('annuity') > -1
+    },
+    isClientType() {
+      return this.clientType !== null
     }
   },
   created() {
@@ -429,3 +543,86 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .calculation__tab-btn {
+    background: grey;
+    color: white;
+    padding: 0 18px;
+    line-height: 40px;
+  }
+  .content .v-card__title {
+    padding-bottom: 0;
+  }
+  .content .v-card__actions {
+    padding-left: 20px;
+  }
+  .tab-btn--active {
+    background: black;
+    color: white;
+  }
+  .content__switch {
+    display: flex;
+    align-items: center;
+    border: 2px solid #9e9e9e;
+    border-radius: 8px;
+    padding: 0 8px;
+  }
+  .content__switch-title-wrapper {
+    width: 70%;
+  }
+  .content__switch-title {
+    display: block;
+    padding: 0 5px 0 8px;
+  }
+  .content__switch-wrapper {
+    display: flex; 
+    width: 30%; 
+    justify-content: flex-start;
+  }
+  .switch-label-prepend {
+    color: black!important; 
+    padding: 4px 6px 0 8px;
+    font-size: 17px;
+  }
+  .slider-prepend {
+    font-size: 17px;
+    // color: black!important; 
+  }
+  .slider-wrapper {
+    // .slider-prepend {
+    //   text-decoration: underline;
+    // }
+  }
+  .slider-wrapper .v-input__append-outer {
+    margin: 0 4px;
+    padding: 5px;
+    background: #6f6f6f;
+    color: white!important;
+    border-radius: 4px;
+  }
+  .slider-wrapper .v-input__prepend-outer {
+    margin: 0 4px;
+    padding: 5px;
+    background: #6f6f6f;
+    color: white!important;
+    border-radius: 4px;
+  }
+  .calculator-radio label {
+    color: black!important;
+  }
+  @media(max-width: 545px) {
+    .content__switch {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: start;
+    }
+    .content__switch-wrapper,
+    .content__switch-title-wrapper {
+      width: 100%;
+    }
+  }
+  // .v-input--selection-controls__input label {
+  //   color: black!important;
+  // }
+</style>

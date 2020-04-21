@@ -53,6 +53,7 @@ class CalculatorDataService
             'client-type' => (int) $this->calculateRequest->leasingClientType,    
             'client-type' => (int) $this->calculateRequest->leasingClientType,
             'currency' => $this->getCurrency(),
+            'leasing-currency' => $this->getLeasingCurrency(),//
             'payment-PF' => (int) $this->calculateRequest->paymentPf,
             'vehicle-owner-tax' => (int) $this->calculateRequest->vehicleOwnerTax,
             'gps-tracker-model' =>(int) $this->calculateRequest->gpsTrackerModel, 
@@ -147,6 +148,22 @@ class CalculatorDataService
                 return 3;
         }
     }
+
+     /**
+     * @return int
+     */
+    protected function getLeasingCurrency(): int
+    {
+        switch ( $this->calculateRequest->leasingCurrency ?? null) {
+            case 'USD':
+                return 2;
+            case 'EURO':
+                return 3;
+            case 'UAH':
+                return 1;
+        }
+    }
+
 
     /**
      * @param array $formApiResponse

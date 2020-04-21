@@ -42,27 +42,36 @@ class CalculateRequest extends JsonRequest
     public function rules()
     {
         return [
-            'agent_id' => 'required',
-            'leasingObjectType' => 'required',
-            'leasedAssertMark' => 'required',
-            'leasedAssertModel' => 'required',
-            'leasingObjectYear' => 'required',
-            'leasedAssertEngine' => 'required', //Обьем двигателя
-            'leasingClientType' => 'required', //Тип клиента
-            'currency' => 'required',
+            'agent_id' => 'required|integer',
+            'leasingObjectType' => 'required|array',
+            'leasingObjectType.value' => 'required|integer',
+            'leasingObjectType.label' => 'required|string',
+
+            'leasedAssertMark' => 'required|array',
+            'leasedAssertMark.name' => 'required|string',
+            'leasedAssertMark.value' => 'required|integer',
+
+            'leasedAssertModel' => 'required|array',
+            'leasedAssertModel.name' => 'required|string',
+            'leasedAssertModel.value' => 'required|integer',
+            
+            'leasingObjectYear' => 'required|integer',
+            'leasedAssertEngine' => 'required|integer', //Обьем двигателя
+            'leasingClientType' => 'required|integer', //Тип клиента
+            'currency' => 'required|string',
             'isNew' => 'required|boolean',
-            'leasingAmount' => 'required',
-            'leasingQuantity' => 'required',
-            'leasingCurrencyCourse' => 'required',
-            'graphType' => 'required',
-            'advance' => 'required',
-            'leasingTerm' => 'required',
+            'leasingAmount' => 'required|string',
+            'leasingQuantity' => 'required|integer',
+            'leasingCurrencyCourse' => 'required|string',
+            'graphType' => 'required|array',
+            'advance' => 'required|integer',
+            'leasingTerm' => 'required|integer',
             'paymentPf' => 'required|boolean',
-            'vehicleOwnerTax' => 'required',
-            'gpsTrackerModel' => 'required',
-            'insuranceProgram' => 'required',
-            'insuranceFranchise' => 'required',
-            'insuranceVehicleType' => 'required',
+            'vehicleOwnerTax' => 'required|integer',
+            'gpsTrackerModel' => 'required|integer',
+            'insuranceProgram' => 'required|integer',
+            'insuranceFranchise' => 'required|integer',
+            'insuranceVehicleType' => 'required|integer',
         ];
     }
 }

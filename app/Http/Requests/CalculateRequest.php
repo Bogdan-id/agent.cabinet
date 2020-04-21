@@ -42,7 +42,7 @@ class CalculateRequest extends JsonRequest
     public function rules()
     {
         return [
-            'agent_id' => 'required|integer',
+            'agentId' => 'required|integer',
             'leasingObjectType' => 'required|array',
             'leasingObjectType.value' => 'required|integer',
             'leasingObjectType.label' => 'required|string',
@@ -54,7 +54,7 @@ class CalculateRequest extends JsonRequest
             'leasedAssertModel' => 'required|array',
             'leasedAssertModel.name' => 'required|string',
             'leasedAssertModel.value' => 'required|integer',
-            
+
             'leasingObjectYear' => 'required|integer',
             'leasedAssertEngine' => 'required|integer', //Обьем двигателя
             'leasingClientType' => 'required|integer', //Тип клиента
@@ -71,7 +71,7 @@ class CalculateRequest extends JsonRequest
             'gpsTrackerModel' => 'required|integer',
             'insuranceProgram' => 'required|integer',
             'insuranceFranchise' => 'required|integer',
-            'insuranceVehicleType' => 'required|integer',
+           // 'insuranceVehicleType' => 'required|integer',
         ];
     }
 }

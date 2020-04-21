@@ -12,6 +12,7 @@ namespace App\Service;
 use App\Http\Clients\BitrixClient;
 use App\Http\Requests\CalculateRequest;
 use Carbon\Carbon;
+use DateTime;
 
 class CalculatorDataService
 {
@@ -40,7 +41,8 @@ class CalculatorDataService
      * @throws \Exception
      */
     public function getRequestData () {
-        return [
+
+       $requestData = [
             'agent_id' => $this->calculateRequest->agentId,
             'leasing-object-type' => $this->getObjType(),
             'leasing-program' => $this->getProgram(),
@@ -67,14 +69,38 @@ class CalculatorDataService
             'commission-lk' => (int) $this->calculateRequest->leasingAmount * 0.005,
             'insurance-franchise' => $this->calculateRequest->insuranceFranchise,
             'insurance-program' => $this->getInsuranceProgram(),
-           // 'gain-even-graphic-months' => TODO:
-           // 'gain-even-graphic-percent' => TODO:
-           // 'UNSPR-months' => TODO:
+            'leasing-start-date' => $this->getStartDate(),
             //'leasing-rest' => $this->calculateRequest->left / 100,
-            'output' => [
-                'sets' => $this->calculateRequest->graphType
-            ]
         ];
+       
+        $graphType = $this->calculateRequest->graphType;
+
+        if(in_array('indv', $graphType))
+        {
+            $requestData['custom-graphic-type'] = 5;
+            $requestData['custom-universal-option'] = 1;
+            $requestData['custom-fixed-months'] = 3;
+            foreach($graphType as $key => $value){
+                if($value === 'indv'){
+                    unset($graphType[$key]);
+                }
+            }
+            $requestData['output'] = [
+                'sets' => $graphType
+            ];
+        };
+
+        if($this->calculateRequest->gainEvenGraphicMonths && in_array('annuity', $graphType)){
+            $requestData['gain-even-graphic-months'] = $this->calculateRequest->gainEvenGraphicMonths;
+        }
+        if($this->calculateRequest->gainEvenGraphicPercent && in_array('annuity', $graphType)){
+            $requestData['gain-even-graphic-percent'] = $this->calculateRequest->gainEvenGraphicPercent;
+        }
+        if($this->calculateRequest->UnsrMonths && in_array('annuity', $graphType)){
+            $requestData['UNSPR-month'] = $this->calculateRequest->UnsrMonths;
+        }
+
+        return $requestData;
     }
 
     /**
@@ -137,16 +163,26 @@ class CalculatorDataService
     /**
      * @return int
      */
-    protected function getCurrency(): int
+    protected function getStartDate()
     {
-        switch ( $this->calculateRequest->currency ?? null) {
-            case 'USD':
-                return 1;
-            case 'EURO':
-                return 2;
-            case 'UAH':
-                return 3;
+        $date = new DateTime(date("Y-m-d"));
+
+        switch (date("d")) {
+            case '29':
+               $daysPlus = date("t") - 28;
+               $date->modify("+{$daysPlus} day");
+            break;
+            case '30': 
+                $daysPlus = date("t") - 29;
+                $date->modify("+{$daysPlus} day");
+            break;
+            case '31':
+                $daysPlus = date("t") - 30;
+                $date->modify("+{$daysPlus} day");             
+            break;
         }
+
+        return $date->format('Y-m-d');
     }
 
      /**
@@ -164,6 +200,17 @@ class CalculatorDataService
         }
     }
 
+    protected function getCurrency(): int
+    {
+        switch ( $this->calculateRequest->currency ?? null) {
+            case 'USD':
+                return 1;
+            case 'EURO':
+                return 2;
+            case 'UAH':
+                return 3;
+        }
+    }
 
     /**
      * @param array $formApiResponse

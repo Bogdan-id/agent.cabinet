@@ -40,12 +40,17 @@ class CalculateController extends Controller
      ) {
         try {
             $data = $calculatorDataService->getRequestData();
-           
-            $params = array_merge($calculateClient->runCalculate(
-                $data
-            ), [
-                'params' => $data
+
+            $resultData = $calculateClient->runCalculate($data);
+            
+            $params = array_merge(
+            [
+                'result_data' => $resultData
+            ],
+            [
+                'request_data' => $data
             ]);
+
             $calculation = $calculationRepository->create($params);
            // $bitrixClient->addQuoteFromCalculator($calculatorDataService, $params); //Пока нет надобности отправлять предложения
         } catch (RequestException $e) {

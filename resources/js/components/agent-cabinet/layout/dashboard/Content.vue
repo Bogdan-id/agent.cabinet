@@ -1,8 +1,8 @@
 <template>
-  <div class="content" style="position: relative;">
+  <div class="content">
     <div 
       v-if="loading"
-      style="position: absolute; top: 0; right: 0; z-index: 100;">
+      class="spinner-wrapper">
       <div class="spinner">
         <div class="bounce1"></div>
         <div class="bounce2"></div>
@@ -36,6 +36,12 @@ export default {
     opacity: 0
   }
   /* spinner */
+  .spinner-wrapper {
+    position: fixed; 
+    top: var(--header-height); 
+    right: 0; 
+    z-index: 100;
+  }
   .spinner {
     margin-top: 9px;
     width: 70px;
@@ -44,7 +50,7 @@ export default {
   .spinner > div {
     width: 12px;
     height: 12px;
-    background-color: #333;
+    background-color: rgba(0, 0, 0, 0.726);
 
     border-radius: 100%;
     display: inline-block;

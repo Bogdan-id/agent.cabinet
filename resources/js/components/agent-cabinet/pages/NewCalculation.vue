@@ -611,7 +611,7 @@ export default {
   .calculator-radio label {
     color: black!important;
   }
-  @media(max-width: 545px) {
+  @media(max-width: 716px) {
     .content__switch {
       flex-direction: column;
       justify-content: flex-start;

@@ -40,7 +40,7 @@ export default {
     position: fixed; 
     top: var(--header-height); 
     right: 0; 
-    z-index: 100;
+    z-index: 3000;
   }
   .spinner {
     margin-top: 9px;

@@ -4,18 +4,22 @@ export default {
     {text: 'Б/У', value: false}
   ],
   itemTypes: [
-    {text: "Легкові та комерційні авто", itemValue: 1},
-    {text: "СПЕЦІАЛЬНІ ТЗ", itemValue: 4},
-    {text: "Вантажні авто", itemValue: 6},
-    {text: "Обладнання", itemValue: 6},
-    {text: "Причепи та Напівпричепи", itemValue: 6},
-    {text: "Сільгосптехніка", itemValue: 6}
+    {label: "Легкові та комерційні авто", value: 1},
+    {label: "СПЕЦІАЛЬНІ ТЗ", value: 4},
+    {label: "Вантажні авто", value: 6},
+    {label: "Обладнання", value: 6},
+    {label: "Причепи та Напівпричепи", value: 6},
+    {label: "Сільгосптехніка", value: 6}
   ],
   clientTypes: [ 
     {text: "Юридична особа", value: 1}, 
     {text: "Фізична особа", value: 2}
   ],
-  currencys: [ "UAH", "USD", "EUR" ],
+  currencys: [ 
+    "UAH", 
+    "USD", 
+    "EUR"
+  ],
   itemYears: [ "2019", "2020" ],
   oldItemYers: [ '2013', '2014', '2015', '2016', '2017', '2018', '2019' ],
   chartTypes: [
@@ -31,16 +35,16 @@ export default {
   gpsTrackers: [
     {text: 'Antenor з блокувань', value: 1}, 
     {text: 'ні', value: 2}, 
-    {text: 'Benish Logistic з Блокування', value: 'waiting ..'},
+    {text: 'Benish Logistic з Блокування', value: 13},
     {text: 'Premium Benish Guard', value: 6},
     {text: 'Benish GuardPlatinum', value: 7},
-    {text: 'Benish Universal з Блокування', value: 'waiting ..'}
+    {text: 'Benish Universal з Блокування', value: 13}
   ],
   insurancePrograms: [
     {text: 'Стандарт', value: 1},
     {text: 'Обережно', value: 2},
-    {text: 'Таксі', value: 'waiting ..'},
-    {text: 'Тотал / крадіжка', value: 'waiting ..'}
+    {text: 'Таксі', value: 13},
+    {text: 'Тотал / крадіжка', value: 13}
   ],
   franchises: [
     {text: '0%', value: 1},

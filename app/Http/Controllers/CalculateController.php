@@ -63,8 +63,8 @@ class CalculateController extends Controller
 
             abort($message);
         }
-
-        return $calculation;
+     
+        return response()->json($calculation);
     }
 
     /**

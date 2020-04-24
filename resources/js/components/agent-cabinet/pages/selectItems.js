@@ -18,10 +18,10 @@ export default {
   currencys: [ 
     "UAH", 
     "USD", 
-    "EUR"
+    "EURO"
   ],
   itemYears: [ "2019", "2020" ],
-  oldItemYers: [ '2013', '2014', '2015', '2016', '2017', '2018', '2019' ],
+  oldItemYears: [ '2013', '2014', '2015', '2016', '2017', '2018', '2019' ],
   chartTypes: [
     // якщо вибраний індивідуальний графік на сервер прихована передаються дані в калькулято
     {text: "Класичний", value: 'even'},
@@ -35,10 +35,10 @@ export default {
   gpsTrackers: [
     {text: 'Antenor з блокувань', value: 1}, 
     {text: 'ні', value: 2}, 
-    {text: 'Benish Logistic з Блокування', value: 13},
-    {text: 'Premium Benish Guard', value: 6},
-    {text: 'Benish GuardPlatinum', value: 7},
-    {text: 'Benish Universal з Блокування', value: 13}
+    {text: 'Benish Logistic з Блокування', value: 3},
+    {text: 'Antenor охоронна система', value: 4},
+    {text: 'Premium Benish Guard', value: 5},
+    {text: 'Benish GuardPlatinum', value: 6},
   ],
   insurancePrograms: [
     {text: 'Стандарт', value: 1},

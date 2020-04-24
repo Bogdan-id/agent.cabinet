@@ -1,5 +1,8 @@
 <template>
   <div class="wrapper">
+    <agreement @closeDialog="showAgreement = false" 
+      :showAgreement="showAgreement">
+    </agreement>
     <side-bar>
       <template slot="links">
         <sidebar-link to="/dashboard" name="Головна" icon="ti-panel"/>
@@ -38,6 +41,7 @@
       </mobile-menu>
     </side-bar>
     <div class="main-panel">
+      <!-- <v-btn @click="test()">test</v-btn> -->
       <top-navbar></top-navbar>
       <dashboard-content @click.native="toggleSidebar">
       </dashboard-content>
@@ -51,6 +55,7 @@ import TopNavbar from "./TopNavbar.vue"
 import ContentFooter from "./ContentFooter.vue"
 import DashboardContent from "./Content.vue"
 import MobileMenu from "./MobileMenu"
+import Agreement from "../../pages/Agreement.vue"
 
 import axios from "axios"
 import 'es6-promise/auto'
@@ -60,9 +65,16 @@ export default {
     TopNavbar,
     ContentFooter,
     DashboardContent,
-    MobileMenu
+    MobileMenu,
+    Agreement
   },
+  data: () => ({
+    showAgreement: false
+  }),
   methods: {
+    // test() {
+    //   this.showAgreement = true
+    // },
     toggleSidebar() {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);

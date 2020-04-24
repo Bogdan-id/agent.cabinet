@@ -16,6 +16,7 @@ import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplic
 import NewCalculaton from '../components/agent-cabinet/pages/NewCalculation.vue'
 import CalculationDetail from '../components/agent-cabinet/pages/CalculationDetail.vue'
 import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMaterialsDetail.vue'
+import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram.vue'
 
 const routes = [
   { path: '/', component: Authorization },
@@ -53,6 +54,8 @@ const routes = [
         name: 'Звiтнiсть',
         component: Reporting
       },
+
+      // calculator
       {
         path: '/calculator',
         name: 'Калькулятор лізингу',
@@ -68,6 +71,12 @@ const routes = [
         name: 'Детально',
         component: CalculationDetail
       },
+      {
+        path: '/calculator/chart',
+        name: 'chartDiagrams',
+        component: ChartDiagram
+      },
+      
       {
         path: '/leasing-requests',
         name: 'Заявки на лiзинг',

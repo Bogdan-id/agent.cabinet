@@ -22,8 +22,8 @@
                   v-model="calcObj.leasingClientType"
                   :error-messages="leasingClientTypeErr"
                   row>
-                  <v-radio label="Фiзична особа" value="2" color="black"></v-radio>
-                  <v-radio label="Юридична особа" value="1" color="black"></v-radio>
+                  <v-radio label="Фiзична особа" :value="2" color="black"></v-radio>
+                  <v-radio label="Юридична особа" :value="1" color="black"></v-radio>
                 </v-radio-group>
               </v-col>
             </v-row>
@@ -394,7 +394,6 @@ export default {
     commonErr: ['Обов`язкове поле'],
 
     calcObj: {
-      data: null,
       gpsTrackerQuantity: 1,
       urkAssistService: 1,
       gainEvenGraphicMonths: null,
@@ -421,7 +420,6 @@ export default {
       insuranceProgram: null,
       gpsTrackerModel: null,
       insuranceFranchise: null,
-      insuranceVehicleType: 'waiting ..',
       _token: null
     }
   }),
@@ -746,17 +744,33 @@ export default {
     'calcObj.leasingCurrencyCourse': function (course) {
       if(course == null){ 
         !this.hasForeignCurrency
-          ? this.calcObj.leasingCurrencyCourse = '1'
+          ? this.calcObj.leasingCurrencyCourse = "1"
           : false 
       } else {
         this.calcObj.leasingCurrencyCourse = course.toString()
       }
     },
     'calcObj.leasingCurrency': function(currency) {
-      if(currency === 'UAH') this.calcObj.leasingCurrencyCourse = '1'
+      if(currency === 'UAH') this.calcObj.leasingCurrencyCourse = 1
       else if(currency === "EUR" || currency === "USD") {
         this.calcObj.leasingCurrencyCourse = ''
       }
+    },
+    'calcObj.gainEvenGraphicMonths': function(value) {
+      this.calcObj.gainEvenGraphicMonths = parseInt(value)
+    },
+    'calcObj.gainEvenGraphicPercent': function(value) {
+      this.calcObj.gainEvenGraphicPercent = parseFloat(value)
+    },
+    'calcObj.UnsrMonths': function(value) {
+      this.calcObj.UnsrMonths = parseInt(value)
+    },
+    'calcObj.leasingQuantity': function(value) {
+      if(!value) return value
+      this.calcObj.leasingQuantity = parseInt(value)
+    },
+    'calcObj.leasedAssertEngine': function(value) {
+      this.calcObj.leasedAssertEngine = parseInt(value)
     }
   },
   mounted() {

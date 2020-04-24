@@ -110,8 +110,9 @@
               <v-col cols="12" md="3">
                 <v-text-field
                   v-model="calcObj.leasedAssertEngine"
+                  @input="parseToInt('leasedAssertEngine')"
+                  id="leasedAssertEngine"
                   :error-messages="leasedAssertEngineErr"
-                  type="number"
                   label="Об'єм двигуна" 
                   :disabled="!yearOfModel"
                   color="red darken-4"
@@ -120,10 +121,11 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field
-                  @input="$v.calcObj.leasingAmount.$touch()"
+                  @input="$v.calcObj.leasingAmount.$touch(); 
+                    parseToInt('leasingAmount')"
                   :error-messages="itemCostErrors"
                   v-model="calcObj.leasingAmount"
-                  type="number"
+                  id="leasingAmount"
                   label="Вартість"
                   color="red darken-4"
                   :disabled="calcObj.leasedAssertEngine === null"
@@ -147,12 +149,13 @@
                 v-if="calcObj.leasingCurrency !== null 
                 && hasForeignCurrency 
                 && currentTab === 0">
+                <!-- float -->
                 <v-text-field
                   v-model="calcObj.leasingCurrencyCourse"
                   :error-messages="leasingCurrencyCourseErr"
                   :disabled="calcObj.leasingCurrency === null"
-                  type="number" 
-                  step="0.01"
+                  @input="parseToFloat('leasingCurrencyCourse')"
+                  id="leasingCurrencyCourse"
                   label="Курс"
                   color="red darken-4"
                   dense>
@@ -163,9 +166,10 @@
                   v-model="calcObj.leasingQuantity" 
                   :error-messages="leasingQuantityErr"
                   :disabled="calcObj.leasingCurrency === null"
+                  @input="parseToInt('leasingQuantity')"
+                  id="leasingQuantity"
                   label="Кiлькiсть"
                   min="1"
-                  type="number"
                   color="red darken-4"
                   dense>
                 </v-text-field>
@@ -198,8 +202,9 @@
                     v-model="calcObj.gainEvenGraphicMonths" 
                     :error-messages="gainEvenGraphicMonthsErr"
                     label="Кiлькiсть мiсяцiв"
+                    @input="parseToInt('gainEvenGraphicMonths')"
+                    id="gainEvenGraphicMonths"
                     color="red darken-4"
-                    type="number"
                     dense outlined>
                   </v-text-field>
                 </v-col>
@@ -207,8 +212,8 @@
                   <v-text-field
                     v-model="calcObj.gainEvenGraphicPercent" 
                     :error-messages="gainEvenGraphicPercentErr"
-                    type="number"
-                    step="0.01"
+                    @input="parseToFloat('gainEvenGraphicPercent')"
+                    id="gainEvenGraphicPercent"
                     label="Вiдсоток посилення"
                     color="red darken-4"
                     dense outlined>
@@ -218,9 +223,10 @@
                   <v-text-field
                     v-model="calcObj.UnsrMonths"
                     :error-messages="UnsrMonthsErr"
+                    @input="parseToInt('UnsrMonths')"
+                    id="UnsrMonths"
                     label="УНСПР, місяцiв"
                     color="red darken-4"
-                    type="number"
                     dense outlined>
                   </v-text-field>
                 </v-col>
@@ -659,10 +665,6 @@ export default {
     }
   },
   methods: {
-    // test() {
-    //   console.log(this.validationRules)
-    //   console.log(this.$v.calcObj.leasingCurrencyCourse)
-    // },
     getMarksByType() {
       this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.calcObj.leasingObjectType.value}`)
@@ -675,6 +677,26 @@ export default {
           this.notify('Помилка', message, 'error')
           this.$store.commit('toggleSpinner', false)
         })
+    },
+    parseToInt(id) {
+      let input = new Event('input', {bubbles: true})
+      let el = document.getElementById(id)
+      let value = el.value
+      let intVal = el.value.replace(/[^\d]/g, '')
+      if(value !== intVal) {
+        el.value = intVal
+        el.dispatchEvent(input)
+      }
+    },
+    parseToFloat(id) {
+      let input = new Event('input', {bubbles: true})
+      let el = document.getElementById(id)
+      let value = el.value
+      let intVal = el.value.replace(/\.\d\.|\.+\d+\.+|\.{2,2}|[^\d.]/g, '')
+      if(value !== intVal) {
+        el.value = intVal
+        el.dispatchEvent(input)
+      }
     },
     getModelByMark() {
       this.$store.commit('toggleSpinner', true)
@@ -747,7 +769,8 @@ export default {
           ? this.calcObj.leasingCurrencyCourse = "1"
           : false 
       } else {
-        this.calcObj.leasingCurrencyCourse = course.toString()
+        if(Number.isNaN(parseFloat(course))) return
+        this.calcObj.leasingCurrencyCourse = parseFloat(course).toString()
       }
     },
     'calcObj.leasingCurrency': function(currency) {
@@ -757,19 +780,24 @@ export default {
       }
     },
     'calcObj.gainEvenGraphicMonths': function(value) {
-      this.calcObj.gainEvenGraphicMonths = parseInt(value)
+      if(!value) return value
+      this.calcObj.gainEvenGraphicMonths = parseInt(value).toFixed()
     },
     'calcObj.gainEvenGraphicPercent': function(value) {
+      if(!value) return value
+      else if(Number.isNaN(parseFloat(value))) return value
       this.calcObj.gainEvenGraphicPercent = parseFloat(value)
     },
     'calcObj.UnsrMonths': function(value) {
-      this.calcObj.UnsrMonths = parseInt(value)
+      if(!value) return value
+      this.calcObj.UnsrMonths = parseInt(value).toFixed()
     },
     'calcObj.leasingQuantity': function(value) {
       if(!value) return value
       this.calcObj.leasingQuantity = parseInt(value)
     },
     'calcObj.leasedAssertEngine': function(value) {
+      if(!value) return value
       this.calcObj.leasedAssertEngine = parseInt(value)
     }
   },

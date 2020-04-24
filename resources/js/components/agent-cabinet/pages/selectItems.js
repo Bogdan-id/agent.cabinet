@@ -26,7 +26,7 @@ export default {
     // якщо вибраний індивідуальний графік на сервер прихована передаються дані в калькулято
     {text: "Класичний", value: 'even'},
     {text: "Ануїтет", value: 'annuity'},
-    {text: "Індивідуальний", value: 'indv'}
+    {text: "Індивідуальний", value: 'irregular'}
   ],
   yesOrNo: [
     {text: "Так", value: 1},

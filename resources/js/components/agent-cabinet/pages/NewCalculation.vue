@@ -99,7 +99,7 @@
               <v-col cols="12" md="3" v-if="calcObj.isNew !== null">
                 <v-select
                   v-model="calcObj.leasingObjectYear" 
-                  :items="selects.oldItemYers"
+                  :items=" calcObj.isNew ? selects.itemYears : selects.oldItemYears"
                   :error-messages="leasingObjectYearErr"
                   label="Рік"
                   :disabled="!typeOfModel"

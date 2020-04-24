@@ -31,7 +31,7 @@
 						placeholder="+38 (0__) ___ __ __"
 						v-model="number"
 						@paste="pasteEvent = true"
-						@input=" applyMask()"
+						@input="applyMask()"
 						/>
 				</div>
 				<div class="app__input-text-wrapper">

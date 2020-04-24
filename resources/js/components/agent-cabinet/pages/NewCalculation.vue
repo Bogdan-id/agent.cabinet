@@ -2,22 +2,23 @@
   <v-card>
     <v-tabs 
       v-model="currentTab"
-      class="d-inline-flex"
       slider-color="grey darken-3"
       background-color="red lighten-1"
+      ref="calcTab"
+      grow
       slider-size="7"
       dark>
-      <v-tab key="page-one">Cторiнка 1</v-tab>
-      <v-tab key="page-two">Cторiнка 2</v-tab>
+      <v-tab value="1">Cторiнка 1</v-tab>
+      <v-tab value="2">Cторiнка 2</v-tab>
     </v-tabs>
     
     <v-tabs-items v-model="currentTab">
-      <v-tab-item key="page-one">
+      <v-tab-item key="1">
         <v-card-text>
           <div>
             <v-row>
               <v-col cols="12" md="7">
-                <v-radio-group class="calculator-radio" v-model="clientType" row>
+                <v-radio-group class="calculator-radio" v-model="calcObj.leasingClientType" row>
                   <v-radio label="Фiзична особа" value="2" color="black"></v-radio>
                   <v-radio label="Юридична особа" value="1" color="black"></v-radio>
                 </v-radio-group>
@@ -26,7 +27,7 @@
             <v-row>
               <v-col cols="12" md=3>
                 <v-select 
-                    v-model="itemType"
+                    v-model="calcObj.isNew"
                     :items="selects.itemConditions" 
                     label="Тип авто"
                     color="red darken-4"
@@ -35,8 +36,8 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-select
-                    v-model="agreementCurrency"
-                    :items="selects.currencys" 
+                    v-model="calcObj.currency"
+                    :items="selects.currencys"
                     label="Валюта договору лізингу"
                     color="red darken-4"
                     dense outlined :disabled="!isClientType">
@@ -47,9 +48,9 @@
               <v-col cols="12" md="3">
                 <v-select
                     @change="getMarksByType()"
-                    v-model="LeasedAssetType"
+                    v-model="calcObj.leasingObjectType"
                     :items="selects.itemTypes"
-                    item-text="text"
+                    item-text="label"
                     item-value="text"
                     return-object
                     label="Тип предмета лізингу"
@@ -61,7 +62,7 @@
               <v-col cols="12" md="4">
                 <v-autocomplete
                     @change="getModelByMark()"
-                    v-model="modelItem"
+                    v-model="calcObj.leasedAssertMark"
                     :items="brandItems"
                     item-text="name"
                     item-value="value"
@@ -74,7 +75,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-model="carModel"
+                    v-model="calcObj.leasedAssertModel"
                     :items="modelItems"
                     item-text="name"
                     item-value="value"
@@ -87,9 +88,9 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="12" md="3" v-if="itemType === false">
+              <v-col cols="12" md="3" v-if="calcObj.isNew !== null">
                 <v-select
-                    v-model="itemYear" 
+                    v-model="calcObj.leasingObjectYear" 
                     :items="selects.oldItemYers"
                     label="Рік"
                     :disabled="!typeOfModel"
@@ -99,7 +100,7 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field
-                    v-model="engineCapacity"
+                    v-model="calcObj.leasedAssertEngine"
                     placeholder="Об'єм двигуна" 
                     :disabled="!yearOfModel"
                     color="red darken-4"
@@ -108,10 +109,10 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field
-                    @change="$v.itemCost.$touch()"
-                    @input="$v.itemCost.$touch()"
+                    @change="$v.calcObj.$touch()"
+                    @input="$v.calcObj.$touch()"
                     :error-messages="itemCostErrors"
-                    v-model="itemCost" 
+                    v-model="calcObj.leasingAmount" 
                     placeholder="Вартість"
                     color="red darken-4"
                     dense outlined>
@@ -121,23 +122,26 @@
             <v-row>
               <v-col cols="12" md="3">
                 <v-select
-                    :items="selects.currencys" 
+                    :items="selects.currencys"
+                    item-text="text"
+                    tem-value="value"
                     placeholder="Валюта"
+                    v-model="calcObj.leasingCurrency"
                     color="red darken-4"
                     dense>
                 </v-select>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="3" v-if="calcObj.leasingCurrency !== null && calcObj.leasingCurrency !== 1">
                 <v-text-field
-                    v-model="currencyCourse" 
+                    v-model="calcObj.leasingCurrencyCourse" 
                     placeholder="Курс"
                     color="red darken-4"
-                    dense readonly>
+                    dense>
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field
-                    v-model="carQuantity" 
+                    v-model="calcObj.leasingQuantity" 
                     placeholder="Кiлькiсть"
                     min="1"
                     type="number"
@@ -149,15 +153,13 @@
           </div>
         </v-card-text>
       </v-tab-item>
-
-      <!-- Уточни валюта договора и просто валюта -->
-      <v-tab-item key="page-two">
+      <v-tab-item key="2">
         <v-card-text>
           <div>
             <v-row>
               <v-col cols="12" md="9" class="pb-0">
                 <v-select
-                  v-model="chartType"
+                  v-model="calcObj.graphType"
                   :items="selects.chartTypes"
                   placeholder="Тип графіка"
                   color="red darken-4"
@@ -171,7 +173,7 @@
               <v-row v-show="hasAnnuity">
                 <v-col cols="9" md="4">
                   <v-text-field
-                    v-model="gainEvenGraphicMonths" 
+                    v-model="calcObj.gainEvenGraphicMonths" 
                     placeholder="Кiлькiсть мiсяцiв"
                     color="red darken-4"
                     dense outlined>
@@ -179,15 +181,15 @@
                 </v-col>
                 <v-col cols="9" md="4">
                   <v-text-field
-                    v-model="gainEvenGraphicPercent" 
-                    placeholder="Вiдстоток посилення"
+                    v-model="calcObj.gainEvenGraphicPercent" 
+                    placeholder="Вiдсоток посилення"
                     color="red darken-4"
                     dense outlined>
                   </v-text-field>
                 </v-col>
                 <v-col cols="9" md="4">
                   <v-text-field
-                    v-model="UnsrMonths" 
+                    v-model="calcObj.UnsrMonths" 
                     placeholder="УНСПР, місяцiв"
                     color="red darken-4"
                     dense outlined>
@@ -201,7 +203,7 @@
               <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
                 <div class="body-1 mr-2"><span class="title">Авансовий платiж&nbsp;</span>(<b>%</b>):</div>
                   <v-slider
-                    v-model="advancePayment"
+                    v-model="calcObj.advance"
                     min="20"
                     max="70"
                     color="black"
@@ -223,7 +225,7 @@
                 <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
                   <div class="body-1 mr-2"><span class="title">Термiн лiзингу&nbsp;</span>(<b>мic</b>):</div>
                   <v-slider
-                    v-model="leasingTime"
+                    v-model="calcObj.leasingTerm"
                     min="12"
                     max="72"
                     color="black"
@@ -248,7 +250,9 @@
                   </div>
                   <div class="content__switch-wrapper">
                     <v-switch
-                        v-model="vehicleTax"
+                        v-model="calcObj.vehicleOwnerTax"
+                        :false-value="2"
+                        :true-value="1"
                         dense
                         >
                         <template #prepend>
@@ -270,7 +274,7 @@
                   </div>
                   <div class="content__switch-wrapper">
                     <v-switch
-                        v-model="pensionFundTax"
+                        v-model="calcObj.paymentPf"
                         dense
                         >
                         <template #prepend>
@@ -287,7 +291,7 @@
             <v-row>
               <v-col cols="12" md="3">
                 <v-select
-                    v-model="gpsTracker" 
+                    v-model="calcObj.gpsTrackerModel" 
                     :items="selects.gpsTrackers"
                     label="GPS-трекер"
                     color="red darken-4"
@@ -311,7 +315,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-select
-                    v-model="franchise" 
+                    v-model="calcObj.insuranceFranchise" 
                     :items="selects.franchises"
                     label="Франшиза"
                     color="red darken-4"
@@ -334,76 +338,171 @@
 import axios from 'axios'
 import selectsItemAndVAlue from './selectItems'
 import { validationMixin } from 'vuelidate'
-import { numeric } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   mixins: [validationMixin],
   data:() => ({
-
-    active_tab: 1,
-    /* select items & values */
     selects: selectsItemAndVAlue,
-    
-    /* temporary arrays */
+    currentTab: 0,
     brandItems: [],
     modelItems: [],
-
-    currentTab: null,
-
-    /* hidden data to server */
-    data: null, // КУДА ПЕРЕДАВАТЬ
-    gpsTrackerQuantity: 1, // gps-tracker-quantity = 1 (GPS маячок)
-    urkAssistService: 1, // assist-service = 1 (UKRASSIST-Service)
     
-    /* Уточни как правильно передавать если Ануитет */
-    gainEvenGraphicMonths: null,
-    gainEvenGraphicPercent: null,
-    UnsrMonths: null,
-    // discount: {
-    //   'rate-manipulate': 0.1,
-    //   'agent-commission': 1,
-    //   'commission-manipulate': -0.5, // 0.5% від вартості
-    //   'commission-lk': 0.5 //сума (0.5% від вартості) 
-    // },
-    /* new calculation data */
-    userId: null,
-
-    modelItem: null,
-    carModel: null,
-    itemType: null,
-    LeasedAssetType: null,
-    itemCondition: null,
-    carQuantity: null,
-    itemYear: null,
-    engineCapacity: null,
-    clientType: null,
-    agreementCurrency: null,
-    currencyCourse: null,
-    itemCost: null,
-    chartType: null,
-    advancePayment: null,
-    leasingTime: null,
-    pensionFund: null,
-    vehicleTax: null,
-    pensionFundTax: null,
-    gpsTracker: null,
+    minCarCost: 150000,
     insuranceProgram: null,
-    franchise: null,
 
-    /* booleans */
-    
-
-  }),
-  validations: {
-    itemCost: {
-      minCost: val => parseInt(val.replace(/[^\d]/g, '')) >= 150000,
-      numeric
+    calcObj: {
+      data: null,
+      gpsTrackerQuantity: 1,
+      urkAssistService: 1,
+      gainEvenGraphicMonths: null,
+      gainEvenGraphicPercent: null,
+      UnsrMonths: null,
+      agentId: null,
+      leasedAssertMark: null,
+      leasedAssertModel: null,
+      isNew: null,
+      leasingObjectType: null,
+      leasingQuantity: null,
+      leasingObjectYear: null,
+      leasedAssertEngine: null,
+      leasingClientType: null,
+      currency: null,
+      leasingCurrency: null,
+      leasingCurrencyCourse: null,
+      leasingAmount: null,
+      graphType: null,
+      advance: 20,
+      leasingTerm: 12,
+      vehicleOwnerTax: "2",
+      paymentPf: false,
+      insuranceProgram: null,
+      gpsTrackerModel: null,
+      insuranceFranchise: null,
+      insuranceVehicleType: 'waiting ..',
+      _token: null
     }
+  }),
+  validations() {
+    return {
+      calcObj: this.validationRules
+    }
+  },
+  computed: {
+    validationRules() {
+      let validateObj = {}
+      this.currentTab === 0
+        ? validateObj = Object.assign(
+          {}, this.validateFirstPage
+        )
+        : false
+
+      this.currentTab === 1
+      && !this.hasAnnuity
+        ? validateObj = Object.assign(
+          this.validateFirstPage, 
+          this.validaeSecondPage
+        )
+        : false
+
+      this.currentTab === 1
+      && this.hasAnnuity
+        ? validateObj = Object.assign(
+          this.validateFirstPage,
+          this.validaeSecondPage,
+          this.validateHasAnnuity
+        )
+        : false
+      return validateObj
+    },
+
+    /* Validation rules for different pages */
+
+    validateFirstPage() {
+      return {
+        leasingClientType: { required },
+        isNew: { required },
+        currency: { required },
+        leasingObjectType: { required },
+        leasedAssertMark: { required },
+        leasedAssertModel: { required },
+        leasedAssertEngine: { required }, 
+        leasingCurrency: { required },
+        leasingQuantity: { required },
+        leasingAmount: {
+          minCost: val => {
+            if(val == null) return false
+            return parseInt(val.replace(/[^\d]/g, '')) >= this.minCarCost
+          },
+        },
+      }
+    },
+    validaeSecondPage() {
+      return {
+        leasingCurrencyCourse: { required },
+        vehicleOwnerTax: { required },
+        paymentPf: { required },
+        leasingTerm: { required },
+        graphType: { required },
+        gpsTrackerModel: { required },
+        insuranceProgram: { required },
+        insuranceFranchise: { required },
+      }
+    },
+    validateHasAnnuity() {
+      return {
+        gainEvenGraphicMonths: { required },
+        gainEvenGraphicPercent: { required },
+        UnsrMonths: { required },
+      }
+    },
+
+    /* boolean */
+
+    smAndDown() {
+      return this.$vuetify.breakpoint.smAndDown
+    },
+    typeOfCar() {
+      return this.calcObj.isNew !== null
+    },
+    leasedOfAssetType() {
+      return this.calcObj.leasingObjectType !== null
+    },
+    modelOfItem() {
+      return this.calcObj.leasedAssertMark !== null
+    },
+    typeOfModel() {
+      return this.calcObj.leasedAssertModel !== null
+    },
+    yearOfModel() {
+      return this.calcObj.leasingObjectYear !== null
+    },
+    noBrandItems() {
+      return Object.keys(this.brandItems).length === 0
+    },
+    noModelItems() {
+      return Object.keys(this.modelItems).length === 0
+    },
+    hasAnnuity() {
+      if(this.calcObj.graphType === null) return false
+      return this.calcObj.graphType.indexOf('annuity') > -1
+    },
+    isClientType() {
+      return this.calcObj.leasingClientType !== null
+    },
+
+    /* vuelidate error handlers */
+    itemCostErrors() {
+      const errors = []
+      if (!this.$v.calcObj.leasingAmount.$error) return errors
+      !this.$v.calcObj.leasingAmount.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
+			return errors
+    },
   },
   methods: {
     getMarksByType() {
       this.$store.commit('toggleSpinner', true)
-      axios.get(`/mark?category=${this.LeasedAssetType.itemValue}`)
+      axios.get(`/mark?category=${this.calcObj.leasingObjectType.value}`)
         .then(response => {
           this.brandItems = response.data
           this.$store.commit('toggleSpinner', false)
@@ -416,8 +515,8 @@ export default {
     },
     getModelByMark() {
       this.$store.commit('toggleSpinner', true)
-      let categorieId = this.LeasedAssetType.itemValue
-      axios.get(`/models?category=${categorieId}&mark=${this.modelItem.value}`)
+      let categorieId = this.calcObj.leasingObjectType.value
+      axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
           this.modelItems = response.data
           this.$store.commit('toggleSpinner', false)
@@ -440,13 +539,29 @@ export default {
     },
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-		},
+    },
     submit() {
+      // console.log(this.calcObj)
+      // console.log(this.hasAnnuity)
+      console.log(this.currentTab === 1 && this.hasAnnuity)
+      !this.$v.$invalid
+      && this.$v.$dirty
+      && this.currentTab === 0
+        ? this.currentTab = 1
+        : this.currentTab === 1
+          && !this.$v.$invalid
+          && this.$v.$dirty
+            ? this.sendRequest()
+            : this.notify('', 'Заповнiть даннi', 'error')
+      
+    },
+    sendRequest() {
+      this.$store.commit('toggleSpinner', true)
       axios
-        .post('/calculate', this.calculationObj())
-          this.$store.commit('toggleSpinner', true)
+        .post('/calculate', this.calcObj)
           .then(response => {
             console.log(response)
+            this.$store.commit('toggleSpinner', false)
           })
           .catch(error => {
             console.log(error.response)
@@ -455,91 +570,15 @@ export default {
             this.$store.commit('toggleSpinner', false)
           })
     },
-
-    calculationObj() {
-      return {
-        'agentId': this.userId,
-        'leasingObjectType': {
-          'label': this.LeasedAssetType.text,
-          'value': this.LeasedAssetType.itemValue
-        },
-        'leasedAssertMark': {
-          'name': this.modelItem.name,
-          'value': this.modelItem.value
-        },
-        'leasedAssertModel': {
-          'name': this.carModel.name,
-          'value': this.carModel.value
-        },
-        'leasingObjectYear': parseInt(this.itemYear),
-        'leasedAssertEngine': this.engineCapacity,
-        'leasingClientType': this.clientType,
-        'currency': this.agreementCurrency,
-        'isNew': this.itemType,
-        'leasingAmount': this.itemCost,
-        'leasingQuantity': this.carQuantity,
-        'leasingCurrencyCourse': '25.3', // курс валют откуда брать?
-        'graphType': this.chartType,
-        'advance': this.advancePayment,
-        'leasingTerm': this.leasingTime,
-        'paymentPf': this.pensionFundTax,
-        'vehicleOwnerTax': this.vehicleTax,
-        'gpsTrackerModel': this.gpsTracker,
-        'insuranceProgram': this.insuranceProgram.value,
-        'insuranceFranchise': this.franchise,
-        'insuranceVehicleType': 'waiting ..',
-        /* Уточни данные на ануитет и вцелом "прихованi данi" к каким ключам привязывать */
-        // data - также уточни
-        'gainEvenGraphicMonths': this.gainEvenGraphicMonths,
-        'gainEvenGraphicPercent': this.gainEvenGraphicPercent,
-        'UnsrMonths': this.UnsrMonths,
-        '_token': this.getCsrf()
-      }
+  },
+  watch: {
+    insuranceProgram(val) {
+      this.calcObj.insuranceProgram = val.value
     }
   },
-  computed: {
-    smAndDown() {
-      return this.$vuetify.breakpoint.smAndDown
-    },
-    typeOfCar() {
-      return this.itemType !== null
-    },
-    leasedOfAssetType() {
-      return this.LeasedAssetType !== null
-    },
-    modelOfItem() {
-      return this.modelItem !== null
-    },
-    typeOfModel() {
-      return this.carModel !== null
-    },
-    yearOfModel() {
-      return this.itemYear !== null
-    },
-    noBrandItems() {
-      return Object.keys(this.brandItems).length === 0
-    },
-    noModelItems() {
-      return Object.keys(this.modelItems).length === 0
-    },
-    /* vuelidate error handlers */
-    itemCostErrors() {
-      const errors = []
-      if (!this.$v.itemCost.$error) return errors
-      !this.$v.itemCost.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
-      !this.$v.itemCost.numeric && errors.push(`Числове поле`)
-			return errors
-    },
-    hasAnnuity() {
-      if(this.chartType === null) return false
-      return this.chartType.indexOf('annuity') > -1
-    },
-    isClientType() {
-      return this.clientType !== null
-    }
-  },
-  created() {
-    this.userId = this.$store.state.user.agent_id
+  mounted() {
+    this.calcObj._token = this.getCsrf()
+    this.calcObj.agentId = this.$store.state.user.user_id
   }
 }
 </script>

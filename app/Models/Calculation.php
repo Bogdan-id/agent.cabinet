@@ -6,5 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Calculation extends Model
 {
-    //
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'agent_id',  
+        'request_id', 
+        'result_data', 
+        'request_data',
+    ];
+
+
+     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+      //
+    ];
+
+    protected $casts = [
+        'request_data' => 'array',
+        'result_data' => 'array',
+    ];
+
+
 }

@@ -72,23 +72,18 @@ class CalculatorDataService
             'leasing-start-date' => $this->getStartDate(),
         ];
        
-        $graphType = $this->calculateRequest->graphType;
+        $graphTypes = $this->calculateRequest->graphType;
 
-        if(in_array('indv', $graphType))
+        if(in_array('irregular', $graphTypes))
         {
             $requestData['custom-graphic-type'] = 5;
             $requestData['custom-universal-option'] = 1;
             $requestData['custom-fixed-months'] = 3;
-            foreach($graphType as $key => $value){
-                if($value === 'indv'){
-                    unset($graphType[$key]);
-                }
-            }
-            $requestData['output'] = [
-                'sets' => $graphType
-            ];
         };
-
+        
+        $requestData['output'] = [
+            'sets' => $graphTypes
+        ];
         if($this->calculateRequest->gainEvenGraphicMonths && in_array('annuity', $graphType)){
             $requestData['gain-even-graphic-months'] = $this->calculateRequest->gainEvenGraphicMonths;
         }

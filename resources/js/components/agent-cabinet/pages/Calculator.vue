@@ -5,187 +5,175 @@
         <v-card-title class="d-block">
           <div>Калькулятор лiзингу</div>
           <v-divider></v-divider>
-        </v-card-title>
-          <v-card-actions>
-            <v-tooltip right>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                    v-on="on"
-                    to="/calculator/new"
-                    color="error" 
-                    fab dark>
-                    <v-icon dark>mdi-plus-thick</v-icon>
-                </v-btn>
+          </v-card-title>
+            <v-card-actions>
+              <v-tooltip right>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                      v-on="on"
+                      to="/calculator/new"
+                      color="error" 
+                      fab dark>
+                      <v-icon dark>mdi-plus-thick</v-icon>
+                  </v-btn>
+                </template>
+                <span>Новий розрахунок</span>
+              </v-tooltip>
+          </v-card-actions>
+          <v-card-text class="calculations-table">
+            <v-card-title class="headline">
+              Iсторiя розрахункiв
+              <v-spacer></v-spacer>
+              <v-text-field
+                color="black"
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Пошук"
+                single-line
+                hide-details>
+              </v-text-field>
+            </v-card-title>
+            <v-data-table
+              :search="search"
+              color="black"
+              :headers="tableHeader"
+              :items="tabledata"
+              :loading="!tableDataPresent"
+              :items-per-page="5"
+              class="elevation-1">
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                  class="mr-2"
+                  @click="toEdit(item)"
+                  >
+                  mdi-pencil
+                </v-icon>
               </template>
-              <span>Новий розрахунок</span>
-            </v-tooltip>
-        </v-card-actions>
-        <card :title="table.title" :subTitle="table.subTitle">
-          <div slot="raw-content" class="table-responsive">
-            <paper-table 
-              :data="table.data" 
-              :columns="table.columns"
-              :title="table.title" 
-              :sub-title="table.subTitle" 
-              type="hover">
-              <template slot-scope="{row}">
-                <td>{{row.id}}</td>
-                <td>{{row.дата}}</td>
-                <td>{{row.тип}}</td>
-                <td>{{row.клієнт}}</td>
-                <td>{{row.марка}}</td>
-                <td>{{row.модель}}</td>
-                <td>{{row.сума}}</td>
-              <td>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-btn 
-                        color="grey" 
-                        v-on="on " 
-                        icon 
-                        :to="{ 
-                            name: 'Детально', 
-                            params: {
-                              table: table,
-                              id: row.id
-                            } 
-                        }">
-                      <v-icon color="red lighten-1" v-text="'mdi-card-bulleted-outline'"></v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Детально</span>
-                </v-tooltip>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-btn 
-                        color="grey" 
-                        v-on="on " 
-                        icon 
-                        :to="{ 
-                            name: 'Детально', 
-                            params: {
-                              table: table,
-                              id: row.id
-                            } 
-                        }">
-                      <v-icon color="red lighten-1" v-text="'mdi-square-edit-outline'"></v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Редагувати</span>
-                </v-tooltip>
-              </td>
-            </template>
-            </paper-table>
-          </div>
-        </card>
+            </v-data-table>
+            <!-- <v-btn @click="test()">test</v-btn> -->
+          </v-card-text>
         </v-card>
       </div>
     </div>
 </template>
+
+
 <script>
-  // title: "",
-  // subTitle: "(Розрахунки за місяць)",
-  // №	Дата	Тип	Клієнт	Марка	Модель	Cума	Детально
-import { PaperTable } from "../components"
-import { tableColumns, tableData } from "./calculator-temp-data.js"
+// <v-tooltip top>
+//   <template v-slot:activator="{ on }">
+//     <v-btn 
+//         color="grey" 
+//         v-on="on " 
+//         icon 
+//         :to="{ 
+//             name: 'Детально', 
+//             params: {
+//               table: table,
+//               id: row.id
+//             } 
+//         }">
+//       <v-icon color="red lighten-1" v-text="'mdi-square-edit-outline'"></v-icon>
+//     </v-btn>
+//   </template>
+//   <span>Редагувати</span>
+// </v-tooltip>
+import axios from 'axios'
+
 export default {
-  components: {
-    PaperTable,
-  },
   data:() => ({
-    /* items */
-    table: {
-      title: "Історія розрахунків",
-      subTitle: "Розрахунки за місяць",
-      columns: [...tableColumns],
-      data: [...tableData]
-    },
-    
-    itemConditions: [ "Новий", "б/у" ],
-    itemTypes: [
-      "Легкові та комерційні авто",
-      "СПЕЦІАЛЬНІ ТЗ",
-      "Вантажні авто",
-      "Обладнання",
-      "Причепи та Напівпричепи",
-      "Сільгосптехніка"
+    tableHeader: [
+      { text: 'Тип об`єкту лiзингу', value: 'Тип', align: 'start'},
+      { text: 'Марка', value: 'Марка', align: 'start'},
+      { text: 'Модель', value: 'Модель', align: 'start' },
+      { text: 'Сума', value: 'Сума', align: 'start' },
+      { text: 'Дата', value: 'Дата', align: 'start' },
+      { text: 'Редагувати', value: 'actions' },
     ],
-    itemBrand: [ "Audi", "Renault", "ВАЗ" ],
-    clientTypes: [ 
-      {text: "Юридична особа", value: 2}, 
-      {text: "Фізична особа", value: 1}
-    ],
-    currencys: [ "UAH", "USD", "EUR" ],
-    itemYears: [ "2019", "2020" ],
-    oldItemYers: [ '2013', '2014', '2015', '2016', '2017', '2018', '2019' ],
-    chartTypes: [
-      // якщо вибраний індивідуальний графік на сервер прихована передаються дані в калькулято
-      "Класичний",
-      "Ануїтет",
-      "Індивідуальний"
-    ],
-    yesOrNo: [
-      {text: "Так", value: 1},
-      {text: "Нi", value: 2}
-    ],
-    gpsTrackers: [
-      'Antenor з блокувань', 
-      'ні', 
-      'Benish Logistic з Блокування',
-      'Premium Benish Guard',
-      'Benish GuardPlatinum',
-      'Benish Universal з Блокування'
-    ],
-    insurancePrograms: [
-      'Стандарт',
-      'Обережно',
-      'Таксі',
-      'Тотал / крадіжка'
-    ],
-    franchises: [
-      {text: '0%', value: '0%'},
-      {text: '0.3%', value: '0.3%'},
-      {text: '0.5%', value: '0.5%'},
-      {text: '1%', value: '1%'},
-      {text: '2%', value: '2%'},
-    ],
-
-    /* new calculation data */
-    itemType: null,
-    itemCondition: null,
-    brand: null,
-    itemYear: null,
-    engineCapacity: null,
-
-    clientType: null,
-
-    agreementCurrency: null,
-    itemCost: null,
-    chartType: null,
-    advancePayment: null,
-    leasingTime: null,
-    pensionFund: null,
-    vehicleTax: null,
-    pensionFundTax: null,
-    gpsTracker: null,
-    insuranceProgram: null,
-    franchise: null,
-
-    //physical person
-
-    // legarl person
-
-    /* modals */
-    newCalculationModal: false,
-
-    newCalculation: false
+    tabledata: [],
+    search: '',
   }),
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
+    userData() {
+      return Object.keys(this.user).length > 0
+    },
+    tableDataPresent() {
+      return this.tabledata.length > 0
+    }
+  },
+  methods: {
+    toEdit(id) {
+      this.$router.push({name: 'Детально', params: {id: id}})
+    },
+    getUserCalculations() {
+      console.log('get user calc')
+      if(this.userData){
+        const agentId = this.$store.state.user.user_id
+        axios
+          .get(`calculations/agent/${agentId}`)
+          .then(response => {
+            this.data = response.data
+            console.log(response)
+            this.createTableData(response.data)
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.$notify({
+              
+            })
+          })
+        }
+    },
+    test() {
+      console.log(this.tableDataPresent)
+      console.log(this.tabledata)
+    },
+    async createTableData(object) {
+      await object.map(val => {
+        console.log(val)
+        let dataObj = {
+          'Тип': val.request_data['leasing-object-type'],
+          'Марка': val.request_data['leased-assert-mark'],
+          'Модель': val.request_data['leased-assert-model'],
+          'Сума': val.request_data['leasing-amount'],
+          'Дата': val.request_data['leasing-start-date'],
+          'id': val.request_id
+        }
+        this.tabledata.push(dataObj)
+      })
+    },
+  },
+  created() {
+    this.getUserCalculations()
+  },
+  watch: {
+    tabledata() {
+      console.log(this.tabledata)
+    },
+    user() {
+      if(this.userData) this.getUserCalculations()
+      return
+    }
+  }
 }
 </script>
+
+
 <style lang="scss">
+  .calculations-table {
+    .text-start {
+      font-size: 1rem!important;
+    }
+    .v-data-footer__select,
+    .v-data-footer__pagination {
+      font-size: 14px!important;
+    }
+  }
   .new-calculation-btn {
     .v-btn__content {
-      text-transform: capitalize!important;
+      text-transform: capitalize;
     }
   }
   .calculator__new-calculation {

@@ -10,7 +10,7 @@ export default new Vuex.Store({
   },
   mutations: {
     addUser(state, value) {
-      state.user = value
+      state.user = Object.assign({}, value)
     },
     toggleSpinner(state, value) {
       state.loader = value

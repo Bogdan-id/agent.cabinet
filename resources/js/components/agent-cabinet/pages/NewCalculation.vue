@@ -723,12 +723,10 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     highlightErrors() {
-      console.log(this.$v)
       this.$v.$anyError
       this.$v.$touch()
     },
     submit() {
-      console.log(this.currentTab)
       console.log(this.calcObj)
       this.highlightErrors()
       !this.$v.$invalid
@@ -756,6 +754,9 @@ export default {
             const message = error.response.statusText
             this.notify('Помилка', message, 'error')
             this.$store.commit('toggleSpinner', false)
+            setTimeout(() => {
+              this.$router.go()
+            },4000)
           })
     },
   },
@@ -781,7 +782,7 @@ export default {
     },
     'calcObj.gainEvenGraphicMonths': function(value) {
       if(!value) return value
-      this.calcObj.gainEvenGraphicMonths = parseInt(value).toFixed()
+      this.calcObj.gainEvenGraphicMonths = parseInt(value)
     },
     'calcObj.gainEvenGraphicPercent': function(value) {
       if(!value) return value
@@ -790,7 +791,7 @@ export default {
     },
     'calcObj.UnsrMonths': function(value) {
       if(!value) return value
-      this.calcObj.UnsrMonths = parseInt(value).toFixed()
+      this.calcObj.UnsrMonths = parseInt(value)
     },
     'calcObj.leasingQuantity': function(value) {
       if(!value) return value

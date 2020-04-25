@@ -803,6 +803,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$store.state.user)
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.user_id
   }

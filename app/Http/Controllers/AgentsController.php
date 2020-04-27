@@ -34,6 +34,7 @@ class AgentsController extends Controller
         $agent->inn = $data['inn'];
         $agent->birth = $data['birth'];
         $agent->card_number = $data['card_number'];
+        $agent->oferta_accepted = $data['oferta_accepted'];
         $agent->save();
 
         if($data['passport_type_id'] == 1)

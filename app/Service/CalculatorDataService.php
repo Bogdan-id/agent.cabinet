@@ -84,13 +84,13 @@ class CalculatorDataService
         $requestData['output'] = [
             'sets' => $graphTypes
         ];
-        if($this->calculateRequest->gainEvenGraphicMonths && in_array('annuity', $graphType)){
+        if($this->calculateRequest->gainEvenGraphicMonths && in_array('annuity', $graphTypes)){
             $requestData['gain-even-graphic-months'] = $this->calculateRequest->gainEvenGraphicMonths;
         }
-        if($this->calculateRequest->gainEvenGraphicPercent && in_array('annuity', $graphType)){
+        if($this->calculateRequest->gainEvenGraphicPercent && in_array('annuity', $graphTypes)){
             $requestData['gain-even-graphic-percent'] = $this->calculateRequest->gainEvenGraphicPercent;
         }
-        if($this->calculateRequest->UnsrMonths && in_array('annuity', $graphType)){
+        if($this->calculateRequest->UnsrMonths && in_array('annuity', $graphTypes)){
             $requestData['UNSPR-month'] = $this->calculateRequest->UnsrMonths;
         }
 

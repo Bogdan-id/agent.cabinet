@@ -63,7 +63,7 @@ class CalculateRequest extends JsonRequest
             'isNew' => 'required|boolean',
             'leasingAmount' => 'required|string',
             'leasingQuantity' => 'required|integer',
-            'leasingCurrencyCourse' => 'required|string',
+            'leasingCurrencyCourse' => 'required|between:0,99.99',
             'graphType' => 'required|array',
             'advance' => 'required|integer',
             'leasingTerm' => 'required|integer',
@@ -72,7 +72,9 @@ class CalculateRequest extends JsonRequest
             'gpsTrackerModel' => 'required|integer',
             'insuranceProgram' => 'required|integer',
             'insuranceFranchise' => 'required|integer',
-           // 'insuranceVehicleType' => 'required|integer',
+            'gainEvenGraphicMonths' => 'integer',
+            'gainEvenGraphicPercent' => 'between:0,99.99',
+            'UnsrMonths' => 'integer'
         ];
     }
 }

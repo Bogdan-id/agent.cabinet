@@ -721,10 +721,28 @@ export default {
       this.$refs.graphType.blur()
     },
     getMarksByType() {
+      this.brandItems = []
       this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.calcObj.leasingObjectType.value}`)
         .then(response => {
+          console.log(response)
           this.brandItems = response.data
+          this.$store.commit('toggleSpinner', false)
+        })
+        .catch(error => {
+          let message = error.response.statusText
+          this.notify('Помилка', message, 'error')
+          this.$store.commit('toggleSpinner', false)
+        })
+    },
+    getModelByMark() {
+      this.modelItems = []
+      this.$store.commit('toggleSpinner', true)
+      let categorieId = this.calcObj.leasingObjectType.value
+      axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
+        .then(response => {
+          console.log(response)
+          this.modelItems = response.data
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
@@ -752,20 +770,6 @@ export default {
         el.value = intVal
         el.dispatchEvent(input)
       }
-    },
-    getModelByMark() {
-      this.$store.commit('toggleSpinner', true)
-      let categorieId = this.calcObj.leasingObjectType.value
-      axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
-        .then(response => {
-          this.modelItems = response.data
-          this.$store.commit('toggleSpinner', false)
-        })
-        .catch(error => {
-          let message = error.response.statusText
-          this.notify('Помилка', message, 'error')
-          this.$store.commit('toggleSpinner', false)
-        })
     },
     notify(title, text, group) {
 			this.$notify({
@@ -836,12 +840,6 @@ export default {
         this.calcObj.leasingCurrencyCourse = parseFloat(course)
       }
     },
-    // 'calcObj.leasingCurrency': function(currency) {
-    //   if(currency === 'UAH') this.calcObj.leasingCurrencyCourse = 1
-    //   else if(currency === "EUR" || currency === "USD") {
-    //     this.calcObj.leasingCurrencyCourse = ''
-    //   }
-    // },
     'calcObj.gainEvenGraphicMonths': function(value) {
       if(!value) return value
       this.calcObj.gainEvenGraphicMonths = parseInt(value)
@@ -873,12 +871,11 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$router.currentRoute.params)
     if(this.$router.currentRoute.params.edit === true) {
+    
     axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
-        console.log(response)
         let data = response.data.request_data
         this.brandItems.push(data.leasedAssertMark)
         this.modelItems.push(data.leasedAssertModel)
@@ -886,9 +883,19 @@ export default {
           .find(
             obj => obj.value === data.insuranceProgram
           )
+        // console.log(data)
+        Object.assign(this.calcObj, data)
+        console.log(this.calcObj)
+        this.getMarksByType()
+        this.getModelByMark()
       })
       .catch(error => {
         console.log(error.response)
+        this.$notify({
+          group: 'error',
+          title: 'Виникла помилка',
+          text: error.response.data.message,
+        })
       })
     }
 

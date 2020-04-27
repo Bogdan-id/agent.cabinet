@@ -23,7 +23,6 @@ export default {
   itemYears: [ 2019, 2020 ],
   oldItemYears: [ 2013, 2014, 2015, 2016, 2017, 2018, 2019 ],
   chartTypes: [
-    // якщо вибраний індивідуальний графік на сервер прихована передаються дані в калькулято
     {text: "Класичний", value: 'even'},
     {text: "Ануїтет", value: 'annuity'},
     {text: "Індивідуальний", value: 'irregular'}

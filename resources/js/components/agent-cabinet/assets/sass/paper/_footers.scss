@@ -141,6 +141,13 @@
     }
     .footer__contacts-wrapper {
       margin-left: 10px;
+      .footer__contacts-wrapper {
+        padding: 35px 0!important;
+        .contact-title {
+          display: block;
+          padding: 12px 0!important;
+        }
+      }
     }
   }
 }

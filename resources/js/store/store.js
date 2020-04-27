@@ -7,6 +7,7 @@ export default new Vuex.Store({
 	state: {
     user: {},
     loader: false,
+    userCalculations: []
   },
   mutations: {
     addUser(state, value) {
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     toggleSpinner(state, value) {
       state.loader = value
+    },
+    addCalculation(state, value) {
+      state.userCalculations.push(value) 
     }
   },
   actions: {

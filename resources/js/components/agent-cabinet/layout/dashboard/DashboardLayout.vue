@@ -84,10 +84,9 @@ export default {
       this.$store.commit('toggleSpinner', true)
       axios.get('/getUserAgent')
       .then(response => {
-        let user = response.data.user
-        let {userData, ...userAgentdata} = response.data.agent
-        this.$store.dispatch('add_user', Object.assign(user, userAgentdata, userData))
+        this.$store.dispatch('add_user', Object.assign({}, response.data))
         this.$store.commit('toggleSpinner', false)
+        console.log(response)
       })
       .catch(error => {
         console.log(error.response)

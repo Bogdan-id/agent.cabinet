@@ -164,12 +164,13 @@ export default {
     async createTableData(object) {
       console.log(object)
       await object.map(val => {
+        console.log(val)
         let dataObj = {
-          'Тип': val.request_data['leasing-object-type'],
-          'Марка': val.request_data['leased-assert-mark'],
-          'Модель': val.request_data['leased-assert-model'],
-          'Сума': val.request_data['leasing-amount'],
-          'Дата': val.request_data['leasing-start-date'],
+          'Тип': val.request_data.leasingObjectType.label,
+          'Марка': val.request_data.leasedAssertMark.name,
+          'Модель': val.request_data.leasedAssertModel.name,
+          'Сума': val.request_data.leasingAmount,
+          'Дата': val.created_at.substr(0, 10),
           'id': val.id
         }
         this.tabledata.push(dataObj)

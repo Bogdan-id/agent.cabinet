@@ -14,8 +14,8 @@
     <v-tabs-items v-model="currentTab">
       <v-tab-item key="1">
         <v-card-text>
-          <div>
-            <v-row>
+          <div class="calculation-row-wrapper">
+            <v-row class="mb-3">
               <v-col cols="12" md="7">
                 <v-radio-group 
                   class="calculator-radio" 
@@ -171,7 +171,7 @@
                 </v-text-field>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row class="mt-3">
               <v-col cols="12" md="3">
                 <v-select
                   :items="selects.currencys"
@@ -296,7 +296,7 @@
               </v-row>
               </v-card-text>
             </v-card>
-            <v-row>
+            <v-row class="custom-input">
               <v-col cols="12" md="10">
               <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
                 <v-chip class="custom-chip ma-1 font-weight-thin" color="white" text-color="black">Авансовий платiж</v-chip>
@@ -323,7 +323,7 @@
                 </div>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row class="custom-input">
               <v-col cols="12" md="10">
                 <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
                   <v-chip class="custom-chip ma-1" color="white" text-color="black">Термiн лiзингу</v-chip>
@@ -346,7 +346,7 @@
                 </div>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row class="custom-input">
               <v-col cols="12" md="8">
                 <div class="content__switch">
                   <div class="content__switch-title-wrapper">
@@ -371,7 +371,7 @@
                 </div>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row class="custom-input">
               <v-col cols="12" md="8">
                 <div class="content__switch">
                   <div class="content__switch-title-wrapper">
@@ -481,7 +481,7 @@ export default {
     commonErr: ['Обов`язкове поле'],
 
     calcObj: {
-      urkAssistService: 1,
+      // urkAssistService: 1,
       gainEvenGraphicMonths: null,
       gainEvenGraphicPercent: null,
       UnsrMonths: null,
@@ -897,46 +897,6 @@ export default {
   },
   mounted() {
     console.log(this.$router.currentRoute.params)
-    if(this.$router.currentRoute.params.edit === true) {
-    axios
-      .get(`/calculation/${this.$router.currentRoute.params.id}`)
-      .then(response => {
-        let data = response.data.request_data
-        console.log(response.data.request_data)
-        let calcObj = {
-          urkAssistService: data['UNSPR-month'],
-          gainEvenGraphicMonths: data['gain-even-graphic-months'],
-          gainEvenGraphicPercent: data['gain-even-graphic-percent'],
-          UnsrMonths: data['UNSPR-month'],
-          agentId: data['assist-service'],
-          leasedAssertMark: data['leased-assert-mark'],
-          leasedAssertModel: data['leased-assert-model'],
-          gpsTrackerModel: data['gps-tracker-model'],
-          // isNew: data,
-          leasingObjectType: data['leasing-object-type'],
-          // leasingQuantity: data,
-          // leasingObjectYear: data,
-          leasedAssertEngine: data['leased-assert-engine'],
-          leasingClientType: data['client-type'],
-          currency: data['currency'],
-          leasingCurrency: data['leasing-currency'],
-          // leasingCurrencyCourse: data,
-          leasingAmount: data['leasing-amount'],
-          // graphType: data,
-          advance: data['advance'], // Уточни данные приходят меньше чем вводил пользователь
-          leasingTerm: data['leasing-term'],
-          vehicleOwnerTax: data['vehicle-owner-tax'],
-          paymentPf: data['payment-PF'],
-          insuranceProgram: data['insurance-program'],
-          insuranceFranchise: data['insurance-franchise'],
-        }
-        Object.assign(this.calcObj, calcObj)
-        console.log(this.calcObj)
-      })
-      .catch(error => {
-        console.log(error.response)
-      })
-    }
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
   }

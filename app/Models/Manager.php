@@ -24,10 +24,18 @@ class Manager extends Model
      * @var array
      */
     protected $hidden = [
-      //
+      'bitrix_id'
     ];
 
     protected $casts = [
         //
     ];
+
+    /**
+     * Get the agent record associated with the user.
+     */
+    public function agent()
+    {
+        return $this->hasOne('App\Models\Manager');
+    }
 }

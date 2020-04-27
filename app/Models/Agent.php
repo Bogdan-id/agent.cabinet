@@ -28,4 +28,13 @@ class Agent extends Model
     protected $casts = [
       //
     ];
+
+    /**
+     * Get the agent record associated with the user.
+     */
+    public function manager()
+    {
+        return $this->belongsTo('App\Models\Manager');
+    }
+
 }

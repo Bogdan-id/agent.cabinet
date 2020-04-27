@@ -39,4 +39,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the agent record associated with the user.
+     */
+    public function agent()
+    {
+        return $this->hasOne('App\Models\Agent');
+    }
 }

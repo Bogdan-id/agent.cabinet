@@ -87,4 +87,12 @@ class AgentsController extends Controller
         ]);
     }
 
+    public function getAgentManager($agent_id)
+    {
+       $agent = Agent::find($agent_id);
+       $manager = $agent->manager;
+
+       return response()->json($manager);
+    }
+
 }

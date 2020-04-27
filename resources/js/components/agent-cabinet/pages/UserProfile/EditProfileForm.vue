@@ -74,6 +74,7 @@
                 @change="save"
                 v-model="choosedDate"  
                 ref="picker"
+                color="red lighten-1"
                 :min="hundredYears" 
                 :max="eighteenYearsAgo">
             </v-date-picker>
@@ -115,8 +116,7 @@
             <v-select
                 v-model="user.passport_type_id"
                 append-icon=""
-                label="Тип паспорту"
-                :placeholder="showPassportType"
+                :label="showPassportType"
                 :items="pasportItems"
                 outlined dense>
             </v-select>
@@ -205,30 +205,7 @@
 <script>
 export default {
   data: () => ({
-    user: {
-      id: null,
-      name: null,
-      email: null,
-      phone: null,
-      is_active: 1,
-      user_id: 5,
-      first_name: null,
-      last_name: null,
-      patronymic: null,
-      company_type: null,
-      company_name: null,
-      position: null,
-      status: null,
-      passport_type_id: null,
-      inn: null,
-      birth: null,
-      card_number: null,
-      ab_size: null,
-      manager_id: null,
-      agent_id: null,
-      unzr_number: null,
-      id_card_number: null
-    },
+    user: {},
     /* temp data */
     choosedDate: null,
 
@@ -299,7 +276,12 @@ export default {
   },
   created() {
     console.log(this.$store.state.user)
-    this.user = this.$store.state.user
+    Object.assign(this.user, 
+      this.$store.state.user.agent,
+      this.$store.state.user.user,
+      this.$store.state.user.agent.document
+    ) 
+    console.log(this.user)
   },
 }
 </script>

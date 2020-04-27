@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card min-height="350">
     <v-card-title>
       Chart diagrams component
     </v-card-title>

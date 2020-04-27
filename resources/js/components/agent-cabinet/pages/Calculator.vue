@@ -1,30 +1,48 @@
 <template>
     <div class="row">
       <div class="col-12">
-        <v-card class="pb-4">
+        <v-card class="pb-4" min-height="300">
         <v-card-title class="d-block">
           <div>Калькулятор лiзингу</div>
           <v-divider></v-divider>
           </v-card-title>
-            <v-card-actions>
-              <v-tooltip right>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                      v-on="on"
-                      to="/calculator/new"
-                      color="error" 
-                      fab dark>
-                      <v-icon dark>mdi-plus-thick</v-icon>
-                  </v-btn>
-                </template>
-                <span>Новий розрахунок</span>
-              </v-tooltip>
+          <v-card-actions
+            :style="`transition: all 0.5s; opacity: ${!loading ? '1' : '0'}`">
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                    v-on="on"
+                    to="/calculator/new"
+                    color="error" 
+                    fab dark>
+                    <v-icon dark>mdi-plus-thick</v-icon>
+                </v-btn>
+              </template>
+              <span>Новий розрахунок</span>
+            </v-tooltip>
           </v-card-actions>
-          <v-card-text class="calculations-table">
+          <v-progress-linear
+            :height="1"
+            :active="loading"
+            :indeterminate="loading"
+            absolute
+            top
+            color="grey lighten-1"
+          ></v-progress-linear>
+          <v-card-title
+            v-if="!loading && !tableDataPresent"
+            absolute
+            class="headline d-block text-center grey--text">
+            Iсторiя розрахункiв порожня
+          </v-card-title>
+          <v-card-text 
+            v-show="tableDataPresent" 
+            class="calculations-table">
             <v-card-title class="headline">
               Iсторiя розрахункiв
               <v-spacer></v-spacer>
               <v-text-field
+                v-show="tableDataPresent"
                 color="black"
                 v-model="search"
                 append-icon="mdi-magnify"
@@ -38,13 +56,13 @@
               color="black"
               :headers="tableHeader"
               :items="tabledata"
-              :loading="!tableDataPresent"
               :items-per-page="5"
               class="elevation-1">
               <template v-slot:item.actions="{ item }">
                 <v-icon
+                  color="red lighten-1"
                   class="mr-2"
-                  @click="toEdit(item)"
+                  @click="toEdit(item.id)"
                   >
                   mdi-pencil
                 </v-icon>
@@ -87,39 +105,52 @@ export default {
       { text: 'Модель', value: 'Модель', align: 'start' },
       { text: 'Сума', value: 'Сума', align: 'start' },
       { text: 'Дата', value: 'Дата', align: 'start' },
-      { text: 'Редагувати', value: 'actions' },
+      { text: 'Редагувати', value: 'actions', align: 'end' },
     ],
     tabledata: [],
     search: '',
   }),
   computed: {
     user() {
-      return this.$store.state.user
+      return this.$store.state.user.agent
     },
     userData() {
-      return Object.keys(this.user).length > 0
+      return Object.keys(this.$store.state.user.agent).length > 0
     },
     tableDataPresent() {
       return this.tabledata.length > 0
+    },
+    loading() {
+      return this.$store.state.loader === true
     }
   },
   methods: {
     toEdit(id) {
-      this.$router.push({name: 'Детально', params: {id: id}})
+      this.$router.push({name: 'Редагувати', params: {id: id, edit: true}})
     },
     getUserCalculations() {
       console.log('get user calc')
+      this.$store.commit('toggleSpinner', true)
+      this.tabledata = []
       if(this.userData){
-        const agentId = this.$store.state.user.user_id
+        const agentId = this.$store.state.user.agent.id
+        console.log(agentId)
         axios
           .get(`calculations/agent/${agentId}`)
           .then(response => {
-            this.data = response.data
             console.log(response)
-            this.createTableData(response.data)
+            this.$store.commit('toggleSpinner', false)
+            if(response.data.length > 0)  {
+              console.log('user has calculations')
+              this.createTableData(response.data)
+            } else {
+              console.log('calculations epsent')
+              this.tabledata = []
+            }
           })
           .catch(error => {
             console.log(error.response)
+            this.$store.commit('toggleSpinner', false)
             this.$notify({
               
             })
@@ -127,36 +158,36 @@ export default {
         }
     },
     test() {
-      console.log(this.tableDataPresent)
-      console.log(this.tabledata)
+      console.log(!this.loading)
+      console.log(!this.tableDataPresent)
     },
     async createTableData(object) {
+      console.log(object)
       await object.map(val => {
-        console.log(val)
         let dataObj = {
           'Тип': val.request_data['leasing-object-type'],
           'Марка': val.request_data['leased-assert-mark'],
           'Модель': val.request_data['leased-assert-model'],
           'Сума': val.request_data['leasing-amount'],
           'Дата': val.request_data['leasing-start-date'],
-          'id': val.request_id
+          'id': val.id
         }
         this.tabledata.push(dataObj)
+        console.log(this.tabledata)
       })
     },
   },
-  created() {
-    this.getUserCalculations()
-  },
   watch: {
-    tabledata() {
-      console.log(this.tabledata)
-    },
     user() {
       if(this.userData) this.getUserCalculations()
       return
     }
-  }
+  },
+  mounted() {
+    this.$store.state.user.agent 
+      ? this.getUserCalculations()
+      : false
+  },
 }
 </script>
 
@@ -170,10 +201,25 @@ export default {
     .v-data-footer__pagination {
       font-size: 14px!important;
     }
+    .v-data-table__empty-wrapper {
+      td {
+        font-size: 1.2rem!important;
+      }
+    }
+    .v-select__selection {
+      font-size: 0.9rem!important;
+    }
   }
   .new-calculation-btn {
     .v-btn__content {
       text-transform: capitalize;
+    }
+  }
+  .calculator-radio {
+    .v-input--radio-group__input {
+      .v-input--selection-controls__ripple {
+        height: 0!important;
+      }
     }
   }
   .calculator__new-calculation {

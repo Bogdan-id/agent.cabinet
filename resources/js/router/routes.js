@@ -13,8 +13,8 @@ import UsefulMaterials from "../components/agent-cabinet/pages/UsefulMaterials.v
 import Reporting from "../components/agent-cabinet/pages/Reporting.vue"
 import Calculator from "../components/agent-cabinet/pages/Calculator.vue"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications.vue"
-import NewCalculaton from '../components/agent-cabinet/pages/NewCalculation.vue'
-import CalculationDetail from '../components/agent-cabinet/pages/CalculationDetail.vue'
+import NewCalculation from '../components/agent-cabinet/pages/NewCalculation.vue'
+import CalculationEdit from '../components/agent-cabinet/pages/CalculationEdit.vue'
 import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMaterialsDetail.vue'
 import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram.vue'
 
@@ -64,12 +64,12 @@ const routes = [
       {
         path: '/calculator/new',
         name: 'Новий розрахунок',
-        component: NewCalculaton
+        component: NewCalculation
       },
       {
-        path: '/calculator/detail',
-        name: 'Детально',
-        component: CalculationDetail
+        path: '/calculator/edit',
+        name: 'Редагувати',
+        component: CalculationEdit
       },
       {
         path: '/calculator/chart',

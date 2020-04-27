@@ -15,6 +15,7 @@ use Mpdf\Mpdf;
 use GuzzleHttp\Psr7;
 use App\Repositories\CalculationRepository;
 use App\Models\Calculation;
+use App\Http\Requests\CalculateRequest;
 
 class CalculateController extends Controller
 {
@@ -36,12 +37,15 @@ class CalculateController extends Controller
     public function create (CalculatorDataService $calculatorDataService, 
         CalculateClient $calculateClient,
         BitrixClient $bitrixClient,
-        CalculationRepository $calculationRepository
+        CalculationRepository $calculationRepository,
+        CalculateRequest $calculateRequest
      ) {
         try {
-            $data = $calculatorDataService->getRequestData();
-
-            $resultData = $calculateClient->runCalculate($data);
+            $data = $calculateRequest->validated();
+          
+            $requestData = $calculatorDataService->getRequestData();
+            
+            $resultData = $calculateClient->runCalculate($requestData);
             
             $params = array_merge(
             [

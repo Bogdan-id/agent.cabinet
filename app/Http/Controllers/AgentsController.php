@@ -65,7 +65,7 @@ class AgentsController extends Controller
     public function getUserAgent()
     {
         $user = Auth::user();
-        $agent = Agent::where('user_id', '=', $user->id)->first();
+        $agent = $user->agent;
         if($agent){
             switch ($agent->passport_type_id) {
                 case 1:

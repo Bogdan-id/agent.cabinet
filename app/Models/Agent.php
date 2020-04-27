@@ -22,7 +22,7 @@ class Agent extends Model
      * @var array
      */
     protected $hidden = [
-      //
+      'oferta_accepted'
     ];
 
     protected $casts = [

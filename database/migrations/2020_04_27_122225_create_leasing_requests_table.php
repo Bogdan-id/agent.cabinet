@@ -16,6 +16,7 @@ class CreateLeasingRequestsTable extends Migration
         Schema::create('leasing_requests', function (Blueprint $table) {
             $table->id();
             $table->integer('agent_id');
+            $table->integer('calculation_id');
             $table->integer('client_type_id');
             $table->string('first_name');
             $table->string('last_name');

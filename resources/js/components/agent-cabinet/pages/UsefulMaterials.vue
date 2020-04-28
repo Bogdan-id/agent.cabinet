@@ -1,7 +1,9 @@
 <template>
     <div class="row">
+      <bread-scrumb />  
       <div class="col-md-12 useful-materials">
-        <v-card>
+        <router-view ref="rv"></router-view>
+        <v-card v-show="$route.name === 'Кориснi матерiали'">
           <v-card-title class="d-block">
             <div>
               Кориснi матерiали
@@ -32,7 +34,12 @@
     </div>
 </template>
 <script>
+import BreadScrumb from '../components/breadScrumb'
+
 export default {
+  components: {
+    BreadScrumb
+  },
   data: () => ({
     sections: [
       {
@@ -71,6 +78,14 @@ export default {
   methods: {
     routeObject(route, data) {
       return {name: 'Кориснi матерiали вiд Best-leasing', params: {detail: route, data: data}}
+    },
+    test() {
+      // console.log(this.$route)
+    }
+  },
+  computed: {
+    isExactActive() {
+      return this.$refs.rv === 'undefined' || this.$refs.rv === null
     }
   },
   mounted() {

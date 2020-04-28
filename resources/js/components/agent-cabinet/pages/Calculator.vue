@@ -1,6 +1,8 @@
 <template>
-    <div class="row">
-      <div class="col-12">
+    <div>
+      <breads-crumb></breads-crumb>
+      <router-view></router-view>
+      <div class="col-12" v-show="$route.name === 'Калькулятор лізингу'">
         <v-card class="pb-4" min-height="300">
         <v-card-title class="d-block">
           <div>Калькулятор лiзингу</div>
@@ -78,8 +80,12 @@
 
 <script>
 import axios from 'axios'
+import BreadsCrumb from '../components/breadScrumb.vue'
 
 export default {
+  components: {
+    BreadsCrumb
+  },
   data:() => ({
     tableHeader: [
       { text: 'Тип об`єкту лiзингу', value: 'Тип', align: 'start'},
@@ -140,8 +146,8 @@ export default {
         }
     },
     test() {
-      console.log(!this.loading)
-      console.log(!this.tableDataPresent)
+      // console.log(!this.loading)
+      // console.log(!this.tableDataPresent)
     },
     async createTableData(object) {
       console.log(object)

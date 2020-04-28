@@ -7,7 +7,8 @@ export default new Vuex.Store({
 	state: {
     user: {},
     loader: false,
-    userCalculations: []
+    userCalculations: [],
+    breadScrumb: {}
   },
   mutations: {
     addUser(state, value) {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     },
     addCalculation(state, value) {
       state.userCalculations.push(value) 
+    },
+    setBreadScrumb(state, links) {
+      state.breadScrumb = Object.assign({}, links)
     }
   },
   actions: {

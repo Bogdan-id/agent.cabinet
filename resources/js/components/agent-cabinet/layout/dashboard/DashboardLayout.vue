@@ -11,7 +11,6 @@
         <sidebar-link to="/reporting" name="Звітність" icon="ti-widget-alt"/>
         <sidebar-link to="/useful-materials" name="Корисні матеріали" icon="ti-bookmark-alt"/>
         <sidebar-link to="/agent-profile" name="профiль" icon="ti-user"/>
-        <sidebar-link to="/calculator/chart" name="TEST CHART" icon="ti-user"/>
         <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->
         <!-- <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/> -->
       </template>

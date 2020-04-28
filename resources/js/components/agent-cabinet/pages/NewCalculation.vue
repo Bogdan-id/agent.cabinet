@@ -107,7 +107,7 @@
                   label="Модель"
                   loaderHeight="1"
                   :loading="$store.state.loader && modelOfItem"
-                  :disabled="!modelOfItem"
+                  :disabled="!modelOfItem || modelItems.length === 0"
                   color="red darken-4"
                   dense outlined>
                 </v-autocomplete>
@@ -799,14 +799,29 @@ export default {
             : this.notify('', 'Заповнiть даннi', 'error')
 
     },
+    checkIfHasCurrency() {
+      if(this.hasForeignCurrency) return
+      this.calcObj.leasingCurrencyCourse = 1
+    },
+    checkIfHasAnnuity() {
+      if(!this.hasAnnuity) {
+        delete this.calcObj.gainEvenGraphicMonths
+        delete this.calcObj.gainEvenGraphicPercent
+        delete this.calcObj.UnsrMonths
+      }
+    },
     sendRequest() {
+      this.checkIfHasAnnuity()
+      this.checkIfHasCurrency()
       this.$store.commit('toggleSpinner', true)
       axios
         .post('/calculate', this.calcObj)
           .then(response => {
             console.log(response)
             this.$store.commit('toggleSpinner', false)
-            this.$router.push('/calculator/chart')
+            // this.$router.push('/calculator/chart')
+            let data = response.data.result_data
+            this.$router.push({name: 'chartDiagrams', params: {data: data}})
           })
           .catch(error => {
             console.log(error.response)
@@ -824,11 +839,6 @@ export default {
       console.log(val)
       // this.calcObj.insuranceProgram = val.value
       this.calcObj.insuranceProgram = val.value
-
-    },
-    hasForeignCurrency(val) {
-      if(val === false) this.calcObj.leasingCurrencyCourse = 1
-      return
     },
     'calcObj.leasingCurrencyCourse': function (course) {
       if(course == null){

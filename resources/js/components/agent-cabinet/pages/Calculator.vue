@@ -77,24 +77,6 @@
 
 
 <script>
-// <v-tooltip top>
-//   <template v-slot:activator="{ on }">
-//     <v-btn 
-//         color="grey" 
-//         v-on="on " 
-//         icon 
-//         :to="{ 
-//             name: 'Детально', 
-//             params: {
-//               table: table,
-//               id: row.id
-//             } 
-//         }">
-//       <v-icon color="red lighten-1" v-text="'mdi-square-edit-outline'"></v-icon>
-//     </v-btn>
-//   </template>
-//   <span>Редагувати</span>
-// </v-tooltip>
 import axios from 'axios'
 
 export default {

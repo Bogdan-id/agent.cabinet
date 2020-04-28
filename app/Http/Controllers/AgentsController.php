@@ -77,7 +77,6 @@ class AgentsController extends Controller
             }
 
             $agent->document = $document;
-            $agent->manager - null;
         }
 
 

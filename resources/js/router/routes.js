@@ -27,32 +27,53 @@ const routes = [
 	{ 
 		path: '/home', 
     component: DashboardLayout,
+    name: 'Головна',
     redirect: "/dashboard",
+    meta: {
+      title: 'Головна'
+    },
 		children: [
       {
         path: '/dashboard',
         name: 'Головна',
-        component: Dashboard
+        component: Dashboard,
+        meta: {
+          title: 'Головна'
+        }
       },
       {
         path: '/agent-profile',
         name: 'Профiль',
-        component: UserProfile
+        component: UserProfile,
+        meta: {
+          title: 'Профiль'
+        }
       },
       {
         path: '/useful-materials',
         name: 'Кориснi матерiали',
-        component: UsefulMaterials
-      },
-      {
-        path: '/useful-materials/:detail',
-        name: 'Кориснi матерiали вiд Best-leasing',
-        component: UsefulMaterialsDetail
+        component: UsefulMaterials,
+        meta: {
+          title: 'Кориснi матерiали'
+        },
+        children: [
+          {
+            path: ':detail',
+            name: 'Кориснi матерiали вiд Best-leasing',
+            component: UsefulMaterialsDetail,
+            meta: {
+              title: "Кориснi матерiалы вiд Best leasing"
+            }
+          }
+        ]
       },
       {
         path: '/reporting',
         name: 'Звiтнiсть',
-        component: Reporting
+        component: Reporting,
+        meta: {
+          title: 'Звiтнiсть'
+        }
       },
 
       // calculator
@@ -60,27 +81,42 @@ const routes = [
         path: '/calculator',
         name: 'Калькулятор лізингу',
         component: Calculator,
+        meta: {
+          title: 'Калькулятор лiзингу'
+        },
+        children: [
+          {
+            path: 'new',
+            name: 'Новий розрахунок',
+            component: NewCalculation,
+            meta: {
+              title: 'Новый розрахунок'
+            }
+          },
+          {
+            path: 'edit',
+            name: 'Редагувати',
+            component: NewCalculation,
+            meta: {
+              title: 'Редагувати'
+            }
+          },
+          {
+            path: 'chart',
+            name: 'chartDiagrams',
+            component: ChartDiagram,
+            meta: {
+              title: 'Графiк розрахункiв'
+            }
+          }
+        ]
       },
-      {
-        path: '/calculator/new',
-        name: 'Новий розрахунок',
-        component: NewCalculation
-      },
-      {
-        path: '/calculator/edit',
-        name: 'Редагувати',
-        component: NewCalculation
-      },
-      {
-        path: '/calculator/chart',
-        name: 'chartDiagrams',
-        component: ChartDiagram
-      },
-      
       {
         path: '/leasing-requests',
         name: 'Заявки на лiзинг',
-        component: LeasingApplications
+        component: LeasingApplications,meta: {
+          title: 'Заявки на лiзинг'
+        }
       }
       
     ]

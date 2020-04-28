@@ -1,5 +1,8 @@
 <template>
   <div class="app">
+    <agreement @closeDialog="showAgreement = false;" 
+      :showAgreement="showAgreement">
+    </agreement>
     <v-content class="label__block">
       <!-- rhombus to background -->
       <div class="rhombus-1"></div>
@@ -230,7 +233,12 @@ import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import { required, minLength } from 'vuelidate/lib/validators'
 
+import Agreement from "./Agreement.vue"
+
 export default {
+  components: {
+    Agreement
+  },
   mixins: [validationMixin],
   data: () => ({
     /* known user data */
@@ -244,6 +252,7 @@ export default {
     /* boolean */
     modal: false,
     request: false,
+    showAgreement: true,
 
     /* masks */
     unzrMask: '########-#####',
@@ -370,8 +379,6 @@ export default {
       return {
         'user_id': this.knownUserData.id,
         'first_name': this.knownUserData.name,
-        // this.knownUserData.email
-        // this.knownUserData.phone
         'last_name': this.lastName,
         'patronymic': this.patronymic,
         'company_type': this.companyType,
@@ -383,6 +390,7 @@ export default {
         'passport_number': this.getPassportNumber,
         'inn': this.inn,
         'card_number': this.cardNumber.replace(/[^\d]/g, ''),
+        'oferta_accepted': true,
         '_token': this.getCsrf()
       }
     },
@@ -409,6 +417,7 @@ export default {
     },
     getCurrentUser() {
       axios.get('/getCurrentUser').then(({data}) => {
+        console.log(data)
         Object.assign(this.knownUserData, data)
       })
       .catch(e => {

@@ -13,7 +13,7 @@
     <v-card-actions class="justify-center">
       <span>
         <v-btn
-          @click="sendRequest()" 
+          @click="closeDialog()" 
           color="grey darken-4"
           :loading="loading"
           dark small>
@@ -26,8 +26,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   props: ['showAgreement'],
   data: () => ({
@@ -36,35 +34,21 @@ export default {
     loading: false,
   }),
   methods: {
-    sendRequest() {
+    closeDialog() {
       this.loading = true
-      axios
-        .post('/...', this.user_id) // ***
-        .then(response => {
-          this.loading = false
-          this.$emit('closeDialog')
-          // this.$router.push('...') // ***
-          console.log(response)
-        })
-        .catch(error => {
-          this.loading = false
-          this.$notify({
-            group: 'error',
-            title: `${error.response.status} ${error.response.data.message}`,
-            text: 'Сторiнку буде оновлено',
-          })
-          this.$emit('closeDialog') // delete after test
-          setTimeout(() => {
-            // this.router.go()
-          }, 5000)
-          console.log(error.response)
-        })
+      setTimeout(() => {
+        this.loading = false
+        this.$emit('closeDialog', true)
+      }, 700)
     }
   },
   watch: {
     showAgreement(val) {
       this.openDialog = val
     }
+  },
+  mounted() {
+    this.openDialog = this.showAgreement
   }
 }
 </script>

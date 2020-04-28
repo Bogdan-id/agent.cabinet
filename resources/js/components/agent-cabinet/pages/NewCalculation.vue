@@ -1,10 +1,9 @@
 <template>
   <v-card>
-    <v-tabs 
+    <v-tabs
       v-model="currentTab"
       slider-color="grey darken-3"
       background-color="red lighten-1"
-      ref="calcTab"
       grow
       slider-size="7"
       dark>
@@ -17,8 +16,8 @@
           <div>
             <v-row>
               <v-col cols="12" md="7">
-                <v-radio-group 
-                  class="calculator-radio" 
+                <v-radio-group
+                  class="calculator-radio"
                   v-model="calcObj.leasingClientType"
                   :error-messages="leasingClientTypeErr"
                   row>
@@ -37,7 +36,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" md=3>
-                <v-select 
+                <v-select
                   v-model="calcObj.isNew"
                   :items="selects.itemConditions"
                   itemColor="red darken-4"
@@ -89,7 +88,7 @@
                   return-object
                   label="Марка"
                   loaderHeight="1"
-                  :loading="!leasedOfAssetType && $store.state.loader 
+                  :loading="!leasedOfAssetType && $store.state.loader
                     || noBrandItems && $store.state.loader"
                   :disabled="!leasedOfAssetType || noBrandItems"
                   color="red darken-4"
@@ -108,7 +107,7 @@
                   label="Модель"
                   loaderHeight="1"
                   :loading="$store.state.loader && modelOfItem"
-                  :disabled="!modelOfItem"
+                  :disabled="!modelOfItem || modelItems.length === 0"
                   color="red darken-4"
                   dense outlined>
                 </v-autocomplete>
@@ -117,7 +116,7 @@
             <v-row>
               <v-col cols="12" md="3" v-if="calcObj.isNew !== null">
                 <v-select
-                  v-model="calcObj.leasingObjectYear" 
+                  v-model="calcObj.leasingObjectYear"
                   :items=" calcObj.isNew ? selects.itemYears : selects.oldItemYears"
                   itemColor="red darken-4"
                   :error-messages="leasingObjectYearErr"
@@ -133,7 +132,7 @@
                   @input="parseToInt('leasedAssertEngine')"
                   id="leasedAssertEngine"
                   :error-messages="leasedAssertEngineErr"
-                  label="Об'єм двигуна" 
+                  label="Об'єм двигуна"
                   :disabled="!yearOfModel"
                   color="red darken-4"
                   dense outlined>
@@ -141,7 +140,7 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field
-                  @input="$v.calcObj.leasingAmount.$touch(); 
+                  @input="$v.calcObj.leasingAmount.$touch();
                     parseToInt('leasingAmount')"
                   :error-messages="itemCostErrors"
                   v-model="calcObj.leasingAmount"
@@ -166,12 +165,11 @@
                   dense>
                 </v-select>
               </v-col>
-              <v-col cols="12" md="3" 
-                v-if="calcObj.leasingCurrency !== null 
-                && hasForeignCurrency 
-                && currentTab === 0">
+              <v-col cols="12" md="3"
+                v-if="hasForeignCurrency">
                 <!-- float -->
                 <v-text-field
+                  v-if="currentTab === 0"
                   v-model="calcObj.leasingCurrencyCourse"
                   :error-messages="leasingCurrencyCourseErr"
                   :disabled="calcObj.leasingCurrency === null"
@@ -184,7 +182,7 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field
-                  v-model="calcObj.leasingQuantity" 
+                  v-model="calcObj.leasingQuantity"
                   :error-messages="leasingQuantityErr"
                   :disabled="calcObj.leasingCurrency === null"
                   @input="parseToInt('leasingQuantity')"
@@ -202,6 +200,9 @@
       <v-tab-item key="2">
         <v-card-text>
           <div>
+            <v-card>
+            <v-card-title class="subtitle-1"><v-chip dark>Тип графiку</v-chip></v-card-title>
+            <v-card-text>
             <v-row>
               <v-col cols="12" md="9" class="pb-0">
                 <v-select
@@ -210,102 +211,113 @@
                   itemColor="red darken-4"
                   :error-messages="graphTypeErr"
                   ref="graphType"
-                  label="Тип графіку"
+                  placeholder="Оберiть тип графiку"
                   color="red darken-4"
                   multiple deletable-chips chips>
                   <template #append-item>
-                    <v-btn class="ml-2 mt-1 mb-1 d-block" small dark @click="closeSelect()">Ok</v-btn>
+                    <v-btn
+                      @click="closeSelect()"
+                      color="grey darken-4"
+                      v-show="!hasGraph"
+                      class="ml-3 mt-3 mb-1 d-block"
+                      fab dark x-small>
+                      <v-icon small v-text="'mdi-check-bold'"></v-icon>
+                    </v-btn>
                   </template>
                 </v-select>
               </v-col>
             </v-row>
-            <v-card v-show="hasAnnuity" class="d-inline-block mb-3">
-            <v-card-title v-show="hasAnnuity" class="headline">Посилання для рiвномiрного графiку</v-card-title>
-            <v-card-text class="pb-0" v-show="hasAnnuity">
-              <v-row v-show="hasAnnuity">
-                <v-col cols="9" md="4">
-                  <v-text-field
-                    v-model="calcObj.gainEvenGraphicMonths" 
-                    :error-messages="gainEvenGraphicMonthsErr"
-                    label="Кiлькiсть мiсяцiв"
-                    @input="parseToInt('gainEvenGraphicMonths')"
-                    id="gainEvenGraphicMonths"
-                    color="red darken-4"
-                    dense outlined>
-                  </v-text-field>
-                </v-col>
-                <v-col cols="9" md="4">
-                  <v-text-field
-                    v-model="calcObj.gainEvenGraphicPercent" 
-                    :error-messages="gainEvenGraphicPercentErr"
-                    @input="parseToFloat('gainEvenGraphicPercent')"
-                    id="gainEvenGraphicPercent"
-                    label="Вiдсоток посилення"
-                    color="red darken-4"
-                    dense outlined>
-                  </v-text-field>
-                </v-col>
-                <v-col cols="9" md="4">
-                  <v-text-field
-                    v-model="calcObj.UnsrMonths"
-                    :error-messages="UnsrMonthsErr"
-                    @input="parseToInt('UnsrMonths')"
-                    id="UnsrMonths"
-                    label="УНСПР, місяцiв"
-                    color="red darken-4"
-                    dense outlined>
-                  </v-text-field>
+            </v-card-text>
+            <v-card-text class="pt-0">
+              <v-card-title v-show="hasAnnuity" class="subtitle-1 black--text pt-0">Посилання для рiвномiрного графiку</v-card-title>
+              <v-card-text class="pb-0" v-show="hasAnnuity">
+                <v-row v-show="hasAnnuity">
+                  <v-col cols="9" md="4">
+                    <v-text-field
+                      v-model="calcObj.gainEvenGraphicMonths"
+                      :error-messages="gainEvenGraphicMonthsErr"
+                      label="Кiлькiсть мiсяцiв"
+                      @input="parseToInt('gainEvenGraphicMonths')"
+                      id="gainEvenGraphicMonths"
+                      color="red darken-4"
+                      dense outlined>
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="9" md="4">
+                    <v-text-field
+                      v-model="calcObj.gainEvenGraphicPercent"
+                      :error-messages="gainEvenGraphicPercentErr"
+                      @input="parseToFloat('gainEvenGraphicPercent')"
+                      id="gainEvenGraphicPercent"
+                      label="Вiдсоток посилення"
+                      color="red darken-4"
+                      dense outlined>
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="9" md="4">
+                    <v-text-field
+                      v-model="calcObj.UnsrMonths"
+                      :error-messages="UnsrMonthsErr"
+                      @input="parseToInt('UnsrMonths')"
+                      id="UnsrMonths"
+                      label="УНСПР, місяцiв"
+                      color="red darken-4"
+                      dense outlined>
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+                </v-card-text>
+            </v-card-text>
+            </v-card>
+            <div class="term-and-advance">
+              <v-row>
+                <v-col cols="12" md="10">
+                <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
+                  <!-- create v-chip absolute on border-top -->
+                  <v-chip class="custom-chip ma-1 font-weight-thin" color="white" text-color="black">Авансовий платiж</v-chip>
+                    <v-slider
+                      v-model="calcObj.advance"
+                      :error-messages="advanceErr"
+                      min="20"
+                      max="70"
+                      color="red"
+                      track-color="grey lighten-2"
+                      persistent-hint
+                      thumb-label>
+                      <template #prepend>
+                        <span class="slider-prepend">20<v-icon small class="ml-1" color="white" v-text="'mdi-percent-outline'"></v-icon></span>
+                      </template>
+                      <template #append>
+                        <span class="slider-prepend">70<v-icon small class="ml-1" color="white" v-text="'mdi-percent-outline'"></v-icon></span>
+                      </template>
+                    </v-slider>
+                  </div>
                 </v-col>
               </v-row>
-              </v-card-text>
-            </v-card>
-            <v-row>
-              <v-col cols="12" md="10">
-              <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
-                <!-- create v-chip absolute on border-top -->
-                <v-chip style="font-size: 17px; position: absolute; top: -22px;" class="ma-1 font-weight-thin" color="white" text-color="black">Авансовий платiж</v-chip>
-                  <v-slider
-                    v-model="calcObj.advance"
-                    :error-messages="advanceErr"
-                    min="20"
-                    max="70"
-                    color="black"
-                    track-color="grey"
-                    persistent-hint
-                    thumb-label>
-                    <template #prepend>
-                      <span class="slider-prepend">20<v-icon small class="ml-1" color="white" v-text="'mdi-percent-outline'"></v-icon></span>
-                    </template>
-                    <template #append>
-                      <span class="slider-prepend">70<v-icon small class="ml-1" color="white" v-text="'mdi-percent-outline'"></v-icon></span>
-                    </template>
-                  </v-slider>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="10">
-                <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
-                  <v-chip style="font-size: 17px; position: absolute; top: -22px;" class="ma-1 font-weight-thin" color="white" text-color="black">Термiн лiзингу</v-chip>
-                  <v-slider
-                    v-model="calcObj.leasingTerm"
-                    :error-messages="leasingTermErr"
-                    min="12"
-                    max="72"
-                    color="black"
-                    track-color="grey"
-                    persistent-hint
-                    thumb-label>
-                    <template v-slot:prepend>
-                      <span class="slider-prepend">12&nbsp;мiс</span>
-                    </template>
-                    <template v-slot:append>
-                      <span class="slider-prepend">72&nbsp;мiс</span>
-                    </template>
-                  </v-slider>
-                </div>
-              </v-col>
-            </v-row>
+              <v-row>
+                <v-col cols="12" md="10">
+                  <div :class="`slider-wrapper d-flex flex-${smAndDown ? 'column' : 'row'}`">
+                    <v-chip class="custom-chip ma-1 font-weight-thin" color="white" text-color="black">Термiн лiзингу</v-chip>
+                    <v-slider
+                      v-model="calcObj.leasingTerm"
+                      :error-messages="leasingTermErr"
+                      min="12"
+                      max="72"
+                      color="red"
+                      track-color="grey lighten-2"
+                      persistent-hint
+                      thumb-label>
+                      <template v-slot:prepend>
+                        <span class="slider-prepend">12&nbsp;мiс</span>
+                      </template>
+                      <template v-slot:append>
+                        <span class="slider-prepend">72&nbsp;мiс</span>
+                      </template>
+                    </v-slider>
+                  </div>
+                </v-col>
+              </v-row>
+            </div>
             <v-row>
               <v-col cols="12" md="8">
                 <div class="content__switch">
@@ -357,44 +369,48 @@
             <v-row>
               <v-col cols="12" md="3">
                 <v-select
-                    v-model="calcObj.gpsTrackerModel" 
-                    :items="selects.gpsTrackers"
-                    itemColor="red darken-4"
-                    :error-messages="gpsTrackerModelErr"
-                    label="GPS-трекер"
-                    color="red darken-4"
-                    dense outlined>
+                  flat
+                  v-model="calcObj.gpsTrackerModel"
+                  :items="selects.gpsTrackers"
+                  itemColor="red darken-4"
+                  :error-messages="gpsTrackerModelErr"
+                  class="mt-1 mb-1"
+                  label="GPS-трекер"
+                  color="red darken-4"
+                  dense>
                 </v-select>
               </v-col>
             </v-row>
-            <v-card-title class="headline">Страхування</v-card-title>
-            <v-row>
-              <v-col cols="12" md="4">
-                <v-select
-                    v-model="insuranceProgram" 
-                    :items="selects.insurancePrograms"
-                    :error-messages="insuranceProgramErr"
-                    item-text="text"
-                    item-value="text"
-                    return-object
-                    label="Програма страхування"
-                    itemColor="red darken-4"
-                    color="red darken-4"
-                    dense outlined>
-                </v-select>
-              </v-col>
-              <v-col cols="12" md="4">
-                <v-select
-                    v-model="calcObj.insuranceFranchise" 
-                    :items="selects.franchises"
-                    itemColor="red darken-4"
-                    :error-messages="insuranceFranchiseErr"
-                    label="Франшиза"
-                    color="red darken-4"
-                    dense outlined>
-                </v-select>
-              </v-col>
-            </v-row>
+            <div class="calculator-insurance">
+              <v-card-title class="black--text insurance-title">Страхування</v-card-title>
+              <v-row>
+                <v-col cols="12" md="4">
+                  <v-select
+                      v-model="insuranceProgram"
+                      :items="selects.insurancePrograms"
+                      :error-messages="insuranceProgramErr"
+                      item-text="text"
+                      item-value="text"
+                      return-object
+                      label="Програма страхування"
+                      itemColor="red darken-4"
+                      color="red darken-4"
+                      dense outlined>
+                  </v-select>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-select
+                      v-model="calcObj.insuranceFranchise"
+                      :items="selects.franchises"
+                      itemColor="red darken-4"
+                      :error-messages="insuranceFranchiseErr"
+                      label="Франшиза"
+                      color="red darken-4"
+                      dense outlined>
+                  </v-select>
+                </v-col>
+              </v-row>
+            </div>
           </div>
         </v-card-text>
       </v-tab-item>
@@ -421,13 +437,12 @@ export default {
   data:() => ({
     selects: selectsItemAndValue,
     currentTab: 0,
-    brandItems: [],
-    modelItems: [],
-    
     minCarCost: 150000,
     insuranceProgram: null,
-
     commonErr: ['Обов`язкове поле'],
+
+    brandItems: [],
+    modelItems: [],
 
     calcObj: {
       gpsTrackerQuantity: 1,
@@ -483,7 +498,7 @@ export default {
 
       this.currentTab === 1 && !this.hasAnnuity
         ? validateObj = Object.assign({},
-          this.validateFirstPage, 
+          this.validateFirstPage,
           this.validateSecondPage
         )
         : false
@@ -509,7 +524,7 @@ export default {
         leasingObjectType: { required },
         leasedAssertMark: { required },
         leasedAssertModel: { required },
-        leasedAssertEngine: { required }, 
+        leasedAssertEngine: { required },
         leasingCurrency: { required },
         leasingQuantity: { required },
         leasingAmount: {
@@ -587,6 +602,10 @@ export default {
     },
     isClientType() {
       return this.calcObj.leasingClientType !== null
+    },
+    hasGraph() {
+      if(this.calcObj.graphType === null || this.calcObj.graphType === 'undefined') return false
+      return this.calcObj.graphType.length > 0
     },
 
     /* vuelidate error handlers */
@@ -702,10 +721,28 @@ export default {
       this.$refs.graphType.blur()
     },
     getMarksByType() {
+      this.brandItems = []
       this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.calcObj.leasingObjectType.value}`)
         .then(response => {
+          console.log(response)
           this.brandItems = response.data
+          this.$store.commit('toggleSpinner', false)
+        })
+        .catch(error => {
+          let message = error.response.statusText
+          this.notify('Помилка', message, 'error')
+          this.$store.commit('toggleSpinner', false)
+        })
+    },
+    getModelByMark() {
+      this.modelItems = []
+      this.$store.commit('toggleSpinner', true)
+      let categorieId = this.calcObj.leasingObjectType.value
+      axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
+        .then(response => {
+          console.log(response)
+          this.modelItems = response.data
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
@@ -734,20 +771,6 @@ export default {
         el.dispatchEvent(input)
       }
     },
-    getModelByMark() {
-      this.$store.commit('toggleSpinner', true)
-      let categorieId = this.calcObj.leasingObjectType.value
-      axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
-        .then(response => {
-          this.modelItems = response.data
-          this.$store.commit('toggleSpinner', false)
-        })
-        .catch(error => {
-          let message = error.response.statusText
-          this.notify('Помилка', message, 'error')
-          this.$store.commit('toggleSpinner', false)
-        })
-    },
     notify(title, text, group) {
 			this.$notify({
 				group: group || 'standard',
@@ -774,16 +797,31 @@ export default {
           && this.$v.$dirty
             ? this.sendRequest()
             : this.notify('', 'Заповнiть даннi', 'error')
-      
+
+    },
+    checkIfHasCurrency() {
+      if(this.hasForeignCurrency) return
+      this.calcObj.leasingCurrencyCourse = 1
+    },
+    checkIfHasAnnuity() {
+      if(!this.hasAnnuity) {
+        delete this.calcObj.gainEvenGraphicMonths
+        delete this.calcObj.gainEvenGraphicPercent
+        delete this.calcObj.UnsrMonths
+      }
     },
     sendRequest() {
+      this.checkIfHasAnnuity()
+      this.checkIfHasCurrency()
       this.$store.commit('toggleSpinner', true)
       axios
         .post('/calculate', this.calcObj)
           .then(response => {
             console.log(response)
             this.$store.commit('toggleSpinner', false)
-            this.$router.push('/calculator/chart')
+            // this.$router.push('/calculator/chart')
+            let data = response.data.result_data
+            this.$router.push({name: 'chartDiagrams', params: {data: data}})
           })
           .catch(error => {
             console.log(error.response)
@@ -793,27 +831,23 @@ export default {
           })
     },
     test() {
-      this.$refs.graphType.blur()
+      console.log(this.calcObj)
     },
   },
   watch: {
     insuranceProgram(val) {
+      console.log(val)
+      // this.calcObj.insuranceProgram = val.value
       this.calcObj.insuranceProgram = val.value
     },
     'calcObj.leasingCurrencyCourse': function (course) {
-      if(course == null){ 
+      if(course == null){
         !this.hasForeignCurrency
-          ? this.calcObj.leasingCurrencyCourse = "1"
-          : false 
+          ? this.calcObj.leasingCurrencyCourse = 1
+          : false
       } else {
         if(Number.isNaN(parseFloat(course))) return
-        this.calcObj.leasingCurrencyCourse = parseFloat(course).toString()
-      }
-    },
-    'calcObj.leasingCurrency': function(currency) {
-      if(currency === 'UAH') this.calcObj.leasingCurrencyCourse = 1
-      else if(currency === "EUR" || currency === "USD") {
-        this.calcObj.leasingCurrencyCourse = ''
+        this.calcObj.leasingCurrencyCourse = parseFloat(course)
       }
     },
     'calcObj.gainEvenGraphicMonths': function(value) {
@@ -847,15 +881,33 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$router.currentRoute.params)
-    // axios
-    //   .get(`/calculation/${this.$router.currentRoute.params.id}`)
-    //   .then(response => {
-    //     console.log(response)
-    //   })
-    //   .catch(error => {
-    //     console.log(error.response)
-    //   })
+    if(this.$router.currentRoute.params.edit === true) {
+    
+    axios
+      .get(`/calculation/${this.$router.currentRoute.params.id}`)
+      .then(response => {
+        let data = response.data.request_data
+        this.brandItems.push(data.leasedAssertMark)
+        this.modelItems.push(data.leasedAssertModel)
+        this.insuranceProgram = this.selects.insurancePrograms
+          .find(
+            obj => obj.value === data.insuranceProgram
+          )
+        // console.log(data)
+        Object.assign(this.calcObj, data)
+        console.log(this.calcObj)
+        this.getMarksByType()
+        this.getModelByMark()
+      })
+      .catch(error => {
+        console.log(error.response)
+        this.$notify({
+          group: 'error',
+          title: 'Виникла помилка',
+          text: error.response.data.message,
+        })
+      })
+    }
 
     this.calcObj._token = this.getCsrf()
     console.log(this.$store.state.user)
@@ -865,6 +917,21 @@ export default {
 </script>
 
 <style lang="scss">
+  .calculation-row-wrapper {
+    .custom-input {
+      margin: 13px 0!important;
+    }
+  }
+  .term-and-advance {
+    margin: 30px 0;
+  }
+  .calculator-insurance {
+    .insurance-title {
+      border-left: 2px solid red;
+      padding-top: 0;
+      font-size: 18px;
+    }
+  }
   .calculation__tab-btn {
     background: grey;
     color: white;
@@ -884,9 +951,10 @@ export default {
   .content__switch {
     display: flex;
     align-items: center;
-    border: 2px solid #818080;
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 0 8px;
+    border-left: 2px solid black;
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12)
   }
   .content__switch-title-wrapper {
     width: 70%;
@@ -896,12 +964,12 @@ export default {
     padding: 0 5px 0 8px;
   }
   .content__switch-wrapper {
-    display: flex; 
-    width: 30%; 
+    display: flex;
+    width: 30%;
     justify-content: flex-start;
   }
   .switch-label-prepend {
-    color: black!important; 
+    color: black!important;
     padding: 4px 6px 0 8px;
     font-size: 17px;
   }
@@ -909,7 +977,7 @@ export default {
     white-space: nowrap;
     font-size: 17px;
     padding: 1px 1px;
-    // color: black!important; 
+    // color: black!important;
   }
   .slider-wrapper {
     position: relative;
@@ -917,8 +985,8 @@ export default {
     border-radius: 8px;
     padding: 12px 8px 0 6px;
     .custom-chip {
-      font-size: 17px; 
-      position: absolute; 
+      font-size: 17px;
+      position: absolute;
       top: -22px;
     }
     .v-input__slider {
@@ -951,14 +1019,19 @@ export default {
     color: white!important;
     border-radius: 4px;
   }
-  .calculator-radio label {
-    color: black!important;
-  }
   .calculator-radio {
     .v-radio {
-      border: 1px solid black !important;
+      transition: border 0.3s ease;
+      border: 1px solid #808080;
       padding: 7px 10px;
       border-radius: 4px;
+      margin: 10px 0;
+      &.v-item--active {
+        border: 1px solid black;
+      }
+    }
+    label {
+      color: black!important;
     }
   }
   @media(max-width: 716px) {

@@ -27,8 +27,8 @@ class LeasingRequestRequest extends JsonRequest
         $data = $request->post();
         $rules = [
             'agentId' =>  'required|integer|exists:agents,id',
-            'agentId' =>  'required|integer|exists:calculations,id',
-            'clientTypeId' =>  'required|integer|exists:clients_types,id', //TODO: |exists:clients_types,id
+            'calculationId' =>  'required|integer|exists:calculations,id',
+            'clientTypeId' =>  'required|integer|exists:client_types,id', //TODO: |exists:clients_types,id
             'lastName' => 'required|string',
             'firstName' => 'required|string',
             'patronymic' => 'required|string',
@@ -44,6 +44,8 @@ class LeasingRequestRequest extends JsonRequest
         ];
 
         if($data['clientTypeId'] === 1){
+            $rules['email'] = 'required|string';
+            $rules['phone'] = 'required|string';
             $rules['legalInfo.inn'] = 'required|string';
             $rules['legalInfo.monthlyIncome'] = 'required|integer';
             $rules['legalInfo.creditPayment'] = 'required|integer';

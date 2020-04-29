@@ -19,7 +19,8 @@
               :headers="tableHeader"
               :items="annuity"
               :items-per-page="180"
-              class="elevation-1">
+              class="elevation-1"
+              :hide-default-footer="true">
             </v-data-table>
           </v-card>
         </v-tab-item>
@@ -32,7 +33,8 @@
               :headers="tableHeader"
               :items="even"
               :items-per-page="180"
-              class="elevation-1">
+              class="elevation-1"
+              :hide-default-footer="true">
             </v-data-table>
           </v-card>
         </v-tab-item>
@@ -45,7 +47,8 @@
               :headers="tableHeader"
               :items="irregular"
               :items-per-page="180"
-              class="elevation-1">
+              class="elevation-1"
+              :hide-default-footer="true">
             </v-data-table>
           </v-card>
         </v-tab-item>

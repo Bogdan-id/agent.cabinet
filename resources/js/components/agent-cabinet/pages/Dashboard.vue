@@ -7,15 +7,15 @@
     <ul>
       <li>
         <span class="agent-desc">Ваш куратор:</span>
-        <span class="agent-data">Тест Т.Т.</span>
+        <span class="agent-data">{{ agentData.name }}</span>
       </li>
       <li>
         <span class="agent-desc">Мобiльний:</span>
-        <span class="agent-data">+38 (095) 741 - 92 - 42</span>
+        <span class="agent-data">{{ agentData.phone }}</span>
       </li>
       <li>
         <span class="agent-desc">email:</span>
-        <span class="agent-data">test@test.com</span>
+        <span class="agent-data">{{ agentData.email }}</span>
       </li>
     </ul>
   </div>
@@ -51,9 +51,9 @@
           <v-list-item-content>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-list-item-title v-on="on" class="body-2">Тест Т.Т.</v-list-item-title>
+                <v-list-item-title v-on="on" class="body-2">{{ agentData.name }}</v-list-item-title>
               </template>
-              <span>Товкач Б.В.</span>
+              <span>{{ agentData.name }}</span>
             </v-tooltip>
             <v-list-item-subtitle class="caption">ФИО</v-list-item-subtitle>
           </v-list-item-content>
@@ -62,9 +62,9 @@
           <v-list-item-content>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-list-item-title v-on="on" class="body-2">(650) 555-1234</v-list-item-title>
+                <v-list-item-title v-on="on" class="body-2">{{ agentData.phone }}</v-list-item-title>
               </template>
-              <span>(650) 555-1234</span>
+              <span>{{ agentData.phone }}</span>
             </v-tooltip>
             <v-list-item-subtitle class="caption">Мобiльний</v-list-item-subtitle>
           </v-list-item-content>
@@ -73,9 +73,9 @@
           <v-list-item-content>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-list-item-title v-on="on" class="body-2">test@test.com</v-list-item-title>
+                <v-list-item-title v-on="on" class="body-2">{{ agentData.email }}</v-list-item-title>
               </template>
-              <span>test@test.com</span>
+              <span>{{ agentData.email }}</span>
             </v-tooltip>
             <v-list-item-subtitle class="caption">email</v-list-item-subtitle>
           </v-list-item-content>
@@ -106,12 +106,16 @@ export default {
   methods: {
     getManager() {
       let agent_id = this.$store.state.user.agent.id
+      this.$store.commit('toggleSpinner', true)
       axios
         .get(`/agent/manager/${agent_id}`)
         .then(response => {
+          this.$store.commit('toggleSpinner', false)
+          Object.assign(this.agentData, response.data)
           console.log(response)
         })
         .catch(error => {
+          this.$store.commit('toggleSpinner', false)
           console.log(error.response)
         })
     }

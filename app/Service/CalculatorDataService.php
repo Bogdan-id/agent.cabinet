@@ -70,6 +70,7 @@ class CalculatorDataService
             'insurance-franchise' => $this->calculateRequest->insuranceFranchise,
             'insurance-program' => $this->getInsuranceProgram(),
             'leasing-start-date' => $this->getStartDate(),
+            //'insurance-vehicle-type' =>  $this->getVehicleType()
         ];
        
         $graphTypes = $this->calculateRequest->graphType;
@@ -104,6 +105,38 @@ class CalculatorDataService
     {
         return (int) $this->calculateRequest->leasingObjectType['value'];
     }
+
+    //  /**
+    //  * @return int
+    //  */
+    // protected function getVehicleType(): int
+    // {
+    //     $engine = $this->calculateRequest->leasedAssertEngine;
+    //     switch (true) {
+    //         case $engine < 1601:
+    //             return 1;
+    //         case $engine > 1600 && $engine < 2001:
+    //             return 2;
+    //         case $engine > 2000 && $engine < 3001:
+    //             return 3;
+    //         case $engine > 3000:
+    //             return 4;
+    //         case 'ГАЗ':
+    //             return 6;
+    //         case 'Ravon':
+    //             return 7;
+    //         case 'Peugeot':
+    //             return 8;
+    //         case 'Citroen':
+    //             return 9;
+    //         case 'Lexus':
+    //             return 13;
+    //         case 'Mercedes-Benz':
+    //             return 14;
+    //         default:
+    //             return 1;
+    //     }
+    // }
 
     /**
      * @return int
@@ -180,7 +213,7 @@ class CalculatorDataService
             break;
         }
 
-        return $date->format('Y-m-d');
+        return $date->format('Y.m.d');
     }
 
      /**

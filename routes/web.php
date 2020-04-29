@@ -34,11 +34,17 @@ Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');
 
 Route::get('/getUserAgent', 'AgentsController@getUserAgent');
 Route::post('/agent/create', 'AgentsController@create');
+Route::get('/agent/manager/{agent_id}', 'AgentsController@getAgentManager')
+            ->where('agent_id', '[0-9]+');
+
 Route::get('calculations/agent/{id}', 'CalculateController@getCalculationByAgent');
 Route::get('calculation/{id}', 'CalculateController@getCalculationById');
 
+Route::post('leasing-reqeust/create', 'LeasingRequestController@create');
 
 Route::get('/getManagers', 'ManagerController@getManagers');
+Route::get('/updateManagers', 'ManagerController@updateManagers');
+
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
 
 Route::post('/calculate', 'CalculateController@create');

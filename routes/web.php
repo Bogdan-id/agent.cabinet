@@ -41,6 +41,8 @@ Route::get('calculations/agent/{id}', 'CalculateController@getCalculationByAgent
 Route::get('calculation/{id}', 'CalculateController@getCalculationById');
 
 Route::post('leasing-reqeust/create', 'LeasingRequestController@create');
+Route::get('leasing-reqeust/{id}', 'LeasingRequestController@getLeasingRequest')
+            ->where('id', '[0-9]+');
 
 Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');

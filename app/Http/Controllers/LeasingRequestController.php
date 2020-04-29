@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\LeasingRequestRequest;
 use App\Repositories\LeasingRequestRepository;
-use App\Models\LeasingRequest;
+use App\Models\{
+    LeasingRequest,
+    Agent
+};
 
 class LeasingRequestController extends Controller
 {
@@ -29,5 +32,14 @@ class LeasingRequestController extends Controller
        $leasingRequest = LeasingRequest::find($id);
 
        return response()->json($leasingRequest);
+    }
+
+    public function getLeasingRequestByAgent($agent_id)
+    {
+       $agent = Agent::find($agent_id);
+
+       $leasingRequests = $agent->leasingRequests;
+
+       return response()->json($leasingRequests);
     }
 }

@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
-use App\Repositories\CalculationRepository;
-use App\Repositories\Interfaces\CalculationRepositoryInterface;
+use App\Repositories\{
+    CalculationRepository,
+    LeasingRequestRepository
+};
+use App\Repositories\Interfaces\{
+    CalculationRepositoryInterface,
+    LeasingRequestRepositoryInterface
+};
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -15,7 +21,9 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             CalculationRepositoryInterface::class,
-            CalculationRepository::class
+            CalculationRepository::class,
+            LeasingRequestRepositoryInterface::class,
+            LeasingRequestRepository::class
         );
     }
 }

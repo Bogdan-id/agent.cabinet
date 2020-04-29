@@ -30,11 +30,18 @@ class Agent extends Model
     ];
 
     /**
-     * Get the agent record associated with the user.
+     * Get the manager record associated with the agent.
      */
     public function manager()
     {
         return $this->belongsTo('App\Models\Manager');
     }
 
+    /**
+     * Get the leasing requests records associated with the agent.
+     */
+    public function leasingRequests()
+    {
+        return $this->hasMany('App\Models\LeasingRequest');
+    }
 }

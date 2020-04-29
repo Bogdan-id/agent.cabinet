@@ -58,13 +58,21 @@
         :items-per-page="5"
         class="elevation-1">
         <template v-slot:item.actions="{ item }">
-          <v-icon
-            color="red lighten-1"
-            class="mr-2"
-            @click="toEdit(item.id)"
-            >
-            mdi-pencil
-          </v-icon>
+          <div class="d-flex">
+            <v-icon
+              @click="toEdit(item.id)"
+              color="red lighten-1"
+              class="mr-2"
+              >
+              mdi-pencil
+            </v-icon>
+            <v-icon
+              @click="toDetail(item.id)"
+              color="red lighten-1"
+              >
+              mdi-file-find-outline
+            </v-icon>
+          </div>
         </template>
       </v-data-table>
       <!-- <v-btn @click="test()">test</v-btn> -->
@@ -84,7 +92,7 @@ export default {
       { text: 'Модель', value: 'Модель', align: 'start' },
       { text: 'Сума', value: 'Сума', align: 'start' },
       { text: 'Дата', value: 'Дата', align: 'start' },
-      { text: 'Редагувати', value: 'actions', align: 'end' },
+      { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
     search: '',
@@ -107,22 +115,30 @@ export default {
     toEdit(id) {
       this.$router.push({name: 'Редагувати', params: {id: id, edit: true}})
     },
+    toDetail(id) {
+      let graphs = this.getGraphById(id)[0].result_data
+      this.$router.push({name: 'Графiки ', params: {data: graphs}})
+    },
+    getGraphById(id) {
+      return this.$store.state.graphs
+        .filter(val => val.id === id)
+    },
     getUserCalculations() {
-      console.log('get user calc')
       this.$store.commit('toggleSpinner', true)
       this.tabledata = []
       if(this.userData){
         const agentId = this.$store.state.user.agent.id
-        console.log(agentId)
-        console.log(`calculations/agent/${agentId}`)
         axios
           .get(`calculations/agent/${agentId}`)
           .then(response => {
-            console.log(response)
             this.$store.commit('toggleSpinner', false)
             if(response.data.length > 0)  {
               console.log('user has calculations')
               this.createTableData(response.data)
+              this.$store.commit('deleteGraph')
+              response.data.forEach(val => 
+                this.$store.commit('addGraph', val)
+              )
             } else {
               console.log('calculations epsent')
               this.tabledata = []
@@ -144,7 +160,6 @@ export default {
     async createTableData(object) {
       console.log(object)
       await object.map(val => {
-        console.log(val)
         let dataObj = {
           'Тип': val.request_data.leasingObjectType.label,
           'Марка': val.request_data.leasedAssertMark.name,
@@ -154,7 +169,6 @@ export default {
           'id': val.id
         }
         this.tabledata.push(dataObj)
-        console.log(this.tabledata)
       })
     },
   },

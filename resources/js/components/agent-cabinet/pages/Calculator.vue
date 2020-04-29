@@ -1,11 +1,10 @@
 <template>
-    <div>
-      <breads-crumb></breads-crumb>
-      <router-view></router-view>
-      <calculator-data  v-if="$route.name === 'Калькулятор лізингу'"></calculator-data>
-    </div>
+  <div>
+    <breads-crumb></breads-crumb>
+    <router-view :key="$route.path"></router-view>
+    <calculator-data  v-if="$route.name === 'Калькулятор лізингу'"></calculator-data>
+  </div>
 </template>
-
 
 <script>
 import BreadsCrumb from '../components/breadScrumb.vue'

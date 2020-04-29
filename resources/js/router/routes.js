@@ -91,7 +91,17 @@ const routes = [
             component: NewCalculation,
             meta: {
               title: 'Новый розрахунок'
-            }
+            },
+            children: [
+              {
+                path: 'chart',
+                name: 'Графiки',
+                component: ChartDiagram,
+                meta: {
+                  title: 'Графiк розрахункiв'
+                }
+              }
+            ]
           },
           {
             path: 'edit',
@@ -102,8 +112,8 @@ const routes = [
             }
           },
           {
-            path: 'chart',
-            name: 'chartDiagrams',
+            path: 'charts',
+            name: 'Графiки ',// indentation important
             component: ChartDiagram,
             meta: {
               title: 'Графiк розрахункiв'

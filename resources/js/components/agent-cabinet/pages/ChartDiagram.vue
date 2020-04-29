@@ -101,6 +101,7 @@ export default {
   },
   mounted() {
     let data = this.$router.currentRoute.params.data
+    console.log(data)
     Object.keys(data).forEach(object => {
       if(data[object].graph) {
         data[object].graph.splice(0, 1)

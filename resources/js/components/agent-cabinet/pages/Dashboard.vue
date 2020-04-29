@@ -7,7 +7,7 @@
     <ul>
       <li>
         <span class="agent-desc">Ваш куратор:</span>
-        <span class="agent-data">Товкач Б.В.</span>
+        <span class="agent-data">Тест Т.Т.</span>
       </li>
       <li>
         <span class="agent-desc">Мобiльний:</span>
@@ -51,7 +51,7 @@
           <v-list-item-content>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-list-item-title v-on="on" class="body-2">Товкач Б.В.</v-list-item-title>
+                <v-list-item-title v-on="on" class="body-2">Тест Т.Т.</v-list-item-title>
               </template>
               <span>Товкач Б.В.</span>
             </v-tooltip>

@@ -13,7 +13,7 @@ import UsefulMaterials from "../components/agent-cabinet/pages/UsefulMaterials.v
 import Reporting from "../components/agent-cabinet/pages/Reporting.vue"
 import Calculator from "../components/agent-cabinet/pages/Calculator.vue"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications.vue"
-import NewCalculation from '../components/agent-cabinet/pages/NewCalculation.vue'
+import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalculation.vue'
 // import CalculationEdit from '../components/agent-cabinet/pages/CalculationEdit.vue'
 import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMaterialsDetail.vue'
 import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram.vue'

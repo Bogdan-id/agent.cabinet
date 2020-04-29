@@ -219,8 +219,8 @@
 <script>
 
 import { PaperTable } from "../components"
-import { appTableColumns, appTableData } from './calculator-temp-data.js'
-import selectItems from './selectItems.js'
+import { appTableColumns, appTableData } from './Calculator/calculator-temp-data.js'
+import selectItems from './Calculator/selectItems.js'
 
 export default {
   data: () => ({

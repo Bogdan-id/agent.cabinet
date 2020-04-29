@@ -38,8 +38,7 @@
   }
 }
 
-/* Wait-answer */
-@media(max-width: 557px) {
+@media(max-width: 790px) {
   .mobile-agent-info {
     display: flex;
   }
@@ -51,6 +50,9 @@
       width: 100%;
     }
   }
+}
+
+@media(max-width: 557px) {
   .label__block-wrapper {
     width: 85%;
   }

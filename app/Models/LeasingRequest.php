@@ -26,6 +26,6 @@ class LeasingRequest extends Model
     ];
 
     protected $casts = [
-        //
+        'legal_info' => 'array'
     ];
 }

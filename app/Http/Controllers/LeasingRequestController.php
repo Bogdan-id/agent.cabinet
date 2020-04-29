@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\LeasingRequestRequest;
+use App\Repositories\LeasingRequestRepository;
 
 
 class LeasingRequestController extends Controller
@@ -13,9 +14,13 @@ class LeasingRequestController extends Controller
         //$this->middleware('auth');
     }
 
-    public function create(LeasingRequestRequest $request)
+    public function create(
+                        LeasingRequestRequest $request,
+                        LeasingRequestRepository $leasingRequestRepository)
     {
         $data = $request->validated();
-        dd($data);
+        $leasingRequest = $leasingRequestRepository->create($data);
+
+        return response()->json($leasingRequest);
     }
 }

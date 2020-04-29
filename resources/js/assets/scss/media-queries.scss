@@ -8,6 +8,7 @@
   .app__presentation-block {
     display: none;
   }
+  
   .app__form-block {
     width: 100%;
     height: auto;
@@ -39,6 +40,17 @@
 
 /* Wait-answer */
 @media(max-width: 557px) {
+  .mobile-agent-info {
+    display: flex;
+  }
+  .dashboard-container{
+    .agent-info {
+      display: none;
+    }
+    .main-card {
+      width: 100%;
+    }
+  }
   .label__block-wrapper {
     width: 85%;
   }

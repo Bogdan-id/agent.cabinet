@@ -65,11 +65,15 @@ export default {
   display: block;
   padding: 10px 10px;
   font-size: 14px;
+  a {
+    color: #424242!important;
+    text-decoration: underline;
+  }
   .not-active {
     pointer-events: none;
     cursor: default;
     text-decoration: none;
-    color: #c1c1c1;
+    color: #c1c1c1!important;
   }
   .slash {
     padding: 0 5px 0 5px; 

@@ -123,6 +123,7 @@ export default {
       if(this.userData){
         const agentId = this.$store.state.user.agent.id
         console.log(agentId)
+        console.log(`calculations/agent/${agentId}`)
         axios
           .get(`calculations/agent/${agentId}`)
           .then(response => {
@@ -177,6 +178,11 @@ export default {
       ? this.getUserCalculations()
       : false
   },
+  created() {
+    this.$store.state.user.agent 
+      ? this.getUserCalculations()
+      : false
+  }
 }
 </script>
 

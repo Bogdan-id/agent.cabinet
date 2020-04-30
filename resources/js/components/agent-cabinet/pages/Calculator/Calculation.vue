@@ -21,12 +21,12 @@
                   v-model="calcObj.leasingClientType"
                   :error-messages="leasingClientTypeErr"
                   row>
-                  <v-radio :value="2" color="black">
+                  <v-radio :value="1" color="black">
                     <template #label>
                       <span>Фiзична особа</span>
                     </template>
                   </v-radio>
-                  <v-radio :value="1" color="black">
+                  <v-radio :value="2" color="black">
                     <template #label>
                       <span>Юридична особа</span>
                     </template>

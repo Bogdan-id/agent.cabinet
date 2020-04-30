@@ -12,8 +12,8 @@ export default {
     {label: "Сільгосптехніка", value: 6}
   ],
   clientTypes: [ 
-    {text: "Юридична особа", value: 1}, 
-    {text: "Фізична особа", value: 2}
+    {text: "Юридична особа", value: 2}, 
+    {text: "Фізична особа", value: 1}
   ],
   currencys: [ 
     "UAH", 

@@ -1,7 +1,7 @@
 <template>
 <div>
   <v-dialog
-    v-model="showForm"
+    v-model="leasingApplicationForm"
     max-width="600">
     <v-card>
       <div class="complete-reg-form__title title">
@@ -75,7 +75,7 @@
             dense outlined>
           </v-text-field>
 
-          <div v-if="clientTypeId === 2">
+          <div v-if="clientTypeId === 1">
             <v-text-field
               @input="parseToInt('inn');
                 $v.legalInfo.inn.$touch()"
@@ -99,7 +99,9 @@
             </v-text-field>
             <v-select
               v-model="legalInfo.acquisitionTargetId"
-              :items="['Пока нет данных']"
+              :items="listItem"
+              item-text="target"
+              item-value="id"
               @blur="$v.legalInfo.acquisitionTargetId.$touch()"
               @change="$v.legalInfo.acquisitionTargetId.$touch()" 
               :error-messages="acquisitionTargetIdErr"
@@ -108,7 +110,7 @@
             </v-select>
           </div>
 
-          <div v-if="clientTypeId === 1">
+          <div v-if="clientTypeId === 2">
             <v-text-field
               @input="parseToInt('edrpou');
                 $v.legalInfo.edrpou.$touch()"
@@ -178,7 +180,7 @@
         <v-btn
           v-on="on"
           @click="test()"
-          color="black" 
+          color="grey darken-2" 
           dark small icon>
           <v-icon dark v-text="'mdi-email-send'"></v-icon>
         </v-btn>
@@ -192,7 +194,7 @@
           <v-btn
             v-on="on"
             @click="openForm()"
-            color="black" 
+            color="grey darken-2" 
             icon small dark>
             <v-icon dark>mdi-plus-thick</v-icon>
           </v-btn>
@@ -205,7 +207,7 @@
         <template v-slot:activator="{ on }">
           <v-btn 
             v-on="on"
-            color="black" 
+            color="grey darken-2" 
             small icon dark>
             <v-icon dark v-text="'mdi-download'"></v-icon>
           </v-btn>
@@ -228,11 +230,14 @@ export default {
   mixins: [validationMixin],
   data: () => ({
     select: selectItems,
-    showForm: false,
+    leasingApplicationForm: false,
     commonErr: ['Обов`язкове поле'],
     pasteEvent: false,
     loading: false,
     creditPayment: null,
+
+    responseData: null,
+    listItem: null,
 
     agentId: null,
     calculationId: null,
@@ -273,14 +278,14 @@ export default {
       this.clientTypeId === 1
         ? validateObj = Object.assign({},
           this.commonRules,
-          this.legalPerson
+          this.individualPerson
         )
         : false
 
       this.clientTypeId === 2
         ? validateObj = Object.assign({},
           this.commonRules,
-          this.individualPerson
+          this.legalPerson
         )
         : false
       return validateObj
@@ -331,7 +336,7 @@ export default {
       }
     },
     isLegalPerson() {
-      return this.clientTypeId === 1
+      return this.clientTypeId === 2
     },
     /* error handlers */
     lastNameErr() {
@@ -448,11 +453,18 @@ export default {
       let object = this.object()
       console.log(this.requestObj(object))
       axios.
-        post('leasing-reqeust/create', this.requestObj(object))
+        post('/leasing-reqeust/create', this.requestObj(object))
         .then(response => {
           console.log(response)
-          // handle pop-up width data
+          this.$notify({
+            group: 'success',
+            title: 'Заявку успiшно вiдправленно',
+            text: '',
+          })
           this.loading = false
+          setTimeout(() => {
+            this.leasingApplicationForm = false
+          }, 5000);
         })
         .catch(error => {
           console.log(error.response)
@@ -460,7 +472,7 @@ export default {
           this.$notify({
             group: 'error',
             title: 'Помилка',
-            text: `${e.response.status} \n ${e.response.data.message}`,
+            text: `${error.response.status} \n ${error.response.data.message}`,
           })
         })
     },
@@ -487,7 +499,19 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
-      this.showForm = true
+      this.leasingApplicationForm = true
+      this.getListItem()
+    },
+    getListItem() {
+      axios
+        .get('/getAcquisitionTargets')
+        .then(response => {
+          console.log(response)
+          this.listItem = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
     },
     test() {
       console.log(this.$v)
@@ -590,5 +614,8 @@ export default {
   created() {
     this.getDefaultProperties()
   },
+  mounted() {
+    console.log(this.$v)
+  }
 }
 </script>

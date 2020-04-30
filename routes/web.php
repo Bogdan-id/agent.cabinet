@@ -46,6 +46,8 @@ Route::get('leasing-reqeust/{id}', 'LeasingRequestController@getLeasingRequest')
 Route::get('leasing-reqeust/agent/{agent_id}', 'LeasingRequestController@getLeasingRequestByAgent')
             ->where('agent_id', '[0-9]+');
 
+Route::get('/getAcquisitionTargets', 'AcquisitionTargetController@getAcquisitionTargets');
+
 Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');
 

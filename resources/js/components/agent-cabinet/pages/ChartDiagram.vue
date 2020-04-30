@@ -75,7 +75,7 @@ export default {
     // data to props 
     graphData: null,
     // data
-    currentTab: "even",
+    currentTab: null,
     search: '',
     tableHeader: [
       { text: '№', value: 'n', align: 'end'},
@@ -123,6 +123,11 @@ export default {
     })
     this.addObjects(this.graphData)
     document.body.scrollTop = 0
+  },
+  watch:{
+    graphData(val) {
+      console.log(val)
+    }
   }
 }
 </script>

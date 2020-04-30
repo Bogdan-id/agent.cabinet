@@ -518,7 +518,6 @@ export default {
     },
     getDefaultProperties() {
       this.agentId = this.$store.state.user.agent.id
-      this.graphType = this.graph
       this.calculationId = this.data.id
       this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`
       this.clientTypeId = this.data.request_data.leasingClientType
@@ -609,13 +608,17 @@ export default {
     'creditPayment': function(value) {
       if(!value) return value
       this.legalInfo.creditPayment = parseInt(value)
+    },
+    graph(val) {
+      this.graphType = val
+      console.log(val)
     }
   },
   created() {
     this.getDefaultProperties()
   },
   mounted() {
-    console.log(this.$v)
+    this.graphType = this.graph
   }
 }
 </script>

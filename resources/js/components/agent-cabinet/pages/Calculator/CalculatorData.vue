@@ -116,7 +116,7 @@ export default {
       this.$router.push({name: 'Редагувати', params: {id: id, edit: true}})
     },
     toDetail(id) {
-      let graphs = this.getGraphById(id)[0].result_data
+      let graphs = this.getGraphById(id)[0]
       this.$router.push({name: 'Графiки ', params: {data: graphs}})
     },
     getGraphById(id) {

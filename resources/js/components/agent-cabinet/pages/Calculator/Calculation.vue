@@ -820,7 +820,7 @@ export default {
             console.log(response)
             this.$store.commit('toggleSpinner', false)
             // this.$router.push('/calculator/chart')
-            let data = response.data.result_data
+            let data = response.data
             this.$router.push({name: 'Графiки', params: {data: data}})
           })
           .catch(error => {

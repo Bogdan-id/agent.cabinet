@@ -1,10 +1,183 @@
 <template>
+<div>
+  <v-dialog
+    v-model="showForm"
+    max-width="600">
+    <v-card>
+      <div class="complete-reg-form__title title">
+        <div class="complete-reg-form__title-logo"></div>
+        <span class="d-block title">Заявка на лiзинг</span>
+      </div>
+      <v-card-text class="pb-0">
+        <v-row>
+        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
+          <v-text-field
+            v-model="lastName"
+            @blur="$v.lastName.$touch()"
+            @input="$v.lastName.$touch()" 
+            :error-messages="lastNameErr"
+            label="Прiзвище"
+            dense outlined>
+          </v-text-field>
+          <v-text-field
+            v-model="firstName"
+            @blur="$v.firstName.$touch()"
+            @input="$v.firstName.$touch()" 
+            :error-messages="firstNameErr"
+            label="Им`я"
+            dense outlined>
+          </v-text-field>
+          <v-text-field
+            v-model="patronymic"
+            @blur="$v.patronymic.$touch()"
+            @input="$v.patronymic.$touch()" 
+            :error-messages="patronymicErr"
+            label="Побатьковi"
+            dense outlined>
+          </v-text-field>
+          <v-select
+            v-model="region"
+            @blur="$v.region.$touch()"
+            @change="$v.region.$touch()" 
+            :error-messages="regionErr"
+            :items="select.regions"
+            label="Область"
+            dense outlined>
+          </v-select>
+          <v-text-field
+            v-model="phone"
+            @blur="isLegalPerson ? false : $v.phone.$touch()"
+            @input="isLegalPerson ? false : $v.phone.$touch();
+              applyMask()" 
+            id="number"
+            :error-messages="isLegalPerson ? legalPhone : phoneErr"
+            label="Телефон"
+            dense outlined>
+          </v-text-field>
+          <v-text-field
+            v-model="email"
+            @blur="isLegalPerson ? false : $v.email.$touch()"
+            @input="isLegalPerson ? false : $v.email.$touch()" 
+            :error-messages="isLegalPerson ? legalEmail : emailErr"
+            label="email"
+            dense outlined>
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
+          <v-text-field
+            v-model="creditPayment"
+            :error-messages="creditPaymentErr"
+            @blur="$v.creditPayment.$touch()"
+            @input="parseToInt('creditPayment');
+              $v.creditPayment.$touch()"
+            id="creditPayment"
+            label="Щомісячний платіж (за міс. грн) поa кредитам та ін."
+            dense outlined>
+          </v-text-field>
+
+          <div v-if="clientTypeId === 2">
+            <v-text-field
+              @input="parseToInt('inn');
+                $v.legalInfo.inn.$touch()"
+              @blur="$v.legalInfo.inn.$touch()"
+              v-model="legalInfo.inn"
+              :error-messages="innErr"
+              id="inn"
+              max="10"
+              label="Iдентифiкацiйний код"
+              dense outlined>
+            </v-text-field>
+            <v-text-field
+              @input="parseToInt('monthlyIncome');
+                $v.legalInfo.monthlyIncome.$touch()"
+              @blur="$v.legalInfo.monthlyIncome.$touch()"
+              v-model="legalInfo.monthlyIncome"
+              :error-messages="monthlyIncomeErr"
+              id="monthlyIncome"
+              label="Середньомісячний дохід (грн)"
+              dense outlined>
+            </v-text-field>
+            <v-select
+              v-model="legalInfo.acquisitionTargetId"
+              :items="['Пока нет данных']"
+              @blur="$v.legalInfo.acquisitionTargetId.$touch()"
+              @change="$v.legalInfo.acquisitionTargetId.$touch()" 
+              :error-messages="acquisitionTargetIdErr"
+              label="Мета придбання авто"
+              dense outlined>
+            </v-select>
+          </div>
+
+          <div v-if="clientTypeId === 1">
+            <v-text-field
+              @input="parseToInt('edrpou');
+                $v.legalInfo.edrpou.$touch()"
+              @blur="$v.legalInfo.edrpou.$touch()"
+              v-model="legalInfo.edrpou"
+              :error-messages="edrpouErr"
+              id="edrpou"
+              max="8"
+              label="ЄДРПОУ"
+              dense outlined>
+            </v-text-field>
+            <v-text-field
+              v-model="legalInfo.companyName"
+              @blur="$v.legalInfo.companyName.$touch()"
+              @input="$v.legalInfo.companyName.$touch()" 
+              :error-messages="companyNameErr"
+              label="Назва компанії"
+              dense outlined>
+            </v-text-field>
+            <v-text-field
+              @input="parseToInt('currencyBalance');
+                $v.legalInfo.currencyBalance.$touch()"
+              v-model="legalInfo.currencyBalance"
+              @blur="$v.legalInfo.currencyBalance.$touch()"
+              :error-messages="currencyBalanceErr"
+              id="currencyBalance"
+              label="Валютний баланс"
+              dense outlined>
+            </v-text-field>
+            <v-text-field
+              v-model="legalInfo.equity"
+              @blur="$v.legalInfo.equity.$touch()"
+              @input="$v.legalInfo.equity.$touch()" 
+              :error-messages="equityErr"
+              label="Власный капiтал"
+              dense outlined>
+            </v-text-field>
+            <!-- <v-text-field
+              v-model="legalInfo.balances"
+              label="Мета придбання авто"
+              dense outlined>
+            </v-text-field> -->
+          </div>
+        </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="d-flex justify-center pb-6 pt-3">
+            <span>
+              <v-btn @click="submit()" 
+                  :loading="loading"
+                  class="d-block white--text" 
+                  color="grey darken-3">
+                <v-icon v-show="validData" v-text="'mdi-check-bold'">
+                </v-icon>
+                &nbsp;Вiдправити заявку
+              </v-btn>
+            </span>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
   <v-card-text class="d-flex justify-space-around align-center">
     <span>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
         <v-btn
           v-on="on"
+          @click="test()"
           color="black" 
           dark small icon>
           <v-icon dark v-text="'mdi-email-send'"></v-icon>
@@ -18,12 +191,13 @@
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
+            @click="openForm()"
             color="black" 
             icon small dark>
             <v-icon dark>mdi-plus-thick</v-icon>
           </v-btn>
         </template>
-        <span>Створити заявку на лiзинг</span>
+        <span>відправити запит на лізинг</span>
       </v-tooltip>
     </span>
     <span>
@@ -40,4 +214,381 @@
       </v-tooltip>
     </span>
   </v-card-text>
+</div>
 </template>
+
+<script>
+import selectItems from './Calculator/selectItems.js'
+import { validationMixin } from 'vuelidate'
+import { required, email } from 'vuelidate/lib/validators'
+import axios from 'axios'
+
+export default {
+  props: ['graph', 'data'],
+  mixins: [validationMixin],
+  data: () => ({
+    select: selectItems,
+    showForm: false,
+    commonErr: ['Обов`язкове поле'],
+    pasteEvent: false,
+    loading: false,
+    creditPayment: null,
+
+    agentId: null,
+    calculationId: null,
+    clientTypeId: null,
+    lastName: null,
+    firstName: null,
+    patronymic: null,
+    region: null,
+    phone: null,
+    email: null,
+    leasingObject: null,
+    advance: null,
+    leasingTerm: null,
+    leasingAmount: null,
+    graphType: null,
+    legalInfo: {
+      creditPayment: null,
+      inn: null,
+      monthlyIncome: null,
+      acquisitionTargetId: null,
+      edrpou: null,
+      companyName: null,
+      currencyBalance: null,
+      equity: null,
+      // balances: null, // - waiting... (пока не отправляй)
+    },
+    _token: null
+  }),
+   validations() {
+      return this.validationRules
+  },
+  computed: {
+    validData() {
+      return !this.$v.$invalid && this.$v.$dirty
+    },
+    validationRules() {
+      let validateObj = null
+      this.clientTypeId === 1
+        ? validateObj = Object.assign({},
+          this.commonRules,
+          this.legalPerson
+        )
+        : false
+
+      this.clientTypeId === 2
+        ? validateObj = Object.assign({},
+          this.commonRules,
+          this.individualPerson
+        )
+        : false
+      return validateObj
+    },
+    commonRules() {
+      return {
+        lastName: { required },
+        firstName: { required },
+        patronymic: { required },
+        region: { required },
+        creditPayment: { required },
+      }
+    },
+    individualPerson() {
+      return {
+        phone: { 
+          minLength: value => {
+            if(value == null) return false
+            return value.replace(/[^\d]/g, '').length === 12
+          }
+        },
+        email: { email, required },
+        legalInfo: {
+          inn: { 
+            minLength: value => {
+              if(value == null) return false
+              return value.length === 10
+            }
+           }, 
+          monthlyIncome: { required },
+          acquisitionTargetId: { required },
+        }
+      }
+    },
+    legalPerson() {
+      return {
+        legalInfo: {
+          edrpou: { 
+            minLength: value => {
+              if(value == null) return false
+              return value.length === 8
+            }
+          },
+          companyName: { required },
+          currencyBalance: { required },
+          equity: { required },
+        }
+      }
+    },
+    isLegalPerson() {
+      return this.clientTypeId === 1
+    },
+    /* error handlers */
+    lastNameErr() {
+      if (!this.$v.lastName.$error) return
+      return this.commonErr
+    },
+    firstNameErr() {
+      if (!this.$v.firstName.$error) return
+      return this.commonErr
+    },
+    patronymicErr() {
+      if (!this.$v.patronymic.$error) return
+      return this.commonErr
+    },
+    regionErr() {
+      if (!this.$v.region.$error) return
+      return this.commonErr
+    },
+    phoneErr() {
+      if (!this.$v.phone.$error) return
+      return ['Невiрний номер']
+    },
+    emailErr() {
+      if (!this.$v.email.$error) return
+      return ['Невiрний email']
+    },
+    creditPaymentErr() {
+      if (!this.$v.creditPayment.$error) return
+      return this.commonErr
+    },
+    innErr() {
+      if (!this.$v.legalInfo.inn.$error) return
+      return ['Повинно бути 10 цифр']
+    },
+    monthlyIncomeErr() {
+      if (!this.$v.legalInfo.monthlyIncome.$error) return
+      return this.commonErr
+    },
+    acquisitionTargetIdErr() {
+      if (!this.$v.legalInfo.acquisitionTargetId.$error) return
+      return this.commonErr
+    },
+    edrpouErr() {
+      if (!this.$v.legalInfo.edrpou.$error) return
+      return ['Повинно бути 8 цифр']
+    },
+    companyNameErr() {
+      if (!this.$v.legalInfo.companyName.$error) return
+      return this.commonErr
+    },
+    currencyBalanceErr() {
+      if (!this.$v.legalInfo.currencyBalance.$error) return
+      return this.commonErr
+    },
+    equityErr() {
+      if (!this.$v.legalInfo.equity.$error) return
+      return this.commonErr
+    },
+    legalEmail() {
+      return ''
+    },
+    legalPhone() {
+      return ''
+    }
+  },
+  methods: {
+    submit() {
+      !this.$v.$invalid
+      && this.$v.$dirty
+        ? this.sendRequest()
+        : this.highlightErrors()
+    },
+    object() {
+      return {
+        agentId: this.agentId,
+        calculationId: this.calculationId,
+        clientTypeId: this.clientTypeId,
+        lastName: this.lastName,
+        firstName: this.firstName,
+        patronymic: this.patronymic,
+        region: this.region,
+        phone: this.phone,
+        email: this.email,
+        leasingObject: this.leasingObject,
+        advance: this.advance,
+        leasingTerm: this.leasingTerm,
+        leasingAmount: this.leasingAmount,
+        graphType: this.graphType,
+        legalInfo: {
+          creditPayment: this.legalInfo.creditPayment,
+
+          inn: this.legalInfo.inn,
+          monthlyIncome: this.legalInfo.monthlyIncome,
+          acquisitionTargetId: this.legalInfo.acquisitionTargetId,
+          
+          edrpou: this.legalInfo.edrpou,
+          companyName: this.legalInfo.companyName,
+          currencyBalance: this.legalInfo.currencyBalance,
+          equity: this.legalInfo.equity,
+          // balances: this.legalInfo.balances, // - waiting... (пока не отправляй)
+        },
+        _token: this._token
+      }
+    },
+    requestObj(object) {
+      let finalObj = null
+      this.isLegalPerson === false
+        ? finalObj = this.deleteLegalFields(object)
+        : finalObj = this.deleteIndividualFields(object)
+      return finalObj
+    },
+    sendRequest() {
+      this.loading = true
+      let object = this.object()
+      console.log(this.requestObj(object))
+      axios.
+        post('leasing-reqeust/create', this.requestObj(object))
+        .then(response => {
+          console.log(response)
+          // handle pop-up width data
+          this.loading = false
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.loading = false
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${e.response.status} \n ${e.response.data.message}`,
+          })
+        })
+    },
+    highlightErrors() {
+      this.$v.$anyError
+      this.$v.$touch()
+    },
+    deleteIndividualFields(object) {
+      if(object.phone === null || object.phone === 'undefined') delete object.phone
+      if(object.email === null || object.email === 'undefined') delete object.email
+      delete object.legalInfo.inn
+      delete object.legalInfo.monthlyIncome
+      delete object.legalInfo.acquisitionTargetId
+      return object
+    },
+    deleteLegalFields(object) {
+      delete object.legalInfo.edrpou,
+      delete object.legalInfo.companyName
+      delete object.legalInfo.currencyBalance
+      delete object.legalInfo.equity
+      return object
+    },
+    getCsrf() {
+			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    openForm() {
+      this.showForm = true
+    },
+    test() {
+      console.log(this.$v)
+    },
+    getDefaultProperties() {
+      this.agentId = this.$store.state.user.agent.id
+      this.graphType = this.graph
+      this.calculationId = this.data.id
+      this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`
+      this.clientTypeId = this.data.request_data.leasingClientType
+      this.advance = this.data.request_data.advance
+      this.leasingTerm = this.data.request_data.leasingTerm
+      this.leasingAmount = this.data.request_data.leasingAmount
+      this._token = this.getCsrf()
+    },
+    parseToInt(id) {
+      let input = new Event('input', {bubbles: true})
+      let el = document.getElementById(id)
+      let value = el.value
+      let intVal = el.value.replace(/[^\d]/g, '')
+      if(value !== intVal) {
+        el.value = intVal
+        el.dispatchEvent(input)
+      }
+    },
+    applyMask() {
+			const el = document.getElementById('number')
+			const event = new Event('input', {bubbles: true})
+			const mask = '+38 (0##) ### - ## - ##'
+			const sign = '#'
+
+			const numLengthRe = /[^#\d+]/g
+			const notDigit = /[^\d]/g
+
+			const firstIndex = mask.indexOf(sign)
+			const countryCode = mask.slice(0, firstIndex)
+			const numLength = mask.slice(firstIndex).replace(numLengthRe, '').length
+			const number = this.phone.replace(countryCode, '').replace(numLengthRe, '')
+			const cCpresent = this.phone.indexOf(countryCode)
+
+			let splitMask = mask.split('')
+			let indexes = []
+
+			splitMask.forEach((val, i) => {
+				val === sign ? indexes.push(i) : false
+			})
+			let fillMask = (val) => {
+				val.split('').forEach((val, i) => {
+						indexes[i] ? splitMask[indexes[i]] = val : false
+				})
+			}
+			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
+				fillMask(
+					this.phone
+						.replace(countryCode, '')
+						.replace(numLengthRe, '')
+						.slice(number.length - numLength)
+				)
+			} else if(number.length >= numLength && cCpresent === -1) {
+				fillMask(
+					this.phone
+						.replace(numLengthRe, '')
+						.slice(number.length - numLength)
+				)
+			} else if (this.phone.length > 1){
+				fillMask(
+					this.phone
+						.slice(firstIndex)
+						.replace(notDigit, '')
+				)
+			} else if (this.phone.length <= 1) {
+				fillMask(
+					this.phone
+						.replace(notDigit, '')
+				)
+			}
+			const joinMask = splitMask.join('').replace(/[^\d]+$/, '')
+			if(el.value !== joinMask) {
+				el.value = joinMask
+				el.setSelectionRange(splitMask.indexOf(sign), splitMask.indexOf(sign))
+				el.dispatchEvent(event)
+			}
+			this.pasteEvent = false
+		},
+  },
+  watch: {
+    'legalInfo.currencyBalance': function(value) {
+      if(!value) return value
+      this.legalInfo.currencyBalance = parseInt(value)
+    },
+    'legalInfo.monthlyIncome': function(value) {
+      if(!value) return value
+      this.legalInfo.monthlyIncome = parseInt(value)
+    },
+    'creditPayment': function(value) {
+      if(!value) return value
+      this.legalInfo.creditPayment = parseInt(value)
+    }
+  },
+  created() {
+    this.getDefaultProperties()
+  },
+}
+</script>

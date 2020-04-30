@@ -19,16 +19,51 @@ import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMater
 import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram.vue'
 
 const routes = [
-  { path: '/', component: Authorization },
-	{ path: '/login', component: Authorization, props: true, name: 'authorization' },
-  { path: '/register', component: Registration},
-  { path: '/verification', component: WaitAnswer },
-  { path: '/finish-register', component: CompleteRegistration },
+  { 
+    path: '/', 
+    component: Authorization,
+    meta: {
+      title: 'Увiйти'
+    }
+  },
+	{ 
+    path: '/login', 
+    component: Authorization, 
+    props: true, 
+    name: 'authorization',
+    meta: {
+      title: 'Увiйти'
+    }
+  },
+  { 
+    path: '/register', 
+    component: Registration,
+    meta: {
+      title: 'Реєстрація'
+    }
+  },
+  { 
+    path: '/verification', 
+    component: WaitAnswer,
+    meta: {
+      title: 'Очiкуйте зворотнього зв`язку'
+    }
+  },
+  { 
+    path: '/finish-register', 
+    component: CompleteRegistration,
+    meta: {
+      title: 'Завершення реєстрації'
+    }
+  },
+
 	{ 
 		path: '/home', 
     component: DashboardLayout,
     name: 'Головна',
     redirect: "/dashboard",
+
+    /* Головна */
     meta: {
       title: 'Головна'
     },

@@ -52,8 +52,7 @@ class CalculatorDataService
             'leased-assert-mark' => ($this->calculateRequest->leasedAssertMark ?? [])['name'] ?? null,
             'leased-assert-model' => ($this->calculateRequest->leasedAssertModel ?? [])['name'] ?? null,
             'leased-assert-engine' => (int) $this->calculateRequest->leasedAssertEngine,
-            'client-type' => (int) $this->calculateRequest->leasingClientType,    
-            'client-type' => (int) $this->calculateRequest->leasingClientType,
+            'client-type' => (int) $this->calculateRequest->leasingClientType,  
             'currency' => $this->getCurrency(),
             'leasing-currency' => $this->getLeasingCurrency(),//
             'payment-PF' => (int) $this->calculateRequest->paymentPf,

@@ -6,8 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
     user: {},
+    graphs: [],
     loader: false,
-    userCalculations: [],
+    // userCalculations: [],
     breadScrumb: {}
   },
   mutations: {
@@ -17,12 +18,20 @@ export default new Vuex.Store({
     toggleSpinner(state, value) {
       state.loader = value
     },
-    addCalculation(state, value) {
-      state.userCalculations.push(value) 
-    },
+    // addCalculation(state, value) {
+    //   state.userCalculations.push(value) 
+    // },
     setBreadScrumb(state, links) {
       state.breadScrumb = Object.assign({}, links)
+    },
+
+    addGraph(state, value) {
+      state.graphs.push(value)
+    },
+    deleteGraph(state) {
+      state.graphs = []
     }
+    
   },
   actions: {
     add_user({commit}, userObj) {

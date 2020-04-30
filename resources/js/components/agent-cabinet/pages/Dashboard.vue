@@ -1,196 +1,212 @@
 <template>
-  <div>
-
-    <!--Stats cards-->
-    <div class="row">
-      <div class="col-md-6 col-xl-3" v-for="stats in statsCards" :key="stats.title">
-        <stats-card>
-          <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
-            <i :class="stats.icon"></i>
-          </div>
-          <div class="numbers" slot="content">
-            <p>{{stats.title}}</p>
-            {{stats.value}}
-          </div>
-          <div class="stats" slot="footer">
-            <i :class="stats.footerIcon"></i> {{stats.footerText}}
-          </div>
-        </stats-card>
-      </div>
+<div>
+  <div class="mobile-agent-info">
+    <div class="icon-wrapper">
+      <v-icon size="60" v-text="'mdi-account-circle'" dark></v-icon>
     </div>
-
-    <!--Charts-->
-    <div class="row">
-
-      <div class="col-12">
-        <chart-card title="Users behavior"
-                    sub-title="24 Hours performance"
-                    :chart-data="usersChart.data"
-                    :chart-options="usersChart.options">
-          <span slot="footer">
-            <i class="ti-reload"></i> Updated 3 minutes ago
-          </span>
-          <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Open
-            <i class="fa fa-circle text-danger"></i> Click
-            <i class="fa fa-circle text-warning"></i> Click Second Time
-          </div>
-        </chart-card>
-      </div>
-
-      <div class="col-md-6 col-12">
-        <chart-card title="Email Statistics"
-                    sub-title="Last campaign performance"
-                    :chart-data="preferencesChart.data"
-                    chart-type="Pie">
-          <span slot="footer">
-            <i class="ti-timer"></i> Campaign set 2 days ago</span>
-          <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Open
-            <i class="fa fa-circle text-danger"></i> Bounce
-            <i class="fa fa-circle text-warning"></i> Unsubscribe
-          </div>
-        </chart-card>
-      </div>
-
-      <div class="col-md-6 col-12">
-        <chart-card title="2015 Sales"
-                    sub-title="All products including Taxes"
-                    :chart-data="activityChart.data"
-                    :chart-options="activityChart.options">
-          <span slot="footer">
-            <i class="ti-check"></i> Data information certified
-          </span>
-          <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Tesla Model S
-            <i class="fa fa-circle text-warning"></i> BMW 5 Series
-          </div>
-        </chart-card>
-      </div>
-
-    </div>
-
+    <ul>
+      <li>
+        <span class="agent-desc">Ваш куратор:</span>
+        <span class="agent-data">{{ agentData.name }}</span>
+      </li>
+      <li>
+        <span class="agent-desc">Мобiльний:</span>
+        <span class="agent-data">{{ agentData.phone }}</span>
+      </li>
+      <li>
+        <span class="agent-desc">email:</span>
+        <span class="agent-data">{{ agentData.email }}</span>
+      </li>
+    </ul>
   </div>
+  <div class="dashboard-container">
+    <v-card class="main-card">
+      <div class="main-card-banner">
+        <div class="content-wrapper">
+          <div class="content-text white--text">
+            <h3>*ЗАОЩАДЖУЙ ЧАС ТА ГРОЩI — ЛЕГКО ПЕРЕХОДЬ НА ЛIЗИНГ ОНЛАЙН!*</h3>
+            <p class="content-paragraph">Сформуйте заявку в режимі онлайн у декiлька простих шагiв
+            </p>
+          </div>
+          <v-btn
+            to="calculator/new"
+            color="red darken-2" 
+            class="main-card__button white--text ml-1" 
+            large>
+            Хочу легкий лiзинг
+          </v-btn>
+        </div>
+      </div>
+    </v-card>
+    <v-card class="agent-info">
+        <div style="width: 100%; display: flex; background: #ef5350; color: white; flex-direction: column; align-items: center;">
+        <v-card-title class="subtitle-2 text-center d-inline-block">
+          Ваш куратор
+        </v-card-title>
+        <v-icon size="70" v-text="'mdi-account-circle'" dark></v-icon>
+        </div>
+        <v-card-text style="padding: 0!important">
+        <v-list two-line>
+          <v-list-item>
+          <v-list-item-content>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-list-item-title v-on="on" class="body-2">{{ agentData.name }}</v-list-item-title>
+              </template>
+              <span>{{ agentData.name }}</span>
+            </v-tooltip>
+            <v-list-item-subtitle class="caption">ФИО</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-list-item-title v-on="on" class="body-2">{{ agentData.phone }}</v-list-item-title>
+              </template>
+              <span>{{ agentData.phone }}</span>
+            </v-tooltip>
+            <v-list-item-subtitle class="caption">Мобiльний</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-list-item-title v-on="on" class="body-2">{{ agentData.email }}</v-list-item-title>
+              </template>
+              <span>{{ agentData.email }}</span>
+            </v-tooltip>
+            <v-list-item-subtitle class="caption">email</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      </v-card-text>
+    </v-card>
+  </div>
+</div>
 </template>
 <script>
-import { StatsCard, ChartCard } from "../components/index";
-import Chartist from 'chartist';
+import axios from 'axios'
+
 export default {
-  components: {
-    StatsCard,
-    ChartCard
+  data: () => ({
+    agentData: {
+      id: null,
+      name: null,
+      phone: null,
+      email: null
+    }
+  }),
+  computed: {
+    hasUser() {
+      return Object.keys(this.$store.state.user).length > 0
+    }
   },
-  /**
-   * Chart data used to render stats, charts. Should be replaced with server data
-   */
-  data() {
-    return {
-      statsCards: [
-        {
-          type: "warning",
-          icon: "ti-server",
-          title: "Capacity",
-          value: "105GB",
-          footerText: "Updated now",
-          footerIcon: "ti-reload"
-        },
-        {
-          type: "success",
-          icon: "ti-wallet",
-          title: "Revenue",
-          value: "$1,345",
-          footerText: "Last day",
-          footerIcon: "ti-calendar"
-        },
-        {
-          type: "danger",
-          icon: "ti-pulse",
-          title: "Errors",
-          value: "23",
-          footerText: "In the last hour",
-          footerIcon: "ti-timer"
-        },
-        {
-          type: "info",
-          icon: "ti-twitter-alt",
-          title: "Followers",
-          value: "+45",
-          footerText: "Updated now",
-          footerIcon: "ti-reload"
-        }
-      ],
-      usersChart: {
-        data: {
-          labels: [
-            "9:00AM",
-            "12:00AM",
-            "3:00PM",
-            "6:00PM",
-            "9:00PM",
-            "12:00PM",
-            "3:00AM",
-            "6:00AM"
-          ],
-          series: [
-            [287, 385, 490, 562, 594, 626, 698, 895, 952],
-            [67, 152, 193, 240, 387, 435, 535, 642, 744],
-            [23, 113, 67, 108, 190, 239, 307, 410, 410]
-          ]
-        },
-        options: {
-          low: 0,
-          high: 1000,
-          showArea: true,
-          height: "245px",
-          axisX: {
-            showGrid: false
-          },
-          lineSmooth: Chartist.Interpolation.simple({
-            divisor: 3
-          }),
-          showLine: true,
-          showPoint: false
-        }
-      },
-      activityChart: {
-        data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "Mai",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-          ],
-          series: [
-            [542, 543, 520, 680, 653, 753, 326, 434, 568, 610, 756, 895],
-            [230, 293, 380, 480, 503, 553, 600, 664, 698, 710, 736, 795]
-          ]
-        },
-        options: {
-          seriesBarDistance: 10,
-          axisX: {
-            showGrid: false
-          },
-          height: "245px"
-        }
-      },
-      preferencesChart: {
-        data: {
-          labels: ["62%", "32%", "6%"],
-          series: [62, 32, 6]
-        },
-        options: {}
-      }
-    };
+  methods: {
+    getManager() {
+      let agent_id = this.$store.state.user.agent.id
+      this.$store.commit('toggleSpinner', true)
+      axios
+        .get(`/agent/manager/${agent_id}`)
+        .then(response => {
+          this.$store.commit('toggleSpinner', false)
+          Object.assign(this.agentData, response.data)
+          console.log(response)
+        })
+        .catch(error => {
+          this.$store.commit('toggleSpinner', false)
+          console.log(error.response)
+        })
+    }
+  },
+  watch: {
+    hasUser() {
+      console.log(this.$store.state.user)
+      this.getManager()
+    }
+  },
+  mounted() {
+    if(this.hasUser) {
+      console.log(this.$store.state.user)
+      this.getManager()
+    }
   }
-};
+}
 </script>
-<style>
+
+<style lang="scss">
+.mobile-agent-info {
+  border-radius: 4px; 
+  margin-bottom: 12px; 
+  overflow: hidden;
+  .icon-wrapper {
+    align-items: stretch;
+    background: #ef5350;
+    padding: 15px;
+  }
+  // padding: 15px; 
+  display: none;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 
+    0 2px 2px 0 rgba(0,0,0,.14), 
+    0 1px 5px 0 rgba(0,0,0,.12);
+  ul {
+    padding: 15px 15px 15px 0;
+    list-style: none;
+    margin-bottom: 0;
+  }
+  .agent-desc {
+    font-size: 12px;
+    padding-right: 4px;
+  }
+  .agent-data {
+    transition: all 0.3s ease;
+  }
+  .agent-data {
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+.dashboard-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  .agent-info {
+    width: 24%;
+    background: #f4f3ef!important;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .main-card {
+    width: 74%;
+    min-height: 400px;
+    .main-card-banner {
+      background-image: url('../assets/img/specoffer_detail_bg.jpg');
+      background-repeat: no-repeat;
+      background-position: 50%;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 30px;
+      min-height: 500px;
+      .content-wrapper {
+        .main-card__button {
+          margin-top: 50px;
+        }
+      }
+      .content-text {
+        backdrop-filter: blur(5px);
+        padding: 40px;
+        background-color: rgba(0,46,103,.7);
+        .content-paragraph {
+          font-size: 19px;
+        }
+      }
+    }
+  }
+}
 </style>

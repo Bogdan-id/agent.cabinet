@@ -12,40 +12,52 @@
       <v-tabs-items v-model="currentTab">
         <v-tab-item :key="1" value="annuity">
           <v-card>
-            <chart-buttons />
+            <chart-buttons 
+              v-if="graphData !== null"
+              :graph="currentTab" 
+              :data="graphData"/>
             <v-data-table
               :search="search"
               color="black"
               :headers="tableHeader"
               :items="annuity"
               :items-per-page="180"
-              class="elevation-1">
+              class="elevation-1"
+              :hide-default-footer="true">
             </v-data-table>
           </v-card>
         </v-tab-item>
         <v-tab-item :key="2" value="even">
           <v-card>
-            <chart-buttons />
+            <chart-buttons 
+              v-if="graphData !== null"
+              :graph="currentTab" 
+              :data="graphData"/>
             <v-data-table
               :search="search"
               color="black"
               :headers="tableHeader"
               :items="even"
               :items-per-page="180"
-              class="elevation-1">
+              class="elevation-1"
+              :hide-default-footer="true">
             </v-data-table>
           </v-card>
         </v-tab-item>
         <v-tab-item :key="3" value="irregular">
           <v-card>
-            <chart-buttons />
+            <chart-buttons 
+              v-if="graphData !== null"
+              :graph="currentTab" 
+              :data="graphData"/>
             <v-data-table
               :search="search"
               color="black"
               :headers="tableHeader"
               :items="irregular"
               :items-per-page="180"
-              class="elevation-1">
+              class="elevation-1"
+              :hide-default-footer="true">
             </v-data-table>
           </v-card>
         </v-tab-item>
@@ -60,6 +72,9 @@ export default {
     ChartButtons
   },
   data: () => ({
+    // data to props 
+    graphData: null,
+    // data
     currentTab: "even",
     search: '',
     tableHeader: [
@@ -75,9 +90,9 @@ export default {
   methods: {
     addObjects(data) {
       /* eslint-disable */
-      if(data.hasOwnProperty('annuity')) this.annuity = data.annuity.graph
-      if(data.hasOwnProperty('irregular')) this.irregular = data.irregular.graph
-      if(data.hasOwnProperty('even')) this.even = data.even.graph
+      if(data.result_data.hasOwnProperty('annuity')) this.annuity = data.result_data.annuity.graph
+      if(data.result_data.hasOwnProperty('irregular')) this.irregular = data.result_data.irregular.graph
+      if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
       /* eslint-enable */
       this.setCurrentTab(data)
     },
@@ -100,13 +115,13 @@ export default {
     }
   },
   mounted() {
-    let data = this.$router.currentRoute.params.data
-    Object.keys(data).forEach(object => {
-      if(data[object].graph) {
-        data[object].graph.splice(0, 1)
+    this.graphData = this.$router.currentRoute.params.data
+    Object.keys(this.graphData).forEach(object => {
+      if(this.graphData[object].graph) {
+        this.graphData[object].graph.splice(0, 1)
       }
     })
-    this.addObjects(data)
+    this.addObjects(this.graphData)
     document.body.scrollTop = 0
   }
 }

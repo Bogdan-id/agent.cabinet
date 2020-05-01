@@ -71,7 +71,7 @@
             @input="parseToInt('creditPayment');
               $v.creditPayment.$touch()"
             id="creditPayment"
-            label="Щомісячний платіж (за міс. грн) поa кредитам та ін."
+            label="Щомісячний платіж (за міс. грн) по кредитам та ін."
             dense outlined>
           </v-text-field>
 

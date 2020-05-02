@@ -88,10 +88,10 @@ export default {
   data:() => ({
     tableHeader: [
       { text: 'Тип об`єкту лiзингу', value: 'Тип', align: 'start'},
-      { text: 'Марка', value: 'Марка', align: 'start'},
-      { text: 'Модель', value: 'Модель', align: 'start' },
-      { text: 'Сума', value: 'Сума', align: 'start' },
-      { text: 'Дата', value: 'Дата', align: 'start' },
+      { text: 'Марка', value: 'Марка', align: 'center'},
+      { text: 'Модель', value: 'Модель', align: 'center' },
+      { text: 'Сума', value: 'Сума', align: 'center' },
+      { text: 'Дата', value: 'Дата', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],

@@ -1,299 +1,322 @@
 <template>
-  <v-card>
-    <v-card-title class="d-block"> 
-      <div>Заявки на лiзинг</div>
-      <v-divider></v-divider>
-    </v-card-title>
-    <v-card-actions>
-      <v-tooltip right>
-        <template v-slot:activator="{ on }">
-          <v-btn class="mx-2" fab dark v-on="on" @click.stop="subjectTypeDialog = true" color="error">
-            <v-icon dark>mdi-plus-thick</v-icon>
-          </v-btn>
-        </template>
-        <span>Створити заявку</span>
-      </v-tooltip>
-      <v-dialog
-        v-model="subjectTypeDialog"
-        max-width="490">
-        <v-card class="d-flex flex-column">
-          <v-card-title class="d-inline-flex text-center">
-            Створити заявку для:
-          </v-card-title>
-          <v-card-text :class="`d-flex justify-space-around ${smallScreen ? 'flex-column' : ''}`">
+<div class="col-12">
+  <v-dialog
+    v-model="leasingApplicationForm"
+    max-width="600">
+    <v-card v-if="hasObject">
+      <div class="complete-reg-form__title title">
+        <div class="complete-reg-form__title-logo"></div>
+        <span class="d-block title">Заявка вiд розрахунку на 
+          <span class="font-weight-bold">{{ reqObj.leasing_object }}</span>
+        </span>
+      </div>
+      <v-card-text class="pb-0">
+        <v-row>
+        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
+          <v-text-field
+            :value="reqObj.last_name"
+            label="Прiзвище"
+            dense outlined readonly>
+          </v-text-field>
+          <v-text-field
+            :value="reqObj.first_name"
+            label="Iм`я"
+            dense outlined readonly>
+          </v-text-field>
+          <v-text-field
+            :value="reqObj.patronymic"
+            label="По батьковi"
+            dense outlined readonly>
+          </v-text-field>
+          <v-text-field
+            :value="reqObj.region"
+            label="Область"
+            dense outlined readonly>
+          </v-text-field>
+          <v-text-field
+            v-if="reqObj.phone"
+            :value="reqObj.phone"
+            label="Телефон"
+            dense outlined readonly>
+          </v-text-field>
+          <v-text-field
+            v-if="reqObj.email"
+            :value="reqObj.email"
+            label="Email"
+            dense outlined readonly>
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
+          <v-text-field
+            :value="reqObj.legal_info.creditPayment"
+            label="Щомісячний платіж (за міс. грн) по кредитам та ін."
+            dense outlined readonly>
+          </v-text-field>
+          <div v-if="reqObj.client_type_id === 1">
+            <v-text-field
+              :value="reqObj.legal_info.inn"
+              label="IПН"
+              dense outlined readonly>
+            </v-text-field>
+            <v-text-field
+              :value="reqObj.legal_info.monthlyIncome"
+              label="Середньомісячний дохід (грн)"
+              dense outlined>
+            </v-text-field>
+            <v-text-field
+              :value="reqObj.legal_info.acquisitionTargetId"
+              label="Мета придбання авто"
+              dense outlined readonly>
+            </v-text-field>
+          </div>
+          <div v-if="reqObj.client_type_id === 2">
+            <v-text-field
+              :value="reqObj.legal_info.edrpou"
+              label="ЄДРПОУ"
+              dense outlined readonly>
+            </v-text-field>
+            <v-text-field
+              :value="reqObj.legal_info.companyName"
+              label="Назва компанії"
+              dense outlined readonly>
+            </v-text-field>
+            <v-text-field
+              :value="reqObj.legal_info.currencyBalance"
+              label="Валютний баланс"
+              dense outlined readonly>
+            </v-text-field>
+            <v-text-field
+              :value="reqObj.legal_info.equity"
+              label="Власный капiтал"
+              dense outlined readonly>
+            </v-text-field>
+            <!-- <v-text-field
+              v-model="legalInfo.balances"
+              label="Мета придбання авто"
+              dense outlined>
+            </v-text-field> -->
+          </div>
+        </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="d-flex justify-center pb-6 pt-3">
             <span>
-              <v-btn class="ma-2" dark @click.stop="applicationByType(2)">
-                Фізичної особи
-              </v-btn>
-              </span>
-            <span>
-              <v-btn class="ma-2" dark @click.stop="applicationByType(1)">
-                Юридичної особи
+              <v-btn @click="leasingApplicationForm = false" 
+                  class="d-block white--text" 
+                  color="grey darken-3">
+                <v-icon v-text="'mdi-check-bold'">
+                </v-icon>
+                &nbsp;Закрити
               </v-btn>
             </span>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-dialog
-        v-model="newLeasingAplication"
-        :width="dialogSize">
-        <v-card class="pb-1">
-          <v-card-title class="headline">Заявка на фiзичну особу</v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" md="3">
-                <v-select
-                  v-model="rigion"
-                  :items="regions"
-                  label="Область"
-                  dense outlined>
-                </v-select>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="3">
-                <v-text-field
-                    v-model="lastName"
-                    label="Прiзвище"
-                    dense outlined>
-                </v-text-field>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                    v-model="firstName"
-                    label="Им`я"
-                    dense outlined>
-                </v-text-field>
-              </v-col>
-              <v-col md="3">
-                <v-text-field
-                    v-model="patronymic"
-                    label="По батьковi"
-                    dense outlined>
-                </v-text-field>
-              </v-col>
-            </v-row>
-            <!-- bellow conditionally -->
-            <v-row>
-              <v-col md="4">
-                <v-text-field
-                    v-if="subjectPerson"
-                    v-model="number"
-                    label="Телефон"
-                    dense outlined>
-                </v-text-field>
-                <v-text-field
-                    v-if="subjectLegalEntity"
-                    v-model="companyName"
-                    label="Назва компанiї"
-                    dense outlined>
-                </v-text-field>
-              </v-col>
-              <v-col md="4">
-                <v-text-field
-                    v-if="subjectPerson"
-                    v-model="email"
-                    label="Email"
-                    dense outlined>
-                </v-text-field>
-                <v-text-field
-                    v-if="subjectLegalEntity"
-                    v-model="usreou"
-                    label="ЄДРПОУ"
-                    dense outlined>
-                </v-text-field>
-              </v-col>
-            </v-row>
-            <v-row v-if="subjectPerson">
-              <v-col md="5">
-                <v-text-field
-                    v-model="inn"
-                    label="Iдентифiкацiйний код"
-                    dense outlined>
-                </v-text-field>
-              </v-col>
-            </v-row>
-            
-            <v-row>
-              <v-col md="7">
-                <v-select
-                    v-model="inn"
-                    label="Об'єкт лiзингу"
-                    dense outlined>
-                </v-select>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col md="3">
-                <v-text-field
-                    v-model="prepaid"
-                    label="Аванс"
-                    dense outlined readonly>
-                </v-text-field>
-              </v-col>
-              <v-col md="4">
-                <v-text-field
-                    v-model="leasingTerm"
-                    label="Термiн лiзингу"
-                    dense outlined readonly>
-                </v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col md="3">
-                <v-text-field
-                    v-model="cost"
-                    label="Вартiсть з ПДВ"
-                    dense outlined readonly>
-                </v-text-field>
-              </v-col>
-              <v-col md="4">
-                <v-text-field
-                    v-if="subjectPerson"
-                    v-model="monthlyIncome"
-                    label="Середньомiсячний дохiд"
-                    dense outlined readonly>
-                </v-text-field>
-                <v-text-field
-                    v-if="subjectLegalEntity"
-                    v-model="monthlyIncome"
-                    label="Власный капитал"
-                    dense outlined readonly>
-                </v-text-field>
-              </v-col>
-              <v-col v-if="subjectLegalEntity" md="4">
-                <v-text-field
-                    v-model="monthlyIncome"
-                    label="Валюта балансу"
-                    dense outlined readonly>
-                </v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col md="5">
-                <v-text-field
-                    v-model="loanPayment"
-                    label="Платіж по кредитам та позикам (мiс/грн)"
-                    dense outlined>
-                </v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col md="10">
-                <v-select
-                    v-if="subjectPerson"
-                    v-model="carBuyingPurpose"
-                    label="Мета придбання авто"
-                    dense outlined>
-                </v-select>
-                <v-file-input
-                    v-if="subjectLegalEntity"
-                    v-model="companyBalances"
-                    label="Баланси"
-                    dense outlined chips multiple show-size>
-                </v-file-input>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions class="justify-center">
-            <span><v-btn color="grey darken-1 white--text">створити</v-btn></span>
-            <v-btn @click="test()">test</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-card-actions>
-    <v-card-text>
-      <div slot="raw-content" class="table-responsive">
-        <paper-table 
-          :data="table.data" 
-          :columns="table.columns"
-          :title="table.title" 
-          :sub-title="table.subTitle" 
-          type="hover">
-        </paper-table>
-      </div>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+  <v-card class="pb-4" min-height="300">
+  <v-card-title class="d-block">
+    <div>Заявки на лiзинг</div>
+    <v-divider></v-divider>
+    </v-card-title>
+    <v-progress-linear
+      :height="1"
+      :active="loading"
+      :indeterminate="loading"
+      absolute
+      top
+      color="grey lighten-1"
+    ></v-progress-linear>
+    <v-card-title
+      v-if="!loading && !tableDataPresent"
+      absolute
+      class="headline d-block text-center grey--text">
+      Iсторiя заявок на лiзинг порожня
+    </v-card-title>
+    <v-card-text 
+      v-show="tableDataPresent" 
+      class="calculations-table">
+      <v-card-title class="headline">
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-show="tableDataPresent"
+          color="black"
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Пошук"
+          single-line
+          hide-details>
+        </v-text-field>
+      </v-card-title>
+      <v-data-table
+        :search="search"
+        color="black"
+        :headers="tableHeader"
+        :items="tabledata"
+        :items-per-page="5"
+        class="elevation-1">
+        <template v-slot:item.actions="{ item }">
+          <div class="d-flex">
+            <v-icon
+              @click="toDetail(item.id)"
+              color="red lighten-1"
+              >
+              mdi-file-find-outline
+            </v-icon>
+          </div>
+        </template>
+      </v-data-table>
+      <!-- <v-btn @click="test()">test</v-btn> -->
     </v-card-text>
   </v-card>
+</div>
 </template>
 
 <script>
-
-import { PaperTable } from "../components"
-import { appTableColumns, appTableData } from './Calculator/calculator-temp-data.js'
-import selectItems from './Calculator/selectItems.js'
+import axios from 'axios'
 
 export default {
-  data: () => ({
-    /* data for v-selects and tables */
-    table: {
-      title: "Історія розрахунків",
-      subTitle: "Розрахунки за місяць",
-      columns: [...appTableColumns],
-      data: [...appTableData]
+  data:() => ({
+    search: '',
+    leasingApplicationForm: false,
+    tableHeader: [
+      { text: 'ФИО', value: 'initials', align: 'start'},
+      { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center'},
+      { text: 'Цiна', value: 'leasing_amount', align: 'center' },
+      { text: 'Тип графiку', value: 'graph_type', align: 'center' },
+      { text: 'Дата', value: 'data', align: 'center' },
+      { text: 'Статус заявки', value: 'request_status', align: 'center' },
+      { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
+    ],
+    tabledata: [],
+
+    // request detail data
+    reqObj: {
+      calculation_id: null,
+      email: null,
+      first_name: null,
+      last_name: null,
+      legal_info:{
+        acquisitionTargetId: null,
+        creditPayment: null,
+        inn: null,
+        monthlyIncome: null,
+      },
+      patronymic: null,
+      phone: null,
+      region: null,
     },
-    regions: selectItems.regions,
-
-    /* leasing-application data */
-
-    subjectType: null,
-
-    rigion: null,
-    lastName: null,
-    firstName: null,
-    patronymic: null,
-    prepaid: null,
-    leasingTerm: null,
-    cost: null,
-    loanPayment: null,
-    // below for legal entity
-    companyName: null,
-    usreou: null, // ЄДРПОУ
-    equity: null,
-    balanceCurrency: null,
-    companyBalances: null,
-    // below for person
-    number: null,
-    email: null,
-    monthlyIncome: null,
-    inn: null,
-    carBuyingPurpose: null,
-
-    /* booleans */
-    subjectTypeDialog: false,
-    newLeasingAplication: false,
+    request: false,
   }),
-  methods: {
-    test() {
-      console.log(this.$vuetify.breakpoint.smAndDown)
-    },
-    applicationByType(type) {
-      this.newLeasingAplication = true; 
-      this.subjectTypeDialog = false; 
-      this.subjectType = type
-    }
-  },
   computed: {
-    dialogSize() {
-      let screenSize = 'md'
-      if(this.$vuetify.breakpoint.name === 'xs') screenSize = '360'
-      if(this.$vuetify.breakpoint.name === 'sm') screenSize = '550'
-      if(this.$vuetify.breakpoint.name === 'md') screenSize = '800'
-      if(this.$vuetify.breakpoint.name === 'lg') screenSize = '1000'
-      if(this.$vuetify.breakpoint.name === 'xl') screenSize = '1300'
-      return screenSize
+    user() {
+      return this.$store.state.user.agent
     },
-    smallScreen() {
-      return this.$vuetify.breakpoint.smAndDown
+    userData() {
+      return Object.keys(this.$store.state.user.agent).length > 0
     },
-    subjectPerson() {
-      return this.subjectType === 2
+    tableDataPresent() {
+      return this.tabledata.length > 0
     },
-    subjectLegalEntity() {
-      return this.subjectType === 1
+    loading() {
+      return this.$store.state.loader === true
+    },
+    hasObject() {
+      return this.request
     }
   },
-  components: {
-    PaperTable
-  }
+  methods: {
+    toEdit(id) {
+      this.$router.push({name: 'Редагувати', params: {id: id, edit: true}})
+    },
+    toDetail(id) {
+      this.leasingApplicationForm = true
+      this.$store.commit('toggleSpinner', true)
+      axios
+        .get(`/leasing-reqeust/${id}`)
+        .then(response => {
+          console.log(response)
+          Object.assign(this.reqObj, response.data)
+          this.$store.commit('toggleSpinner', false)
+          this.request = true
+        })
+        .catch(error => {
+          console.log(error)
+          this.$store.commit('toggleSpinner', false)
+          this.leasingApplicationForm = false
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+        })
+    },
+    getGraphById(id) {
+      return this.$store.state.graphs
+        .filter(val => val.id === id)
+    },
+    getUserCalculations() {
+      this.$store.commit('toggleSpinner', true)
+      this.tabledata = []
+      if(this.userData){
+        const agentId = this.$store.state.user.agent.id
+        axios
+          .get(`/leasing-reqeust/agent/${agentId}`)
+          .then(response => {
+            this.$store.commit('toggleSpinner', false)
+            if(response.data.length > 0)  {
+              this.createTableData(response.data)
+              this.$store.commit('deleteGraph')
+              response.data.forEach(val => 
+                this.$store.commit('addGraph', val)
+              )
+            } else {
+              this.tabledata = []
+            }
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.$store.commit('toggleSpinner', false)
+            this.$notify({
+              group: 'error',
+              title: 'Помилка',
+              text: `${error.response.status} \n ${error.response.data.message}`,
+            })
+          })
+        }
+    },
+    test() {
+      // console.log(!this.loading)
+      // console.log(!this.tableDataPresent)
+    },
+    async createTableData(object) {
+      await object.map(val => {
+        let dataObj = {
+          'initials': `${val.last_name} ${val.first_name} ${val.patronymic}`,
+          'leasing_object': val.leasing_object,
+          'leasing_amount': val.leasing_amount,
+          'graph_type': val.graph_type,
+          'data': val.created_at.substr(0, 10),
+          'request_status': val.status_id,
+          'id': val.id
+        }
+        this.tabledata.push(dataObj)
+      })
+    },
+  },
+  watch: {
+    user() {
+      if(this.userData) this.getUserCalculations()
+      return
+    },
+    leasingApplicationForm(val) {
+      if(val === false) this.request = false
+    }
+  },
+  mounted() {
+    this.$store.state.user.agent 
+      ? this.getUserCalculations()
+      : false
+  },
 }
 </script>

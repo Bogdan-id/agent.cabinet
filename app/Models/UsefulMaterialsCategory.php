@@ -14,7 +14,8 @@ class UsefulMaterialsCategory extends Model
     * @var array
     */
    protected $fillable = [
-       //
+       'name',
+       'slug'
    ];
 
     /**

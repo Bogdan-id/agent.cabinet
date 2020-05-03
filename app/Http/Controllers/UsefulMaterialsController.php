@@ -17,7 +17,9 @@ class UsefulMaterialsController extends Controller
 
     public function getCategories()
     {
-        //
+       $usefulMaterialsCategories = UsefulMaterialsCategory::all();
+
+       return response()->json($usefulMaterialsCategories);
     }
 
     public function createCategory(Request $request)

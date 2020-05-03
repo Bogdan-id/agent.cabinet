@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UsefulMaterialsCategories extends Model
+class UsefulMaterialsCategory extends Model
 {
     public $timestamps = false;
 

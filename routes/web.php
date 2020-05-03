@@ -48,6 +48,14 @@ Route::get('leasing-reqeust/agent/{agent_id}', 'LeasingRequestController@getLeas
 
 Route::get('/getAcquisitionTargets', 'AcquisitionTargetController@getAcquisitionTargets');
 
+Route::get('useful-materials-categories/all', 'UsefulMaterialsController@getCategories');
+Route::post('useful-materials-categories/create', 'UsefulMaterialsController@createCategory');
+Route::post('useful-materials-categories/update/{id}', 'UsefulMaterialsController@updateCategory')
+            ->where('id', '[0-9]+');
+Route::delete('useful-materials-categories/delete/{id}', 'UsefulMaterialsController@destroyCategory')
+            ->where('id', '[0-9]+');
+
+
 Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');
 

@@ -34,9 +34,16 @@ class UsefulMaterialsController extends Controller
     }
 
 
-    public function updateCategory($id)
+    public function updateCategory(Request $request, $id)
     {
-        //
+        $data = $request->post();
+        $usefulMaterialsCategory = UsefulMaterialsCategory::find($id);
+        $usefulMaterialsCategory->update([
+           'name' => $data['name'],
+           'slug' => Str::slug($data['name'], '-')
+        ]);
+
+        return response()->json($usefulMaterialsCategory);
     }
 
     public function destroyCategory($id)

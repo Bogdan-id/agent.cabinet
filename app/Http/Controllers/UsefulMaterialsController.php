@@ -48,6 +48,11 @@ class UsefulMaterialsController extends Controller
 
     public function destroyCategory($id)
     {
-        //
+        $usefulMaterialsCategory = UsefulMaterialsCategory::find($id);
+        $usefulMaterialsCategory->delete();
+
+        return response()->json([
+            'status' => 200
+        ]);
     }
 }

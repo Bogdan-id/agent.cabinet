@@ -26,7 +26,7 @@ export default new Vuex.Store({
     },
 
     addGraph(state, value) {
-      state.graphs.push(value)
+      state.graphs = value
     },
     deleteGraph(state) {
       state.graphs = []

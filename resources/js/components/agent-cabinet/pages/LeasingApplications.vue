@@ -3,7 +3,7 @@
   <v-dialog
     v-model="leasingApplicationForm"
     max-width="600">
-    <v-card v-if="hasObject">
+    <v-card>
       <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
         <span class="d-block title">Заявка вiд розрахунку на 
@@ -153,7 +153,7 @@
         color="black"
         :headers="tableHeader"
         :items="tabledata"
-        :items-per-page="5"
+        :items-per-page="10"
         class="elevation-1">
         <template v-slot:item.actions="{ item }">
           <div class="d-flex">
@@ -189,6 +189,7 @@ export default {
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
+    loading: false,
 
     // request detail data
     reqObj: {
@@ -196,7 +197,7 @@ export default {
       email: null,
       first_name: null,
       last_name: null,
-      legal_info:{
+      legal_info: {
         acquisitionTargetId: null,
         creditPayment: null,
         inn: null,
@@ -206,7 +207,6 @@ export default {
       phone: null,
       region: null,
     },
-    request: false,
   }),
   computed: {
     user() {
@@ -218,12 +218,6 @@ export default {
     tableDataPresent() {
       return this.tabledata.length > 0
     },
-    loading() {
-      return this.$store.state.loader === true
-    },
-    hasObject() {
-      return this.request
-    }
   },
   methods: {
     toEdit(id) {
@@ -231,52 +225,30 @@ export default {
     },
     toDetail(id) {
       this.leasingApplicationForm = true
-      this.$store.commit('toggleSpinner', true)
-      axios
-        .get(`/leasing-reqeust/${id}`)
-        .then(response => {
-          console.log(response)
-          Object.assign(this.reqObj, response.data)
-          this.$store.commit('toggleSpinner', false)
-          this.request = true
-        })
-        .catch(error => {
-          console.log(error)
-          this.$store.commit('toggleSpinner', false)
-          this.leasingApplicationForm = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
-        })
+      Object.assign(this.reqObj, this.getGraphById(id)[0])
     },
     getGraphById(id) {
       return this.$store.state.graphs
         .filter(val => val.id === id)
     },
     getUserCalculations() {
-      this.$store.commit('toggleSpinner', true)
+      this.loading = true
       this.tabledata = []
       if(this.userData){
         const agentId = this.$store.state.user.agent.id
         axios
           .get(`/leasing-reqeust/agent/${agentId}`)
           .then(response => {
-            this.$store.commit('toggleSpinner', false)
+            this.loading = false
             if(response.data.length > 0)  {
               this.createTableData(response.data)
-              this.$store.commit('deleteGraph')
-              response.data.forEach(val => 
-                this.$store.commit('addGraph', val)
-              )
+              this.$store.commit('addGraph', response.data)
             } else {
               this.tabledata = []
             }
           })
           .catch(error => {
-            console.log(error.response)
-            this.$store.commit('toggleSpinner', false)
+            this.loading = false
             this.$notify({
               group: 'error',
               title: 'Помилка',
@@ -289,19 +261,33 @@ export default {
       // console.log(!this.loading)
       // console.log(!this.tableDataPresent)
     },
+    sortData(a, b) {
+      return new Date(b.created_at) - new Date(a.created_at)
+    },
+    switchValue(val) {
+      switch(val) {
+        case 'even': return 'Класичний'
+        case 'annuity': return 'Ануїтет'
+        case 'irregular': return 'Індивідуальний'
+      }
+    },
     async createTableData(object) {
+      let arr = []
       await object.map(val => {
         let dataObj = {
           'initials': `${val.last_name} ${val.first_name} ${val.patronymic}`,
           'leasing_object': val.leasing_object,
           'leasing_amount': val.leasing_amount,
-          'graph_type': val.graph_type,
+          'graph_type': this.switchValue(val.graph_type),
           'data': val.created_at.substr(0, 10),
           'request_status': val.status_id,
           'id': val.id
         }
-        this.tabledata.push(dataObj)
+        arr.push(dataObj)
       })
+      this.tabledata = arr
+        .sort(this.sortData)
+        .reverse()
     },
   },
   watch: {

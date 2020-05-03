@@ -39,16 +39,17 @@
 }
 
 @media(max-width: 790px) {
+  .dashboard-wrapper {
+    flex-direction: row; 
+  }
   .mobile-agent-info {
     display: flex;
   }
+  .agent-info {
+    display: none!important;
+  }
   .dashboard-container{
-    .agent-info {
-      display: none;
-    }
-    .main-card {
-      width: 100%;
-    }
+    width: 100%;
   }
 }
 

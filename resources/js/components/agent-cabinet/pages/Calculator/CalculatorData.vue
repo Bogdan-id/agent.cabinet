@@ -132,7 +132,7 @@ export default {
             this.loading = false
             if(response.data.length > 0)  {
               this.createTableData(response.data)
-              this.$store.commit('addGraph', response.data) // костыль
+              this.$store.commit('addGraph', response.data)
             } else {
               this.tabledata = []
             }

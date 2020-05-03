@@ -155,7 +155,7 @@ export default {
         })
         .catch(error => {
           this.$store.commit('toggleSpinner', false)
-          // console.log(error.response)
+          console.log(error.response)
         })
     },
     getUserCalculcations() {

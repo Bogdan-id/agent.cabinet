@@ -118,7 +118,7 @@
                 append-icon=""
                 :label="showPassportType"
                 :items="pasportItems"
-                outlined dense readonly="">
+                outlined dense readonly>
             </v-select>
           </div>
           <div class="col-md-3">

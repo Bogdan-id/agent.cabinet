@@ -12,20 +12,20 @@
           </v-card-title>
           <v-card-text v-if="routes !== null">
             <div
-              v-for="(item, key) in sections"
-              :key="key"
+              v-for="(item) in sections"
+              :key="item.id"
               class="useful-materials__article">
               <div class="headline">
                 <router-link 
-                  :to="routeObject(item.route, item)"
-                  >{{ item.title }}
+                  :to="routeObject(item.slug, item)"
+                  >{{ item.name }}
                 </router-link>
               </div>
-              <p>{{ item.text }}
+              <!-- <p>{{ item.text }}
                 <router-link 
                   :to="routeObject(item.route, item)">
                 </router-link>
-              </p>
+              </p> -->
               <!-- <p>{{ item.text }}<a :href="item.link"></a></p> -->
             </div>
           </v-card-text>
@@ -35,44 +35,46 @@
 </template>
 <script>
 import BreadScrumb from '../components/breadScrumb'
+import axios from 'axios'
 
 export default {
   components: {
     BreadScrumb
   },
   data: () => ({
-    sections: [
-      {
-        title: 'Інформація про нас', 
-        text: 'Текст генератор для роздiлу Інформація про нас',
-        route: 'about-us'
-      },
-      {
-        title: 'Тренінги', 
-        text: 'Генератор тексту для роздулу Тренінги',
-        route: 'trainings'
-      },
-      {
-        title: 'Відеоогляди', 
-        text: 'Текст генератор для роздiлу Відеоогляди',
-        route: 'video-review'
-      },
-      {
-        title: 'Законодавство', 
-        text: 'Текст генератор для роздiлу Законодавство',
-        route: 'legislation'
-      },
-      {
-        title: 'Страхові пакети', 
-        text: 'Генератор тексту для роздулу Страхові пакети',
-        route: 'insurance-packages'
-      },
-      {
-        title: 'Асистанс', 
-        text: 'Текст генератор для роздiлу Асистанс',
-        route: 'assistance'
-      },
-    ],
+    // sections: [
+    //   {
+    //     title: 'Інформація про нас', 
+    //     text: 'Текст генератор для роздiлу Інформація про нас',
+    //     route: 'about-us'
+    //   },
+    //   {
+    //     title: 'Тренінги', 
+    //     text: 'Генератор тексту для роздулу Тренінги',
+    //     route: 'trainings'
+    //   },
+    //   {
+    //     title: 'Відеоогляди', 
+    //     text: 'Текст генератор для роздiлу Відеоогляди',
+    //     route: 'video-review'
+    //   },
+    //   {
+    //     title: 'Законодавство', 
+    //     text: 'Текст генератор для роздiлу Законодавство',
+    //     route: 'legislation'
+    //   },
+    //   {
+    //     title: 'Страхові пакети', 
+    //     text: 'Генератор тексту для роздулу Страхові пакети',
+    //     route: 'insurance-packages'
+    //   },
+    //   {
+    //     title: 'Асистанс', 
+    //     text: 'Текст генератор для роздiлу Асистанс',
+    //     route: 'assistance'
+    //   },
+    // ],
+    sections: null,
     routes: null,
   }),
   methods: {
@@ -91,6 +93,22 @@ export default {
   mounted() {
     this.routes = this.$router.currentRoute.path
     console.log(this.routes)
+  },
+  created() {
+    axios
+      .get('/useful-materials-categories/all/')
+      .then(response => {
+        console.log(response)
+        this.sections = response.data
+      })
+      .catch(error => {
+        console.log(error.reponse)
+        this.$notify({
+          group: 'error',
+          title: 'Помилка',
+          text: `Код помилки: ${error.response.status} \n ${error.response.data.message}`,
+        })
+      })
   }
 }
 </script>

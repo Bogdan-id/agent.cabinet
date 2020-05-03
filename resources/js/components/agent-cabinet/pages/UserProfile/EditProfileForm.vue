@@ -118,7 +118,7 @@
                 append-icon=""
                 :label="showPassportType"
                 :items="pasportItems"
-                outlined dense>
+                outlined dense readonly>
             </v-select>
           </div>
           <div class="col-md-3">
@@ -126,13 +126,13 @@
                 v-model="user.serie"
                 label="Серiя паспорту"
                 placeholder="Серія паспорту"
-                outlined dense>
+                outlined dense readonly>
             </v-text-field>
             <v-text-field v-if="bioPassport"
                 label="Номер УНЗР"
                 placeholder="номер УНЗР"
                 v-model="user.unzr_number"
-                outlined dense>
+                outlined dense readonly>
             </v-text-field>
           </div>
           <div class="col-md-3">
@@ -140,13 +140,13 @@
                 v-model="user.passport_number"
                 label="Номер паспорту"
                 placeholder="номер паспорту"
-                outlined dense>
+                outlined dense readonly>
             </v-text-field>
             <v-text-field v-if="bioPassport"
                 v-model="user.id_card_number"
                 label="Номер документа"
                 placeholder="номер документа"
-                outlined dense>
+                outlined dense readonly>
             </v-text-field>
           </div>
         </div>
@@ -275,7 +275,6 @@ export default {
     }
   },
   created() {
-    console.log(this.$store.state.user)
     Object.assign(this.user, 
       this.$store.state.user.agent,
       this.$store.state.user.user,

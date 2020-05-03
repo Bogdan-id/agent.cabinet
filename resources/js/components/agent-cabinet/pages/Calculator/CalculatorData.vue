@@ -55,7 +55,7 @@
         color="black"
         :headers="tableHeader"
         :items="tabledata"
-        :items-per-page="5"
+        :items-per-page="10"
         class="elevation-1">
         <template v-slot:item.actions="{ item }">
           <div class="d-flex">
@@ -96,6 +96,7 @@ export default {
     ],
     tabledata: [],
     search: '',
+    loading: false
   }),
   computed: {
     user() {
@@ -107,9 +108,6 @@ export default {
     tableDataPresent() {
       return this.tabledata.length > 0
     },
-    loading() {
-      return this.$store.state.loader === true
-    }
   },
   methods: {
     toEdit(id) {
@@ -124,41 +122,39 @@ export default {
         .filter(val => val.id === id)
     },
     getUserCalculations() {
-      this.$store.commit('toggleSpinner', true)
+      this.loading = true
       this.tabledata = []
       if(this.userData){
         const agentId = this.$store.state.user.agent.id
         axios
           .get(`calculations/agent/${agentId}`)
           .then(response => {
-            this.$store.commit('toggleSpinner', false)
+            this.loading = false
             if(response.data.length > 0)  {
-              console.log('user has calculations')
               this.createTableData(response.data)
-              this.$store.commit('deleteGraph')
-              response.data.forEach(val => 
-                this.$store.commit('addGraph', val)
-              )
+              this.$store.commit('addGraph', response.data)
             } else {
-              console.log('calculations epsent')
               this.tabledata = []
             }
           })
           .catch(error => {
-            console.log(error.response)
-            this.$store.commit('toggleSpinner', false)
+            this.loading = false
             this.$notify({
-              
+              group: 'error',
+              title: 'Помилка',
+              text: `${error.response.status} \n ${error.response.data.message}`,
             })
           })
         }
     },
     test() {
-      // console.log(!this.loading)
-      // console.log(!this.tableDataPresent)
+      console.log(this.tabledata)
+    },
+    sortData(a, b) {
+      return new Date(b.created_at) - new Date(a.created_at)
     },
     async createTableData(object) {
-      console.log(object)
+      let arr = []
       await object.map(val => {
         let dataObj = {
           'Тип': val.request_data.leasingObjectType.label,
@@ -168,8 +164,11 @@ export default {
           'Дата': val.created_at.substr(0, 10),
           'id': val.id
         }
-        this.tabledata.push(dataObj)
+        arr.push(dataObj)
       })
+      this.tabledata = arr
+        .sort(this.sortData)
+        .reverse()
     },
   },
   watch: {

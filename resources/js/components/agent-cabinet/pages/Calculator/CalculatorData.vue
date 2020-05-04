@@ -1,25 +1,32 @@
 <template>
 <div class="col-12">
   <v-card class="pb-4" min-height="300">
-  <v-card-title class="d-block">
-    <div>Калькулятор лiзингу</div>
-    <v-divider></v-divider>
+    <v-card-title class="d-block grey darken-3 white--text">
+      <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-calculator-variant'"></v-icon>
+      Калькулятор лiзингу
+      <v-divider></v-divider>
     </v-card-title>
-    <v-card-actions
+    <v-card-title
+      class="calculator-custom-title"
       :style="`transition: all 0.5s; opacity: ${!loading ? '1' : '0'}`">
-      <v-tooltip right>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            v-on="on"
-            to="/calculator/new"
-            color="error" 
-            fab dark>
-            <v-icon dark>mdi-plus-thick</v-icon>
-          </v-btn>
-        </template>
-        <span>Новий розрахунок</span>
-      </v-tooltip>
-    </v-card-actions>
+        <v-btn
+          v-on="on"
+          to="/calculator/new"
+          color="error" 
+          dark>
+          Новий розрахунок
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-show="tableDataPresent"
+          color="black"
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Пошук"
+          single-line
+          hide-details>
+        </v-text-field>
+    </v-card-title>
     <v-progress-linear
       :height="1"
       :active="loading"
@@ -37,18 +44,8 @@
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">
-      <v-card-title class="headline">
+      <v-card-title class="headline black--text d-block text-center mb-5">
         Iсторiя розрахункiв
-        <v-spacer></v-spacer>
-        <v-text-field
-          v-show="tableDataPresent"
-          color="black"
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Пошук"
-          single-line
-          hide-details>
-        </v-text-field>
       </v-card-title>
       <v-data-table
         :search="search"
@@ -92,7 +89,7 @@ export default {
       { text: 'Модель', value: 'Модель', align: 'center' },
       { text: 'Сума', value: 'Сума', align: 'center' },
       { text: 'Дата', value: 'Дата', align: 'center' },
-      { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
+      { text: 'Дiї', value: 'actions', align: 'start', sortable: false },
     ],
     tabledata: [],
     search: '',
@@ -184,3 +181,14 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+  .calculator-custom-title {
+    .v-text-field {
+      padding: 0!important;
+    }
+    .v-btn {
+      border-radius: 0!important;
+    }
+  }
+</style>

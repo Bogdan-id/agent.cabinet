@@ -47,9 +47,10 @@
         Заявки на лiзинг
         <v-spacer></v-spacer>
         <v-btn
+          class="dashboard__custom-btn"
           to="/leasing-requests"
           color="red"
-          dark text small>
+          dark small>
           Показати всі заявки
         </v-btn>
       </v-card-title>
@@ -234,6 +235,9 @@ export default {
   flex-direction: row; 
   justify-content: space-between;
 }
+.dashboard__custom-btn {
+  border-radius: 0!important;
+}
 .mobile-agent-info {
   border-radius: 4px; 
   margin-bottom: 12px; 
@@ -301,6 +305,7 @@ export default {
       min-height: 500px;
       .content-wrapper {
         .main-card__button {
+          border-radius: 0!important;
           margin-top: 50px;
         }
       }

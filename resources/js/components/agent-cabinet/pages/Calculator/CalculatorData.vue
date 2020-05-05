@@ -44,7 +44,7 @@
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">
-      <v-card-title class="headline black--text d-block text-center mb-8 mt-3">
+      <v-card-title class="headline black--text d-block text-center mb-8 mt-3 ">
         Iсторiя розрахункiв
       </v-card-title>
       <v-data-table

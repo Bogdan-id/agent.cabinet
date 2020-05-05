@@ -11,7 +11,7 @@
         <div class="bounce3"></div>
       </div>
     </div>
-    <div class="container-fluid">
+    <div>
       <transition name="fade" mode="out-in">
         <!-- your content here -->
         <router-view></router-view>

@@ -1,4 +1,5 @@
 <template>
+<div>
 <div class="dashboard-wrapper">
   <!-- Mobyle agent info -->
   <div class="mobile-agent-info">
@@ -27,13 +28,13 @@
         <div class="content-wrapper">
           <div class="content-text white--text">
             <h3>*ЗАОЩАДЖУЙ ЧАС ТА ГРОЩI — ЛЕГКО ПЕРЕХОДЬ НА ЛIЗИНГ ОНЛАЙН!*</h3>
-            <p class="content-paragraph">Сформуйте заявку в режимі онлайн у декiлька простих шагiв
+            <p class="content-paragraph">Сформуйте заявку в режимі онлайн у декiлька простих крокiв
             </p>
           </div>
           <v-btn
             to="calculator/new"
             color="red darken-2" 
-            class="main-card__button white--text ml-1" 
+            class="vuetify_custom-btn white--text ml-1 mt-7" 
             large>
             Хочу легкий лiзинг
           </v-btn>
@@ -42,17 +43,9 @@
     </v-card>
     <v-card 
       v-if="tabledata.length > 0"
-      class="mt-10" elevation="7">
-      <v-card-title class="subtitle-1">
+      class="mt-10 mb-6" elevation="7">
+      <v-card-title class="headline mb-7 mt-3">
         Заявки на лiзинг
-        <v-spacer></v-spacer>
-        <v-btn
-          class="dashboard__custom-btn"
-          to="/leasing-requests"
-          color="red"
-          dark small>
-          Показати всі заявки
-        </v-btn>
       </v-card-title>
       <v-data-table
         color="black"
@@ -62,55 +55,153 @@
         :hide-default-footer="true"
         :items-per-page="5">
       </v-data-table>
+      <div class="d-flex justify-center">
+        <span>
+          <v-btn
+            class="vuetify_custom-btn capitalize ma-4"
+            to="/leasing-requests"
+            color="red"
+            dark>
+            Показати всі заявки
+          </v-btn>
+        </span>
+      </div>
     </v-card>
-    <!-- Agent info -->
   </div>
-  <v-card class="agent-info">
-    <div class="agent-info__header">
-      <v-card-title class="subtitle-2 text-center d-inline-block">
-        Ваш куратор
-      </v-card-title>
-        <v-icon size="70" v-text="'mdi-account-circle'" dark></v-icon>
+  <div class="right-block-wrapper">
+    <!-- Agent info -->
+    <v-card class="agent-info">
+      <div class="agent-info__header">
+        <v-icon class="pt-3" size="70" v-text="'mdi-account-circle'" dark></v-icon>
+        <v-card-title class="caption white--text pt-0 pb-2">
+          Ваш куратор
+        </v-card-title>
+      </div>
+        <v-card-text style="padding: 0!important">
+          <v-list two-line class="text-center">
+            <v-list-item>
+              <v-list-item-content>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-list-item-title v-on="on" class="body-2">{{ agentData.name }}</v-list-item-title>
+                  </template>
+                  <span>{{ agentData.name }}</span>
+                </v-tooltip>
+                <v-list-item-subtitle class="caption">ФИО</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-list-item-title v-on="on" class="body-2">{{ agentData.phone }}</v-list-item-title>
+                  </template>
+                  <span>{{ agentData.phone }}</span>
+                </v-tooltip>
+                <v-list-item-subtitle class="caption">Мобiльний</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-list-item-title v-on="on" class="body-2">{{ agentData.email }}</v-list-item-title>
+                  </template>
+                  <span>{{ agentData.email }}</span>
+                </v-tooltip>
+                <v-list-item-subtitle class="caption">email</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <!-- <v-btn @click="test()">test</v-btn> -->
+        </v-card-text>
+      </v-card>
+      <v-card class="dashboard__rigth-block">
+        <v-card-title class="headline red--text">
+          Новини
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-hover v-slot:default="{ hover }">
+            <v-card :elevation="hover ? 5 : 2" class="news">
+              <v-img
+                class="white--text align-end"
+                style="width: 100%"
+                :src="require('../assets/img/car1.jpg')">
+                <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
+              </v-img>
+              <v-card-text>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn class="vuetify_custom-btn --small capitalize">
+                  Детально
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-hover>
+          <v-hover v-slot:default="{ hover }">
+            <v-card :elevation="hover ? 5 : 2" class="news">
+              <v-img
+                class="white--text align-end"
+                style="width: 100%"
+                :src="require('../assets/img/car2.jpg')">
+                <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
+              </v-img>
+              <v-card-text>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn class="vuetify_custom-btn --small capitalize">
+                  Детально
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-hover>
+        </v-card-text>
+      </v-card>
     </div>
-      <v-card-text style="padding: 0!important">
-        <v-list two-line>
-          <v-list-item>
-            <v-list-item-content>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-list-item-title v-on="on" class="body-2">{{ agentData.name }}</v-list-item-title>
-                </template>
-                <span>{{ agentData.name }}</span>
-              </v-tooltip>
-              <v-list-item-subtitle class="caption">ФИО</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-list-item-title v-on="on" class="body-2">{{ agentData.phone }}</v-list-item-title>
-                </template>
-                <span>{{ agentData.phone }}</span>
-              </v-tooltip>
-              <v-list-item-subtitle class="caption">Мобiльний</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-list-item-title v-on="on" class="body-2">{{ agentData.email }}</v-list-item-title>
-                </template>
-                <span>{{ agentData.email }}</span>
-              </v-tooltip>
-              <v-list-item-subtitle class="caption">email</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <!-- <v-btn @click="test()">test</v-btn> -->
-      </v-card-text>
-    </v-card>
+  </div>
+  <v-card class="dashboard-news">
+    <v-card-title class="headline red--text">
+      Новини
+    </v-card-title>
+    <v-divider></v-divider>
+    <v-card-text class="dashboard-news__wrapper">
+      <v-hover v-slot:default="{ hover }">
+        <v-card class="news-card" :elevation="hover ? 5 : 2">
+          <v-img
+            class="white--text align-end"
+            style="width: 100%"
+            :src="require('../assets/img/car1.jpg')">
+            <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
+          </v-img>
+          <v-card-text>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn class="vuetify_custom-btn capitalize pl-4 pr-4">
+              Детально
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-hover>
+      <v-hover v-slot:default="{ hover }">
+        <v-card class="news-card" :elevation="hover ? 5 : 2">
+          <v-img
+            class="white--text align-end"
+            style="width: 100%"
+            :src="require('../assets/img/car2.jpg')">
+            <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
+          </v-img>
+          <v-card-text>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn class="vuetify_custom-btn capitalize  pl-4 pr-4">
+              Детально
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-hover>
+    </v-card-text>
+  </v-card>
 </div>
 </template>
 <script>
@@ -238,6 +329,27 @@ export default {
 .dashboard__custom-btn {
   border-radius: 0!important;
 }
+.right-block-wrapper {
+  width: 24%; 
+  display: flex; 
+  flex-direction: column;
+}
+.dashboard-news {
+  display: none!important;
+  width: 100%!important; 
+  margin-top: 35px; 
+  box-shadow: 0px 1px 23px 0px #c2c0c0!important;
+  .dashboard-news__wrapper {
+    flex-direction: row; 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: space-around;
+    .news-card {
+      width: 320px!important; 
+      margin: 0 25px 15px 0
+    }
+  }
+}
 .mobile-agent-info {
   border-radius: 4px; 
   margin-bottom: 12px; 
@@ -272,20 +384,39 @@ export default {
   }
 }
 .agent-info {
-    width: 24%;
-    background: #f4f3ef!important;
-    display: flex;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .agent-info__header {
+    width: 100%; 
+    display: flex; 
+    background: #ef5350; 
+    color: white; 
+    flex-direction: column; 
     align-items: center;
-    flex-direction: column;
-    .agent-info__header {
-      width: 100%; 
-      display: flex; 
-      background: #ef5350; 
-      color: white; 
-      flex-direction: column; 
-      align-items: center;
-    }
   }
+}
+.dashboard__rigth-block {
+  margin-top: 15px;
+  display: block;
+  .v-divider {
+    margin-bottom: 0!important;
+  }
+  .news {
+    margin-bottom: 20px;
+  }
+}
+.vuetify_custom-btn {
+  &.capitalize {
+    text-transform: capitalize!important;
+  }
+  &.--small {
+    height: 28px!important;
+  }
+  border-radius: 0!important;
+  background: #f44336!important;
+  color: white!important;
+}
 .dashboard-container{
   flex-direction: column;
   display: flex;
@@ -303,12 +434,6 @@ export default {
       justify-content: center;
       padding: 30px;
       min-height: 500px;
-      .content-wrapper {
-        .main-card__button {
-          border-radius: 0!important;
-          margin-top: 50px;
-        }
-      }
       .content-text {
         backdrop-filter: blur(5px);
         padding: 40px;

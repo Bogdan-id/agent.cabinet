@@ -56,7 +56,6 @@
                 "cors",
                 "stack"
             ],
-            "time": "2019-12-24T22:41:47+00:00"
         },
         {
             "name": "brick/math",

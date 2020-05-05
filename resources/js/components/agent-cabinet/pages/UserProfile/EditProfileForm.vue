@@ -114,13 +114,13 @@
         <!--  -->
         <div class="row">
           <div class="col-md-3">
-            <v-select
+            <v-text-field
                 :value="showPassportType"
                 append-icon=""
                 :label="showPassportType"
                 :items="pasportItems"
-                outlined dense disabled>
-            </v-select>
+                outlined dense readonly>
+            </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field v-if="!bioPassport"

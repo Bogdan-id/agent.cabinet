@@ -1,3 +1,7 @@
+/* Admin */
+import Admin from '../components/admin/main'
+import AdminAuth from '../components/admin/components/routes/Auth.vue'
+
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
 import Registration from '../components/authentication/Registration'
@@ -19,6 +23,22 @@ import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMater
 import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram.vue'
 
 const routes = [
+  // Admin form 
+  { 
+    path: '/admin', 
+    component: Admin,
+    meta: {
+      title: 'Адмiн панель'
+    }
+  },
+  { 
+    path: '/admin/auth/login', 
+    component: AdminAuth,
+    meta: {
+      title: 'Увiйти'
+    }
+  },
+  // Authentication (dashboard)
   { 
     path: '/', 
     component: Authorization,
@@ -57,13 +77,12 @@ const routes = [
     }
   },
 
+  /* Головна */
 	{ 
 		path: '/home', 
     component: DashboardLayout,
     name: 'Головна',
     redirect: "/dashboard",
-
-    /* Головна */
     meta: {
       title: 'Головна'
     },
@@ -110,7 +129,6 @@ const routes = [
           title: 'Звiтнiсть'
         }
       },
-
       // calculator
       {
         path: '/calculator',

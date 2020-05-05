@@ -1,5 +1,7 @@
 <template>
   <div class="content">
+    <!-- <v-btn to="/admin">Адмiн панель</v-btn>
+    <v-btn to="/admin/auth/login">Увiйти</v-btn> -->
     <div 
       v-if="loading"
       class="spinner-wrapper">
@@ -9,7 +11,7 @@
         <div class="bounce3"></div>
       </div>
     </div>
-    <div class="container-fluid">
+    <div>
       <transition name="fade" mode="out-in">
         <!-- your content here -->
         <router-view></router-view>

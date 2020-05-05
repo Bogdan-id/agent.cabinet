@@ -1,7 +1,8 @@
 <template>
   <v-card class="edit-profile">
-    <v-card-title class="d-block">
-      <div>Профiль</div>
+    <v-card-title class="d-block grey darken-3 white--text">
+      <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-account'"></v-icon>
+      Профiль
       <v-divider></v-divider>
     </v-card-title>
     <v-card-text>
@@ -98,7 +99,7 @@
                 v-model="user.satus"
                 label="Статус"
                 :placeholder="user.status || 'Статус'"
-                outlined dense>
+                outlined dense disabled>
             </v-text-field>
           </div>
           <div class="col-md-3">
@@ -113,13 +114,13 @@
         <!--  -->
         <div class="row">
           <div class="col-md-3">
-            <v-select
-                v-model="user.passport_type_id"
+            <v-text-field
+                :value="showPassportType"
                 append-icon=""
                 :label="showPassportType"
                 :items="pasportItems"
                 outlined dense readonly>
-            </v-select>
+            </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field v-if="!bioPassport"
@@ -176,7 +177,7 @@
                 v-model="user.ab_size"
                 label="Розмiр АВ"
                 placeholder="Розмiр АВ"
-                outlined dense>
+                outlined dense disabled>
             </v-text-field>
           </div>
           <div class="col-md-3">
@@ -184,7 +185,7 @@
                 v-model="user.manager_id"
                 label="Куратор"
                 placeholder="Куратор"
-                outlined dense>
+                outlined dense disabled>
             </v-text-field>
           </div>
         </div>
@@ -214,7 +215,7 @@ export default {
 
     /* item types */
     pasportItems: [
-      { text: 'Био-паспорт', value: '2' },
+      { text: 'ID-картка', value: '2' },
       { text: 'Книжкового зразка', value: '1' }
     ],
     companyTypes: [
@@ -237,7 +238,7 @@ export default {
     showPassportType() {
       return parseInt(this.user.passport_type_id) === 1
         ? "Книжкового зразка" 
-        : "Бiо-паспорт"
+        : "ID-картка"
     },
     userEditPassword() {
       return this.passportType !== null
@@ -272,6 +273,9 @@ export default {
 		choosedDate(val) {
 			const [year, month, day] = val.split('-')
 			this.user.birth = `${day}.${month}.${year}`
+    },
+    showPassportType(val) {
+      this.user.passport_type_id = val
     }
   },
   created() {
@@ -282,6 +286,9 @@ export default {
     ) 
     console.log(this.user)
   },
+  mounted() {
+    this.user.passport_type_id = this.showPassportType
+  }
 }
 </script>
 <style lang="scss">

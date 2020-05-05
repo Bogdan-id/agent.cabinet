@@ -10,7 +10,6 @@
       class="calculator-custom-title"
       :style="`transition: all 0.5s; opacity: ${!loading ? '1' : '0'}`">
         <v-btn
-          v-on="on"
           to="/calculator/new"
           color="error" 
           dark>

@@ -23,7 +23,6 @@ import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMater
 import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram.vue'
 
 const routes = [
-  // Admin form 
   { 
     path: '/admin', 
     component: Admin,
@@ -38,7 +37,7 @@ const routes = [
       title: 'Увiйти'
     }
   },
-  // Authentication (dashboard)
+  //Authentication (dashboard)
   { 
     path: '/', 
     component: Authorization,
@@ -177,7 +176,8 @@ const routes = [
       {
         path: '/leasing-requests',
         name: 'Заявки на лiзинг',
-        component: LeasingApplications,meta: {
+        component: LeasingApplications,
+        meta: {
           title: 'Заявки на лiзинг'
         }
       }

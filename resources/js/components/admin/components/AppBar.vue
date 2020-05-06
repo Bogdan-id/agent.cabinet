@@ -1,39 +1,43 @@
 <template>
     <v-app-bar absolute dark app dense short tile>
-      <v-app-bar-nav-icon @click="$emit('listenDrawer', !drawer)"></v-app-bar-nav-icon>
-      <v-spacer></v-spacer>
-      <v-menu  offset-y :close-on-content-click="false">
-          <template v-slot:activator="{ on }">
-              <v-btn small dense outlined v-on="on">Вихiд</v-btn>
-          </template>
-          <v-card class="mt-1">
-              <v-list>
-                  <v-list-item>
-                      <v-list-item-icon>
-                          <v-icon>fas fa-user-check</v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                          <v-list-item-title>Title</v-list-item-title>
-                      </v-list-item-content>
-                  </v-list-item>
-                  <v-divider></v-divider>
-                  <v-list-item>
-                      <v-btn @click="" text color="warning" small>Log Out</v-btn>
-                      <v-spacer></v-spacer>
-                  </v-list-item>
-              </v-list>
-          </v-card>
-      </v-menu>      
+        <v-app-bar-nav-icon @click="$emit('listenDrawer', !drawer)"></v-app-bar-nav-icon>
+        <v-spacer></v-spacer>
+        <v-btn 
+          @click="logOut(); test()"
+          small dense outlined>
+          Вихiд
+        </v-btn>    
     </v-app-bar>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
 	props: ['drawer'],
 	data: () => ({
 		drawerState: null,
   }),
   methods: {
+    test() {
+      console.log({_token: this.getCsrf()})
+    },
+    logOut() {
+      this.$store.commit('toggleAdminSpinner', true)
+      axios
+        .post('/admin/auth/logout', {_token: this.getCsrf()})
+        .then(response => {
+          console.log(response)
+          this.$store.commit('toggleAdminSpinner', false)
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.$store.commit('toggleAdminSpinner', false)
+        })
+    },
+    getCsrf() {
+      return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
   },
 	mounted() {
 		this.drawerState = this.drawer

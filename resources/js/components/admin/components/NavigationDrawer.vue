@@ -20,7 +20,7 @@
               class="pl-3 pa-1"
               v-for="(item, key) in nav"
               :key="key"
-              @click.stop="test()">
+              :to="{path: item.link, name: item.link}">
               <v-list-item-icon class="mr-2">
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-icon>
@@ -40,17 +40,14 @@ export default {
 	data: () => ({
     drawerState: null,
     nav: [
-			{subj: 'Агенти'},
-      {subj: 'Кориснi матерiалы'},
-      {subj: 'Заявки на винагороду'},
+			{subj: 'Агенти', link: 'agents-edit'},
+      {subj: 'Кориснi матерiалы', link: 'useful-materials-edit'},
+      {subj: 'Заявки на винагороду', link: 'reward-applications'},
 		]
 	}),
 	computed: {
   },
   methods: {
-    test() {
-      this.drawerState = !this.drawerState
-    }
   },
   watch: {
     drawer(val) {

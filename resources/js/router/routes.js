@@ -1,6 +1,9 @@
 /* Admin */
 import Admin from '../components/admin/main'
-import AdminAuth from '../components/admin/components/routes/Auth.vue'
+import AdminAuth from '../components/admin/components/routes/Auth'
+import EditCategory from '../components/admin/components/routes/UsefulMaterialsEdit'
+import RewardApplications from '../components/admin/components/routes/RewardApplication'
+import Agents from '../components/admin/components/routes/Agents'
 
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
@@ -9,18 +12,18 @@ import WaitAnswer from '../components/authentication/Wait-answer'
 import CompleteRegistration from '../components/authentication/CompleteRegistration'
 
 /* Dashboard components */
-import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout.vue"
+import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout"
 // import NotFound from "../components/agent-cabinet//pages/NotFoundPage.vue"
-import Dashboard from "../components/agent-cabinet/pages/Dashboard.vue"
-import UserProfile from "../components/agent-cabinet/pages/UserProfile.vue"
-import UsefulMaterials from "../components/agent-cabinet/pages/UsefulMaterials.vue"
-import Reporting from "../components/agent-cabinet/pages/Reporting.vue"
-import Calculator from "../components/agent-cabinet/pages/Calculator.vue"
-import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications.vue"
-import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalculation.vue'
+import Dashboard from "../components/agent-cabinet/pages/Dashboard"
+import UserProfile from "../components/agent-cabinet/pages/UserProfile"
+import UsefulMaterials from "../components/agent-cabinet/pages/UsefulMaterials"
+import Reporting from "../components/agent-cabinet/pages/Reporting"
+import Calculator from "../components/agent-cabinet/pages/Calculator"
+import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications"
+import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalculation'
 // import CalculationEdit from '../components/agent-cabinet/pages/CalculationEdit.vue'
-import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMaterialsDetail.vue'
-import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram.vue'
+import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMaterialsDetail'
+import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram'
 
 const routes = [
   { 
@@ -28,8 +31,34 @@ const routes = [
     component: Admin,
     meta: {
       title: 'Адмiн панель'
-    }
-  },
+    },
+    children: [
+      {
+        path: 'useful-materials-edit',
+        name: 'useful-materials-edit',
+        component: EditCategory,
+        meta: {
+          title: 'Кориснi матерiали'
+        }
+      },
+      {
+        path: 'reward-applications',
+        name: 'reward-applications',
+        component: RewardApplications,
+        meta: {
+          title: 'Заявки на винагороду'
+        }
+      },
+      {
+        path: 'agents-edit',
+        name: 'agents-edit',
+        component: Agents,
+        meta: {
+          title: 'Агенти'
+        }
+      }
+    ]
+  }, 
   { 
     path: '/admin/auth/login', 
     component: AdminAuth,

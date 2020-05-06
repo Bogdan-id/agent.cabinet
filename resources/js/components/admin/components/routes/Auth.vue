@@ -1,15 +1,21 @@
 <template>
   <div class="admin-auth-form">
     <v-card width="400" class="admin-panel__login-card mx-auto">
-		<v-card-title>Авторизацiя</v-card-title>
+		<v-card-title class="headline">Авторизацiя</v-card-title>
       <v-card-text class="pb-0">
         <v-form>
           <v-text-field
-            v-model="userName"
-            label="Iм`я користувача" 
+            @blur="$v.userObj.username.$touch()"
+            @input="$v.userObj.username.$touch()"
+            :error-messages="usernameErr"
+            v-model="userObj.username"
+            label="Iм`я користувача"
             prepend-icon="mdi-account-circle"/>
           <v-text-field
-            v-model="password"
+            @blur="$v.userObj.password.$touch()"
+            @input="$v.userObj.password.$touch()"
+            :error-messages="passwordErr"
+            v-model="userObj.password"
             :type="showPassword ? 'text' : 'password'"
             label="Пароль"
             prepend-icon="mdi-lock"
@@ -17,25 +23,111 @@
             @click:append="showPassword = !showPassword"/>
         </v-form>
         <v-checkbox
+          v-model="userObj.remember"
+          :false-value="2"
+          :true-value="1"
           label="Запам`ятати мене">
         </v-checkbox>
       </v-card-text>
       <v-divider class="mt-0 mb-0"></v-divider>
       <v-card-actions style="justify-content: center;">
-        <span><v-btn class="error white--text">Увiйти</v-btn></span>
+        <span>
+          <v-btn 
+            @click="signIn()" 
+            class="error white--text" 
+            :loading="loading">
+            Увiйти
+          </v-btn>
+        </span>
       </v-card-actions>
     </v-card>
   </div>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
+import axios from 'axios'
+
 export default {
+  mixins: [validationMixin],
 	data: () => ({
     showPassword: false,
-    userName: null,
-    password: null,
-    remember: false
-	})
+    loading: false,
+    commonErr: ['Обов`язкове поле'],
+
+    userObj: {
+      username: null,
+      password: null,
+      remember: 2,
+      _token: null,
+    },
+  }),
+  validations: {
+    userObj: {
+      username: { required },
+      password: { required },
+    },
+  },
+  computed: {
+    usernameErr() {
+      if (!this.$v.userObj.username.$error) return
+      return this.commonErr
+    },
+    passwordErr() {
+      if (!this.$v.userObj.password.$error) return
+      return this.commonErr
+    },
+  },
+  methods: {
+    signIn() {
+      this.$v.$dirty
+      && !this.$v.$invalid
+        ? this.sendRequest()
+        : this.highlightErrors()
+    },
+    getCsrf() {
+			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    sendRequest() {
+      this.loading = true
+      axios.
+        post('/admin/auth/login', this.userObj)
+        .then(response => {
+          console.log(response)
+          if(response.status === 200) {
+            this.$notify({
+              group: 'success',
+              title: 'Успiшно',
+              text: '',
+            })
+          } else {
+            this.$notify({
+              group: 'warning',
+              title: 'Виникла помилка. Спробуйте пiзнiше',
+              text: '',
+            })
+          }
+          this.loading = false
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.loading = false
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+        })
+    },
+    highlightErrors() {
+      this.$v.$anyError
+      this.$v.$touch()
+    },
+  },
+  mounted() {
+    this.userObj._token = this.getCsrf()
+  }
 }
 </script>
 

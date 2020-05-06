@@ -95,11 +95,19 @@ export default {
         post('/admin/auth/login', this.userObj)
         .then(response => {
           console.log(response)
-          this.$notify({
-            group: 'success',
-            title: 'Успiшно',
-            text: '',
-          })
+          if(response.status === 200) {
+            this.$notify({
+              group: 'success',
+              title: 'Успiшно',
+              text: '',
+            })
+          } else {
+            this.$notify({
+              group: 'warning',
+              title: 'Виникла помилка. Спробуйте пiзнiше',
+              text: '',
+            })
+          }
           this.loading = false
         })
         .catch(error => {

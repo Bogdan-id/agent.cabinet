@@ -8,6 +8,7 @@ export default new Vuex.Store({
     user: {},
     graphs: [],
     loader: false,
+    adminLoader: false,
     // userCalculations: [],
     breadScrumb: {}
   },
@@ -18,9 +19,9 @@ export default new Vuex.Store({
     toggleSpinner(state, value) {
       state.loader = value
     },
-    // addCalculation(state, value) {
-    //   state.userCalculations.push(value) 
-    // },
+    toggleAdminSpinner(state, value) {
+      state.adminLoader = value
+    },
     setBreadScrumb(state, links) {
       state.breadScrumb = Object.assign({}, links)
     },

@@ -1,5 +1,7 @@
 <template>
   <div class="content">
+    <v-btn small to="/admin">Адмiн панель</v-btn>
+    <v-btn small to="/admin/auth/login">Увiйти</v-btn>
     <div 
       v-if="loading"
       class="spinner-wrapper">

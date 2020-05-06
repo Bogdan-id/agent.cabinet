@@ -1,6 +1,17 @@
 <template>
   <v-app class="admin-panel">
-    <router-view></router-view>
+    <v-progress-linear
+      :active="loading"
+      :indeterminate="loading"
+      absolute
+      :height="4"
+      top
+      style="z-index: 5;"
+      color="red">
+    </v-progress-linear>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
     <NavigationDrawer
       @listenDrawer="drawer = $event" 
       :drawer="drawer"/>
@@ -22,5 +33,13 @@ export default {
   data: () => ({
     drawer: true,
   }),
+  computed: {
+    loading() {
+      return this.$store.state.adminLoader
+    }
+  },
+  mounted() {
+    this.$router.push({name: 'agents-edit'})
+  }
 }
 </script>

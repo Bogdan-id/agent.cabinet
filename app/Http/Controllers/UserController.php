@@ -19,4 +19,11 @@ class UserController extends Controller
 
         return response()->json($user);
     }
+
+    public function getDontActiveUsers()
+    {
+        $users = User::dontActive()->get();
+
+        return response()->json($users);
+    }
 }

@@ -53,8 +53,6 @@ import ContentFooter from "./ContentFooter.vue"
 import DashboardContent from "./Content.vue"
 import MobileMenu from "./MobileMenu"
 
-
-import axios from "axios"
 import 'es6-promise/auto'
 
 export default {
@@ -73,22 +71,9 @@ export default {
         this.$sidebar.displaySidebar(false);
       }
     },
-    getCurrentUser() {
-      this.$store.commit('toggleSpinner', true)
-      axios.get('/getUserAgent')
-      .then(response => {
-        this.$store.dispatch('add_user', Object.assign({}, response.data))
-        this.$store.commit('toggleSpinner', false)
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error.response)
-        this.$store.commit('toggleSpinner', false)
-      })
-    },
   },
   created() {
-    this.getCurrentUser()
+    this.$store.dispatch('getCurrentUser')
   }
 }
 </script>

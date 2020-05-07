@@ -1,11 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
     user: {},
+    agentData: {
+      id: null,
+      name: null,
+      phone: null,
+      email: null
+    },
     graphs: [],
     loader: false,
     adminLoader: false,
@@ -13,8 +20,11 @@ export default new Vuex.Store({
     breadScrumb: {}
   },
   mutations: {
-    addUser(state, value) {
+    addUserData(state, value) {
       state.user = Object.assign({}, value)
+    },
+    addAgentData(state, value) {
+      state.agentData = Object.assign({}, value)
     },
     toggleSpinner(state, value) {
       state.loader = value
@@ -25,18 +35,39 @@ export default new Vuex.Store({
     setBreadScrumb(state, links) {
       state.breadScrumb = Object.assign({}, links)
     },
-
     addGraph(state, value) {
       state.graphs = value
     },
     deleteGraph(state) {
       state.graphs = []
     }
-    
   },
   actions: {
-    add_user({commit}, userObj) {
-      commit('addUser', userObj)
-    }
+    getCurrentUser({commit, state}) {
+      commit('toggleSpinner', true)
+      axios.get('/getUserAgent')
+      .then(response => {
+        console.log(response)
+        commit('addUserData', response.data)
+      })
+      .then(() => {
+        console.log('get manager')
+        axios
+        .get(`/agent/manager/${state.user.agent.id}`)
+        .then(response => {
+          console.log(response)
+          commit('toggleSpinner', false)
+          commit('addAgentData', response.data)
+        })
+        .catch(error => {
+          commit('toggleSpinner', false)
+          console.log(error.response)
+        })
+      })
+      .catch(error => {
+        console.log(error.response)
+        commit('toggleSpinner', false)
+      })
+    },
   }
 })

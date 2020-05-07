@@ -50,7 +50,7 @@
             @blur="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
             :error-messages="newCategorieErr"
             v-model="newCategorie"
-            label="Додати категорiю">
+            label="Додати категорiю" outlined>
           </v-text-field>
           <div class="d-flex justify-space-between">
             <span>
@@ -213,7 +213,6 @@ export default {
         })
     },
     makeActive(e, category) {
-      console.log(e.target)
       this.categoryToEdit.name = category
       document.querySelectorAll('#categories-list .btn-actions button')
         .forEach(button => button.disabled = true)
@@ -343,10 +342,6 @@ export default {
   created() {
     this.getMageterialCategories()
   },
-  mounted() {
-    console.log(this.$v)
-    console.log(this.validationRules)
-  }
 }
 </script>
 

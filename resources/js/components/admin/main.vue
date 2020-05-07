@@ -28,7 +28,7 @@ import NavigationDrawer from './components/NavigationDrawer.vue'
 export default {
   components: {
 		AppBar,
-		NavigationDrawer,
+    NavigationDrawer,
   },
   data: () => ({
     drawer: true,

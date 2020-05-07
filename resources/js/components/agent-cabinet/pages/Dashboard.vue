@@ -2,11 +2,18 @@
 <div>
 <div class="dashboard-wrapper">
   <!-- Mobyle agent info -->
-  <div class="mobile-agent-info">
+  <div :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
     <div class="icon-wrapper">
-      <v-icon size="60" v-text="'mdi-account-circle'" dark></v-icon>
+      <v-icon size="60" style="min-width: 60px" v-text="'mdi-account-circle'" dark></v-icon>
     </div>
-    <ul>
+    <div v-if="!hasAgent" class="d-flex justify-center align-center">
+      <v-progress-circular
+        class="ml-2"
+        indeterminate
+        color="red">
+      </v-progress-circular>
+    </div>
+    <ul :class="hasAgent ? 'agent-list-info agent-list-active' : 'agent-list-info'">
       <li>
         <span class="agent-desc">Ваш куратор:</span>
         <span class="agent-data">{{ agentData.name }}</span>
@@ -70,14 +77,19 @@
   </div>
   <div class="right-block-wrapper">
     <!-- Agent info -->
-    <v-card class="agent-info">
+    <v-card :class="hasAgent ? 'agent-info agent-info-active' : 'agent-info'">
       <div class="agent-info__header">
-        <v-icon class="pt-3" size="70" v-text="'mdi-account-circle'" dark></v-icon>
-        <v-card-title class="caption white--text pt-0 pb-2">
-          Ваш куратор
-        </v-card-title>
+        <v-icon class="pa-3" size="70" v-text="'mdi-account-circle'" dark></v-icon>
       </div>
-        <v-card-text style="padding: 0!important">
+      <div v-if="!hasAgent" class="d-flex justify-center align-center">
+        <v-progress-circular
+          class="ma-3"
+          indeterminate
+          color="red">
+        </v-progress-circular>
+      </div>
+      <!--  -->
+        <v-card-text :class="hasAgent ? 'agent-info-list agent-info-list-active' : 'agent-info-list'"> 
           <v-list two-line class="text-center">
             <v-list-item>
               <v-list-item-content>
@@ -87,7 +99,7 @@
                   </template>
                   <span>{{ agentData.name }}</span>
                 </v-tooltip>
-                <v-list-item-subtitle class="caption">ФИО</v-list-item-subtitle>
+                <v-list-item-subtitle class="caption">Ваш куратор</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
             <v-list-item>
@@ -219,37 +231,23 @@ export default {
       // { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
-    agentData: {
-      id: null,
-      name: null,
-      phone: null,
-      email: null
-    }
+    managerLoader: false,
   }),
   computed: {
     hasUser() {
       return Object.keys(this.$store.state.user).length > 0
     },
+    hasAgent() {
+      return this.$store.state.agentData.id !== null
+    },
+    agentData() {
+      return this.$store.state.agentData
+    }
   },
   methods: {
     test() {
       console.log(this.hasUser)
     },  
-    getManager() {
-      let agent_id = this.$store.state.user.agent.id
-      this.$store.commit('toggleSpinner', true)
-      axios
-        .get(`/agent/manager/${agent_id}`)
-        .then(response => {
-          this.$store.commit('toggleSpinner', false)
-          // console.log(response)
-          Object.assign(this.agentData, response.data)
-        })
-        .catch(error => {
-          this.$store.commit('toggleSpinner', false)
-          console.log(error.response)
-        })
-    },
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
       this.tabledata = []
@@ -306,13 +304,11 @@ export default {
   },
   watch: {
     hasUser() {
-      this.getManager()
       this.getUserCalculcations()
     },
   },
-  async mounted() {
+  created() {
     if(this.hasUser) {
-      this.getManager()
       this.getUserCalculcations()
     }
   },
@@ -354,6 +350,29 @@ export default {
   border-radius: 4px; 
   margin-bottom: 12px; 
   overflow: hidden;
+  max-width: 140px;
+  max-height: 86px;
+  border-top: 2px solid #ef5350;
+  border-bottom: 2px solid #ef5350;
+  border-right: 2px solid #ef5350;
+  transition: max-width 0.5s ease-in;
+  ul {
+    padding: 15px;
+    list-style: none;
+    margin-bottom: 0;
+  }
+  .agent-list-info {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-in 0.3s;
+    &.agent-list-active {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  &.active {
+    max-width: 500px;
+  }
   .icon-wrapper {
     align-items: stretch;
     background: #ef5350;
@@ -364,19 +383,13 @@ export default {
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 
     0 2px 2px 0 rgba(0,0,0,.14), 
     0 1px 5px 0 rgba(0,0,0,.12);
-  ul {
-    padding: 15px 15px 15px 0;
-    list-style: none;
-    margin-bottom: 0;
-  }
+  
   .agent-desc {
     font-size: 12px;
     padding-right: 4px;
   }
   .agent-data {
     transition: all 0.3s ease;
-  }
-  .agent-data {
     &:hover {
       text-decoration: underline;
       cursor: pointer;
@@ -387,6 +400,23 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+  max-height: 160px;
+  transition: max-height 1s ease!important;
+  border-left: 2px solid #ef5350!important;
+  border-right: 2px solid #ef5350!important;
+  border-bottom: 2px solid #ef5350!important;
+  .agent-info-list {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in 0.3s;
+    &.agent-info-list-active {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  &.agent-info-active {
+    max-height: 650px;
+  }
   .agent-info__header {
     width: 100%; 
     display: flex; 

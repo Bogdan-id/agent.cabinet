@@ -60,6 +60,7 @@ Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
+Route::get('/getDontActiveUsers', 'UserController@getDontActiveUsers');
 
 Route::post('/calculate', 'CalculateController@create');
 Route::get('/models', 'ModelController@index');

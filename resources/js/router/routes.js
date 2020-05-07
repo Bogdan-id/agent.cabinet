@@ -4,6 +4,7 @@ import AdminAuth from '../components/admin/components/routes/Auth'
 import EditCategory from '../components/admin/components/routes/UsefulMaterialsEdit'
 import RewardApplications from '../components/admin/components/routes/RewardApplication'
 import Agents from '../components/admin/components/routes/Agents'
+import ApplicationsToRegister from '../components/admin/components/routes/ApplicationsToRegister'
 
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
@@ -27,6 +28,7 @@ import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram'
 
 const routes = [
   { 
+    // Admin
     path: '/admin', 
     component: Admin,
     meta: {
@@ -39,6 +41,14 @@ const routes = [
         component: EditCategory,
         meta: {
           title: 'Кориснi матерiали'
+        }
+      },
+      {
+        path: 'application-for-registration',
+        name: 'application-for-registration',
+        component: ApplicationsToRegister,
+        meta: {
+          title: 'Заявки на реєстрацію'
         }
       },
       {

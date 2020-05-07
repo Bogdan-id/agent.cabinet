@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      Роздiл агенти
+      Роздiл - Агенти
     </v-card-title>
   </v-card>
 </template>

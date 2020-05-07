@@ -121,12 +121,12 @@
     <v-divider></v-divider>
     </v-card-title>
     <v-progress-linear
-      :height="1"
+      :height="3"
       :active="loading"
       :indeterminate="loading"
       absolute
       top
-      color="grey lighten-1"
+      color="red lighten-1"
     ></v-progress-linear>
     <v-card-title
       v-if="!loading && !tableDataPresent"

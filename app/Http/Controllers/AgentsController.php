@@ -94,4 +94,11 @@ class AgentsController extends Controller
        return response()->json($manager);
     }
 
+    public function getAgents()
+    {
+       $agents = Agent::all();
+
+       return response()->json($agents);
+    }
+
 }

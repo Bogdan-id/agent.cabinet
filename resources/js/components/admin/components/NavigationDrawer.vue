@@ -2,15 +2,11 @@
   <v-navigation-drawer
     v-model="drawerState"
     app
-    dark
-    >
-    <v-list-item class="pt-4">
-        <v-list-item-icon>
-            <v-icon x-large color="success" v-text="'mdi-trello'"></v-icon>
-        </v-list-item-icon>
-        <v-list-item-title class="title">
-            Адмiн панель
-        </v-list-item-title>
+    dark>
+    <v-list-item 
+      class="pa-4" 
+      style="background: lightgrey!important;">
+      <logo width="100%" height="" />
     </v-list-item>
     <v-divider dark class="ma-2"></v-divider>
     <v-list-item-group>
@@ -34,15 +30,19 @@
 </template>
 
 <script>
+import Logo from '../../agent-cabinet/assets/svg-icons/best-leasing-logo.vue'
 
 export default {
   props: ['drawer'],
+  components: {
+    Logo
+  },
 	data: () => ({
     drawerState: null,
     nav: [
-			{subj: 'Агенти', link: 'agents-edit'},
-      {subj: 'Кориснi матерiалы', link: 'useful-materials-edit'},
-      {subj: 'Заявки на винагороду', link: 'reward-applications'},
+			{subj: 'Агенти', link: 'agents-edit', icon: 'mdi-face-agent'},
+      {subj: 'Кориснi матерiалы', link: 'useful-materials-edit', icon: 'mdi-bookmark'},
+      {subj: 'Заявки на винагороду', link: 'reward-applications', icon: 'mdi-format-list-checks'},
 		]
 	}),
 	computed: {
@@ -60,7 +60,5 @@ export default {
   mounted() {
     this.drawerState = this.drawer
   },
-	components: {
-	},
 }
 </script>

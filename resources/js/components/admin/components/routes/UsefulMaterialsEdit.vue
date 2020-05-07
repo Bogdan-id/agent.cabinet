@@ -4,20 +4,24 @@
       :max-width="430"
       v-model="editCategoryDialog">
       <v-card>
-        <v-card-title class="success white--text">Редагування</v-card-title>
+        <v-card-title class="error white--text">Редагування</v-card-title>
         <v-card-title>Поточна назва -&nbsp; 
-          <span style="color: black;">{{ categoryToEdit}}</span>
+          <span style="color: black;">{{ categoryToEdit.name}}</span>
         </v-card-title>
         <v-card-text>
           <v-text-field
-            v-model="categoryToEdit"
+            @input="editCategoryDialog ? $v.categoryToEdit.name.$touch() : ''"
+            @blur="editCategoryDialog ? $v.categoryToEdit.name.$touch() : ''"
+            :error-messages="categoryToEditErr"
+            v-model="categoryToEdit.name"
             label="Редагувати категорiю"
             outlined>
           </v-text-field>
           <div class="d-flex justify-space-between">
             <span>
               <v-btn
-                @click=""
+                @click="saveChangedCategory()"
+                :loading="loading"
                 class="grey darken-3 white--text">
                 Зберегти
               </v-btn>
@@ -37,18 +41,22 @@
       :max-width="430"
       v-model="makeCategoryDialog">
       <v-card>
-        <v-card-title class="success white--text">
+        <v-card-title class="error white--text">
           Додати категорiю
         </v-card-title>
         <v-card-text class="mt-5">
           <v-text-field
+            @input="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
+            @blur="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
+            :error-messages="newCategorieErr"
             v-model="newCategorie"
-            label="Додати категорiю">
+            label="Додати категорiю" outlined>
           </v-text-field>
           <div class="d-flex justify-space-between">
             <span>
               <v-btn
-                @click=""
+                @click="makeCategory()"
+                :loading="loading"
                 class="grey darken-3 white--text">
                 Зберегти
               </v-btn>
@@ -68,15 +76,21 @@
       :max-width="430"
       v-model="deleteCategoryDialog">
       <v-card>
-        <v-card-title class="success white--text">
+        <v-card-title class="error white--text">
           Видалення
         </v-card-title>
         <v-card-title>
-          Категорiя - <b>&nbsp;"{{ categoryToDelete }}"</b>
+          Категорiю -<b>&nbsp;"{{ categoryToDelete.name }}"</b>
+          буде видалено назавжди. <span style="white-space: pre-line;">Продовжити?</span>
         </v-card-title>
         <v-card-text class="d-flex justify-space-around">
           <span>
-            <v-btn class="grey darken-3 white--text">Так</v-btn>
+            <v-btn 
+              @click="deleteCategory()"
+              :loading="loading"
+              class="grey darken-3 white--text">
+              Так
+            </v-btn>
           </span>
           <span>
             <v-btn 
@@ -97,7 +111,7 @@
           cols="12" xs="12" sm="12" md="6">
           <v-card-title class="edit-title">Редагувати категорiї</v-card-title>
           <!-- <v-divider class="pl-8 pr-8"></v-divider> -->
-          <v-btn @click="makeCategoryDialog = true" class="ml-6 red lighten-1" dark>
+          <v-btn @click="makeCategoryDialog = true; removeActiveClass()" class="ml-6 red lighten-1" dark>
             Додати категорiю&nbsp;
             <v-icon v-text="'mdi-plus'"></v-icon>
           </v-btn>
@@ -110,14 +124,12 @@
               {{ item.name }}
               <span class="btn-actions">
                 <v-btn 
-                  @click.stop="editCategoryDialog = true; 
-                    editCategory(item.id, item.name)" 
+                  @click.stop="openDialogToEditCategory(item.id, item.name)" 
                   icon>
                   <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
                 </v-btn>
                 <v-btn 
-                  @click.stop="deleteCategoryDialog = true;
-                    deleteCategory(item.id, item.name)" 
+                  @click.stop="openDialogDeleteCategory(item.id, item.name)" 
                   icon>
                   <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
                 </v-btn>
@@ -125,38 +137,6 @@
             </li>
           </ul>
         </v-col>
-        <!-- <v-col 
-          v-if="categoryToEdit !== null" 
-          cols="12" xs="12" sm="12" md="6">
-          <v-card-title class="edit-subtitle">Редагувати матерiали в категорiї -&nbsp;<i>{{ categoryToEdit }}</i></v-card-title>
-          <v-btn @click="makeCategory()" class="ml-6 red lighten-1" dark>
-            Додати матерiал&nbsp;
-            <v-icon v-text="'mdi-plus'"></v-icon>
-          </v-btn>
-          <ul id="categories-list">
-            <li
-              v-for="item in categories"
-              :key="item.id"
-              class="list-element"
-              @click.self="makeActive($event, item.name)">
-              {{ item.name }}
-              <span class="btn-actions">
-                <v-btn 
-                  @click.stop="editCategoryDialog = true; 
-                    editCategory(item.id, item.name)" 
-                  icon>
-                  <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
-                </v-btn>
-                <v-btn 
-                  @click.stop="deleteCategoryDialog = true;
-                    deleteCategory(item.id, item.name)" 
-                  icon>
-                  <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
-                </v-btn>
-              </span>
-            </li>
-          </ul>
-        </v-col> -->
       </v-row>
     </v-card-text>
   </v-card>
@@ -164,20 +144,60 @@
 
 <script>
 import axios from 'axios'
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
+  mixins: [validationMixin],
   data: () => ({
+    commonErr: ['Обов`язкове поле'],
     categories: [],
+    loading: false,
 
     editCategoryDialog: false,
     deleteCategoryDialog: false,
     makeCategoryDialog: false,
 
-    categoryToEdit: null,
-    categoryToDelete: null,
+    categoryToEdit: {
+      id: null,
+      name: null
+    },
+    categoryToDelete: {
+      id: null,
+      name: null
+    },
     newCategorie: null,
   }),
+  validations() {
+    return this.validationRules
+  },
+  computed: {
+    validationRules() {
+      let validateObj = {}
+      this.editCategoryDialog
+        ? validateObj = { categoryToEdit: { name: { required } } }
+        : false
+
+      this.makeCategoryDialog
+        ? validateObj = { newCategorie: { required } }
+        : false
+      return validateObj
+    },
+    categoryToEditErr() {
+      if (!this.editCategoryDialog) return
+      if (!this.$v.categoryToEdit.name.$error) return
+      return this.commonErr
+    },
+    newCategorieErr() {
+      if(!this.makeCategoryDialog) return
+      if (!this.$v.newCategorie.$error) return
+      return this.commonErr
+    },
+  },
   methods: {
+    test() {
+      console.log(this.$v)
+    },
     getMageterialCategories() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
@@ -193,31 +213,135 @@ export default {
         })
     },
     makeActive(e, category) {
-      console.log(e.target)
-      this.categoryToEdit = category
+      this.categoryToEdit.name = category
       document.querySelectorAll('#categories-list .btn-actions button')
         .forEach(button => button.disabled = true)
-      let activeEl = document.querySelector('#categories-list .list-element.active')
-      if (activeEl !== null) {
-        activeEl.classList.remove('active')
-      }
+      this.removeActiveClass()
       e.target.classList.add('active')
       document.querySelectorAll('#categories-list .list-element.active .btn-actions button')
         .forEach(button => button.disabled = false)
     },
-    editCategory(id, category) {
-      this.categoryToEdit = category
+    removeActiveClass() {
+      let activeEl = document.querySelector('#categories-list .list-element.active')
+      if (activeEl !== null) {
+        activeEl.classList.remove('active')
+      }
     },
-    deleteCategory(id, category) { 
-      this.categoryToDelete = category
+    openDialogToEditCategory(id, category) {
+      this.editCategoryDialog = true
+      this.categoryToEdit.name = category
+      this.categoryToEdit.id = id
+    },
+    openDialogDeleteCategory(id, category) {
+      this.deleteCategoryDialog = true
+      this.categoryToDelete.name = category
+      this.categoryToDelete.id = id
+    },
+    deleteCategory() {
+      this.loading = true
+      axios
+        .delete(`/useful-materials-categories/delete/${this.categoryToDelete.id}`, {_token: this.getCsrf()})
+        .then(response => {
+          console.log(response)
+          this.loading = false
+          this.getMageterialCategories()
+          this.$notify({
+            group: 'success',
+            title: 'Успiшно',
+            text: ``,
+          })
+          setTimeout(() => {
+            this.deleteCategoryDialog = false
+          }, 800)
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.loading = false
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+        })
     },
     makeCategory() {
-      /*  */
-    }
+      if(this.$v.$dirty && !this.$v.$invalid) {
+        this.loading = true
+        axios
+          .post(`/useful-materials-categories/create`, 
+            {
+              name: this.newCategorie,
+              _token: this.getCsrf()
+            }
+          ).then(response => {
+            console.log(response)
+            this.loading = false
+            this.getMageterialCategories()
+            this.$notify({
+              group: 'success',
+              title: 'Успiшно',
+              text: ``,
+            })
+            setTimeout(() => {
+              this.makeCategoryDialog = false
+              this.newCategorie = null
+            }, 800)
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.loading = false
+            this.$notify({
+              group: 'error',
+              title: 'Помилка',
+              text: `${error.response.status} \n ${error.response.data.message}`,
+            })
+          })
+      } else this.highlightErrors()
+    },
+    saveChangedCategory() {
+      if(this.$v.$dirty && !this.$v.$invalid) {
+        this.loading = true
+        axios
+          .post(`/useful-materials-categories/update/${parseInt(this.categoryToEdit.id)}`, 
+            {
+              name: this.categoryToEdit.name,
+              _token: this.getCsrf()
+            }
+          ).then(response => {
+            console.log(response)
+            this.loading = false
+            this.getMageterialCategories()
+            this.$notify({
+              group: 'success',
+              title: 'Успiшно',
+              text: ``,
+            })
+            setTimeout(() => {
+              this.editCategoryDialog = false
+            }, 800)
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.loading = false
+            this.$notify({
+              group: 'error',
+              title: 'Помилка',
+              text: `${error.response.status} \n ${error.response.data.message}`,
+            })
+          })
+      } else this.highlightErrors()
+    },
+    getCsrf() {
+			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    highlightErrors() {
+      this.$v.$anyError
+      this.$v.$touch()
+    },
   },
   created() {
     this.getMageterialCategories()
-  }
+  },
 }
 </script>
 

@@ -421,10 +421,10 @@ export default {
         Object.assign(this.knownUserData, data)
       })
       .catch(e => {
+        console.log(e.response)
         if(e.response.status == 401) {
           this.$router.push({ name: 'authorization', params: { reload: true }})
         }
-        // console.log(e.response)
       })
     },
     simpleNotify(title, text, group) {
@@ -434,12 +434,6 @@ export default {
 				text: text,
 			})
 		},
-    // scrollToId(id) {
-    //   const el = document.getElementById(id)
-    //   setTimeout(() => {
-    //     el.scrollIntoView({behavior: "smooth"})
-    //   }, 250)
-    // }
   },
   watch: {
     modal(val) {

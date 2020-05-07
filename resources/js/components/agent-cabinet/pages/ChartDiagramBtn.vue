@@ -266,8 +266,8 @@ export default {
     },
     _token: null
   }),
-   validations() {
-      return this.validationRules
+  validations() {
+    return this.validationRules
   },
   computed: {
     validData() {

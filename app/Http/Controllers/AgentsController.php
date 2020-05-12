@@ -101,4 +101,18 @@ class AgentsController extends Controller
        return response()->json($agents);
     }
 
+    public function adminUpdateAgent(Request $request, $id)
+    {
+        $data = $request->post();
+        $agent = Agent::find($id);
+        $agent->ab_size = $data['abSize'];
+        $agent->status = $data['status'];
+        $agent->manager_id = $data['managerId'];
+        $agent->save();
+        
+        return response()->json([
+            'status' => 200
+        ]);
+    }
+
 }

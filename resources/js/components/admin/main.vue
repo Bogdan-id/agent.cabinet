@@ -39,7 +39,7 @@ export default {
     }
   },
   mounted() {
-    this.$router.push({name: 'agents-edit'})
+    this.$router.push({name: 'application-for-registration'})
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
 <v-card>
   <v-card-title>
-    Роздiл заявки на винагороду
+    Роздiл - Заявки на винагороду
   </v-card-title>
 </v-card>
 </template>

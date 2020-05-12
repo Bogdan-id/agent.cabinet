@@ -8,6 +8,14 @@
             <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>
             Кориснi матерiали
           <v-divider></v-divider>
+          <v-progress-linear
+            :height="3"
+            :active="loading"
+            :indeterminate="loading"
+            absolute
+            top
+            color="red lighten-1">
+          </v-progress-linear>
           </v-card-title>
           <v-card-text v-if="routes !== null">
             <v-hover
@@ -46,40 +54,9 @@ export default {
     BreadScrumb
   },
   data: () => ({
-    // sections: [
-    //   {
-    //     title: 'Інформація про нас', 
-    //     text: 'Текст генератор для роздiлу Інформація про нас',
-    //     route: 'about-us'
-    //   },
-    //   {
-    //     title: 'Тренінги', 
-    //     text: 'Генератор тексту для роздулу Тренінги',
-    //     route: 'trainings'
-    //   },
-    //   {
-    //     title: 'Відеоогляди', 
-    //     text: 'Текст генератор для роздiлу Відеоогляди',
-    //     route: 'video-review'
-    //   },
-    //   {
-    //     title: 'Законодавство', 
-    //     text: 'Текст генератор для роздiлу Законодавство',
-    //     route: 'legislation'
-    //   },
-    //   {
-    //     title: 'Страхові пакети', 
-    //     text: 'Генератор тексту для роздулу Страхові пакети',
-    //     route: 'insurance-packages'
-    //   },
-    //   {
-    //     title: 'Асистанс', 
-    //     text: 'Текст генератор для роздiлу Асистанс',
-    //     route: 'assistance'
-    //   },
-    // ],
     sections: null,
     routes: null,
+    loading: false,
   }),
   methods: {
     routeObject(route, data) {
@@ -99,6 +76,7 @@ export default {
     console.log(this.routes)
   },
   created() {
+    this.loading = true
     this.$store.commit('toggleSpinner', true)
     axios
       .get('/useful-materials-categories/all/')
@@ -106,6 +84,7 @@ export default {
         console.log(response)
         this.sections = response.data
         this.$store.commit('toggleSpinner', false)
+        this.loading = false
       })
       .catch(error => {
         console.log(error.reponse)
@@ -114,6 +93,7 @@ export default {
           title: 'Помилка',
           text: `Код помилки: ${error.response.status} \n ${error.response.data.message}`,
         })
+        this.loading = false
         this.$store.commit('toggleSpinner', false)
       })
   }

@@ -15,7 +15,7 @@
                 v-model="user.last_name"
                 label="Прізвище"
                 :placeholder="user.last_name"
-                outlined dense>
+                dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
@@ -23,7 +23,7 @@
                 v-model="user.first_name"
                 label="Ім'я"
                 :placeholder="user.first_name"
-                outlined dense>
+                dense>
             </v-text-field>
           </div>
           <div class="col-md-3">
@@ -31,7 +31,7 @@
                 v-model="user.patronymic"
                 label="По батькові"
                 :placeholder="user.patronymic"
-                outlined dense>
+                dense>
             </v-text-field>
           </div>
         </div>
@@ -67,6 +67,7 @@
                   v-on="on"
                   label="Дата народження"
                   :placeholder="user.birth"
+                  prepend-inner-icon="mdi-calendar-range"
                   dense readonly
                   outlined>
               </v-text-field>
@@ -106,6 +107,7 @@
             <v-text-field
                 v-model="user.position"
                 label="Посада"
+                prepend-inner-icon="mdi-briefcase"
                 :placeholder="user.position"
                 outlined dense>
             </v-text-field>

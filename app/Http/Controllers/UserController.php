@@ -37,4 +37,15 @@ class UserController extends Controller
             'status' => 200
         ]);
     }
+
+    public function deactivateUser($id)
+    {
+        $user = User::find($id);
+        $user->is_active = 0;
+        $user->save();
+        
+        return response()->json([
+            'status' => 200
+        ]);
+    }
 }

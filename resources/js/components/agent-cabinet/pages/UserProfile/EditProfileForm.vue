@@ -179,12 +179,13 @@
                 v-model="user.ab_size"
                 label="Розмiр АВ"
                 placeholder="Розмiр АВ"
+                prepend-inner-icon="mdi-percent-outline"
                 outlined dense disabled>
             </v-text-field>
           </div>
           <div class="col-md-3">
             <v-text-field
-                v-model="user.manager_id"
+                v-model="user.name"
                 label="Куратор"
                 placeholder="Куратор"
                 outlined dense disabled>
@@ -294,28 +295,10 @@ export default {
 }
 </script>
 <style lang="scss">
-  // .edit-profile {
-  //   ::-webkit-input-placeholder 
-  //   { 
-  //     color: black!important;
-  //   }
-  //   ::-moz-placeholder {
-  //     color: black!important;
-  //   }
-  //   :-ms-input-placeholder {
-  //     color: black!important;
-  //   }
-  //   :-moz-placeholder {
-  //     color: black!important;
-  //   }
-  // }
   .edit-profile {
     .v-text-field input {
       padding-left: 10px!important;
     }
-    // .btn {
-    //   text-transform: capitalize;
-    // }
     .form-control {
       border-bottom: 1px solid #a8a6a6;
       border-radius: 0;

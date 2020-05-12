@@ -13,7 +13,10 @@
         color="red">
       </v-progress-circular>
     </div>
-    <ul :class="hasAgent ? 'agent-list-info agent-list-active' : 'agent-list-info'">
+    <v-card-title v-if="!hasUserManager" class="pa-3">
+      За Вами не закріплений жоден з менеджерів
+    </v-card-title>
+    <ul v-show="hasUserManager" :class="hasAgent ? 'agent-list-info agent-list-active' : 'agent-list-info'">
       <li>
         <span class="agent-desc">Ваш куратор:</span>
         <span class="agent-data">{{ agentData.name }}</span>
@@ -89,7 +92,10 @@
         </v-progress-circular>
       </div>
       <!--  -->
-        <v-card-text :class="hasAgent ? 'agent-info-list agent-info-list-active' : 'agent-info-list'"> 
+        <v-card-title v-if="!hasUserManager" class="pa-3">
+          За Вами не закріплений жоден з менеджерів
+        </v-card-title>
+        <v-card-text v-show="hasUserManager" :class="hasAgent ? 'agent-info-list agent-info-list-active' : 'agent-info-list'"> 
           <v-list two-line class="text-center">
             <v-list-item>
               <v-list-item-content>
@@ -231,7 +237,6 @@ export default {
       // { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
-    managerLoader: false,
   }),
   computed: {
     hasUser() {
@@ -242,6 +247,10 @@ export default {
     },
     agentData() {
       return this.$store.state.agentData
+    },
+    hasUserManager() {
+      if(!this.$store.state.user.agent) return true
+      return this.$store.state.user.agent.manager_id !== null
     }
   },
   methods: {

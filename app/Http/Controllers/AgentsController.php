@@ -65,7 +65,7 @@ class AgentsController extends Controller
     public function getUserAgent()
     {
         $user = Auth::user();
-        $agent = $user->agent;
+        $agent = $user->agent->with('manager')->first();
         if($agent){
             switch ($agent->passport_type_id) {
                 case 1:
@@ -99,6 +99,20 @@ class AgentsController extends Controller
        $agents = Agent::all();
 
        return response()->json($agents);
+    }
+
+    public function adminUpdateAgent(Request $request, $id)
+    {
+        $data = $request->post();
+        $agent = Agent::find($id);
+        $agent->ab_size = $data['abSize'];
+        $agent->status = $data['status'];
+        $agent->manager_id = $data['managerId'];
+        $agent->save();
+        
+        return response()->json([
+            'status' => 200
+        ]);
     }
 
 }

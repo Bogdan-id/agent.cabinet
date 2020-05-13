@@ -17,18 +17,12 @@
         :hide-default-footer="true"
         class="elevation-1 mr-3 ml-3">
         <template v-slot:item.actions="{ item }">
-          <div class="d-flex">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  @click="addUser(item.id)"
-                  v-on="on"
-                  color="success"
-                  v-text="'mdi-checkbox-marked'">
-                </v-icon>
-              </template>
-              <span>Пiдтвердити реєстрацію</span>
-            </v-tooltip>
+          <div class="d-flex justify-center">
+            <v-btn
+              @click="addUser(item.id)"
+              color="error" x-small>
+              Пiдтвердити
+            </v-btn>
           </div>
         </template>
       </v-data-table>
@@ -46,7 +40,7 @@ export default {
       { text: 'Телефон', value: 'phone', align: 'center'},
       { text: 'Email', value: 'email', align: 'center' },
       { text: 'Дата подання', value: 'created_at', align: 'center' },
-      { text: 'Дiї', value: 'actions', align: 'start', sortable: false },
+      { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
   }),

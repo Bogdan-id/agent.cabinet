@@ -105,40 +105,81 @@
     <v-card-title>
       Роздiл - Кориснi матерiали
     </v-card-title>
-    <v-card-text v-if="categories.length > 0">
-      <v-row>
-        <v-col 
-          cols="12" xs="12" sm="12" md="6">
-          <v-card-title class="edit-title">Редагувати категорiї</v-card-title>
-          <!-- <v-divider class="pl-8 pr-8"></v-divider> -->
-          <v-btn @click="makeCategoryDialog = true; removeActiveClass()" class="ml-6 red lighten-1" dark>
-            Додати категорiю&nbsp;
-            <v-icon v-text="'mdi-plus'"></v-icon>
-          </v-btn>
-          <ul id="categories-list">
-            <li
-              v-for="item in categories"
-              :key="item.id"
-              class="list-element"
-              @click.self="makeActive($event, item.name)">
-              {{ item.name }}
-              <span class="btn-actions">
-                <v-btn 
-                  @click.stop="openDialogToEditCategory(item.id, item.name)" 
-                  icon>
-                  <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
-                </v-btn>
-                <v-btn 
-                  @click.stop="openDialogDeleteCategory(item.id, item.name)" 
-                  icon>
-                  <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
-                </v-btn>
-              </span>
-            </li>
-          </ul>
-        </v-col>
-      </v-row>
-    </v-card-text>
+    <section class="section" id="section">
+      <div class="tabs">
+        <div class="tabs-input active">
+          <label 
+            @click.stop="changeActive($event)" 
+            for="tab-1" 
+            class="label">
+            <v-icon v-text="'mdi-format-list-bulleted-square'" class="pr-1" large></v-icon>
+            Категорії
+          </label>
+          <input 
+            @click.stop="changeActive($event)"
+            id="tab-1" 
+            name="tab" 
+            type="radio" 
+            value="1" 
+            checked="checked" 
+            v-model="currentTab"/>
+          <div class="content">
+            <v-card-text v-if="categories.length > 0">
+              <v-card-title class="edit-title pb-6">Редагувати категорiї</v-card-title>
+              <!-- <v-divider class="pl-8 pr-8"></v-divider> -->
+              <v-btn 
+                @click="makeCategoryDialog = true; 
+                  removeActiveClass()" 
+                class="ml-6 red lighten-1" dark>
+                Додати категорiю&nbsp;
+                <v-icon v-text="'mdi-plus'"></v-icon>
+              </v-btn>
+              <ul id="categories-list">
+                <li
+                  v-for="item in categories"
+                  :key="item.id"
+                  class="list-element"
+                  @click.self="makeActive($event, item.name)">
+                  {{ item.name }}
+                  <span class="btn-actions">
+                    <v-btn 
+                      @click.stop="openDialogToEditCategory(item.id, item.name)" 
+                      icon>
+                      <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
+                    </v-btn>
+                    <v-btn 
+                      @click.stop="openDialogDeleteCategory(item.id, item.name)" 
+                      icon>
+                      <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
+                    </v-btn>
+                  </span>
+                </li>
+              </ul>
+            </v-card-text>
+          </div>
+        </div>
+        <div class="tabs-input">
+          <label 
+            @click.stop="changeActive($event)" 
+            for="tab-2" 
+            class="label">
+            <v-icon v-text="'mdi-playlist-edit'" class="pr-1" large></v-icon>
+            Материали
+          </label>
+          <input
+            @click.stop="changeActive($event)"
+            id="tab-2" 
+            name="tab" 
+            type="radio" 
+            value="2" 
+            v-model="currentTab">
+          <div class="content">
+            <v-card-title class="edit-title pb-6">Редагувати матерiали</v-card-title>
+          </div>
+        </div>
+      </div>
+      <!-- <v-btn @click="test()">test</v-btn> -->
+    </section>
   </v-card>
 </template>
 
@@ -153,6 +194,7 @@ export default {
     commonErr: ['Обов`язкове поле'],
     categories: [],
     loading: false,
+    currentTab: '1',
 
     editCategoryDialog: false,
     deleteCategoryDialog: false,
@@ -196,8 +238,13 @@ export default {
   },
   methods: {
     test() {
-      console.log(this.$v)
+      console.log(this.currentTab)
     },
+    changeActive(event) {
+      let tabs = document.querySelectorAll('#section .tabs-input')
+      tabs.forEach(element => element.classList.remove('active'))
+      event.target.parentNode.classList.add('active')
+    }, 
     getMageterialCategories() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
@@ -352,7 +399,7 @@ export default {
     }
     .edit-title {
       letter-spacing: 0.1rem; 
-      text-decoration: underline; 
+      // text-decoration: underline; 
       font-size: 1.8rem; 
       font-weight: bold;
     }
@@ -395,5 +442,76 @@ export default {
         }
       }
     }
+  }
+
+  /* Tabs */
+  html, body {
+    padding: 0;
+    margin: 0;
+  }
+  .section {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .tabs {
+    position: relative;
+  }
+  .section .tabs {
+    display: flex;
+  }
+  .tabs .tabs-input input,
+  .tabs .tabs-input input:focus {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    outline: none;
+  }
+  .tabs .tabs-input [type="radio"] {
+    display: block;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid rgba(239, 237, 239, 0.5);
+    transition: border-bottom 0.3s ease;
+  }
+  .tabs .tabs-input [type="radio"]:checked {
+    border-bottom: 2px solid #ef5350;
+  }
+  .tabs .tabs-input [type="radio"] {
+    border-bottom: 2px solid rgb(209, 207, 207);
+  }
+  .tabs .tabs-input .label {
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    font-size: 26px;
+    text-align: center;
+    line-height: 2rem;
+    color: #212121;
+  }
+  .tabs .tabs-input {
+    width: 50%;
+    display: block;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+  .tabs .tabs-input.active,
+  .tabs .tabs-input:hover {
+    opacity: 1;
+  }
+  .tabs-input [type="radio"] + .content {
+    display: block;
+    opacity: 0;
+    padding: 0.5rem 0;
+    width: 100%;
+    position: absolute;
+    left: 100%;
+    transition: left 0.3s ease-in-out, opacity 0.3s ease; 
+  }
+  .tabs-input [type="radio"]:checked + .content {
+    left: 0;
+    opacity: 1;
   }
 </style>

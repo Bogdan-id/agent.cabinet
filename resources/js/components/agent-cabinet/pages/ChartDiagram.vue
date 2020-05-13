@@ -78,7 +78,7 @@ export default {
     currentTab: null,
     search: '',
     tableHeader: [
-      { text: '№', value: 'n', align: 'end'},
+      { text: '№', value: 'n', align: 'center'},
       { text: 'Оплата за авто', value: 'payment-principal', align: 'end'},
       { text: 'Винагорода лiзингодавця', value: 'interest', align: 'end' },
       { text: 'Сума платежу', value: 'payment', align: 'end' },
@@ -90,7 +90,7 @@ export default {
   methods: {
     addObjects(data) {
       /* eslint-disable */
-      if(data.result_data.hasOwnProperty('annuity')) this.annuity = data.result_data.annuity.graph
+      if(data.result_data.hasOwnProperty('annuity')) {console.log(data.result_data.annuity.graph); this.annuity = data.result_data.annuity.graph}
       if(data.result_data.hasOwnProperty('irregular')) this.irregular = data.result_data.irregular.graph
       if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
       /* eslint-enable */
@@ -116,18 +116,13 @@ export default {
   },
   mounted() {
     this.graphData = this.$router.currentRoute.params.data
-    Object.keys(this.graphData).forEach(object => {
-      if(this.graphData[object].graph) {
-        this.graphData[object].graph.splice(0, 1)
+    Object.keys(this.graphData.result_data).forEach(object => {
+      if(this.graphData.result_data[object].graph) {
+        this.graphData.result_data[object].graph[0].n = 'Аванс'
       }
     })
     this.addObjects(this.graphData)
     document.body.scrollTop = 0
   },
-  watch:{
-    graphData(val) {
-      console.log(val)
-    }
-  }
 }
 </script>

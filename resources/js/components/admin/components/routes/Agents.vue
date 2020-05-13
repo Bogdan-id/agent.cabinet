@@ -175,7 +175,7 @@ export default {
           initials: `${val.last_name} ${val.first_name} ${val.patronymic}`,
           companyName: val.company_name,
           position: val.position,
-          id: val.id
+          id: val.user_id
         }
         arr.push(dataObj)
       })
@@ -184,7 +184,7 @@ export default {
         // .reverse()
     },
     findAgent(id) {
-      console.log('findAgent')
+      console.log('findAgent',  id)
       return this.tabledata
         .find(value => {
           value.id === id
@@ -194,6 +194,7 @@ export default {
         })
     },
     deactivateUser(userId) {
+      console.log('deactivateUser', userId)
       this.deactivateDialog = true
       this.findAgent(userId)
       console.log(userId)

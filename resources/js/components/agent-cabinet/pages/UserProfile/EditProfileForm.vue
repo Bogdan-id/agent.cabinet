@@ -185,7 +185,8 @@
           </div>
           <div class="col-md-3">
             <v-text-field
-                v-model="user.name"
+                v-if="user.manager !== null"
+                v-model="user.manager.name"
                 label="Куратор"
                 placeholder="Куратор"
                 outlined dense disabled>
@@ -282,6 +283,7 @@ export default {
     }
   },
   created() {
+    console.log(this.$store.state.user)
     Object.assign(this.user, 
       this.$store.state.user.agent,
       this.$store.state.user.user,

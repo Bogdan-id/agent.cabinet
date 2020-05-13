@@ -2,21 +2,21 @@
 <div>
 <div class="dashboard-wrapper">
   <!-- Mobyle agent info -->
-  <div :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
+  <div v-if="!hasUserManager && !loading" class="mobile-agent-not-manager">
+    <div class="pa-3 d-flex headline align-center">
+      <div style="height: 100%; width: auto; display: flex;">
+        <v-icon v-text="'mdi-information'" class="pr-3" size="50" color="red lighten-1"></v-icon>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <b>За Вами не закрiплений жоден з менеджерів!</b>
+      </div>
+    </div>
+  </div>
+  <div v-if="!loading && hasUserManager" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
     <div class="icon-wrapper">
       <v-icon size="60" style="min-width: 60px" v-text="'mdi-account-circle'" dark></v-icon>
     </div>
-    <div v-if="!hasAgent" class="d-flex justify-center align-center">
-      <v-progress-circular
-        class="ml-2"
-        indeterminate
-        color="red">
-      </v-progress-circular>
-    </div>
-    <v-card-title v-if="!hasUserManager" class="pa-3">
-      За Вами не закріплений жоден з менеджерів
-    </v-card-title>
-    <ul v-show="hasUserManager" :class="hasAgent ? 'agent-list-info agent-list-active' : 'agent-list-info'">
+    <ul :class="hasAgent ? 'agent-list-info agent-list-active' : 'agent-list-info'">
       <li>
         <span class="agent-desc">Ваш куратор:</span>
         <span class="agent-data">{{ agentData.name }}</span>
@@ -80,11 +80,11 @@
   </div>
   <div class="right-block-wrapper">
     <!-- Agent info -->
-    <v-card :class="hasAgent ? 'agent-info agent-info-active' : 'agent-info'">
-      <div class="agent-info__header">
+    <v-card :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'">
+      <div v-if="!loading && hasUserManager" class="agent-info__header">
         <v-icon class="pa-3" size="70" v-text="'mdi-account-circle'" dark></v-icon>
       </div>
-      <div v-if="!hasAgent" class="d-flex justify-center align-center">
+      <div v-if="loading" class="d-flex justify-center align-center">
         <v-progress-circular
           class="ma-3"
           indeterminate
@@ -92,9 +92,14 @@
         </v-progress-circular>
       </div>
       <!--  -->
-        <v-card-title v-if="!hasUserManager" class="pa-3">
-          За Вами не закріплений жоден з менеджерів
-        </v-card-title>
+        <div v-if="!hasUserManager && !loading" class="pa-3 d-flex align-center">
+          <div style="height: 100%; width: auto; display: flex;">
+            <v-icon v-text="'mdi-information'" class="pr-3" size="60" color="red lighten-1"></v-icon>
+          </div>
+          <div style="display: flex; align-items: center;" class="title">
+            <b>За Вами не закрiплений жоден з менеджерів!</b>
+          </div>
+        </div>
         <v-card-text v-show="hasUserManager" :class="hasAgent ? 'agent-info-list agent-info-list-active' : 'agent-info-list'"> 
           <v-list two-line class="text-center">
             <v-list-item>
@@ -131,7 +136,6 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <!-- <v-btn @click="test()">test</v-btn> -->
         </v-card-text>
       </v-card>
       <v-card class="dashboard__rigth-block">
@@ -239,6 +243,9 @@ export default {
     tabledata: [],
   }),
   computed: {
+    loading() {
+      return this.$store.state.loader === true
+    },
     hasUser() {
       return Object.keys(this.$store.state.user).length > 0
     },
@@ -249,7 +256,7 @@ export default {
       return this.$store.state.agentData
     },
     hasUserManager() {
-      if(!this.$store.state.user.agent) return true
+      if(!this.$store.state.user.agent) return false
       return this.$store.state.user.agent.manager_id !== null
     }
   },
@@ -330,6 +337,7 @@ export default {
   align-items: flex-start; 
   flex-direction: row; 
   justify-content: space-between;
+  transition: all 0.3s ease;
 }
 .dashboard__custom-btn {
   border-radius: 0!important;
@@ -355,6 +363,18 @@ export default {
     }
   }
 }
+.mobile-agent-not-manager {
+  border-radius: 4px; 
+  margin-bottom: 12px;
+  width: 100%;
+  overflow: hidden;
+  display: none;
+  border-top: 2px solid #ef5350;
+  border-bottom: 2px solid #ef5350;
+  border-right: 2px solid #ef5350;
+  border-left: 2px solid #ef5350;
+  transition: max-width 0.5s ease-in;
+}
 .mobile-agent-info {
   border-radius: 4px; 
   margin-bottom: 12px; 
@@ -364,6 +384,7 @@ export default {
   border-top: 2px solid #ef5350;
   border-bottom: 2px solid #ef5350;
   border-right: 2px solid #ef5350;
+  border-left: 2px solid #ef5350;
   transition: max-width 0.5s ease-in;
   ul {
     padding: 15px;
@@ -380,7 +401,8 @@ export default {
     }
   }
   &.active {
-    max-width: 500px;
+    max-width: 100%;
+    width: 100%;
   }
   .icon-wrapper {
     align-items: stretch;
@@ -411,6 +433,7 @@ export default {
   flex-direction: column;
   max-height: 160px;
   transition: max-height 1s ease!important;
+  border-top: 2px solid #ef5350!important;
   border-left: 2px solid #ef5350!important;
   border-right: 2px solid #ef5350!important;
   border-bottom: 2px solid #ef5350!important;

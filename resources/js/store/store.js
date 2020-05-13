@@ -56,8 +56,8 @@ export default new Vuex.Store({
         .get(`/agent/manager/${state.user.agent.manager_id}`)
         .then(response => {
           console.log(response)
-          commit('toggleSpinner', false)
           commit('addAgentData', response.data)
+          commit('toggleSpinner', false)
         })
         .catch(error => {
           commit('toggleSpinner', false)

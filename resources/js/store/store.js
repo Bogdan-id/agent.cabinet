@@ -53,7 +53,7 @@ export default new Vuex.Store({
       .then(() => {
         console.log('get manager')
         axios
-        .get(`/agent/manager/${state.user.agent.id}`)
+        .get(`/agent/manager/${state.user.agent.manager_id}`)
         .then(response => {
           console.log(response)
           commit('toggleSpinner', false)

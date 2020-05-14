@@ -53,10 +53,7 @@ export default {
   },
   created() {
     this.getBreadsCrumbData()
-    console.log('********************')
-    console.log('BREAD CRUMB')
     console.log(this.$route.matched)
-    console.log('********************')
   },
 }
 </script>
@@ -65,7 +62,7 @@ export default {
 .breadScrumb {
   display: block;
   padding: 10px 10px;
-  font-size: 14px;
+  font-size: 16px;
   a {
     color: #424242!important;
     text-decoration: underline;

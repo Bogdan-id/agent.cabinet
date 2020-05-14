@@ -105,11 +105,12 @@ export default {
 			}
 		},
 		checkUser() {
-			axios.get(`/getUserAgent`)
+			axios.get(`/getCurrentUser`)
 				.then(response => {
+          console.log(response)
 					// user has registered account and the application is approved
-					if(response.data.user.is_active === 1) {
-						this.checkUserAgent(response.data)
+					if(response.data.is_active === 1) {
+						this.checkUserAgent()
 					// user has registered an account. Application at the verification stage
 					} else if(response.data.user.is_active === 0) {
 						this.$router.push('/verification')
@@ -119,14 +120,23 @@ export default {
 					console.log(error.response.statusText)
 				})
 		},
-		checkUserAgent(response) {
-			// user is tied to an agent. Pass to dashboard
-			if(response.agent !== null) {
-				this.$router.push('/home')
-			// Application approved. Fill the form (complete register)
-			} else {
-				this.$router.push('/finish-register')
-			}
+		checkUserAgent() {
+      // user is tied to an agent. Pass to dashboard
+      axios.get(`/getUserAgent`)
+				.then(response => {
+          console.log(response)
+					// user has registered account and the application is approved
+					if(response.data.agent !== null) {
+            this.$router.push('/home')
+          // Application approved. Fill the form (complete register)
+          } else {
+            this.$router.push('/finish-register')
+          }
+				})
+				.catch(error => {
+          this.$router.push('/finish-register')
+					console.log(error.response.statusText)
+				})
 		},
 		signIn(userObj) {
 			this.request = true

@@ -122,9 +122,8 @@
                       v-on="on"
                       label="Дата народження"
                       :placeholder="user.birth"
-                      prepend-inner-icon="mdi-calendar-range"
-                      dense readonly
-                      outlined>
+                      prepend-icon="mdi-calendar-range"
+                      dense readonly>
                   </v-text-field>
                 </template>
                 <v-date-picker 
@@ -210,8 +209,8 @@
                     v-model="user.ab_size"
                     label="Розмiр АВ"
                     placeholder="Розмiр АВ"
-                    append-icon="mdi-percent-outline"
-                    outlined dense readonly>
+                    prepend-icon="mdi-percent-outline"
+                    dense readonly>
                 </v-text-field>
               </div>
               <div class="col-md-4">
@@ -220,7 +219,7 @@
                     v-model="user.manager.name"
                     label="Куратор"
                     placeholder="Куратор"
-                    outlined dense readonly>
+                    dense readonly>
                 </v-text-field>
               </div>
             </div>

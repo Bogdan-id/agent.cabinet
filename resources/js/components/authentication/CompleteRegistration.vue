@@ -202,6 +202,14 @@
                         label="Реквізити карти для виплат" 
                         outlined dense>
                     </v-text-field>
+                    <v-textarea
+                        v-model="iban"
+                        name="input-7-4"
+                        label="IBAN"
+                        maxlength="29"
+                        rows="1"
+                        outlined>
+                    </v-textarea>
                   </div>
               </v-col>
             </v-row>
@@ -277,6 +285,7 @@ export default {
     unzr: null,
     inn: null,
     cardNumber: null,
+    iban: null,
 
     /* temporary data */
     choosedDate: null,

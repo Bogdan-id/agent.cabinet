@@ -4,8 +4,8 @@
       max-width="390"
       v-model="agentOperationsDialog">
       <v-card>
-        <v-card-title style="border-bottom: 1px solid grey!important">
-          <v-icon large class="mr-2" v-text="'mdi-information'"></v-icon>
+        <v-card-title class="white--text grey darken-4">
+          <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
           Операції
         </v-card-title>
         <v-card-text class="mt-8 pb-1 subtitle-1">
@@ -39,13 +39,15 @@
           <v-btn
             @click="sendUserSettings()"
             :loading="loading"
-            small dark>
+            small
+            color="error">
             Зберегти
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
             @click="agentOperationsDialog = false"
-            small dark>
+            small 
+            class="grey darken-2 white--text">
             Вiдмiнити
           </v-btn>
         </v-card-actions>
@@ -55,8 +57,8 @@
       max-width="390"
       v-model="deactivateDialog">
       <v-card>
-        <v-card-title style="border-bottom: 1px solid grey!important">
-          <v-icon large class="mr-2" v-text="'mdi-information'"></v-icon>
+        <v-card-title class="white--text grey darken-4">
+          <v-icon large color="white"  class="mr-2" v-text="'mdi-information'"></v-icon>
           Деактивацiя
         </v-card-title>
         <v-card-text class="mt-4 subtitle-1">
@@ -66,17 +68,18 @@
         </v-card-text>
         <v-card-actions>
           <v-btn 
-            class="ml-3" 
+            class="ml-3"
+            color="error" 
             :disabled="currentUser.id === null"
             :loading="loading"
             @click="sendRequest(currentUser.id)"
-            dark small>Так
+            small>Так
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn 
             @click="deactivateDialog = false" 
-            class="mr-3" 
-            dark small>Нi
+            class="mr-3 grey darken-2 white--text" 
+            small>Нi
           </v-btn>
         </v-card-actions>
       </v-card>

@@ -316,12 +316,16 @@ export default {
   },
   created() {
     console.log(this.$store.state.user)
+    let agentId = this.$store.state.user.agent.id
+    let userId = this.$store.state.user.user.id
     Object.assign(this.user, 
       this.$store.state.user.agent,
       this.$store.state.user.user,
       this.$store.state.user.agent.document
     ) 
-    console.log(this.user)
+    this.user['agentId'] = agentId
+    this.user['userId'] = userId
+    delete this.user.agent
   },
   mounted() {
     this.user.passport_type_id = this.showPassportType

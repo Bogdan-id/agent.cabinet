@@ -98,7 +98,7 @@
               @click="getAgentOperations(item.id);
                 findAgent(item.id)"
               color="primary" x-small>
-              Операції
+              Змiнити
             </v-btn>
             &nbsp;
             <v-btn

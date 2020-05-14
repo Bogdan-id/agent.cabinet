@@ -2,203 +2,236 @@
   <v-card class="edit-profile">
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-account'"></v-icon>
-      Профiль
+        Профiль
       <v-divider></v-divider>
     </v-card-title>
     <v-card-text>
     <div>
       <form @submit.prevent>
         <!--  -->
-        <div class="row">
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.last_name"
-                label="Прізвище"
-                :placeholder="user.last_name"
-                dense>
-            </v-text-field>
-          </div>
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.first_name"
-                label="Ім'я"
-                :placeholder="user.first_name"
-                dense>
-            </v-text-field>
-          </div>
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.patronymic"
-                label="По батькові"
-                :placeholder="user.patronymic"
-                dense>
-            </v-text-field>
-          </div>
-        </div>
+        <v-card class="mb-6 custom-border">
+          <v-card-title>
+            ПIБ
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <div class="col-md-4">
+                <v-text-field
+                    v-model="user.last_name"
+                    label="Прізвище"
+                    :placeholder="user.last_name"
+                    dense>
+                </v-text-field>
+              </div>
+              <div class="col-md-4">
+                <v-text-field
+                    v-model="user.first_name"
+                    label="Ім'я"
+                    :placeholder="user.first_name"
+                    dense>
+                </v-text-field>
+              </div>
+              <div class="col-md-4">
+                <v-text-field
+                    v-model="user.patronymic"
+                    label="По батькові"
+                    :placeholder="user.patronymic"
+                    dense>
+                </v-text-field>
+              </div>
+            </v-row>
+          </v-card-text>
+        </v-card>
         <!--  -->
-        <div class="row">
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.phone"
-                label="Телефон"
-                :placeholder="user.phone"
-                outlined dense>
-            </v-text-field>
-          </div>
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.email"
-                label="Email"
-                :placeholder="user.email"
-                outlined dense>
-            </v-text-field>
-          </div>
-        </div>
+        <v-card class="mb-6 custom-border">
+          <v-card-title>
+            Контактна iнформацiя
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <div class="col-md-5">
+                <v-text-field
+                    v-model="user.phone"
+                    label="Телефон"
+                    :placeholder="user.phone"
+                    outlined dense>
+                </v-text-field>
+              </div>
+              <div class="col-md-6">
+                <v-text-field
+                    v-model="user.email"
+                    label="Email"
+                    :placeholder="user.email"
+                    outlined dense>
+                </v-text-field>
+              </div>
+            </v-row>
+          </v-card-text>
+        </v-card>
         <!--  -->
-        <div class="row">
-          <div class="col-md-3">
-            <v-dialog
-                v-model="modal"
-                ref="modal"
-                width="290px">
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                  v-model="user.birth"
-                  v-on="on"
-                  label="Дата народження"
-                  :placeholder="user.birth"
-                  prepend-inner-icon="mdi-calendar-range"
-                  dense readonly
-                  outlined>
-              </v-text-field>
-            </template>
-            <v-date-picker 
-                @change="save"
-                v-model="choosedDate"  
-                ref="picker"
-                color="red lighten-1"
-                :min="hundredYears" 
-                :max="eighteenYearsAgo">
-            </v-date-picker>
-          </v-dialog>
-          </div>
-        </div>
+        <v-card class="mb-6 custom-border">
+          <v-card-title>
+            Посадовi даннi
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <div class="col-md-5">
+                <v-select
+                    v-model="user.company_type"
+                    append-icon=""
+                    label="Місце роботи"
+                    :placeholder="companyType"
+                    :items="companyTypes"
+                    outlined dense>
+                </v-select>
+              </div>
+              <div class="col-md-3">
+                <v-text-field
+                    v-model="user.satus"
+                    label="Статус"
+                    :placeholder="user.status || 'Статус'"
+                    outlined dense readonly>
+                </v-text-field>
+              </div>
+              <div class="col-md-4">
+                <v-text-field
+                    v-model="user.position"
+                    label="Посада"
+                    :placeholder="user.position"
+                    outlined dense>
+                </v-text-field>
+              </div>
+            </v-row>
+          </v-card-text>
+        </v-card>
         <!--  -->
-        <div class="row">
-          <div class="col-md-3">
-            <v-select
-                v-model="user.company_type"
-                append-icon=""
-                label="Місце роботи"
-                :placeholder="companyType"
-                :items="companyTypes"
-                outlined dense>
-            </v-select>
-          </div>
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.satus"
-                label="Статус"
-                :placeholder="user.status || 'Статус'"
-                outlined dense disabled>
-            </v-text-field>
-          </div>
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.position"
-                label="Посада"
-                prepend-inner-icon="mdi-briefcase"
-                :placeholder="user.position"
-                outlined dense>
-            </v-text-field>
-          </div>
-        </div>
+        <v-card class="mb-6 custom-border">
+          <v-card-title>
+            Особовi даннi
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <div class="col-md-4">
+                <v-dialog
+                    v-model="modal"
+                    ref="modal"
+                    width="290px">
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                      v-model="user.birth"
+                      v-on="on"
+                      label="Дата народження"
+                      :placeholder="user.birth"
+                      prepend-inner-icon="mdi-calendar-range"
+                      dense readonly
+                      outlined>
+                  </v-text-field>
+                </template>
+                <v-date-picker 
+                    @change="save"
+                    v-model="choosedDate"  
+                    ref="picker"
+                    color="red lighten-1"
+                    :min="hundredYears" 
+                    :max="eighteenYearsAgo">
+                </v-date-picker>
+              </v-dialog>
+              </div>
+            </v-row>
+            <div class="row">
+              <div class="col-md-3">
+                <v-text-field
+                    :value="showPassportType"
+                    append-icon=""
+                    :label="showPassportType"
+                    :items="pasportItems"
+                    outlined dense readonly>
+                </v-text-field>
+              </div>
+              <div class="col-md-4">
+                <v-text-field v-if="!bioPassport"
+                    v-model="user.serie"
+                    label="Серiя паспорту"
+                    placeholder="Серія паспорту"
+                    outlined dense readonly>
+                </v-text-field>
+                <v-text-field v-if="bioPassport"
+                    label="Номер УНЗР"
+                    placeholder="номер УНЗР"
+                    v-model="user.unzr_number"
+                    outlined dense readonly>
+                </v-text-field>
+              </div>
+              <div class="col-md-4">
+                <v-text-field v-if="!bioPassport"
+                    v-model="user.passport_number"
+                    label="Номер паспорту"
+                    placeholder="номер паспорту"
+                    outlined dense readonly>
+                </v-text-field>
+                <v-text-field v-if="bioPassport"
+                    v-model="user.id_card_number"
+                    label="Номер документа"
+                    placeholder="номер документа"
+                    outlined dense readonly>
+                </v-text-field>
+              </div>
+            </div>
+            <!--  -->
+            <div class="row">
+              <div class="col-md-4">
+                <v-text-field
+                    v-model="user.inn"
+                    label="Ідентифікаційний код"
+                    :placeholder="user.inn"
+                    outlined dense>
+                </v-text-field>
+              </div>
+              <div class="col-md-4">
+                <v-text-field
+                    v-model="user.card_number"
+                    label="Реквiзити картки"
+                    :placeholder="user.card_number"
+                    outlined dense>
+                </v-text-field>
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
         <!--  -->
-        <div class="row">
-          <div class="col-md-3">
-            <v-text-field
-                :value="showPassportType"
-                append-icon=""
-                :label="showPassportType"
-                :items="pasportItems"
-                outlined dense readonly>
-            </v-text-field>
-          </div>
-          <div class="col-md-3">
-            <v-text-field v-if="!bioPassport"
-                v-model="user.serie"
-                label="Серiя паспорту"
-                placeholder="Серія паспорту"
-                outlined dense readonly>
-            </v-text-field>
-            <v-text-field v-if="bioPassport"
-                label="Номер УНЗР"
-                placeholder="номер УНЗР"
-                v-model="user.unzr_number"
-                outlined dense readonly>
-            </v-text-field>
-          </div>
-          <div class="col-md-3">
-            <v-text-field v-if="!bioPassport"
-                v-model="user.passport_number"
-                label="Номер паспорту"
-                placeholder="номер паспорту"
-                outlined dense readonly>
-            </v-text-field>
-            <v-text-field v-if="bioPassport"
-                v-model="user.id_card_number"
-                label="Номер документа"
-                placeholder="номер документа"
-                outlined dense readonly>
-            </v-text-field>
-          </div>
-        </div>
-        <!--  -->
-        <div class="row">
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.inn"
-                label="Ідентифікаційний код"
-                :placeholder="user.inn"
-                outlined dense>
-            </v-text-field>
-          </div>
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.card_number"
-                label="Реквiзити картки"
-                :placeholder="user.card_number"
-                outlined dense>
-            </v-text-field>
-          </div>
-        </div>
-        <!--  -->
-        <div class="row">
-          <div class="col-md-3">
-            <v-text-field
-                v-model="user.ab_size"
-                label="Розмiр АВ"
-                placeholder="Розмiр АВ"
-                prepend-inner-icon="mdi-percent-outline"
-                outlined dense disabled>
-            </v-text-field>
-          </div>
-          <div class="col-md-3">
-            <v-text-field
-                v-if="user.manager !== null"
-                v-model="user.manager.name"
-                label="Куратор"
-                placeholder="Куратор"
-                outlined dense disabled>
-            </v-text-field>
-          </div>
-        </div>
+        <v-card class="mb-6 custom-border">
+          <v-card-title>
+            Лiзинг
+          </v-card-title>
+          <v-card-text>
+            <div class="row">
+              <div class="col-md-3">
+                <v-text-field
+                    v-model="user.ab_size"
+                    label="Розмiр АВ"
+                    placeholder="Розмiр АВ"
+                    append-icon="mdi-percent-outline"
+                    outlined dense readonly>
+                </v-text-field>
+              </div>
+              <div class="col-md-4">
+                <v-text-field
+                    v-if="user.manager !== null"
+                    v-model="user.manager.name"
+                    label="Куратор"
+                    placeholder="Куратор"
+                    outlined dense readonly>
+                </v-text-field>
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
         <div class="text-center">
           <v-btn
-              dark
-              color="red darken-1"
-              @click.native.prevent="updateProfile">
-              Оновити профіль
+            dark
+            color="red darken-1"
+            @click.native.prevent="updateProfile">
+            Оновити профіль
           </v-btn>
         </div>
         <div class="clearfix"></div>
@@ -308,5 +341,25 @@ export default {
     .v-text-field__slot .v-label--active, .v-label {
       font-size: 20px!important;
     }
+    .v-card {
+      &.custom-border {
+        border-left: 2px solid red;
+      }
+    }
+    // .profile-data-wrapper {
+    //   border: 2px solid #818080;
+    //   position: relative;
+    //   padding: 25px 15px 0 15px;
+    //   border-radius: 15px;
+    //   margin-bottom: 25px;
+    //   font-size: 1.3rem;
+    //   .profile-data-title {
+    //     position: absolute;
+    //     top: -11px;
+    //     z-index: 3;
+    //     background: #ffffff;
+    //     padding: 0 10px 0 10px;
+    //   }
+    // }
   }
 </style>

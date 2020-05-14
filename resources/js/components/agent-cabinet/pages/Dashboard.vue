@@ -369,10 +369,7 @@ export default {
   width: 100%;
   overflow: hidden;
   display: none;
-  border-top: 2px solid #ef5350;
-  border-bottom: 2px solid #ef5350;
-  border-right: 2px solid #ef5350;
-  border-left: 2px solid #ef5350;
+  border: 2px solid #ef5350;
   transition: max-width 0.5s ease-in;
 }
 .mobile-agent-info {
@@ -381,10 +378,7 @@ export default {
   overflow: hidden;
   max-width: 140px;
   max-height: 86px;
-  border-top: 2px solid #ef5350;
-  border-bottom: 2px solid #ef5350;
-  border-right: 2px solid #ef5350;
-  border-left: 2px solid #ef5350;
+  border: 2px solid #ef5350;
   transition: max-width 0.5s ease-in;
   ul {
     padding: 15px;
@@ -432,11 +426,9 @@ export default {
   align-items: center;
   flex-direction: column;
   max-height: 160px;
+  width: 100%!important;
   transition: max-height 1s ease!important;
-  border-top: 2px solid #ef5350!important;
-  border-left: 2px solid #ef5350!important;
-  border-right: 2px solid #ef5350!important;
-  border-bottom: 2px solid #ef5350!important;
+  border: 1px solid #ef5350!important;
   .agent-info-list {
     visibility: hidden;
     opacity: 0;

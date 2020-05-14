@@ -174,7 +174,9 @@
             value="2" 
             v-model="currentTab">
           <div class="content">
-            <v-card-title class="edit-title pb-6">Редагувати матерiали</v-card-title>
+            <v-card-text>
+              <v-card-title class="edit-title pb-6">Редагувати матерiали</v-card-title>
+            </v-card-text>
           </div>
         </div>
       </div>

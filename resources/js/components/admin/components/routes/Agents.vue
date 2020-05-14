@@ -123,7 +123,7 @@ export default {
   data: () => ({
     tableHeader: [
       { text: 'ФИО', value: 'initials', align: 'start'},
-      { text: 'Компанiя', value: 'companyName', align: 'center'},
+      { text: 'Компанiя', value: 'company_name', align: 'center'},
       { text: 'Посада', value: 'position', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center' },
     ],
@@ -176,9 +176,12 @@ export default {
       await object.map(val => {
         let dataObj = {
           initials: `${val.last_name} ${val.first_name} ${val.patronymic}`,
-          companyName: val.company_name,
+          company_name: val.company_name,
           position: val.position,
-          id: val.user_id
+          id: val.user_id,
+          abSize: val.ab_size,
+          managerId: val.manager_id,
+          status: val.status
         }
         arr.push(dataObj)
       })
@@ -187,23 +190,24 @@ export default {
         // .reverse()
     },
     findAgent(id) {
-      console.log('findAgent',  id)
-      return this.tabledata
+      console.log(id)
+      let data = this.tabledata
         .find(value => {
-          value.id === id
-          console.log(value)
-          Object.assign(this.currentUser, value)
-          Object.assign(this.userSettings, value)
+          return value.id === id
+          // console.log(value.id, id)
         })
+      if(Object.keys(data).length > 0) {
+        Object.assign(this.currentUser, data)
+        Object.assign(this.userSettings, data)
+        // console.log(data)
+        // console.log(this.userSettings)
+      }
     },
     deactivateUser(userId) {
-      console.log('deactivateUser', userId)
       this.deactivateDialog = true
       this.findAgent(userId)
-      console.log(userId)
-      console.log(this.tabledata)
     },
-    getManaers() {
+    getManagers() {
       axios
         .get('/getManagers')
         .then(response => {
@@ -262,9 +266,18 @@ export default {
         el.dispatchEvent(input)
       }
     },
+    // checkObject(object) {
+    //   Object.keys(object)
+    //     .forEach(propertie => {
+    //       if(object[propertie] === null) {
+    //         delete object[propertie]
+    //       }
+    //     })
+    // },
     sendUserSettings() {
       this.loading = true
       this.userSettings._token = this.getCsrf()
+      // this.checkObject(this.userSettings)
       axios
         .post(`/admin/agent/update/${this.currentUser.id}`, this.userSettings)
         .then(response => {
@@ -298,11 +311,19 @@ export default {
     'userSettings.managerId': function (val) {
       if(val === null || val === 'undefined') return
       else this.userSettings.managerId = parseInt(val)
-    }
+    },
+    agentOperationsDialog(val) {
+      if(val === false) {
+        Object.keys(this.userSettings)
+          .forEach(propertie => {
+            this.userSettings[propertie] = null
+          })
+      }
+    },
   },
   created() {
     this.getAgents()
-    this.getManaers()
+    this.getManagers()
   }
 }
 </script>

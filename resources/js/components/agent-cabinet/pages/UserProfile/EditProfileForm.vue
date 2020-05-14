@@ -209,7 +209,7 @@
                     v-model="user.ab_size"
                     label="Розмiр АВ"
                     placeholder="Розмiр АВ"
-                    prepend-icon="mdi-percent-outline"
+                    append-inner-icon="mdi-percent-outline"
                     dense readonly>
                 </v-text-field>
               </div>

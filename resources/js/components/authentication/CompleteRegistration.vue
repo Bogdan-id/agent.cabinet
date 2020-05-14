@@ -94,123 +94,126 @@
             </v-col>
 
             <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-                  <div>
-                    <span class="title d-block mt-3">Тип паспорту</span>
-                    <v-radio-group
-                      style="margin-top: 0;"
-                      :error-messages="passportTypeErrors" 
-                      @input="$v.passportType.$touch()" 
-                      v-model="passportType"
-                      dense row>
-                      <v-radio label="ID - картка" color="black" value="2"></v-radio>
-                      <v-radio label="Книжковий" color="black" value="1"></v-radio>
-                    </v-radio-group>
-                    <v-text-field
-                        v-show="passportType === '1'" 
-                        :error-messages="passportSeriesErrors" 
-                        @input="lettersToUpperCase(); $v.passportSeries.$touch()" 
-                        @blur="$v.passportSeries.$touch()"
-                        v-model="passportSeries" 
-                        class="passport-serries" 
-                        id="passwordS" 
-                        :maxlength="passportSeriesMaxLength"  
-                        hint="Серія паспорта"
-                        label="Серія" 
-                        dense outlined counter persistent-hint>
-                    </v-text-field>
-                    <v-text-field
-                        v-show="passportType === '1'" 
-                        :error-messages="passportNumberErrors" 
-                        @blur="$v.passportNumber.$touch()" 
-                        @input="$v.passportNumber.$touch()"
-                        v-mask="passportNumberMask"  
-                        v-model="passportNumber" 
-                        class="passport-number"
-                        label="Номер"
-                        :maxlength="passportNumberMaxLength"
-                        hint="Номер паспорта"
-                        outlined counter dense persistent-hint>
-                    </v-text-field>
-                    <v-text-field 
-                        v-show="passportType === '2'"
-                        :error-messages="unzrErrors" 
-                        @blur="$v.unzr.$touch()"
-                        @input="$v.unzr.$touch()"
-                        v-model="unzr"
-                        v-mask="unzrMask"
-                        class="passport-number"
-                        label="УНЗР"
-                        hint="Унікальний номер запису у реєстрі"
-                        :maxlength="unzrMaxLength" 
-                        outlined dense counter clearable>
-                    </v-text-field>
-                    <v-text-field
-                        v-show="passportType === '2'"
-                        :error-messages="bioPassportNumberErrors" 
-                        @blur="$v.bioPassportNumber.$touch()" 
-                        @input="$v.bioPassportNumber.$touch()" 
-                        v-model="bioPassportNumber" 
-                        v-mask="bioPassportNumberMask" 
-                        class="passport-serries"
-                        label="Номер документа"
-                        :maxlength="bioPassportNumberMaxLength"
-                        hint="Номер документа"
-                        outlined counter dense persistent-hint>
-                    </v-text-field>
-                  </div>
-                  <div class="input__text">
-                    <v-text-field 
-                        :error-messages="innErrors" 
-                        @blur="$v.inn.$touch()" 
-                        @input="$v.inn.$touch()"
-                        v-mask="innMask"
-                        v-model="inn" 
-                        prepend-inner-icon="mdi-account-outline"
-                        label="Ідентифікаційний код" 
-                        :maxlength="innMaxLength" 
-                        outlined dense counter clearable>
-                    </v-text-field>
-                    <v-dialog
-                      v-model="modal"
-                      ref="modal"
-                      width="290px">
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                            v-model="dateOfBirth"
-                            v-on="on"
-                            prepend-inner-icon="mdi-calendar-range"
-                            label="Дата народження"
-                            dense readonly outlined>
-                        </v-text-field>
-                      </template>
-                      <v-date-picker 
-                          @change="save"
-                          v-model="choosedDate"  
-                          ref="picker"
-                          :min="hundredYears" 
-                          :max="eighteenYearsAgo"
-                          color="red">
-                      </v-date-picker>
-                    </v-dialog>
-                    <v-text-field 
-                        :error-messages="cardNumberErrors" 
-                        @blur="$v.cardNumber.$touch()" 
-                        @input="$v.cardNumber.$touch()"
-                        v-model="cardNumber" 
-                        v-mask="cardNumberMask"
-                        prepend-inner-icon="mdi-credit-card-outline" 
-                        label="Реквізити карти для виплат" 
-                        outlined dense>
-                    </v-text-field>
-                    <v-textarea
-                        v-model="iban"
-                        name="input-7-4"
-                        label="IBAN"
-                        maxlength="29"
-                        rows="1"
-                        outlined>
-                    </v-textarea>
-                  </div>
+                <div>
+                  <span class="title d-block mt-3">Тип паспорту</span>
+                  <v-radio-group
+                    style="margin-top: 0;"
+                    :error-messages="passportTypeErrors" 
+                    @input="$v.passportType.$touch()" 
+                    v-model="passportType"
+                    dense row>
+                    <v-radio label="ID - картка" color="black" value="2"></v-radio>
+                    <v-radio label="Книжковий" color="black" value="1"></v-radio>
+                  </v-radio-group>
+                  <v-text-field
+                      v-show="passportType === '1'" 
+                      :error-messages="passportSeriesErrors" 
+                      @input="lettersToUpperCase(); $v.passportSeries.$touch()" 
+                      @blur="$v.passportSeries.$touch()"
+                      v-model="passportSeries" 
+                      class="passport-serries" 
+                      id="passwordS" 
+                      :maxlength="passportSeriesMaxLength"  
+                      hint="Серія паспорта"
+                      label="Серія" 
+                      dense outlined counter persistent-hint>
+                  </v-text-field>
+                  <v-text-field
+                      v-show="passportType === '1'" 
+                      :error-messages="passportNumberErrors" 
+                      @blur="$v.passportNumber.$touch()" 
+                      @input="$v.passportNumber.$touch()"
+                      v-mask="passportNumberMask"  
+                      v-model="passportNumber" 
+                      class="passport-number"
+                      label="Номер"
+                      :maxlength="passportNumberMaxLength"
+                      hint="Номер паспорта"
+                      outlined counter dense persistent-hint>
+                  </v-text-field>
+                  <v-text-field 
+                      v-show="passportType === '2'"
+                      :error-messages="unzrErrors" 
+                      @blur="$v.unzr.$touch()"
+                      @input="$v.unzr.$touch()"
+                      v-model="unzr"
+                      v-mask="unzrMask"
+                      class="passport-number"
+                      label="УНЗР"
+                      hint="Унікальний номер запису у реєстрі"
+                      :maxlength="unzrMaxLength" 
+                      outlined dense counter clearable>
+                  </v-text-field>
+                  <v-text-field
+                      v-show="passportType === '2'"
+                      :error-messages="bioPassportNumberErrors" 
+                      @blur="$v.bioPassportNumber.$touch()" 
+                      @input="$v.bioPassportNumber.$touch()" 
+                      v-model="bioPassportNumber" 
+                      v-mask="bioPassportNumberMask" 
+                      class="passport-serries"
+                      label="Номер документа"
+                      :maxlength="bioPassportNumberMaxLength"
+                      hint="Номер документа"
+                      outlined counter dense persistent-hint>
+                  </v-text-field>
+                </div>
+                <div class="input__text">
+                  <v-text-field 
+                      :error-messages="innErrors" 
+                      @blur="$v.inn.$touch()" 
+                      @input="$v.inn.$touch()"
+                      v-mask="innMask"
+                      v-model="inn" 
+                      prepend-inner-icon="mdi-account-outline"
+                      label="Ідентифікаційний код" 
+                      :maxlength="innMaxLength" 
+                      outlined dense counter clearable>
+                  </v-text-field>
+                  <v-dialog
+                    v-model="modal"
+                    ref="modal"
+                    width="290px">
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                          v-model="dateOfBirth"
+                          v-on="on"
+                          prepend-inner-icon="mdi-calendar-range"
+                          label="Дата народження"
+                          dense readonly outlined>
+                      </v-text-field>
+                    </template>
+                    <v-date-picker 
+                        @change="save"
+                        v-model="choosedDate"  
+                        ref="picker"
+                        :min="hundredYears" 
+                        :max="eighteenYearsAgo"
+                        color="red">
+                    </v-date-picker>
+                  </v-dialog>
+                  <v-text-field 
+                      :error-messages="cardNumberErrors" 
+                      @blur="$v.cardNumber.$touch()" 
+                      @input="$v.cardNumber.$touch()"
+                      v-model="cardNumber" 
+                      v-mask="cardNumberMask"
+                      prepend-inner-icon="mdi-credit-card-outline" 
+                      label="Реквізити карти для виплат" 
+                      outlined dense>
+                  </v-text-field>
+                  <v-textarea
+                      :error-messages="ibanErrors" 
+                      @blur="$v.iban.$touch()" 
+                      @input="$v.iban.$touch()"
+                      v-model="iban"
+                      name="input-7-4"
+                      label="IBAN"
+                      maxlength="29"
+                      rows="1"
+                      outlined>
+                  </v-textarea>
+                </div>
               </v-col>
             </v-row>
             <v-row>
@@ -302,6 +305,10 @@ export default {
     unzrMaxLength: 14,
   }),
   validations: {
+    iban: {
+      required,
+      minLength: minLength(29)
+    },
     lastName: {
       required,
     },
@@ -400,6 +407,7 @@ export default {
         'inn': this.inn,
         'card_number': this.cardNumber.replace(/[^\d]/g, ''),
         'oferta_accepted': true,
+        'iban': this.iban,
         '_token': this.getCsrf()
       }
     },
@@ -563,6 +571,13 @@ export default {
       !this.$v.passportType.checked && errors.push(`Оберiть тип паспорту`)
 			return errors
     },
+    ibanErrors() {
+      const errors = []
+      if (!this.$v.iban.$error) return errors
+      !this.$v.iban.minLength && errors.push(`Повинно бути 29 символiв`)
+      !this.$v.iban.required && errors.push(`Поле обов\`язкове для заповнення`)
+			return errors
+    },
     passport() {
       let check = false
       !this.$v.lastName.$invalid
@@ -576,6 +591,7 @@ export default {
       && !this.$v.passportNumber.$invalid
       && !this.$v.inn.$invalid
       && !this.$v.cardNumber.$invalid
+      && !this.$v.iban.$invalid
         ? check = true
         : false
       return check
@@ -592,6 +608,7 @@ export default {
       && !this.dateOfBirth != null
       && !this.$v.inn.$invalid
       && !this.$v.cardNumber.$invalid
+      && !this.$v.iban.$invalid
         ? check = true
         : false
       return check

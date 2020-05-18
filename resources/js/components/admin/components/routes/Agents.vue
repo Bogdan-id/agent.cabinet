@@ -184,7 +184,7 @@ export default {
           initials: `${val.last_name} ${val.first_name} ${val.patronymic}`,
           company_name: val.company_name,
           position: val.position,
-          id: val.user_id,
+          id: val.id,
           abSize: val.ab_size,
           managerId: val.manager_id,
           status: val.status

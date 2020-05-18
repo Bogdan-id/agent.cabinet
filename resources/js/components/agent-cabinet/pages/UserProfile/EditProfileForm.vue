@@ -346,7 +346,7 @@ export default {
     }
     .v-card {
       &.custom-border {
-        border-left: 2px solid red;
+        border-left: 3px solid red;
       }
     }
     // .profile-data-wrapper {

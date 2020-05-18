@@ -935,7 +935,7 @@ export default {
 <style lang="scss">
   .v-card{ 
     &.black-border-left {
-      border-left: 2px solid #ff0000!important;
+      border-left: 3px solid #ff0000!important;
     }
   }
 </style>

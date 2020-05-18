@@ -667,7 +667,7 @@ export default {
       return this.commonErr
     },
     leasingCurrencyCourseErr() {
-      if(!this.hasForeignCurrency) return
+      if (!this.hasForeignCurrency) return
       if (!this.$v.calcObj.leasingCurrencyCourse.$error) return
       return this.commonErr
     },
@@ -935,7 +935,7 @@ export default {
 <style lang="scss">
   .v-card{ 
     &.black-border-left {
-      border-left: 2px solid black!important;
+      border-left: 2px solid #ff0000!important;
     }
   }
 </style>

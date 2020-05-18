@@ -87,6 +87,12 @@
     <v-card-title>
       Роздiл - Агенти
     </v-card-title>
+    <v-card-text v-if="$store.state.adminLoader">
+      <v-progress-circular
+        color="red"
+        indeterminate>
+      </v-progress-circular>
+    </v-card-text>
     <v-card-text>
       <v-data-table
         v-if="tabledata.length > 0"

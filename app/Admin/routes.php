@@ -16,5 +16,10 @@ Route::group([
     $router->post('/agent/update/{id}', 'AgentController@adminUpdateAgent');
     $router->get('/agent/all', 'AgentController@getAgents');
     $router->get('/getDontActiveUsers', 'AgentController@getDontActiveUsers');
-
+    $router->get('useful-materials-categories/all', 'UsefulMaterialsController@getCategories');
+    $router->post('useful-materials-categories/create', 'UsefulMaterialsController@createCategory');
+    $router->post('useful-materials-categories/update/{id}', 'UsefulMaterialsController@updateCategory')
+            ->where('id', '[0-9]+');
+    $router->delete('useful-materials-categories/delete/{id}', 'UsefulMaterialsController@destroyCategory')
+            ->where('id', '[0-9]+');
 });

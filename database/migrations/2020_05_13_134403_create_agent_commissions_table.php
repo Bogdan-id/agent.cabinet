@@ -17,7 +17,7 @@ class CreateAgentCommissionsTable extends Migration
             $table->id();
             $table->integer('agent_id');
             $table->integer('leasing_request_id');
-            $table->text('purpose_of_payment');
+            $table->text('purpose_of_payment')->nullable();
             $table->string('status');
             $table->timestamps();
         });

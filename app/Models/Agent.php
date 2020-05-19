@@ -44,4 +44,12 @@ class Agent extends Model
     {
         return $this->hasMany('App\Models\LeasingRequest');
     }
+
+    /**
+     * Get the commisions records associated with the agent.
+     */
+    public function commissions()
+    {
+        return $this->hasMany('App\Models\AgentCommission')->with('leasingRequest');
+    }
 }

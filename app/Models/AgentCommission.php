@@ -28,4 +28,10 @@ class AgentCommission extends Model
      protected $casts = [
        //
      ];
+
+     
+    public function leasingRequest()
+    {
+        return $this->belongsTo('App\Models\LeasingRequest', 'leasing_requests_id');
+    }
 }

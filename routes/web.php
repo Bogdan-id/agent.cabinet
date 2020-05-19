@@ -56,6 +56,7 @@ Route::post('useful-materials-categories/update/{id}', 'UsefulMaterialsControlle
 Route::delete('useful-materials-categories/delete/{id}', 'UsefulMaterialsController@destroyCategory')
             ->where('id', '[0-9]+');
 
+Route::post('agent-commission/create', 'AgentCommisionController@create');
 
 Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');

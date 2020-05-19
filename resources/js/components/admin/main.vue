@@ -18,17 +18,20 @@
     <AppBar 
       :drawer="drawer"
       @listenDrawer="drawer = $event"/>
-    </v-app>
+    <Footer />
+  </v-app>
 </template>
 
 <script>
 import AppBar from './components/AppBar.vue'
 import NavigationDrawer from './components/NavigationDrawer.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   components: {
 		AppBar,
     NavigationDrawer,
+    Footer
   },
   data: () => ({
     drawer: true,

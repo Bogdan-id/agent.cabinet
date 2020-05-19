@@ -4,8 +4,8 @@
       max-width="390"
       v-model="agentOperationsDialog">
       <v-card>
-        <v-card-title style="border-bottom: 1px solid grey!important">
-          <v-icon large class="mr-2" v-text="'mdi-information'"></v-icon>
+        <v-card-title class="white--text grey darken-4">
+          <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
           Операції
         </v-card-title>
         <v-card-text class="mt-8 pb-1 subtitle-1">
@@ -39,13 +39,15 @@
           <v-btn
             @click="sendUserSettings()"
             :loading="loading"
-            small dark>
+            small
+            color="error">
             Зберегти
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
             @click="agentOperationsDialog = false"
-            small dark>
+            small 
+            class="grey darken-2 white--text">
             Вiдмiнити
           </v-btn>
         </v-card-actions>
@@ -55,8 +57,8 @@
       max-width="390"
       v-model="deactivateDialog">
       <v-card>
-        <v-card-title style="border-bottom: 1px solid grey!important">
-          <v-icon large class="mr-2" v-text="'mdi-information'"></v-icon>
+        <v-card-title class="white--text grey darken-4">
+          <v-icon large color="white"  class="mr-2" v-text="'mdi-information'"></v-icon>
           Деактивацiя
         </v-card-title>
         <v-card-text class="mt-4 subtitle-1">
@@ -66,17 +68,18 @@
         </v-card-text>
         <v-card-actions>
           <v-btn 
-            class="ml-3" 
+            class="ml-3"
+            color="error" 
             :disabled="currentUser.id === null"
             :loading="loading"
             @click="sendRequest(currentUser.id)"
-            dark small>Так
+            small>Так
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn 
             @click="deactivateDialog = false" 
-            class="mr-3" 
-            dark small>Нi
+            class="mr-3 grey darken-2 white--text" 
+            small>Нi
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -84,6 +87,12 @@
     <v-card-title>
       Роздiл - Агенти
     </v-card-title>
+    <v-card-text v-if="$store.state.adminLoader">
+      <v-progress-circular
+        color="red"
+        indeterminate>
+      </v-progress-circular>
+    </v-card-text>
     <v-card-text>
       <v-data-table
         v-if="tabledata.length > 0"
@@ -98,7 +107,7 @@
               @click="getAgentOperations(item.id);
                 findAgent(item.id)"
               color="primary" x-small>
-              Операції
+              Змiнити
             </v-btn>
             &nbsp;
             <v-btn
@@ -120,7 +129,7 @@ export default {
   data: () => ({
     tableHeader: [
       { text: 'ФИО', value: 'initials', align: 'start'},
-      { text: 'Компанiя', value: 'companyName', align: 'center'},
+      { text: 'Компанiя', value: 'company_name', align: 'center'},
       { text: 'Посада', value: 'position', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center' },
     ],
@@ -173,9 +182,12 @@ export default {
       await object.map(val => {
         let dataObj = {
           initials: `${val.last_name} ${val.first_name} ${val.patronymic}`,
-          companyName: val.company_name,
+          company_name: val.company_name,
           position: val.position,
-          id: val.id
+          id: val.id,
+          abSize: val.ab_size,
+          managerId: val.manager_id,
+          status: val.status
         }
         arr.push(dataObj)
       })
@@ -184,22 +196,24 @@ export default {
         // .reverse()
     },
     findAgent(id) {
-      console.log('findAgent')
-      return this.tabledata
+      console.log(id)
+      let data = this.tabledata
         .find(value => {
-          value.id === id
-          console.log(value)
-          Object.assign(this.currentUser, value)
-          Object.assign(this.userSettings, value)
+          return value.id === id
+          // console.log(value.id, id)
         })
+      if(Object.keys(data).length > 0) {
+        Object.assign(this.currentUser, data)
+        Object.assign(this.userSettings, data)
+        // console.log(data)
+        // console.log(this.userSettings)
+      }
     },
     deactivateUser(userId) {
       this.deactivateDialog = true
       this.findAgent(userId)
-      console.log(userId)
-      console.log(this.tabledata)
     },
-    getManaers() {
+    getManagers() {
       axios
         .get('/getManagers')
         .then(response => {
@@ -258,9 +272,18 @@ export default {
         el.dispatchEvent(input)
       }
     },
+    // checkObject(object) {
+    //   Object.keys(object)
+    //     .forEach(propertie => {
+    //       if(object[propertie] === null) {
+    //         delete object[propertie]
+    //       }
+    //     })
+    // },
     sendUserSettings() {
       this.loading = true
       this.userSettings._token = this.getCsrf()
+      // this.checkObject(this.userSettings)
       axios
         .post(`/admin/agent/update/${this.currentUser.id}`, this.userSettings)
         .then(response => {
@@ -294,11 +317,19 @@ export default {
     'userSettings.managerId': function (val) {
       if(val === null || val === 'undefined') return
       else this.userSettings.managerId = parseInt(val)
-    }
+    },
+    agentOperationsDialog(val) {
+      if(val === false) {
+        Object.keys(this.userSettings)
+          .forEach(propertie => {
+            this.userSettings[propertie] = null
+          })
+      }
+    },
   },
   created() {
     this.getAgents()
-    this.getManaers()
+    this.getManagers()
   }
 }
 </script>

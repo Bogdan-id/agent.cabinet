@@ -160,10 +160,33 @@
           <div class="d-flex">
             <v-icon
               @click="toDetail(item.id)"
-              color="red lighten-1"
-              >
+              color="red lighten-1">
               mdi-file-find-outline
             </v-icon>
+          </div>
+        </template>
+        <template v-slot:item.request_status="{ item }">
+          <div class="d-flex align-center pr-1 flex-column">
+            <div>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <div>
+                    <v-icon
+                      v-for="key in progressDivision"
+                      :key="key"
+                      v-on="on"
+                      small
+                      :color="applyChanges(item.request_status, key).color">
+                      mdi-brightness-1
+                    </v-icon>
+                  </div>
+                </template>
+                <span>{{ applyChanges(item.request_status).text }}</span>
+              </v-tooltip>
+            </div>
+            <!-- <div>
+              {{applyChanges(item.request_status, i).text}}
+            </div> -->
           </div>
         </template>
       </v-data-table>
@@ -186,11 +209,12 @@ export default {
       { text: 'Цiна', value: 'leasing_amount', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },
       { text: 'Дата', value: 'data', align: 'center' },
-      { text: 'Статус заявки', value: 'request_status', align: 'center' },
+      { text: 'Статус заявки', value: 'request_status', align: 'center', width: 200 },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
     loading: false,
+    progressDivision: 5,
 
     // request detail data
     reqObj: {
@@ -221,6 +245,16 @@ export default {
     },
   },
   methods: {
+    applyChanges(status, index) {
+      console.log(index)
+      switch(status) {
+        case '1': return {text: 'в обробцi', color: `${index <= 1 ? 'orange' : 'grey'}`};
+        case '2': return {text: 'схвалено', color: `${index <= 5 ? 'green' : 'grey'}`};
+        case '3': return {text: 'вiдхилено', color: `${index <= 5 ? 'red' : 'grey'}`};
+        case '4': return {text: 'iнший статус', color: `${index <= 2 ? 'purple' : 'grey'}` };
+        case '5': return {text: 'скасовано клієнтом', color: `${index <= 5 ? 'red' : 'grey'}`};
+      }
+    },
     toEdit(id) {
       this.$router.push({name: 'Редагувати', params: {id: id, edit: true}})
     },
@@ -258,9 +292,8 @@ export default {
           })
         }
     },
-    test() {
-      // console.log(!this.loading)
-      // console.log(!this.tableDataPresent)
+    test(item) {
+      console.log(item)
     },
     sortData(a, b) {
       return new Date(b.created_at) - new Date(a.created_at)

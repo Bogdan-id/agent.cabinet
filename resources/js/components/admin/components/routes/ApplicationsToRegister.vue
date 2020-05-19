@@ -3,6 +3,12 @@
     <v-card-title>
       Роздiл - Заявки на реєстрацію
     </v-card-title>
+    <v-card-text v-if="$store.state.adminLoader">
+      <v-progress-circular
+        color="red"
+        indeterminate>
+      </v-progress-circular>
+    </v-card-text>
     <v-card-title 
       v-if="!tabledata.length > 0 && !$store.state.adminLoader"
       class="d-flex justify-center grey--text">

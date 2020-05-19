@@ -34,166 +34,181 @@
                 </v-radio-group>
               </v-col>
             </v-row>
-            <v-row>
-              <v-col cols="12" md=3>
-                <v-select
-                  v-model="calcObj.isNew"
-                  :items="selects.itemConditions"
-                  itemColor="red darken-4"
-                  :error-messages="isNewErr"
-                  label="Тип авто"
-                  color="red darken-4"
-                  dense outlined :disabled="!isClientType">
-                </v-select>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-select
-                  v-model="calcObj.currency"
-                  :items="selects.currencys"
-                  itemColor="red darken-4"
-                  :error-messages="currencyErr"
-                  label="Валюта договору лізингу"
-                  color="red darken-4"
-                  dense outlined :disabled="!isClientType">
-                </v-select>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="3">
-                <v-select
-                  @change="getMarksByType()"
-                  v-model="calcObj.leasingObjectType"
-                  :items="selects.itemTypes"
-                  :error-messages="leasingObjectTypeErr"
-                  item-text="label"
-                  item-value="text"
-                  return-object
-                  label="Тип предмета лізингу"
-                  itemColor="red darken-4"
-                  ref="refLoading"
-                  :disabled="!typeOfCar"
-                  color="red darken-4"
-                  dense outlined>
-                </v-select>
-              </v-col>
-              <v-col cols="12" md="4">
-                <v-autocomplete
-                  @change="getModelByMark()"
-                  v-model="calcObj.leasedAssertMark"
-                  :items="brandItems"
-                  itemColor="red darken-4"
-                  :error-messages="leasedAssertMarkErr"
-                  item-text="name"
-                  item-value="value"
-                  return-object
-                  label="Марка"
-                  loaderHeight="1"
-                  :loading="!leasedOfAssetType && $store.state.loader
-                    || noBrandItems && $store.state.loader"
-                  :disabled="!leasedOfAssetType || noBrandItems"
-                  color="red darken-4"
-                  dense outlined>
-                </v-autocomplete>
-              </v-col>
-              <v-col cols="12" md="4">
-                <v-autocomplete
-                  v-model="calcObj.leasedAssertModel"
-                  :items="modelItems"
-                  itemColor="red darken-4"
-                  :error-messages="leasedAssertModelErr"
-                  item-text="name"
-                  item-value="value"
-                  return-object
-                  label="Модель"
-                  loaderHeight="1"
-                  :loading="$store.state.loader && modelOfItem"
-                  :disabled="!modelOfItem || modelItems.length === 0"
-                  color="red darken-4"
-                  dense outlined>
-                </v-autocomplete>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="3" v-if="calcObj.isNew !== null">
-                <v-select
-                  v-model="calcObj.leasingObjectYear"
-                  :items=" calcObj.isNew ? selects.itemYears : selects.oldItemYears"
-                  itemColor="red darken-4"
-                  :error-messages="leasingObjectYearErr"
-                  label="Рік"
-                  :disabled="!typeOfModel"
-                  color="red darken-4"
-                  dense outlined>
-                </v-select>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  v-model="calcObj.leasedAssertEngine"
-                  @input="parseToInt('leasedAssertEngine')"
-                  id="leasedAssertEngine"
-                  :error-messages="leasedAssertEngineErr"
-                  label="Об'єм двигуна"
-                  :disabled="!yearOfModel"
-                  color="red darken-4"
-                  dense outlined>
-                </v-text-field>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  @input="$v.calcObj.leasingAmount.$touch();
-                    parseToInt('leasingAmount')"
-                  :error-messages="itemCostErrors"
-                  v-model="calcObj.leasingAmount"
-                  id="leasingAmount"
-                  label="Вартість"
-                  color="red darken-4"
-                  :disabled="calcObj.leasedAssertEngine === null"
-                  dense outlined>
-                </v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="3">
-                <v-select
-                  :items="selects.currencys"
-                  itemColor="red darken-4"
-                  :error-messages="leasingCurrencyErr"
-                  label="Валюта"
-                  v-model="calcObj.leasingCurrency"
-                  :disabled="calcObj.leasingAmount === null"
-                  color="red darken-4"
-                  dense>
-                </v-select>
-              </v-col>
-              <v-col cols="12" md="3"
-                v-if="hasForeignCurrency">
-                <!-- float -->
-                <v-text-field
-                  v-if="currentTab === 0"
-                  v-model="calcObj.leasingCurrencyCourse"
-                  :error-messages="leasingCurrencyCourseErr"
-                  :disabled="calcObj.leasingCurrency === null"
-                  @input="parseToFloat('leasingCurrencyCourse')"
-                  id="leasingCurrencyCourse"
-                  label="Курс"
-                  color="red darken-4"
-                  dense>
-                </v-text-field>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  v-model="calcObj.leasingQuantity"
-                  :error-messages="leasingQuantityErr"
-                  :disabled="calcObj.leasingCurrency === null"
-                  @input="parseToInt('leasingQuantity')"
-                  id="leasingQuantity"
-                  label="Кiлькiсть"
-                  min="1"
-                  color="red darken-4"
-                  dense>
-                </v-text-field>
-              </v-col>
-            </v-row>
+
+            <v-card class="mb-6 black-border-left">
+              <v-card-title>
+                Об'єкт лiзингу
+              </v-card-title>
+              <v-card-text>
+                <v-row>
+                  <v-col cols="12" md=3>
+                    <v-select
+                      v-model="calcObj.isNew"
+                      :items="selects.itemConditions"
+                      itemColor="red darken-4"
+                      :error-messages="isNewErr"
+                      label="Тип авто"
+                      color="red darken-4"
+                      dense outlined :disabled="!isClientType">
+                    </v-select>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-select
+                      v-model="calcObj.currency"
+                      :items="selects.currencys"
+                      itemColor="red darken-4"
+                      :error-messages="currencyErr"
+                      label="Валюта договору лізингу"
+                      color="red darken-4"
+                      dense outlined :disabled="!isClientType">
+                    </v-select>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" md="3">
+                    <v-select
+                      @change="getMarksByType()"
+                      v-model="calcObj.leasingObjectType"
+                      :items="selects.itemTypes"
+                      :error-messages="leasingObjectTypeErr"
+                      item-text="label"
+                      item-value="text"
+                      return-object
+                      label="Тип предмета лізингу"
+                      itemColor="red darken-4"
+                      ref="refLoading"
+                      :disabled="!typeOfCar"
+                      color="red darken-4"
+                      dense outlined>
+                    </v-select>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-autocomplete
+                      @change="getModelByMark()"
+                      v-model="calcObj.leasedAssertMark"
+                      :items="brandItems"
+                      itemColor="red darken-4"
+                      :error-messages="leasedAssertMarkErr"
+                      item-text="name"
+                      item-value="value"
+                      return-object
+                      label="Марка"
+                      loaderHeight="1"
+                      :loading="!leasedOfAssetType && $store.state.loader
+                        || noBrandItems && $store.state.loader"
+                      :disabled="!leasedOfAssetType || noBrandItems"
+                      color="red darken-4"
+                      dense outlined>
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-autocomplete
+                      v-model="calcObj.leasedAssertModel"
+                      :items="modelItems"
+                      itemColor="red darken-4"
+                      :error-messages="leasedAssertModelErr"
+                      item-text="name"
+                      item-value="value"
+                      return-object
+                      label="Модель"
+                      loaderHeight="1"
+                      :loading="$store.state.loader && modelOfItem"
+                      :disabled="!modelOfItem || modelItems.length === 0"
+                      color="red darken-4"
+                      dense outlined>
+                    </v-autocomplete>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" md="3" v-if="calcObj.isNew !== null">
+                    <v-select
+                      v-model="calcObj.leasingObjectYear"
+                      :items=" calcObj.isNew ? selects.itemYears : selects.oldItemYears"
+                      itemColor="red darken-4"
+                      :error-messages="leasingObjectYearErr"
+                      label="Рік"
+                      :disabled="!typeOfModel"
+                      color="red darken-4"
+                      dense outlined>
+                    </v-select>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="calcObj.leasedAssertEngine"
+                      @input="parseToInt('leasedAssertEngine')"
+                      id="leasedAssertEngine"
+                      :error-messages="leasedAssertEngineErr"
+                      label="Об'єм двигуна"
+                      :disabled="!yearOfModel"
+                      color="red darken-4"
+                      dense outlined>
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      @input="$v.calcObj.leasingAmount.$touch();
+                        parseToInt('leasingAmount')"
+                      :error-messages="itemCostErrors"
+                      v-model="calcObj.leasingAmount"
+                      id="leasingAmount"
+                      label="Вартість"
+                      color="red darken-4"
+                      :disabled="calcObj.leasedAssertEngine === null"
+                      dense outlined>
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+            <v-card class="mb-6 black-border-left">
+              <v-card-title>
+                Вартiсть
+              </v-card-title>
+              <v-card-text>
+                <v-row>
+                  <v-col cols="12" md="3">
+                    <v-select
+                      :items="selects.currencys"
+                      itemColor="red darken-4"
+                      :error-messages="leasingCurrencyErr"
+                      label="Валюта"
+                      v-model="calcObj.leasingCurrency"
+                      :disabled="calcObj.leasingAmount === null"
+                      color="red darken-4"
+                      dense>
+                    </v-select>
+                  </v-col>
+                  <v-col cols="12" md="3"
+                    v-if="hasForeignCurrency">
+                    <!-- float -->
+                    <v-text-field
+                      v-if="currentTab === 0"
+                      v-model="calcObj.leasingCurrencyCourse"
+                      :error-messages="leasingCurrencyCourseErr"
+                      :disabled="calcObj.leasingCurrency === null"
+                      @input="parseToFloat('leasingCurrencyCourse')"
+                      id="leasingCurrencyCourse"
+                      label="Курс"
+                      color="red darken-4"
+                      dense>
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="calcObj.leasingQuantity"
+                      :error-messages="leasingQuantityErr"
+                      :disabled="calcObj.leasingCurrency === null"
+                      @input="parseToInt('leasingQuantity')"
+                      id="leasingQuantity"
+                      label="Кiлькiсть"
+                      min="1"
+                      color="red darken-4"
+                      dense>
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
           </div>
         </v-card-text>
       </v-tab-item>
@@ -415,7 +430,7 @@
         </v-card-text>
       </v-tab-item>
     </v-tabs-items>
-    <v-card-actions class="d-flex justify-center new-calculation-btn">
+    <v-card-actions class="d-flex justify-center ">
       <span>
         <v-btn @click="submit()" class="mb-3" dark color="grey darken-3">
         {{ currentTab === 0 ? 'Далi' : 'Розрахувати'}}
@@ -652,7 +667,7 @@ export default {
       return this.commonErr
     },
     leasingCurrencyCourseErr() {
-      if(!this.hasForeignCurrency) return
+      if (!this.hasForeignCurrency) return
       if (!this.$v.calcObj.leasingCurrencyCourse.$error) return
       return this.commonErr
     },
@@ -916,3 +931,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .v-card{ 
+    &.black-border-left {
+      border-left: 3px solid #ff0000!important;
+    }
+  }
+</style>

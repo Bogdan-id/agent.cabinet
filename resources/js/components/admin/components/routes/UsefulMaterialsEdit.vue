@@ -4,9 +4,12 @@
       :max-width="430"
       v-model="editCategoryDialog">
       <v-card>
-        <v-card-title class="error white--text">Редагування</v-card-title>
-        <v-card-title>Поточна назва -&nbsp; 
-          <span style="color: black;">{{ categoryToEdit.name}}</span>
+        <v-card-title class="white--text grey darken-4">
+          <v-icon large color="white"  class="mr-2" v-text="'mdi-information'"></v-icon>
+          Редагування
+        </v-card-title>
+        <v-card-title class="mb-4">Поточна назва -&nbsp; 
+          <span style="color: black;">"{{ categoryToEdit.name}}"</span>
         </v-card-title>
         <v-card-text>
           <v-text-field
@@ -17,23 +20,20 @@
             label="Редагувати категорiю"
             outlined>
           </v-text-field>
-          <div class="d-flex justify-space-between">
-            <span>
-              <v-btn
-                @click="saveChangedCategory()"
-                :loading="loading"
-                class="grey darken-3 white--text">
-                Зберегти
-              </v-btn>
-            </span>
-            <span>
-              <v-btn 
-                @click="editCategoryDialog = false"
-                class="grey darken-3 white--text">
-                Вiдмiнити
-              </v-btn>
-            </span>
-          </div>
+          <v-card-actions>
+            <v-btn
+              @click="saveChangedCategory()"
+              :loading="loading"
+              color="error">
+              Зберегти
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn 
+              @click="editCategoryDialog = false"
+              class="grey darken-2 white--text">
+              Вiдмiнити
+            </v-btn>
+          </v-card-actions>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -41,10 +41,14 @@
       :max-width="430"
       v-model="makeCategoryDialog">
       <v-card>
-        <v-card-title class="error white--text">
+        <v-card-title class="white--text grey darken-4 mb-8">
+          <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
           Додати категорiю
         </v-card-title>
-        <v-card-text class="mt-5">
+        <v-card-text>
+          <span>
+            Введiть назву категорiї
+          </span>
           <v-text-field
             @input="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
             @blur="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
@@ -57,14 +61,14 @@
               <v-btn
                 @click="makeCategory()"
                 :loading="loading"
-                class="grey darken-3 white--text">
+                color="error">
                 Зберегти
               </v-btn>
             </span>
             <span>
               <v-btn 
                 @click="makeCategoryDialog = false"
-                class="grey darken-3 white--text">
+                class="grey darken-2 white--text">
                 Вiдмiнити
               </v-btn>
             </span>
@@ -76,30 +80,34 @@
       :max-width="430"
       v-model="deleteCategoryDialog">
       <v-card>
-        <v-card-title class="error white--text">
+        <v-card-title class="white--text grey darken-4">
+          <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
           Видалення
         </v-card-title>
-        <v-card-title>
-          Категорiю -<b>&nbsp;"{{ categoryToDelete.name }}"</b>
-          буде видалено назавжди. <span style="white-space: pre-line;">Продовжити?</span>
+        <v-card-title class="mt-4">
+          Категорiю -<b class="pr-1">"{{ categoryToDelete.name }}"</b>
+          буде видалено назавжди.&nbsp;
+          <span style="white-space: pre-line; font-weight: bold;">Продовжити?</span>
         </v-card-title>
-        <v-card-text class="d-flex justify-space-around">
-          <span>
-            <v-btn 
-              @click="deleteCategory()"
-              :loading="loading"
-              class="grey darken-3 white--text">
-              Так
-            </v-btn>
-          </span>
-          <span>
-            <v-btn 
-              @click="deleteCategoryDialog = false" 
-              class="grey darken-3 white--text">
-              Вiдмiнити
-            </v-btn>
-          </span>
-        </v-card-text>
+        <v-card-text class="pt-4">
+          <div class="d-flex justify-space-between">
+            <span>
+              <v-btn 
+                @click="deleteCategory()"
+                :loading="loading"
+                color="error">
+                Так
+              </v-btn>
+            </span>
+            <span>
+              <v-btn 
+                @click="deleteCategoryDialog = false" 
+                class="grey darken-2 white--text">
+                Hi
+              </v-btn>
+            </span>
+          </div>
+      </v-card-text>
       </v-card>
     </v-dialog>
     <v-card-title>
@@ -124,6 +132,12 @@
             checked="checked" 
             v-model="currentTab"/>
           <div class="content">
+            <v-card-text v-if="$store.state.adminLoader">
+              <v-progress-circular
+                indeterminate
+                color="red">
+              </v-progress-circular>
+            </v-card-text>
             <v-card-text v-if="categories.length > 0">
               <v-card-title class="edit-title pb-6">Редагувати категорiї</v-card-title>
               <!-- <v-divider class="pl-8 pr-8"></v-divider> -->
@@ -174,7 +188,9 @@
             value="2" 
             v-model="currentTab">
           <div class="content">
-            <v-card-title class="edit-title pb-6">Редагувати матерiали</v-card-title>
+            <v-card-text>
+              <v-card-title class="edit-title pb-6">Редагувати матерiали</v-card-title>
+            </v-card-text>
           </div>
         </div>
       </div>

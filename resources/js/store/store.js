@@ -43,27 +43,30 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getCurrentUser({commit, state}) {
+    getCurrentUser({commit/*, state*/}) {
       commit('toggleSpinner', true)
       axios.get('/getUserAgent')
       .then(response => {
         console.log(response)
         commit('addUserData', response.data)
+        commit('addAgentData', response.data.agent.manager)
+        commit('toggleSpinner', false)
       })
-      .then(() => {
-        console.log('get manager')
-        axios
-        .get(`/agent/manager/${state.user.agent.manager_id}`)
-        .then(response => {
-          console.log(response)
-          commit('toggleSpinner', false)
-          commit('addAgentData', response.data)
-        })
-        .catch(error => {
-          commit('toggleSpinner', false)
-          console.log(error.response)
-        })
-      })
+      // .then(() => {
+      //   console.log('get manager')
+      //   console.log(state.user.agent.manager_id)
+      //   axios
+      //   .get(`/agent/manager/${state.user.agent.manager_id}`)
+      //   .then(response => {
+      //     console.log(response)
+          
+      //     commit('toggleSpinner', false)
+      //   })
+      //   .catch(error => {
+      //     commit('toggleSpinner', false)
+      //     console.log(error.response)
+      //   })
+      // })
       .catch(error => {
         console.log(error.response)
         commit('toggleSpinner', false)

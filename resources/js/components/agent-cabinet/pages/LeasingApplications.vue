@@ -168,16 +168,24 @@
         <template v-slot:item.request_status="{ item }">
           <div class="d-flex align-center pr-1 flex-column">
             <div>
-              <v-icon
-                v-for="i in 5"
-                :key="i"
-                small
-                :color="applyColor(item.request_status, i).color">
-                mdi-brightness-1
-              </v-icon>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <div>
+                    <v-icon
+                      v-for="key in progressDivision"
+                      :key="key"
+                      v-on="on"
+                      small
+                      :color="applyChanges(item.request_status, key).color">
+                      mdi-brightness-1
+                    </v-icon>
+                  </div>
+                </template>
+                <span>{{ applyChanges(item.request_status).text }}</span>
+              </v-tooltip>
             </div>
             <!-- <div>
-              {{applyColor(item.request_status, i).text}}
+              {{applyChanges(item.request_status, i).text}}
             </div> -->
           </div>
         </template>
@@ -206,6 +214,7 @@ export default {
     ],
     tabledata: [],
     loading: false,
+    progressDivision: 5,
 
     // request detail data
     reqObj: {
@@ -236,7 +245,7 @@ export default {
     },
   },
   methods: {
-    applyColor(status, index) {
+    applyChanges(status, index) {
       console.log(index)
       switch(status) {
         case '1': return {text: 'в обробцi', color: `${index <= 1 ? 'orange' : 'grey'}`};

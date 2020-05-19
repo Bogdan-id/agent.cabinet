@@ -161,7 +161,7 @@ export default {
     getAgents() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
-        .get('/agent/all')
+        .get('/admin/agent/all')
         .then(response => {
           console.log(response)
           this.createTableData(response.data)

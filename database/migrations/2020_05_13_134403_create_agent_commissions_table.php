@@ -16,7 +16,7 @@ class CreateAgentCommissionsTable extends Migration
         Schema::create('agent_commissions', function (Blueprint $table) {
             $table->id();
             $table->integer('agent_id');
-            $table->integer('leasing_request_id');
+            $table->integer('leasing_requests_id');
             $table->text('purpose_of_payment')->nullable();
             $table->string('status');
             $table->timestamps();

@@ -33,7 +33,6 @@ Route::get('/verification/accept/{id}', 'VerificationController@acceptAgent');
 Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');
 
 Route::get('/getUserAgent', 'AgentsController@getUserAgent');
-Route::get('/agent/all', 'AgentsController@getAgents');
 Route::post('/agent/create', 'AgentsController@create');
 Route::get('/agent/manager/{agent_id}', 'AgentsController@getAgentManager')
             ->where('agent_id', '[0-9]+');
@@ -50,18 +49,13 @@ Route::get('leasing-reqeust/agent/{agent_id}', 'LeasingRequestController@getLeas
 Route::get('/getAcquisitionTargets', 'AcquisitionTargetController@getAcquisitionTargets');
 
 Route::get('useful-materials-categories/all', 'UsefulMaterialsController@getCategories');
-Route::post('useful-materials-categories/create', 'UsefulMaterialsController@createCategory');
-Route::post('useful-materials-categories/update/{id}', 'UsefulMaterialsController@updateCategory')
-            ->where('id', '[0-9]+');
-Route::delete('useful-materials-categories/delete/{id}', 'UsefulMaterialsController@destroyCategory')
-            ->where('id', '[0-9]+');
 
+Route::post('agent-commission/create', 'AgentCommisionController@create');
 
 Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
-Route::get('/getDontActiveUsers', 'UserController@getDontActiveUsers');
 
 Route::post('/calculate', 'CalculateController@create');
 Route::get('/models', 'ModelController@index');

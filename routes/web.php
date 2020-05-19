@@ -33,7 +33,6 @@ Route::get('/verification/accept/{id}', 'VerificationController@acceptAgent');
 Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');
 
 Route::get('/getUserAgent', 'AgentsController@getUserAgent');
-Route::get('/agent/all', 'AgentsController@getAgents');
 Route::post('/agent/create', 'AgentsController@create');
 Route::get('/agent/manager/{agent_id}', 'AgentsController@getAgentManager')
             ->where('agent_id', '[0-9]+');
@@ -62,7 +61,6 @@ Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
-Route::get('/getDontActiveUsers', 'UserController@getDontActiveUsers');
 
 Route::post('/calculate', 'CalculateController@create');
 Route::get('/models', 'ModelController@index');

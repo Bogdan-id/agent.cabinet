@@ -53,7 +53,6 @@ export default {
   },
   created() {
     this.getBreadsCrumbData()
-    console.log(this.$route.matched)
   },
 }
 </script>

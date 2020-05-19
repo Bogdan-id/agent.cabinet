@@ -5,6 +5,7 @@ import EditCategory from '../components/admin/components/routes/UsefulMaterialsE
 import RewardApplications from '../components/admin/components/routes/RewardApplication'
 import Agents from '../components/admin/components/routes/Agents'
 import ApplicationsToRegister from '../components/admin/components/routes/ApplicationsToRegister'
+import EditMaterials from '../components/admin/components/routes/EditMaterials.vue'
 
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
@@ -36,12 +37,30 @@ const routes = [
     },
     children: [
       {
-        path: 'useful-materials-edit',
-        name: 'useful-materials-edit',
+        path: 'useful-materials',
+        name: 'Кориснi матерiали',
         component: EditCategory,
         meta: {
           title: 'Кориснi матерiали'
-        }
+        },
+        children: [
+          {
+            path: 'new',
+            name: 'Новый матерiал',
+            component: EditMaterials,
+            meta: {
+              title: 'Новый матерiал'
+            },
+          },
+          {
+            path: 'Редагувати матерiал',
+            name: 'edit',
+            component: EditMaterials,
+            meta: {
+              title: 'Редагувати матерiал'
+            },
+          }
+        ]
       },
       {
         path: 'application-for-registration',

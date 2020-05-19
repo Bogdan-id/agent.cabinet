@@ -42,7 +42,7 @@ export default {
     nav: [
       {subj: 'Заявки на реєстрацію', link: 'application-for-registration', icon: 'mdi-account-check'},
 			{subj: 'Агенти', link: 'agents-edit', icon: 'mdi-face-agent'},
-      {subj: 'Кориснi матерiалы', link: 'useful-materials-edit', icon: 'mdi-bookmark'},
+      {subj: 'Кориснi матерiалы', link: 'Кориснi матерiали', icon: 'mdi-bookmark'},
       {subj: 'Заявки на винагороду', link: 'reward-applications', icon: 'mdi-format-list-checks'},
 		]
 	}),

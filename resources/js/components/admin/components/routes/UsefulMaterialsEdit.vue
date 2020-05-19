@@ -1,211 +1,228 @@
 <template>
-  <v-card class="admin-categories">
-    <v-dialog
-      :max-width="430"
-      v-model="editCategoryDialog">
-      <v-card>
-        <v-card-title class="white--text grey darken-4">
-          <v-icon large color="white"  class="mr-2" v-text="'mdi-information'"></v-icon>
-          Редагування
-        </v-card-title>
-        <v-card-title class="mb-4">Поточна назва -&nbsp; 
-          <span style="color: black;">"{{ categoryToEdit.name}}"</span>
-        </v-card-title>
-        <v-card-text>
-          <v-text-field
-            @input="editCategoryDialog ? $v.categoryToEdit.name.$touch() : ''"
-            @blur="editCategoryDialog ? $v.categoryToEdit.name.$touch() : ''"
-            :error-messages="categoryToEditErr"
-            v-model="categoryToEdit.name"
-            label="Редагувати категорiю"
-            outlined>
-          </v-text-field>
-          <v-card-actions>
-            <v-btn
-              @click="saveChangedCategory()"
-              :loading="loading"
-              color="error">
-              Зберегти
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn 
-              @click="editCategoryDialog = false"
-              class="grey darken-2 white--text">
-              Вiдмiнити
-            </v-btn>
-          </v-card-actions>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      :max-width="430"
-      v-model="makeCategoryDialog">
-      <v-card>
-        <v-card-title class="white--text grey darken-4 mb-8">
-          <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
-          Додати категорiю
-        </v-card-title>
-        <v-card-text>
-          <span>
-            Введiть назву категорiї
-          </span>
-          <v-text-field
-            @input="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
-            @blur="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
-            :error-messages="newCategorieErr"
-            v-model="newCategorie"
-            label="Додати категорiю" outlined>
-          </v-text-field>
-          <div class="d-flex justify-space-between">
-            <span>
+<div>
+  <breads-crumb />
+  <div v-if="$route.name === 'Кориснi матерiали'">
+    <v-card class="admin-categories">
+      <v-dialog
+        :max-width="430"
+        v-model="editCategoryDialog">
+        <v-card>
+          <v-card-title class="white--text grey darken-4">
+            <v-icon large color="white"  class="mr-2" v-text="'mdi-information'"></v-icon>
+            Редагування
+          </v-card-title>
+          <v-card-title class="mb-4">Поточна назва -&nbsp; 
+            <span style="color: black;">"{{ categoryToEdit.name}}"</span>
+          </v-card-title>
+          <v-card-text>
+            <v-text-field
+              @input="editCategoryDialog ? $v.categoryToEdit.name.$touch() : ''"
+              @blur="editCategoryDialog ? $v.categoryToEdit.name.$touch() : ''"
+              :error-messages="categoryToEditErr"
+              v-model="categoryToEdit.name"
+              label="Редагувати категорiю"
+              outlined>
+            </v-text-field>
+            <v-card-actions>
               <v-btn
-                @click="makeCategory()"
+                @click="saveChangedCategory()"
                 :loading="loading"
                 color="error">
                 Зберегти
               </v-btn>
-            </span>
-            <span>
+              <v-spacer></v-spacer>
               <v-btn 
-                @click="makeCategoryDialog = false"
+                @click="editCategoryDialog = false"
                 class="grey darken-2 white--text">
                 Вiдмiнити
               </v-btn>
+            </v-card-actions>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+        :max-width="430"
+        v-model="makeCategoryDialog">
+        <v-card>
+          <v-card-title class="white--text grey darken-4 mb-8">
+            <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
+            Додати категорiю
+          </v-card-title>
+          <v-card-text>
+            <span>
+              Введiть назву категорiї
             </span>
-          </div>
+            <v-text-field
+              @input="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
+              @blur="makeCategoryDialog ? $v.newCategorie.$touch() : ''"
+              :error-messages="newCategorieErr"
+              v-model="newCategorie"
+              label="Додати категорiю" outlined>
+            </v-text-field>
+            <div class="d-flex justify-space-between">
+              <span>
+                <v-btn
+                  @click="makeCategory()"
+                  :loading="loading"
+                  color="error">
+                  Зберегти
+                </v-btn>
+              </span>
+              <span>
+                <v-btn 
+                  @click="makeCategoryDialog = false"
+                  class="grey darken-2 white--text">
+                  Вiдмiнити
+                </v-btn>
+              </span>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+        :max-width="430"
+        v-model="deleteCategoryDialog">
+        <v-card>
+          <v-card-title class="white--text grey darken-4">
+            <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
+            Видалення
+          </v-card-title>
+          <v-card-title class="mt-4">
+            Категорiю -<b class="pr-1">"{{ categoryToDelete.name }}"</b>
+            буде видалено назавжди.&nbsp;
+            <span style="white-space: pre-line; font-weight: bold;">Продовжити?</span>
+          </v-card-title>
+          <v-card-text class="pt-4">
+            <div class="d-flex justify-space-between">
+              <span>
+                <v-btn 
+                  @click="deleteCategory()"
+                  :loading="loading"
+                  color="error">
+                  Так
+                </v-btn>
+              </span>
+              <span>
+                <v-btn 
+                  @click="deleteCategoryDialog = false" 
+                  class="grey darken-2 white--text">
+                  Hi
+                </v-btn>
+              </span>
+            </div>
         </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      :max-width="430"
-      v-model="deleteCategoryDialog">
-      <v-card>
-        <v-card-title class="white--text grey darken-4">
-          <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
-          Видалення
-        </v-card-title>
-        <v-card-title class="mt-4">
-          Категорiю -<b class="pr-1">"{{ categoryToDelete.name }}"</b>
-          буде видалено назавжди.&nbsp;
-          <span style="white-space: pre-line; font-weight: bold;">Продовжити?</span>
-        </v-card-title>
-        <v-card-text class="pt-4">
-          <div class="d-flex justify-space-between">
-            <span>
-              <v-btn 
-                @click="deleteCategory()"
-                :loading="loading"
-                color="error">
-                Так
-              </v-btn>
-            </span>
-            <span>
-              <v-btn 
-                @click="deleteCategoryDialog = false" 
-                class="grey darken-2 white--text">
-                Hi
-              </v-btn>
-            </span>
+        </v-card>
+      </v-dialog>
+      <v-card-title>
+        Роздiл - Кориснi матерiали
+      </v-card-title>
+      <section class="section" id="section">
+        <div class="tabs">
+          <div class="tabs-input active">
+            <label
+              @click.stop="changeActive($event)" 
+              for="tab-1" 
+              class="label">
+              <v-icon v-text="'mdi-format-list-bulleted-square'" class="pr-1" large></v-icon>
+              Категорії
+            </label>
+            <input 
+              @click.stop="changeActive($event)"
+              id="tab-1" 
+              name="tab" 
+              type="radio" 
+              value="1" 
+              checked="checked" 
+              v-model="currentTab"/>
+            <div class="content">
+              <v-card-text v-if="$store.state.adminLoader">
+                <v-progress-circular
+                  indeterminate
+                  color="red">
+                </v-progress-circular>
+              </v-card-text>
+              <v-card-text v-if="categories.length > 0">
+                <v-card-title class="edit-title pb-6">Редагувати категорiї</v-card-title>
+                <!-- <v-divider class="pl-8 pr-8"></v-divider> -->
+                <v-btn 
+                  @click="makeCategoryDialog = true; 
+                    removeActiveClass()" 
+                  class="ml-6 red lighten-1" dark>
+                  Додати категорiю&nbsp;
+                  <v-icon v-text="'mdi-plus'"></v-icon>
+                </v-btn>
+                <ul id="categories-list">
+                  <li
+                    v-for="item in categories"
+                    :key="item.id"
+                    class="list-element"
+                    @click.self="makeActive($event, item.name)">
+                    {{ item.name }}
+                    <span class="btn-actions">
+                      <v-btn 
+                        @click.stop="openDialogToEditCategory(item.id, item.name)" 
+                        icon>
+                        <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
+                      </v-btn>
+                      <v-btn 
+                        @click.stop="openDialogDeleteCategory(item.id, item.name)" 
+                        icon>
+                        <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
+                      </v-btn>
+                    </span>
+                  </li>
+                </ul>
+              </v-card-text>
+            </div>
           </div>
-      </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-card-title>
-      Роздiл - Кориснi матерiали
-    </v-card-title>
-    <section class="section" id="section">
-      <div class="tabs">
-        <div class="tabs-input active">
-          <label 
-            @click.stop="changeActive($event)" 
-            for="tab-1" 
-            class="label">
-            <v-icon v-text="'mdi-format-list-bulleted-square'" class="pr-1" large></v-icon>
-            Категорії
-          </label>
-          <input 
-            @click.stop="changeActive($event)"
-            id="tab-1" 
-            name="tab" 
-            type="radio" 
-            value="1" 
-            checked="checked" 
-            v-model="currentTab"/>
-          <div class="content">
-            <v-card-text v-if="$store.state.adminLoader">
-              <v-progress-circular
-                indeterminate
-                color="red">
-              </v-progress-circular>
-            </v-card-text>
-            <v-card-text v-if="categories.length > 0">
-              <v-card-title class="edit-title pb-6">Редагувати категорiї</v-card-title>
-              <!-- <v-divider class="pl-8 pr-8"></v-divider> -->
-              <v-btn 
-                @click="makeCategoryDialog = true; 
-                  removeActiveClass()" 
-                class="ml-6 red lighten-1" dark>
-                Додати категорiю&nbsp;
-                <v-icon v-text="'mdi-plus'"></v-icon>
-              </v-btn>
-              <ul id="categories-list">
-                <li
-                  v-for="item in categories"
-                  :key="item.id"
-                  class="list-element"
-                  @click.self="makeActive($event, item.name)">
-                  {{ item.name }}
-                  <span class="btn-actions">
-                    <v-btn 
-                      @click.stop="openDialogToEditCategory(item.id, item.name)" 
-                      icon>
-                      <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
-                    </v-btn>
-                    <v-btn 
-                      @click.stop="openDialogDeleteCategory(item.id, item.name)" 
-                      icon>
-                      <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
-                    </v-btn>
-                  </span>
-                </li>
-              </ul>
-            </v-card-text>
+          <div class="tabs-input">
+            <label 
+              @click.stop="changeActive($event)" 
+              for="tab-2" 
+              class="label">
+              <v-icon v-text="'mdi-playlist-edit'" class="pr-1" large></v-icon>
+              Материали
+            </label>
+            <input
+              @click.stop="changeActive($event)"
+              id="tab-2" 
+              name="tab" 
+              type="radio" 
+              value="2" 
+              v-model="currentTab">
+            <div class="content">
+              <v-card-text>
+                <v-card-title class="edit-title pb-6">Редагувати матерiали</v-card-title>
+                <v-btn 
+                  :to="{name: 'Новый матерiал'}"
+                  class="ml-6 red lighten-1" dark>
+                  Додати матерiал&nbsp;
+                  <v-icon v-text="'mdi-plus'"></v-icon>
+                </v-btn>
+              </v-card-text>
+            </div>
           </div>
         </div>
-        <div class="tabs-input">
-          <label 
-            @click.stop="changeActive($event)" 
-            for="tab-2" 
-            class="label">
-            <v-icon v-text="'mdi-playlist-edit'" class="pr-1" large></v-icon>
-            Материали
-          </label>
-          <input
-            @click.stop="changeActive($event)"
-            id="tab-2" 
-            name="tab" 
-            type="radio" 
-            value="2" 
-            v-model="currentTab">
-          <div class="content">
-            <v-card-text>
-              <v-card-title class="edit-title pb-6">Редагувати матерiали</v-card-title>
-            </v-card-text>
-          </div>
-        </div>
-      </div>
-      <!-- <v-btn @click="test()">test</v-btn> -->
-    </section>
-  </v-card>
+        <!-- <v-btn @click="test()">test</v-btn> -->
+      </section>
+    </v-card>
+  </div>
+  <router-view></router-view>
+</div>
 </template>
 
 <script>
 import axios from 'axios'
+
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
+import BreadsCrumb from '../../../../components/agent-cabinet/components/breadScrumb.vue'
 
 export default {
   mixins: [validationMixin],
+  components: {
+    BreadsCrumb
+  },
   data: () => ({
     commonErr: ['Обов`язкове поле'],
     categories: [],
@@ -257,10 +274,11 @@ export default {
       console.log(this.currentTab)
     },
     changeActive(event) {
+      console.log(event)
       let tabs = document.querySelectorAll('#section .tabs-input')
       tabs.forEach(element => element.classList.remove('active'))
       event.target.parentNode.classList.add('active')
-    }, 
+    },
     getMageterialCategories() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
@@ -276,6 +294,7 @@ export default {
         })
     },
     makeActive(e, category) {
+      console.log(e)
       this.categoryToEdit.name = category
       document.querySelectorAll('#categories-list .btn-actions button')
         .forEach(button => button.disabled = true)
@@ -405,6 +424,12 @@ export default {
   created() {
     this.getMageterialCategories()
   },
+  // mounted() {
+  //   let tabs = document.querySelectorAll('#section .tabs-input')
+  //   tabs.forEach(element => element.classList.remove('active'))
+  //   // tabs[0].classList.add('active')
+  //   // this.currentTab = 1
+  // },
 }
 </script>
 

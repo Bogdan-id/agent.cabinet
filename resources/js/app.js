@@ -4,6 +4,7 @@ window.Vue = require('vue')
 
 import router from './router/router'
 import App from './components/App'
+import CKEditor from '@ckeditor/ckeditor5-vue'
 
 import PaperDashboard from "./components/agent-cabinet/plugins/paperDashboard"
 // https://github.com/euvl/vue-notification
@@ -16,6 +17,7 @@ import store from './store/store'
 Vue.use(PaperDashboard)
 Vue.use(VueMask)
 Vue.use(Notifications)
+Vue.use( CKEditor )
 
 new Vue({
 	store,

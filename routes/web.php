@@ -51,6 +51,7 @@ Route::get('/getAcquisitionTargets', 'AcquisitionTargetController@getAcquisition
 Route::get('useful-materials-categories/all', 'UsefulMaterialsController@getCategories');
 
 Route::post('agent-commission/create', 'AgentCommisionController@create');
+Route::get('agent-commission/agent/{id}', 'AgentCommisionController@getAgentCommissions');
 
 Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');

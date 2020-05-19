@@ -95,12 +95,4 @@ class AgentsController extends Controller
        return response()->json($manager);
     }
 
-    public function getAgentCommissions($agent_id)
-    {
-       $agent = Agent::find($agent_id);
-       $commisions = $agent->commisions;
-
-       return response()->json($commisions);
-    }
-
 }

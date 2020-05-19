@@ -50,6 +50,6 @@ class Agent extends Model
      */
     public function commissions()
     {
-        return $this->hasMany('App\Models\AgentCommission');
+        return $this->hasMany('App\Models\AgentCommission')->with('leasingRequest');
     }
 }

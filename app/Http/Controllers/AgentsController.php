@@ -95,25 +95,12 @@ class AgentsController extends Controller
        return response()->json($manager);
     }
 
-    public function getAgents()
+    public function getAgentCommissions($agent_id)
     {
-       $agents = Agent::all();
+       $agent = Agent::find($agent_id);
+       $commisions = $agent->commisions;
 
-       return response()->json($agents);
-    }
-
-    public function adminUpdateAgent(Request $request, $id)
-    {
-        $data = $request->post();
-        $agent = Agent::find($id);
-        $agent->ab_size = $data['abSize'];
-        $agent->status = $data['status'];
-        $agent->manager_id = $data['managerId'];
-        $agent->save();
-        
-        return response()->json([
-            'status' => 200
-        ]);
+       return response()->json($commisions);
     }
 
 }

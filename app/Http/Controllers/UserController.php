@@ -20,32 +20,4 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function getDontActiveUsers()
-    {
-        $users = User::dontActive()->get();
-
-        return response()->json($users);
-    }
-
-    public function activateUser($id)
-    {
-        $user = User::find($id);
-        $user->is_active = 1;
-        $user->save();
-
-        return response()->json([
-            'status' => 200
-        ]);
-    }
-
-    public function deactivateUser($id)
-    {
-        $user = User::find($id);
-        $user->is_active = 0;
-        $user->save();
-        
-        return response()->json([
-            'status' => 200
-        ]);
-    }
 }

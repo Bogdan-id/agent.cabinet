@@ -1,0 +1,209 @@
+<template>
+ <div class="row">
+  <v-dialog 
+    v-model="commissionRequestsDialog"
+    max-width="490">
+    <v-card>
+      <v-card-title class="grey darken-3 white--text">
+        <v-icon large class="mr-4" color="white" v-text="'mdi-information'"></v-icon>
+        Заявка на винагороду
+      </v-card-title>
+      <v-card-text class="mt-8 pb-0">
+        <v-select
+          :error-messages="leasingRequestIdErr"
+          v-model="object.leasingRequestId"
+          :items="agentCommisions"
+          label="Оберiть ID заявки"
+          item-text="id"
+          item-value="id"
+          dense outlined>
+        </v-select>
+        <v-text-field
+          v-model="object.purposeOfPayment"
+          label="Цiль винагороди"
+          dense outlined>
+        </v-text-field>
+      </v-card-text>
+      <div class="d-flex justify-center pb-4">
+        <span>
+          <v-btn class="error" 
+            @click="submit()"
+            :loading="loading"
+            dark>Пiдтвердити
+          </v-btn>
+        </span>
+      </div>
+    </v-card>
+  </v-dialog>
+  <div class="col-md-12">
+    <v-card style="min-height: 350px;">
+      <v-card-title class="d-block grey darken-3 white--text">
+        <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-clipboard-check'"></v-icon>
+          Заявки на вынагороду
+        <v-divider></v-divider>
+        <v-progress-linear
+          :height="3"
+          :active="loading"
+          :indeterminate="loading"
+          absolute
+          top
+          color="red lighten-1">
+        </v-progress-linear>
+      </v-card-title>
+      <v-card-text class="mt-4">
+        <v-btn 
+          dark class="red lighten-1"
+          @click.stop="commissionRequestsDialog = !commissionRequestsDialog">
+          Подати нову заявку&nbsp;
+          <v-icon v-text="'mdi-plus'"></v-icon>
+        </v-btn>
+        <v-card-title
+          v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
+          class="d-flex justify-center headline">
+          Iсторiя заявок на винагороду
+        </v-card-title>
+        <v-card-title 
+          v-if="agentCommisions.lenght === 0 && !$store.state.adminLoader"
+          class="d-flex justify-center">
+          (Iсторiя заявок порожня)
+        </v-card-title>
+        <v-data-table
+          v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
+          color="black"
+          :headers="tableHeader"
+          :items="agentCommisions"
+          :hide-default-footer="true"
+          class="elevation-1 mr-3 ml-3 mt-4">
+        </v-data-table>
+      </v-card-text>
+    </v-card>
+  </div>
+ </div>
+</template>
+<script>
+import axios from 'axios'
+
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
+
+export default {
+  mixins: [validationMixin],
+  data: () => ({
+    loading: false,
+    commissionRequestsDialog: false,
+    agentCommisions: [],
+    object: {
+      leasingRequestId: null,
+      purposeOfPayment: null,
+      agentId: null,
+      _token: null
+    },
+    tableHeader: [
+      { text: 'Им`я', value: 'initials', align: 'start'},
+      { text: 'Марка', value: 'company_name', align: 'center'},
+      { text: 'Модель', value: 'position', align: 'center' },
+      { text: 'Призначення платежу', value: 'actions', align: 'center' },
+      { text: 'Дата', value: 'actions', align: 'center' },
+      { text: 'Стату', value: 'actions', align: 'center' },
+    ],
+  }),
+  validations: {
+    object: {
+      leasingRequestId: { required }
+    }
+  },
+  computed: {
+    hasAgent() {
+      if(!this.$store.state.user.agent) return false
+      else return Object.keys(this.$store.state.user).length > 0
+    },
+    leasingRequestIdErr() {
+      if (!this.$v.object.leasingRequestId.$error) return
+      return ['Обов`язкове поле']
+    }
+  },
+  methods: {
+    getCommisionRequests() {
+      if(this.$store.state.user.agent){
+        this.$store.commit('toggleAdminSpinner', true)
+        let id = this.$store.state.user.agent.id
+        this.object.agentId = id
+        this.object._token = this.getCsrf()
+        axios
+          .get(`/agent-commission/agent/${id}`)
+          .then(response => {
+            this.agentCommisions = response.data
+            this.object.agentId = id
+            this.object._token = this.getCsrf()
+            this.$store.commit('toggleAdminSpinner', false)
+            // this.agentCommisions = response.data
+            console.log(response)
+          })
+          .catch(error => {
+            this.$store.commit('toggleAdminSpinner', false)
+            console.log(error.response)
+          })
+      }
+    },
+    getCsrf() {
+      return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    submit() {
+      this.$v.$dirty
+      && !this.$v.error
+        ? this.highLightErrors()
+        : this.sendRequest()
+    },
+    highLightErrors() {
+      this.$v.$anyError
+      this.$v.$touch()
+    },
+    clearOptionalField() {
+      if(this.object.purposeOfPayment === null) {
+        delete this.object.purposeOfPayment
+      }
+    },
+    sendRequest() {
+      this.clearOptionalField()
+      console.log(this.object)
+      this.loading = true
+      axios
+        .post('/agent-commission/create', this.object)
+        .then(response => {
+          console.log(response)
+          this.$notify({
+            group: 'success',
+            title: 'Успiшно',
+            text: ``,
+          })
+          this.loading = false
+          setTimeout(() => {
+            this.commissionRequestsDialog = false
+          }, 800)
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.loading = false
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+        })
+    }
+  },
+  watch: {
+    hasAgent(val) {
+      if(val && this.agentCommisions.length === 0) {
+        this.getCommisionRequests()
+      }
+    }
+  },
+  mounted() {
+    this.getCommisionRequests()
+  },
+}
+</script>
+
+<style>
+</style>

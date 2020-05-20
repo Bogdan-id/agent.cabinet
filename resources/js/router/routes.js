@@ -19,7 +19,7 @@ import DashboardLayout from "../components/agent-cabinet/layout/dashboard/Dashbo
 import Dashboard from "../components/agent-cabinet/pages/Dashboard"
 import UserProfile from "../components/agent-cabinet/pages/UserProfile"
 import UsefulMaterials from "../components/agent-cabinet/pages/UsefulMaterials"
-import Reporting from "../components/agent-cabinet/pages/Reporting"
+import RewardApplicationsDashboard from "../components/agent-cabinet/pages/RewardApplications"
 import Calculator from "../components/agent-cabinet/pages/Calculator"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications"
 import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalculation'
@@ -179,9 +179,9 @@ const routes = [
         ]
       },
       {
-        path: '/reporting',
-        name: 'Звiтнiсть',
-        component: Reporting,
+        path: '/commission-requests',
+        name: 'Заявки на винагороду',
+        component: RewardApplicationsDashboard,
         meta: {
           title: 'Звiтнiсть'
         }

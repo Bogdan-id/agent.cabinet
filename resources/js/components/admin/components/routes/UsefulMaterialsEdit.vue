@@ -1,7 +1,7 @@
 <template>
 <div>
   <breads-crumb />
-  <div v-if="$route.name === 'Кориснi матерiали'">
+  <div v-show="$route.name === 'Кориснi матерiали'">
     <v-card class="admin-categories">
       <v-dialog
         :max-width="430"
@@ -424,12 +424,6 @@ export default {
   created() {
     this.getMageterialCategories()
   },
-  // mounted() {
-  //   let tabs = document.querySelectorAll('#section .tabs-input')
-  //   tabs.forEach(element => element.classList.remove('active'))
-  //   // tabs[0].classList.add('active')
-  //   // this.currentTab = 1
-  // },
 }
 </script>
 

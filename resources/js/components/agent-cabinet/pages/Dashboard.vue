@@ -232,7 +232,7 @@ import axios from 'axios'
 export default {
   data: () => ({
     tableHeader: [
-      { text: 'ФИО', value: 'initials', align: 'start', sortable: false},
+      { text: 'ПIБ', value: 'initials', align: 'start', sortable: false},
       { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна', value: 'leasing_amount', align: 'center', sortable: false },
       { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },

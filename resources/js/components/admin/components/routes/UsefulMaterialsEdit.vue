@@ -181,7 +181,7 @@
               for="tab-2" 
               class="label">
               <v-icon v-text="'mdi-playlist-edit'" class="pr-1" large></v-icon>
-              Материали
+              Матерiали
             </label>
             <input
               @click.stop="changeActive($event)"

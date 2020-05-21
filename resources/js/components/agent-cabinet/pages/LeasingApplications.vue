@@ -204,7 +204,7 @@ export default {
     search: '',
     leasingApplicationForm: false,
     tableHeader: [
-      { text: 'ФИО', value: 'initials', align: 'start'},
+      { text: 'ПIБ', value: 'initials', align: 'start'},
       { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна', value: 'leasing_amount', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },

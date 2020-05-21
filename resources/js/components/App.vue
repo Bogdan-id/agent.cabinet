@@ -25,4 +25,11 @@
 	@import "../assets/scss/media-queries.scss";
 	@import "../assets/scss/loader.scss";
 	@import "../assets/scss/scroll.scss";
+  thead th {
+    & span {
+      font-size: 1.1rem!important;
+      font-weight: bold!important;
+      color: #2b2a28!important;
+    }
+  }
 </style>

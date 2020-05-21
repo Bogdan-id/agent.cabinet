@@ -2,25 +2,27 @@
  <div class="row">
   <v-dialog 
     v-model="commissionRequestsDialog"
-    max-width="490">
+    max-width="390">
     <v-card>
       <v-card-title class="grey darken-3 white--text">
         <v-icon large class="mr-4" color="white" v-text="'mdi-information'"></v-icon>
-        Заявка на винагороду
+          Заявка на винагороду
       </v-card-title>
       <v-card-text class="mt-8 pb-0">
+        <!--           
+          item-text="id"
+          item-value="id" -->
         <v-select
           :error-messages="leasingRequestIdErr"
           v-model="object.leasingRequestId"
-          :items="agentCommisions"
+          :items="[7]"
           label="Оберiть ID заявки"
-          item-text="id"
-          item-value="id"
+
           dense outlined>
         </v-select>
         <v-text-field
           v-model="object.purposeOfPayment"
-          label="Цiль винагороди"
+          label="Цiль платежу"
           dense outlined>
         </v-text-field>
       </v-card-text>
@@ -50,7 +52,7 @@
           color="red lighten-1">
         </v-progress-linear>
       </v-card-title>
-      <v-card-text class="mt-4">
+      <v-card-text class="mt-6">
         <v-btn 
           dark class="red lighten-1"
           @click.stop="commissionRequestsDialog = !commissionRequestsDialog">
@@ -59,7 +61,7 @@
         </v-btn>
         <v-card-title
           v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
-          class="d-flex justify-center headline">
+          class="d-flex justify-center headline black--text mt-7 mb-5">
           Iсторiя заявок на винагороду
         </v-card-title>
         <v-card-title 
@@ -74,6 +76,11 @@
           :items="agentCommisions"
           :hide-default-footer="true"
           class="elevation-1 mr-3 ml-3 mt-4">
+          <template v-slot:item.leasing_request.created_at="{ item }">
+            <div class="text-center">
+              {{ item.created_at.substr(0, 10) }}
+            </div>
+          </template>
         </v-data-table>
       </v-card-text>
     </v-card>
@@ -99,12 +106,12 @@ export default {
       _token: null
     },
     tableHeader: [
-      { text: 'Им`я', value: 'initials', align: 'start'},
-      { text: 'Марка', value: 'company_name', align: 'center'},
-      { text: 'Модель', value: 'position', align: 'center' },
-      { text: 'Призначення платежу', value: 'actions', align: 'center' },
-      { text: 'Дата', value: 'actions', align: 'center' },
-      { text: 'Стату', value: 'actions', align: 'center' },
+      { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
+      // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
+      { text: 'Модель', value: 'leasing_request.leasing_object', align: 'center' },
+      { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },
+      { text: 'Дата', value: 'leasing_request.created_at', align: 'center', sortable: true },
+      { text: 'Статус', value: 'status', align: 'center' },
     ],
   }),
   validations: {

@@ -22,4 +22,5 @@ Route::group([
             ->where('id', '[0-9]+');
     $router->delete('useful-materials-categories/delete/{id}', 'UsefulMaterialsController@destroyCategory')
             ->where('id', '[0-9]+');
+    $router->post('useful-material/create', 'UsefulMaterialsController@createMaterial');
 });

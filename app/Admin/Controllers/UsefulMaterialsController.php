@@ -4,9 +4,11 @@ namespace App\Admin\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\{
-    UsefulMaterialsCategory
+    UsefulMaterialsCategory,
+    UsefulMaterial
 };
 use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 
 class UsefulMaterialsController extends Controller
 {
@@ -49,5 +51,18 @@ class UsefulMaterialsController extends Controller
         return response()->json([
             'status' => 200
         ]);
+    }
+
+    public function createMaterial(Request $request)
+    {
+        $data = $request->post();
+        $usefulMaterial = new UsefulMaterial;
+        $usefulMaterial->useful_materials_category_id = $data['usefulMaterialsCategoryId'];
+        $usefulMaterial->title_image = $data['titleImage'];
+        $usefulMaterial->title = $data['title'];
+        $usefulMaterial->content = $data['content'];
+        $usefulMaterial->save();
+
+        return response()->json($usefulMaterialsCategory);
     }
 }

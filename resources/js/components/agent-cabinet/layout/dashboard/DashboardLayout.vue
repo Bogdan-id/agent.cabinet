@@ -5,7 +5,7 @@
         <sidebar-link to="/dashboard" name="Головна" icon="ti-panel"/>
         <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="ti-agenda"/>
         <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="ti-clipboard"/>
-        <sidebar-link to="/reporting" name="Звітність" icon="ti-widget-alt"/>
+        <sidebar-link to="/commission-requests" name="Заявки на винагороду" icon="ti-widget-alt"/>
         <sidebar-link to="/useful-materials" name="Корисні матеріали" icon="ti-bookmark-alt"/>
         <sidebar-link to="/agent-profile" name="профiль" icon="ti-user"/>
         <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->

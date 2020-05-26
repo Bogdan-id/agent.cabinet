@@ -5,6 +5,7 @@ import EditCategory from '../components/admin/components/routes/UsefulMaterialsE
 import RewardApplications from '../components/admin/components/routes/RewardApplication'
 import Agents from '../components/admin/components/routes/Agents'
 import ApplicationsToRegister from '../components/admin/components/routes/ApplicationsToRegister'
+import EditMaterials from '../components/admin/components/routes/EditMaterials.vue'
 
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
@@ -18,7 +19,7 @@ import DashboardLayout from "../components/agent-cabinet/layout/dashboard/Dashbo
 import Dashboard from "../components/agent-cabinet/pages/Dashboard"
 import UserProfile from "../components/agent-cabinet/pages/UserProfile"
 import UsefulMaterials from "../components/agent-cabinet/pages/UsefulMaterials"
-import Reporting from "../components/agent-cabinet/pages/Reporting"
+import RewardApplicationsDashboard from "../components/agent-cabinet/pages/RewardApplications"
 import Calculator from "../components/agent-cabinet/pages/Calculator"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications"
 import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalculation'
@@ -36,12 +37,30 @@ const routes = [
     },
     children: [
       {
-        path: 'useful-materials-edit',
-        name: 'useful-materials-edit',
+        path: 'useful-materials',
+        name: 'Кориснi матерiали',
         component: EditCategory,
         meta: {
           title: 'Кориснi матерiали'
-        }
+        },
+        children: [
+          {
+            path: 'new',
+            name: 'Новый матерiал',
+            component: EditMaterials,
+            meta: {
+              title: 'Новый матерiал'
+            },
+          },
+          {
+            path: 'Редагувати матерiал',
+            name: 'edit',
+            component: EditMaterials,
+            meta: {
+              title: 'Редагувати матерiал'
+            },
+          }
+        ]
       },
       {
         path: 'application-for-registration',
@@ -160,9 +179,9 @@ const routes = [
         ]
       },
       {
-        path: '/reporting',
-        name: 'Звiтнiсть',
-        component: Reporting,
+        path: '/commission-requests',
+        name: 'Заявки на винагороду',
+        component: RewardApplicationsDashboard,
         meta: {
           title: 'Звiтнiсть'
         }

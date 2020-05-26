@@ -32,7 +32,7 @@
     </div>
     <div class="container-fluid d-flex flex-wrap justify-content-between pt-2 pb-2">
       <div>
-        <router-link class="--dark" :to="{path:'/dashboard'}">© 2020 ТОВ «Бест Лизинг»</router-link>
+        <router-link class="--dark" :to="{path:'/dashboard'}">© 2020 ТОВ «Бест Лiзинг»</router-link>
       </div>
     </div>
   </footer>

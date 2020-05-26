@@ -71,7 +71,7 @@
         <!--  -->
         <v-card class="mb-6 custom-border">
           <v-card-title>
-            Посадовi даннi
+            Посадовi данi
           </v-card-title>
           <v-card-text>
             <v-row>
@@ -107,7 +107,7 @@
         <!--  -->
         <v-card class="mb-6 custom-border">
           <v-card-title>
-            Особовi даннi
+            Особовi данi
           </v-card-title>
           <v-card-text>
             <v-row>

@@ -54,7 +54,7 @@ export default {
     getApplicationsToRegister() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
-        .get('/getDontActiveUsers')
+        .get('/admin/getDontActiveUsers')
         .then(response => {
           console.log(response)
           this.createTableData(response.data)

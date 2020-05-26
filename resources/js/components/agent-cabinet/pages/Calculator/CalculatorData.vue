@@ -88,7 +88,7 @@ export default {
       { text: 'Модель', value: 'Модель', align: 'center' },
       { text: 'Сума', value: 'Сума', align: 'center' },
       { text: 'Дата', value: 'Дата', align: 'center' },
-      { text: 'Дiї', value: 'actions', align: 'start', sortable: false },
+      { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
     search: '',

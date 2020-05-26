@@ -128,7 +128,7 @@ import axios from 'axios'
 export default {
   data: () => ({
     tableHeader: [
-      { text: 'ФИО', value: 'initials', align: 'start'},
+      { text: 'ПІБ', value: 'initials', align: 'start'},
       { text: 'Компанiя', value: 'company_name', align: 'center'},
       { text: 'Посада', value: 'position', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center' },
@@ -161,7 +161,7 @@ export default {
     getAgents() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
-        .get('/agent/all')
+        .get('/admin/agent/all')
         .then(response => {
           console.log(response)
           this.createTableData(response.data)

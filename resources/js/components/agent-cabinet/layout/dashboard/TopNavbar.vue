@@ -61,7 +61,7 @@ export default {
       return this.capitalizeFirstLetter(name)
     },
     smAndDown() {
-      return this.$vuetify.breakpoint.smAndDown
+      return this.$vuetify.breakpoint.smAndDown // sm and down
     },
     mdAndUp() {
       return this.$vuetify.breakpoint.mdAndUp

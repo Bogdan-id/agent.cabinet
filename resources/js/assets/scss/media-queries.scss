@@ -4,7 +4,15 @@
     background-position: 0 100%;
   }
 }
-@media(max-width: 1340px) {
+@media(max-width: 1200px) {
+  .dashboard-container {
+    width: 67%;
+  }
+  .right-block-wrapper {
+    width: 30%;
+  }
+}
+@media(max-width: 1040px) {
   .dashboard__rigth-block {
     display: none!important;
   }

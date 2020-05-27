@@ -78,19 +78,28 @@
 </template>
 
 <script>
-  import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-  import '@ckeditor/ckeditor5-build-classic/build/translations/uk'
+  // import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+  // import '@ckeditor/ckeditor5-build-classic/build/translations/uk'
+  // import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter'
   import axios from 'axios'
-  import { validationMixin } from 'vuelidate'
-  import { required } from 'vuelidate/lib/validators'
+  // import { validationMixin } from 'vuelidate'
+  // import { required } from 'vuelidate/lib/validators'
 
   export default {
-    mixins: [validationMixin],
+    // mixins: [validationMixin],
     data: () => ({
       commonErr: ['Обов`язкове поле'],
-      editor: ClassicEditor,
+      // editor: ClassicEditor,
       editorConfig: {
+        // plugins: [ SimpleUploadAdapter],
         language: 'uk',
+        simpleUpload: {
+            uploadUrl: 'http://example.com',
+            headers: {
+                'X-CSRF-TOKEN': 'CSFR-Token',
+                Authorization: 'Bearer <JSON Web Token>'
+            }
+        }
       },
       rules: [
         value => !value || value.size < 2000000 || 'Розмiр зображення повинен бути меньше 2 MB!',
@@ -106,8 +115,8 @@
       newCategorie: null
     }),
     validations: {
-      newCategorie: { required },
-      materialName: { required },
+      // newCategorie: { required },
+      // materialName: { required },
     },
     computed: {
       categoriesPresent() {
@@ -194,6 +203,12 @@
         this.$v.$anyError
         this.$v.$touch()
       },
+      assignTokenToCkEditorConfig() {
+        this.editorConfig.simpleUpload.headers.Authorization = this.getCsrf()
+      }
+    },
+    mounted() {
+      this.assignTokenToCkEditorConfig()
     },
     created() {
       this.getMageterialCategories()

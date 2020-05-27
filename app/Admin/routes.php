@@ -7,7 +7,7 @@ Admin::routes();
 Route::group([
     'prefix'        => config('admin.route.prefix'),
     'namespace'     => config('admin.route.namespace'),
-    'middleware'    => config('admin.route.middleware'),
+    //'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('admin.home');
@@ -21,5 +21,10 @@ Route::group([
     $router->post('useful-materials-categories/update/{id}', 'UsefulMaterialsController@updateCategory')
             ->where('id', '[0-9]+');
     $router->delete('useful-materials-categories/delete/{id}', 'UsefulMaterialsController@destroyCategory')
+            ->where('id', '[0-9]+');
+    $router->post('useful-material/create', 'UsefulMaterialsController@createMaterial');
+    $router->post('useful-material/update/{id}', 'UsefulMaterialsController@updateMaterial')
+            ->where('id', '[0-9]+');
+    $router->delete('useful-material/delete/{id}', 'UsefulMaterialsController@destroyMaterial')
             ->where('id', '[0-9]+');
 });

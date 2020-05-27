@@ -4,9 +4,11 @@ namespace App\Admin\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\{
-    UsefulMaterialsCategory
+    UsefulMaterialsCategory,
+    UsefulMaterial
 };
 use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 
 class UsefulMaterialsController extends Controller
 {
@@ -45,6 +47,44 @@ class UsefulMaterialsController extends Controller
     {
         $usefulMaterialsCategory = UsefulMaterialsCategory::find($id);
         $usefulMaterialsCategory->delete();
+
+        return response()->json([
+            'status' => 200
+        ]);
+    }
+
+    public function createMaterial(Request $request)
+    {
+        $data = $request->post();
+       
+        $usefulMaterial = new UsefulMaterial;
+        $usefulMaterial->useful_materials_category_id = $data['usefulMaterialsCategoryId'];
+        $usefulMaterial->title_image = $data['titleImage'];
+        $usefulMaterial->title = $data['title'];
+        $usefulMaterial->content = $data['content'];
+        $usefulMaterial->save();
+
+        return response()->json($usefulMaterial);
+    }
+
+    public function updateMaterial(Request $request, $id)
+    {
+        $data = $request->post();
+        $usefulMaterial = UsefulMaterial::find($id);
+        $usefulMaterial->update([
+            'useful_materials_category_id' => $data['usefulMaterialsCategoryId'],
+            'title_image' =>$data['titleImage'],
+            'title' => $data['title'],
+            'content' =>$data['content'],
+         ]);
+
+        return response()->json($usefulMaterial);
+    }
+
+    public function destroyMaterial($id)
+    {
+        $usefulMaterial = UsefulMaterial::find($id);
+        $usefulMaterial->delete();
 
         return response()->json([
             'status' => 200

@@ -56,6 +56,7 @@ class UsefulMaterialsController extends Controller
     public function createMaterial(Request $request)
     {
         $data = $request->post();
+       
         $usefulMaterial = new UsefulMaterial;
         $usefulMaterial->useful_materials_category_id = $data['usefulMaterialsCategoryId'];
         $usefulMaterial->title_image = $data['titleImage'];
@@ -63,6 +64,30 @@ class UsefulMaterialsController extends Controller
         $usefulMaterial->content = $data['content'];
         $usefulMaterial->save();
 
-        return response()->json($usefulMaterialsCategory);
+        return response()->json($usefulMaterial);
+    }
+
+    public function updateMaterial(Request $request, $id)
+    {
+        $data = $request->post();
+        $usefulMaterial = UsefulMaterial::find($id);
+        $usefulMaterial->update([
+            'useful_materials_category_id' => $data['usefulMaterialsCategoryId'],
+            'title_image' =>$data['titleImage'],
+            'title' => $data['title'],
+            'content' =>$data['content'],
+         ]);
+
+        return response()->json($usefulMaterial);
+    }
+
+    public function destroyMaterial($id)
+    {
+        $usefulMaterial = UsefulMaterial::find($id);
+        $usefulMaterial->delete();
+
+        return response()->json([
+            'status' => 200
+        ]);
     }
 }

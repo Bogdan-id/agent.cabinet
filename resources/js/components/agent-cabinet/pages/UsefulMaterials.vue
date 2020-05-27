@@ -2,7 +2,7 @@
     <div class="row">
       <bread-scrumb />  
       <div class="col-md-12 useful-materials">
-        <router-view ref="rv"></router-view>
+        <router-view></router-view>
         <v-card style="min-height: 350px;" v-show="$route.name === 'Кориснi матерiали'">
           <v-card-title class="d-block grey darken-3 white--text">
             <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>

@@ -21,6 +21,7 @@ import UserProfile from "../components/agent-cabinet/pages/UserProfile"
 import UsefulMaterials from "../components/agent-cabinet/pages/UsefulMaterials"
 import RewardApplicationsDashboard from "../components/agent-cabinet/pages/RewardApplications"
 import Calculator from "../components/agent-cabinet/pages/Calculator"
+import CurrentMaterial from "../components/agent-cabinet/pages/CurrentMaterial"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications"
 import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalculation'
 // import CalculationEdit from '../components/agent-cabinet/pages/CalculationEdit.vue'
@@ -32,6 +33,7 @@ const routes = [
     // Admin
     path: '/admin', 
     component: Admin,
+    name: 'Aдмiн',
     meta: {
       title: 'Адмiн панель'
     },
@@ -174,7 +176,17 @@ const routes = [
             component: UsefulMaterialsDetail,
             meta: {
               title: "Кориснi матерiалы вiд Best leasing"
-            }
+            },
+            children: [
+              {
+                path: ':detail',
+                name: 'Детально',
+                component: CurrentMaterial,
+                meta: {
+                  title: "Детально"
+                },
+              }
+            ]
           }
         ]
       },

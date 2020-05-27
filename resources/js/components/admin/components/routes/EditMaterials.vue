@@ -3,8 +3,29 @@
       <v-card-title class="headline">
         Новий матерiал
       </v-card-title>
-      <v-card-text class="pb-0">
+      <!-- <v-btn @click="sendRequest()">Додати</v-btn> -->
+      <v-card-text>
+        <v-row>
+          <v-col md="4" class="pb-0 pt-0">
+            <v-select
+              @blur="$v.newCategorie.$touch()"
+              @change="$v.newCategorie.$touch()"
+              :error-messages="newCategorieErr"
+              v-model="newCategorie"
+              label="Оберiть категорiю"
+              :items="categories"
+              item-text="name"
+              item-value="id"
+              outlined dense>
+            </v-select>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-text class="pb-0 pt-0">
         <v-textarea
+          @input="$v.materialName.$touch()"
+          @blur="$v.materialName.$touch()"
+          :error-messages="materialNameErr"
           v-model="materialName"
           label="Заголовок матерiалу"
           rows="2"
@@ -18,7 +39,8 @@
               :rules="rules"
               accept="image/png, image/jpeg, image/bmp"
               prepend-inner-icon="mdi-camera"
-              label="Зображення до матерiалу" 
+              label="Зображення до матерiалу"
+              :disabled="!categoriesPresent"
               outlined show-size dense>
             </v-file-input>
           </v-col>
@@ -31,13 +53,26 @@
           class="grey darken-4">
         </v-img>
       </v-card-text>
-      <v-card-text class="mb-12">
+      <v-card-text>
         <v-card-title 
           class="headline black--text"
           style="text-decoration: underline;">
           Контент
         </v-card-title>
-        <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+        <ckeditor
+          :editor="editor" v-model="editorData" :config="editorConfig">
+        </ckeditor>
+        <v-card-text class="d-flex justify-center">
+          <span>
+            <v-btn 
+            @click="submit()" 
+            :loading="loading"
+            dark 
+            class="error">
+              Додати матерiал
+            </v-btn>
+          </span>
+        </v-card-text>
       </v-card-text>
     </v-card>
 </template>
@@ -45,25 +80,90 @@
 <script>
   import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
   import '@ckeditor/ckeditor5-build-classic/build/translations/uk'
+  import axios from 'axios'
+  import { validationMixin } from 'vuelidate'
+  import { required } from 'vuelidate/lib/validators'
 
   export default {
-    name: 'app',
+    mixins: [validationMixin],
     data: () => ({
+      commonErr: ['Обов`язкове поле'],
       editor: ClassicEditor,
-      editorData: '',
       editorConfig: {
         language: 'uk',
       },
-      materialName: null,
-      materialImg: null,
-      materialImgPreview: null,
       rules: [
         value => !value || value.size < 2000000 || 'Розмiр зображення повинен бути меньше 2 MB!',
       ],
+      categories: [],
+      loading: false,
+
+      editorData: '',
+      materialName: null,
+      materialImg: null,
+      materialImgPreview: null,
+      imageName: null,
+      newCategorie: null
     }),
+    validations: {
+      newCategorie: { required },
+      materialName: { required },
+    },
+    computed: {
+      categoriesPresent() {
+        return this.categories.length > 0 && this.newCategorie !== null
+      },
+      newCategorieErr() {
+        if (!this.$v.newCategorie.$error) return
+        return this.commonErr
+      },
+      materialNameErr() {
+        if (!this.$v.materialName.$error) return
+        return this.commonErr
+      }
+    },
     methods: {
-      previewImage(event) {
+      submit() {
+        this.$v.$dirty
+        && !this.$v.$invalid
+          ? this.sendRequest()
+          : this.highlightErrors()
+      },
+      sendRequest() {
+        this.loading = true
+        axios
+          .post('/admin/useful-material/create', this.finalObj())
+          .then(response => {
+            console.log(response)
+            this.loading = false
+            this.$notify({
+              group: 'success',
+              title: 'Успiшно',
+              text: ``,
+            })
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.loading = false
+            this.$notify({
+              group: 'error',
+              title: 'Помилка',
+              text: `${error.response.status} \n ${error.response.data.message}`,
+            })
+          })
+      },
+      finalObj() {
+        return {
+          usefulMaterialsCategoryId: this.newCategorie,
+          titleImage: this.imageName,
+          title: this.materialName, 
+          content: this.editorData,
+          _token: this.getCsrf()
+        }
+      },
+      previewImage(event) { 
         if(event) {
+          this.imageName = event.name
           const reader = new FileReader()
           reader.readAsDataURL(event)
           reader.onload = (data) => {
@@ -73,6 +173,30 @@
           this.materialImgPreview = null
         }
       },
+      getCsrf() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      getMageterialCategories() {
+        this.$store.commit('toggleAdminSpinner', true)
+        axios
+          .get('/useful-materials-categories/all')
+          .then(response => {
+            console.log(response)
+            this.categories = response.data
+            this.$store.commit('toggleAdminSpinner', false)
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.$store.commit('toggleAdminSpinner', false)
+          })
+      },
+      highlightErrors() {
+        this.$v.$anyError
+        this.$v.$touch()
+      },
+    },
+    created() {
+      this.getMageterialCategories()
     }
   }
 </script>
@@ -80,7 +204,7 @@
 <style lang="scss">
   .ck {
     &.ck-content {
-      min-height: 400px!important;
+      min-height: 200px!important;
     }
   }
 </style>

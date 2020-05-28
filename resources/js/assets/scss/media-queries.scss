@@ -4,6 +4,22 @@
     background-position: 0 100%;
   }
 }
+@media(min-width: 1550px) {
+  .dashboard-container {
+    width: 78%;
+  }
+  .right-block-wrapper {
+    width: 20%;
+  }
+}
+@media(min-width: 1750px) {
+  .dashboard-container {
+    width: 81%;
+  }
+  .right-block-wrapper {
+    width: 18%;
+  }
+}
 @media(max-width: 1200px) {
   .dashboard-container {
     width: 67%;

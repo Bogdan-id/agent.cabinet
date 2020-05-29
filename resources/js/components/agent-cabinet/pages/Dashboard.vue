@@ -14,7 +14,7 @@
   </div>
   <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
     <span class="mobile-manager-title">
-      {{ !requestRecieved ? '' : hasUserManager && !loading ? 'Ваш менеджер' : 'За Вами не закрiплений жоден з менеджерів!'}}
+      {{ 'Ваш менеджер' }}
     </span>
     <div v-if="loading" class="d-flex justify-center align-center">
       <v-progress-circular
@@ -106,7 +106,7 @@
         </div>
       </v-card>
       <v-card class="dashboard__rigth-block">
-        <v-card-title class="headline red--text">
+        <v-card-title class="title red--text">
           Новини
         </v-card-title>
         <v-divider></v-divider>
@@ -403,7 +403,6 @@ export default {
   transition: max-width 0.5s ease-in;
   width: 100%;
   .mobile-manager-title {
-    position: absolute; 
     top: 0.8rem; 
     font-size: 1rem;
     position: absolute; 

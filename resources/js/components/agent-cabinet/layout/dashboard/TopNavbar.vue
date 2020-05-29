@@ -77,8 +77,13 @@
                     </div>
                   </v-timeline-item>
                 </v-timeline>
-                <div class="pt-2 pb-2 pl-4" style="border-top: 1px solid #e9ecef">
-                  <a style="color: #f44336; font-size: 1rem" href="#">Дивитись всi <v-icon color="red" v-text="'mdi-arrow-right-bold'"></v-icon></a>
+                <div class="pt-2 pb-2 pl-6" style="border-top: 1px solid #e9ecef">
+                  <v-hover v-slot:default="{ hover }">
+                    <a class="notification-card-link" href="#">
+                      Дивитись всi 
+                      <v-icon :color="hover ? '#e57373' : '#bb433c'" v-text="'mdi-arrow-right-bold'"></v-icon>
+                    </a>
+                  </v-hover>
                 </div>
               </v-card>
               </span>
@@ -237,6 +242,14 @@ export default {
   &.show-card {
     opacity: 1;
     top: 38px!important;
+  }
+  .notification-card-link {
+    color: #bb433c; 
+    font-size: 1rem;
+    transition: color 0.2s ease-in!important;
+    &:hover {
+      color: #e57373;
+    }
   }
 }
 </style>

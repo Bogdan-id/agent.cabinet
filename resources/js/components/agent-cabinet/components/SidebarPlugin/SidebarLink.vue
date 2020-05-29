@@ -6,14 +6,28 @@
              tag="li">
     <a class="nav-link">
       <slot>
-        <i v-if="icon" :class="icon"></i>
+        <component :is="icon"></component>
+        <!-- <i v-if="icon" :class="icon"></i> -->
         <p class="nav-item-title">{{name}}</p>
       </slot>
     </a>
   </component>
 </template>
 <script>
+import homeSvg from '../../assets/svg-icons/home.vue'
+import calculatorSvg from '../../assets/svg-icons/calculator.vue'
+import leasingRequestSvg from '../../assets/svg-icons/leasing-requests.vue'
+import usefulMaterialsSvg from '../../assets/svg-icons/useful-materials.vue'
+import rewardRequests from '../../assets/svg-icons/rewardRequests.vue'
+
 export default {
+  components: {
+    homeSvg,
+    calculatorSvg,
+    leasingRequestSvg,
+    usefulMaterialsSvg,
+    rewardRequests
+  },
   name: "sidebar-link",
   inheritAttrs: false,
   data: () => ({

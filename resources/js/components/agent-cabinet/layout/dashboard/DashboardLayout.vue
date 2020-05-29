@@ -2,11 +2,11 @@
   <div class="wrapper">
     <side-bar>
       <template slot="links">
-        <sidebar-link to="/dashboard" name="Головна" icon="ti-panel"/>
-        <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="ti-agenda"/>
-        <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="ti-clipboard"/>
-        <sidebar-link to="/commission-requests" name="Заявки на винагороду" icon="ti-widget-alt"/>
-        <sidebar-link to="/useful-materials" name="Корисні матеріали" icon="ti-bookmark-alt"/>
+        <sidebar-link to="/dashboard" name="Головна" icon="homeSvg"/>
+        <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="calculatorSvg"/>
+        <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="leasingRequestSvg"/>
+        <sidebar-link to="/commission-requests" name="Заявки на винагороду" icon="rewardRequests"/>
+        <sidebar-link to="/useful-materials" name="Корисні матеріали" icon="usefulMaterialsSvg"/>
         <!-- <sidebar-link to="/agent-profile" name="профiль" icon="ti-user"/> -->
         <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->
         <!-- <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/> -->

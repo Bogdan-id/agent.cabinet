@@ -27,6 +27,7 @@ import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalc
 // import CalculationEdit from '../components/agent-cabinet/pages/CalculationEdit.vue'
 import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMaterialsDetail'
 import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram'
+import UserNotifications from '../components/agent-cabinet/pages/UserNotifications'
 
 const routes = [
   { 
@@ -250,8 +251,15 @@ const routes = [
         meta: {
           title: 'Заявки на лiзинг'
         }
+      },
+      {
+        path: '/notifications',
+        name: 'Повiдомлення',
+        component: UserNotifications,
+        meta: {
+          title: 'Повiдомлення'
+        }
       }
-      
     ]
   },
 ]

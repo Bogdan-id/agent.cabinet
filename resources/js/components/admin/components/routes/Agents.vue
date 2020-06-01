@@ -72,7 +72,7 @@
             color="error" 
             :disabled="currentUser.id === null"
             :loading="loading"
-            @click="sendRequest(currentUser.id)"
+            @click="sendRequest(currentUser.user_id)"
             small>Так
           </v-btn>
           <v-spacer></v-spacer>
@@ -178,6 +178,7 @@ export default {
         })
     },
     async createTableData(object) {
+      console.log(object)
       let arr = []
       await object.map(val => {
         let dataObj = {
@@ -185,6 +186,7 @@ export default {
           company_name: val.company_name,
           position: val.position,
           id: val.id,
+          user_id: val.user_id,
           abSize: val.ab_size,
           managerId: val.manager_id,
           status: val.status

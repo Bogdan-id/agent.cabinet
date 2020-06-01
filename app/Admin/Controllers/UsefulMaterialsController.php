@@ -107,4 +107,12 @@ class UsefulMaterialsController extends Controller
 
         return response()->json($materials);
     }
+
+    public function getMaterialsByCategory($id)
+    {
+        $category = UsefulMaterialsCategory::find($id);
+        $materials = $category->materials;
+
+        return response()->json($materials);
+    }
 }

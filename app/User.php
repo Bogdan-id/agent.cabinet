@@ -55,8 +55,8 @@ class User extends Authenticatable
     /**
      * Get the agent record associated with the user.
      */
-    public function agent()
-    {
-        return $this->hasOne('App\Models\Agent');
-    }
+    // public function agent()
+    // {
+    //     return $this->hasOne('App\Models\Agent', 'user_id');
+    // }
 }

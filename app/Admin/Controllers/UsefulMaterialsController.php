@@ -9,6 +9,7 @@ use App\Models\{
 };
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use App\Admin\Requests\ImageUploadRequest;
 
 class UsefulMaterialsController extends Controller
 {
@@ -91,12 +92,27 @@ class UsefulMaterialsController extends Controller
         ]);
     }
 
-    public function uploadImage(Request $request)
+    public function uploadImage(ImageUploadRequest $request)
     {
-        $request->file('image')->store('uploads', 'public');
+        $path = $request->file('image')->store('uploads', 'public');
 
         return response()->json([
-            'status' => 200
+            'url' => $path
         ]);
+    }
+
+    public function getMaterials()
+    {
+        $materials = UsefulMaterial::all();
+
+        return response()->json($materials);
+    }
+
+    public function getMaterialsByCategory($id)
+    {
+        $category = UsefulMaterialsCategory::find($id);
+        $materials = $category->materials;
+
+        return response()->json($materials);
     }
 }

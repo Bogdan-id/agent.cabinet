@@ -30,4 +30,13 @@ class UsefulMaterialsCategory extends Model
    protected $casts = [
        //
    ];
+
+   
+    /**
+     * Get the materials record associated with the category.
+     */
+    public function materials()
+    {
+        return $this->hasMany('App\Models\UsefulMaterial');
+    }
 }

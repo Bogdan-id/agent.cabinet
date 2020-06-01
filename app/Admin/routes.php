@@ -29,4 +29,7 @@ Route::group([
             ->where('id', '[0-9]+');
     $router->post('useful-material/image/upload', 'UsefulMaterialsController@uploadImage');
     $router->get('managers/update', 'ManagersController@updateManagers');
+    $router->get('useful-materials/all', 'UsefulMaterialsController@getMaterials');
+    $router->get('useful-materials/category/{id}', 'UsefulMaterialsController@getMaterialsByCategory');
+
 });

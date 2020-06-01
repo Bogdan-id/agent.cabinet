@@ -100,4 +100,11 @@ class UsefulMaterialsController extends Controller
             'url' => $path
         ]);
     }
+
+    public function getMaterials()
+    {
+        $materials = UsefulMaterial::all();
+
+        return response()->json($materials);
+    }
 }

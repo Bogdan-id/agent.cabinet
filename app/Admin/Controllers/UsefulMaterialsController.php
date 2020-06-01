@@ -90,4 +90,13 @@ class UsefulMaterialsController extends Controller
             'status' => 200
         ]);
     }
+
+    public function uploadImage(Request $request)
+    {
+        $request->file('image')->store('uploads', 'public');
+
+        return response()->json([
+            'status' => 200
+        ]);
+    }
 }

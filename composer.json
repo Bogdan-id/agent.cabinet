@@ -27,6 +27,8 @@
         "phpunit/phpunit": "^8.5"
     },
     "config": {
+        "disable-tls": true,
+        "secure-http": false,
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true

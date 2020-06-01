@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import MaterialContent from './UserfulMaterialsContent'
+import MaterialContent from './UsefulMaterialsContent'
 export default {
   components: {
     MaterialContent
   },
   data: () => ({
     article: [
-      {title: 'Тайтл для материала', text: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. ', image: require('D:/Bogdan/Image/10781.jpg'), route: 'test'},
-      {title: 'Тайтл для материала', text: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. ', image: require('D:/Bogdan/Image/10781.jpg'), route: 'test'}
+      {title: 'Тайтл для материала', text: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. ', route: 'test'},
+      {title: 'Тайтл для материала', text: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. ', route: 'test'}
     ],
     breadcrumbs: null
   }),

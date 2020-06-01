@@ -1,12 +1,12 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid">
+    <div style="position: relative" class="container-fluid d-flex justify-space-between">
       <toggleIcon
         @click.native="toggleCustomSidebar()"
         :class="showSidebar ? 'sidebar__toggle-icon' : 'sidebar__toggle-icon --toggle-icon-active'"
         >
       </toggleIcon>
-      <a class="navbar-brand" href="#">{{routeName}}</a>
+      <!-- <i><a style="position: absolute; left: 4rem; color: #727170; font-size: 1.4rem; top: 0.69rem; font-weight: bold;" href="#">{{routeName}}</a></i> -->
       <!-- <button class="navbar-toggler navbar-burger"
               type="button"
               @click="toggleSidebar"
@@ -16,12 +16,12 @@
         <span class="navbar-toggler-bar"></span>
         <span class="navbar-toggler-bar"></span>
       </button> -->
-      <div class="collapse navbar-collapse">
+      <!-- <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
           <drop-down class="nav-item"
-                     title="Повiдомлення"
-                     title-classes="nav-link"
-                     icon="ti-bell">
+            title="Повiдомлення"
+            title-classes="nav-link"
+            icon="ti-bell">
             <a class="dropdown-item" href="#">Повiдомлення 1</a>
             <a class="dropdown-item" href="#">Повiдомлення 2</a>
             <a class="dropdown-item" href="#">Повiдомлення 3</a>
@@ -36,15 +36,76 @@
             </a>
           </li>
         </ul>
+      </div> -->
+      <div>
+        <v-tooltip bottom>
+          <template #activator="{ on }">
+            <!-- to="/agent-profile" -->
+            <span style="display: inline-block; height: 52px; width: 52px;">
+              <v-btn v-on="on" @click="toggleNotifyCard($event)" large icon><v-icon v-text="'mdi-bell-outline'" color="black" id="notify-btn"></v-icon></v-btn>
+              <span style="position: relative;">
+              <v-card id="cadr-notification" elevation="8">
+                <v-card-title style="border-left: 4px solid #e57373" class="subtitle-1">
+                  Повiдомлення
+                </v-card-title>
+                <v-timeline dense>
+                  <v-timeline-item
+                    color="red lighten-2"
+                    small
+                    right>
+                    <div>
+                      <div style="font-size: 1rem" color="red">Перше повiдомлення</div>
+                      <span style="font-size: 0.85rem; color: #808080">25.07.20 20:35</span>
+                    </div>
+                  </v-timeline-item>
+                  <v-timeline-item
+                    color="red lighten-2"
+                    small
+                    right>
+                    <div>
+                      <div style="font-size: 1rem" color="red">Друге повiдомлення</div>
+                      <span style="font-size: 0.85rem; color: #808080">11.04.20 13:01</span>
+                    </div>
+                  </v-timeline-item>
+                  <v-timeline-item
+                    color="red lighten-2"
+                    small
+                    right>
+                    <div>
+                      <div style="font-size: 1rem" color="red">Третє повiдомлення</div>
+                      <span style="font-size: 0.85rem; color: #808080">23.07.20 10:35</span>
+                    </div>
+                  </v-timeline-item>
+                </v-timeline>
+                <div class="pt-2 pb-2 pl-6" style="border-top: 1px solid #e9ecef">
+                  <v-hover v-slot:default="{ hover }">
+                    <router-link class="notification-card-link" to="/notifications">
+                      Дивитись всi 
+                      <v-icon :color="hover ? '#e57373' : '#bb433c'" v-text="'mdi-arrow-right-bold'"></v-icon>
+                    </router-link>
+                  </v-hover>
+                </div>
+              </v-card>
+              </span>
+            </span>
+          </template>
+          <span>Повiдомлення</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template #activator="{ on }">
+            <v-btn v-on="on" to="/agent-profile" x-large icon><v-icon large v-text="'mdi-account'"></v-icon></v-btn>
+          </template>
+          <span>Профiль</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template #activator="{ on }">
+            <v-btn @click="signOut()" v-on="on" icon x-large>
+              <v-icon large v-text="'mdi-logout'"></v-icon>
+            </v-btn>
+          </template>
+          <span>Вихiд</span>
+        </v-tooltip>
       </div>
-      <v-tooltip bottom>
-        <template #activator="{ on }">
-          <v-btn @click="signOut()" v-on="on" icon x-large>
-            <v-icon large v-text="'mdi-logout'"></v-icon>
-          </v-btn>
-        </template>
-        <span>Вихiд</span>
-      </v-tooltip>
     </div></nav>
 </template>
 <script>
@@ -85,6 +146,26 @@ export default {
         this.showSidebar = true
       }
     },
+    toggleNotifyCard() {
+      setTimeout(() => {
+        let card = document.querySelector('#cadr-notification')
+        if(!card.classList.contains('show-card')) {
+          card.classList.add('show-card')
+        } else card.classList.remove('show-card')
+      }, 150);
+    },
+    listenCardState() {
+      let body = document.querySelector('body')
+      let notifyCard = document.querySelector('#cadr-notification')
+      body.addEventListener('click', event => {
+        if(notifyCard.classList.contains('show-card') && event.target.id !== "notify-btn") {
+          notifyCard.classList.remove('show-card')
+        }
+      })
+      notifyCard.addEventListener('click', event => {
+        event.stopPropagation()
+      })
+    },
     signOut() {
       this.logOut(this.getCsrf())
     },
@@ -107,26 +188,11 @@ export default {
           horizontalAlign: 'center'
         })
         this.$store.commit('toggleSpinner', false)
-				console.log(e.response.data)
-        console.log(e.response.status)
-        console.log(e.response.headers)
 			})
 		},
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
-    // toggleNotificationDropDown() {
-    //   this.activeNotifications = !this.activeNotifications;
-    // },
-    // closeDropDown() {
-    //   this.activeNotifications = false
-    // },
-    // toggleSidebar() {
-    //   this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
-    // },
-    // hideSidebar() {
-    //   this.$sidebar.displaySidebar(false);
-    // },
   },
   watch: {
     smAndDown(val) {
@@ -142,8 +208,52 @@ export default {
   },
   mounted() {
     this.smAndDown ? this.toggleCustomSidebar() : false
+    this.listenCardState()
   }
 }
 </script>
-<style>
+<style lang="scss">
+.v-timeline--dense:not(.v-timeline--reverse):before {
+    right: auto;
+    left: 25px!important;
+  }
+.v-timeline {
+  .v-timeline-item {
+    .v-timeline-item__divider {
+      min-width: 45px!important;
+      margin-top: 10px;
+      position: absolute;
+      left: 3px!important;
+    }
+    .v-timeline-item__body {
+      max-width: 180px!important;
+      position: relative!important;
+      margin-right: 0.5rem!important;
+    }
+  }
+}
+#cadr-notification {
+  position: absolute; 
+  min-width: 240px; 
+  right: 0;
+  top: 80px!important;
+  transition: opacity ease-out 0.15s, 
+    top ease-out 0.15s, 
+    visibility 0.15s ease-out;
+  opacity: 0;
+  visibility: hidden;
+  &.show-card {
+    visibility: visible;
+    opacity: 1;
+    top: 38px!important;
+  }
+  .notification-card-link {
+    color: #bb433c; 
+    font-size: 1rem;
+    transition: color 0.2s ease-in!important;
+    &:hover {
+      color: #e57373;
+    }
+  }
+}
 </style>

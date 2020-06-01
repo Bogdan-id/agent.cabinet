@@ -78,8 +78,25 @@
 </template>
 
 <script>
-  import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-  import '@ckeditor/ckeditor5-build-classic/build/translations/uk'
+  // import '@ckeditor/ckeditor5-build-classic/build/translations/uk'
+  import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter'
+  import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
+  import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
+  import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold'
+  import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic'
+  import LinkPlugin from '@ckeditor/ckeditor5-link/src/link'
+  import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph'
+  import Heading from '@ckeditor/ckeditor5-heading/src/heading'
+  import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment'
+  import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat'
+  import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
+  import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
+  import Image from '@ckeditor/ckeditor5-image/src/image'
+  import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
+  import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
+  import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
+  import List from '@ckeditor/ckeditor5-list/src/list'
+
   import axios from 'axios'
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
@@ -90,7 +107,56 @@
       commonErr: ['Обов`язкове поле'],
       editor: ClassicEditor,
       editorConfig: {
+        plugins: [ 
+          SimpleUploadAdapter,
+          EssentialsPlugin,
+          BoldPlugin,
+          ItalicPlugin,
+          LinkPlugin,
+          ParagraphPlugin,
+          Heading,
+          Alignment,
+          Autoformat,
+          BlockQuote,
+          ImageCaption,
+          Image,
+          ImageUpload,
+          ImageStyle,
+          ImageToolbar,
+          List
+        ],
+        toolbar: {
+          items: [
+            'heading',
+            '|',
+            'alignment',
+            'bold',
+            'italic',
+            'link',
+            // 'list',
+            // 'TodoList',
+            'ImageUpload',
+            'blockQuote',
+            'undo',
+            'redo',
+          ]
+        },
+        image: {
+          toolbar: [
+            'imageStyle:full',
+            'imageStyle:side',
+            '|',
+            'imageTextAlternative'
+          ]
+        },
         language: 'uk',
+        simpleUpload: {
+          uploadUrl: 'http://example.com',
+          headers: {
+            'X-CSRF-TOKEN': 'CSFR-Token',
+            Authorization: 'Bearer <JSON Web Token>'
+          }
+        }
       },
       rules: [
         value => !value || value.size < 2000000 || 'Розмiр зображення повинен бути меньше 2 MB!',
@@ -194,6 +260,12 @@
         this.$v.$anyError
         this.$v.$touch()
       },
+      assignTokenToCkEditorConfig() {
+        this.editorConfig.simpleUpload.headers.Authorization = this.getCsrf()
+      }
+    },
+    mounted() {
+      this.assignTokenToCkEditorConfig()
     },
     created() {
       this.getMageterialCategories()

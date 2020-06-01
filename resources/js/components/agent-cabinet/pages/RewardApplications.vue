@@ -52,7 +52,7 @@
           color="red lighten-1">
         </v-progress-linear>
       </v-card-title>
-      <v-card-text class="mt-6">
+      <v-card-text class="mt-9">
         <v-btn 
           dark class="red lighten-1"
           @click.stop="commissionRequestsDialog = !commissionRequestsDialog">
@@ -61,7 +61,7 @@
         </v-btn>
         <v-card-title
           v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
-          class="d-flex justify-center headline black--text mt-7 mb-5">
+          class="d-flex justify-center headline black--text mt-3 mb-4">
           Iсторiя заявок на винагороду
         </v-card-title>
         <v-card-title 
@@ -110,7 +110,7 @@ export default {
       // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
       { text: 'Модель', value: 'leasing_request.leasing_object', align: 'center' },
       { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },
-      { text: 'Дата', value: 'leasing_request.created_at', align: 'center', sortable: true },
+      { text: 'Дата заявки', value: 'leasing_request.created_at', align: 'center', sortable: true },
       { text: 'Статус', value: 'status', align: 'center' },
     ],
   }),

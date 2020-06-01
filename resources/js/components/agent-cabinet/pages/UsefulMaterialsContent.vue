@@ -10,6 +10,7 @@
           <v-col xs="12" sm="3">
             <div class="image-column">
               <v-img
+                v-if="item.image"
                 :src="item.image"
                 width="365">
               </v-img>

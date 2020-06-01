@@ -2,7 +2,7 @@
 <div>
 <div class="dashboard-wrapper">
   <!-- Mobyle agent info -->
-  <div v-if="!hasUserManager && !loading" class="mobile-agent-not-manager">
+  <div v-if="!hasUserManager && !loading && requestRecieved" class="mobile-agent-not-manager">
     <div class="pa-3 d-flex headline align-center">
       <div style="height: 100%; width: auto; display: flex;">
         <v-icon v-text="'mdi-information'" class="pr-3" size="50" color="red lighten-1"></v-icon>
@@ -12,24 +12,25 @@
       </div>
     </div>
   </div>
-  <div v-if="!loading && hasUserManager" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
-    <div class="icon-wrapper">
-      <v-icon size="60" style="min-width: 60px" v-text="'mdi-account-circle'" dark></v-icon>
+  <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
+    <span class="mobile-manager-title">
+      {{ 'Ваш менеджер' }}
+    </span>
+    <div v-if="loading" class="d-flex justify-center align-center">
+      <v-progress-circular
+        class="ma-3"
+        indeterminate
+        color="red">
+      </v-progress-circular>
     </div>
-    <ul :class="hasAgent ? 'agent-list-info agent-list-active' : 'agent-list-info'">
-      <li>
-        <span class="agent-desc">Ваш куратор:</span>
-        <span class="agent-data">{{ agentData.name }}</span>
-      </li>
-      <li>
-        <span class="agent-desc">Мобiльний:</span>
-        <span class="agent-data">{{ agentData.phone }}</span>
-      </li>
-      <li>
-        <span class="agent-desc">email:</span>
-        <span class="agent-data">{{ agentData.email }}</span>
-      </li>
-    </ul>
+    <div class="d-flex justify-center" style="width: 100%;">
+      <div v-if="hasUserManager && !loading && requestRecieved" class="mobile-manager-content">
+        <div class="empty-logo"><span class="logo-letter">{{ agentData.name }}</span></div>
+        <span style="font-size: 1.1rem; padding-right: 0.8rem;">{{ agentData.name }}</span>
+        <span style="font-weight: bold; font-size: 0.76rem; display: inline-block; padding-right: 0.8rem;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</span>
+        <span style="color: #bb433c; display: inline-block;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</span>
+      </div>
+    </div>
   </div>
   <!-- Dashboard container -->
   <div class="dashboard-container">
@@ -80,66 +81,32 @@
   </div>
   <div class="right-block-wrapper">
     <!-- Agent info -->
-    <v-card :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'">
-      <div v-if="!loading && hasUserManager" class="agent-info__header">
-        <v-icon class="pa-3" size="70" v-text="'mdi-account-circle'" dark></v-icon>
-      </div>
-      <div v-if="loading" class="d-flex justify-center align-center">
-        <v-progress-circular
-          class="ma-3"
-          indeterminate
-          color="red">
-        </v-progress-circular>
-      </div>
-      <!--  -->
-        <div v-if="!hasUserManager && !loading" class="pa-3 d-flex align-center">
-          <div style="height: 100%; width: auto; display: flex;">
-            <v-icon v-text="'mdi-information'" class="pr-3" size="60" color="red lighten-1"></v-icon>
+      <v-card :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'">
+        <div class="mt-4 mb-4 pl-4 mb-1 manager-title">
+          {{ !requestRecieved ? '' : hasUserManager && !loading ? 'Ваш менеджер' : 'За Вами не закрiплений жоден з менеджерів!'}}
+        </div>
+        <div v-if="loading" class="d-flex justify-center align-center">
+          <v-progress-circular
+            class="ma-3"
+            indeterminate
+            color="red">
+          </v-progress-circular>
+        </div>
+        <div v-if="hasUserManager && !loading && requestRecieved" class="manager-content mt-3 d-flex">
+          <div style="display: inline-flex; justify-content: center; width: 27%; align-items: start;">
+            <div style="display: flex; align-text: center; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 100%; background-color: #dadada;"><span class="logo-letter">{{ agentData.name }}</span></div>
           </div>
-          <div style="display: flex; align-items: center;" class="title">
-            <b>За Вами не закрiплений жоден з менеджерів!</b>
+          <div class="manager-list-wrapper" style="display: inline-block; width: 70%;">
+            <ul>
+              <li style="font-size: 1.1rem; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
+              <li style="font-weight: bold; font-size: 0.76rem"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</li>
+              <li style="color: #bb433c;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</li>
+            </ul>
           </div>
         </div>
-        <v-card-text v-show="hasUserManager" :class="hasAgent ? 'agent-info-list agent-info-list-active' : 'agent-info-list'"> 
-          <v-list two-line class="text-center">
-            <v-list-item>
-              <v-list-item-content>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-list-item-title v-on="on" class="body-2">{{ agentData.name }}</v-list-item-title>
-                  </template>
-                  <span>{{ agentData.name }}</span>
-                </v-tooltip>
-                <v-list-item-subtitle class="caption">Ваш куратор</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-content>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-list-item-title v-on="on" class="body-2">{{ agentData.phone }}</v-list-item-title>
-                  </template>
-                  <span>{{ agentData.phone }}</span>
-                </v-tooltip>
-                <v-list-item-subtitle class="caption">Мобiльний</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-content>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-list-item-title v-on="on" class="body-2">{{ agentData.email }}</v-list-item-title>
-                  </template>
-                  <span>{{ agentData.email }}</span>
-                </v-tooltip>
-                <v-list-item-subtitle class="caption">email</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
       </v-card>
       <v-card class="dashboard__rigth-block">
-        <v-card-title class="headline red--text">
+        <v-card-title class="title red--text">
           Новини
         </v-card-title>
         <v-divider></v-divider>
@@ -241,6 +208,7 @@ export default {
       // { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
+    requestRecieved: false,
   }),
   computed: {
     loading() {
@@ -258,7 +226,7 @@ export default {
     hasUserManager() {
       if(!this.$store.state.user.agent) return false
       return this.$store.state.user.agent.manager_id !== null
-    }
+    },
   },
   methods: {
     test() {
@@ -322,6 +290,13 @@ export default {
     hasUser() {
       this.getUserCalculcations()
     },
+    loading(val) {
+      if(val === false){
+        setTimeout(() => {
+          this.requestRecieved = true
+        }, 900)
+      }
+    }
   },
   created() {
     if(this.hasUser) {
@@ -332,6 +307,53 @@ export default {
 </script>
 
 <style lang="scss">
+.manager-list-wrapper {
+  ul {
+    padding-left: 0!important;
+    list-style: none!important;
+    li {padding-bottom: 0.28rem}
+    li{
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+.logo-letter {
+  font-size: 0;
+}
+.logo-letter:first-letter {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.mobile-manager-content {
+  padding: 1.6rem 1rem 0.3rem 1rem; 
+  display: inline-block;
+  span, div:hover {
+    cursor: pointer;
+  }
+  .empty-logo {
+    margin-right: 0.5rem; 
+    display: inline-flex; 
+    justify-content: center; 
+    align-items: center; 
+    width: 40px; 
+    height: 40px; 
+    border-radius: 100%; 
+    background-color: #dadada;
+  }
+}
+
+.manager-title {
+  border-left: 3px solid #e75d57; 
+  border-radius: 0!important; 
+  font-weight: bold; 
+  display: flex; 
+  align-items: center; 
+  height: 2.2rem; 
+  line-height: 1rem;
+}
+
 .dashboard-wrapper {
   display: flex; 
   align-items: flex-start; 
@@ -373,13 +395,24 @@ export default {
   transition: max-width 0.5s ease-in;
 }
 .mobile-agent-info {
+  position: relative;
   border-radius: 4px; 
+  // border-left: 3px solid #e75d57;
   margin-bottom: 12px; 
   overflow: hidden;
-  max-width: 140px;
-  max-height: 86px;
-  border: 2px solid #ef5350;
   transition: max-width 0.5s ease-in;
+  width: 100%;
+  .mobile-manager-title {
+    top: 0.8rem; 
+    font-size: 1rem;
+    position: absolute; 
+    left: 50%; transform: 
+    translate(-50%, -50%); 
+    background: #e75d57; 
+    padding: 1px 10px; 
+    border-radius: 0 0 5px 5px; 
+    color: white;
+  }
   ul {
     padding: 15px;
     list-style: none;
@@ -394,10 +427,10 @@ export default {
       opacity: 1;
     }
   }
-  &.active {
-    max-width: 100%;
-    width: 100%;
-  }
+  // &.active {
+  //   max-width: 100%;
+  //   width: 100%;
+  // }
   .icon-wrapper {
     align-items: stretch;
     background: #ef5350;
@@ -428,7 +461,6 @@ export default {
   max-height: 160px;
   width: 100%!important;
   transition: max-height 1s ease!important;
-  border: 1px solid #ef5350!important;
   .agent-info-list {
     visibility: hidden;
     opacity: 0;
@@ -440,14 +472,6 @@ export default {
   }
   &.agent-info-active {
     max-height: 650px;
-  }
-  .agent-info__header {
-    width: 100%; 
-    display: flex; 
-    background: #ef5350; 
-    color: white; 
-    flex-direction: column; 
-    align-items: center;
   }
 }
 .dashboard__rigth-block {

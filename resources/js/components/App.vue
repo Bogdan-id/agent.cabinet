@@ -26,12 +26,24 @@
 	@import "../assets/scss/loader.scss";
 	@import "../assets/scss/scroll.scss";
   thead th {
+    vertical-align: top!important;
+    text-align: center!important;
     & span {
-      font-size: 1.1rem!important;
+      font-size: 0.94rem!important;
       font-weight: bold!important;
       color: #2b2a28!important;
     }
   }
+  .v-data-table {
+    tbody {
+      tr:last-child {
+        height: 70px!important;
+      }
+    }
+  }
+  // .v-data-table-header th {
+  //   white-space: nowrap;
+  // }
 </style>
 
 <script>

@@ -1,5 +1,33 @@
 <template>
 <div class="col-12">
+  <v-dialog
+    v-model="showDocumentAttachment"
+    max-width="370">
+    <v-card>
+      <v-card-title class="mb-5" style="font-size: 1.55rem">
+        Додати документи
+      </v-card-title>
+      <v-card-text>
+        <v-file-input 
+          v-model="attachedFiles"
+          accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
+          multiple 
+          label="Додати файл"
+          outlined dense small-chips counter-size-string show-size>
+        </v-file-input>
+        <v-card-actions>
+        <v-btn
+          small
+          dark
+          color="grey darken-3"
+          @click="sendRequest()"
+          :loading="btnLoading">
+          Подати заявку
+        </v-btn>
+      </v-card-actions>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
   <v-card class="pb-4" min-height="300">
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-calculator-variant'"></v-icon>
@@ -54,20 +82,52 @@
         :items-per-page="10"
         class="elevation-1">
         <template v-slot:item.actions="{ item }">
-          <div class="d-flex">
-            <v-icon
-              @click="toEdit(item.id)"
-              color="red lighten-1"
-              class="mr-2"
-              >
-              mdi-pencil
-            </v-icon>
-            <v-icon
-              @click="toDetail(item.id)"
-              color="red lighten-1"
-              >
-              mdi-file-find-outline
-            </v-icon>
+          <div style="display: flex; justify-content: space-between;">
+            <v-tooltip bottom>
+              <template #activator="{ on: Btn }">
+                <v-btn 
+                  @click="toEdit(item.id)"
+                  v-on="{ ...Btn }"
+                  icon>
+                  <v-icon
+                    color="red lighten-1"
+                    >
+                    mdi-pencil
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Редагувати</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <v-btn
+                  @click="toDetail(item.id)"
+                  v-on="on"
+                  icon>
+                  <v-icon
+                    color="red lighten-1"
+                    >
+                    mdi-file-find-outline
+                  </v-icon>
+                </v-btn>
+                </template>
+              <span>Переглянуты</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <v-btn 
+                  @click.stop="showDocumentAttachment = true"
+                  v-on="on"
+                  icon>
+                  <v-icon
+                    color="red lighten-1"
+                    >
+                    mdi-plus-circle
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>Подати заявку</span>
+            </v-tooltip>
           </div>
         </template>
       </v-data-table>
@@ -87,12 +147,16 @@ export default {
       { text: 'Марка', value: 'Марка', align: 'center'},
       { text: 'Модель', value: 'Модель', align: 'center' },
       { text: 'Сума', value: 'Сума', align: 'center' },
+      { text: 'Розмiр АВ', value: '', align: 'center' },
       { text: 'Дата', value: 'Дата', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
     search: '',
-    loading: false
+    attachedFiles: null,
+    loading: false,
+    btnLoading: false,
+    showDocumentAttachment: false
   }),
   computed: {
     user() {
@@ -116,6 +180,12 @@ export default {
     getGraphById(id) {
       return this.$store.state.graphs
         .filter(val => val.id === id)
+    },
+    sendRequest() {
+      this.btnLoading = true
+      setTimeout(() => {
+        this.btnLoading = false
+      }, 800)
     },
     getUserCalculations() {
       this.loading = true
@@ -171,6 +241,11 @@ export default {
     user() {
       if(this.userData) this.getUserCalculations()
       return
+    },
+    showDocumentAttachment(val) {
+      if(val === false) {
+        this.attachedFiles = null
+      }
     }
   },
   mounted() {

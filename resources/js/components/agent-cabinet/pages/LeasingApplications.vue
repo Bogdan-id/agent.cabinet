@@ -137,7 +137,7 @@
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">
-      <v-card-title class="headline">
+      <v-card-title class="headline mb-7">
         <v-spacer></v-spacer>
         <v-text-field
           v-show="tableDataPresent"
@@ -156,25 +156,43 @@
         :items="tabledata"
         :items-per-page="10"
         class="elevation-1">
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <div class="d-flex">
-            <v-icon
-              @click="toDetail(item.id)"
-              color="red lighten-1">
-              mdi-file-find-outline
-            </v-icon>
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <v-icon
+                  @click="toDetail(item.id)"
+                  class="mr-3"
+                  v-on="on"
+                  color="red lighten-1">
+                  mdi-plus-circle
+                </v-icon>
+              </template>
+              <span>Подати заявку на виплату АВ</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <v-icon
+                  @click="toDetail(item.id)"
+                  v-on="on"
+                  color="red lighten-1">
+                  mdi-file-find-outline
+                </v-icon>
+              </template>
+              <span>Переглянути</span>
+            </v-tooltip>
           </div>
         </template>
-        <template v-slot:item.request_status="{ item }">
-          <div class="d-flex align-center pr-1 flex-column">
-            <div>
+        <template #item.request_status="{ item }">
+          <!--  class="d-flex align-center flex-column" -->
+          <div class="d-flex justify-center">
+            <div style="display: inline-block">
               <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <div>
+                <template #activator="{ on }">
+                  <div v-on="on"  style="display: inline-block">
                     <v-icon
                       v-for="key in progressDivision"
                       :key="key"
-                      v-on="on"
                       small
                       :color="applyChanges(item.request_status, key).color">
                       mdi-brightness-1
@@ -184,10 +202,10 @@
                 <span>{{ applyChanges(item.request_status).text }}</span>
               </v-tooltip>
             </div>
+          </div>
             <!-- <div>
               {{applyChanges(item.request_status, i).text}}
             </div> -->
-          </div>
         </template>
       </v-data-table>
       <!-- <v-btn @click="test()">test</v-btn> -->
@@ -207,6 +225,7 @@ export default {
       { text: 'ПIБ', value: 'initials', align: 'start'},
       { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна', value: 'leasing_amount', align: 'center' },
+      { text: 'Розмір агентської винагороди', value: 'leasing_amount', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },
       { text: 'Дата', value: 'data', align: 'center' },
       { text: 'Статус заявки', value: 'request_status', align: 'center', width: 200 },
@@ -274,6 +293,7 @@ export default {
         axios
           .get(`/leasing-reqeust/agent/${agentId}`)
           .then(response => {
+            console.log(response)
             this.loading = false
             if(response.data.length > 0)  {
               this.createTableData(response.data)

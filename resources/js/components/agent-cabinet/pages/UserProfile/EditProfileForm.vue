@@ -195,6 +195,16 @@
                 </v-text-field>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-8">
+                <v-text-field
+                    v-model="user.card_number"
+                    label="IBAN"
+                    :placeholder="user.card_number"
+                    outlined dense>
+                </v-text-field>
+              </div>
+            </div>
           </v-card-text>
         </v-card>
         <!--  -->
@@ -209,7 +219,7 @@
                     v-model="user.ab_size"
                     label="Розмiр АВ"
                     placeholder="Розмiр АВ"
-                    append-inner-icon="mdi-percent-outline"
+                    append-icon="mdi-percent-outline"
                     dense readonly>
                 </v-text-field>
               </div>

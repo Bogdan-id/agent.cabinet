@@ -320,19 +320,29 @@ class BitrixClient
         return $result['result']['ASSIGNED_BY_ID'];
     }
 
-    public function getManagers() 
+    public function getManagers()
     {
-        //dd('ok');
         $response = $this->client
-                ->get("/rest/3/{$this->token}/user.search", [
-                    'query' => [
-                        "UF_DEPARTMENT_NAME" => "ВІДДІЛ ПРЯМИХ ПРОДАЖІВ"
-                    ]
-                ])
-                ->getBody()
-                ->getContents();
-        $result = json_decode($response, true);
-        dd($result);
-        return $result['result']['ASSIGNED_BY_ID'];
+            ->get("/rest/3/{$this->token}/user.search", [
+                'query' => [
+                     'FILTER' => [
+                         'UF_DEPARTMENT' => [
+                            // 0 => 19,
+                             1 => 21,
+                             2 => 93,
+                             3 => 95,
+                             4 => 97,
+                             5 => 99,
+                         ],
+                         'ACTIVE' => true
+                     ]
+                ]
+            ])
+            ->getBody()
+            ->getContents();
+
+            $result = json_decode($response, true);
+            
+            return $result['result'];
     }
 }

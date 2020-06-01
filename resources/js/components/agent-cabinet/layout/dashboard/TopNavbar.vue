@@ -79,7 +79,7 @@
                 </v-timeline>
                 <div class="pt-2 pb-2 pl-6" style="border-top: 1px solid #e9ecef">
                   <v-hover v-slot:default="{ hover }">
-                    <router-link class="notification-card-link" to="/notifications">
+                    <router-link @click.native.stop="toggleNotifyCard()" class="notification-card-link" to="/notifications">
                       Дивитись всi 
                       <v-icon :color="hover ? '#e57373' : '#bb433c'" v-text="'mdi-arrow-right-bold'"></v-icon>
                     </router-link>

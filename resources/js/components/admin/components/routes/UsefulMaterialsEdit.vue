@@ -489,11 +489,9 @@ export default {
     min-height: 100vh;
     overflow-x: hidden;
   }
-  .tabs {
-    position: relative;
-  }
   .section .tabs {
     display: flex;
+    position: relative;
   }
   .tabs .tabs-input input,
   .tabs .tabs-input input:focus {
@@ -521,6 +519,7 @@ export default {
     cursor: pointer;
     display: block;
     width: 100%;
+    height: 100%;
     font-size: 26px;
     text-align: center;
     line-height: 2rem;
@@ -529,6 +528,7 @@ export default {
   .tabs .tabs-input {
     width: 50%;
     display: block;
+    height: 100%;
     opacity: 0.4;
     transition: opacity 0.3s ease;
   }

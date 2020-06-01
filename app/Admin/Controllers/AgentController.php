@@ -45,7 +45,7 @@ class AgentController extends Controller
         $user = User::find($id);
         $user->is_active = 1;
         $user->save();
-
+        //TODO: отправка на почту
         return response()->json([
             'status' => 200
         ]);
@@ -56,7 +56,7 @@ class AgentController extends Controller
         $user = User::find($id);
         $user->is_active = 0;
         $user->save();
-        
+        //TODO: отправка на почту
         return response()->json([
             'status' => 200
         ]);

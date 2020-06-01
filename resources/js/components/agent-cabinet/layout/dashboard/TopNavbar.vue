@@ -79,10 +79,10 @@
                 </v-timeline>
                 <div class="pt-2 pb-2 pl-6" style="border-top: 1px solid #e9ecef">
                   <v-hover v-slot:default="{ hover }">
-                    <a class="notification-card-link" href="#">
+                    <router-link class="notification-card-link" to="/notifications">
                       Дивитись всi 
                       <v-icon :color="hover ? '#e57373' : '#bb433c'" v-text="'mdi-arrow-right-bold'"></v-icon>
-                    </a>
+                    </router-link>
                   </v-hover>
                 </div>
               </v-card>
@@ -237,9 +237,13 @@ export default {
   min-width: 240px; 
   right: 0;
   top: 80px!important;
-  transition: opacity ease-out 0.15s, top ease-out 0.15s;
+  transition: opacity ease-out 0.15s, 
+    top ease-out 0.15s, 
+    visibility 0.15s ease-out;
   opacity: 0;
+  visibility: hidden;
   &.show-card {
+    visibility: visible;
     opacity: 1;
     top: 38px!important;
   }

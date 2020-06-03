@@ -160,24 +160,30 @@
           <div class="d-flex">
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-icon
+                <v-btn 
                   @click="toDetail(item.id)"
                   class="mr-3"
                   v-on="on"
-                  color="red lighten-1">
-                  mdi-plus-circle
-                </v-icon>
+                  icon>
+                  <v-icon
+                    color="red lighten-1">
+                    mdi-plus-circle
+                  </v-icon>
+                </v-btn>
               </template>
               <span>Подати заявку на виплату АВ</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-icon
+                <v-btn 
                   @click="toDetail(item.id)"
                   v-on="on"
-                  color="red lighten-1">
-                  mdi-file-find-outline
-                </v-icon>
+                  icon>
+                  <v-icon
+                    color="red lighten-1">
+                    mdi-file-find-outline
+                  </v-icon>
+                </v-btn>
               </template>
               <span>Переглянути</span>
             </v-tooltip>

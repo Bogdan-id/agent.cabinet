@@ -142,6 +142,9 @@
           ]
         },
         image: {
+          upload: {
+            types: ['jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff']
+          },
           toolbar: [
             'imageStyle:full',
             'imageStyle:side',
@@ -151,7 +154,7 @@
         },
         language: 'uk',
         simpleUpload: {
-          uploadUrl: 'http://example.com',
+          uploadUrl: '/admin/useful-material/image/upload',
           headers: {
             'X-CSRF-TOKEN': 'CSFR-Token',
             Authorization: 'Bearer <JSON Web Token>'

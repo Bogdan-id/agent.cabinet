@@ -1,59 +1,56 @@
 <template>
-<div  style="border-radius: 8px 8px 0 0; position: relative; border-radius: 8px 8px 0 0; overflow: hidden; margin-right: 15px;">
-  <div style="position: absolute; top: 0; left: 0; right: 0; height: 560px; background-color: #d24a43; padding: 10px 0"></div>
-  <div class="text-color-for-red-absolute" style="z-index:1; position: relative; color: white;l">
-    <div style="padding: 1rem 2rem">
-      <span style="font-size: 1.5rem">Пiдбери найвигiднiшi умови фiнансування</span>
-    </div>
-    <!-- main container -->
-    <div class="calculator-red-block" style="margin: 0 19px; border:1px solid #e5e5e5; border-radius: 8px; padding: 15px 25px;">
+<div  style="position: relative; border-radius: 8px 8px 0 0; overflow: hidden; margin-right: 15px;">
+  <div style="position: absolute; top: 0; left: 0; right: 0; height: 615px; background-color: #d24a43; padding: 10px 0"></div>
+  <div class="text-color-for-red-absolute" style="z-index:1; position: relative; color: white;">
+    <div class="calculator-red-block" style="margin: 19px 19px; border:1px solid #e5e5e5; border-radius: 8px; padding: 15px 25px;">
       <v-row class="leasing-types">
         <v-col cols="12" sm="4" md="2">
-          <input @change="getMarksByType()" v-model="calcObj.leasingObjectType" type="radio" id="car" name="leasing-type" :value="1" checked>
-          <label for="car" style="display: inline-block;">
-            <car style="height: 50px;"></car>
-            <span style="display: block; border-bottom: 4px solid white; padding-bottom: 0.35rem;">Легковi авто</span>
+          <input @change="getMarksByType($event); addActiveClass($event)" v-model="calcObj.leasingObjectType" type="radio" id="car" name="leasing-type" :value="1" checked>
+          <label for="car" class="leasing-type-block">
+            <car style="height: 50px; margin-left: 0.40rem;"></car>
+            <span>ЛЕГКОВI АВТО</span>
           </label>
         </v-col>
         <v-col cols="12" sm="4" md="2">
-          <input @change="getMarksByType()" v-model="calcObj.leasingObjectType" type="radio" id="cargo" name="leasing-type" :value="6">
-          <label for="cargo" style="display: inline-block;">
-            <cargo style="height: 50px;"></cargo>
-            <span style="display: block; border-bottom: 4px solid white; padding-bottom: 0.35rem;">Вантажiвки</span>
+          <input @change="getMarksByType($event); addActiveClass($event)" v-model="calcObj.leasingObjectType" type="radio" id="cargo" name="leasing-type" :value="6">
+          <label for="cargo" class="leasing-type-block">
+            <cargo style="height: 50px; margin-left: 0.40rem;"></cargo>
+            <span>ВАНТАЖIВКИ</span>
           </label>
         </v-col>
         <v-col cols="12" sm="4" md="2">
-          <input @change="getMarksByType()" v-model="calcObj.leasingObjectType" type="radio" id="special" name="leasing-type" :value="4">
-          <label for="special" style="display: inline-block;">
-            <special style="height: 50px;"></special>
-            <span style="display: block; border-bottom: 4px solid white; padding-bottom: 0.35rem;">Спецтехнiка</span>
+          <input @change="getMarksByType($event); addActiveClass($event)" v-model="calcObj.leasingObjectType" type="radio" id="special" name="leasing-type" :value="4">
+          <label for="special" class="leasing-type-block">
+            <special style="height: 50px; margin-left: 0.40rem;"></special>
+            <span>СПЕЦТЕХНIКА</span>
           </label>
         </v-col>
         <v-col cols="12" sm="4" md="2">
-          <input @change="getMarksByType()" v-model="calcObj.leasingObjectType" type="radio" id="agricultural" name="leasing-type" :value="6">
-          <label for="agricultural" style="display: inline-block;">
-            <agricultural style="height: 50px;"></agricultural>
-            <span style="display: block; border-bottom: 4px solid white; padding-bottom: 0.35rem;">С/Г Технiка</span>
+          <input @change="getMarksByType($event); addActiveClass($event)" v-model="calcObj.leasingObjectType" type="radio" id="agricultural" name="leasing-type" :value="6">
+          <label for="agricultural" class="leasing-type-block">
+            <agricultural style="height: 50px; margin-left: 0.40rem;"></agricultural>
+            <span>С/Г ТЕХНIКА</span>
           </label>
         </v-col>
         <v-col cols="12" sm="4" md="2">
-          <input @change="getMarksByType()" v-model="calcObj.leasingObjectType" type="radio" id="equipment" name="leasing-type" :value="6">
-          <label for="equipment" style="display: inline-block;">
-            <equipment style="height: 50px;"></equipment>
-            <span style="display: block; border-bottom: 4px solid white; padding-bottom: 0.35rem;">Обладнання</span>
+          <input @change="getMarksByType($event); addActiveClass($event)" v-model="calcObj.leasingObjectType" type="radio" id="equipment" name="leasing-type" :value="6">
+          <label for="equipment" class="leasing-type-block">
+            <equipment style="height: 50px; margin-left: 0.40rem;"></equipment>
+            <span>ОБЛАДНАННЯ</span>
           </label>
         </v-col>
         <v-col cols="12" sm="4" md="2">
-          <input @change="getMarksByType()" v-model="calcObj.leasingObjectType" type="radio" id="trailer" name="leasing-type" :value="6">
-          <label for="trailer" style="display: inline-block;">
-            <div style="height: 50px;"></div>
-            <span style="display: block; border-bottom: 4px solid white; padding-bottom: 0.35rem;">Причепи та напiвпричепи</span>
+          <input @change="getMarksByType($event); addActiveClass($event)" v-model="calcObj.leasingObjectType" type="radio" id="trailer" name="leasing-type" :value="6">
+          <label for="trailer" class="leasing-type-block">
+            <trailer style="height: 50px; margin-left: 0.40rem;"></trailer>
+            <span>ПРИЧЕПИ ТА НАПIВПРИЧЕПИ</span>
           </label>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="6" class="pt-0 pb-0">
           <v-radio-group
+            class="d-flex justify-space-between"
             dark
             color="white"
             v-model="calcObj.leasingClientType"
@@ -61,12 +58,12 @@
             row>
             <v-radio :value="1" color="white">
               <template #label>
-                <span>Фiзична особа</span>
+                <span style="font-size: 1.2rem; color: white"><b>Фiзична особа</b></span>
               </template>
             </v-radio>
-            <v-radio :value="2" color="white">
+            <v-radio :value="2" color="white" class="ml-5">
               <template #label>
-                <span>Юридична особа</span>
+                <span style="font-size: 1.2rem; color: white"><b>Юридична особа</b></span>
               </template>
             </v-radio>
           </v-radio-group>
@@ -77,8 +74,8 @@
         <v-col cols="12" md="6" class="pt-0 pb-0">
           <v-row>
             <v-col cols="12" md="4">
-              <div style="min-height: 40px; display: inline-flex; align-items: center;">
-                <span style="display: block; font-size: 0.93rem; color: #e5e5e5">Тип авто</span>
+              <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Тип авто</span>
               </div>
             </v-col>
             <v-col cols="12" md="7">
@@ -91,7 +88,7 @@
                 :error-messages="isNewErr"
                 label="Тип авто"
                 color="red darken-4"
-                dense outlined :disabled="!isClientType">
+                outlined :disabled="!isClientType">
               </v-select>
             </v-col>
           </v-row>
@@ -99,8 +96,8 @@
         <v-col cols="12" md="6" class="pt-0 pb-0">
           <v-row style="display: flex; justify-content: flex-end;">
             <v-col cols="12" md="4">
-              <div style="min-height: 40px; display: inline-flex; align-items: center;">
-                <span style="display: block; font-size: 0.93rem; color: #e5e5e5">Предмет лізингу</span>
+              <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Предмет лізингу</span>
               </div>
             </v-col>
             <v-col cols="12" md="7">
@@ -119,7 +116,7 @@
                 ref="refLoading"
                 :disabled="!typeOfCar"
                 color="red darken-4"
-                dense outlined>
+                outlined>
               </v-select>
             </v-col>
           </v-row>
@@ -130,8 +127,8 @@
         <v-col cols="12" md="6" class="pt-0 pb-0">
           <v-row style="display: flex;">
             <v-col cols="12" md="4">
-              <div style="min-height: 40px; display: inline-flex; align-items: center;">
-                <span style="display: block; font-size: 0.93rem; color: #e5e5e5">Марка</span>
+              <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Марка</span>
               </div>
             </v-col>
             <v-col cols="12" md="7">
@@ -152,7 +149,7 @@
                   || noBrandItems && $store.state.loader"
                 :disabled="!leasedOfAssetType || noBrandItems"
                 color="red darken-4"
-                dense outlined>
+                outlined>
               </v-autocomplete>
             </v-col>
           </v-row>
@@ -160,8 +157,8 @@
         <v-col cols="12" md="6" class="pt-0 pb-0">
           <v-row style="display: flex; justify-content: flex-end;">
             <v-col cols="12" md="4">
-              <div style="min-height: 40px; display: inline-flex; align-items: center;">
-                <span style="display: block; font-size: 0.93rem; color: #e5e5e5">Модель</span>
+              <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Модель</span>
               </div>
             </v-col>
             <v-col cols="12" md="7">
@@ -180,7 +177,7 @@
                 :loading="$store.state.loader && modelOfItem"
                 :disabled="!modelOfItem || modelItems.length === 0"
                 color="red darken-4"
-                dense outlined>
+                outlined>
               </v-autocomplete>
             </v-col>
           </v-row>
@@ -191,8 +188,8 @@
         <v-col cols="12" md="6" class="pt-0 pb-0">
           <v-row style="display: flex;">
             <v-col cols="12" md="4">
-              <div style="min-height: 40px; display: inline-flex; align-items: center;">
-                <span style="display: block; font-size: 0.93rem; color: #e5e5e5">Об'єм двигуна</span>
+              <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Об'єм двигуна</span>
               </div>
             </v-col>
             <v-col cols="12" md="7">
@@ -205,7 +202,7 @@
                 label="Об'єм двигуна"
                 :disabled="!yearOfModel"
                 color="red darken-4"
-                dense outlined>
+                outlined>
                 <template v-slot:append>
                   <span style="color: grey!important; display: block; margin-top: 5px;">см3</span>
                 </template>
@@ -216,8 +213,8 @@
         <v-col cols="12" md="6" class="pt-0 pb-0">
           <v-row style="display: flex; justify-content: flex-end;">
             <v-col cols="12" md="4">
-              <div style="min-height: 40px; display: inline-flex; align-items: center;">
-                <span style="display: block; font-size: 0.93rem; color: #e5e5e5">Рік</span>
+              <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Рік</span>
               </div>
             </v-col>
             <v-col cols="12" md="7">
@@ -231,7 +228,7 @@
                 label="Рік"
                 :disabled="!typeOfModel"
                 color="red darken-4"
-                dense outlined>
+                outlined>
               </v-select>
             </v-col>
           </v-row>
@@ -239,11 +236,11 @@
       </v-row>
       <!--  -->
       <v-row>
-        <v-col cols="12" md="6" class="pt-0 pb-0">
+        <v-col cols="12" md="6" class="pt-0 pb-0 ">
           <v-row style="display: flex;">
             <v-col cols="12" md="4">
-              <div style="min-height: 40px; display: inline-flex; align-items: center;">
-                <span style="display: block; font-size: 0.93rem; color: #e5e5e5">Валюта</span>
+              <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Валюта</span>
               </div>
             </v-col>
             <v-col cols="12" md="7">
@@ -256,7 +253,7 @@
                 :error-messages="currencyErr"
                 label="Оберiть валюту"
                 color="red darken-4"
-                dense outlined :disabled="!isClientType">
+                outlined :disabled="!isClientType">
               </v-select>
             </v-col>
           </v-row>
@@ -264,8 +261,8 @@
         <v-col cols="12" md="6" class="pt-0 pb-0">
           <v-row style="display: flex; justify-content: flex-end">
             <v-col cols="12" md="4">
-              <div style="min-height: 40px; display: inline-flex; align-items: center;">
-                <span style="display: block; font-size: 0.93rem; color: #e5e5e5">Вартiсть</span>
+              <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Вартiсть</span>
               </div>
             </v-col>
             <v-col cols="12" md="7">
@@ -279,7 +276,7 @@
                 label="Вартість"
                 color="red darken-4"
                 :disabled="calcObj.leasedAssertEngine === null"
-                dense outlined>
+                outlined>
                 <template v-slot:append>
                   <span style="color: grey!important; display: block; margin-top: 5px;">грн</span>
                 </template>
@@ -288,8 +285,9 @@
           </v-row>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="mt-10">
         <v-col cols="12" md="3">
+          <!-- :disabled="calcObj.leasingAmount === null" -->
           <v-select
             :items="selects.currencys"
             append-icon="mdi-chevron-down"
@@ -297,17 +295,16 @@
             :error-messages="leasingCurrencyErr"
             label="Валюта"
             v-model="calcObj.leasingCurrency"
-            :disabled="calcObj.leasingAmount === null"
             color="red darken-4"
             dense>
           </v-select>
         </v-col>
         <v-col cols="12" md="3">
           <!-- float -->
+          <!-- :disabled="calcObj.leasingCurrency === null" -->
           <v-text-field
             v-model="calcObj.leasingCurrencyCourse"
             :error-messages="leasingCurrencyCourseErr"
-            :disabled="calcObj.leasingCurrency === null"
             @input="parseToFloat('leasingCurrencyCourse')"
             id="leasingCurrencyCourse"
             label="Курс"
@@ -316,10 +313,10 @@
           </v-text-field>
         </v-col>
         <v-col cols="12" md="3">
+          <!-- :disabled="calcObj.leasingCurrency === null" -->
           <v-text-field
             v-model="calcObj.leasingQuantity"
             :error-messages="leasingQuantityErr"
-            :disabled="calcObj.leasingCurrency === null"
             @input="parseToInt('leasingQuantity')"
             id="leasingQuantity"
             label="Кiлькiсть"
@@ -553,11 +550,12 @@ import Agricultural from '../../assets/svg-icons/agricultural.vue'
 import Equipment from '../../assets/svg-icons/equipment.vue'
 import Special from '../../assets/svg-icons/special.vue'
 import Cargo from '../../assets/svg-icons/cargo.vue'
+import Trailer from '../../assets/svg-icons/trailer.vue'
 
 export default {
   mixins: [validationMixin],
   components: {
-    Car, Agricultural, Equipment, Special, Cargo
+    Car, Agricultural, Equipment, Special, Cargo, Trailer
   },
   data:() => ({
     selects: selectsItemAndValue,
@@ -799,6 +797,14 @@ export default {
     closeSelect() {
       this.$refs.graphType.blur()
     },
+    addActiveClass(event) {
+      let el = document.querySelectorAll('.leasing-type-block')
+      el.forEach(val => {
+        console.log(val)
+        val.classList.remove('active')
+      })
+      if(event) event.target.nextSibling.nextSibling.classList.add('active')
+    },
     getMarksByType() {
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
@@ -1010,6 +1016,14 @@ export default {
         border: none!important;
       }
     }
+    .v-select__selection, input {
+      font-size: 1.28rem!important;
+    }
+    .v-select__slot, .v-text-field__slot {
+      label {
+        font-size: 1.28rem!important;
+      }
+    }
     .v-input--selection-controls__ripple:before {
       background: none!important;
     }
@@ -1036,6 +1050,37 @@ export default {
     }
     .leasing-types input {
       display: none;
+    }
+    .leasing-type-block {
+      display: inline-block;
+      padding: 10px 12px 15px 12px; 
+      border-radius: 6px;
+      color: white;
+      padding-bottom: 0.35rem;
+      transition: border-bottom 0.25s ease-in, color 0.25s ease-in;
+      span {
+        display: block;
+        border-bottom: 4px solid white;
+        padding: 0.4rem;
+      }
+      &.active {
+        opacity: 1!important;
+        background: white!important;
+        color: #d24a43;
+        span {
+          border-bottom: 4px solid #d24a43;
+        }
+      }
+      &:hover {
+        transition: opacity 0.15s ease-in;
+        cursor: pointer;
+        opacity: 0.8;
+        background: rgb(255, 255, 255);
+        color: #d24a43;
+        span {
+          border-bottom: 4px solid #d24a43;
+        }
+      }
     }
   }
   

@@ -110,19 +110,19 @@ export default {
 
 <style scoped>
   .tabs {
-    border-bottom: 2px solid #ea4c45;
+    border-bottom: 2px solid #d85151;
   }
   .tabs .tabs-input {
     opacity: 1;
   }
   .tabs .tabs-input label {
-    transition: background;
+    transition: background 0.25s ease-in, color 0.25s ease-in;
     font-size: 1rem; 
     margin-bottom: auto; 
     padding: 6px 10px;
   }
   .tabs .tabs-input.active label {
-    background: #ea4c45!important;
+    background: #d85151!important;
     color: white!important;
   }
 </style>

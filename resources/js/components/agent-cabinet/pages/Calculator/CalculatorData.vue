@@ -82,49 +82,55 @@
         :items-per-page="10"
         class="elevation-1">
         <template v-slot:item.actions="{ item }">
-          <div style="display: flex; justify-content: space-between;">
+          <div style="display: flex; justify-content: center">
             <v-tooltip bottom>
-              <template #activator="{ on: Btn }">
-                <v-btn 
-                  @click="toEdit(item.id)"
-                  v-on="{ ...Btn }"
-                  icon>
-                  <v-icon
-                    color="red lighten-1"
-                    >
-                    mdi-pencil
-                  </v-icon>
-                </v-btn>
+              <template #activator="{ on }">
+                <span>
+                  <v-btn 
+                    @click="toEdit(item.id)"
+                    v-on="on"
+                    icon>
+                    <v-icon
+                      color="red lighten-1"
+                      >
+                      mdi-pencil
+                    </v-icon>
+                  </v-btn>
+                </span>
               </template>
               <span>Редагувати</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-btn
-                  @click="toDetail(item.id)"
-                  v-on="on"
-                  icon>
-                  <v-icon
-                    color="red lighten-1"
-                    >
-                    mdi-file-find-outline
-                  </v-icon>
-                </v-btn>
+                <span>
+                  <v-btn
+                    @click="toDetail(item.id)"
+                    v-on="on"
+                    icon>
+                    <v-icon
+                      color="red lighten-1"
+                      >
+                      mdi-file-find-outline
+                    </v-icon>
+                  </v-btn>
+                </span>
                 </template>
               <span>Переглянуты</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-btn 
-                  @click.stop="showDocumentAttachment = true"
-                  v-on="on"
-                  icon>
-                  <v-icon
-                    color="red lighten-1"
-                    >
-                    mdi-plus-circle
-                  </v-icon>
-                </v-btn>
+                <span>
+                  <v-btn 
+                    @click.stop="showDocumentAttachment = true"
+                    v-on="on"
+                    icon>
+                    <v-icon
+                      color="red lighten-1"
+                      >
+                      mdi-plus-circle
+                    </v-icon>
+                  </v-btn>
+                </span>
               </template>
               <span>Подати заявку</span>
             </v-tooltip>

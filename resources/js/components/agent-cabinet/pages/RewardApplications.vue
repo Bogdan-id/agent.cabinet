@@ -61,7 +61,7 @@
         </v-btn>
         <v-card-title
           v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
-          class="d-flex justify-center headline black--text mt-3 mb-4">
+          class="d-flex justify-center headline black--text mt-3 mb-6">
           Iсторiя заявок на винагороду
         </v-card-title>
         <v-card-title 

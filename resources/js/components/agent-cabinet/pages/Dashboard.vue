@@ -34,28 +34,38 @@
   </div>
   <!-- Dashboard container -->
   <div class="dashboard-container">
-    <v-card class="main-card">
-      <div class="main-card-banner">
-        <div class="content-wrapper">
-          <div class="content-text white--text">
-            <h3>*ЗАОЩАДЖУЙ ЧАС ТА ГРОЩI — ЛЕГКО ПЕРЕХОДЬ НА ЛIЗИНГ ОНЛАЙН!*</h3>
-            <p class="content-paragraph">Сформуйте заявку в режимі онлайн у декiлька простих крокiв
-            </p>
+    <v-card elevation="9">
+      <v-carousel
+        cycle
+        height="400"
+        hide-delimiter-background
+        show-arrows-on-hover>
+        <v-carousel-item
+          v-for="(item, i) in items"
+          :src="item.image"
+          :key="i"
+          reverse-transition="fade-transition"
+          transition="fade-transition">
+          <div>
+            <div style="height: 120px;">
+              <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
+                <h3><b>{{ item.title}}</b></h3>
+                <p style="font-size: 0.88rem"> {{ item.text }} </p>
+              </div>
+            </div>
+            <div style="height: 240px; display: flex; width: 100%; justify-content: flex-end; align-items: flex-end;">
+              <span style="display: inline-block; margin-right: 40px; margin-bottom: 15px">
+                <v-btn class="vuetify_custom-btn white--text ml-1 mt-7" @click="">Ознайомитись</v-btn>
+              </span>
+            </div>
           </div>
-          <v-btn
-            to="calculator/new"
-            color="red darken-2" 
-            class="vuetify_custom-btn white--text ml-1 mt-7" 
-            large>
-            Хочу легкий лiзинг
-          </v-btn>
-        </div>
-      </div>
-    </v-card>
+      </v-carousel-item>
+    </v-carousel>
+  </v-card>
     <v-card 
       v-if="tabledata.length > 0"
-      class="mt-10 mb-6" elevation="7">
-      <v-card-title class="headline mb-7 mt-3">
+      class="mt-10 mb-6" elevation="9">
+      <v-card-title class="headline pb-3 pt-3 mb-7" style="border-left: 5px solid #e75d57;">
         Заявки на лiзинг
       </v-card-title>
       <v-data-table
@@ -81,7 +91,7 @@
   </div>
   <div class="right-block-wrapper">
     <!-- Agent info -->
-      <v-card :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'">
+      <v-card :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'" elevation="8">
         <div class="mt-4 mb-4 pl-4 mb-1 manager-title">
           {{ !requestRecieved ? '' : hasUserManager && !loading ? 'Ваш менеджер' : 'За Вами не закрiплений жоден з менеджерів!'}}
         </div>
@@ -105,8 +115,8 @@
           </div>
         </div>
       </v-card>
-      <v-card class="dashboard__rigth-block">
-        <v-card-title class="title red--text">
+      <v-card class="dashboard__rigth-block" elevation="8">
+        <v-card-title class="title pl-4 pb-2 pt-2" style="border-left: 4px solid #e75d57">
           Новини
         </v-card-title>
         <v-divider></v-divider>
@@ -119,13 +129,16 @@
                 :src="require('../assets/img/car1.jpg')">
                 <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
               </v-img>
-              <v-card-text>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn class="vuetify_custom-btn --small capitalize">
-                  Детально
-                </v-btn>
-              </v-card-actions>
+              <v-card-text>
+                <span>Neque porro quisquam est qui dolorem ipsum</span>
+                <div style="text-align: right">
+                  <span>
+                    <v-btn :small="mdAndDown" class="vuetify_custom-btn --small capitalize mt-2" text>
+                      Детально
+                    </v-btn>
+                  </span>
+                </div>
+              </v-card-text>
             </v-card>
           </v-hover>
           <v-hover v-slot:default="{ hover }">
@@ -136,13 +149,16 @@
                 :src="require('../assets/img/car2.jpg')">
                 <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
               </v-img>
-              <v-card-text>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn class="vuetify_custom-btn --small capitalize">
-                  Детально
-                </v-btn>
-              </v-card-actions>
+              <v-card-text>
+                <span>Neque porro quisquam est qui dolorem...</span>
+                <div style="text-align: right">
+                  <span>
+                    <v-btn :small="mdAndDown" class="vuetify_custom-btn --small capitalize mt-2" text>
+                      Детально
+                    </v-btn>
+                  </span>
+                </div>
+              </v-card-text>
             </v-card>
           </v-hover>
         </v-card-text>
@@ -207,6 +223,23 @@ export default {
       { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },
       // { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
+    items: [
+      {
+        image: require('../assets/img/carousel-1.jpg'),
+        title: 'Subaru в лiзинг',
+        text: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.'
+      },
+      {
+        image: require('../assets/img/carousel-2.jpg'),
+        title: 'Another car в лiзинг',
+        text: 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'
+      },
+      {
+        image: require('../assets/img/carousel-4.jpeg'),
+        title: 'Mercedes в лiзинг',
+        text: 'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. '
+      },
+    ],
     tabledata: [],
     requestRecieved: false,
   }),
@@ -227,6 +260,12 @@ export default {
       if(!this.$store.state.user.agent) return false
       return this.$store.state.user.agent.manager_id !== null
     },
+    mdAndDown() {
+      return this.$vuetify.breakpoint.mdAndDown
+    },
+    xs() {
+      return this.$vuetify.breakpoint.xs
+    }
   },
   methods: {
     test() {
@@ -303,6 +342,9 @@ export default {
       this.getUserCalculcations()
     }
   },
+  mounted() {
+    console.log(this.$vuetify.breakpoint.name)
+  }
 }
 </script>
 
@@ -345,7 +387,7 @@ export default {
 }
 
 .manager-title {
-  border-left: 3px solid #e75d57; 
+  border-left: 4px solid #e75d57; 
   border-radius: 0!important; 
   font-weight: bold; 
   display: flex; 
@@ -499,6 +541,18 @@ export default {
   flex-direction: column;
   display: flex;
   width: 74%;
+  .actions-block-text {
+    backdrop-filter: blur(5px); 
+    padding: 0 15px; 
+    border-radius: 3px;
+    background-color: rgba(252, 252, 252, 0.7); 
+    max-width: 48%;
+    margin: 25px 0 5px 25px; 
+    display: inline-block;
+    &.small-screen {
+      max-width: 90%;
+    }
+  }
   .main-card {
     width: 100%;
     min-height: 400px;

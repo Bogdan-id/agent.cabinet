@@ -198,10 +198,10 @@
             <div class="row">
               <div class="col-md-8">
                 <v-text-field
-                    v-model="user.card_number"
+                    v-model="user.iban"
                     label="IBAN"
-                    :placeholder="user.card_number"
-                    outlined dense>
+                    :placeholder="user.iban"
+                    outlined dense readonly>
                 </v-text-field>
               </div>
             </div>

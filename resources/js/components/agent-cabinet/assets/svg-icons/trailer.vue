@@ -1,5 +1,5 @@
 <template>
-<svg version="1.1" class="trailer" style="width: 55; height: 35" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+<svg version="1.1" class="trailer" style="width: 47; height: 21" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	viewBox="0 0 512 512" xml:space="preserve">
 <g>
 	<g>

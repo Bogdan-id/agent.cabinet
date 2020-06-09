@@ -8,29 +8,7 @@
         <div style="position: absolute; top: 19px; right: 19px; left: 19px; bottom: 19px; border:1px solid #e5e5e5; border-radius: 8px; ">
         </div>
         <div style="margin: 0 39px;">
-          <v-row style="padding-top: 20px">
-            <v-col cols="12" md="8" sm="12" class="pt-0 pb-0">
-              <v-radio-group
-                class="d-flex justify-space-between"
-                dark
-                color="white"
-                v-model="calcObj.leasingClientType"
-                :error-messages="leasingClientTypeErr"
-                row>
-                <v-radio :value="1" color="white">
-                  <template #label>
-                    <span style="font-size: 1.2rem; color: white"><b>Фiзична особа</b></span>
-                  </template>
-                </v-radio>
-                <v-radio :value="2" color="white" class="ml-5">
-                  <template #label>
-                    <span style="font-size: 1.2rem; color: white"><b>Юридична особа</b></span>
-                  </template>
-                </v-radio>
-              </v-radio-group>
-            </v-col>
-          </v-row>
-          <v-row class="leasing-types">
+          <v-row class="leasing-types" style="padding-top: 45px">
             <v-col :cols="mediumAndDown ? '4' : '2'" class="d-flex justify-center">
               <input @change="getMarksByType($event); addActiveClass($event)" v-model="calcObj.leasingObjectType" type="radio" id="car" name="leasing-type" :value="1" checked>
               <label for="car" class="leasing-type-block">
@@ -74,8 +52,68 @@
               </label>
             </v-col>
           </v-row>
+          <div class="pb-4">
+            <div>
+              <v-row>
+                <v-col cols="12" md="9" sm="12" class="pt-0 pb-0">
+                  <v-radio-group
+                    class="d-flex justify-space-between"
+                    dark
+                    color="white"
+                    v-model="calcObj.leasingClientType"
+                    :error-messages="leasingClientTypeErr"
+                    row dense>
+                    <v-row class="pl-8">
+                      <div style="display: flex; min-width: 190px;">
+                        <v-radio :value="1" color="white">
+                          <template #label>
+                            <span style="font-size: 1.2rem; color: white;">Фiзична особа</span>
+                          </template>
+                        </v-radio>
+                      </div>
+                      <div style="display: flex; min-width: 190px;">
+                        <v-radio :value="2" color="white" class="ml-5">
+                          <template #label>
+                            <span style="font-size: 1.2rem; color: white;">Юридична особа</span>
+                          </template>
+                        </v-radio>
+                      </div>
+                    </v-row>
+                  </v-radio-group>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="8" sm="12" class="pt-0 pb-0">
+                  <v-radio-group
+                    class="d-flex justify-space-between"
+                    dark
+                    color="white"
+                    v-model="calcObj.isNew"
+                    :error-messages="leasingClientTypeErr"
+                    row dense>
+                    <v-row class="pl-8">
+                      <div style="display: flex; min-width: 190px;">
+                        <v-radio :value="true" color="white">
+                          <template #label>
+                            <span style="font-size: 1.2rem; color: white">Нове авто</span>
+                          </template>
+                        </v-radio>
+                      </div>
+                      <div style="display: flex; min-width: 190px;">
+                        <v-radio :value="false" color="white" class="ml-5">
+                          <template #label>
+                            <span style="font-size: 1.2rem; color: white">Б/в авто</span>
+                          </template>
+                        </v-radio>
+                      </div>
+                    </v-row>
+                  </v-radio-group>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
           <!--  -->
-          <v-row>
+          <!-- <v-row>
             <v-col cols="12" md="6" sm="12" class="pt-0 pb-0">
               <v-row>
                 <v-col cols="12" md="4">
@@ -97,7 +135,7 @@
                   </v-select>
                 </v-col>
               </v-row>
-            </v-col>
+            </v-col> -->
             <!-- <v-col cols="12" md="6" class="pt-0 pb-0">
               <v-row style="display: flex; justify-content: flex-end;">
                 <!-- <v-col cols="12" md="4">
@@ -125,8 +163,8 @@
                   </v-select>
                 </v-col>
               </v-row>
-            </v-col> -->
-          </v-row>
+            </v-col> 
+          </v-row>-->
           <!--  -->
           <v-row>
             <v-col cols="12" md="6" class="pt-0 pb-0">
@@ -241,11 +279,11 @@
           </v-row>
           <!--  -->
           <v-row>
-            <v-col cols="12" md="6" class="pt-0 pb-0 ">
+            <v-col cols="12" md="6" class="pt-0 pb-0">
               <v-row style="display: flex;">
                 <v-col cols="12" md="4">
                   <div style="min-height: 55px; display: inline-flex; align-items: center;">
-                    <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Валюта</span>
+                    <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Валюта договору</span>
                   </div>
                 </v-col>
                 <v-col cols="12" md="7">
@@ -265,6 +303,31 @@
             </v-col>
             <v-col cols="12" md="6" class="pt-0 pb-0">
               <v-row style="display: flex; justify-content: flex-end">
+                <v-col cols="12" md="4">
+                  <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                    <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Курс</span>
+                  </div>
+                </v-col>
+                <v-col cols="12" md="7">
+                  <!-- float -->
+                  <!-- :disabled="calcObj.leasingCurrency === null" -->
+                  <v-text-field
+                    v-model="calcObj.leasingCurrencyCourse"
+                    :error-messages="leasingCurrencyCourseErr"
+                    @input="parseToFloat('leasingCurrencyCourse')"
+                    background-color="white"
+                    id="leasingCurrencyCourse"
+                    label="Курс"
+                    color="red darken-4"
+                    outlined>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-row style="display: flex;">
                 <v-col cols="12" md="4">
                   <div style="min-height: 55px; display: inline-flex; align-items: center;">
                     <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Вартiсть</span>
@@ -289,106 +352,253 @@
                 </v-col>
               </v-row>
             </v-col>
+            <v-col cols="12" md="6">
+              <!-- :disabled="calcObj.leasingCurrency === null" -->
+              <v-row style="display: flex; justify-content: flex-end">
+                <v-col cols="12" md="4">
+                  <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                    <span style="display: block; font-size: 1.1rem; color: #e5e5e5">Кiлькiсть</span>
+                  </div>
+                </v-col>
+                <v-col cols="12" md="7">
+                  <v-text-field
+                    v-model="calcObj.leasingQuantity"
+                    :error-messages="leasingQuantityErr"
+                    @input="parseToInt('leasingQuantity')"
+                    background-color="white"
+                    id="leasingQuantity"
+                    label="Кiлькiсть"
+                    min="1"
+                    color="red darken-4"
+                    outlined>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
           </v-row>
+          <v-row class="pb-4">
+              <v-col cols="12" class="pt-0 pb-0">
+                <v-checkbox
+                  dark
+                  class="discount-price mt-0 white--text"
+                  v-model="discountPrice"
+                  label="Вартiсть зi знижкою" 
+                  :value="true" 
+                  :false-value="false"
+                  dense>
+                </v-checkbox>
+              </v-col>
+              <v-col cols="12" md="4" v-show="discountPrice">
+                <v-text-field
+                  v-model="calcObj.discountPrice"
+                  background-color="white"
+                  label="price"
+                  color="red darken-4"
+                  outlined dense>
+                </v-text-field>
+              </v-col>
+            </v-row>
         </div>
       </div>
       <div class="calculator-white-block" style="margin: 0 39px 39px 39px;">
         <v-row style="color: #505050">
-          <v-col cols="12" md="8" lg="7" class="mb-6 mt-9 mr-12">
-            <div class="pb-4">
-              <span style="font-size: 1.15rem">Авансовий платiж</span>
-            </div>
-            <v-text-field
-              v-model="carCost.current"
-              label=""
-              color="red darken-4"
-              readonly
-              outlined>
-              <template v-slot:append>
-                <percent></percent>
-              </template>
-            </v-text-field>
-            <div>
-              <input 
-                type="range" 
-                id="advance-payment" 
-                name="advance-payment" 
-                :min="elRange.min" 
-                :max="elRange.max"
-                v-model="carCost.current"
-                step="0.1"
-                class="slider" 
-                @input="initElRange($event)">
-              <div style="display: flex; position: relative" class="pt-6">
-                <div 
-                  v-for="v in 14"
-                  :key="v"
-                  :style="`${'width: 7%;'} height: 10px; color: #969599; position: relative;`">
-                  <span style="z-index: 3; background: #ffffff; position: relative">{{ (v - 1) * 5 + '%' }}</span>
-                  <div v-if="v === 7" style="position: absolute; top: -34px;">
-                    <div style="width: 14px; height: 14px; background: #201600; border-radius: 100%; z-index: 1; position: relative">
-                      <div style="position: absolute; border:none; border-left: 1px dashed #201600; height: 95px; top: 0; left: 48%; right: 52%;"></div>
-                      <div style="position: absolute; top: 70px; display: flex; justify-content: space-between; right: -147px;">
-                        <div style="display: inline-flex; color: #969599; align-items: center; margin-right: 40px;">
-                          <div style="display: inline-block; font-size: 0.7rem; margin-right: 1.2rem; text-align: right;">
-                            '<span style="white-space: nowrap; ">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
-                          </div>
-                          <div>
-                            <calculator-left-arrow></calculator-left-arrow>
-                          </div>
-                        </div>
-                        <div style="display: inline-flex; color: #d24a43; align-items: center;"> 
-                          <div style="display: inline-block;">
-                            <calculator-right-arrow></calculator-right-arrow>
-                          </div>
-                          <div style="display: inline-block; margin-left: 1.2rem">
-                            <b style="text-decoration: underline; font-size: 0.7rem"><span style="white-space: nowrap;">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ</b>
+              <v-col cols="12" class="mt-9 pb-0 graphs">
+                <div class="pb-4">
+                  <span style="font-size: 1.25rem;">Графiк платежiв</span>
+                </div>
+                <v-row class="d-flex justify-space-around">
+                  <v-col cols="12" sm="4" md="4" class="pt-0">
+                    <v-checkbox
+                      v-model="calcObj.graphType"
+                      label="Ануїтет"
+                      color="red darken-3"
+                      value="annuity">
+                    </v-checkbox>
+                  </v-col>
+                  <v-col cols="12" sm="4" md="4" class="pt-0">
+                    <v-checkbox
+                      v-model="calcObj.graphType"
+                      label="Класичний"
+                      color="red darken-3"
+                      value="even">
+                    </v-checkbox>
+                  </v-col>
+                  <v-col cols="12" sm="4" md="4" class="pt-0">
+                    <v-checkbox
+                      v-model="calcObj.graphType"
+                      label="Iндивiдуальний"
+                      color="red darken-3"
+                      value="irregular">
+                    </v-checkbox>
+                  </v-col>
+                </v-row>
+                <!-- <v-select
+                  v-model="calcObj.graphType"
+                  append-icon="mdi-chevron-down"
+                  :items="selects.chartTypes"
+                  itemColor="red darken-4"
+                  :error-messages="graphTypeErr"
+                  ref="graphType"
+                  placeholder="Оберiть тип графiку"
+                  color="red darken-4"
+                  multiple deletable-chips chips>
+                  <template #append-item>
+                    <v-btn
+                      @click="closeSelect()"
+                      color="grey darken-4"
+                      v-show="!hasGraph"
+                      class="ml-3 mt-3 mb-1 d-block"
+                      fab dark x-small>
+                      <v-icon small v-text="'mdi-check-bold'"></v-icon>
+                    </v-btn>
+                  </template>
+                </v-select> -->
+              </v-col>
+            </v-row>
+            <v-row v-show="hasAnnuity" style="position: relative;">
+              <v-col cols="12" class="pt-0">
+                <div style="font-size: 1rem; color: #5f5f5f; display: flex;">
+                  <v-icon class="mr-2" color="red" v-text="'mdi-information-outline'"></v-icon>
+                  <span style="display: inline-block; padding-top: 1px;">Вкажiть данi для типу графiка Ануїтет нижче</span>
+                </div>
+              </v-col>
+              <v-col cols="9" md="4">
+                <v-text-field
+                  v-model="calcObj.gainEvenGraphicMonths"
+                  :error-messages="gainEvenGraphicMonthsErr"
+                  label="Кiлькiсть мiсяцiв"
+                  @input="parseToInt('gainEvenGraphicMonths')"
+                  id="gainEvenGraphicMonths"
+                  color="red darken-4"
+                  outlined>
+                </v-text-field>
+              </v-col>
+              <v-col cols="9" md="4">
+                <v-text-field
+                  v-model="calcObj.gainEvenGraphicPercent"
+                  :error-messages="gainEvenGraphicPercentErr"
+                  @input="parseToFloat('gainEvenGraphicPercent')"
+                  id="gainEvenGraphicPercent"
+                  label="Вiдсоток посилення"
+                  color="red darken-4"
+                  outlined>
+                  <template v-slot:append>
+                    <percent></percent>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="9" md="4">
+                <v-text-field
+                  v-model="calcObj.UnsrMonths"
+                  :error-messages="UnsrMonthsErr"
+                  @input="parseToInt('UnsrMonths')"
+                  id="UnsrMonths"
+                  label="УНСПР, місяцiв"
+                  color="red darken-4"
+                  outlined>
+                </v-text-field>
+              </v-col>
+            </v-row>
+        <v-row style="display: flex; justify-content: space-between;">
+          <v-col cols="12" md="7">
+            <v-row style="color: #505050">
+              <v-col cols="12" class="mb-6 mt-9 mr-12">
+                <div class="pb-4">
+                  <span style="font-size: 1.15rem">Авансовий платiж</span>
+                </div>
+                <v-text-field
+                  v-model="carCost.current"
+                  label=""
+                  color="red darken-4"
+                  readonly
+                  outlined>
+                  <template v-slot:append>
+                    <percent></percent>
+                  </template>
+                </v-text-field>
+                <div>
+                  <input 
+                    type="range" 
+                    id="advance-payment" 
+                    name="advance-payment" 
+                    :min="elRange.min" 
+                    :max="elRange.max"
+                    v-model="carCost.current"
+                    step="0.1"
+                    class="slider" 
+                    @input="initElRange($event)">
+                  <div style="display: flex; position: relative" class="pt-6">
+                    <div 
+                      v-for="v in 14"
+                      :key="v"
+                      :style="`${'width: 7%;'} height: 10px; color: #969599; position: relative;`">
+                      <span style="z-index: 3; background: #ffffff; position: relative">{{ (v - 1) * 5 + '%' }}</span>
+                      <div v-if="v === 7" style="position: absolute; top: -34px;">
+                        <div style="width: 14px; height: 14px; background: #201600; border-radius: 100%; z-index: 1; position: relative">
+                          <div style="position: absolute; border:none; border-left: 1px dashed #201600; height: 95px; top: 0; left: 48%; right: 52%;"></div>
+                          <div style="position: absolute; top: 70px; display: flex; justify-content: space-between; right: -147px;">
+                            <div style="display: inline-flex; color: #969599; align-items: center; margin-right: 40px;">
+                              <div style="display: inline-block; font-size: 0.7rem; margin-right: 1.2rem; text-align: right;">
+                                '<span style="white-space: nowrap; ">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
+                              </div>
+                              <div>
+                                <calculator-left-arrow></calculator-left-arrow>
+                              </div>
+                            </div>
+                            <div style="display: inline-flex; color: #d24a43; align-items: center;"> 
+                              <div style="display: inline-block;">
+                                <calculator-right-arrow></calculator-right-arrow>
+                              </div>
+                              <div style="display: inline-block; margin-left: 1.2rem">
+                                <b style="text-decoration: underline; font-size: 0.7rem"><span style="white-space: nowrap;">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ</b>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <div style="position: absolute; right: -15px; color: #969599;">
+                      {{ `70%` }}
+                    </div>
                   </div>
+                </div>  
+                <!-- <v-slider
+                    v-model="calcObj.advance"
+                    :error-messages="advanceErr"
+                    min="20"
+                    max="70"
+                    color="red"
+                    track-color="grey lighten-2"
+                    persistent-hint
+                    thumb-label>
+                  </v-slider> -->
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="mb-6 mt-9">
+                <div class="pb-4">
+                  <span style="font-size: 1.15rem">Термiн фiнансування</span>
                 </div>
-                <div style="position: absolute; right: -15px; color: #969599;">
-                  {{ `70%` }}
-                </div>
-              </div>
-            </div>  
-            <!-- <v-slider
-                v-model="calcObj.advance"
-                :error-messages="advanceErr"
-                min="20"
-                max="70"
-                color="red"
-                track-color="grey lighten-2"
-                persistent-hint
-                thumb-label>
-              </v-slider> -->
-          </v-col>
-          <v-col cols="12" md="6" lg="4" class="mb-6 mt-9">
-            <div class="pb-4">
-              <span style="font-size: 1.15rem">Термiн фiнансування</span>
-            </div>
-            <v-text-field
-              v-model="calcObj.leasingTerm"
-              label=""
-              color="red darken-4"
-              readonly
-              outlined>
-              <template v-slot:append>
-                <span style="color: grey !important; display: block; font-size: 1.4rem; margin-top: 0;">мiс</span>
-              </template>
-            </v-text-field>
-            <input 
-                type="range" 
-                id="leasing-term" 
-                name="leasing-term" 
-                :min="leasingTerm.min" 
-                :max="leasingTerm.max"
-                v-model="calcObj.leasingTerm"
-                step="1"
-                class="slider" 
-                @input="initElRange($event)">
+                <v-text-field
+                  v-model="calcObj.leasingTerm"
+                  label=""
+                  color="red darken-4"
+                  readonly
+                  outlined>
+                  <template v-slot:append>
+                    <span style="color: grey !important; display: block; font-size: 1.4rem; margin-top: 0;">мiс</span>
+                  </template>
+                </v-text-field>
+                <input 
+                  type="range" 
+                  id="leasing-term" 
+                  name="leasing-term" 
+                  :min="leasingTerm.min"
+                  :max="leasingTerm.max"
+                  v-model="calcObj.leasingTerm"
+                  step="0.1"
+                  class="slider" 
+                  @input="initElRange($event)">
                 <div style="display: flex; position: relative; margin-right: 14px;" class="pt-6">
                   <div
                     v-for="v in ['12', '24', '36', '48']"
@@ -400,158 +610,155 @@
                     {{ `60` }}
                   </div>
                 </div>
-            <!-- <v-slider
-              v-model="calcObj.leasingTerm"
-              :error-messages="leasingTermErr"
-              min="12"
-              max="72"
-              color="red"
-              track-color="grey lighten-2"
-              persistent-hint
-              thumb-label>
-            </v-slider> -->
-          </v-col>
-        </v-row>
-        <v-row class="mt-10">
-          <v-col cols="12" md="3">
-            <!-- :disabled="calcObj.leasingAmount === null" -->
-            <v-select
-              :items="selects.currencys"
-              append-icon="mdi-chevron-down"
-              itemColor="red darken-4"
-              :error-messages="leasingCurrencyErr"
-              label="Валюта"
-              v-model="calcObj.leasingCurrency"
-              color="red darken-4"
-              outlined>
-            </v-select>
-          </v-col>
-          <v-col cols="12" md="3">
-            <!-- float -->
-            <!-- :disabled="calcObj.leasingCurrency === null" -->
-            <v-text-field
-              v-model="calcObj.leasingCurrencyCourse"
-              :error-messages="leasingCurrencyCourseErr"
-              @input="parseToFloat('leasingCurrencyCourse')"
-              id="leasingCurrencyCourse"
-              label="Курс"
-              color="red darken-4"
-              outlined>
-            </v-text-field>
-          </v-col>
-          <v-col cols="12" md="3">
-            <!-- :disabled="calcObj.leasingCurrency === null" -->
-            <v-text-field
-              v-model="calcObj.leasingQuantity"
-              :error-messages="leasingQuantityErr"
-              @input="parseToInt('leasingQuantity')"
-              id="leasingQuantity"
-              label="Кiлькiсть"
-              min="1"
-              color="red darken-4"
-              outlined>
-            </v-text-field>
-          </v-col>
-        </v-row>
-        <v-row style="color: #505050">
-          <v-col cols="12" md="8" lg="7" class="mt-9 pb-0">
-            <div class="pb-4">
-              <span style="font-size: 1.25rem; font-weight: bold;">Тип графiку</span>
-            </div>
-            <v-row>
-              <v-col cols="12" sm="4" md="4" class="pt-0">
-                <v-checkbox
-                  v-model="calcObj.graphType"
-                  label="Ануїтет"
-                  color="red darken-3"
-                  value="annuity">
-                </v-checkbox>
-              </v-col>
-              <v-col cols="12" sm="4" md="4" class="pt-0">
-                <v-checkbox
-                  v-model="calcObj.graphType"
-                  label="Класичний"
-                  color="red darken-3"
-                  value="even">
-                </v-checkbox>
-              </v-col>
-              <v-col cols="12" sm="4" md="4" class="pt-0">
-                <v-checkbox
-                  v-model="calcObj.graphType"
-                  label="Iндивiдуальний"
-                  color="red darken-3"
-                  value="irregular">
-                </v-checkbox>
               </v-col>
             </v-row>
-            <!-- <v-select
-              v-model="calcObj.graphType"
-              append-icon="mdi-chevron-down"
-              :items="selects.chartTypes"
-              itemColor="red darken-4"
-              :error-messages="graphTypeErr"
-              ref="graphType"
-              placeholder="Оберiть тип графiку"
-              color="red darken-4"
-              multiple deletable-chips chips>
-              <template #append-item>
-                <v-btn
-                  @click="closeSelect()"
-                  color="grey darken-4"
-                  v-show="!hasGraph"
-                  class="ml-3 mt-3 mb-1 d-block"
-                  fab dark x-small>
-                  <v-icon small v-text="'mdi-check-bold'"></v-icon>
-                </v-btn>
-              </template>
-            </v-select> -->
+            <v-row style="display: flex;">
+              <v-col cols="12">
+                <div>
+                  <span style="display: block; font-size: 1.15rem;">Валюта фiнансування</span>
+                </div>
+              </v-col>
+              <!-- :disabled="calcObj.leasingAmount === null" -->
+              <!-- :error-messages="leasingClientTypeErr" -->
+              <v-col cols="12" class="pt-0">
+                <v-radio-group
+                  class="d-flex justify-space-between"
+                  color="red darken-4"
+                  v-model="calcObj.leasingCurrency"
+                  row dense>
+                  <v-row class="pl-8">
+                    <div style="display: flex;">
+                      <v-radio value="UAH" color="red darken-3">
+                        <template #label>
+                          <span style="font-size: 1.2rem;">UAH</span>
+                        </template>
+                      </v-radio>
+                    </div>
+                    <div style="display: flex;">
+                      <v-radio value="USD" color="red darken-3" class="ml-5">
+                        <template #label>
+                          <span style="font-size: 1.2rem;">USD</span>
+                        </template>
+                      </v-radio>
+                    </div>
+                    <div style="display: flex;">
+                      <v-radio value="EURO" color="red darken-3" class="ml-5">
+                        <template #label>
+                          <span style="font-size: 1.2rem;">EURO</span>
+                        </template>
+                      </v-radio>
+                    </div>
+                  </v-row>
+                </v-radio-group>
+              </v-col>
+              <!-- <v-select
+                :items="selects.currencys"
+                append-icon="mdi-chevron-down"
+                itemColor="red darken-4"
+                :error-messages="leasingCurrencyErr"
+                label="Валюта фiнансування"
+                v-model="calcObj.leasingCurrency"
+                color="red darken-4"
+                outlined>
+              </v-select> -->
+            </v-row>
           </v-col>
-        </v-row>
-        <v-row v-show="hasAnnuity" style="position: relative;">
-          <div style="    position: absolute; left: 1.26rem; top: -23px; font-size: 1rem; color: #5f5f5f; display: flex;">
-            <v-icon class="mr-2" color="red" v-text="'mdi-information-outline'"></v-icon>
-            <span style="display: inline-block; padding-top: 1px;">Вкажiть данi для типу графiка Ануїтет нижче</span>
-          </div>
-          <v-col cols="9" md="4">
-            <v-text-field
-              v-model="calcObj.gainEvenGraphicMonths"
-              :error-messages="gainEvenGraphicMonthsErr"
-              label="Кiлькiсть мiсяцiв"
-              @input="parseToInt('gainEvenGraphicMonths')"
-              id="gainEvenGraphicMonths"
-              color="red darken-4"
-              outlined>
-            </v-text-field>
+          <v-col cols="12" md="5" class="mb-6 mt-9 pl-12">
+            <div class="pb-4" style="display: inline-block;">
+              <span style="font-size: 1.15rem">Тип нестандартного графiку</span>
+            </div>
+            <v-row>
+              <v-col cols="5" xs="12" class="d-flex justify">
+                <span
+                  @click="changeCustomGraph(1)" 
+                  text 
+                  :style="`cursor: pointer; color: ${customGraphType === 1 ? '#d24a43' : 'black'}`"
+                  ><b>СТУПIНЧАТЕ ПОСИЛЕННЯ</b>
+                </span>
+              </v-col>
+              <v-col cols="6" xs="12">
+                <span
+                  @click="changeCustomGraph(2)" 
+                  text 
+                  :style="`cursor: pointer;  color: ${customGraphType === 2 ? '#d24a43' : 'black'}`"
+                  ><b>УНIВЕРСАЛЬНЕ ПОСИЛЕННЯ</b>
+                </span>
+              </v-col>
+            </v-row>
+            <v-col cols="12" v-show="customGraphType === 1">
+              <v-row>
+                <v-col cols="12">
+                  <span style="font-size: 1rem; color: black">Параметри ступеневого графiку</span>
+                </v-col>
+              </v-row>
+              <v-row style="display: flex; justify-content: space-around">
+                <v-col cols="2">
+                  <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                    <span style="display: block; font-size: 1.1rem;">1/3</span>
+                  </div>
+                </v-col>
+                <v-col cols="3">
+                  <v-text-field
+                    color="red darken-3">
+                    <template v-slot:append-outer>
+                      <percent style="margin-top: 5px;"></percent>
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row style="display: flex; justify-content: space-around">
+                <v-col cols="2">
+                  <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                    <span style="display: block; font-size: 1.1rem;">2/3</span>
+                  </div>
+                </v-col>
+                <v-col cols="3">
+                  <v-text-field
+                    color="red darken-3">
+                    <template v-slot:append-outer>
+                      <percent style="margin-top: 5px;"></percent>
+                    </template>
+                    <!-- <template v-slot:prepend>
+                      <span style="display: block; font-size: 1.1rem;">2/3</span>
+                    </template> -->
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row style="display: flex; justify-content: space-around">
+                <v-col cols="2">
+                  <div style="min-height: 55px; display: inline-flex; align-items: center;">
+                    <span style="display: block; font-size: 1.1rem;">3/3</span>
+                  </div>
+                </v-col>
+                <v-col cols="3">
+                  <v-text-field
+                    color="red darken-3">
+                    <template v-slot:append-outer>
+                      <percent style="margin-top: 5px;"></percent>
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="12" v-show="customGraphType === 2">
+              <v-row>
+                <v-col cols="12">
+                  <span style="font-size: 1rem; color: black">Параметри унiверсального посилення</span>
+                </v-col>
+              </v-row>
+              <v-row style="display: flex; justify-content: center;">
+                <v-col cols="5">
+                  <v-text-field
+                    color="red darken-3"
+                    label="вкажіть значення у вiдсотках">
+                    <template v-slot:append-outer>
+                      <percent style="margin-top: 5px;"></percent>
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
           </v-col>
-          <v-col cols="9" md="4">
-            <v-text-field
-              v-model="calcObj.gainEvenGraphicPercent"
-              :error-messages="gainEvenGraphicPercentErr"
-              @input="parseToFloat('gainEvenGraphicPercent')"
-              id="gainEvenGraphicPercent"
-              label="Вiдсоток посилення"
-              color="red darken-4"
-              outlined>
-              <template v-slot:append>
-                <percent></percent>
-              </template>
-            </v-text-field>
-          </v-col>
-          <v-col cols="9" md="4">
-            <v-text-field
-              v-model="calcObj.UnsrMonths"
-              :error-messages="UnsrMonthsErr"
-              @input="parseToInt('UnsrMonths')"
-              id="UnsrMonths"
-              label="УНСПР, місяцiв"
-              color="red darken-4"
-              outlined>
-            </v-text-field>
-          </v-col>
-        </v-row>
-        
-        <v-row>
-          
         </v-row>
         <v-row>
           <v-col cols="12" md="8">
@@ -603,6 +810,106 @@
           </v-col>
         </v-row>
         <v-row>
+          <v-col cols="12">
+            <v-expansion-panels>
+              <v-expansion-panel>
+                <v-expansion-panel-header>Страхування</v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col cols="12" md="5">
+                      <v-select
+                          v-model="insuranceProgram"
+                          append-icon="mdi-chevron-down"
+                          :items="selects.insurancePrograms"
+                          :error-messages="insuranceProgramErr"
+                          item-text="text"
+                          item-value="text"
+                          return-object
+                          label="Програма страхування"
+                          itemColor="red darken-4"
+                          color="red darken-4"
+                          outlined>
+                      </v-select>
+                    </v-col>
+                    <v-col cols="12" md="7">
+                      <div style="margin-bottom: 25px; padding-left: 15px;">
+                        <span style="font-size: 1.2rem; color: #757575; ">Франшиза (%)</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        id="franchise" 
+                        name="franchise" 
+                        :min="franchise.min"
+                        :max="franchise.max"
+                        v-model="calcObj.insuranceFranchise"
+                        step="0.5"
+                        class="slider" 
+                        @input="initElRange($event)">
+                      <div style="display: flex; position: relative; margin-right: 14px;" class="pt-6">
+                        <div
+                          v-for="v in ['0', '0.5', '1', '1.5']"
+                          :key="v"
+                          style="color: color: #969599; position: relative; width: 37.8%;'">
+                          <span style="color: #969599;">{{ v }}</span>
+                        </div>
+                        <div style="position: absolute; right: -15px; color: #969599;">
+                          {{ `2` }}
+                        </div>
+                      </div>
+                      <!-- <v-select
+                          v-model="calcObj.insuranceFranchise"
+                          append-icon="mdi-chevron-down"
+                          :items="selects.franchises"
+                          itemColor="red darken-4"
+                          :error-messages="insuranceFranchiseErr"
+                          label="Франшиза"
+                          color="red darken-4"
+                          outlined>
+                      </v-select> -->
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-expansion-panels>
+              <v-expansion-panel>
+                <v-expansion-panel-header>Додатковi умови</v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row>
+                    <v-col cols="12" md="5">
+                      <v-select
+                        v-model="insuranceProgram"
+                        append-icon="mdi-chevron-down"
+                        :items="['Акцiя 1', 'Акцiя 2', 'Акцiя 3']"
+                        :error-messages="insuranceProgramErr"
+                        return-object
+                        label="Акцiя"
+                        itemColor="red darken-4"
+                        color="red darken-4"
+                        outlined>
+                      </v-select>
+                    </v-col>
+                    <v-col cols="12" md="7" class="pt-6">
+                      <div style="margin-bottom: 25px; padding-left: 15px;">
+                        <v-checkbox color="red darken-3" class="mt-0">
+                          <template #prepend>
+                            <span style="font-size: 1.2rem; color: #757575; ">Канiкули</span>
+                          </template>
+                        </v-checkbox>
+                      </div>
+                      <!-- checkbox here -->
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12" md="4" class="pb-0">
             <v-select
               flat
@@ -615,35 +922,6 @@
               label="GPS-трекер"
               color="red darken-4"
               outlined>
-            </v-select>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="4" pt="0">
-            <v-select
-                v-model="insuranceProgram"
-                append-icon="mdi-chevron-down"
-                :items="selects.insurancePrograms"
-                :error-messages="insuranceProgramErr"
-                item-text="text"
-                item-value="text"
-                return-object
-                label="Програма страхування"
-                itemColor="red darken-4"
-                color="red darken-4"
-                outlined>
-            </v-select>
-          </v-col>
-          <v-col cols="12" md="4" pt="0">
-            <v-select
-                v-model="calcObj.insuranceFranchise"
-                append-icon="mdi-chevron-down"
-                :items="selects.franchises"
-                itemColor="red darken-4"
-                :error-messages="insuranceFranchiseErr"
-                label="Франшиза"
-                color="red darken-4"
-                outlined>
             </v-select>
           </v-col>
         </v-row>
@@ -696,6 +974,8 @@ export default {
     insuranceProgram: null,
     commonErr: ['Обов`язкове поле'],
     windowInnerWidth: null,
+    discountPrice: false,
+    customGraphType: 1,
 
     brandItems: [],
     modelItems: [],
@@ -707,6 +987,10 @@ export default {
     leasingTerm: {
       min: 12,
       max: 60
+    },
+    franchise: {
+      min: 0,
+      max: 2
     },
     carCost: {
       current: 20
@@ -742,7 +1026,8 @@ export default {
       paymentPf: false,
       insuranceProgram: null,
       gpsTrackerModel: null,
-      insuranceFranchise: null,
+      insuranceFranchise: 0,
+      discountPrice: null,
       _token: null
     }
   }),
@@ -947,6 +1232,9 @@ export default {
     test() {
       console.log('event work')
     },
+    changeCustomGraph(id) {
+      this.customGraphType = id
+    },
     closeSelect() {
       this.$refs.graphType.blur()
     },
@@ -1116,13 +1404,18 @@ export default {
 				this.input.remainingProgress
 			)
 		},
-    toInt(val) {
-			return parseInt(val.replace(/^\D/g, ''))
+    toInt(val, dataSelector) {
+      if(dataSelector === 'franchise') {
+        return parseFloat(val.replace(/^\D/g, ''))
+      } else {
+        return parseInt(val.replace(/^\D/g, ''))
+      }
 		},
 		initInputValues() {
 			let elArr = document.querySelectorAll('.slider')
 			let event = new Event('input', {bubbles: true})
 			elArr.forEach(el => {
+        console.log(el)
 				el.value = el.min
 				el.dispatchEvent(event)
 			})
@@ -1135,6 +1428,9 @@ export default {
 			} else if(e.target.name === 'leasing-term') {
 				elRange = document.getElementById('leasing-term')
 				dataSelector = 'leasing-term'
+			} else if(e.target.name === 'franchise') {
+				elRange = document.getElementById('franchise')
+				dataSelector = 'franchise'
 			} 
       // else if(e.target.name === 'termFinancing-input' || e.target.name === 'termFinancing-range') {
 			// 	elRange = document.getElementById('termFinancing')
@@ -1145,12 +1441,12 @@ export default {
 		initElRange(e) {
 			let {elRange, dataSelector} = this.switchSelector(e) 
 			if(!e) {
-				elRange.value = this.toInt(elRange.min)
+				elRange.value = this.toInt(elRange.min, dataSelector)
 				this.syncValue(elRange.value, dataSelector) 
 				this.updateElRange(elRange, elRange.value)
 				return
 			}
-			elRange.value = this.toInt(e.target.value)
+			elRange.value = this.toInt(e.target.value, dataSelector)
 			let check = this.checkValue(elRange.value, elRange, dataSelector)
 			if(!check) {
 				this.updateElRange(elRange, elRange.value)
@@ -1158,7 +1454,7 @@ export default {
 			}
 			this.syncValue(elRange.value, dataSelector) 
 			this.updateElRange(elRange, elRange.value)
-      console.log(this.calcObj.leasingTerm)
+      console.log(this.calcObj.insuranceFranchise)
 		},
 
 
@@ -1222,6 +1518,7 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
+    this.displayWindowSize()
     if(this.$router.currentRoute.params.edit === true) {
     axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
@@ -1252,7 +1549,6 @@ export default {
     this.calcObj._token = this.getCsrf()
     this.initInputValues()
     this.calcObj.agentId = this.$store.state.user.agent.id
-    console.log(document.querySelector('.slider'))
   }
 }
 </script>
@@ -1263,10 +1559,27 @@ export default {
       border-left: 3px solid #ff0000!important;
     }
   }
+  .v-input--checkbox {
+    label {
+      margin-bottom: 0;
+      padding-top: 5px;
+      font-size: 1.1rem;
+    }
+  }
   .calculator-red-block {
     .v-input {
       fieldset {
         border: none!important;
+      }
+    }
+    .discount-price {
+      .v-input__slot  {
+        margin-bottom: 0;
+      }
+      label {
+        padding-top: 5px;
+        margin-bottom: 5px;
+        color: white!important;
       }
     }
     .v-select__selection, input {

@@ -22,7 +22,7 @@
           color="grey darken-3"
           @click="sendRequest()"
           :loading="btnLoading">
-          Подати заявку
+          Подати заявку на лiзинг
         </v-btn>
       </v-card-actions>
       </v-card-text>
@@ -132,7 +132,7 @@
                   </v-btn>
                 </span>
               </template>
-              <span>Подати заявку</span>
+              <span>Подати заявку на лiзинг</span>
             </v-tooltip>
           </div>
         </template>
@@ -152,7 +152,7 @@ export default {
       { text: 'Тип об`єкту лiзингу', value: 'Тип', align: 'start'},
       { text: 'Марка', value: 'Марка', align: 'center'},
       { text: 'Модель', value: 'Модель', align: 'center' },
-      { text: 'Сума', value: 'Сума', align: 'center' },
+      { text: 'Цiна', value: 'Сума', align: 'center' },
       { text: 'Розмiр АВ', value: '', align: 'center' },
       { text: 'Дата', value: 'Дата', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },

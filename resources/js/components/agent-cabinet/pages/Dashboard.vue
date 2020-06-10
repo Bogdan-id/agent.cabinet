@@ -218,6 +218,7 @@ export default {
       { text: 'ПIБ', value: 'initials', align: 'start', sortable: false},
       { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна', value: 'leasing_amount', align: 'center', sortable: false },
+      { text: 'Розмiр АВ', value: '', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },
       { text: 'Дата', value: 'data', align: 'center', sortable: false },
       { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },

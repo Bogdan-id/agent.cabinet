@@ -312,7 +312,7 @@
                   <span style="font-size: 1.15rem">Авансовий платiж</span>
                 </div>
                 <v-text-field
-                  v-model="carCost.current"
+                  v-model="calcObj.advance"
                   label=""
                   color="red darken-4"
                   readonly
@@ -329,7 +329,7 @@
                     name="advance-payment" 
                     :min="elRange.min" 
                     :max="elRange.max"
-                    v-model="carCost.current"
+                    v-model="calcObj.advance"
                     step="0.1"
                     class="slider" 
                     @input="initElRange($event)">
@@ -454,74 +454,59 @@
                 </span>
               </v-col>
             </v-row>
-            <v-col cols="12" v-show="customGraphType === 1">
+            <v-col cols="12" v-if="customGraphType === 1">
               <v-row>
                 <v-col cols="12" :style="`text-align: ${mediumAndDown ? '' : 'center;'}`">
                   <span style="font-size: 1rem; color: #787878">Параметри ступеневого графiку</span>
                 </v-col>
               </v-row>
               <v-row style="display: flex; justify-content: space-around">
-                <!-- <v-col cols="6">
-                  <div style="min-height: 55px; display: inline-flex; align-items: center;">
-                    <span style="display: block; font-size: 1.1rem;">1/3</span>
-                  </div>
-                </v-col> -->
                 <v-col cols="6">
                   <v-text-field
                     color="red darken-3"
-                    :dense="xs">
+                    :dense="xs"
+                    >
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
                     </template>
                     <template v-slot:prepend>
-                      <span style="display: block; font-size: 1.1rem;">1/3</span>
+                      <span style="display: block; font-size: 1.1rem; padding-top: 5px;">1/3</span>
                     </template>
                   </v-text-field>
                 </v-col>
               </v-row>
               <v-row style="display: flex; justify-content: space-around">
-                <!-- <v-col cols="6">
-                  <div style="min-height: 55px; display: inline-flex; align-items: center;">
-                    <span style="display: block; font-size: 1.1rem;">2/3</span>
-                  </div>
-                </v-col> -->
                 <v-col cols="6">
                   <v-text-field
                     color="red darken-3"
-                    :dense="xs">
+                    :dense="xs"
+                    >
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
                     </template>
                     <template v-slot:prepend>
-                      <span style="display: block; font-size: 1.1rem;">2/3</span>
+                      <span style="display: block; font-size: 1.1rem; padding-top: 5px;">2/3</span>
                     </template>
-                    <!-- <template v-slot:prepend>
-                      <span style="display: block; font-size: 1.1rem;">2/3</span>
-                    </template> -->
                   </v-text-field>
                 </v-col>
               </v-row>
               <v-row style="display: flex; justify-content: space-around">
-                <!-- <v-col cols="6">
-                  <div style="min-height: 55px; display: inline-flex; align-items: center;">
-                    <span style="display: block; font-size: 1.1rem;">3/3</span>
-                  </div>
-                </v-col> -->
                 <v-col cols="6">
                   <v-text-field
                     color="red darken-3"
-                    :dense="xs">
+                    :dense="xs"
+                    >
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
                     </template>
                     <template v-slot:prepend>
-                      <span style="display: block; font-size: 1.1rem;">3/3</span>
+                      <span style="display: block; font-size: 1.1rem; padding-top: 5px;">3/3</span>
                     </template>
                   </v-text-field>
                 </v-col>
               </v-row>
             </v-col>
-            <v-col cols="12" v-show="customGraphType === 2">
+            <v-col cols="12" v-if="customGraphType === 2">
               <v-row>
                 <v-col cols="12" :style="`text-align: ${mediumAndDown ? '' : 'center;'}`">
                   <span style="font-size: 1rem; color: #787878">Параметри унiверсального посилення</span>
@@ -720,6 +705,9 @@ export default {
 			currentProgress: '#d24a43',
 			remainingProgress: '#efefef'
 		},
+    nonStandardIrregular: {
+
+    },
 
     calcObj: {
       gpsTrackerQuantity: 1,

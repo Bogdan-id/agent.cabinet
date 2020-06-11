@@ -103,11 +103,12 @@
             </div>
           </div>
           <v-row>
-            <v-col cols="12" md="6" sm="6" xs="12">
+            <v-col cols="12" md="6" sm="6" xs="12" class="pb-0">
               <v-autocomplete
                 background-color="white"
                 append-icon="mdi-chevron-down"
                 @change="getModelByMark()"
+                @focus="$v.calcObj.leasedAssertMark.$touch()"
                 v-model="calcObj.leasedAssertMark"
                 :items="brandItems"
                 itemColor="red darken-4"
@@ -124,7 +125,7 @@
                 outlined :dense="xs">
               </v-autocomplete>
             </v-col>
-            <v-col cols="12" md="6" sm="6" xs="12">
+            <v-col cols="12" md="6" sm="6" xs="12"  class="pb-0">
               <v-autocomplete
                 background-color="white"
                 append-icon="mdi-chevron-down"
@@ -146,7 +147,7 @@
           </v-row>
           <!--  -->
           <v-row>
-            <v-col cols="12" md="6" sm="6" xs="12">
+            <v-col cols="12" md="6" sm="6" xs="12"  class="pb-0">
               <v-select
                 background-color="white"
                 append-icon="mdi-chevron-down"
@@ -160,7 +161,7 @@
                 outlined :dense="xs">
               </v-select>
             </v-col>
-            <v-col cols="12" md="6" sm="6" xs="12">
+            <v-col cols="12" md="6" sm="6" xs="12"  class="pb-0">
               <v-text-field
                 background-color="white"
                 v-model="calcObj.leasedAssertEngine"
@@ -216,7 +217,7 @@
                 :dense="xs">
               </v-select>
             </v-col>
-            <v-col cols="12" md="3" sm="6" xs="12">
+            <v-col cols="12" md="3" sm="6" xs="12" v-if="hasForeignCurrency">
               <!-- float -->
               <!-- :disabled="calcObj.leasingCurrency === null" -->
               <v-text-field
@@ -224,6 +225,7 @@
                 :error-messages="leasingCurrencyCourseErr"
                 @input="parseToFloat('leasingCurrencyCourse')"
                 background-color="white"
+                itemColor="red darken-4"
                 id="leasingCurrencyCourse"
                 label="Курс"
                 color="red darken-4"
@@ -242,7 +244,7 @@
                 min="1"
                 color="red darken-4"
                 outlined :dense="xs"
-                :disabled="calcObj.leasingCurrencyCourse === null">
+                :disabled="calcObj.currency === null">
               </v-text-field>
             </v-col>
           </v-row>
@@ -841,9 +843,9 @@ export default {
       return this.calcObj.graphType.indexOf('annuity') > -1
     },
     hasForeignCurrency() {
-      if(this.calcObj.leasingCurrency === null) return false
-      return this.calcObj.leasingCurrency.indexOf('EUR') > -1
-        || this.calcObj.leasingCurrency.indexOf('USD') > - 1
+      if(this.calcObj.currency === null) return false
+      return this.calcObj.currency.indexOf('EUR') > -1
+        || this.calcObj.currency.indexOf('USD') > - 1
     },
     isClientType() {
       return this.calcObj.leasingClientType !== null
@@ -898,7 +900,7 @@ export default {
     },
     leasingCurrencyCourseErr() {
       if (!this.hasForeignCurrency) return
-      if (!this.$v.calcObj.leasingCurrencyCourse.$error) return
+      if (!this.$v.calcObj.currency.$error) return
       return this.commonErr
     },
     leasingQuantityErr() {
@@ -1002,6 +1004,7 @@ export default {
         })
     },
     getModelByMark() {
+      console.log(this.$v)
       this.modelItems = []
       this.$store.commit('toggleSpinner', true)
       let categorieId = this.calcObj.leasingObjectType
@@ -1326,8 +1329,14 @@ export default {
     }
   }
   .calculator-red-block {
+    .v-messages__message {
+      color: white!important;
+    }
     .leasing-type-radio, 
     .auto-type-radio {
+      .v-messages__message {
+        text-align: center;
+      }
       .v-input--radio-group__input {
         justify-content: center;
       }
@@ -1395,10 +1404,10 @@ export default {
       border-radius: 8px!important;
     }
     .v-input .v-input__control {
-      display: flex!important;
-      align-items: center!important;
+      // display: flex!important;
+      // align-items: center!important;
       .v-text-field__details {
-        display: none!important;
+        margin-bottom: 0;
       }
     }
     .leasing-types input {

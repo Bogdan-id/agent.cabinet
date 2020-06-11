@@ -62,7 +62,7 @@
                     color="white"
                     v-model="calcObj.leasingClientType"
                     :error-messages="leasingClientTypeErr"
-                    row :dense="xs">
+                    row :dense="xs" :disabled="calcObj.leasingObjectType === null">
                     <div :class="`leasing-type-radio-wrapper ${mediumAndDown ? 'small' : ''}`">
                       <v-radio :value="1" color="white">
                         <template #label>
@@ -84,7 +84,7 @@
                     color="white"
                     v-model="calcObj.isNew"
                     :error-messages="leasingClientTypeErr"
-                    row :dense="xs">
+                    row :dense="xs" :disabled="calcObj.leasingObjectType === null">
                     <div :class="`auto-type-radio-wrapper ${mediumAndDown ? 'small' : xs ? 'small xs' : ''}`">
                       <v-radio :value="true" color="white">
                         <template #label>
@@ -119,7 +119,7 @@
                 loaderHeight="1"
                 :loading="!leasedOfAssetType && $store.state.loader
                   || noBrandItems && $store.state.loader"
-                :disabled="!leasedOfAssetType || noBrandItems"
+                :disabled="calcObj.isNew === null || calcObj.leasingClientType === null"
                 color="red darken-4"
                 outlined :dense="xs">
               </v-autocomplete>
@@ -138,7 +138,7 @@
                 label="Модель"
                 loaderHeight="1"
                 :loading="$store.state.loader && modelOfItem"
-                :disabled="!modelOfItem || modelItems.length === 0"
+                :disabled="calcObj.leasedAssertMark === null"
                 color="red darken-4"
                 outlined :dense="xs">
               </v-autocomplete>
@@ -155,7 +155,7 @@
                 itemColor="red darken-4"
                 :error-messages="leasingObjectYearErr"
                 label="Рік"
-                :disabled="!typeOfModel"
+                :disabled="calcObj.leasedAssertModel === null"
                 color="red darken-4"
                 outlined :dense="xs">
               </v-select>
@@ -211,7 +211,8 @@
                 :error-messages="currencyErr"
                 label="Валюта"
                 color="red darken-4"
-                outlined :disabled="!isClientType"
+                outlined 
+                :disabled="calcObj.leasingAmount === null"
                 :dense="xs">
               </v-select>
             </v-col>
@@ -226,7 +227,8 @@
                 id="leasingCurrencyCourse"
                 label="Курс"
                 color="red darken-4"
-                outlined :dense="xs">
+                outlined :dense="xs"
+                :disabled="calcObj.currency === null">
               </v-text-field>
             </v-col>
             <v-col cols="12" md="3" sm="6" xs="12">
@@ -239,7 +241,8 @@
                 label="Кiлькiсть"
                 min="1"
                 color="red darken-4"
-                outlined :dense="xs">
+                outlined :dense="xs"
+                :disabled="calcObj.leasingCurrencyCourse === null">
               </v-text-field>
             </v-col>
           </v-row>
@@ -252,7 +255,8 @@
                 label="Вартiсть зi знижкою" 
                 :value="true" 
                 :false-value="false"
-                :dense="xs">
+                :dense="xs"
+                :disabled="calcObj.leasingQuantity === null">
               </v-checkbox>
             </v-col>
             <v-col cols="12" md="4" v-show="discountPrice">
@@ -280,7 +284,8 @@
                   label="Ануїтет"
                   color="red darken-3"
                   value="annuity"
-                  :dense="xs">
+                  :dense="xs"
+                  :disabled="calcObj.leasingQuantity === null">
                 </v-checkbox>
               </v-col>
               <v-col cols="12" sm="4" md="4" class="pt-0">
@@ -289,7 +294,8 @@
                   label="Класичний"
                   color="red darken-3"
                   value="even"
-                  :dense="xs">
+                  :dense="xs"
+                  :disabled="calcObj.leasingQuantity === null">
                 </v-checkbox>
               </v-col>
               <v-col cols="12" sm="4" md="4" class="pt-0">
@@ -298,7 +304,8 @@
                   label="Iндивiдуальний"
                   color="red darken-3"
                   value="irregular"
-                  :dense="xs">
+                  :dense="xs"
+                  :disabled="calcObj.leasingQuantity === null">
                 </v-checkbox>
               </v-col>
             </v-row>

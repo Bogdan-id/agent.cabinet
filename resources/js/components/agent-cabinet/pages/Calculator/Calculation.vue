@@ -465,6 +465,7 @@
                   <v-text-field
                     color="red darken-3"
                     :dense="xs"
+                    v-model="stepGain.oneThird"
                     >
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -480,6 +481,7 @@
                   <v-text-field
                     color="red darken-3"
                     :dense="xs"
+                    v-model="stepGain.twoThirds"
                     >
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -495,6 +497,7 @@
                   <v-text-field
                     color="red darken-3"
                     :dense="xs"
+                    v-model="stepGain.threeThirds"
                     >
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -516,6 +519,7 @@
                 <v-col cols="8">
                   <v-text-field
                     color="red darken-3"
+                    v-model="universalGain"
                     :dense="xs">
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -590,11 +594,9 @@
                   <v-row>
                     <v-col cols="12" md="5">
                       <v-select
-                        v-model="insuranceProgram"
+                        v-model="calcObj.promotion"
                         append-icon="mdi-chevron-down"
                         :items="['Акцiя 1', 'Акцiя 2', 'Акцiя 3']"
-                        :error-messages="insuranceProgramErr"
-                        return-object
                         label="Акцiя"
                         itemColor="red darken-4"
                         color="red darken-4"
@@ -604,7 +606,12 @@
                     </v-col>
                     <v-col cols="12" md="7" class="pt-6">
                       <div style="margin-bottom: 25px; padding-left: 15px;">
-                        <v-checkbox color="red darken-3" class="mt-0">
+                        <v-checkbox 
+                          v-model="calcObj.holiday"
+                          :value="true" 
+                          :false-value="false"
+                          color="red darken-3" 
+                          class="mt-0">
                           <template #prepend>
                             <span style="font-size: 1.2rem; color: #757575; ">Канiкули</span>
                           </template>
@@ -705,9 +712,12 @@ export default {
 			currentProgress: '#d24a43',
 			remainingProgress: '#efefef'
 		},
-    nonStandardIrregular: {
-
+    stepGain: {
+      oneThird: null,
+      twoThirds: null,
+      threeThirds: null
     },
+    universalGain: null,
 
     calcObj: {
       gpsTrackerQuantity: 1,
@@ -737,6 +747,8 @@ export default {
       gpsTrackerModel: null,
       insuranceFranchise: 0,
       discountPrice: null,
+      promotion: null,
+      holiday: null,
       _token: null
     }
   }),

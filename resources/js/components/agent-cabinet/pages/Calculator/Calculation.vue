@@ -396,16 +396,7 @@
                 </v-select>
               </v-col>
               <v-col :cols="mediumAndDown || hasIrregular ? 12 : 12">
-                <!-- <v-col cols="12" class="pt-0">
-                  <div>
-                    <span style="display: block; font-size: 1.15rem;">Валюта фiнансування</span>
-                  </div>
-                </v-col> -->
-                <!-- :disabled="calcObj.leasingAmount === null" -->
-                <!-- :error-messages="leasingClientTypeErr" -->
-                  <div style="display: inline-block;">
-                    <span style="display: inline-block; font-size: 1.15rem;">Валюта фiнансування</span>
-                  </div>
+                  <span style="display: inline-block; font-size: 1.15rem;">Валюта фiнансування</span>
                   <v-radio-group
                     :class="`d-inline-block ${xs ? 'mt-0' : ''}`"
                     color="red darken-4"
@@ -470,11 +461,11 @@
                 </v-col>
               </v-row>
               <v-row style="display: flex; justify-content: space-around">
-                <v-col cols="6">
+                <!-- <v-col cols="6">
                   <div style="min-height: 55px; display: inline-flex; align-items: center;">
                     <span style="display: block; font-size: 1.1rem;">1/3</span>
                   </div>
-                </v-col>
+                </v-col> -->
                 <v-col cols="6">
                   <v-text-field
                     color="red darken-3"
@@ -482,21 +473,27 @@
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
                     </template>
+                    <template v-slot:prepend>
+                      <span style="display: block; font-size: 1.1rem;">1/3</span>
+                    </template>
                   </v-text-field>
                 </v-col>
               </v-row>
               <v-row style="display: flex; justify-content: space-around">
-                <v-col cols="6">
+                <!-- <v-col cols="6">
                   <div style="min-height: 55px; display: inline-flex; align-items: center;">
                     <span style="display: block; font-size: 1.1rem;">2/3</span>
                   </div>
-                </v-col>
+                </v-col> -->
                 <v-col cols="6">
                   <v-text-field
                     color="red darken-3"
                     :dense="xs">
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
+                    </template>
+                    <template v-slot:prepend>
+                      <span style="display: block; font-size: 1.1rem;">2/3</span>
                     </template>
                     <!-- <template v-slot:prepend>
                       <span style="display: block; font-size: 1.1rem;">2/3</span>
@@ -505,17 +502,20 @@
                 </v-col>
               </v-row>
               <v-row style="display: flex; justify-content: space-around">
-                <v-col cols="6">
+                <!-- <v-col cols="6">
                   <div style="min-height: 55px; display: inline-flex; align-items: center;">
                     <span style="display: block; font-size: 1.1rem;">3/3</span>
                   </div>
-                </v-col>
+                </v-col> -->
                 <v-col cols="6">
                   <v-text-field
                     color="red darken-3"
                     :dense="xs">
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
+                    </template>
+                    <template v-slot:prepend>
+                      <span style="display: block; font-size: 1.1rem;">3/3</span>
                     </template>
                   </v-text-field>
                 </v-col>
@@ -589,16 +589,6 @@
                           {{ `2` }}
                         </div>
                       </div>
-                      <!-- <v-select
-                          v-model="calcObj.insuranceFranchise"
-                          append-icon="mdi-chevron-down"
-                          :items="selects.franchises"
-                          itemColor="red darken-4"
-                          :error-messages="insuranceFranchiseErr"
-                          label="Франшиза"
-                          color="red darken-4"
-                          outlined>
-                      </v-select> -->
                     </v-col>
                   </v-row>
                 </v-expansion-panel-content>
@@ -718,10 +708,6 @@ export default {
     elRange: {
       min: 0,
       max: 70
-    },
-    leasingTerm: {
-      min: 12,
-      max: 60
     },
     franchise: {
       min: 0,
@@ -1159,11 +1145,21 @@ export default {
 			let elArr = document.querySelectorAll('.slider')
 			let event = new Event('input', {bubbles: true})
 			elArr.forEach(el => {
-        console.log(el)
 				el.value = el.min
 				el.dispatchEvent(event)
 			})
 		},
+    initFranchiseInput() {
+      setTimeout(() => {
+        let el = document.querySelector('#franchise')
+        console.log(el.value)
+        if(el.value == 0) {
+          let event = new Event('input', {bubbles: true})
+          el.value = el.min
+          el.dispatchEvent(event)
+        }
+      }, 40)
+    },
 		switchSelector(e) {
 			let dataSelector, elRange
 			if(e.target.name === 'advance-payment') {
@@ -1264,6 +1260,11 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
+    let franchiseInputEl = document.querySelector('.v-expansion-panel-header')
+    console.log(franchiseInputEl)
+    franchiseInputEl.addEventListener("click", () => {
+      this.initFranchiseInput()
+    })
     this.displayWindowSize()
     if(this.$router.currentRoute.params.edit === true) {
     axios
@@ -1435,6 +1436,7 @@ export default {
     .graphs {
       label {
         color: black;
+        margin-bottom: 8px;
       }
     }
     .v-input--selection-controls__ripple:before {
@@ -1486,6 +1488,8 @@ export default {
 	} 
 	.slider::-webkit-slider-thumb {
 		// border: 8px solid #FAFAFA;
+    position: relative;
+    z-index:5;
 		box-shadow: -1px -1px 9px -4px rgba(0,0,0,0.75);
     appearance: none;
     width: 9px;

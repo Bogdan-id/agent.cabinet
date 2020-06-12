@@ -87,7 +87,7 @@
             :value="6">
           <label for="trailer" class="leasing-type-block">
             <trailer  style="height: 50px; margin-left: 0.40rem;"></trailer>
-            <span>ПРИЧЕПИ ТА НАПIВПРИЧЕПИ</span>
+            <span>ПРИЧЕПИ</span>
           </label>
         </v-col>
       </v-row>

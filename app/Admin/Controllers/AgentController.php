@@ -8,6 +8,11 @@ use App\Models\{
     IdCard,
     Passport
 };
+use App\Mail\{
+    AgentAcceptMail,
+    AgentRejectMail
+};
+use Mail;
 use App\User;
 
 class AgentController extends Controller
@@ -45,7 +50,8 @@ class AgentController extends Controller
         $user = User::find($id);
         $user->is_active = 1;
         $user->save();
-        //TODO: отправка на почту
+        Mail::to($user->email)->send(new AgentAcceptMail($user));
+        
         return response()->json([
             'status' => 200
         ]);
@@ -56,7 +62,8 @@ class AgentController extends Controller
         $user = User::find($id);
         $user->is_active = 0;
         $user->save();
-        //TODO: отправка на почту
+        Mail::to($user->email)->send(new AgentRejectMail($user));
+
         return response()->json([
             'status' => 200
         ]);

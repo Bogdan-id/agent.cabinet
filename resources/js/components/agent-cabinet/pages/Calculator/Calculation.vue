@@ -103,14 +103,14 @@
                 :error-messages="leasingClientTypeErr"
                 row :dense="xs" :disabled="calcObj.leasingObjectType === null">
                 <div :class="`leasing-type-radio-wrapper ${mediumAndDown ? 'small' : ''}`">
-                  <v-radio :value="1" color="white">
-                    <template #label>
-                      <span class="red-block-radio-label">Фiзична особа</span>
-                    </template>
-                  </v-radio>
                   <v-radio :value="2" color="white">
                     <template #label>
                       <span class="red-block-radio-label">Юридична особа</span>
+                    </template>
+                  </v-radio>
+                  <v-radio :value="1" color="white">
+                    <template #label>
+                      <span class="red-block-radio-label">Фiзична особа</span>
                     </template>
                   </v-radio>
                 </div>
@@ -142,7 +142,7 @@
         </div>
       </div>
       <v-row>
-        <v-col cols="12" md="6" sm="6" xs="12" class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
           <v-autocomplete
             @change="getModelByMark()"
             v-model="calcObj.leasedAssertMark"
@@ -163,7 +163,7 @@
             outlined :dense="xs">
           </v-autocomplete>
         </v-col>
-        <v-col cols="12" md="6" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
           <v-autocomplete
             v-model="calcObj.leasedAssertModel"
             :error-messages="leasedAssertModelErr"
@@ -182,9 +182,7 @@
             outlined :dense="xs">
           </v-autocomplete>
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
           <v-select
             v-model="calcObj.leasingObjectYear"
             :items=" calcObj.isNew ? selects.itemYears : selects.oldItemYears"
@@ -198,7 +196,7 @@
             outlined :dense="xs">
           </v-select>
         </v-col>
-        <v-col cols="12" md="6" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
           <v-text-field
             @input="parseToInt('leasedAssertEngine')"
             v-model="calcObj.leasedAssertEngine"
@@ -215,27 +213,29 @@
           </v-text-field>
         </v-col>
       </v-row>
-      <v-row class="justify-center">
+      <!-- <v-row class="justify-center">
         <v-col cols="11" class="pa-0">
           <v-divider dark></v-divider>
         </v-col>
-      </v-row>
+      </v-row> -->
       <v-row>
         <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
+          <!-- @input="$v.calcObj.leasingAmount.$touch();
+              parseToInt('leasingAmount')" -->
+              <!-- :disabled="calcObj.leasedAssertEngine === null" -->
           <v-text-field
-            @input="$v.calcObj.leasingAmount.$touch();
-              parseToInt('leasingAmount')"
+            @input="amountToLocalStr($event)"
             :error-messages="itemCostErrors"
             v-model="calcObj.leasingAmount"
             background-color="white"
             id="leasingAmount"
             label="Вартість"
             color="red darken-4"
-            :disabled="calcObj.leasedAssertEngine === null"
+            
             outlined :dense="xs">
-            <template v-slot:append>
+            <!-- <template v-slot:append>
               <span style="color: grey!important; display: block; margin-top: 5px;">грн</span>
-            </template>
+            </template> -->
           </v-text-field>
         </v-col>
         <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
@@ -298,7 +298,6 @@
           <v-text-field
             v-model="calcObj.discountPrice"
             background-color="white"
-            label="вартiсть зi знижкою"
             color="red darken-4"
             outlined :dense="xs">
           </v-text-field>
@@ -835,6 +834,8 @@ export default {
       threeThirds: null
     },
     universalGain: null,
+    emulateLeaseingAmount: null,
+    emulateDiscountPrice: null,
 
     calcObj: {
       gpsTrackerQuantity: 1,
@@ -845,12 +846,12 @@ export default {
       agentId: null,
       leasedAssertMark: null,
       leasedAssertModel: null,
-      isNew: null,
+      isNew: true,
       leasingObjectType: null,
       leasingQuantity: null,
       leasingObjectYear: null,
       leasedAssertEngine: null,
-      leasingClientType: null,
+      leasingClientType: 2,
       currency: null,
       leasingCurrency: null,
       leasingCurrencyCourse: null,
@@ -1084,6 +1085,12 @@ export default {
   methods: {
     test() {
       console.log('event work')
+    },
+    amountToLocalStr(event) {
+      el = document.getElementById('leasingAmount')
+      console.log(el)
+      console.log(el.value)
+      console.log(parseInt(event).toLocaleString().replace(/,/g, ' '))
     },
     changeCustomGraph(id) {
       this.customGraphType = id

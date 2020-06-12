@@ -489,7 +489,7 @@
             </v-row> 
           </v-col>
           <v-col v-if="!hasIrregular && !mediumAndDown" cols="5" :class="`pl-8 ${hasIrregular || mediumAndDown ? 'mt-9' : ''}`">
-            <div class="pb-4">
+            <div>
               <span style="font-size:1rem">Термiн фiнансування</span>
             </div>
             <v-select

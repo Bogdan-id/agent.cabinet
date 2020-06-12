@@ -310,7 +310,7 @@
     <v-row style="color: #505050">
       <v-col cols="12" class="mt-9 pb-0 graphs">
         <div class="pb-4">
-          <span style="font-size: 1rem;">Графiк платежiв</span>
+          <span class="section-title">Графiк платежiв</span>
         </div>
         <v-row class="d-flex justify-space-around pl-5 pr-5">
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
@@ -353,7 +353,7 @@
             <v-row>
               <v-col cols="12" class="pt-0 pb-0" style="min-height: 250px;">
                 <div>
-              <span style="font-size: 1rem">Авансовий платiж</span>
+              <span class="section-title">Авансовий платiж</span>
             </div>
             <v-text-field
               v-model="calcObj.advance"
@@ -377,18 +377,22 @@
                 step="1"
                 class="slider" 
                 @input="initElRange($event)">
-              <div style="display: flex; position: relative" class="pt-6">
+              <div class="advance-range-scale pt-6">
                 <div 
                   v-for="v in 14"
                   :key="v"
-                  :style="`${'width: 7%;'} height: 10px; color: #969599; position: relative;`">
-                  <span :style="`z-index: 3; background: #ffffff; position: relative; font-size: ${xs ? '0.5rem' : '0.8rem'}`">{{ (v - 1) * 5 + '%' }}</span>
+                  class="advance-range-wrapper">
+                  <span 
+                    class="advance-range-cell" 
+                    :style="`color: ${calcObj.advance == ((v - 1) * 5) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.5rem' : '0.8rem'}`">
+                      {{ (v - 1) * 5 + '%' }}
+                  </span>
                   <div v-if="v === 7" style="position: absolute; top: -34px;">
-                    <div style="width: 14px; height: 14px; background: #201600; border-radius: 100%; z-index: 1; position: relative">
-                      <div style="position: absolute; border:none; border-left: 1px dashed #201600; height: 95px; top: 0; left: 48%; right: 52%;"></div>
-                      <div :style="`position: absolute; top: 70px; display: flex; justify-content: space-between; right: ${xs ? '-119px;' : '-147px;'}`">
-                        <div style="display: inline-flex; color: #969599; align-items: center; margin-right: 40px;">
-                          <div :style="`display: inline-block; font-size: ${xs ? '0.5rem;' : '0.7rem;'} margin-right: 1.2rem; text-align: right;`">
+                    <div class="range-black-dot">
+                      <div class="range-dashed-line"></div>
+                      <div class="arrow-directions-wrapper" :style="`right: ${xs ? '-119px;' : '-147px;'}`">
+                        <div class="arrow-directions-content">
+                          <div :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
                             <span style="white-space: nowrap; ">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
                           </div>
                           <div>
@@ -400,14 +404,17 @@
                             <calculator-right-arrow></calculator-right-arrow>
                           </div>
                           <div style="display: inline-block; margin-left: 1.2rem">
-                            <b :style="`text-decoration: underline; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`"><span style="white-space: nowrap;">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ</b>
+                            <b :style="`text-decoration: underline; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
+                              <span style="white-space: nowrap;">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ
+                            </b>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div :style="`position: absolute; right: -9px; color: #969599; font-size: ${xs ? '0.5rem' : '0.8rem'}`">
+                <div 
+                  :style="`position: absolute; right: -9px; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.5rem' : '0.8rem'}`">
                   {{ `70%` }}
                 </div>
               </div>
@@ -418,7 +425,7 @@
             <v-row v-if="mediumAndDown || hasIrregular">
               <v-col class="pb-0 pt-0 mt-6 leasing-term-sm" cols="12" md="6" sm="12">
                 <div class="pb-4">
-                  <span style="font-size: 1rem">Термiн фiнансування</span>
+                  <span class="section-title">Термiн фiнансування</span>
                 </div>
                 <v-select
                   v-model="calcObj.leasingTerm"
@@ -430,12 +437,12 @@
                   outlined
                   :dense="xs">
                   <template v-slot:append>
-                    <span style="color: grey !important; display: block; font-size: 1.4rem; margin-top: 0;">мiс</span>
+                    <span class="leasing-term-append-label">мiс</span>
                   </template>
                 </v-select>
               </v-col>
               <v-col cols="12" md="6" sm="12" :class="`pt-0 pb-0 ${smAndDown ? '' : 'mt-6'}`">
-                  <span style="display: inline-block; font-size: 1rem;">Валюта фiнансування</span>
+                  <span class="section-title">Валюта фiнансування</span>
                   <v-radio-group
                     :class="`financing-currency d-inline-block ${xs ? 'mt-0' : ''}`"
                     :error-messages="leasingCurrencyErr"
@@ -446,21 +453,33 @@
                       <div style="display: flex;">
                         <v-radio value="UAH" color="red darken-3" dense class="ml-1">
                           <template #label>
-                            <span style="font-size: 1.1rem;">UAH</span>
+                            <span 
+                              class="current-currency-label" 
+                              :style="`color: ${calcObj.leasingCurrency === 'UAH' ? 'black' : ''}`">
+                              UAH
+                            </span>
                           </template>
                         </v-radio>
                       </div>
                       <div style="display: flex;">
-                        <v-radio value="USD" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-5' : 'ml-1'" dense>
+                        <v-radio value="USD" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-5' : 'ml-1'">
                           <template #label>
-                            <span style="font-size: 1.1rem;">USD</span>
+                            <span 
+                              class="current-currency-label"  
+                              :style="`color: ${calcObj.leasingCurrency === 'USD' ? 'black' : ''}`">
+                              USD
+                            </span>
                           </template>
                         </v-radio>
                       </div>
                       <div style="display: flex;">
                         <v-radio value="EURO" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-5' : 'ml-1'">
                           <template #label>
-                            <span style="font-size: 1.1rem;">EURO</span>
+                            <span 
+                              class="current-currency-label"  
+                              :style="`color: ${calcObj.leasingCurrency === 'EURO' ? 'black' : ''}`">
+                              EURO
+                            </span>
                           </template>
                         </v-radio>
                       </div>
@@ -483,7 +502,7 @@
               outlined
               :dense="xs">
               <template v-slot:append>
-                <span style="color: grey !important; display: block; font-size: 1.4rem; margin-top: 0;">мiс</span>
+                <span class="leasing-term-append-label">мiс</span>
               </template>
             </v-select>
             <span style="display: inline-block; font-size: 1rem;">Валюта фiнансування</span>
@@ -497,21 +516,33 @@
                 <div style="display: flex;">
                   <v-radio value="UAH" color="red darken-3" dense>
                     <template #label>
-                      <span style="font-size: 1.1rem;">UAH</span>
+                      <span 
+                        class="current-currency-label" 
+                        :style="`color: ${calcObj.leasingCurrency === 'UAH' ? 'black' : ''}`">
+                        UAH
+                      </span>
                     </template>
                   </v-radio>
                 </div>
                 <div style="display: flex;">
                   <v-radio value="USD" color="red darken-3" :class="!xs ? 'ml-5' : ''">
                     <template #label>
-                      <span style="font-size: 1.1rem;">USD</span>
+                      <span 
+                        class="current-currency-label"  
+                        :style="`color 0.15s ease-in; color: ${calcObj.leasingCurrency === 'USD' ? 'black' : ''}`">
+                        USD
+                      </span>
                     </template>
                   </v-radio>
                 </div>
                 <div style="display: flex;">
                   <v-radio value="EURO" color="red darken-3" :class="!xs ? 'ml-5' : ''">
                     <template #label>
-                      <span style="font-size: 1.1rem;">EURO</span>
+                      <span 
+                        class="current-currency-label" 
+                        :style="`color: ${calcObj.leasingCurrency === 'EURO' ? 'black' : ''}`">
+                        EURO
+                      </span>
                     </template>
                   </v-radio>
                 </div>
@@ -519,112 +550,106 @@
             </v-radio-group>
           </v-col>
           <v-col v-if="hasIrregular" :cols="mediumAndDown ? 12 : 5" :class="`mb-6 ${mediumAndDown ? '' : 'mt-2 pl-6'} `">
-        <div class="pb-4" :style="`text-align: ${mediumAndDown ? '' : 'center;'};`">
-          <span style="font-size: 1rem; color: #505050;">Оберiть тип нестандартного графiку</span>
-        </div>
-        <v-row class="d-flex justify-space-around">
-          <v-col cols="5" xs="12" class="text-center">
-            <span
-              @click="changeCustomGraph(1)" 
-              text 
-              :style="`cursor: pointer; color: ${customGraphType === 1 ? '#d24a43' : 'black'}`"
-              ><b>СТУПIНЧАТЕ ПОСИЛЕННЯ</b>
-            </span>
-          </v-col>
-          <v-col cols="6" xs="12" class="text-center">
-            <span
-              @click="changeCustomGraph(2)" 
-              text 
-              :style="`cursor: pointer;  color: ${customGraphType === 2 ? '#d24a43' : 'black'}`"
-              ><b>УНIВЕРСАЛЬНЕ ПОСИЛЕННЯ</b>
-            </span>
+            <div class="pb-4" :style="`text-align: ${mediumAndDown ? '' : 'center;'};`">
+              <span class="section-title">Оберiть тип нестандартного графiку</span>
+            </div>
+            <v-row class="d-flex justify-space-around">
+              <v-col cols="5" xs="12" class="text-center">
+                <span
+                  @click="changeCustomGraph(1)" 
+                  text 
+                  :style="`cursor: pointer; color: ${customGraphType === 1 ? '#d24a43' : 'black'}`"
+                  ><b>СТУПIНЧАТЕ ПОСИЛЕННЯ</b>
+                </span>
+              </v-col>
+              <v-col cols="6" xs="12" class="text-center">
+                <span
+                  @click="changeCustomGraph(2)" 
+                  text 
+                  :style="`cursor: pointer;  color: ${customGraphType === 2 ? '#d24a43' : 'black'}`"
+                  ><b>УНIВЕРСАЛЬНЕ ПОСИЛЕННЯ</b>
+                </span>
+              </v-col>
+            </v-row>
+            <v-col cols="12" v-if="customGraphType === 1">
+              <v-row>
+                <v-col cols="12" :style="`text-align: ${mediumAndDown ? '' : 'center;'}`">
+                  <span style="font-size: 1rem; color: #787878">Параметри ступеневого графiку</span>
+                </v-col>
+              </v-row>
+              <v-row style="display: flex; justify-content: space-around">
+                <v-col cols="6" class="pt-0 pb-0">
+                  <v-text-field
+                    color="red darken-3"
+                    :dense="xs"
+                    v-model="stepGain.oneThird" 
+                    class="pt-0">
+                    <template v-slot:append-outer>
+                      <percent style="margin-top: 5px;"></percent>
+                    </template>
+                    <template v-slot:prepend>
+                      <span class="step-schedule-label">1/3</span>
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row style="display: flex; justify-content: space-around">
+                <v-col cols="6" class="pt-0 pb-0">
+                  <v-text-field
+                    color="red darken-3"
+                    :dense="xs"
+                    v-model="stepGain.twoThirds"
+                    class="pt-0"
+                    >
+                    <template v-slot:append-outer>
+                      <percent style="margin-top: 5px;"></percent>
+                    </template>
+                    <template v-slot:prepend>
+                      <span class="step-schedule-label">2/3</span>
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row style="display: flex; justify-content: space-around">
+                <v-col cols="6" class="pt-0 pb-0">
+                  <v-text-field
+                    color="red darken-3"
+                    :dense="xs"
+                    v-model="stepGain.threeThirds"
+                    class="pt-0"
+                    >
+                    <template v-slot:append-outer>
+                      <percent style="margin-top: 5px;"></percent>
+                    </template>
+                    <template v-slot:prepend>
+                      <span class="step-schedule-label">3/3</span>
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="12" v-if="customGraphType === 2">
+              <v-row>
+                <v-col cols="12" :style="`text-align: ${mediumAndDown ? '' : 'center;'}`">
+                  <span style="font-size: 1rem; color: #787878">Параметри унiверсального посилення</span>
+                </v-col>
+              </v-row>
+              <v-row :style="`${mediumAndDown ? '' : 'justify-content: center'}`">
+                <v-col cols="8">
+                  <v-text-field
+                    color="red darken-3"
+                    v-model="universalGain"
+                    :dense="xs">
+                    <template v-slot:append-outer>
+                      <percent style="margin-top: 5px;"></percent>
+                    </template>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
           </v-col>
         </v-row>
-        <v-col cols="12" v-if="customGraphType === 1">
-          <v-row>
-            <v-col cols="12" :style="`text-align: ${mediumAndDown ? '' : 'center;'}`">
-              <span style="font-size: 1rem; color: #787878">Параметри ступеневого графiку</span>
-            </v-col>
-          </v-row>
-          <v-row style="display: flex; justify-content: space-around">
-            <v-col cols="6" class="pt-0 pb-0">
-              <v-text-field
-                color="red darken-3"
-                :dense="xs"
-                v-model="stepGain.oneThird" 
-                class="pt-0">
-                <template v-slot:append-outer>
-                  <percent style="margin-top: 5px;"></percent>
-                </template>
-                <template v-slot:prepend>
-                  <span style="display: block; font-size: 1.1rem; padding-top: 5px;">1/3</span>
-                </template>
-              </v-text-field>
-            </v-col>
-          </v-row>
-          <v-row style="display: flex; justify-content: space-around">
-            <v-col cols="6" class="pt-0 pb-0">
-              <v-text-field
-                color="red darken-3"
-                :dense="xs"
-                v-model="stepGain.twoThirds"
-                class="pt-0"
-                >
-                <template v-slot:append-outer>
-                  <percent style="margin-top: 5px;"></percent>
-                </template>
-                <template v-slot:prepend>
-                  <span style="display: block; font-size: 1.1rem; padding-top: 5px;">2/3</span>
-                </template>
-              </v-text-field>
-            </v-col>
-          </v-row>
-          <v-row style="display: flex; justify-content: space-around">
-            <v-col cols="6" class="pt-0 pb-0">
-              <v-text-field
-                color="red darken-3"
-                :dense="xs"
-                v-model="stepGain.threeThirds"
-                class="pt-0"
-                >
-                <template v-slot:append-outer>
-                  <percent style="margin-top: 5px;"></percent>
-                </template>
-                <template v-slot:prepend>
-                  <span style="display: block; font-size: 1.1rem; padding-top: 5px;">3/3</span>
-                </template>
-              </v-text-field>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="12" v-if="customGraphType === 2">
-          <v-row>
-            <v-col cols="12" :style="`text-align: ${mediumAndDown ? '' : 'center;'}`">
-              <span style="font-size: 1rem; color: #787878">Параметри унiверсального посилення</span>
-            </v-col>
-          </v-row>
-          <v-row :style="`${mediumAndDown ? '' : 'justify-content: center'}`">
-            <v-col cols="8">
-              <v-text-field
-                color="red darken-3"
-                v-model="universalGain"
-                :dense="xs">
-                <template v-slot:append-outer>
-                  <percent style="margin-top: 5px;"></percent>
-                </template>
-              </v-text-field>
-            </v-col>
-          </v-row>
-        </v-col>
       </v-col>
-        </v-row>
-      </v-col>
-      
-
-
-    </v-row>
-    <v-row>
-      
     </v-row>
     <v-row>
       <v-col cols="12" class="pt-0">
@@ -667,10 +692,10 @@
                     <div
                       v-for="v in ['0', '0.5', '1', '1.5']"
                       :key="v"
-                      style="color: color: #969599; position: relative; width: 37.8%;'">
-                      <span style="color: #969599;">{{ v }}</span>
+                      style="position: relative; width: 37.8%;'">
+                      <span :style="`color: #969599; transition: color 0.2s ease-in; color: ${calcObj.insuranceFranchise === v ? 'black; font-weight: bold;' : '#969599;' }`">{{ v }}</span>
                     </div>
-                    <div style="position: absolute; right: -15px; color: #969599;">
+                    <div :style="`position: absolute; transition: color 0.2s ease-in; right: -15px; color: ${calcObj.insuranceFranchise == '2' ? 'black; font-weight: bold;' : '#969599;'} `">
                       {{ `2` }}
                     </div>
                   </div>
@@ -1408,7 +1433,71 @@ export default {
     box-shadow: 0 5px 6px -3px rgba(0,0,0,.2),
       0 9px 12px 1px rgba(0,0,0,.14),
       0 3px 16px 2px rgba(0,0,0,.12)!important;
+    .section-title {
+      font-size: 1rem;
+    }
+    .advance-range-scale {
+      display: flex; 
+      position: relative
+    }
+    .current-currency-label {
+      font-size: 1.1rem; 
+      transition: color 0.15s ease-in;
+    }
+    .leasing-term-append-label {
+      color: grey !important; 
+      display: block; 
+      font-size: 1.4rem; 
+      margin-top: 0;
+    }
+    .advance-range-wrapper {
+      width: 7%; 
+      height: 10px; 
+      color: #969599; 
+      position: relative;
+      .advance-range-cell {
+        z-index: 3; 
+        transition: color 0.25s ease-in; 
+        background: #ffffff; 
+        position: relative;
+      }
+      .range-black-dot {
+        width: 14px; 
+        height: 14px; 
+        background: #201600; 
+        border-radius: 100%; 
+        z-index: 1; 
+        position: relative;
+        .range-dashed-line {
+          position: absolute; 
+          border:none; 
+          border-left: 1px dashed #201600; 
+          height: 95px; 
+          top: 0; 
+          left: 48%; 
+          right: 52%;
+        }
+        .arrow-directions-wrapper {
+          position: absolute; 
+          top: 70px; 
+          display: flex; 
+          justify-content: space-between;
+          .arrow-directions-content {
+            display: inline-flex; 
+            color: #969599; 
+            align-items: center; 
+            margin-right: 40px;
+          }
+        }
+      }
+    }
+    .step-schedule-label {
+      display: block; 
+      font-size: 1.1rem; 
+      padding-top: 5px;
+    }
   }
+  
   .v-input__slot {
     fieldset  {
       border: 2px solid #efefef!important;

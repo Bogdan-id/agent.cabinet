@@ -41,9 +41,7 @@ export default {
   ],
   insurancePrograms: [
     {text: 'Стандарт', value: 1},
-    {text: 'Обережно', value: 2},
-    {text: 'Таксі', value: 13},
-    {text: 'Тотал / крадіжка', value: 13}
+    {text: 'Обережний', value: 2},
   ],
   franchises: [
     {text: '0%', value: 1},

@@ -192,13 +192,46 @@
               v-model="currentTab">
             <div class="content">
               <v-card-text>
-                <v-card-title class="edit-title pb-6">Редагувати матерiали</v-card-title>
+                <v-card-title class="edit-title pb-6">
+                  Редагувати матерiали
+                  <v-spacer></v-spacer>
+                  <v-select
+                    style="max-width: 220px!important;"
+                    @change="filterByCategory($event)"
+                    :items="categories"
+                    item-text="name"
+                    item-value="id"
+                    label="Фiльтр по категорiям"> 
+                  </v-select>
+                </v-card-title>
                 <v-btn 
-                  :to="{name: 'Новый матерiал'}"
+                  :to="{name: 'Новый матерiал', params: {categories}}"
                   class="ml-6 red lighten-1" dark>
                   Додати матерiал&nbsp;
                   <v-icon v-text="'mdi-plus'"></v-icon>
                 </v-btn>
+                <ul id="categories-list">
+                  <li
+                    v-for="item in filteredMaterials"
+                    :key="item.id"
+                    class="list-element"
+                    @click.self="makeActive($event, item.name)">
+                    {{ item.title }}
+                    <span class="btn-actions">
+                      <v-btn 
+                        @click.stop="" 
+                        icon>
+                        <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
+                      </v-btn>
+                      <!-- openDialogDeleteCategory(item.id, item.name) -->
+                      <v-btn 
+                        @click.stop="" 
+                        icon>
+                        <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
+                      </v-btn>
+                    </span>
+                  </li>
+                </ul>
               </v-card-text>
             </div>
           </div>
@@ -217,15 +250,19 @@ import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import BreadsCrumb from '../../../../components/agent-cabinet/components/breadScrumb.vue'
+import EditMaterials from './EditMaterials.vue'
 
 export default {
   mixins: [validationMixin],
   components: {
-    BreadsCrumb
+    BreadsCrumb,
+    EditMaterials
   },
   data: () => ({
     commonErr: ['Обов`язкове поле'],
     categories: [],
+    materials: [],
+    filteredMaterials: [],
     loading: false,
     currentTab: '1',
 
@@ -270,8 +307,10 @@ export default {
     },
   },
   methods: {
-    test() {
-      console.log(this.currentTab)
+    filterByCategory(id) {
+      console.log('id' + id)
+      this.filteredMaterials = this.materials
+        .filter(v => {console.log(v); return v.id === id})
     },
     changeActive(event) {
       console.log(event)
@@ -287,9 +326,26 @@ export default {
           console.log(response)
           this.categories = response.data
           this.$store.commit('toggleAdminSpinner', false)
+          this.getUsefulMaterials()
         })
         .catch(error => {
           console.log(error.response)
+          this.$store.commit('toggleAdminSpinner', false)
+          this.getUsefulMaterials()
+        })
+    },
+    getUsefulMaterials() {
+      console.log('emit trigered')
+      this.$store.commit('toggleAdminSpinner', true)
+      axios
+        .get('/admin/useful-materials/all')
+        .then(response => {
+          this.materials = response.data
+          this.filteredMaterials = response.data
+          this.$store.commit('toggleAdminSpinner', false)
+        })
+        .catch(error => {
+          console.log(error.reponse)
           this.$store.commit('toggleAdminSpinner', false)
         })
     },

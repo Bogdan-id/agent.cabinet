@@ -39,6 +39,7 @@
         cycle
         height="400"
         hide-delimiter-background
+        :interval="7000"
         show-arrows-on-hover>
         <v-carousel-item
           v-for="(item, i) in items"
@@ -350,6 +351,23 @@ export default {
 </script>
 
 <style lang="scss">
+.v-window {
+  position: relative!important;
+  .v-window-item  {
+    transition: opacity .45s ease-in!important;
+    position: absolute!important;
+    top: 0!important;
+    left: 0!important;
+    right: 0!important;
+    bottom: 0!important;
+    &.fade-transition-leave, .fade-transition-leave-active {
+      opacity: 0!important;
+    }
+    &.fade-transition-enter, .fade-transition-enter-active {
+      opacity: 0!important;
+    }
+  }
+}
 .manager-list-wrapper {
   ul {
     padding-left: 0!important;

@@ -60,7 +60,7 @@ export default {
 <style lang="scss">
 .breadScrumb {
   display: block;
-  padding: 10px 10px;
+  padding: 0 10px 10px 10px;
   font-size: 16px;
   a {
     color: #424242!important;

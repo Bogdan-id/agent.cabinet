@@ -42,7 +42,9 @@
       background: #f4f3ef; 
       width: 100%;
       z-index: 1; 
-      padding: 35px 0 32px 0; 
+      display: flex;
+      align-items: center;
+      height: 74px;
     }
   }
   .sidebar-background {
@@ -62,7 +64,8 @@
     &.sidebar--hide {
       width: var(--sidebar-collapsed);
       .vue-paper-sidebar__logo-wrapper {
-        padding: 30px 0 22px 0;
+        // padding: 30px 0 22px 0;
+        height: 74px;
       }
       .sidebar-wrapper {
         transition: width 0.5s;

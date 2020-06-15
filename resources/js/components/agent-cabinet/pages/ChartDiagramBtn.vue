@@ -173,48 +173,50 @@
       </v-card-text>
     </v-card>
   </v-dialog>
-  <v-card-text class="d-flex justify-space-around align-center">
-    <span>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-        <v-btn
-          v-on="on"
-          @click="test()"
-          color="grey darken-2" 
-          dark small icon>
-          <v-icon dark v-text="'mdi-email-send'"></v-icon>
-        </v-btn>
-        </template>
-        <span>Надiслати розрахунок на email</span>
-      </v-tooltip>
-    </span>
-    <span>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
+  <v-card-text style="display: flex; justify-content: flex-end;">
+    <div style="width: 165px; display: flex; justify-content: space-around;">
+      <span>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
-            @click="openForm()"
+            @click="test()"
             color="grey darken-2" 
-            icon small dark>
-            <v-icon dark>mdi-plus-thick</v-icon>
+            dark large icon>
+            <v-icon size="22" dark v-text="'mdi-email-send'"></v-icon>
           </v-btn>
-        </template>
-        <span>відправити запит на лізинг</span>
-      </v-tooltip>
-    </span>
-    <span>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn 
-            v-on="on"
-            color="grey darken-2" 
-            small icon dark>
-            <v-icon dark v-text="'mdi-download'"></v-icon>
-          </v-btn>
-        </template>
-        <span>Завантажити розрахунок у форматi Pdf</span>
-      </v-tooltip>
-    </span>
+          </template>
+          <span>Надiслати розрахунок на email</span>
+        </v-tooltip>
+      </span>
+      <span>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              v-on="on"
+              @click="openForm()"
+              color="grey darken-2" 
+              icon large dark>
+              <v-icon size="22" small dark>mdi-plus-thick</v-icon>
+            </v-btn>
+          </template>
+          <span>Відправити запит на лізинг</span>
+        </v-tooltip>
+      </span>
+      <span>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              v-on="on"
+              color="grey darken-2" 
+              icon large dark>
+              <v-icon size="22" small dark v-text="'mdi-download'"></v-icon>
+            </v-btn>
+          </template>
+          <span>Завантажити розрахунок у форматi Pdf</span>
+        </v-tooltip>
+      </span>
+    </div>
   </v-card-text>
 </div>
 </template>

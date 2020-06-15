@@ -210,6 +210,9 @@
               title: 'Успiшно',
               text: ``,
             })
+            setTimeout(() => {
+              this.$router.push({name: 'Кориснi матерiали', params: {reload: true}})
+            }, 200);
           })
           .catch(error => {
             console.log(error.response)
@@ -245,20 +248,6 @@
       getCsrf() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
       },
-      getMageterialCategories() {
-        this.$store.commit('toggleAdminSpinner', true)
-        axios
-          .get('/useful-materials-categories/all')
-          .then(response => {
-            console.log(response)
-            this.categories = response.data
-            this.$store.commit('toggleAdminSpinner', false)
-          })
-          .catch(error => {
-            console.log(error.response)
-            this.$store.commit('toggleAdminSpinner', false)
-          })
-      },
       highlightErrors() {
         this.$v.$anyError
         this.$v.$touch()
@@ -271,7 +260,7 @@
       this.assignTokenToCkEditorConfig()
     },
     created() {
-      this.getMageterialCategories()
+      this.categories = this.$route.params.categories
     }
   }
 </script>

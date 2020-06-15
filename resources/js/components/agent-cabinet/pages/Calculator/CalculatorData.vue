@@ -201,6 +201,7 @@ export default {
         axios
           .get(`calculations/agent/${agentId}`)
           .then(response => {
+            console.log(response)
             this.loading = false
             if(response.data.length > 0)  {
               this.createTableData(response.data)

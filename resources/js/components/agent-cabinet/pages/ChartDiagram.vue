@@ -20,21 +20,37 @@
             v-model="currentTab"/>
           <div class="content">
             <v-card class="view-charts">
-            <v-data-table
-              :search="search"
-              color="black"
-              :headers="tableHeader"
-              :items="annuity"
-              :items-per-page="180"
-              :hide-default-footer="true">
-              <template v-slot:footer>
-                <chart-buttons 
-                  v-if="graphData !== null"
-                  :graph="currentTab" 
-                  :data="graphData"/>
-              </template>
-            </v-data-table>
-          </v-card>
+              <v-data-table
+                class="leasing-object-table"
+                v-if="leasingObjectData !== null"
+                color="black"
+                :headers="leasingObjectDataHeader"
+                :items="leasingObjectData"
+                :items-per-page="180"
+                :hide-default-footer="true"
+                :must-sort="false"
+                dense
+                :mobile-breakpoint="1400">
+              </v-data-table>
+              <div class="payout-schedule">
+                Графiк виплат
+              </div>
+              <v-data-table
+                :search="search"
+                color="black"
+                :headers="tableHeader"
+                :items="annuity"
+                :items-per-page="180"
+                :hide-default-footer="true"
+                dense>
+                <template v-slot:footer>
+                  <chart-buttons 
+                    v-if="graphData !== null"
+                    :graph="currentTab" 
+                    :data="graphData"/>
+                </template>
+              </v-data-table>
+            </v-card>
           </div>
         </div>
         <div class="tabs-input">
@@ -55,12 +71,28 @@
           <div class="content">
             <v-card  class="view-charts">
             <v-data-table
+              class="leasing-object-table"
+              v-if="leasingObjectData !== null"
+              color="black"
+              :headers="leasingObjectDataHeader"
+              :items="leasingObjectData"
+              :items-per-page="180"
+              :hide-default-footer="true"
+              :must-sort="false"
+              dense
+              :mobile-breakpoint="1400">
+            </v-data-table>
+            <div class="payout-schedule">
+              Графiк виплат
+            </div>
+            <v-data-table
               :search="search"
               color="black"
               :headers="tableHeader"
               :items="even"
               :items-per-page="180"
-              :hide-default-footer="true">
+              :hide-default-footer="true"
+              dense>
               <template v-slot:footer>
                 <chart-buttons 
                   v-if="graphData !== null"
@@ -89,12 +121,28 @@
           <div class="content">
             <v-card  class="view-charts">
             <v-data-table
+              class="leasing-object-table"
+              v-if="leasingObjectData !== null"
+              color="black"
+              :headers="leasingObjectDataHeader"
+              :items="leasingObjectData"
+              :items-per-page="180"
+              :hide-default-footer="true"
+              :must-sort="false"
+              dense
+              :mobile-breakpoint="1400">
+            </v-data-table>
+            <div class="payout-schedule">
+              Графiк виплат
+            </div>
+            <v-data-table
               :search="search"
               color="black"
               :headers="tableHeader"
               :items="irregular"
               :items-per-page="180"
-              :hide-default-footer="true">
+              :hide-default-footer="true"
+              dense>
               <template v-slot:footer>
                 <chart-buttons 
                   v-if="graphData !== null"
@@ -188,9 +236,21 @@ export default {
   data: () => ({
     // data to props 
     graphData: null,
+    leasingObjectData: null,
     // data
     currentTab: '1',
     search: '',
+    leasingObjectDataHeader: [
+      { text: 'Автомобiль', value: 'leasedAssertModel.name', align: 'center', sortable: false},
+      { text: 'Вартiсть автомобiля, грн', value: 'leasingAmount', align: 'end', sortable: false},
+      { text: 'Вартість автомобіля з реєстрацією, грн', value: 'leasingAmount', align: 'end', sortable: false },
+      { text: 'Термiн лiзингу, мiс', value: 'leasingTerm', align: 'end', sortable: false },
+      { text: 'Авансовий платiж, грн', value: 'advance', align: 'center', sortable: false},
+      { text: 'Одноразова комiсiя, %', value: '', align: 'end', sortable: false},
+      { text: 'Середньомiсячний платiж, грн', value: '', align: 'end', sortable: false },
+      { text: 'Залишкова вартiсть, грн', value: '', align: 'end', sortable: false },
+      { text: 'Валюта фiнансування', value: 'leasingCurrency', align: 'end', sortable: false },
+    ],
     tableHeader: [
       { text: '№', value: 'n', align: 'center'},
       { text: 'Оплата за авто', value: 'payment-principal', align: 'end'},
@@ -236,6 +296,11 @@ export default {
   },
   mounted() {
     this.graphData = this.$router.currentRoute.params.data
+    // this.leasingObjectData = [...this.graphData.request_data]
+    this.leasingObjectData = [this.graphData.request_data]
+    console.log('*************')
+    console.log(this.leasingObjectData)
+    console.log('*************')
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {
         this.graphData.result_data[object].graph[0].n = 'Аванс'
@@ -246,8 +311,47 @@ export default {
   },
 }
 </script>
-
+<style lang="scss">
+  .payout-schedule {
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #424242;
+    padding-left: 1rem;
+  }
+.v-data-table {
+  &.leasing-object-table{
+    margin-bottom: 0.7rem;
+    .v-data-table__mobile-row {
+      min-height: 22px!important;
+      border-bottom: 1px solid #eeedeb;
+      margin: 0 25px 0 25px;
+      padding: 0;
+      .v-data-table__mobile-row__cell {
+        font-weight: bold;
+        color: #424242;
+      }
+    }
+    thead {
+      tr {
+        th {
+          .v-data-table-header-mobile__wrapper:before {
+            font-size: 1.1rem;
+            color: #424242;
+            content: "Об'єкт лізингу"
+          }
+        }
+      }
+    }
+  }
+}
+</style>
 <style lang="scss" scoped>
+.v-data-table.leasing-object-table {
+  .v-data-table__mobile-row {
+    min-height: 22px!important;
+  }
+}
 .chart-diagram {
   width: 100%;
   min-height: 100vh;

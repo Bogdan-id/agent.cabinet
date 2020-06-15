@@ -183,7 +183,7 @@
             @click="test()"
             color="grey darken-2" 
             dark large icon>
-            <v-icon size="27" dark v-text="'mdi-email-send'"></v-icon>
+            <v-icon size="22" dark v-text="'mdi-email-send'"></v-icon>
           </v-btn>
           </template>
           <span>Надiслати розрахунок на email</span>
@@ -197,10 +197,10 @@
               @click="openForm()"
               color="grey darken-2" 
               icon large dark>
-              <v-icon size="27" dark>mdi-plus-thick</v-icon>
+              <v-icon size="22" small dark>mdi-plus-thick</v-icon>
             </v-btn>
           </template>
-          <span>відправити запит на лізинг</span>
+          <span>Відправити запит на лізинг</span>
         </v-tooltip>
       </span>
       <span>
@@ -210,7 +210,7 @@
               v-on="on"
               color="grey darken-2" 
               icon large dark>
-              <v-icon size="27" dark v-text="'mdi-download'"></v-icon>
+              <v-icon size="22" small dark v-text="'mdi-download'"></v-icon>
             </v-btn>
           </template>
           <span>Завантажити розрахунок у форматi Pdf</span>

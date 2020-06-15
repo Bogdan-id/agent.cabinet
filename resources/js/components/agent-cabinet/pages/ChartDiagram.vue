@@ -30,7 +30,7 @@
                 :hide-default-footer="true"
                 :must-sort="false"
                 dense
-                :mobile-breakpoint="1400">
+                :mobile-breakpoint="6500">
               </v-data-table>
               <div class="payout-schedule">
                 Графiк виплат
@@ -80,7 +80,7 @@
               :hide-default-footer="true"
               :must-sort="false"
               dense
-              :mobile-breakpoint="1400">
+              :mobile-breakpoint="6500">
             </v-data-table>
             <div class="payout-schedule">
               Графiк виплат
@@ -130,7 +130,7 @@
               :hide-default-footer="true"
               :must-sort="false"
               dense
-              :mobile-breakpoint="1400">
+              :mobile-breakpoint="6500">
             </v-data-table>
             <div class="payout-schedule">
               Графiк виплат

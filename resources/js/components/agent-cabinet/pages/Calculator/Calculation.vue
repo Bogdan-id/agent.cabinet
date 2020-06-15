@@ -218,7 +218,7 @@
         </v-col>
         <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
           <v-text-field
-            @input="parseToInt('leasedAssertEngine')"
+            @input="amountToLocalStr('leasedAssertEngine')"
             v-model="calcObj.leasedAssertEngine"
             :error-messages="leasedAssertEngineErr"
             background-color="white"
@@ -446,7 +446,7 @@
               </v-col>
             </v-row>
 
-            <v-row v-if="mediumAndDown || hasIrregular">
+            <v-row>
               <v-col cols="12" md="6" sm="12" :class="`pt-0 pb-0 ${smAndDown ? '' : 'mt-6'}`">
                 <span class="section-title">Валюта фiнансування</span>
                 <v-radio-group
@@ -455,7 +455,7 @@
                   color="red darken-4"
                   v-model="calcObj.leasingCurrency"
                   dense>
-                  <v-row class="pl-8" :style="`flex-direction: ${xs ? 'column' : ''}`">
+                  <v-row class="pl-8" :style="`flex-direction: ${mediumAndDown ? 'column' : ''}`">
                     <div style="display: flex;">
                       <v-radio value="UAH" color="red darken-3" dense class="ml-1">
                         <template #label>
@@ -468,7 +468,7 @@
                       </v-radio>
                     </div>
                     <div style="display: flex;">
-                      <v-radio value="USD" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-5' : 'ml-1'">
+                      <v-radio value="USD" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-2' : 'ml-1'">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -479,7 +479,7 @@
                       </v-radio>
                     </div>
                     <div style="display: flex;">
-                      <v-radio value="EURO" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-5' : 'ml-1'">
+                      <v-radio value="EURO" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-2' : 'ml-1'">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -504,7 +504,7 @@
                   color="red darken-4"
                   itemColor="red darken-4"
                   outlined
-                  :dense="xs">
+                  dense>
                   <template v-slot:append>
                     <span class="leasing-term-append-label">мiс</span>
                   </template>
@@ -514,14 +514,16 @@
                 <div class="pb-4">
                   <span class="section-title">Залишкова вартiсть</span>
                 </div>
+                <!-- :error-messages="residualValueErr" -->
                 <v-text-field
                   v-model="calcObj.residualValue"
-                  :error-messages="residualValueErr"
-                  label="Вiдстотки"
+                  @input="restrictToPercent('residual-value')"
+                  label="Вiдсоток"
+                  id="residual-value"
                   color="red darken-4"
                   itemColor="red darken-4"
                   outlined
-                  :dense="xs">
+                  dense>
                   <template v-slot:append>
                     <percent style="margin-top: 5px;"></percent>
                   </template>
@@ -529,7 +531,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col v-if="!hasIrregular && !mediumAndDown" cols="5" :class="`pl-8 ${hasIrregular || mediumAndDown ? 'mt-9' : ''}`">
+          <!-- <v-col v-if="!hasIrregular && !mediumAndDown" cols="5" :class="`pl-8 ${hasIrregular || mediumAndDown ? 'mt-9' : ''}`">
             <span style="display: inline-block; font-size: 1rem;">Валюта фiнансування</span>
             <v-radio-group
               :class="`financing-currency d-inline-block ${xs ? 'mt-0' : ''}`"
@@ -589,7 +591,9 @@
                 <span class="leasing-term-append-label">мiс</span>
               </template>
             </v-select>
-          </v-col>
+          </v-col> -->
+          <!--  -->
+          <!--  -->
           <v-col v-if="hasIrregular" :cols="mediumAndDown ? 12 : 5" :class="`mb-6 ${mediumAndDown ? '' : 'mt-2 pl-6'} `">
             <div class="pb-4" :style="`text-align: ${mediumAndDown ? '' : 'center;'};`">
               <span class="section-title">Оберiть тип нестандартного графiку</span>
@@ -667,7 +671,7 @@
                   <v-text-field
                     color="red darken-3"
                     :dense="xs"
-                    v-model="stepGain.threeThirds"
+                    v-model="threeThirds"
                     class="pt-0"
                     readonly>
                     <template v-slot:append-outer>
@@ -691,6 +695,8 @@
                   <v-text-field
                     color="red darken-3"
                     v-model="universalGain"
+                    id="universalGain"
+                    @input="restrictToPercent('universalGain')"
                     :dense="xs">
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -881,7 +887,7 @@ export default {
       leasedAssertMark: null,
       leasedAssertModel: null,
       isNew: true,
-      leasingObjectType: null,
+      leasingObjectType: 1,
       leasingQuantity: null,
       leasingObjectYear: null,
       leasedAssertEngine: null,
@@ -952,6 +958,12 @@ export default {
         gainEvenGraphicPercent: { required },
         UnsrMonths: { required },
       }
+    },
+    threeThirds() {
+      if(Number.isNaN(100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds)))) {
+        return 0
+      }
+      return 100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds))
     },
 
     /* boolean */
@@ -1115,6 +1127,20 @@ export default {
     test() {
       console.log('event work')
     },
+    restrictToPercent(id) {
+      let el = document.getElementById(id)
+      console.log(el.value)
+      let inputEvent = new Event('input', {bubbles: true})
+      let temp = parseInt(el.value.replace(/[^\d]/g, ''))
+      console.log(el.value)
+      if(parseInt(temp) > 100) {
+        temp = 100
+      }
+      if(el.value != temp && !isNaN(parseInt(temp))) {
+        el.value = temp
+        el.dispatchEvent(inputEvent)
+      }
+    },
     amountToLocalStr(id) {
       let el = document.getElementById(id)
       let inputEvent = new Event('input', {bubbles: true})
@@ -1135,17 +1161,18 @@ export default {
         currentEl.dispatchEvent(inputEvent)
       }
       if(selector == 'stepGain-oneThird') {
-        if(currentEl.value >= 0 && currentEl.value <= 100) {
+        if(parseInt(currentEl.value) + parseInt(this.stepGain.twoThirds) > 100) {
           this.stepGain.twoThirds = 100 - currentEl.value
         } else if(Number.isNaN(currentEl.value)) {
           this.stepGain.twoThirds = null
-        }
-      } else if(selector == 'stepGain-twoThirds') {
-        if(currentEl.value >= 0 && currentEl.value <= 100) {
+        } else return
+      } 
+      else if(selector == 'stepGain-twoThirds') {
+        if(parseInt(currentEl.value) + parseInt(this.stepGain.oneThird) > 100) {
           this.stepGain.oneThird = 100 - currentEl.value
         } else if(Number.isNaN(currentEl.value)) {
           this.stepGain.oneThird = null
-        }
+        } else return
       }
     },
     changeCustomGraph(id) {
@@ -1426,10 +1453,10 @@ export default {
       if(!value) return value
       this.calcObj.leasingQuantity = parseInt(value)
     },
-    'calcObj.leasedAssertEngine': function(value) {
-      if(!value) return value
-      this.calcObj.leasedAssertEngine = parseInt(value)
-    },
+    // 'calcObj.leasedAssertEngine': function(value) {
+    //   if(!value) return value
+    //   this.calcObj.leasedAssertEngine = parseInt(value)
+    // },
     // добавь условие ниже в функцию запроса аксиос
     'calcObj.leasingObjectType': function(value) {
       console.log(this.calcObj.leasingObjectType)

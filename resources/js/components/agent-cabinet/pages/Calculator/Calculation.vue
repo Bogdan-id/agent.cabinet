@@ -95,6 +95,7 @@
         <v-col class="pb-0">
           <v-select
             v-model="calcObj.leasingObjectType"
+            @change="getMarksByType($event)"
             label="Предмет лiзингу"
             background-color="white"
             append-icon="mdi-chevron-down"
@@ -1149,9 +1150,7 @@ export default {
       this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.calcObj.leasingObjectType}`)
         .then(response => {
-          console.log('*********')
           console.log(response)
-          console.log('*********')
           this.brandItems = response.data
           this.$store.commit('toggleSpinner', false)
         })
@@ -1165,7 +1164,14 @@ export default {
       console.log(this.$v)
       this.modelItems = []
       this.$store.commit('toggleSpinner', true)
-      let categorieId = this.calcObj.leasingObjectType
+      let categorieId
+      // || this.calcObj.leasingObjectType !== null
+      if(typeof this.calcObj.leasingObjectType === 'object') {
+        categorieId = this.calcObj.leasingObjectType.value
+      } else {
+        categorieId = this.calcObj.leasingObjectType
+      }
+      console.log(categorieId)
       axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
           console.log(response)
@@ -1408,9 +1414,6 @@ export default {
     },
     // добавь условие ниже в функцию запроса аксиос
     'calcObj.leasingObjectType': function(value) {
-      if(typeof value === 'object' && value !== null) {
-        this.calcObj.leasingObjectType = value.value
-      } else return
       console.log(this.calcObj.leasingObjectType)
     },
     user() {

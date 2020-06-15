@@ -15,7 +15,7 @@
             name="leasing-type"
             :value="1"
             checked>
-          <label for="car" class="leasing-type-block">
+          <label for="car" class="leasing-type-block active">
             <car class="leasing-type-icon"></car>
             <span style="white-space: nowrap">ЛЕГКОВI АВТО</span>
           </label>
@@ -510,6 +510,23 @@
                   </template>
                 </v-select>
               </v-col>
+              <v-col class="pb-0 pt-0 leasing-term-sm" cols="12" md="6" sm="12">
+                <div class="pb-4">
+                  <span class="section-title">Залишкова вартiсть</span>
+                </div>
+                <v-text-field
+                  v-model="calcObj.residualValue"
+                  :error-messages="residualValueErr"
+                  label="Вiдстотки"
+                  color="red darken-4"
+                  itemColor="red darken-4"
+                  outlined
+                  :dense="xs">
+                  <template v-slot:append>
+                    <percent style="margin-top: 5px;"></percent>
+                  </template>
+                </v-text-field>
+              </v-col>
             </v-row>
           </v-col>
           <v-col v-if="!hasIrregular && !mediumAndDown" cols="5" :class="`pl-8 ${hasIrregular || mediumAndDown ? 'mt-9' : ''}`">
@@ -869,6 +886,7 @@ export default {
       leasingObjectYear: null,
       leasedAssertEngine: null,
       leasingClientType: 2,
+      residualValue: null,
       currency: null,
       leasingCurrency: null,
       leasingCurrencyCourse: null,
@@ -1435,6 +1453,7 @@ export default {
       this.initFranchiseInput()
     })
     this.displayWindowSize()
+    this.getMarksByType()
     if(this.$router.currentRoute.params.edit === true) {
     axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)

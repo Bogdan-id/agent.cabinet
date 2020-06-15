@@ -188,7 +188,7 @@
               id="tab-2" 
               name="tab" 
               type="radio" 
-              value="2" 
+              value="2"
               v-model="currentTab">
             <div class="content">
               <v-card-text>
@@ -483,7 +483,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .admin-categories {
     #categories-list {
       padding: 15px 0;

@@ -65,7 +65,7 @@
   </v-card>
     <v-card 
       v-if="tabledata.length > 0"
-      class="mt-10 mb-6" elevation="9">
+      class="mt-10 mb-6 dashboard-table" elevation="9">
       <v-card-title class="headline pb-3 pt-3 mb-7" style="border-left: 5px solid #e75d57;">
         Заявки на лiзинг
       </v-card-title>
@@ -351,23 +351,6 @@ export default {
 </script>
 
 <style lang="scss">
-.v-window {
-  position: relative!important;
-  .v-window-item  {
-    transition: opacity .45s ease-in!important;
-    position: absolute!important;
-    top: 0!important;
-    left: 0!important;
-    right: 0!important;
-    bottom: 0!important;
-    &.fade-transition-leave, .fade-transition-leave-active {
-      opacity: 0!important;
-    }
-    &.fade-transition-enter, .fade-transition-enter-active {
-      opacity: 0!important;
-    }
-  }
-}
 .manager-list-wrapper {
   ul {
     padding-left: 0!important;
@@ -560,6 +543,23 @@ export default {
   flex-direction: column;
   display: flex;
   width: 74%;
+  .v-window {
+  position: relative!important;
+  .v-window-item  {
+    transition: opacity .45s ease-in!important;
+    position: absolute!important;
+    top: 0!important;
+    left: 0!important;
+    right: 0!important;
+    bottom: 0!important;
+    &.fade-transition-leave, .fade-transition-leave-active {
+      opacity: 0!important;
+    }
+    &.fade-transition-enter, .fade-transition-enter-active {
+      opacity: 0!important;
+    }
+  }
+}
   .actions-block-text {
     backdrop-filter: blur(5px); 
     padding: 0 15px; 

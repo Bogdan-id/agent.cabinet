@@ -11,11 +11,7 @@
       </v-tabs>
       <v-tabs-items v-model="currentTab">
         <v-tab-item :key="1" value="annuity">
-          <v-card>
-            <chart-buttons 
-              v-if="graphData !== null"
-              :graph="currentTab" 
-              :data="graphData"/>
+          <v-card class="view-charts">
             <v-data-table
               :search="search"
               color="black"
@@ -24,6 +20,12 @@
               :items-per-page="180"
               class="elevation-1"
               :hide-default-footer="true">
+              <template v-slot:footer>
+                <chart-buttons 
+                  v-if="graphData !== null"
+                  :graph="currentTab" 
+                  :data="graphData"/>
+              </template>
             </v-data-table>
           </v-card>
         </v-tab-item>

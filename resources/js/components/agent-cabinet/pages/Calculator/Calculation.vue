@@ -179,7 +179,7 @@
             :loading="!leasedOfAssetType && $store.state.loader
               || noBrandItems && $store.state.loader"
             :disabled="calcObj.isNew === null || calcObj.leasingClientType === null"
-            color="red darken-4"
+            color="grey darken-2"
             outlined :dense="xs">
           </v-autocomplete>
         </v-col>
@@ -198,7 +198,7 @@
             loaderHeight="1"
             :loading="$store.state.loader && modelOfItem"
             :disabled="calcObj.leasedAssertMark === null"
-            color="red darken-4"
+            color="grey darken-2"
             outlined :dense="xs">
           </v-autocomplete>
         </v-col>
@@ -245,11 +245,11 @@
           <!-- v-model="calcObj.leasingAmount" -->
           <!--  -->
           <v-text-field
-            @input="amountToLocalStr('leasingAmount')"
+            @input="amountToLocalStr('leasing-amount')"
             v-model="calcObj.leasingAmount"
             :error-messages="itemCostErrors"
             background-color="white"
-            id="leasingAmount"
+            id="leasing-amount"
             label="Вартість"
             color="red darken-4"
             maxlength="20"
@@ -306,9 +306,9 @@
       </v-row>
       <v-row class="pb-4">
         <v-col cols="12" class="pt-0 pb-0">
-          <!-- :disabled="calcObj.leasingQuantity === null" -->
+          <!--  -->
           <v-checkbox
-            
+            :disabled="calcObj.leasingAmount === null || calcObj.leasingAmount === ''"
             v-model="discountPrice"
             :value="true"
             class="discount-price mt-0 white--text"
@@ -317,7 +317,7 @@
             dark :dense="xs">
           </v-checkbox>
         </v-col>
-        <v-col cols="12" md="4" v-show="discountPrice">
+        <v-col cols="12" md="4" v-if="discountPrice && calcObj.leasingAmount !== ''">
           <v-text-field
             @input="amountToLocalStr('discount-price')"
             id="discount-price"
@@ -749,7 +749,7 @@
     </v-row>
     <v-card-actions class="d-flex justify-center ">
       <span>
-        <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :large="!xs" :dense="xs">
+        <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :dense="xs">
         {{'Розрахувати'}}
         </v-btn>
       </span>
@@ -1141,18 +1141,42 @@ export default {
     },
     amountToLocalStr(id) {
       let el = document.getElementById(id)
+      let discountPriceEl = document.getElementById('discount-price')
       let inputEvent = new Event('input', {bubbles: true})
       let temp = parseInt(el.value.replace(/ /g, '' ))
         .toLocaleString()
         .replace(/,/g, ' ')
+      let tempCopy = temp.replace(/[^\d]/g, '')
       if(el.value != temp && !Number.isNaN(parseInt(temp))) {
-        console.log('if')
+        if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
+          if(parseInt(tempCopy) > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
+            temp = this.calcObj.leasingAmount
+          }
+        } else if(id === 'leasing-amount' && this.calcObj.discountPrice !== null) {
+          if(parseInt(tempCopy) < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
+            this.calcObj.discountPrice = temp
+          }
+        }
         el.value = temp
         el.dispatchEvent(inputEvent)
       } else if(el.value != temp.replace(/[^\d ]/g, '') && Number.isNaN(parseInt(temp))) {
-        console.log('else')
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
+      } else {
+        if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
+          if(parseInt(tempCopy) > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
+            discountPriceEl.value = this.calcObj.leasingAmount
+            discountPriceEl.dispatchEvent(inputEvent)
+          } 
+        } else if(id === 'leasing-amount' && this.calcObj.discountPrice !== null) {
+          if(parseInt(tempCopy) < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
+            discountPriceEl.value = this.calcObj.leasingAmount
+            discountPriceEl.dispatchEvent(inputEvent)
+          } else if (this.calcObj.leasingAmount === '') {
+            discountPriceEl.value = ''
+            discountPriceEl.dispatchEvent(inputEvent)
+          }
+        }
       }
     },
     setGraphProportion(event, selector) {
@@ -1835,7 +1859,7 @@ input[type='checkbox'] {
 .lbl-toggle {
   display: block;
 
-  font-size: 1.2rem;
+  font-size: 1rem;
   text-transform: uppercase;
   text-align: center;
 

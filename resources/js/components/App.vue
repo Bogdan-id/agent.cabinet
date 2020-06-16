@@ -32,7 +32,7 @@
       text-align: center!important;
       & span {
         font-size: 0.94rem!important;
-        font-weight: bold!important;
+        // font-weight: bold!important;
         color: #2b2a28!important;
       }
     }

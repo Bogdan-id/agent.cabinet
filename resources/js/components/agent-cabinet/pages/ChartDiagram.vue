@@ -7,7 +7,6 @@
             @click.stop="changeActive($event)" 
             for="tab-1" 
             class="label">
-            <!-- <v-icon v-text="'mdi-format-list-bulleted-square'" class="pr-1" large></v-icon> -->
             АНУЇТЕТ
           </label>
           <input 
@@ -58,7 +57,6 @@
             @click.stop="changeActive($event)" 
             for="tab-2" 
             class="label">
-            <!-- <v-icon v-text="'mdi-playlist-edit'" class="pr-1" large></v-icon> -->
             КЛАСИЧНИЙ
           </label>
           <input
@@ -108,7 +106,6 @@
             @click.stop="changeActive($event)" 
             for="tab-3" 
             class="label">
-            <!-- <v-icon v-text="'mdi-playlist-edit'" class="pr-1" large></v-icon> -->
             IНДИВIДУАЛЬНИЙ
           </label>
           <input
@@ -155,75 +152,6 @@
         </div>
       </div>
     </section>
-    <!-- <v-tabs
-      v-model="currentTab"
-      background-color="red lighten-1"
-      dark grow>
-      <v-tabs-slider></v-tabs-slider>
-      <v-tab v-if="hasAnnuity" href="#annuity">Ануїтет</v-tab>
-      <v-tab v-if="hasIrregular" href="#irregular">Iндивiдуальний</v-tab>
-      <v-tab v-if="hasEven" href="#even">Класичний</v-tab>
-      </v-tabs>
-      <v-tabs-items v-model="currentTab">
-        <v-tab-item :key="1" value="annuity">
-          <v-card class="view-charts">
-            <v-data-table
-              :search="search"
-              color="black"
-              :headers="tableHeader"
-              :items="annuity"
-              :items-per-page="180"
-              class="elevation-1"
-              :hide-default-footer="true">
-              <template v-slot:footer>
-                <chart-buttons 
-                  v-if="graphData !== null"
-                  :graph="currentTab" 
-                  :data="graphData"/>
-              </template>
-            </v-data-table>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item :key="2" value="even">
-          <v-card  class="view-charts">
-            <v-data-table
-              :search="search"
-              color="black"
-              :headers="tableHeader"
-              :items="even"
-              :items-per-page="180"
-              class="elevation-1"
-              :hide-default-footer="true">
-              <template v-slot:footer>
-                <chart-buttons 
-                  v-if="graphData !== null"
-                  :graph="currentTab" 
-                  :data="graphData"/>
-              </template>
-            </v-data-table>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item :key="3" value="irregular">
-          <v-card  class="view-charts">
-            <v-data-table
-              :search="search"
-              color="black"
-              :headers="tableHeader"
-              :items="irregular"
-              :items-per-page="180"
-              class="elevation-1"
-              :hide-default-footer="true">
-              <template v-slot:footer>
-                <chart-buttons 
-                  v-if="graphData !== null"
-                  :graph="currentTab" 
-                  :data="graphData"/>
-              </template>
-            </v-data-table>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-tabs> -->
   </v-card>
 </template>
 
@@ -296,16 +224,14 @@ export default {
   },
   mounted() {
     this.graphData = this.$router.currentRoute.params.data
-    // this.leasingObjectData = [...this.graphData.request_data]
     this.leasingObjectData = [this.graphData.request_data]
-    console.log('*************')
-    console.log(this.leasingObjectData)
-    console.log('*************')
+
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {
         this.graphData.result_data[object].graph[0].n = 'Аванс'
       }
     })
+
     this.addObjects(this.graphData)
     document.body.scrollTop = 0
   },

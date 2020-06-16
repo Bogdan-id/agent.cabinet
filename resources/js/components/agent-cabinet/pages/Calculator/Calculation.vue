@@ -890,12 +890,12 @@ export default {
         leasedAssertEngine: { required },
         leasingCurrency: { required },
         leasingQuantity: { required },
-        leasingAmount: {
-          minCost: val => {
-            if(val == null) return false
-            return parseInt(val.replace(/[^\d]/g, '')) >= this.minCarCost
-          },
-        },
+        leasingAmount: { required },
+        //   minCost: val => {
+        //     if(val == null) return false
+        //     return parseInt(val.replace(/[^\d]/g, '')) >= this.minCarCost
+        //   },
+        // },
         leasingCurrencyCourse: (() => { 
           if(this.hasForeignCurrency) {
             return { required }
@@ -982,10 +982,10 @@ export default {
 
     /* vuelidate error handlers */
     itemCostErrors() {
-      const errors = []
-      if (!this.$v.calcObj.leasingAmount.$error) return errors
-      !this.$v.calcObj.leasingAmount.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
-			return errors
+      // const errors = []
+      if (!this.$v.calcObj.leasingAmount.$error) return
+      // !this.$v.calcObj.leasingAmount.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
+			return this.commonErr
     },
     leasingClientTypeErr() {
       if (!this.$v.calcObj.leasingClientType.$error) return

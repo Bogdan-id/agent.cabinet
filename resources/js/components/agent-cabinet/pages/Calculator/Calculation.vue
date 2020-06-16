@@ -15,7 +15,7 @@
             name="leasing-type"
             :value="1"
             checked>
-          <label for="car" class="leasing-type-block">
+          <label for="car" class="leasing-type-block active">
             <car class="leasing-type-icon"></car>
             <span style="white-space: nowrap">ЛЕГКОВI АВТО</span>
           </label>
@@ -179,7 +179,7 @@
             :loading="!leasedOfAssetType && $store.state.loader
               || noBrandItems && $store.state.loader"
             :disabled="calcObj.isNew === null || calcObj.leasingClientType === null"
-            color="red darken-4"
+            color="grey darken-2"
             outlined :dense="xs">
           </v-autocomplete>
         </v-col>
@@ -198,7 +198,7 @@
             loaderHeight="1"
             :loading="$store.state.loader && modelOfItem"
             :disabled="calcObj.leasedAssertMark === null"
-            color="red darken-4"
+            color="grey darken-2"
             outlined :dense="xs">
           </v-autocomplete>
         </v-col>
@@ -218,7 +218,7 @@
         </v-col>
         <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
           <v-text-field
-            @input="parseToInt('leasedAssertEngine')"
+            @input="amountToLocalStr('leasedAssertEngine')"
             v-model="calcObj.leasedAssertEngine"
             :error-messages="leasedAssertEngineErr"
             background-color="white"
@@ -245,11 +245,11 @@
           <!-- v-model="calcObj.leasingAmount" -->
           <!--  -->
           <v-text-field
-            @input="amountToLocalStr('leasingAmount')"
+            @input="amountToLocalStr('leasing-amount')"
             v-model="calcObj.leasingAmount"
             :error-messages="itemCostErrors"
             background-color="white"
-            id="leasingAmount"
+            id="leasing-amount"
             label="Вартість"
             color="red darken-4"
             maxlength="20"
@@ -306,20 +306,22 @@
       </v-row>
       <v-row class="pb-4">
         <v-col cols="12" class="pt-0 pb-0">
+          <!--  -->
           <v-checkbox
+            :disabled="calcObj.leasingAmount === null || calcObj.leasingAmount === ''"
             v-model="discountPrice"
             :value="true"
             class="discount-price mt-0 white--text"
             label="Вартiсть зi знижкою"
             :false-value="false"
-            :disabled="calcObj.leasingQuantity === null"
             dark :dense="xs">
           </v-checkbox>
         </v-col>
-        <v-col cols="12" md="4" v-show="discountPrice">
+        <v-col cols="12" md="4" v-if="discountPrice && calcObj.leasingAmount !== ''">
           <v-text-field
             @input="amountToLocalStr('discount-price')"
             id="discount-price"
+            :error-messages="discountPriceErr"
             v-model="calcObj.discountPrice"
             background-color="white"
             color="red darken-4"
@@ -339,31 +341,31 @@
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
             <v-checkbox
               v-model="calcObj.graphType"
+              :error-messages="graphsErr"
               label="Ануїтет"
               color="red darken-3"
               value="annuity"
-              :dense="xs"
-              :disabled="calcObj.leasingQuantity === null">
+              :dense="xs">
             </v-checkbox>
           </v-col>
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
             <v-checkbox
               v-model="calcObj.graphType"
+              :error-messages="graphsErr"
               label="Класичний"
               color="red darken-3"
               value="even"
-              :dense="xs"
-              :disabled="calcObj.leasingQuantity === null">
+              :dense="xs">
             </v-checkbox>
           </v-col>
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
             <v-checkbox
               v-model="calcObj.graphType"
+              :error-messages="graphsErr"
               label="Iндивiдуальний"
               color="red darken-3"
               value="irregular"
-              :dense="xs"
-              :disabled="calcObj.leasingQuantity === null">
+              :dense="xs">
             </v-checkbox>
           </v-col>
         </v-row>
@@ -446,7 +448,7 @@
               </v-col>
             </v-row>
 
-            <v-row v-if="mediumAndDown || hasIrregular">
+            <v-row>
               <v-col cols="12" md="6" sm="12" :class="`pt-0 pb-0 ${smAndDown ? '' : 'mt-6'}`">
                 <span class="section-title">Валюта фiнансування</span>
                 <v-radio-group
@@ -455,9 +457,9 @@
                   color="red darken-4"
                   v-model="calcObj.leasingCurrency"
                   dense>
-                  <v-row class="pl-8" :style="`flex-direction: ${xs ? 'column' : ''}`">
+                  <v-row class="pl-8" :style="`flex-direction: ${mediumAndDown ? 'column' : ''}`">
                     <div style="display: flex;">
-                      <v-radio value="UAH" color="red darken-3" dense class="ml-1">
+                      <v-radio value="UAH" color="red darken-3" dense>
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -468,7 +470,7 @@
                       </v-radio>
                     </div>
                     <div style="display: flex;">
-                      <v-radio value="USD" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-5' : 'ml-1'">
+                      <v-radio value="USD" color="red darken-3" :class="mediumAndDown ? '' : 'ml-2'">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -479,7 +481,7 @@
                       </v-radio>
                     </div>
                     <div style="display: flex;">
-                      <v-radio value="EURO" color="red darken-3" :class="!xs && !hasIrregular   ? 'ml-5' : 'ml-1'">
+                      <v-radio value="EURO" color="red darken-3" :class="mediumAndDown ? '' : 'ml-2'">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -503,75 +505,32 @@
                   label="Оберiть кiлькiсть"
                   color="red darken-4"
                   itemColor="red darken-4"
-                  outlined
-                  :dense="xs">
+                  outlined>
                   <template v-slot:append>
                     <span class="leasing-term-append-label">мiс</span>
                   </template>
                 </v-select>
               </v-col>
+              <v-col class="pb-0 pt-0 leasing-term-sm" cols="12" md="6" sm="12">
+                <div class="pb-4">
+                  <span class="section-title">Залишкова вартiсть</span>
+                </div>
+                <!-- :error-messages="residualValueErr" -->
+                <v-text-field
+                  v-model="calcObj.residualValue"
+                  :error-messages="residualValueErr"
+                  @input="restrictToPercent('residual-value')"
+                  label="Вiдсоток"
+                  id="residual-value"
+                  color="red darken-4"
+                  itemColor="red darken-4"
+                  outlined>
+                  <template v-slot:append>
+                    <percent style="margin-top: 5px;"></percent>
+                  </template>
+                </v-text-field>
+              </v-col>
             </v-row>
-          </v-col>
-          <v-col v-if="!hasIrregular && !mediumAndDown" cols="5" :class="`pl-8 ${hasIrregular || mediumAndDown ? 'mt-9' : ''}`">
-            <span style="display: inline-block; font-size: 1rem;">Валюта фiнансування</span>
-            <v-radio-group
-              :class="`financing-currency d-inline-block ${xs ? 'mt-0' : ''}`"
-              :error-messages="leasingCurrencyErr"
-              color="red darken-4"
-              v-model="calcObj.leasingCurrency"
-              dense>
-              <v-row class="pl-8" :style="`flex-direction: ${xs ? 'column' : ''}`">
-                <div style="display: flex;">
-                  <v-radio value="UAH" color="red darken-3" dense>
-                    <template #label>
-                      <span
-                        class="current-currency-label"
-                        :style="`color: ${calcObj.leasingCurrency === 'UAH' ? 'black' : ''}`">
-                        UAH
-                      </span>
-                    </template>
-                  </v-radio>
-                </div>
-                <div style="display: flex;">
-                  <v-radio value="USD" color="red darken-3" :class="!xs ? 'ml-5' : ''">
-                    <template #label>
-                      <span
-                        class="current-currency-label"
-                        :style="`color 0.15s ease-in; color: ${calcObj.leasingCurrency === 'USD' ? 'black' : ''}`">
-                        USD
-                      </span>
-                    </template>
-                  </v-radio>
-                </div>
-                <div style="display: flex;">
-                  <v-radio value="EURO" color="red darken-3" :class="!xs ? 'ml-5' : ''">
-                    <template #label>
-                      <span
-                        class="current-currency-label"
-                        :style="`color: ${calcObj.leasingCurrency === 'EURO' ? 'black' : ''}`">
-                        EURO
-                      </span>
-                    </template>
-                  </v-radio>
-                </div>
-              </v-row>
-            </v-radio-group>
-            <div>
-              <span style="font-size:1rem">Термiн фiнансування</span>
-            </div>
-            <v-select
-              v-model="calcObj.leasingTerm"
-              :error-messages="leasingTermErr"
-              :items="['12', '24', '36', '48', '60']"
-              label="Оберiть кiлькiсть"
-              color="red darken-4"
-              itemColor="red darken-4"
-              outlined
-              :dense="xs">
-              <template v-slot:append>
-                <span class="leasing-term-append-label">мiс</span>
-              </template>
-            </v-select>
           </v-col>
           <v-col v-if="hasIrregular" :cols="mediumAndDown ? 12 : 5" :class="`mb-6 ${mediumAndDown ? '' : 'mt-2 pl-6'} `">
             <div class="pb-4" :style="`text-align: ${mediumAndDown ? '' : 'center;'};`">
@@ -604,6 +563,7 @@
               <v-row style="display: flex; justify-content: space-around">
                 <v-col cols="6" class="pt-0 pb-0">
                   <v-text-field
+                    :error-messages="oneThirdErr"
                     color="red darken-3"
                     type="number"
                     id="stepGain-oneThird"
@@ -627,6 +587,7 @@
                 <v-col cols="6" class="pt-0 pb-0">
                   <v-text-field
                     @input="setGraphProportion($event, 'stepGain-twoThirds')"
+                    :error-messages="twoThirdsErr"
                     color="red darken-3"
                     type="number"
                     id="stepGain-twoThirds"
@@ -650,7 +611,7 @@
                   <v-text-field
                     color="red darken-3"
                     :dense="xs"
-                    v-model="stepGain.threeThirds"
+                    v-model="threeThirds"
                     class="pt-0"
                     readonly>
                     <template v-slot:append-outer>
@@ -673,7 +634,10 @@
                 <v-col cols="8">
                   <v-text-field
                     color="red darken-3"
-                    v-model="universalGain"
+                    :error-messages="universalGainErr"
+                    v-model="calcObj.universalGain"
+                    id="universalGain"
+                    @input="restrictToPercent('universalGain')"
                     :dense="xs">
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -687,15 +651,16 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" class="pt-0">
-        <v-expansion-panels>
-          <v-expansion-panel>
-            <v-expansion-panel-header>Страхування</v-expansion-panel-header>
-            <v-expansion-panel-content>
+      <v-col cols="12" class="pt-0 pb-0">
+        <div class="wrap-collabsible">
+          <input id="insurance" class="toggle" type="checkbox">
+          <label for="insurance" class="lbl-toggle">Страхування</label>
+          <div class="collapsible-content">
+            <div class="content-inner">
               <v-row class="d-flex justify-space-between">
                 <v-col cols="12" md="5">
                   <v-select
-                      v-model="insuranceProgram"
+                      v-model="calcObj.insuranceProgram"
                       append-icon="mdi-chevron-down"
                       :items="selects.insurancePrograms"
                       :error-messages="insuranceProgramErr"
@@ -736,17 +701,19 @@
                   </div>
                 </v-col>
               </v-row>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
+            </div>
+          </div>
+        </div>
       </v-col>
     </v-row>
     <v-row>
+      <!-- Додатковi умови -->
       <v-col cols="12">
-        <v-expansion-panels>
-          <v-expansion-panel>
-            <v-expansion-panel-header>Додатковi умови</v-expansion-panel-header>
-            <v-expansion-panel-content>
+        <div class="wrap-collabsible">
+          <input id="additional-conditions" class="toggle" type="checkbox">
+          <label for="additional-conditions" class="lbl-toggle">Додатковi умови</label>
+          <div class="collapsible-content">
+            <div class="content-inner">
               <v-row>
                 <v-col cols="12" md="5">
                   <v-select
@@ -775,14 +742,14 @@
                   </div>
                 </v-col>
               </v-row>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
+            </div>
+          </div>
+        </div>
       </v-col>
     </v-row>
     <v-card-actions class="d-flex justify-center ">
       <span>
-        <v-btn @click="submit()" class="mb-3" dark color="grey darken-3" :dense="xs">
+        <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :dense="xs">
         {{'Розрахувати'}}
         </v-btn>
       </span>
@@ -845,30 +812,31 @@ export default {
 			remainingProgress: '#efefef'
 		},
     stepGain: {
-      oneThird: null,
-      twoThirds: null,
-      threeThirds: 100
+      oneThird: 33,
+      twoThirds: 33,
+      threeThirds: 34
     },
-    universalGain: null,
+    
     emulateLeaseingAmount: null,
     emulateDiscountPrice: null,
     advanceDisabled: false,
 
     calcObj: {
-      gpsTrackerQuantity: 1,
+      // gpsTrackerQuantity: 1,
       urkAssistService: 1,
-      gainEvenGraphicMonths: null,
-      gainEvenGraphicPercent: null,
-      UnsrMonths: null,
+      // gainEvenGraphicMonths: null,
+      // gainEvenGraphicPercent: null,
+      // UnsrMonths: null,
       agentId: null,
       leasedAssertMark: null,
       leasedAssertModel: null,
       isNew: true,
-      leasingObjectType: null,
+      leasingObjectType: 1,
       leasingQuantity: null,
       leasingObjectYear: null,
       leasedAssertEngine: null,
       leasingClientType: 2,
+      residualValue: null,
       currency: null,
       leasingCurrency: null,
       leasingCurrencyCourse: null,
@@ -877,8 +845,11 @@ export default {
       advance: 20,
       leasingTerm: null,
       vehicleOwnerTax: "2",
-      paymentPf: false,
-      insuranceProgram: null,
+
+      universalGain: null,
+
+      // paymentPf: false,
+      insuranceProgram: {text: 'Обережний', value: 2},
       insuranceFranchise: 0,
       discountPrice: null,
       promotion: null,
@@ -888,7 +859,15 @@ export default {
   }),
   validations() {
     return {
-      calcObj: this.validationRules
+      calcObj: this.validationRules,
+      stepGain: (() => {
+        if (this.hasIrregular && this.customGraphType === 1){
+          return {
+            oneThird: { required },
+            twoThirds: { required },
+          }
+        } else return true
+      })(),
     }
   },
   computed: {
@@ -911,16 +890,31 @@ export default {
         leasedAssertEngine: { required },
         leasingCurrency: { required },
         leasingQuantity: { required },
-        leasingAmount: {
-          minCost: val => {
-            if(val == null) return false
-            return parseInt(val.replace(/[^\d]/g, '')) >= this.minCarCost
-          },
-        },
-        leasingCurrencyCourse: { required },
+        leasingAmount: { required },
+        //   minCost: val => {
+        //     if(val == null) return false
+        //     return parseInt(val.replace(/[^\d]/g, '')) >= this.minCarCost
+        //   },
+        // },
+        leasingCurrencyCourse: (() => { 
+          if(this.hasForeignCurrency) {
+            return { required }
+          } else return true
+        })(),
         vehicleOwnerTax: { required },
-        paymentPf: { required },
+        // paymentPf: { required },
         leasingTerm: { required },
+
+        universalGain: (() => { 
+          if(this.hasIrregular && this.customGraphType === 2) {
+            return { required }
+          } else return true
+        })(),
+        discountPrice: (() => { 
+          if(this.discountPrice) {
+            return { required }
+          } else return true
+        })(),
         graphType: {
           hasIndex: (v) => {
             if(v === null) return false
@@ -930,10 +924,17 @@ export default {
         advance: { required },
         insuranceProgram: { required },
         insuranceFranchise: { required },
-        gainEvenGraphicMonths: { required },
-        gainEvenGraphicPercent: { required },
-        UnsrMonths: { required },
+        residualValue: { required }
+        // gainEvenGraphicMonths: { required },
+        // gainEvenGraphicPercent: { required },
+        // UnsrMonths: { required },
       }
+    },
+    threeThirds() {
+      if(Number.isNaN(100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds)))) {
+        return 0
+      }
+      return 100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds))
     },
 
     /* boolean */
@@ -981,10 +982,10 @@ export default {
 
     /* vuelidate error handlers */
     itemCostErrors() {
-      const errors = []
-      if (!this.$v.calcObj.leasingAmount.$error) return errors
-      !this.$v.calcObj.leasingAmount.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
-			return errors
+      // const errors = []
+      if (!this.$v.calcObj.leasingAmount.$error) return
+      // !this.$v.calcObj.leasingAmount.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
+			return this.commonErr
     },
     leasingClientTypeErr() {
       if (!this.$v.calcObj.leasingClientType.$error) return
@@ -1074,6 +1075,33 @@ export default {
       if (!this.$v.calcObj.insuranceFranchise.$error ) return
       return this.commonErr
     },
+    graphsErr() {
+      if (!this.$v.calcObj.graphType.$error) return
+      return this.commonErr
+    },
+    residualValueErr() {
+      if (!this.$v.calcObj.residualValue.$error) return
+      return this.commonErr
+    },
+    discountPriceErr() {
+      if (!this.$v.calcObj.discountPrice.$error) return
+      return this.commonErr
+    },
+
+    universalGainErr() {
+      if (!this.$v.calcObj.universalGain.$error) return
+      return this.commonErr
+    },
+
+    oneThirdErr() {
+      if (!this.$v.stepGain.oneThird.$error) return
+      return this.commonErr
+    },
+    twoThirdsErr() {
+      if (!this.$v.stepGain.twoThirds.$error) return
+      return this.commonErr
+    },
+
     mediumAndDown() {
       return this.windowInnerWidth <= 1145
     },
@@ -1097,15 +1125,58 @@ export default {
     test() {
       console.log('event work')
     },
+    restrictToPercent(id) {
+      let el = document.getElementById(id)
+      console.log(el.value)
+      let inputEvent = new Event('input', {bubbles: true})
+      let temp = parseInt(el.value.replace(/[^\d]/g, ''))
+      console.log(el.value)
+      if(parseInt(temp) > 100) {
+        temp = 100
+      }
+      if(el.value != temp && !isNaN(parseInt(temp))) {
+        el.value = temp
+        el.dispatchEvent(inputEvent)
+      }
+    },
     amountToLocalStr(id) {
       let el = document.getElementById(id)
+      let discountPriceEl = document.getElementById('discount-price')
       let inputEvent = new Event('input', {bubbles: true})
       let temp = parseInt(el.value.replace(/ /g, '' ))
         .toLocaleString()
         .replace(/,/g, ' ')
-      if(el.value != temp && !isNaN(parseInt(temp))) {
+      let tempCopy = temp.replace(/[^\d]/g, '')
+      if(el.value != temp && !Number.isNaN(parseInt(temp))) {
+        if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
+          if(parseInt(tempCopy) > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
+            temp = this.calcObj.leasingAmount
+          }
+        } else if(id === 'leasing-amount' && this.calcObj.discountPrice !== null) {
+          if(parseInt(tempCopy) < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
+            this.calcObj.discountPrice = temp
+          }
+        }
         el.value = temp
         el.dispatchEvent(inputEvent)
+      } else if(el.value != temp.replace(/[^\d ]/g, '') && Number.isNaN(parseInt(temp))) {
+        el.value = temp.replace(/[^\d ]/g, '')
+        el.dispatchEvent(inputEvent)
+      } else {
+        if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
+          if(parseInt(tempCopy) > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
+            discountPriceEl.value = this.calcObj.leasingAmount
+            discountPriceEl.dispatchEvent(inputEvent)
+          } 
+        } else if(id === 'leasing-amount' && this.calcObj.discountPrice !== null) {
+          if(parseInt(tempCopy) < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
+            discountPriceEl.value = this.calcObj.leasingAmount
+            discountPriceEl.dispatchEvent(inputEvent)
+          } else if (this.calcObj.leasingAmount === '') {
+            discountPriceEl.value = ''
+            discountPriceEl.dispatchEvent(inputEvent)
+          }
+        }
       }
     },
     setGraphProportion(event, selector) {
@@ -1117,17 +1188,18 @@ export default {
         currentEl.dispatchEvent(inputEvent)
       }
       if(selector == 'stepGain-oneThird') {
-        if(currentEl.value >= 0 && currentEl.value <= 100) {
+        if(parseInt(currentEl.value) + parseInt(this.stepGain.twoThirds) > 100) {
           this.stepGain.twoThirds = 100 - currentEl.value
         } else if(Number.isNaN(currentEl.value)) {
           this.stepGain.twoThirds = null
-        }
-      } else if(selector == 'stepGain-twoThirds') {
-        if(currentEl.value >= 0 && currentEl.value <= 100) {
+        } else return
+      } 
+      else if(selector == 'stepGain-twoThirds') {
+        if(parseInt(currentEl.value) + parseInt(this.stepGain.oneThird) > 100) {
           this.stepGain.oneThird = 100 - currentEl.value
         } else if(Number.isNaN(currentEl.value)) {
           this.stepGain.oneThird = null
-        }
+        } else return
       }
     },
     changeCustomGraph(id) {
@@ -1219,7 +1291,8 @@ export default {
       this.$v.$touch()
     },
     submit() {
-      console.log(this.calcObj)
+      console.log(this.$v)
+      // console.log(this.calcObj)
       this.highlightErrors()
       !this.$v.$invalid
       && this.$v.$dirty
@@ -1314,23 +1387,16 @@ export default {
       }
 		},
 		initAdvanceInputValue() {
-			let elArr = document.querySelectorAll('.slider')
+			let el = document.querySelector('#advance-payment')
 			let event = new Event('input', {bubbles: true})
-			elArr.forEach(el => {
-				el.value = 15
-				el.dispatchEvent(event)
-			})
+			el.value = 15
+			el.dispatchEvent(event)
 		},
     initFranchiseInput() {
-      setTimeout(() => {
-        let el = document.querySelector('#franchise')
-        console.log(el.value)
-        if(el.value == 0) {
-          let event = new Event('input', {bubbles: true})
-          el.value = el.min
-          el.dispatchEvent(event)
-        }
-      }, 40)
+      let el = document.querySelector('#franchise')
+      let event = new Event('input', {bubbles: true})
+      el.value = el.min
+      el.dispatchEvent(event)
     },
 		switchSelector(e) {
 			let dataSelector, elRange
@@ -1408,10 +1474,10 @@ export default {
       if(!value) return value
       this.calcObj.leasingQuantity = parseInt(value)
     },
-    'calcObj.leasedAssertEngine': function(value) {
-      if(!value) return value
-      this.calcObj.leasedAssertEngine = parseInt(value)
-    },
+    // 'calcObj.leasedAssertEngine': function(value) {
+    //   if(!value) return value
+    //   this.calcObj.leasedAssertEngine = parseInt(value)
+    // },
     // добавь условие ниже в функцию запроса аксиос
     'calcObj.leasingObjectType': function(value) {
       console.log(this.calcObj.leasingObjectType)
@@ -1429,12 +1495,10 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
-    let franchiseInputEl = document.querySelector('.v-expansion-panel-header')
-    console.log(franchiseInputEl)
-    franchiseInputEl.addEventListener("click", () => {
-      this.initFranchiseInput()
-    })
     this.displayWindowSize()
+    this.getMarksByType()
+    console.log(this.$v)
+    console.log(this.$computed)
     if(this.$router.currentRoute.params.edit === true) {
     axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
@@ -1461,15 +1525,20 @@ export default {
         })
       })
     }
-
     this.calcObj._token = this.getCsrf()
     this.initAdvanceInputValue()
+    this.initFranchiseInput()
     this.calcObj.agentId = this.$store.state.user.agent.id
   }
 }
 </script>
 
 <style lang="scss">
+  .calculate-btn {
+    .v-btn__content {
+      font-size: 1.05rem
+    }
+  }
   .calculator-block {
     position: relative;
     border-radius: 8px 8px 0 0;
@@ -1777,4 +1846,76 @@ export default {
 		background: #d24a43;
 		cursor: pointer;
 	}
+
+  /* Collapsible */
+.wrap-collabsible {
+  margin-bottom: 1.2rem 0;
+}
+
+input[type='checkbox'] {
+  display: none;
+}
+
+.lbl-toggle {
+  display: block;
+
+  font-size: 1rem;
+  text-transform: uppercase;
+  text-align: center;
+
+  padding: 0.6rem;
+
+  color: white;
+  background: #e04d45;
+
+  cursor: pointer;
+
+  border-radius: 7px;
+  transition: all 0.25s ease-out;
+}
+
+// .lbl-toggle:hover {
+//   color: #7C5A0B;
+// }
+
+.lbl-toggle::before {
+  content: ' ';
+  display: inline-block;
+
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid currentColor;
+  vertical-align: middle;
+  margin-right: .7rem;
+  transform: translateY(-2px);
+
+  transition: transform .2s ease-out;
+}
+
+.toggle:checked + .lbl-toggle::before {
+  transform: rotate(90deg) translateX(-3px);
+}
+
+.collapsible-content {
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height .25s ease-in-out;
+}
+
+.toggle:checked + .lbl-toggle + .collapsible-content {
+  max-height: 100vh;
+}
+
+.toggle:checked + .lbl-toggle {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.collapsible-content .content-inner {
+  // background: rgba(250, 224, 66, .2);
+  border-bottom: 1px solid #efefef;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  padding: .5rem 1rem;
+}
 </style>

@@ -28,7 +28,7 @@
       </v-card-text>
     </v-card>
   </v-dialog>
-  <v-card class="pb-4" min-height="300">
+  <v-card class="pb-4" min-height="300" elevation="12">
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-calculator-variant'"></v-icon>
       Калькулятор лiзингу
@@ -39,7 +39,7 @@
       :style="`transition: all 0.5s; opacity: ${!loading ? '1' : '0'}`">
         <v-btn
           to="/calculator/new"
-          color="error" 
+          color="#e65048" 
           dark>
           Новий розрахунок
         </v-btn>
@@ -91,9 +91,9 @@
                     v-on="on"
                     icon>
                     <v-icon
-                      color="red lighten-1"
+                      color="red darken-2"
                       >
-                      mdi-pencil
+                      mdi-pencil-outline
                     </v-icon>
                   </v-btn>
                 </span>
@@ -108,14 +108,14 @@
                     v-on="on"
                     icon>
                     <v-icon
-                      color="red lighten-1"
+                      color="red darken-2"
                       >
                       mdi-file-find-outline
                     </v-icon>
                   </v-btn>
                 </span>
                 </template>
-              <span>Переглянуты</span>
+              <span>Переглянути</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
@@ -125,14 +125,49 @@
                     v-on="on"
                     icon>
                     <v-icon
-                      color="red lighten-1"
+                      color="red darken-2"
                       >
-                      mdi-plus-circle
+                      mdi-file-document-edit-outline
                     </v-icon>
                   </v-btn>
                 </span>
               </template>
               <span>Подати заявку на лiзинг</span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <span>
+                  <v-btn 
+                    @click="toEdit(item.id)"
+                    v-on="on"
+                    icon>
+                    <v-icon
+                      color="grey darken-2"
+                      >
+                      mdi-email-send-outline
+                    </v-icon>
+                  </v-btn>
+                </span>
+              </template>
+              <span>Вiдправити на пошту</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <span>
+                  <v-btn 
+                    @click="toEdit(item.id)"
+                    v-on="on"
+                    icon>
+                    <v-icon
+                      color="grey darken-2"
+                      >
+                      mdi-download
+                    </v-icon>
+                  </v-btn>
+                </span>
+              </template>
+              <span>Завантажити</span>
             </v-tooltip>
           </div>
         </template>

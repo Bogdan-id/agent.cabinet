@@ -9,7 +9,7 @@
           <v-col md="4" class="pb-0 pt-0">
             <v-select
               @blur="$v.newCategorie.$touch()"
-              @change="$v.newCategorie.$touch()"
+              @change="$v.newCategorie.$touch(); test()"
               :error-messages="newCategorieErr"
               v-model="newCategorie"
               label="Оберiть категорiю"
@@ -33,6 +33,7 @@
         </v-textarea>
         <v-row>
           <v-col md="4" class="pb-0">
+            <!-- :disabled="!categoriesPresent" -->
             <v-file-input
               @change="previewImage($event)"
               v-model="materialImg"
@@ -40,7 +41,7 @@
               accept="image/png, image/jpeg, image/bmp"
               prepend-inner-icon="mdi-camera"
               label="Зображення до матерiалу"
-              :disabled="!categoriesPresent"
+              
               outlined show-size dense>
             </v-file-input>
           </v-col>
@@ -69,7 +70,7 @@
             :loading="loading"
             dark 
             class="error">
-              Додати матерiал
+              {{ $route.params.edit ? 'Зберегти' : 'Додати матерiал'}}
             </v-btn>
           </span>
         </v-card-text>
@@ -179,9 +180,9 @@
       materialName: { required },
     },
     computed: {
-      categoriesPresent() {
-        return this.categories.length > 0 && this.newCategorie !== null
-      },
+      // categoriesPresent() {
+      //   return this.categories.length > 0 && this.newCategorie !== null
+      // },
       newCategorieErr() {
         if (!this.$v.newCategorie.$error) return
         return this.commonErr
@@ -192,6 +193,9 @@
       }
     },
     methods: {
+      test() {
+        console.log(this.newCategorie)
+      },
       submit() {
         this.$v.$dirty
         && !this.$v.$invalid
@@ -200,8 +204,14 @@
       },
       sendRequest() {
         this.loading = true
+        let url
+        if(this.$route.params.edit) {
+          url = '/admin/useful-material/update/'
+        } else {
+          url = '/admin/useful-material/create'
+        }
         axios
-          .post('/admin/useful-material/create', this.finalObj())
+          .post(url, this.finalObj())
           .then(response => {
             console.log(response)
             this.loading = false
@@ -258,9 +268,21 @@
     },
     mounted() {
       this.assignTokenToCkEditorConfig()
+      console.log(this.$route)
     },
     created() {
-      this.categories = this.$route.params.categories
+      if(this.$route.params.edit) {
+        let material = this.$route.params.material
+        this.categories = this.$route.params.category
+        this.editorData = material.content,
+        this.materialName = material.title,
+        this.materialImg = material.title_image
+        this.newCategorie = this.$route.params.category[0].id
+        // this.materialImgPreview = null,
+      } else {
+        this.categories = this.$route.params.categories
+      }
+      console.log(this.categories)
     }
   }
 </script>

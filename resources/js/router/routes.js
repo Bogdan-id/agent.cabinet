@@ -57,7 +57,7 @@ const routes = [
           },
           {
             path: 'Редагувати матерiал',
-            name: 'edit',
+            name: 'edit-material',
             component: EditMaterials,
             meta: {
               title: 'Редагувати матерiал'

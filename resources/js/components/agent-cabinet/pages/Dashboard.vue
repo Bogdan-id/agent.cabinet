@@ -82,7 +82,7 @@
           <v-btn
             class="vuetify_custom-btn capitalize ma-4"
             to="/leasing-requests"
-            color="red"
+            color="#e65048"
             dark>
             Показати всі заявки
           </v-btn>
@@ -536,7 +536,7 @@ export default {
     height: 28px!important;
   }
   border-radius: 0!important;
-  background: #f44336!important;
+  background: #e65048!important;
   color: white!important;
 }
 .dashboard-container{

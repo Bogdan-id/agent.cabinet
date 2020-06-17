@@ -199,9 +199,13 @@
                     style="max-width: 220px!important;"
                     @change="filterByCategory($event)"
                     :items="categories"
+                    v-model="selectedCategorie"
                     item-text="name"
                     item-value="id"
                     label="Фiльтр по категорiям"> 
+                    <template v-slot:prepend-item>
+                      <v-btn color="grey darken-3" @click="showMaterialCategorie()" style="width: 100%;" text>Всi матерiали</v-btn>
+                    </template>
                   </v-select>
                 </v-card-title>
                 <v-btn 
@@ -219,13 +223,13 @@
                     {{ item.title }}
                     <span class="btn-actions">
                       <v-btn 
-                        @click.stop="" 
+                        @click.stop="editMaterial(item.id, item)" 
                         icon>
                         <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
                       </v-btn>
                       <!-- openDialogDeleteCategory(item.id, item.name) -->
                       <v-btn 
-                        @click.stop="" 
+                        @click.stop="deleteMaterial(item.id)" 
                         icon>
                         <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
                       </v-btn>
@@ -250,13 +254,13 @@ import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import BreadsCrumb from '../../../../components/agent-cabinet/components/breadScrumb.vue'
-import EditMaterials from './EditMaterials.vue'
+// import EditMaterials from './EditMaterials.vue'
 
 export default {
   mixins: [validationMixin],
   components: {
     BreadsCrumb,
-    EditMaterials
+    // EditMaterials
   },
   data: () => ({
     commonErr: ['Обов`язкове поле'],
@@ -265,6 +269,7 @@ export default {
     filteredMaterials: [],
     loading: false,
     currentTab: '1',
+    selectedCategorie: 'Всi матерiали',
 
     editCategoryDialog: false,
     deleteCategoryDialog: false,
@@ -307,10 +312,36 @@ export default {
     },
   },
   methods: {
+    editMaterial(id, material) {
+      let category = this.filterCategoryToEditMaterial(material.useful_materials_category_id)
+      // console.log(id)
+      // console.log(material)
+      this.$router.push({
+        name: 'edit-material', 
+        params: {
+            edit: true, 
+            category: category, 
+            material: material
+        }
+      })
+    },
+    deleteMaterial(id) {
+      console.log(id)
+    },
+    showMaterialCategorie() {
+      this.filteredMaterials = this.materials
+      this.selectedCategorie = null
+    },
+    filterCategoryToEditMaterial(categoryId) {
+      let categorieObj = this.categories
+        .filter(v => { return v.id === categoryId})
+      return categorieObj
+    },
     filterByCategory(id) {
       console.log('id' + id)
       this.filteredMaterials = this.materials
-        .filter(v => {console.log(v); return v.id === id})
+        .filter(v => { return v.useful_materials_category_id === id })
+      console.log(this.filteredMaterials)
     },
     changeActive(event) {
       console.log(event)
@@ -478,6 +509,7 @@ export default {
     },
   },
   created() {
+    console.log(this.$route)
     this.getMageterialCategories()
   },
 }

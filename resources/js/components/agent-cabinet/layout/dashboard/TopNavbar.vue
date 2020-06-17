@@ -3,44 +3,11 @@
     <div style="position: relative" class="container-fluid d-flex justify-space-between">
       <toggleIcon
         @click.native="toggleCustomSidebar()"
-        :class="showSidebar ? 'sidebar__toggle-icon' : 'sidebar__toggle-icon --toggle-icon-active'"
-        >
+        :class="showSidebar ? 'sidebar__toggle-icon' : 'sidebar__toggle-icon --toggle-icon-active'">
       </toggleIcon>
-      <!-- <i><a style="position: absolute; left: 4rem; color: #727170; font-size: 1.4rem; top: 0.69rem; font-weight: bold;" href="#">{{routeName}}</a></i> -->
-      <!-- <button class="navbar-toggler navbar-burger"
-              type="button"
-              @click="toggleSidebar"
-              :aria-expanded="$sidebar.showSidebar"
-              aria-label="Toggle navigation">
-        <span class="navbar-toggler-bar"></span>
-        <span class="navbar-toggler-bar"></span>
-        <span class="navbar-toggler-bar"></span>
-      </button> -->
-      <!-- <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto">
-          <drop-down class="nav-item"
-            title="Повiдомлення"
-            title-classes="nav-link"
-            icon="ti-bell">
-            <a class="dropdown-item" href="#">Повiдомлення 1</a>
-            <a class="dropdown-item" href="#">Повiдомлення 2</a>
-            <a class="dropdown-item" href="#">Повiдомлення 3</a>
-            <a class="dropdown-item" href="#">Повiдомлення 4</a>
-          </drop-down>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-settings"></i>
-              <p>
-                Налаштування
-              </p>
-            </a>
-          </li>
-        </ul>
-      </div> -->
       <div>
         <v-tooltip bottom>
           <template #activator="{ on }">
-            <!-- to="/agent-profile" -->
             <span style="display: inline-block; height: 52px; width: 52px;">
               <v-btn v-on="on" @click="toggleNotifyCard($event)" large icon><v-icon v-text="'mdi-bell-outline'" color="black" id="notify-btn"></v-icon></v-btn>
               <span style="position: relative;">
@@ -134,8 +101,8 @@ export default {
   }),
   methods: {
     toggleCustomSidebar() {
-      let sidebar = document.querySelector('.sidebar')
-      let mainPanel = document.querySelector('.main-panel')
+      let sidebar = document.getElementById('sidebar')
+      let mainPanel = document.getElementById('main-panel')
       if(this.showSidebar) {
         mainPanel.classList.add('main-panel--expand')
         sidebar.classList.add('sidebar--hide')
@@ -148,15 +115,16 @@ export default {
     },
     toggleNotifyCard() {
       setTimeout(() => {
-        let card = document.querySelector('#cadr-notification')
+        let card = document.getElementById('cadr-notification')
         if(!card.classList.contains('show-card')) {
           card.classList.add('show-card')
         } else card.classList.remove('show-card')
       }, 150);
     },
     listenCardState() {
-      let body = document.querySelector('body')
-      let notifyCard = document.querySelector('#cadr-notification')
+      let body = document.getElementById('app')
+      console.log(body)
+      let notifyCard = document.getElementById('cadr-notification')
       body.addEventListener('click', event => {
         if(notifyCard.classList.contains('show-card') && event.target.id !== "notify-btn") {
           notifyCard.classList.remove('show-card')

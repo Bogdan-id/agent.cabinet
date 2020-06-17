@@ -1,33 +1,5 @@
 <template>
 <div class="col-12">
-  <!-- <v-dialog
-    v-model="showDocumentAttachment"
-    max-width="370">
-    <v-card>
-      <v-card-title class="mb-5" style="font-size: 1.55rem">
-        Додати документи
-      </v-card-title>
-      <v-card-text>
-        <v-file-input 
-          v-model="attachedFiles"
-          accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"
-          multiple 
-          label="Додати файл"
-          outlined dense small-chips counter-size-string show-size>
-        </v-file-input>
-        <v-card-actions>
-        <v-btn
-          small
-          dark
-          color="grey darken-3"
-          @click="sendRequest()"
-          :loading="btnLoading">
-          Подати заявку на лiзинг
-        </v-btn>
-      </v-card-actions>
-      </v-card-text>
-    </v-card>
-  </v-dialog> -->
   <v-dialog
     v-model="leasingApplicationForm"
     max-width="600">
@@ -39,7 +11,7 @@
       <v-card-text class="pb-0">
         <v-row>
           <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
-            <div style="font-size: 1rem; font-weight: bold; letter-spacing: 0.03rem">Оберiть тип графiку платежiв</div>
+            <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem">Оберiть тип графiку платежiв</div>
             <v-radio-group 
               v-model="selectedGraph" 
               :error-messages="selectedGraphErr"
@@ -220,6 +192,16 @@
               </v-text-field> -->
             </div>
           </v-col>
+          <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
+            <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem; padding-bottom: 0.5rem;">Додати файли</div>
+            <v-file-input
+              v-model="docs"
+              accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*"
+              label="Натиснiть"
+              multiple
+              outlined show-size dense>
+            </v-file-input>
+          </v-col>
         </v-row>
         <v-row>
           <v-col class="d-flex justify-center pb-6 pt-3">
@@ -348,7 +330,7 @@
               <template #activator="{ on }">
                 <span>
                   <v-btn 
-                    @click="toEdit(item.id)"
+                    @click=""
                     v-on="on"
                     icon>
                     <v-icon
@@ -365,7 +347,7 @@
               <template #activator="{ on }">
                 <span>
                   <v-btn 
-                    @click="toEdit(item.id)"
+                    @click=""
                     v-on="on"
                     icon>
                     <v-icon
@@ -404,6 +386,8 @@ export default {
     loading: false,
     creditPayment: null,
     selectedGraph: null,
+
+    docs: null,
 
     listItem: null,
 

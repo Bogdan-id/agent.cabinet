@@ -37,7 +37,7 @@
         <li class="divider"></li>
       </mobile-menu>
     </side-bar>
-    <div class="main-panel">
+    <div class="main-panel" id="main-panel">
       <!-- <v-btn @click="test()">test</v-btn> -->
       <top-navbar></top-navbar>
       <dashboard-content @click.native="toggleSidebar">

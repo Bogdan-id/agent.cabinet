@@ -1612,16 +1612,6 @@ export default {
     }
   }
 
-  .v-input__slot {
-    fieldset  {
-      border: 2px solid #efefef!important;
-    }
-  }
-  .v-card{
-    &.black-border-left {
-      border-left: 3px solid #ff0000!important;
-    }
-  }
   .v-input--checkbox {
     label {
       margin-bottom: 0;
@@ -1767,6 +1757,11 @@ export default {
   .calculator-white-block {
     margin: 0 39px 39px 39px;
     color: #424242;
+    .v-input__slot {
+      fieldset  {
+        border: 2px solid #efefef!important;
+      }
+    }
     .graph-checkbox {
       .v-input--checkbox {
         margin-top: 8px;

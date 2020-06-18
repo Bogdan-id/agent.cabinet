@@ -1533,12 +1533,12 @@ export default {
       console.log('ROUTER NOT EDIT')
       this.initAdvanceInputValue()
       this.initFranchiseInput()
+      this.getMarksByType()
     }
   },
   mounted() {
     this.initAdvanceInputValue()
     this.initFranchiseInput()
-    this.getMarksByType()
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
   }

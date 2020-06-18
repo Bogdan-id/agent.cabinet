@@ -1502,6 +1502,7 @@ export default {
   created() {
     window.addEventListener("resize", this.displayWindowSize)
     if(this.$router.currentRoute.params.edit === true) {
+      console.log('ROUTER EDIT')
     axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
@@ -1529,6 +1530,7 @@ export default {
         })
       })
     } else {
+      console.log('ROUTER NOT EDIT')
       this.initAdvanceInputValue()
       this.initFranchiseInput()
     }
@@ -1536,6 +1538,7 @@ export default {
   mounted() {
     this.initAdvanceInputValue()
     this.initFranchiseInput()
+    this.getMarksByType()
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
   }

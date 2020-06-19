@@ -18,7 +18,7 @@ class ManagersController extends Controller
             $managerExists = Manager::where('bitrix_id', '=', $manager['ID'])->first();
             if(!$managerExists){
                 $managerModel = new Manager;
-                $managerModel->name = "{$manager['NAME']} {$manager['LAST_NAME']} {$manager['SECOND_NAME']}";
+                $managerModel->name = "{$manager['NAME']} {$manager['LAST_NAME']}";
                 $managerModel->email = $manager['EMAIL'];
                 $managerModel->phone = $manager['WORK_PHONE'] ?? 'Номер не указан';
                 $managerModel->bitrix_id = $manager['ID'];

@@ -22,37 +22,12 @@ class UsefulMaterialsController extends Controller
        return response()->json($usefulMaterialsCategories);
     }
 
-    public function createCategory(Request $request)
+    public function getMaterialsByCategory($categoryId)
     {
-        $data = $request->post();
-        $usefulMaterialsCategory = new UsefulMaterialsCategory;
-        $usefulMaterialsCategory->name = $data['name'];
-        $usefulMaterialsCategory->slug = Str::slug($data['name'], '-');
-        $usefulMaterialsCategory->save();
+        $category = UsefulMaterialsCategory::find($categoryId);
+        abort_if(!$category, 422, 'Категорія не знайдена!');
+        $materials = $category->materials;
 
-        return response()->json($usefulMaterialsCategory);
-    }
-
-
-    public function updateCategory(Request $request, $id)
-    {
-        $data = $request->post();
-        $usefulMaterialsCategory = UsefulMaterialsCategory::find($id);
-        $usefulMaterialsCategory->update([
-           'name' => $data['name'],
-           'slug' => Str::slug($data['name'], '-')
-        ]);
-
-        return response()->json($usefulMaterialsCategory);
-    }
-
-    public function destroyCategory($id)
-    {
-        $usefulMaterialsCategory = UsefulMaterialsCategory::find($id);
-        $usefulMaterialsCategory->delete();
-
-        return response()->json([
-            'status' => 200
-        ]);
+        return response()->json($materials);
     }
 }

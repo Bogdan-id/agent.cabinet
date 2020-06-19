@@ -228,7 +228,7 @@ export default {
     search: '',
     leasingApplicationForm: false,
     tableHeader: [
-      { text: 'ПIБ', value: 'initials', align: 'start'},
+      { text: 'Клієнт', value: 'initials', align: 'start'},
       { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна', value: 'leasing_amount', align: 'center' },
       { text: 'Розмір агентської винагороди', value: 'leasing_amount', align: 'center' },

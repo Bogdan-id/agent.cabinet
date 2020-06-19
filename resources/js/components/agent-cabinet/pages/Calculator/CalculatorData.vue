@@ -272,6 +272,25 @@
         :items="tabledata"
         :items-per-page="10"
         class="elevation-1">
+        <template>
+        </template>
+        <template v-slot:item.request_data.leasedAssertModel.name="{ item }">
+          <span style="white-space: nowrap">{{ item.request_data.leasedAssertModel.name }}</span>
+        </template>
+        <template v-slot:item.request_data="{ item }">
+          <span style="white-space: nowrap">
+            {{ 
+              parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
+                .toLocaleString()
+                .replace(/,/g, ' ')
+            }}
+          </span>
+        </template>
+        <template v-slot:item.created_at="{ item }">
+          <span style="white-space: nowrap">
+            {{ item.created_at.substring(0, 10) }}
+          </span>
+        </template>
         <template v-slot:item.actions="{ item }">
           <div style="display: flex; justify-content: center">
             <v-tooltip bottom>
@@ -419,12 +438,12 @@ export default {
     _token: null,
 
     tableHeader: [
-      { text: 'Тип об`єкту лiзингу', value: 'Тип', align: 'start'},
-      { text: 'Марка', value: 'Марка', align: 'center'},
-      { text: 'Модель', value: 'Модель', align: 'center' },
-      { text: 'Цiна', value: 'Сума', align: 'center' },
+      { text: 'Тип об`єкту лiзингу', value: 'request_data.leasingObjectType.label', align: 'start'},
+      { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
+      { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
+      { text: 'Цiна', value: 'request_data', align: 'center' },
       { text: 'Розмiр АВ', value: '', align: 'center' },
-      { text: 'Дата', value: 'Дата', align: 'center' },
+      { text: 'Дата', value: 'created_at', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
@@ -841,7 +860,7 @@ export default {
             console.log(response)
             this.loading = false
             if(response.data.length > 0)  {
-              this.createTableData(response.data)
+              this.tabledata = response.data
               this.$store.commit('addGraph', response.data)
             } else {
               this.tabledata = []
@@ -863,23 +882,23 @@ export default {
     sortData(a, b) {
       return new Date(b.created_at) - new Date(a.created_at)
     },
-    async createTableData(object) {
-      let arr = []
-      await object.map(val => {
-        let dataObj = {
-          'Тип': val.request_data.leasingObjectType.label,
-          'Марка': val.request_data.leasedAssertMark.name,
-          'Модель': val.request_data.leasedAssertModel.name,
-          'Сума': val.request_data.leasingAmount,
-          'Дата': val.created_at.substr(0, 10),
-          'id': val.id
-        }
-        arr.push(dataObj)
-      })
-      this.tabledata = arr
-        .sort(this.sortData)
-        .reverse()
-    },
+    // async createTableData(object) {
+    //   let arr = []
+    //   await object.map(val => {
+    //     let dataObj = {
+    //       'Тип': val.request_data.leasingObjectType.label,
+    //       'Марка': val.request_data.leasedAssertMark.name,
+    //       'Модель': val.request_data.leasedAssertModel.name,
+    //       'amount': val.request_data.leasingAmount,
+    //       'Дата': val.created_at.substr(0, 10),
+    //       'id': val.id
+    //     }
+    //     arr.push(dataObj)
+    //   })
+    //   this.tabledata = arr
+    //     .sort(this.sortData)
+    //     .reverse()
+    // },
   },
   watch: {
     leasingApplicationForm() {
@@ -907,6 +926,10 @@ export default {
 </script>
 
 <style lang="scss">
+  .calculator-data-leasing-obj-type {
+    font-weight: bold;
+    font-size: 0.91rem!important;
+  }
   .calculator-custom-title {
     .v-text-field {
       padding: 0!important;

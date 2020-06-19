@@ -342,9 +342,9 @@
             <v-checkbox
               v-model="calcObj.graphType"
               :error-messages="graphsErr"
-              label="Ануїтет"
+              label="Класичний"
               color="red darken-3"
-              value="annuity"
+              value="even"
               :dense="xs">
             </v-checkbox>
           </v-col>
@@ -352,9 +352,9 @@
             <v-checkbox
               v-model="calcObj.graphType"
               :error-messages="graphsErr"
-              label="Класичний"
+              label="Ануїтет"
               color="red darken-3"
-              value="even"
+              value="annuity"
               :dense="xs">
             </v-checkbox>
           </v-col>
@@ -450,14 +450,14 @@
 
             <v-row>
               <v-col cols="12" md="6" sm="12" :class="`pt-0 pb-0 ${smAndDown ? '' : 'mt-6'}`">
-                <span class="section-title">Валюта фiнансування</span>
+                <span class="section-title" :style="mediumAndDown ? 'display: block' : 'display: inline-block;'">Валюта фiнансування</span>
                 <v-radio-group
                   :class="`financing-currency d-inline-block ${xs ? 'mt-0' : ''}`"
                   :error-messages="leasingCurrencyErr"
                   color="red darken-4"
                   v-model="calcObj.leasingCurrency"
                   dense>
-                  <v-row class="pl-8" :style="`flex-direction: ${mediumAndDown ? 'column' : ''}`">
+                  <v-row class="pl-8" :style="`flex-direction: ${mediumAndDown ? 'column' : 'row'}`">
                     <div style="display: flex;">
                       <v-radio value="UAH" color="red darken-3" dense>
                         <template #label>
@@ -470,7 +470,7 @@
                       </v-radio>
                     </div>
                     <div style="display: flex;">
-                      <v-radio value="USD" color="red darken-3" :class="mediumAndDown ? '' : 'ml-2'">
+                      <v-radio value="USD" color="red darken-3" :class="mediumAndDown ? '' : 'ml-0'">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -481,7 +481,7 @@
                       </v-radio>
                     </div>
                     <div style="display: flex;">
-                      <v-radio value="EURO" color="red darken-3" :class="mediumAndDown ? '' : 'ml-2'">
+                      <v-radio value="EURO" color="red darken-3" :class="mediumAndDown ? '' : 'ml-0'">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -518,8 +518,7 @@
                 <!-- :error-messages="residualValueErr" -->
                 <v-text-field
                   v-model="calcObj.residualValue"
-                  :error-messages="residualValueErr"
-                  @input="restrictToPercent('residual-value')"
+                  @input="restrictToPercentAdvance('residual-value')"
                   label="Вiдсоток"
                   id="residual-value"
                   color="red darken-4"
@@ -836,7 +835,7 @@ export default {
       leasingObjectYear: null,
       leasedAssertEngine: null,
       leasingClientType: 2,
-      residualValue: null,
+      residualValue: 0,
       currency: null,
       leasingCurrency: null,
       leasingCurrencyCourse: null,
@@ -924,7 +923,7 @@ export default {
         advance: { required },
         insuranceProgram: { required },
         insuranceFranchise: { required },
-        residualValue: { required }
+        // residualValue: { required }
         // gainEvenGraphicMonths: { required },
         // gainEvenGraphicPercent: { required },
         // UnsrMonths: { required },
@@ -937,6 +936,9 @@ export default {
       return 100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds))
     },
 
+    maxResidualValue() {
+      return Math.ceil((100 - parseInt(this.calcObj.advance) - 10) / 5) * 5
+    },
     /* boolean */
 
     smAndDown() {
@@ -1079,10 +1081,10 @@ export default {
       if (!this.$v.calcObj.graphType.$error) return
       return this.commonErr
     },
-    residualValueErr() {
-      if (!this.$v.calcObj.residualValue.$error) return
-      return this.commonErr
-    },
+    // residualValueErr() {
+    //   if (!this.$v.calcObj.residualValue.$error) return
+    //   return this.commonErr
+    // },
     discountPriceErr() {
       if (!this.$v.calcObj.discountPrice.$error) return
       return this.commonErr
@@ -1125,20 +1127,57 @@ export default {
     test() {
       console.log('event work')
     },
-    restrictToPercent(id) {
+    restrictToPercentAdvance(id) {
       let el = document.getElementById(id)
-      console.log(el.value)
       let inputEvent = new Event('input', {bubbles: true})
       let temp = parseInt(el.value.replace(/[^\d]/g, ''))
-      console.log(el.value)
-      if(parseInt(temp) > 100) {
-        temp = 100
+      if(Number.isNaN(temp) && el.value !== '') {
+        el.value = ''
+        el.dispatchEvent(inputEvent)
+        return
       }
+      if(parseInt(temp) > 100 - (parseInt(this.calcObj.advance) + 10)) {
+        console.log('greater')
+        temp = Math.ceil((100 - parseInt(this.calcObj.advance) - 10) / 5) * 5
+      }
+
       if(el.value != temp && !isNaN(parseInt(temp))) {
         el.value = temp
         el.dispatchEvent(inputEvent)
-      }
+       }
     },
+    restrictToPercent(id) {
+      let el = document.getElementById(id)
+      let inputEvent = new Event('input', {bubbles: true})
+      let temp = parseInt(el.value.replace(/[^\d]/g, ''))
+      if(Number.isNaN(temp) && el.value !== '') {
+        console.log('number is nan')
+        el.value = ''
+        el.dispatchEvent(inputEvent)
+        return
+      }
+      
+      console.log(temp)
+      if(parseInt(temp) > 100) {
+        temp = 100
+      }
+
+      if(el.value != temp && !isNaN(parseInt(temp))) {
+        el.value = temp
+        el.dispatchEvent(inputEvent)
+       } // else if(el.value != temp && isNaN(parseInt(temp))) {
+      //   console.log('isNaN')
+      //   el.value = temp.replace(/[^\d]/g, '')
+      //   el.dispatchEvent(inputEvent)
+      // }
+    },
+
+
+    // parseInt(.replace(/ /g, '' ))
+    //     .toLocaleString()
+    //     .replace(/,/g, ' ')
+
+
     amountToLocalStr(id) {
       let el = document.getElementById(id)
       let discountPriceEl = document.getElementById('discount-price')
@@ -1371,7 +1410,15 @@ export default {
 				// case 'termFinancing': this.termFinancing.current = val; break
 			}
 		},
-		updateElRange(elRange, val) {
+		updateElRange(elRange, val, dataSelector) {
+      console.log(dataSelector)
+      if (dataSelector === 'advance-payment' && this.calcObj.residualValue > this.maxResidualValue) {
+        this.calcObj.residualValue = this.maxResidualValue
+      } else if (dataSelector === 'advance-payment' && this.calcObj.residualValue < this.maxResidualValue) {
+        if(this.calcObj.residualValue != 0) {
+          this.calcObj.residualValue = this.maxResidualValue
+        }
+      }
 			let ratio = this.valueTotal(val, elRange.min, elRange.max)
 			elRange.style.backgroundImage = this.getGradient(
 				ratio,
@@ -1436,9 +1483,18 @@ export default {
 				return
 			}
 			this.syncValue(elRange.value, dataSelector)
-			this.updateElRange(elRange, elRange.value)
+			this.updateElRange(elRange, elRange.value, dataSelector)
 		},
-
+    setIndentation(value) {
+      console.log('***********')
+      console.log(value)
+      console.log('***********')
+      if(value) {
+        return parseInt(value.toString().replace(/ /g, '' ))
+          .toLocaleString()
+          .replace(/,/g, ' ')
+      } else return
+    },
 
 
     displayWindowSize() {
@@ -1509,15 +1565,20 @@ export default {
         let data = response.data.request_data
         let advance = response.data.request_data.advance
         let franchise = response.data.request_data.insuranceFranchise
+
         this.initAdvanceInputValue(advance)
         this.initFranchiseInput(franchise)
+
         this.brandItems.push(data.leasedAssertMark)
         this.modelItems.push(data.leasedAssertModel)
+
         this.insuranceProgram = this.selects.insurancePrograms
-          .find(
-            obj => obj.value === data.insuranceProgram
-          )
+          .find(obj => obj.value === data.insuranceProgram)
         Object.assign(this.calcObj, data)
+
+        this.calcObj.discountPrice = this.setIndentation(this.calcObj.discountPrice)
+        this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
+        this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
         this.getMarksByType()
         this.getModelByMark()
       })
@@ -1533,12 +1594,12 @@ export default {
       console.log('ROUTER NOT EDIT')
       this.initAdvanceInputValue()
       this.initFranchiseInput()
-      this.getMarksByType()
     }
   },
   mounted() {
     this.initAdvanceInputValue()
     this.initFranchiseInput()
+    this.getMarksByType()
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
   }

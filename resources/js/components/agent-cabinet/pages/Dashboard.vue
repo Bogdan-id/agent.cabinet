@@ -76,6 +76,30 @@
         class="elevation-1 pb-3"
         :hide-default-footer="true"
         :items-per-page="5">
+        <template v-slot:item.leasing_amount="{ item }">
+          <span style="white-space: nowrap">
+            {{ 
+              parseInt(item.leasing_amount.replace(/ /g, '' ))
+                  .toLocaleString()
+                  .replace(/,/g, ' ')
+            }}
+          </span>
+        </template>
+        <template v-slot:item.data="{item}">
+          <span style="white-space: nowrap">
+            {{ item.data }}
+          </span>
+        </template>
+        <template v-slot:item.leasing_object="{ item }">
+          <span style="white-space: nowrap">
+            {{ item.leasing_object }}
+          </span>
+        </template>
+        <template v-slot:item.initials="{ item }">
+          <span style="white-space: nowrap">
+            {{ item.initials }}
+          </span>
+        </template>
       </v-data-table>
       <div class="d-flex justify-center">
         <span>
@@ -216,7 +240,7 @@ import axios from 'axios'
 export default {
   data: () => ({
     tableHeader: [
-      { text: 'ПIБ', value: 'initials', align: 'start', sortable: false},
+      { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна', value: 'leasing_amount', align: 'center', sortable: false },
       { text: 'Розмiр АВ', value: '', align: 'center' },

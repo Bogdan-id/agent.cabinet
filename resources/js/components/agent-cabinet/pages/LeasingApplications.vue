@@ -156,6 +156,15 @@
         :items="tabledata"
         :items-per-page="10"
         class="elevation-1">
+        <template v-slot:item.leasing_amount="{ item }">
+          <span style="white-space: nowrap">
+            {{ 
+              parseInt(item.leasing_amount.replace(/ /g, '' ))
+                .toLocaleString()
+                .replace(/,/g, ' ')
+            }}
+          </span>
+        </template>
         <template #item.actions="{ item }">
           <div class="d-flex">
             <v-tooltip bottom>
@@ -229,7 +238,7 @@ export default {
     leasingApplicationForm: false,
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start'},
-      { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center'},
+      { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна', value: 'leasing_amount', align: 'center' },
       { text: 'Розмір агентської винагороди', value: 'leasing_amount', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },

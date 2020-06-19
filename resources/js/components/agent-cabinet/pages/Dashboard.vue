@@ -12,7 +12,7 @@
       </div>
     </div>
   </div>
-  <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
+  <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'" style="position: relative">
     <span class="mobile-manager-title">
       {{ 'Ваш менеджер' }}
     </span>
@@ -104,7 +104,8 @@
       <div class="d-flex justify-center">
         <span>
           <v-btn
-            class="vuetify_custom-btn capitalize ma-4"
+            class="vuetify_custom-btn ma-4"
+            style="text-transform: none;"
             to="/leasing-requests"
             color="#e65048"
             dark>
@@ -117,7 +118,7 @@
   <div class="right-block-wrapper">
     <!-- Agent info -->
       <v-card :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'" elevation="8">
-        <div class="mt-4 mb-4 pl-4 mb-1 manager-title">
+        <div class="mt-4 mb-2 pl-4 mb-1 manager-title" style="position: relative; font-size: 0.95rem;">
           {{ !requestRecieved ? '' : hasUserManager && !loading ? 'Ваш менеджер' : 'За Вами не закрiплений жоден з менеджерів!'}}
         </div>
         <div v-if="loading" class="d-flex justify-center align-center">
@@ -127,13 +128,20 @@
             color="red">
           </v-progress-circular>
         </div>
-        <div v-if="hasUserManager && !loading && requestRecieved" class="manager-content mt-3 d-flex">
-          <div style="display: inline-flex; justify-content: center; width: 27%; align-items: start;">
-            <div style="display: flex; align-text: center; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 100%; background-color: #dadada;"><span class="logo-letter">{{ agentData.name }}</span></div>
+        <div v-if="hasUserManager && !loading && requestRecieved" class="manager-content d-flex flex-column">
+          <!-- <div style="display: inline-flex; justify-content: center; width: 27%; align-items: start;">
+            <div style="display: flex; align-text: center; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 100%; background-color: #dadada;">
+              <span class="logo-letter">{{ agentData.name }}</span>
+            </div>
+          </div> -->
+          <div style="display: flex; justify-content: center;">
+            <div style="display: flex; align-text: center; justify-content: center; align-items: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
+              <span class="logo-letter">{{ agentData.name }}</span>
+            </div>
           </div>
-          <div class="manager-list-wrapper" style="display: inline-block; width: 70%;">
+          <div class="manager-list-wrapper">
             <ul>
-              <li style="font-size: 1.1rem; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
+              <li style="font-size: 1.06rem; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
               <li style="font-weight: bold; font-size: 0.76rem"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</li>
               <li style="color: #bb433c;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</li>
             </ul>
@@ -241,7 +249,7 @@ export default {
   data: () => ({
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
-      { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center', sortable: false},
+      { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна', value: 'leasing_amount', align: 'center', sortable: false },
       { text: 'Розмiр АВ', value: '', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },
@@ -376,6 +384,10 @@ export default {
 
 <style lang="scss">
 .manager-list-wrapper {
+  display: inline-block; 
+  width: 100%; 
+  padding: 0 25px;
+  margin-top: 15px;
   ul {
     padding-left: 0!important;
     list-style: none!important;
@@ -391,12 +403,12 @@ export default {
   font-size: 0;
 }
 .logo-letter:first-letter {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 .mobile-manager-content {
   padding: 1.6rem 1rem 0.3rem 1rem; 
-  display: inline-block;
+  flex-direction: row;
   span, div:hover {
     cursor: pointer;
   }

@@ -9,7 +9,9 @@
         <v-tooltip bottom>
           <template #activator="{ on }">
             <span style="display: inline-block; height: 52px; width: 52px;">
-              <v-btn v-on="on" @click="toggleNotifyCard($event)" large icon><v-icon v-text="'mdi-bell-outline'" color="black" id="notify-btn"></v-icon></v-btn>
+              <v-btn v-on="on" @click="toggleNotifyCard($event)" large icon>
+                <v-icon large v-text="'mdi-bell-outline'" id="notify-btn"></v-icon>
+              </v-btn>
               <span style="position: relative;">
               <v-card id="cadr-notification" elevation="8">
                 <v-card-title style="border-left: 4px solid #e57373" class="subtitle-1">

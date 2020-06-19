@@ -3,56 +3,6 @@
     <section class="chart-diagram" id="chart-diagram">
       <div class="tabs">
         <div class="tabs-input active">
-          <label
-            @click.stop="changeActive($event)" 
-            for="tab-1" 
-            class="label">
-            АНУЇТЕТ
-          </label>
-          <input 
-            @click.stop="changeActive($event)"
-            id="tab-1" 
-            name="tab" 
-            type="radio" 
-            value="1" 
-            checked  
-            v-model="currentTab"/>
-          <div class="content">
-            <v-card class="view-charts">
-              <v-data-table
-                class="leasing-object-table"
-                v-if="leasingObjectData !== null"
-                color="black"
-                :headers="leasingObjectDataHeader"
-                :items="leasingObjectData"
-                :items-per-page="180"
-                :hide-default-footer="true"
-                :must-sort="false"
-                dense
-                :mobile-breakpoint="6500">
-              </v-data-table>
-              <div class="payout-schedule">
-                Графiк виплат
-              </div>
-              <v-data-table
-                :search="search"
-                color="black"
-                :headers="tableHeader"
-                :items="annuity"
-                :items-per-page="180"
-                :hide-default-footer="true"
-                dense>
-                <template v-slot:footer>
-                  <chart-buttons 
-                    v-if="graphData !== null"
-                    :graph="currentTab" 
-                    :data="graphData"/>
-                </template>
-              </v-data-table>
-            </v-card>
-          </div>
-        </div>
-        <div class="tabs-input">
           <label 
             @click.stop="changeActive($event)" 
             for="tab-2" 
@@ -64,7 +14,8 @@
             id="tab-2" 
             name="tab" 
             type="radio" 
-            value="2" 
+            value="2"
+            checked  
             v-model="currentTab">
           <div class="content">
             <v-card  class="view-charts">
@@ -79,6 +30,18 @@
               :must-sort="false"
               dense
               :mobile-breakpoint="6500">
+              <template v-slot:item.actions="{ item }">
+                {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
+              </template>
+              <template v-slot:item.leasingAmount="{ item }">
+                <span>
+                  {{ 
+                    parseInt(item.leasingAmount.replace(/ /g, '' ))
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
             </v-data-table>
             <div class="payout-schedule">
               Графiк виплат
@@ -99,6 +62,67 @@
               </template>
             </v-data-table>
           </v-card>
+          </div>
+        </div>
+        <div class="tabs-input">
+          <label
+            @click.stop="changeActive($event)" 
+            for="tab-1" 
+            class="label">
+            АНУЇТЕТ
+          </label>
+          <input 
+            @click.stop="changeActive($event)"
+            id="tab-1" 
+            name="tab" 
+            type="radio" 
+            value="1" 
+            v-model="currentTab"/>
+          <div class="content">
+            <v-card class="view-charts">
+              <v-data-table
+                class="leasing-object-table"
+                v-if="leasingObjectData !== null"
+                color="black"
+                :headers="leasingObjectDataHeader"
+                :items="leasingObjectData"
+                :items-per-page="180"
+                :hide-default-footer="true"
+                :must-sort="false"
+                dense
+                :mobile-breakpoint="6500">
+                <template v-slot:item.actions="{ item }">
+                  {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
+                </template>
+                <template v-slot:item.leasingAmount="{ item }">
+                  <span>
+                    {{ 
+                      parseInt(item.leasingAmount.replace(/ /g, '' ))
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
+              </v-data-table>
+              <div class="payout-schedule">
+                Графiк виплат
+              </div>
+              <v-data-table
+                :search="search"
+                color="black"
+                :headers="tableHeader"
+                :items="annuity"
+                :items-per-page="180"
+                :hide-default-footer="true"
+                dense>
+                <template v-slot:footer>
+                  <chart-buttons 
+                    v-if="graphData !== null"
+                    :graph="currentTab" 
+                    :data="graphData"/>
+                </template>
+              </v-data-table>
+            </v-card>
           </div>
         </div>
         <div class="tabs-input">
@@ -128,6 +152,18 @@
               :must-sort="false"
               dense
               :mobile-breakpoint="6500">
+              <template v-slot:item.actions="{ item }">
+                {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
+              </template>
+              <template v-slot:item.leasingAmount="{ item }">
+                <span>
+                  {{ 
+                    parseInt(item.leasingAmount.replace(/ /g, '' ))
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
             </v-data-table>
             <div class="payout-schedule">
               Графiк виплат
@@ -162,28 +198,26 @@ export default {
     ChartButtons
   },
   data: () => ({
-    // data to props 
     graphData: null,
     leasingObjectData: null,
-    // data
-    currentTab: '1',
+    currentTab: '2',
     search: '',
     leasingObjectDataHeader: [
-      { text: 'Автомобiль', value: 'leasedAssertModel.name', align: 'center', sortable: false},
+      { text: 'Автомобiль', value: 'actions', align: 'center', sortable: false},
       { text: 'Вартiсть автомобiля, грн', value: 'leasingAmount', align: 'end', sortable: false},
       { text: 'Вартість автомобіля з реєстрацією, грн', value: 'leasingAmount', align: 'end', sortable: false },
-      { text: 'Термiн лiзингу, мiс', value: 'leasingTerm', align: 'end', sortable: false },
       { text: 'Авансовий платiж, грн', value: 'advance', align: 'center', sortable: false},
-      { text: 'Одноразова комiсiя, %', value: '', align: 'end', sortable: false},
-      { text: 'Середньомiсячний платiж, грн', value: '', align: 'end', sortable: false },
-      { text: 'Залишкова вартiсть, грн', value: '', align: 'end', sortable: false },
+      { text: 'Термiн лiзингу, мiс', value: 'leasingTerm', align: 'end', sortable: false },
       { text: 'Валюта фiнансування', value: 'leasingCurrency', align: 'end', sortable: false },
+      { text: 'Єдиноразова комiсiя, %', value: '', align: 'end', sortable: false},
+      { text: 'Залишкова вартiсть, грн', value: '', align: 'end', sortable: false },
+      { text: 'Середньомiсячний платiж, грн', value: '', align: 'end', sortable: false },
     ],
     tableHeader: [
-      { text: '№', value: 'n', align: 'center'},
-      { text: 'Оплата за авто', value: 'payment-principal', align: 'end'},
-      { text: 'Винагорода лiзингодавця', value: 'interest', align: 'end' },
-      { text: 'Сума платежу', value: 'payment', align: 'end' },
+      { text: '№', value: 'n', align: 'center', sortable: false},
+      { text: 'Оплата за авто', value: 'payment-principal', align: 'start', sortable: false},
+      { text: 'Винагорода лiзингодавця', value: 'interest', align: 'start', sortable: false },
+      { text: 'Сума платежу', value: 'payment', align: 'start', sortable: false },
     ],
     even: [],
     irregular: [],
@@ -195,15 +229,7 @@ export default {
       if(data.result_data.hasOwnProperty('annuity')) {console.log(data.result_data.annuity.graph); this.annuity = data.result_data.annuity.graph}
       if(data.result_data.hasOwnProperty('irregular')) this.irregular = data.result_data.irregular.graph
       if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
-      /* eslint-enable */
-      // this.setCurrentTab(data)
     },
-    // setCurrentTab(data) {
-    //   let arr = Object.keys(data)
-    //   let index = Object.keys(data).indexOf('requestId')
-    //   arr.splice(index, 1)
-    //   this.currentTab = arr[0]
-    // },
     changeActive(event) {
       console.log(event)
       let tabs = document.querySelectorAll('#chart-diagram .tabs-input')
@@ -225,6 +251,7 @@ export default {
   mounted() {
     this.graphData = this.$router.currentRoute.params.data
     this.leasingObjectData = [this.graphData.request_data]
+    console.log(this.leasingObjectData)
 
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {
@@ -295,20 +322,6 @@ export default {
     width: 100%;
     outline: none;
   }
-  // .tabs .tabs-input [type="radio"] {
-  //   display: block;
-  //   padding: 0;
-  //   margin: 0;
-  //   border-bottom: 1px solid rgba(239, 237, 239, 0.5);
-  //   transition: border-bottom 0.3s ease;
-  // }
-  // .tabs .tabs-input [type="radio"]:checked {
-  //   border-bottom: 3px solid #ef5350;
-  // }
-  // .tabs .tabs-input [type="radio"] {
-  //   border-bottom: 2px solid #ef5350;
-  //   // border-bottom: 2px solid rgb(209, 207, 207);
-  // }
   .tabs .tabs-input .label {
     cursor: pointer;
     display: block;
@@ -325,8 +338,8 @@ export default {
   .tabs .tabs-input.active .label {
     color: white;
     background: #e94949;
-    border-top: 2px solid #424242;
-    box-shadow: 0px -5px 8px 4px rgba(0,0,0,1);
+    // border-top: 2px solid #424242;
+    // box-shadow: 0px -5px 8px 4px rgba(0,0,0,1);
   }
 
   .tabs .tabs-input {

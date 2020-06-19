@@ -58,6 +58,9 @@ Route::get('/updateManagers', 'ManagerController@updateManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
 
+Route::get('/materials/category/{id}', 'UsefulMaterialsController@getMaterialsByCategory')
+                ->where('agent_id', '[0-9]+');;
+
 Route::post('/calculate', 'CalculateController@create');
 Route::get('/models', 'ModelController@index');
 Route::get('/mark', 'MarkController@index');

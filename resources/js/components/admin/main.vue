@@ -10,7 +10,7 @@
       color="red">
     </v-progress-linear>
     <v-content>
-      <router-view></router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </v-content>
     <NavigationDrawer
       @listenDrawer="drawer = $event" 

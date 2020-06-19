@@ -1386,16 +1386,24 @@ export default {
         return parseInt(val.replace(/^\D/g, ''))
       }
 		},
-		initAdvanceInputValue() {
+		initAdvanceInputValue(val) {
 			let el = document.querySelector('#advance-payment')
 			let event = new Event('input', {bubbles: true})
-			el.value = 15
+      if(val) {
+        el.value = val
+      } else {
+        el.value = 15
+      }
 			el.dispatchEvent(event)
 		},
-    initFranchiseInput() {
+    initFranchiseInput(val) {
       let el = document.querySelector('#franchise')
       let event = new Event('input', {bubbles: true})
-      el.value = el.min
+      if(val) {
+        el.value = val
+      } else {
+        el.value = el.min
+      }
       el.dispatchEvent(event)
     },
 		switchSelector(e) {
@@ -1493,26 +1501,23 @@ export default {
   },
   created() {
     window.addEventListener("resize", this.displayWindowSize)
-  },
-  mounted() {
-    this.displayWindowSize()
-    this.getMarksByType()
-    console.log(this.$v)
-    console.log(this.$computed)
     if(this.$router.currentRoute.params.edit === true) {
+      console.log('ROUTER EDIT')
     axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
         let data = response.data.request_data
+        let advance = response.data.request_data.advance
+        let franchise = response.data.request_data.insuranceFranchise
+        this.initAdvanceInputValue(advance)
+        this.initFranchiseInput(franchise)
         this.brandItems.push(data.leasedAssertMark)
         this.modelItems.push(data.leasedAssertModel)
         this.insuranceProgram = this.selects.insurancePrograms
           .find(
             obj => obj.value === data.insuranceProgram
           )
-        // console.log(data)
         Object.assign(this.calcObj, data)
-        console.log(this.calcObj)
         this.getMarksByType()
         this.getModelByMark()
       })
@@ -1524,10 +1529,17 @@ export default {
           text: error.response.data.message,
         })
       })
+    } else {
+      console.log('ROUTER NOT EDIT')
+      this.initAdvanceInputValue()
+      this.initFranchiseInput()
+      this.getMarksByType()
     }
-    this.calcObj._token = this.getCsrf()
+  },
+  mounted() {
     this.initAdvanceInputValue()
     this.initFranchiseInput()
+    this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
   }
 }
@@ -1612,16 +1624,6 @@ export default {
     }
   }
 
-  .v-input__slot {
-    fieldset  {
-      border: 2px solid #efefef!important;
-    }
-  }
-  .v-card{
-    &.black-border-left {
-      border-left: 3px solid #ff0000!important;
-    }
-  }
   .v-input--checkbox {
     label {
       margin-bottom: 0;
@@ -1767,6 +1769,11 @@ export default {
   .calculator-white-block {
     margin: 0 39px 39px 39px;
     color: #424242;
+    .v-input__slot {
+      fieldset  {
+        border: 2px solid #efefef!important;
+      }
+    }
     .graph-checkbox {
       .v-input--checkbox {
         margin-top: 8px;

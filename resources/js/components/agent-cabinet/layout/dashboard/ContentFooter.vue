@@ -26,7 +26,7 @@
             <span>Перейти на сайт</span>
             <a href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
           </div>
-          <a class="footer__custom-btn">Зворотнiй зв`язок</a>
+          <a class="footer__custom-btn" style="background: #e65048;">Зворотнiй зв`язок</a>
         </div>
       </div>
     </div>

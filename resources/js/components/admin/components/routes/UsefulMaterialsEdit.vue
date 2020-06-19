@@ -113,6 +113,40 @@
         </v-card-text>
         </v-card>
       </v-dialog>
+      <v-dialog
+        :max-width="430"
+        v-model="deleteMaterialDialog">
+        <v-card>
+          <v-card-title class="white--text grey darken-4">
+            <v-icon large class="mr-2" color="white" v-text="'mdi-information'"></v-icon>
+            Видалення матерiалу
+          </v-card-title>
+          <v-card-title class="mt-4">
+            Матерiал -<b class="pr-1" style="white-space: pre;">"{{ materialToDelete.name }}"</b>
+            буде видалено назавжди.&nbsp;
+            <span style="white-space: pre-line; font-weight: bold;">Продовжити?</span>
+          </v-card-title>
+          <v-card-text class="pt-4">
+            <div class="d-flex justify-space-between">
+              <span>
+                <v-btn 
+                  @click="deleteMaterial()"
+                  :loading="loading"
+                  color="error">
+                  Так
+                </v-btn>
+              </span>
+              <span>
+                <v-btn 
+                  @click="deleteMaterialDialog = false" 
+                  class="grey darken-2 white--text">
+                  Hi
+                </v-btn>
+              </span>
+            </div>
+        </v-card-text>
+        </v-card>
+      </v-dialog>
       <v-card-title>
         Роздiл - Кориснi матерiали
       </v-card-title>
@@ -156,7 +190,7 @@
                     v-for="item in categories"
                     :key="item.id"
                     class="list-element"
-                    @click.self="makeActive($event, item.name)">
+                    @click.self="makeActiveCategory($event, item.name)">
                     {{ item.name }}
                     <span class="btn-actions">
                       <v-btn 
@@ -167,7 +201,7 @@
                       <v-btn 
                         @click.stop="openDialogDeleteCategory(item.id, item.name)" 
                         icon>
-                        <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
+                        <v-icon color="#e65048" v-text="'mdi-delete-forever'"></v-icon>
                       </v-btn>
                     </span>
                   </li>
@@ -192,47 +226,73 @@
               v-model="currentTab">
             <div class="content">
               <v-card-text>
-                <v-card-title class="edit-title pb-6">
+                <v-card-title class="edit-title">
                   Редагувати матерiали
                   <v-spacer></v-spacer>
                   <v-select
                     style="max-width: 220px!important;"
                     @change="filterByCategory($event)"
                     :items="categories"
+                    v-model="selectedCategorie"
                     item-text="name"
                     item-value="id"
                     label="Фiльтр по категорiям"> 
+                    <template v-slot:prepend-item>
+                      <v-list class="pt-0 pb-0">
+                        <v-list-item @click="showMaterialCategorie()">
+                          <v-list-item-content>
+                            ВСI МАТЕРIАЛИ
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list>
+                    </template>
                   </v-select>
                 </v-card-title>
-                <v-btn 
-                  :to="{name: 'Новый матерiал', params: {categories}}"
-                  class="ml-6 red lighten-1" dark>
-                  Додати матерiал&nbsp;
-                  <v-icon v-text="'mdi-plus'"></v-icon>
-                </v-btn>
-                <ul id="categories-list">
-                  <li
-                    v-for="item in filteredMaterials"
-                    :key="item.id"
-                    class="list-element"
-                    @click.self="makeActive($event, item.name)">
-                    {{ item.title }}
-                    <span class="btn-actions">
-                      <v-btn 
-                        @click.stop="" 
-                        icon>
-                        <v-icon color="green" v-text="'mdi-square-edit-outline'"></v-icon>
-                      </v-btn>
-                      <!-- openDialogDeleteCategory(item.id, item.name) -->
-                      <v-btn 
-                        @click.stop="" 
-                        icon>
-                        <v-icon color="red" v-text="'mdi-delete-forever'"></v-icon>
-                      </v-btn>
-                    </span>
-                  </li>
-                </ul>
-              </v-card-text>
+                <v-row>
+                  <v-col cols="12">
+                    <v-btn 
+                      :to="{name: 'Новый матерiал', params: {categories}}"
+                      class="red lighten-1" dark>
+                      Додати матерiал&nbsp;
+                      <v-icon v-text="'mdi-plus'"></v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-row id="material-card-container">
+                  <v-col 
+                    v-for="(item, key) in filteredMaterials"
+                    :key="key" cols="12">
+                      <v-row class="material-card">
+                        <v-col cols="12" md="2" class="pt-0 pb-0" style="align-items: center; display: flex; padding-top: 0; padding-bottom: 0;">
+                          <v-icon size="90" style="width: 100%;">
+                            mdi-image
+                          </v-icon>
+                        </v-col>
+                        <v-col cols="12" md="10">
+                          <div class="material-card-title" style="font-size: 1.1rem; font-weight: bold;">
+                            {{ item.title }}
+                          </div>
+                          <div class="material-card-content" v-html="item.content"></div>
+                          <div class="material-card-data" style="font-weight: bold; color:#757575; letter-spacing: 0.10rem">
+                            {{`${item.updated_at.substring(0,10)}  ${item.updated_at.substring(12,19)}`}}
+                          </div>
+                          <div class="material-btn-actions" style="position: absolute; right: 1rem; top: 0.2rem;">
+                            <v-btn 
+                              @click.stop="editMaterial(item.id, item)" 
+                              icon>
+                              <v-icon  size="29" color="green" v-text="'mdi-square-edit-outline'"></v-icon>
+                            </v-btn>
+                            <v-btn 
+                              @click.stop="openDialogToDeleteMaterial(item.id, item)" 
+                              icon>
+                              <v-icon size="29" color="#e65048" v-text="'mdi-delete-forever'"></v-icon>
+                            </v-btn>
+                          </div>
+                        </v-col>
+                      </v-row>
+                  </v-col>
+                </v-row>
+                </v-card-text>
             </div>
           </div>
         </div>
@@ -250,13 +310,13 @@ import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 import BreadsCrumb from '../../../../components/agent-cabinet/components/breadScrumb.vue'
-import EditMaterials from './EditMaterials.vue'
+// import EditMaterials from './EditMaterials.vue'
 
 export default {
   mixins: [validationMixin],
   components: {
     BreadsCrumb,
-    EditMaterials
+    // EditMaterials
   },
   data: () => ({
     commonErr: ['Обов`язкове поле'],
@@ -265,11 +325,17 @@ export default {
     filteredMaterials: [],
     loading: false,
     currentTab: '1',
+    selectedCategorie: 'Всi матерiали',
 
     editCategoryDialog: false,
     deleteCategoryDialog: false,
     makeCategoryDialog: false,
+    deleteMaterialDialog: false,
 
+    materialToDelete: {
+      name: null,
+      id: null
+    },
     categoryToEdit: {
       id: null,
       name: null
@@ -307,10 +373,68 @@ export default {
     },
   },
   methods: {
+    editMaterial(id, material) {
+      let category = this.filterCategoryToEditMaterial(material.useful_materials_category_id)
+      // console.log(id)
+      // console.log(material)
+      this.$router.push({
+        name: 'edit-material', 
+        params: {
+            edit: true, 
+            category: category, 
+            material: material
+        }
+      })
+    },
+    openDialogToDeleteMaterial(id, materialObj) {
+      this.materialToDelete.name = materialObj.title
+      this.materialToDelete.id = id
+      this.deleteMaterialDialog = true
+    },
+    deleteMaterial() {
+      this.loading = true
+      axios
+        .delete(`/admin/useful-material/delete/${this.materialToDelete.id}`)
+        .then(response => {
+          console.log(response)
+          this.loading = false
+          this.$notify({
+            group: 'success',
+            title: `Успiшно - ${response.status}`,
+            text: ``,
+          })
+          this.getUsefulMaterials()
+          setTimeout(() => {
+            this.deleteMaterialDialog = false
+          }, 800)
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+          this.loading = false
+        })
+    },
+    showMaterialCategorie() {
+      this.filteredMaterials = this.materials
+      this.selectedCategorie = null
+      let el = document.getElementById('app')
+      let clickEvent = new Event('click', {bubbles: true})
+      el.dispatchEvent(clickEvent)
+    },
+    filterCategoryToEditMaterial(categoryId) {
+      let categorieObj = this.categories
+        .filter(v => { return v.id === categoryId})
+      return categorieObj
+    },
     filterByCategory(id) {
       console.log('id' + id)
       this.filteredMaterials = this.materials
-        .filter(v => {console.log(v); return v.id === id})
+        .filter(v => { return v.useful_materials_category_id === id })
+      console.log(this.filteredMaterials)
     },
     changeActive(event) {
       console.log(event)
@@ -349,7 +473,7 @@ export default {
           this.$store.commit('toggleAdminSpinner', false)
         })
     },
-    makeActive(e, category) {
+    makeActiveCategory(e, category) {
       console.log(e)
       this.categoryToEdit.name = category
       document.querySelectorAll('#categories-list .btn-actions button')
@@ -378,7 +502,7 @@ export default {
     deleteCategory() {
       this.loading = true
       axios
-        .delete(`/useful-materials-categories/delete/${this.categoryToDelete.id}`, {_token: this.getCsrf()})
+        .delete(`/admin/useful-materials-categories/delete/${this.categoryToDelete.id}`, {_token: this.getCsrf()})
         .then(response => {
           console.log(response)
           this.loading = false
@@ -406,7 +530,7 @@ export default {
       if(this.$v.$dirty && !this.$v.$invalid) {
         this.loading = true
         axios
-          .post(`/useful-materials-categories/create`, 
+          .post(`/admin/useful-materials-categories/create`, 
             {
               name: this.newCategorie,
               _token: this.getCsrf()
@@ -440,7 +564,7 @@ export default {
       if(this.$v.$dirty && !this.$v.$invalid) {
         this.loading = true
         axios
-          .post(`/useful-materials-categories/update/${parseInt(this.categoryToEdit.id)}`, 
+          .post(`/admin/useful-materials-categories/update/${parseInt(this.categoryToEdit.id)}`, 
             {
               name: this.categoryToEdit.name,
               _token: this.getCsrf()
@@ -478,11 +602,27 @@ export default {
     },
   },
   created() {
+    console.log(this.$route)
     this.getMageterialCategories()
   },
 }
 </script>
-
+<style scoped>
+.material-card-content >>> * {
+  display: none;
+}
+.material-card-content >>> *:first-child {
+  font-size: 16px;
+  display: block;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+</style>
 <style lang="scss" scoped>
   .admin-categories {
     #categories-list {
@@ -499,6 +639,41 @@ export default {
       text-decoration: none;
       font-weight: bold;
       text-decoration: underline;
+    }
+    .material-card {
+      .v-card__subtitle, .v-card__text {
+        line-height: 0.95rem;
+      }
+      box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),
+        0 6px 10px 0 rgba(0,0,0,.14),
+        0 1px 18px 0 rgba(0,0,0,.12)!important; 
+      min-height: 120px; 
+      transition: box-shadow 0.25s;
+      &:hover {
+        box-shadow: 0 6px 6px -3px rgba(0,0,0,.2),
+          0 10px 14px 1px rgba(0,0,0,.14),
+          0 4px 18px 3px rgba(0,0,0,.12)!important
+      }
+      .material-card-content {
+        padding: 8px 0px 5px 0; 
+        margin-bottom: 0px!important; 
+      }
+      
+      cursor: pointer; 
+      position:relative;
+      .material-btn-actions {
+        transition: opacity 0.3s ease;
+        transition-delay: 0.1s;
+        opacity: 0;
+      }
+      &:hover {
+        .material-btn-actions {
+          opacity: 1;
+        }
+      }
+    }
+    .row.material-card {
+      min-height: 0!important;
     }
     .list-element {
       list-style: none;

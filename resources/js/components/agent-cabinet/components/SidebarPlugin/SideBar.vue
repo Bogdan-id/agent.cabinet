@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar"
+  <div class="sidebar" id="sidebar"
        :data-background-color="backgroundColor"
        :data-active-color="'black'">
       <!-- Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black | darkblue" -->

@@ -36,7 +36,10 @@
 
 <script>
 export default {
-  props: ['item']
+  props: ['item'],
+  mounted() {
+    console.log(this.item)
+  }
 }
 </script>
 

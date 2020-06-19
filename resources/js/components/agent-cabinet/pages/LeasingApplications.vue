@@ -114,7 +114,7 @@
       </v-card-text>
     </v-card>
   </v-dialog>
-  <v-card class="pb-4" min-height="300">
+  <v-card class="pb-4" min-height="300" elevation="12">
   <v-card-title class="d-block grey darken-3 white--text">
     <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-clipboard-list-outline'"></v-icon>
     Заявки на лiзинг

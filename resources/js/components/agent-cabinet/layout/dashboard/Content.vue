@@ -13,7 +13,8 @@
     </div>
     <div>
       <transition name="fade" mode="out-in">
-        <!-- your content here -->
+        <!-- <keep-alive include="Головна"> 
+          <keep-alive> -->
         <router-view></router-view>
       </transition>
     </div>

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div ref="dashboard">
 <div class="dashboard-wrapper">
   <!-- Mobyle agent info -->
   <div v-if="!hasUserManager && !loading && requestRecieved" class="mobile-agent-not-manager">
@@ -34,15 +34,26 @@
   </div>
   <!-- Dashboard container -->
   <div class="dashboard-container">
-    <v-card elevation="9">
+    <v-card elevation="9" height="400">
+      <v-skeleton-loader
+        v-if="!carouselVisibility"
+        height="800"
+        min-height="800"
+        type="image"
+        >
+      </v-skeleton-loader>
       <v-carousel
         cycle
         height="400"
+        name="dashboard-carousel"
+        :class="`${carouselVisibility ? 'dashboard-carousel active' : 'dashboard-carousel'}`"
+        id="dashboard-carousel"
         hide-delimiter-background
         :interval="7000"
         show-arrows-on-hover>
         <v-carousel-item
           v-for="(item, i) in items"
+          @load="test()"
           :src="item.image"
           :key="i"
           reverse-transition="fade-transition"
@@ -246,6 +257,7 @@
 import axios from 'axios'
 
 export default {
+  name: 'Головна',
   data: () => ({
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
@@ -257,6 +269,7 @@ export default {
       { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },
       // { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
+    carouselVisibility: false,
     items: [
       {
         image: require('../assets/img/carousel-1.jpg'),
@@ -269,7 +282,7 @@ export default {
         text: 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'
       },
       {
-        image: require('../assets/img/carousel-4.jpeg'),
+        image: require('../assets/img/carousel-4.jpg'),
         title: 'Mercedes в лiзинг',
         text: 'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. '
       },
@@ -303,8 +316,13 @@ export default {
   },
   methods: {
     test() {
-      console.log(this.hasUser)
-    },  
+      this.$nextTick(() => {
+        this.carouselVisibility = true
+      })
+    },
+    test2() {
+      console.log(this.carouselVisibility)
+    },
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
       this.tabledata = []
@@ -383,6 +401,29 @@ export default {
 </script>
 
 <style lang="scss">
+.theme--light.v-skeleton-loader .v-skeleton-loader__avatar, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__button, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__chip, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__divider, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__heading, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__image, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__text {
+    background: white!important;
+}
+.v-skeleton-loader__image {
+  height: 400px!important;
+  // 
+}
+.theme--light.v-skeleton-loader .v-skeleton-loader__bone:after {
+  background: linear-gradient(90deg,transparent,hsla(187, 0%, 81%, 0.82),transparent)!important;
+}
+
+.dashboard-carousel {
+  visibility: hidden;
+  &.active {
+    visibility: visible;
+  }
+}
 .manager-list-wrapper {
   display: inline-block; 
   width: 100%; 
@@ -403,7 +444,7 @@ export default {
   font-size: 0;
 }
 .logo-letter:first-letter {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
 }
 .mobile-manager-content {
@@ -482,6 +523,7 @@ export default {
   overflow: hidden;
   transition: max-width 0.5s ease-in;
   width: 100%;
+  
   .mobile-manager-title {
     top: 0.8rem; 
     font-size: 1rem;

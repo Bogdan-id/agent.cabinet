@@ -3,7 +3,8 @@
   <v-dialog
     v-model="leasingApplicationForm"
     max-width="600">
-    <v-card>
+    <v-card style="position: relative;">
+      <v-btn style="position: absolute; right: 5px; top: 5px" icon><v-icon v-text="'mdi-close'"></v-icon></v-btn>
       <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
         <span class="d-block title">Заявка вiд розрахунку на 
@@ -104,7 +105,7 @@
               <v-btn @click="leasingApplicationForm = false" 
                   class="d-block white--text" 
                   color="grey darken-3">
-                <v-icon v-text="'mdi-check-bold'">
+                <v-icon v-text="'mdi-close'">
                 </v-icon>
                 &nbsp;Закрити
               </v-btn>
@@ -167,7 +168,7 @@
         </template>
         <template #item.actions="{ item }">
           <div class="d-flex">
-            <v-tooltip bottom>
+            <!-- <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
                   @click="toDetail(item.id)"
@@ -181,7 +182,7 @@
                 </v-btn>
               </template>
               <span>Подати заявку на виплату АВ</span>
-            </v-tooltip>
+            </v-tooltip> -->
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 

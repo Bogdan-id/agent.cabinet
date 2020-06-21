@@ -23,15 +23,13 @@
 }
 p.app__login-form-title {
   padding-top: 0.5rem;
-  font-size: 1.46rem;
-  color: $secondary;
-  font-weight: bold;
+  font-size: 1.40rem;
   margin: 0;
   line-height: 25px;
   margin-bottom: 10px!important;
 }
 p.app__login-form-subtitle {
-  font-size: 17px;
+  font-size: 0.9rem;
   line-height: 25px;
   margin: 0 0 8px 0;
   margin-bottom: 10px!important;
@@ -78,8 +76,9 @@ p.app__login-form-subtitle {
   position: relative;
   padding-left: 22px;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 0.79rem;
   user-select: none;
+  color: #757575;
 }
 .app__button-wrapper {
   display: flex;
@@ -91,7 +90,7 @@ p.app__login-form-subtitle {
 }
 .app__sign-navigate-link {
   display: block;
-  font-size: 13px;
+  font-size: 0.8rem;
 }
 .app__login-footer {
   font-size: 12px;

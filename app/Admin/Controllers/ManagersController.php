@@ -14,6 +14,7 @@ class ManagersController extends Controller
     public function updateManagers(BitrixClient $bitrixClient)
     {
         $managers = $bitrixClient->getManagers();
+
         foreach($managers as $manager){
             $managerExists = Manager::where('bitrix_id', '=', $manager['ID'])->first();
             if(!$managerExists){
@@ -22,6 +23,7 @@ class ManagersController extends Controller
                 $managerModel->email = $manager['EMAIL'];
                 $managerModel->phone = $manager['WORK_PHONE'] ?? 'Номер не указан';
                 $managerModel->bitrix_id = $manager['ID'];
+                $managerModel->photo = $manager['PERSONAL_PHOTO'];
                 $managerModel->save();
             }
         }

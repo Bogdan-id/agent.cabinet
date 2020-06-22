@@ -31,7 +31,7 @@
   & input:checked + .app__custom-checkbox {
     transition: background-color 0.5s;
     border: 0;
-    background-color: $primary;
+    background-color: #e65048;
   }
   & input:checked ~ .app__custom-checkbox::after {
     display: block;

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div ref="dashboard">
 <div class="dashboard-wrapper">
   <!-- Mobyle agent info -->
   <div v-if="!hasUserManager && !loading && requestRecieved" class="mobile-agent-not-manager">
@@ -12,7 +12,7 @@
       </div>
     </div>
   </div>
-  <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
+  <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'" style="position: relative">
     <span class="mobile-manager-title">
       {{ 'Ваш менеджер' }}
     </span>
@@ -34,15 +34,26 @@
   </div>
   <!-- Dashboard container -->
   <div class="dashboard-container">
-    <v-card elevation="9">
+    <v-card elevation="9" height="400">
+      <v-skeleton-loader
+        v-if="!carouselVisibility"
+        height="800"
+        min-height="800"
+        type="image"
+        >
+      </v-skeleton-loader>
       <v-carousel
         cycle
         height="400"
+        name="dashboard-carousel"
+        :class="`${carouselVisibility ? 'dashboard-carousel active' : 'dashboard-carousel'}`"
+        id="dashboard-carousel"
         hide-delimiter-background
         :interval="7000"
         show-arrows-on-hover>
         <v-carousel-item
           v-for="(item, i) in items"
+          @load="test()"
           :src="item.image"
           :key="i"
           reverse-transition="fade-transition"
@@ -104,7 +115,8 @@
       <div class="d-flex justify-center">
         <span>
           <v-btn
-            class="vuetify_custom-btn capitalize ma-4"
+            class="vuetify_custom-btn ma-4"
+            style="text-transform: none;"
             to="/leasing-requests"
             color="#e65048"
             dark>
@@ -117,7 +129,7 @@
   <div class="right-block-wrapper">
     <!-- Agent info -->
       <v-card :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'" elevation="8">
-        <div class="mt-4 mb-4 pl-4 mb-1 manager-title">
+        <div class="mt-4 mb-2 pl-4 mb-1 manager-title" style="position: relative; font-size: 0.95rem;">
           {{ !requestRecieved ? '' : hasUserManager && !loading ? 'Ваш менеджер' : 'За Вами не закрiплений жоден з менеджерів!'}}
         </div>
         <div v-if="loading" class="d-flex justify-center align-center">
@@ -127,13 +139,20 @@
             color="red">
           </v-progress-circular>
         </div>
-        <div v-if="hasUserManager && !loading && requestRecieved" class="manager-content mt-3 d-flex">
-          <div style="display: inline-flex; justify-content: center; width: 27%; align-items: start;">
-            <div style="display: flex; align-text: center; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 100%; background-color: #dadada;"><span class="logo-letter">{{ agentData.name }}</span></div>
+        <div v-if="hasUserManager && !loading && requestRecieved" class="manager-content d-flex flex-column">
+          <!-- <div style="display: inline-flex; justify-content: center; width: 27%; align-items: start;">
+            <div style="display: flex; align-text: center; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 100%; background-color: #dadada;">
+              <span class="logo-letter">{{ agentData.name }}</span>
+            </div>
+          </div> -->
+          <div style="display: flex; justify-content: center;">
+            <div style="display: flex; align-text: center; justify-content: center; align-items: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
+              <span class="logo-letter">{{ agentData.name }}</span>
+            </div>
           </div>
-          <div class="manager-list-wrapper" style="display: inline-block; width: 70%;">
+          <div class="manager-list-wrapper">
             <ul>
-              <li style="font-size: 1.1rem; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
+              <li style="font-size: 1.06rem; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
               <li style="font-weight: bold; font-size: 0.76rem"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</li>
               <li style="color: #bb433c;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</li>
             </ul>
@@ -238,10 +257,11 @@
 import axios from 'axios'
 
 export default {
+  name: 'Головна',
   data: () => ({
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
-      { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center', sortable: false},
+      { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна', value: 'leasing_amount', align: 'center', sortable: false },
       { text: 'Розмiр АВ', value: '', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },
@@ -249,6 +269,7 @@ export default {
       { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },
       // { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
+    carouselVisibility: false,
     items: [
       {
         image: require('../assets/img/carousel-1.jpg'),
@@ -261,7 +282,7 @@ export default {
         text: 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'
       },
       {
-        image: require('../assets/img/carousel-4.jpeg'),
+        image: require('../assets/img/carousel-4.jpg'),
         title: 'Mercedes в лiзинг',
         text: 'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. '
       },
@@ -295,8 +316,13 @@ export default {
   },
   methods: {
     test() {
-      console.log(this.hasUser)
-    },  
+      this.$nextTick(() => {
+        this.carouselVisibility = true
+      })
+    },
+    test2() {
+      console.log(this.carouselVisibility)
+    },
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
       this.tabledata = []
@@ -375,7 +401,34 @@ export default {
 </script>
 
 <style lang="scss">
+.theme--light.v-skeleton-loader .v-skeleton-loader__avatar, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__button, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__chip, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__divider, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__heading, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__image, 
+.theme--light.v-skeleton-loader .v-skeleton-loader__text {
+    background: white!important;
+}
+.v-skeleton-loader__image {
+  height: 400px!important;
+  // 
+}
+.theme--light.v-skeleton-loader .v-skeleton-loader__bone:after {
+  background: linear-gradient(90deg,transparent,hsla(187, 0%, 81%, 0.82),transparent)!important;
+}
+
+.dashboard-carousel {
+  visibility: hidden;
+  &.active {
+    visibility: visible;
+  }
+}
 .manager-list-wrapper {
+  display: inline-block; 
+  width: 100%; 
+  padding: 0 25px;
+  margin-top: 15px;
   ul {
     padding-left: 0!important;
     list-style: none!important;
@@ -391,12 +444,12 @@ export default {
   font-size: 0;
 }
 .logo-letter:first-letter {
-  font-size: 1rem;
+  font-size: 1.4rem;
   font-weight: bold;
 }
 .mobile-manager-content {
   padding: 1.6rem 1rem 0.3rem 1rem; 
-  display: inline-block;
+  flex-direction: row;
   span, div:hover {
     cursor: pointer;
   }
@@ -470,6 +523,7 @@ export default {
   overflow: hidden;
   transition: max-width 0.5s ease-in;
   width: 100%;
+  
   .mobile-manager-title {
     top: 0.8rem; 
     font-size: 1rem;

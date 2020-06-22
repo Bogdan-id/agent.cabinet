@@ -438,7 +438,7 @@ export default {
     _token: null,
 
     tableHeader: [
-      { text: 'Тип об`єкту лiзингу', value: 'request_data.leasingObjectType.label', align: 'start'},
+      { text: 'Тип предмету лiзингу', value: 'request_data.leasingObjectType.label', align: 'start'},
       { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
       { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
       { text: 'Цiна', value: 'request_data', align: 'center' },

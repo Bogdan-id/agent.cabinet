@@ -937,7 +937,7 @@ export default {
     },
 
     maxResidualValue() {
-      return Math.ceil((100 - parseInt(this.calcObj.advance) - 10) / 5) * 5
+      return -Math.ceil(-(100 - parseInt(this.calcObj.advance) - 10) / 5) * 5
     },
     /* boolean */
 

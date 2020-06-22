@@ -6,10 +6,12 @@
   padding: 7px 16px;
   min-width: 120px;
   height: 35px;
-  background: $primary;
+  background: #e65048;
+  transition: background 0.4s ease;
 }
 .app__btn-primary:hover {
-  transition: all 0.2s;
-  background: #039dd4;
-  box-shadow: 0px 3px 6px -1px rgba(0,174,239,1);
+  transition: background 0.4s ease;
+  // transition: all 0.2s;
+  background: #e66b65;
+  text-shadow: 0px 0px 5px rgba(150, 150, 150, 0.47);
 }

@@ -3,7 +3,8 @@
   <v-dialog
     v-model="leasingApplicationForm"
     max-width="600">
-    <v-card>
+    <v-card style="position: relative;">
+      <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 5px; top: 5px" icon><v-icon v-text="'mdi-close'"></v-icon></v-btn>
       <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
         <span class="d-block title">Заявка вiд розрахунку на 
@@ -104,7 +105,7 @@
               <v-btn @click="leasingApplicationForm = false" 
                   class="d-block white--text" 
                   color="grey darken-3">
-                <v-icon v-text="'mdi-check-bold'">
+                <v-icon v-text="'mdi-close'">
                 </v-icon>
                 &nbsp;Закрити
               </v-btn>
@@ -156,9 +157,27 @@
         :items="tabledata"
         :items-per-page="10"
         class="elevation-1">
+        <template v-slot:item.initials="{ item }">
+          <span style="white-space: nowrap;"> {{ item.initials }}</span>
+        </template>
+        <template v-slot:item.leasing_object="{ item }">
+          <span style="white-space: nowrap;"> {{ item.leasing_object }}</span>
+        </template>
+        <template v-slot:item.data="{ item }">
+          <span style="white-space: nowrap;"> {{ item.data }}</span>
+        </template>
+        <template v-slot:item.leasing_amount="{ item }">
+          <span style="white-space: nowrap">
+            {{ 
+              parseInt(item.leasing_amount.replace(/ /g, '' ))
+                .toLocaleString()
+                .replace(/,/g, ' ')
+            }}
+          </span>
+        </template>
         <template #item.actions="{ item }">
           <div class="d-flex">
-            <v-tooltip bottom>
+            <!-- <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
                   @click="toDetail(item.id)"
@@ -172,7 +191,7 @@
                 </v-btn>
               </template>
               <span>Подати заявку на виплату АВ</span>
-            </v-tooltip>
+            </v-tooltip> -->
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
@@ -229,7 +248,7 @@ export default {
     leasingApplicationForm: false,
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start'},
-      { text: 'Об\'єкт лiзингу', value: 'leasing_object', align: 'center'},
+      { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна', value: 'leasing_amount', align: 'center' },
       { text: 'Розмір агентської винагороди', value: 'leasing_amount', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },

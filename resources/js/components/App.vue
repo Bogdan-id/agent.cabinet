@@ -8,9 +8,17 @@
 		<transition name="fade" mode="out-in">
 			<router-view></router-view>
 		</transition>
+    <!-- <keep-alive include="Головна">
+      <router-view></router-view>
+    </keep-alive> -->
 	</div>
 </v-app>
 </template>
+<script>
+export default {
+  name: 'Головна'
+}
+</script>
 
 <style lang="scss">
 	@import "../assets/scss/fonts.scss";

@@ -4,7 +4,7 @@
     v-model="leasingApplicationForm"
     max-width="600">
     <v-card style="position: relative;">
-      <v-btn style="position: absolute; right: 5px; top: 5px" icon><v-icon v-text="'mdi-close'"></v-icon></v-btn>
+      <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 5px; top: 5px" icon><v-icon v-text="'mdi-close'"></v-icon></v-btn>
       <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
         <span class="d-block title">Заявка вiд розрахунку на 
@@ -157,6 +157,15 @@
         :items="tabledata"
         :items-per-page="10"
         class="elevation-1">
+        <template v-slot:item.initials="{ item }">
+          <span style="white-space: nowrap;"> {{ item.initials }}</span>
+        </template>
+        <template v-slot:item.leasing_object="{ item }">
+          <span style="white-space: nowrap;"> {{ item.leasing_object }}</span>
+        </template>
+        <template v-slot:item.data="{ item }">
+          <span style="white-space: nowrap;"> {{ item.data }}</span>
+        </template>
         <template v-slot:item.leasing_amount="{ item }">
           <span style="white-space: nowrap">
             {{ 

@@ -96,9 +96,9 @@ class UsefulMaterialsController extends Controller
     public function uploadImage(ImageUploadRequest $request)
     {
         $path = $request->file('upload')->store('uploads', 'public');
-      
+
         return response()->json([
-            'url' => $path
+            'url' => "storage/{$path}"
         ]);
     }
 

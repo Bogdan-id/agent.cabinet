@@ -19,30 +19,34 @@
             v-model="currentTab">
           <div class="content">
             <v-card  class="view-charts">
-            <v-data-table
-              class="leasing-object-table"
-              v-if="leasingObjectData !== null"
-              color="black"
-              :headers="leasingObjectDataHeader"
-              :items="leasingObjectData"
-              :items-per-page="180"
-              :hide-default-footer="true"
-              :must-sort="false"
-              dense
-              :mobile-breakpoint="6500">
-              <template v-slot:item.actions="{ item }">
-                {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
-              </template>
-              <template v-slot:item.leasingAmount="{ item }">
-                <span>
-                  {{ 
-                    parseInt(item.leasingAmount.replace(/ /g, '' ))
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
-            </v-data-table>
+              <v-row>
+                <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
+                  <v-data-table
+                    class="leasing-object-table"
+                    v-if="leasingObjectData !== null"
+                    color="black"
+                    :headers="leasingObjectDataHeader"
+                    :items="leasingObjectData"
+                    :items-per-page="180"
+                    :hide-default-footer="true"
+                    :must-sort="false"
+                    dense
+                    :mobile-breakpoint="6500">
+                    <template v-slot:item.actions="{ item }">
+                      {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
+                    </template>
+                    <template v-slot:item.leasingAmount="{ item }">
+                      <span>
+                        {{ 
+                          parseInt(item.leasingAmount.replace(/ /g, '' ))
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
+                    </template>
+                  </v-data-table>
+                </v-col>
+              </v-row>
             <div class="payout-schedule">
               Графiк виплат
             </div>
@@ -80,30 +84,34 @@
             v-model="currentTab"/>
           <div class="content">
             <v-card class="view-charts">
-              <v-data-table
-                class="leasing-object-table"
-                v-if="leasingObjectData !== null"
-                color="black"
-                :headers="leasingObjectDataHeader"
-                :items="leasingObjectData"
-                :items-per-page="180"
-                :hide-default-footer="true"
-                :must-sort="false"
-                dense
-                :mobile-breakpoint="6500">
-                <template v-slot:item.actions="{ item }">
-                  {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
-                </template>
-                <template v-slot:item.leasingAmount="{ item }">
-                  <span>
-                    {{ 
-                      parseInt(item.leasingAmount.replace(/ /g, '' ))
-                        .toLocaleString()
-                        .replace(/,/g, ' ')
-                    }}
-                  </span>
-                </template>
-              </v-data-table>
+              <v-row>
+                <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
+                  <v-data-table
+                    class="leasing-object-table"
+                    v-if="leasingObjectData !== null"
+                    color="black"
+                    :headers="leasingObjectDataHeader"
+                    :items="leasingObjectData"
+                    :items-per-page="180"
+                    :hide-default-footer="true"
+                    :must-sort="false"
+                    dense
+                    :mobile-breakpoint="6500">
+                    <template v-slot:item.actions="{ item }">
+                      {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
+                    </template>
+                    <template v-slot:item.leasingAmount="{ item }">
+                      <span>
+                        {{ 
+                          parseInt(item.leasingAmount.replace(/ /g, '' ))
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
+                    </template>
+                  </v-data-table>
+                </v-col>
+              </v-row>
               <div class="payout-schedule">
                 Графiк виплат
               </div>
@@ -142,7 +150,7 @@
           <div class="content">
             <v-card  class="view-charts">
               <v-row>
-                <v-col cols="12" md="8" sm="9" class="pt-0 pb-0">
+                <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
                   <v-data-table
                     class="leasing-object-table"
                     v-if="leasingObjectData !== null"

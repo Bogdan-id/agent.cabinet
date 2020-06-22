@@ -24,7 +24,7 @@ class ImageUploadRequest extends JsonRequest
     public function rules()
     {
         return [
-            'image' => 'required',
+            'upload' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

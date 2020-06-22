@@ -95,14 +95,8 @@ class UsefulMaterialsController extends Controller
 
     public function uploadImage(ImageUploadRequest $request)
     {
-        $image = $request->image;
-        $image = str_replace('data:image/png;base64,', '', $image);
-        $image = str_replace(' ', '+', $image);
-        $imageName =  "image-".time().".png";
-
-        Storage::disk('public')->put($imageName, base64_decode($image));
-        $path = Storage::url($imageName);
-
+        $path = $request->file('upload')->store('uploads', 'public');
+      
         return response()->json([
             'url' => $path
         ]);

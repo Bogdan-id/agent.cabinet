@@ -337,7 +337,7 @@
         <div>
           <span class="section-title">Графiк платежiв</span>
         </div>
-        <v-row class="d-flex graph-checkbox justify-space-around pl-5 pr-5">
+        <v-row :class="`d-flex ${ xs?  'graph-checkbox small' : 'graph-checkbox'}  justify-space-around pl-5 pr-5`">
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
             <v-checkbox
               v-model="calcObj.graphType"
@@ -457,7 +457,7 @@
                   color="red darken-4"
                   v-model="calcObj.leasingCurrency"
                   dense>
-                  <v-row class="pl-8" :style="`flex-direction: ${mediumAndDown ? 'column' : 'row'}`">
+                  <v-row class="pl-8" :style="`flex-direction: ${mediumAndDownCurrency ? 'column' : 'row'}`">
                     <div style="display: flex;">
                       <v-radio value="UAH" color="red darken-3" dense>
                         <template #label>
@@ -470,7 +470,7 @@
                       </v-radio>
                     </div>
                     <div style="display: flex;">
-                      <v-radio value="USD" color="red darken-3" :class="mediumAndDown ? '' : 'ml-0'">
+                      <v-radio value="USD" color="red darken-3" :class="mediumAndDownCurrency ? '' : 'ml-2'">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -481,7 +481,7 @@
                       </v-radio>
                     </div>
                     <div style="display: flex;">
-                      <v-radio value="EURO" color="red darken-3" :class="mediumAndDown ? '' : 'ml-0'">
+                      <v-radio value="EURO" color="red darken-3" :class="mediumAndDownCurrency ? '' : 'ml-2'">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -502,10 +502,9 @@
                   v-model="calcObj.leasingTerm"
                   :error-messages="leasingTermErr"
                   :items="['12', '24', '36', '48', '60']"
-                  label="Оберiть кiлькiсть"
                   color="red darken-4"
                   itemColor="red darken-4"
-                  outlined>
+                  outlined :dense="xs">
                   <template v-slot:append>
                     <span class="leasing-term-append-label">мiс</span>
                   </template>
@@ -523,7 +522,7 @@
                   id="residual-value"
                   color="red darken-4"
                   itemColor="red darken-4"
-                  outlined>
+                  outlined :dense="xs">
                   <template v-slot:append>
                     <percent style="margin-top: 5px;"></percent>
                   </template>
@@ -554,13 +553,9 @@
               </v-col>
             </v-row>
             <v-col cols="12" v-if="customGraphType === 1">
-              <v-row>
-                <v-col cols="12" :style="`text-align: ${mediumAndDown ? '' : 'center;'}`">
-                  <span style="font-size: 1rem; color: #787878">Параметри ступеневого графiку</span>
-                </v-col>
-              </v-row>
               <v-row style="display: flex; justify-content: space-around">
                 <v-col cols="6" class="pt-0 pb-0">
+                  <span style="font-size: 1rem; color: #787878;">Параметри ступеневого графiку</span>
                   <v-text-field
                     :error-messages="oneThirdErr"
                     color="red darken-3"
@@ -624,20 +619,16 @@
               </v-row>
             </v-col>
             <v-col cols="12" v-if="customGraphType === 2">
-              <v-row>
-                <v-col cols="12" :style="`text-align: ${mediumAndDown ? '' : 'center;'}`">
+              <v-row style="justify-content: center;">
+                <v-col cols="6">
                   <span style="font-size: 1rem; color: #787878">Параметри унiверсального посилення</span>
-                </v-col>
-              </v-row>
-              <v-row :style="`${mediumAndDown ? '' : 'justify-content: center'}`">
-                <v-col cols="8">
                   <v-text-field
                     color="red darken-3"
                     :error-messages="universalGainErr"
                     v-model="calcObj.universalGain"
                     id="universalGain"
                     @input="restrictToPercent('universalGain')"
-                    :dense="xs">
+                    dense>
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
                     </template>
@@ -1107,6 +1098,9 @@ export default {
     mediumAndDown() {
       return this.windowInnerWidth <= 1145
     },
+    mediumAndDownCurrency() {
+      return this.windowInnerWidth <= 1200
+    },
     xs() {
       return this.$vuetify.breakpoint.name === 'xs'
     },
@@ -1486,9 +1480,6 @@ export default {
 			this.updateElRange(elRange, elRange.value, dataSelector)
 		},
     setIndentation(value) {
-      console.log('***********')
-      console.log(value)
-      console.log('***********')
       if(value) {
         return parseInt(value.toString().replace(/ /g, '' ))
           .toLocaleString()
@@ -1499,16 +1490,10 @@ export default {
 
     displayWindowSize() {
       this.windowInnerWidth = window.innerWidth
-      console.log(this.xs)
-      console.log(this.$vuetify.breakpoint.name)
-      console.log(window.innerWidth)
-      console.log(this.mediumAndDown)
     }
   },
   watch: {
     insuranceProgram(val) {
-      console.log(val)
-      // this.calcObj.insuranceProgram = val.value
       this.calcObj.insuranceProgram = val.value
     },
     'calcObj.leasingCurrencyCourse': function (course) {
@@ -1543,7 +1528,7 @@ export default {
     //   this.calcObj.leasedAssertEngine = parseInt(value)
     // },
     // добавь условие ниже в функцию запроса аксиос
-    'calcObj.leasingObjectType': function(value) {
+    'calcObj.leasingObjectType': function() {
       console.log(this.calcObj.leasingObjectType)
     },
     user() {
@@ -1558,7 +1543,6 @@ export default {
   created() {
     window.addEventListener("resize", this.displayWindowSize)
     if(this.$router.currentRoute.params.edit === true) {
-      console.log('ROUTER EDIT')
     axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
@@ -1591,7 +1575,6 @@ export default {
         })
       })
     } else {
-      console.log('ROUTER NOT EDIT')
       this.initAdvanceInputValue()
       this.initFranchiseInput()
     }
@@ -1600,6 +1583,7 @@ export default {
     this.initAdvanceInputValue()
     this.initFranchiseInput()
     this.getMarksByType()
+    this.displayWindowSize()
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
   }
@@ -1838,6 +1822,22 @@ export default {
     .graph-checkbox {
       .v-input--checkbox {
         margin-top: 8px;
+      }
+      .v-input__slot {
+        display: flex;
+        justify-content: center;
+      }
+      &.small {
+        .v-input__slot {
+          display: flex;
+          justify-content: flex-start;
+        }
+      }
+      label {
+        display: inline-flex!important;
+      }
+      .v-input--selection-controls .v-input__slot>.v-label, .v-input--selection-controls .v-radio>.v-label {
+        flex: 0!important;
       }
     }
     .leasing-term-sm {

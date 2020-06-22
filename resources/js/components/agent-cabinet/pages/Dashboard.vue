@@ -35,13 +35,14 @@
   <!-- Dashboard container -->
   <div class="dashboard-container">
     <v-card elevation="9" height="400">
-      <v-skeleton-loader
-        v-if="!carouselVisibility"
-        height="800"
-        min-height="800"
-        type="image"
-        >
-      </v-skeleton-loader>
+      <div v-if="!carouselVisibility" style="position: relative; width: 100%; height: 100%;">
+        <v-skeleton-loader
+          style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
+          height="800"
+          min-height="800"
+          type="image">
+        </v-skeleton-loader>
+      </div>
       <v-carousel
         cycle
         height="400"
@@ -53,7 +54,7 @@
         show-arrows-on-hover>
         <v-carousel-item
           v-for="(item, i) in items"
-          @load="test()"
+          @load="imageLoaded()"
           :src="item.image"
           :key="i"
           reverse-transition="fade-transition"
@@ -71,9 +72,9 @@
               </span>
             </div>
           </div>
-      </v-carousel-item>
-    </v-carousel>
-  </v-card>
+        </v-carousel-item>
+      </v-carousel>
+    </v-card>
     <v-card 
       v-if="tabledata.length > 0"
       class="mt-10 mb-6 dashboard-table" elevation="9">
@@ -91,8 +92,8 @@
           <span style="white-space: nowrap">
             {{ 
               parseInt(item.leasing_amount.replace(/ /g, '' ))
-                  .toLocaleString()
-                  .replace(/,/g, ' ')
+                .toLocaleString()
+                .replace(/,/g, ' ')
             }}
           </span>
         </template>
@@ -263,7 +264,7 @@ export default {
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна', value: 'leasing_amount', align: 'center', sortable: false },
-      { text: 'Розмiр АВ', value: '', align: 'center' },
+      { text: 'Розмiр АВ, %', value: 'agency_remuneration', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },
       { text: 'Дата', value: 'data', align: 'center', sortable: false },
       { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },
@@ -315,13 +316,11 @@ export default {
     }
   },
   methods: {
-    test() {
-      this.$nextTick(() => {
+    imageLoaded() {
+      console.log('onload event')
+      setTimeout(() => {
         this.carouselVisibility = true
-      })
-    },
-    test2() {
-      console.log(this.carouselVisibility)
+      }, 300)
     },
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
@@ -368,6 +367,7 @@ export default {
             'graph_type': this.switchValue(val.graph_type),
             'data': val.created_at.substr(0, 10),
             'request_status': val.status_id,
+            'agency_remuneration': this.$store.state.user.agent.ab_size,
             'id': val.id
           }
           arr.push(dataObj)
@@ -394,9 +394,6 @@ export default {
       this.getUserCalculcations()
     }
   },
-  mounted() {
-    console.log(this.$vuetify.breakpoint.name)
-  }
 }
 </script>
 
@@ -412,7 +409,6 @@ export default {
 }
 .v-skeleton-loader__image {
   height: 400px!important;
-  // 
 }
 .theme--light.v-skeleton-loader .v-skeleton-loader__bone:after {
   background: linear-gradient(90deg,transparent,hsla(187, 0%, 81%, 0.82),transparent)!important;
@@ -420,8 +416,11 @@ export default {
 
 .dashboard-carousel {
   visibility: hidden;
+  transition: opacity 1.5s;
+  opacity: 0;
   &.active {
     visibility: visible;
+    opacity: 1;
   }
 }
 .manager-list-wrapper {

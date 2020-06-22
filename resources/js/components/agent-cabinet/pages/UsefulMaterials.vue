@@ -2,8 +2,8 @@
     <div class="row">
       <bread-scrumb />  
       <div class="col-md-12 useful-materials">
-        <router-view></router-view>
-        <v-card style="min-height: 350px;" v-show="$route.name === 'Кориснi матерiали'">
+        <router-view :key="$route.name"></router-view>
+        <v-card style="min-height: 350px;" v-if="$route.name === 'Кориснi матерiали'">
           <v-card-title class="d-block grey darken-3 white--text">
             <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>
             Кориснi матерiали
@@ -28,16 +28,10 @@
                 :class="hover ? `useful-materials__article mt-2 mb-2 ml-2` : `useful-materials__article mt-2 mb-2`"
                 :style="hover ? 'border-left: 7px solid #e64833;' : 'border-left: 7px solid white'"
                 tag="a"
-                :to="routeObject(item.slug, item)">
+                @click="toRoute(item.slug, item.id)">
                 <v-card-title class="custom-title" style="justify-content: center; font-size: 27px;">
                   <a>{{ item.name }}</a>
                 </v-card-title>
-                <!-- <p>{{ item.text }}
-                  <router-link 
-                    :to="routeObject(item.route, item)">
-                  </router-link>
-                </p> -->
-                <!-- <p>{{ item.text }}<a :href="item.link"></a></p> -->
               </v-card>
             </v-hover>
           </v-card-text>
@@ -59,21 +53,16 @@ export default {
     loading: false,
   }),
   methods: {
-    routeObject(route, data) {
-      return {name: 'Кориснi матерiали вiд Best-leasing', params: {detail: route, data: data}}
-    },
     test() {
       // console.log(this.$route)
-    }
-  },
-  computed: {
-    isExactActive() {
-      return this.$refs.rv === 'undefined' || this.$refs.rv === null
+    },
+    toRoute(route, id) {
+      console.log('toRoute()')
+      this.$router.push({name: 'Кориснi матерiали вiд Best-leasing', params: {detail: route, itemId: id}})
     }
   },
   mounted() {
     this.routes = this.$router.currentRoute.path
-    console.log(this.routes)
   },
   created() {
     this.loading = true

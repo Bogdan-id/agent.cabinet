@@ -272,7 +272,8 @@
         :items="tabledata"
         :items-per-page="10"
         class="elevation-1">
-        <template>
+        <template v-slot:item.test>
+          <span>{{ $store.state.user.agent.ab_size }}</span>
         </template>
         <template v-slot:item.request_data.leasedAssertModel.name="{ item }">
           <span style="white-space: nowrap">{{ item.request_data.leasedAssertModel.name }}</span>
@@ -442,7 +443,7 @@ export default {
       { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
       { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
       { text: 'Цiна', value: 'request_data', align: 'center' },
-      { text: 'Розмiр АВ', value: '', align: 'center' },
+      { text: 'Розмiр АВ, %', value: 'test', align: 'center' },
       { text: 'Дата', value: 'created_at', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],

@@ -562,9 +562,9 @@
                 </span>
               </v-col>
             </v-row>
-            <v-col cols="12" v-if="customGraphType === 1">
+            <v-col cols="12" v-if="customGraphType === 1" class="pt-0">
               <v-row style="display: flex; justify-content: space-around">
-                <v-col cols="6" class="pt-0 pb-0">
+                <v-col cols="12" md="6" sm="6"  class="pt-0 pb-0">
                   <span style="font-size: 1rem; color: #787878;">Параметри ступеневого графiку</span>
                   <v-text-field
                     :error-messages="oneThirdErr"
@@ -588,7 +588,7 @@
                 </v-col>
               </v-row>
               <v-row style="display: flex; justify-content: space-around">
-                <v-col cols="6" class="pt-0 pb-0">
+                <v-col cols="12" md="6" sm="6" class="pt-0 pb-0">
                   <v-text-field
                     @input="setGraphProportion($event, 'stepGain-twoThirds')"
                     :error-messages="twoThirdsErr"
@@ -611,7 +611,7 @@
                 </v-col>
               </v-row>
               <v-row style="display: flex; justify-content: space-around">
-                <v-col cols="6" class="pt-0 pb-0">
+                <v-col cols="12" md="6" sm="6" class="pt-0 pb-0">
                   <v-text-field
                     color="red darken-3"
                     :dense="mediumAndDown"
@@ -628,9 +628,9 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col cols="12" v-if="customGraphType === 2">
+            <v-col cols="12" v-if="customGraphType === 2" class="pt-0">
               <v-row style="justify-content: center;">
-                <v-col cols="6">
+                <v-col cols="12" md="6" sm="6" class="pt-0 pb-0">
                   <span style="font-size: 1rem; color: #787878">Параметри унiверсального посилення</span>
                   <v-text-field
                     color="red darken-3"

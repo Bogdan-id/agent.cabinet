@@ -413,7 +413,7 @@
                   class="advance-range-wrapper">
                   <span
                     class="advance-range-cell"
-                    :style="`color: ${calcObj.advance == ((v - 1) * 5) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.45rem' : '0.8rem'}`">
+                    :style="`color: ${calcObj.advance == ((v - 1) * 5) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.45rem' : '0.725rem'}`">
                       {{ (v - 1) * 5 + '%' }}
                   </span>
                   <div v-if="v === 7" style="position: absolute; top: -34px;">
@@ -443,7 +443,7 @@
                   </div>
                 </div>
                 <div
-                  :style="`position: absolute; right: -9px; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.45rem' : '0.8rem'}`">
+                  :style="`position: absolute; right: -9px; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.45rem' : '0.725rem'}`">
                   {{ `70%` }}
                 </div>
               </div>

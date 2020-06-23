@@ -311,7 +311,7 @@
             :disabled="calcObj.leasingAmount === null || calcObj.leasingAmount === ''"
             v-model="discountPrice"
             :value="true"
-            :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 white--text`"
+            :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 pt-0 white--text`"
             label="Вартiсть зi знижкою"
             :false-value="false"
             dark :dense="mediumAndDown">
@@ -337,11 +337,12 @@
         <div>
           <span class="section-title">Графiк платежiв</span>
         </div>
-        <v-row :class="`d-flex ${ mediumAndDown?  'graph-checkbox small' : 'graph-checkbox'}  justify-space-around pl-5 pr-5`">
+        <v-row :class="`d-flex pt-1 ${ mediumAndDown?  'graph-checkbox small' : 'graph-checkbox'}  justify-space-around pl-5 pr-5`">
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
             <v-checkbox
               v-model="calcObj.graphType"
               :error-messages="graphsErr"
+              class="mt-0 pt-0"
               label="Класичний"
               color="red darken-3"
               value="even"
@@ -352,6 +353,7 @@
             <v-checkbox
               v-model="calcObj.graphType"
               :error-messages="graphsErr"
+              class="mt-0 pt-0"
               label="Ануїтет"
               color="red darken-3"
               value="annuity"
@@ -362,6 +364,7 @@
             <v-checkbox
               v-model="calcObj.graphType"
               :error-messages="graphsErr"
+              class="mt-0 pt-0"
               label="Iндивiдуальний"
               color="red darken-3"
               value="irregular"
@@ -376,7 +379,7 @@
         <v-row :style="`color: #505050; ${mediumAndDown ? 'flex-direction: column-reverse;' : ''}`">
           <v-col :cols="mediumAndDown ? 12 : 7" style="align-self: flex-start;" :class="mediumAndDown ? 'pt-0' : ''">
             <v-row>
-              <v-col cols="12" class="pt-0 pb-0" style="min-height: 250px;">
+              <v-col cols="12" class="pt-0 pb-0" style="min-height: 232px;">
                 <div>
               <span class="section-title">Авансовий платiж</span>
             </div>
@@ -450,7 +453,7 @@
 
             <v-row>
               <v-col :class="`pb-0 pt-0 ${mediumAndDown ? '' : 'mt-6'} leasing-term-sm`" cols="12" md="4" xs="12" sm="5">
-                <div class="pb-4">
+                <div class="pb-1">
                   <span class="section-title" style="white-space: nowrap">Термiн фiнансування</span>
                 </div>
                 <v-select
@@ -473,7 +476,7 @@
                 :style="!xs 
                   ? 'margin-left: 1rem;' 
                   : ''">
-                <div class="pb-4">
+                <div class="pb-1">
                   <span class="section-title" style="white-space: nowrap">Залишкова вартiсть</span>
                 </div>
                 <!-- :error-messages="residualValueErr" -->
@@ -493,7 +496,7 @@
               <v-col cols="12" md="6" sm="12" class="pb-0 pt-0 leasing-term-sm">
                 <span class="section-title" :style="mediumAndDown ? 'display: block' : 'display: inline-block;'">Валюта фiнансування</span>
                 <v-radio-group
-                  :class="`financing-currency d-inline-block ${xs ? 'mt-0 pt-2' : ''}`"
+                  :class="`financing-currency d-inline-block mt-0 ${xs ? ' pt-2' : ''}`"
                   :error-messages="leasingCurrencyErr"
                   color="red darken-4"
                   v-model="calcObj.leasingCurrency"
@@ -537,8 +540,8 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col v-if="hasIrregular" :cols="mediumAndDown ? 12 : 5" :class="`mb-6 ${mediumAndDown ? '' : 'mt-2 pl-6'} `">
-            <div class="pb-4" :style="`text-align: ${mediumAndDown ? '' : 'center;'};`">
+          <v-col v-if="hasIrregular" :cols="mediumAndDown ? 12 : 5" :class="`${mediumAndDown ? '' : 'pl-6'} `">
+            <div class="pb-1" :style="`text-align: ${mediumAndDown ? '' : 'center;'};`">
               <span class="section-title">Оберiть тип нестандартного графiку</span>
             </div>
             <v-row class="d-flex justify-space-around">
@@ -732,19 +735,20 @@
                       :false-value="false"
                       color="red darken-3"
                       class="mt-0"
+                      :style="mediumAndDown ? '' : 'padding-top: 14px;'"
                       :dense="mediumAndDown">
                       <template #prepend>
                         <span 
-                          style="display: inline-block; 
+                          :style="`display: inline-block; 
                             margin-top: 2px; 
                             font-size: 1.2rem; 
                             color: #757575; 
                             white-space: nowrap;
-                            position: relative;">
+                            position: relative;`">
                           Канiкули &nbsp;
                           <v-tooltip top>
                             <template v-slot:activator="{ on }">
-                              <v-icon v-on="on" size="19" style="position: absolute; right: -8px; top: -5px; cursor: pointer;" color="#e75d57" v-text="'mdi-information-variant'"></v-icon>
+                              <v-icon v-on="on" size="21" style="position: absolute; right: -8px; top: -5px; cursor: pointer;" color="#e04d45" v-text="'mdi-information-variant'"></v-icon>
                             </template>
                             <span>Пояснення до термiну</span>
                           </v-tooltip>
@@ -1688,6 +1692,9 @@ export default {
   .calculator-red-block {
     background-color: #d24a43;
     z-index: 0;
+    .leasing-type-radio, .auto-type-radio .leasing-type-radio-wrapper .v-radio {
+      padding: 1px 0!important;
+    }
     .claculator-block-border {
       position: absolute;
       top: 19px;
@@ -1715,11 +1722,10 @@ export default {
       }
       .leasing-type-radio-wrapper,
       .auto-type-radio-wrapper {
-
         display: flex;
-        .v-radio {
-          padding: 7px 0;
-        }
+        // .v-radio {
+        //   padding: 7px 0!important;
+        // }
         .red-block-radio-label {
           font-size: 1.2rem;
           color: white;
@@ -1756,7 +1762,7 @@ export default {
         display: none!important;
       }
       label {
-        padding-top: 8px;
+        padding-top: 5px;
         margin-bottom: 5px;
         color: white!important;
       }
@@ -1888,6 +1894,7 @@ export default {
       .v-input__slot {
         display: flex;
         justify-content: center;
+        margin-bottom: 0!important;
         label {
           font-size: 1.1rem;
         }

@@ -1,10 +1,10 @@
 <template>
 <div class="calculator-block">
-  <div class="calculator-red-block">
+  <div :class="`${mediumAndDown ? 'calculator-red-block small' : 'calculator-red-block' }`">
     <div class="claculator-block-border">
     </div>
     <div style="margin: 0 39px">
-      <v-row v-if="!xs" class="leasing-types">
+      <v-row v-if="!xs" :class="`${mediumAndDown ? 'leasing-types small' : 'leasing-types'}`">
         <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
           <input
             @change="getMarksByType($event);
@@ -15,9 +15,9 @@
             name="leasing-type"
             :value="1"
             checked>
-          <label for="car" class="leasing-type-block active">
-            <car class="leasing-type-icon"></car>
-            <span style="white-space: nowrap">ЛЕГКОВI АВТО</span>
+          <label for="car" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+            <car :width="mediumAndDown ? '40' : '47'" :heiht="mediumAndDown ? '18' : '21'" class="leasing-type-icon"></car>
+            <span class="leasing-type-label" style="white-space: nowrap">ЛЕГКОВI АВТО</span>
           </label>
         </v-col>
         <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
@@ -29,9 +29,9 @@
             id="cargo"
             name="leasing-type"
             :value="6">
-          <label for="cargo" class="leasing-type-block">
-            <cargo class="leasing-type-icon"></cargo>
-            <span>ВАНТАЖIВКИ</span>
+          <label for="cargo" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+            <cargo :width="mediumAndDown ? '44' : '65'" :heiht="mediumAndDown ? '23' : '31'" class="leasing-type-icon"></cargo>
+            <span class="leasing-type-label">ВАНТАЖIВКИ</span>
           </label>
         </v-col>
         <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
@@ -43,9 +43,9 @@
             id="special"
             name="leasing-type"
             :value="4">
-          <label for="special" class="leasing-type-block">
-            <special class="leasing-type-icon"></special>
-            <span>СПЕЦТЕХНIКА</span>
+          <label for="special" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+            <special :width="mediumAndDown ? '39' : '50'" :heiht="mediumAndDown ? '39' : '50'" class="leasing-type-icon"></special>
+            <span class="leasing-type-label">СПЕЦТЕХНIКА</span>
           </label>
         </v-col>
         <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
@@ -57,9 +57,9 @@
             id="agricultural"
             name="leasing-type"
             :value="6">
-          <label for="agricultural" class="leasing-type-block">
-            <agricultural class="leasing-type-icon"></agricultural>
-            <span style="white-space: nowrap">С/Г ТЕХНIКА</span>
+          <label for="agricultural" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+            <agricultural :width="mediumAndDown ? '35' : '45'" :heiht="mediumAndDown ? '35' : '39'" class="leasing-type-icon"></agricultural>
+            <span class="leasing-type-label" style="white-space: nowrap">С/Г ТЕХНIКА</span>
           </label>
         </v-col>
         <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
@@ -71,9 +71,9 @@
             id="equipment"
             name="leasing-type"
             :value="6">
-          <label for="equipment" class="leasing-type-block">
-            <equipment class="leasing-type-icon"></equipment>
-            <span>ОБЛАДНАННЯ</span>
+          <label for="equipment" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+            <equipment :width="mediumAndDown ? '34' : '40'" :heiht="mediumAndDown ? '34' : '40'" class="leasing-type-icon"></equipment>
+            <span class="leasing-type-label">ОБЛАДНАННЯ</span>
           </label>
         </v-col>
         <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
@@ -85,9 +85,9 @@
             id="trailer"
             name="leasing-type"
             :value="6">
-          <label for="trailer" class="leasing-type-block">
-            <trailer  style="height: 50px; margin-left: 0.40rem;"></trailer>
-            <span>ПРИЧЕПИ</span>
+          <label for="trailer" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+            <trailer :style=" mediumAndDown ? 'width: 34px; height: 50px; margin-left: 8px' : 'width: 47px; height: 50px; margin-left: 8px'"></trailer>
+            <span class="leasing-type-label">ПРИЧЕПИ</span>
           </label>
         </v-col>
       </v-row>
@@ -109,7 +109,7 @@
           </v-select>
         </v-col>
       </v-row>
-      <div class="pb-4">
+      <div :class="`client-type-wrapper ${mediumAndDown ? 'pb-0' : 'pb-4'}`">
         <div>
           <v-row class="justify-space-around">
             <v-col cols="12" md="6" sm="4" class="pt-0 pb-0">
@@ -120,14 +120,14 @@
                 color="white"
                 v-model="calcObj.leasingClientType"
                 :error-messages="leasingClientTypeErr"
-                row :dense="xs" >
+                row :dense="mediumAndDown" >
                 <div :class="`leasing-type-radio-wrapper ${mediumAndDown ? 'small' : ''}`">
-                  <v-radio :value="2" color="white">
+                  <v-radio :value="2" color="white" dense>
                     <template #label>
                       <span class="red-block-radio-label">Юридична особа</span>
                     </template>
                   </v-radio>
-                  <v-radio :value="1" color="white">
+                  <v-radio :value="1" color="white" dense>
                     <template #label>
                       <span class="red-block-radio-label">Фiзична особа</span>
                     </template>
@@ -143,7 +143,7 @@
                 color="white"
                 v-model="calcObj.isNew"
                 :error-messages="leasingClientTypeErr"
-                row :dense="xs" >
+                row :dense="mediumAndDown" >
                 <div :class="`auto-type-radio-wrapper ${mediumAndDown ? 'small' : xs ? 'small xs' : ''}`">
                   <v-radio :value="true" color="white">
                     <template #label>
@@ -162,7 +162,7 @@
         </div>
       </div>
       <v-row>
-        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-autocomplete
             @change="getModelByMark()"
             v-model="calcObj.leasedAssertMark"
@@ -180,10 +180,10 @@
               || noBrandItems && $store.state.loader"
             :disabled="calcObj.isNew === null || calcObj.leasingClientType === null"
             color="grey darken-2"
-            outlined :dense="xs">
+            outlined :dense="mediumAndDown">
           </v-autocomplete>
         </v-col>
-        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-autocomplete
             v-model="calcObj.leasedAssertModel"
             :error-messages="leasedAssertModelErr"
@@ -199,10 +199,10 @@
             :loading="$store.state.loader && modelOfItem"
             :disabled="calcObj.leasedAssertMark === null"
             color="grey darken-2"
-            outlined :dense="xs">
+            outlined :dense="mediumAndDown">
           </v-autocomplete>
         </v-col>
-        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-select
             v-model="calcObj.leasingObjectYear"
             :items=" calcObj.isNew ? selects.itemYears : selects.oldItemYears"
@@ -213,10 +213,10 @@
             label="Рік"
             :disabled="calcObj.leasedAssertModel === null"
             color="red darken-4"
-            outlined :dense="xs">
+            outlined :dense="mediumAndDown">
           </v-select>
         </v-col>
-        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-text-field
             @input="amountToLocalStr('leasedAssertEngine')"
             v-model="calcObj.leasedAssertEngine"
@@ -226,7 +226,7 @@
             label="Об'єм двигуна"
             :disabled="!yearOfModel"
             color="red darken-4"
-            outlined :dense="xs">
+            outlined :dense="mediumAndDown">
             <template v-slot:append>
               <span style="color: grey!important; display: block; margin-top: 5px;">см3</span>
             </template>
@@ -239,7 +239,7 @@
         </v-col>
       </v-row> -->
       <v-row>
-        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <!-- @input="$v.calcObj.leasingAmount.$touch();
               parseToInt('leasingAmount')" -->
           <!-- v-model="calcObj.leasingAmount" -->
@@ -254,13 +254,13 @@
             color="red darken-4"
             maxlength="20"
             :disabled="calcObj.leasedAssertEngine === null"
-            outlined :dense="xs">
+            outlined :dense="mediumAndDown">
             <!-- <template v-slot:append>
               <span style="color: grey!important; display: block; margin-top: 5px;">грн</span>
             </template> -->
           </v-text-field>
         </v-col>
-        <v-col cols="12" md="3" sm="6" xs="12"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12" :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-select
             v-model="calcObj.currency"
             :items="selects.currencys"
@@ -272,10 +272,10 @@
             color="red darken-4"
             outlined
             :disabled="calcObj.leasingAmount === null"
-            :dense="xs">
+            :dense="mediumAndDown">
           </v-select>
         </v-col>
-        <v-col cols="12" md="3" sm="6" xs="12" v-if="hasForeignCurrency"  class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12" v-if="hasForeignCurrency"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-text-field
             v-model="calcObj.leasingCurrencyCourse"
             :error-messages="leasingCurrencyCourseErr"
@@ -285,11 +285,11 @@
             id="leasingCurrencyCourse"
             label="Курс"
             color="red darken-4"
-            outlined :dense="xs"
+            outlined :dense="mediumAndDown"
             :disabled="calcObj.currency === null">
           </v-text-field>
         </v-col>
-        <v-col cols="12" md="3" sm="6" xs="12" class="pb-0">
+        <v-col cols="12" md="3" sm="6" xs="12" :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-text-field
             v-model="calcObj.leasingQuantity"
             :error-messages="leasingQuantityErr"
@@ -299,25 +299,25 @@
             label="Кiлькiсть"
             min="1"
             color="red darken-4"
-            outlined :dense="xs"
+            outlined :dense="mediumAndDown"
             :disabled="calcObj.currency === null">
           </v-text-field>
         </v-col>
       </v-row>
-      <v-row class="pb-4">
+      <v-row :class="`${mediumAndDown ? 'pb-0' : 'pb-2'}`">
         <v-col cols="12" class="pt-0 pb-0">
           <!--  -->
           <v-checkbox
             :disabled="calcObj.leasingAmount === null || calcObj.leasingAmount === ''"
             v-model="discountPrice"
             :value="true"
-            class="discount-price mt-0 white--text"
+            :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 white--text`"
             label="Вартiсть зi знижкою"
             :false-value="false"
-            dark :dense="xs">
+            dark :dense="mediumAndDown">
           </v-checkbox>
         </v-col>
-        <v-col cols="12" md="4" v-if="discountPrice && calcObj.leasingAmount !== ''">
+        <v-col :class="`${mediumAndDown ? 'pb-0 pt-0' : ''}`" cols="12" md="4" sm="6" xs="12" v-if="discountPrice && calcObj.leasingAmount !== ''">
           <v-text-field
             @input="amountToLocalStr('discount-price')"
             id="discount-price"
@@ -325,7 +325,7 @@
             v-model="calcObj.discountPrice"
             background-color="white"
             color="red darken-4"
-            outlined :dense="xs">
+            outlined :dense="mediumAndDown">
           </v-text-field>
         </v-col>
       </v-row>
@@ -345,7 +345,7 @@
               label="Класичний"
               color="red darken-3"
               value="even"
-              :dense="xs">
+              :dense="mediumAndDown">
             </v-checkbox>
           </v-col>
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
@@ -355,7 +355,7 @@
               label="Ануїтет"
               color="red darken-3"
               value="annuity"
-              :dense="xs">
+              :dense="mediumAndDown">
             </v-checkbox>
           </v-col>
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
@@ -365,7 +365,7 @@
               label="Iндивiдуальний"
               color="red darken-3"
               value="irregular"
-              :dense="xs">
+              :dense="mediumAndDown">
             </v-checkbox>
           </v-col>
         </v-row>
@@ -386,7 +386,7 @@
               color="red darken-4"
               readonly
               outlined
-              :dense="xs">
+              :dense="mediumAndDown">
               <template v-slot:append>
                 <percent></percent>
               </template>
@@ -504,7 +504,7 @@
                   :items="['12', '24', '36', '48', '60']"
                   color="red darken-4"
                   itemColor="red darken-4"
-                  outlined :dense="xs">
+                  outlined :dense="mediumAndDown">
                   <template v-slot:append>
                     <span class="leasing-term-append-label">мiс</span>
                   </template>
@@ -522,7 +522,7 @@
                   id="residual-value"
                   color="red darken-4"
                   itemColor="red darken-4"
-                  outlined :dense="xs">
+                  outlined :dense="mediumAndDown">
                   <template v-slot:append>
                     <percent style="margin-top: 5px;"></percent>
                   </template>
@@ -565,7 +565,7 @@
                     @input="setGraphProportion($event, 'stepGain-oneThird')"
                     min="0"
                     max="100"
-                    :dense="xs"
+                    :dense="mediumAndDown"
                     v-model="stepGain.oneThird"
                     class="pt-0">
                     <template v-slot:append-outer>
@@ -588,7 +588,7 @@
                     name="stepGain-twoThirds"
                     min="0"
                     max="100"
-                    :dense="xs"
+                    :dense="mediumAndDown"
                     v-model="stepGain.twoThirds"
                     class="pt-0">
                     <template v-slot:append-outer>
@@ -604,7 +604,7 @@
                 <v-col cols="6" class="pt-0 pb-0">
                   <v-text-field
                     color="red darken-3"
-                    :dense="xs"
+                    :dense="mediumAndDown"
                     v-model="threeThirds"
                     class="pt-0"
                     readonly>
@@ -661,7 +661,7 @@
                       itemColor="red darken-4"
                       color="red darken-4"
                       outlined
-                      :dense="xs">
+                      :dense="mediumAndDown">
                   </v-select>
                 </v-col>
                 <v-col cols="12" md="6" style="padding-top: 3px;">
@@ -714,7 +714,7 @@
                     itemColor="red darken-4"
                     color="red darken-4"
                     outlined
-                    :dense="xs">
+                    :dense="mediumAndDown">
                   </v-select>
                 </v-col>
                 <v-col cols="12" md="7" class="pt-6">
@@ -1111,7 +1111,7 @@ export default {
       return this.calcObj.graphType.indexOf('irregular') !== -1
     },
     leasingTypeCol() {
-      return this.xs ? '6' : this.mediumAndDown && !this.xs ? '4' : '2'
+      return this.xs ? '6' : this.mediumAndDown && !this.xs ? '2' : '2'
     },
     leasingTypeClass() {
       return `d-flex justify-center ${this.xs ? 'pt-0 pb-0' : ''}`
@@ -1489,6 +1489,7 @@ export default {
 
 
     displayWindowSize() {
+      console.log(this.$vuetify.breakpoint.name)
       this.windowInnerWidth = window.innerWidth
     }
   },
@@ -1717,7 +1718,17 @@ export default {
           white-space: nowrap;
         }
         &.small {
-          flex-direction: column;
+          // flex-direction: column;
+          .red-block-radio-label {
+            font-size: 0.9rem
+          }
+        }
+      }
+    }
+    .client-type-wrapper {
+      &.small {
+        .v-input--selection-controls {
+          margin-top: 0!important;
         }
       }
     }
@@ -1730,19 +1741,33 @@ export default {
       .v-input__slot  {
         margin-bottom: 0;
       }
+      .v-messages {
+        display: none!important;
+      }
       label {
         padding-top: 8px;
         margin-bottom: 5px;
         color: white!important;
       }
+      &.small {
+        label {
+          font-size: 0.9rem;
+        }
+      }
     }
     .v-select__selection, input {
-      font-size: 1.28rem!important;
-      font-weight: bold!important;
+      font-size: 1.28rem;
+      font-weight: bold;
     }
+    
     .v-select__slot, .v-text-field__slot {
       label {
         font-size: 1.28rem!important;
+        font-weight: bold;
+        &.v-label--active {
+          top: -3px!important;
+          color: white!important;
+        }
       }
     }
     .v-input--selection-controls__ripple:before {
@@ -1750,14 +1775,6 @@ export default {
     }
     .v-radio, label {
       color: white;
-    }
-    .v-select__slot, .v-text-field__slot {
-      label {
-        &.v-label--active {
-          top: -3px!important;
-          color: white!important;
-        }
-      }
     }
     .v-input .v-input__slot {
       border-radius: 8px!important;
@@ -1767,16 +1784,40 @@ export default {
         margin-bottom: 0;
       }
     }
+    &.small {
+      .v-select__selection, input {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+      .v-select__slot, .v-text-field__slot {
+        label {
+          font-size: 1.05rem!important;
+          // &.v-label--active {
+          //   top: -3px!important;
+          //   color: white!important;
+          // }
+        }
+      }
+    }
     .leasing-types {
       padding-top: 55px;
       .leasing-type-icon {
         height: 50px;
         margin-left: 0.40rem;
       }
-    }
-    .leasing-types input {
-      display: none;
-      margin-bottom: 18px;
+      &.small {
+        .leasing-type-label {
+          font-size: 0.73rem;
+        }
+        padding-top: 15px;
+        .col {
+          padding-bottom: 0!important;
+        }
+      }
+      input {
+        display: none;
+        margin-bottom: 18px;
+      }
     }
     .leasing-type-block {
       display: inline-block;
@@ -1786,6 +1827,9 @@ export default {
       color: white;
       padding-bottom: 0.35rem;
       transition: border-bottom 0.25s ease-in, color 0.25s ease-in;
+      &.small {
+        padding: 10px 5px 10px 5px;
+      }
       span {
         display: block;
         border-bottom: 4px solid white;

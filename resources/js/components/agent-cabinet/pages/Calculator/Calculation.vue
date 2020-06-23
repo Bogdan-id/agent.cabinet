@@ -4,7 +4,7 @@
     <div class="claculator-block-border">
     </div>
     <div style="margin: 0 39px">
-      <v-row v-if="!xs" :class="`${mediumAndDown ? 'leasing-types small' : 'leasing-types'}`">
+      <v-row v-if="!smallerThenMedium" :class="`${mediumAndDown ? 'leasing-types small' : 'leasing-types'}`">
         <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
           <input
             @change="getMarksByType($event);
@@ -15,7 +15,7 @@
             name="leasing-type"
             :value="1"
             checked>
-          <label for="car" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+          <label for="car" :class="mediumAndDown ? 'leasing-type-block small active' : 'leasing-type-block'">
             <car :width="mediumAndDown ? '40' : '47'" :heiht="mediumAndDown ? '18' : '21'" class="leasing-type-icon"></car>
             <span class="leasing-type-label" style="white-space: nowrap">ЛЕГКОВI АВТО</span>
           </label>
@@ -91,7 +91,7 @@
           </label>
         </v-col>
       </v-row>
-      <v-row v-if="xs" class="pt-8">
+      <v-row v-if="smallerThenMedium" class="pt-8">
         <v-col class="pb-0">
           <v-select
             v-model="calcObj.leasingObjectType"
@@ -111,7 +111,7 @@
       </v-row>
       <div :class="`client-type-wrapper ${mediumAndDown ? 'pb-0' : 'pb-4'}`">
         <div>
-          <v-row class="justify-space-around">
+          <v-row :class="`justify-space-around ${smallerThenMedium ? 'client-type-radio small' : 'client-type-radio'}`">
             <v-col cols="12" md="6" sm="4" class="pt-0 pb-0">
               <!-- :disabled="calcObj.leasingObjectType === null" -->
               <v-radio-group
@@ -121,7 +121,7 @@
                 v-model="calcObj.leasingClientType"
                 :error-messages="leasingClientTypeErr"
                 row :dense="mediumAndDown" >
-                <div :class="`leasing-type-radio-wrapper ${mediumAndDown ? 'small' : ''}`">
+                <div :class="`leasing-type-radio-wrapper ${mediumAndDown ? 'small' : ''}`" :style="smallerThenMedium ? 'flex-direction: column' : ''">
                   <v-radio :value="2" color="white" dense>
                     <template #label>
                       <span class="red-block-radio-label">Юридична особа</span>
@@ -144,7 +144,7 @@
                 v-model="calcObj.isNew"
                 :error-messages="leasingClientTypeErr"
                 row :dense="mediumAndDown" >
-                <div :class="`auto-type-radio-wrapper ${mediumAndDown ? 'small' : xs ? 'small xs' : ''}`">
+                <div :class="`auto-type-radio-wrapper ${mediumAndDown ? 'small' : xs ? 'small xs' : ''}`" :style="smallerThenMedium ? 'flex-direction: column' : ''">
                   <v-radio :value="true" color="white">
                     <template #label>
                       <span class="red-block-radio-label">Нове авто</span>
@@ -331,13 +331,13 @@
       </v-row>
     </div>
   </div>
-  <div class="calculator-white-block">
+  <div :class="`${mediumAndDown ? 'calculator-white-block small' : 'calculator-white-block' }`">
     <v-row style="color: #505050">
       <v-col cols="12" class="pb-0 graphs">
         <div>
           <span class="section-title">Графiк платежiв</span>
         </div>
-        <v-row :class="`d-flex ${ xs?  'graph-checkbox small' : 'graph-checkbox'}  justify-space-around pl-5 pr-5`">
+        <v-row :class="`d-flex ${ mediumAndDown?  'graph-checkbox small' : 'graph-checkbox'}  justify-space-around pl-5 pr-5`">
           <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
             <v-checkbox
               v-model="calcObj.graphType"
@@ -374,7 +374,7 @@
     <v-row :style="`display: flex; justify-content: ${mediumAndDown ? 'center;' : 'space-between;'}`">
       <v-col cols="12">
         <v-row :style="`color: #505050; ${mediumAndDown ? 'flex-direction: column-reverse;' : ''}`">
-          <v-col :cols="mediumAndDown ? 12 : 7" style="align-self: flex-start;">
+          <v-col :cols="mediumAndDown ? 12 : 7" style="align-self: flex-start;" :class="mediumAndDown ? 'pt-0' : ''">
             <v-row>
               <v-col cols="12" class="pt-0 pb-0" style="min-height: 250px;">
                 <div>
@@ -388,7 +388,7 @@
               outlined
               :dense="mediumAndDown">
               <template v-slot:append>
-                <percent></percent>
+                <percent style="margin-top: 5px;"></percent>
               </template>
             </v-text-field>
             <div>
@@ -410,7 +410,7 @@
                   class="advance-range-wrapper">
                   <span
                     class="advance-range-cell"
-                    :style="`color: ${calcObj.advance == ((v - 1) * 5) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.5rem' : '0.8rem'}`">
+                    :style="`color: ${calcObj.advance == ((v - 1) * 5) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.45rem' : '0.8rem'}`">
                       {{ (v - 1) * 5 + '%' }}
                   </span>
                   <div v-if="v === 7" style="position: absolute; top: -34px;">
@@ -440,7 +440,7 @@
                   </div>
                 </div>
                 <div
-                  :style="`position: absolute; right: -9px; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.5rem' : '0.8rem'}`">
+                  :style="`position: absolute; right: -9px; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.45rem' : '0.8rem'}`">
                   {{ `70%` }}
                 </div>
               </div>
@@ -449,54 +449,9 @@
             </v-row>
 
             <v-row>
-              <v-col cols="12" md="6" sm="12" :class="`pt-0 pb-0 ${smAndDown ? '' : 'mt-6'}`">
-                <span class="section-title" :style="mediumAndDown ? 'display: block' : 'display: inline-block;'">Валюта фiнансування</span>
-                <v-radio-group
-                  :class="`financing-currency d-inline-block ${xs ? 'mt-0' : ''}`"
-                  :error-messages="leasingCurrencyErr"
-                  color="red darken-4"
-                  v-model="calcObj.leasingCurrency"
-                  dense>
-                  <v-row class="pl-8" :style="`flex-direction: ${mediumAndDownCurrency ? 'column' : 'row'}`">
-                    <div style="display: flex;">
-                      <v-radio value="UAH" color="red darken-3" dense>
-                        <template #label>
-                          <span
-                            class="current-currency-label"
-                            :style="`color: ${calcObj.leasingCurrency === 'UAH' ? 'black' : ''}`">
-                            UAH
-                          </span>
-                        </template>
-                      </v-radio>
-                    </div>
-                    <div style="display: flex;">
-                      <v-radio value="USD" color="red darken-3" :class="mediumAndDownCurrency ? '' : 'ml-2'">
-                        <template #label>
-                          <span
-                            class="current-currency-label"
-                            :style="`color: ${calcObj.leasingCurrency === 'USD' ? 'black' : ''}`">
-                            USD
-                          </span>
-                        </template>
-                      </v-radio>
-                    </div>
-                    <div style="display: flex;">
-                      <v-radio value="EURO" color="red darken-3" :class="mediumAndDownCurrency ? '' : 'ml-2'">
-                        <template #label>
-                          <span
-                            class="current-currency-label"
-                            :style="`color: ${calcObj.leasingCurrency === 'EURO' ? 'black' : ''}`">
-                            EURO
-                          </span>
-                        </template>
-                      </v-radio>
-                    </div>
-                  </v-row>
-                </v-radio-group>
-              </v-col>
-              <v-col class="pb-0 pt-0 mt-6 leasing-term-sm" cols="12" md="6" sm="12">
+              <v-col :class="`pb-0 pt-0 ${mediumAndDown ? '' : 'mt-6'} leasing-term-sm`" cols="12" md="4" xs="12" sm="5">
                 <div class="pb-4">
-                  <span class="section-title">Термiн фiнансування</span>
+                  <span class="section-title" style="white-space: nowrap">Термiн фiнансування</span>
                 </div>
                 <v-select
                   v-model="calcObj.leasingTerm"
@@ -510,9 +465,16 @@
                   </template>
                 </v-select>
               </v-col>
-              <v-col class="pb-0 pt-0 leasing-term-sm" cols="12" md="6" sm="12">
+              <v-col 
+                :class="`pt-0 pb-0 ${mediumAndDown 
+                  ? '' 
+                  : 'mt-6'}`" 
+                cols="12" md="4" xs="12" sm="5" 
+                :style="!xs 
+                  ? 'margin-left: 1rem;' 
+                  : ''">
                 <div class="pb-4">
-                  <span class="section-title">Залишкова вартiсть</span>
+                  <span class="section-title" style="white-space: nowrap">Залишкова вартiсть</span>
                 </div>
                 <!-- :error-messages="residualValueErr" -->
                 <v-text-field
@@ -527,6 +489,51 @@
                     <percent style="margin-top: 5px;"></percent>
                   </template>
                 </v-text-field>
+              </v-col>
+              <v-col cols="12" md="6" sm="12" class="pb-0 pt-0 leasing-term-sm">
+                <span class="section-title" :style="mediumAndDown ? 'display: block' : 'display: inline-block;'">Валюта фiнансування</span>
+                <v-radio-group
+                  :class="`financing-currency d-inline-block ${xs ? 'mt-0 pt-2' : ''}`"
+                  :error-messages="leasingCurrencyErr"
+                  color="red darken-4"
+                  v-model="calcObj.leasingCurrency"
+                  dense>
+                  <v-row class="pl-2" >
+                    <div style="display: flex;">
+                      <v-radio value="UAH" color="red darken-3" dense>
+                        <template #label>
+                          <span
+                            class="current-currency-label"
+                            :style="`color: ${calcObj.leasingCurrency === 'UAH' ? 'black' : ''}`">
+                            UAH
+                          </span>
+                        </template>
+                      </v-radio>
+                    </div>
+                    <div style="display: flex;">
+                      <v-radio value="USD" color="red darken-3" class="ml-3">
+                        <template #label>
+                          <span
+                            class="current-currency-label"
+                            :style="`color: ${calcObj.leasingCurrency === 'USD' ? 'black' : ''}`">
+                            USD
+                          </span>
+                        </template>
+                      </v-radio>
+                    </div>
+                    <div style="display: flex;">
+                      <v-radio value="EURO" color="red darken-3" class="ml-3">
+                        <template #label>
+                          <span
+                            class="current-currency-label"
+                            :style="`color: ${calcObj.leasingCurrency === 'EURO' ? 'black' : ''}`">
+                            EURO
+                          </span>
+                        </template>
+                      </v-radio>
+                    </div>
+                  </v-row>
+                </v-radio-group>
               </v-col>
             </v-row>
           </v-col>
@@ -648,7 +655,7 @@
           <div class="collapsible-content">
             <div class="content-inner">
               <v-row class="d-flex justify-space-between">
-                <v-col cols="12" md="5">
+                <v-col cols="12" md="5" sm="7" class="pb-0">
                   <v-select
                       v-model="calcObj.insuranceProgram"
                       append-icon="mdi-chevron-down"
@@ -664,7 +671,7 @@
                       :dense="mediumAndDown">
                   </v-select>
                 </v-col>
-                <v-col cols="12" md="6" style="padding-top: 3px;">
+                <v-col cols="12" md="6" sm="10" style="padding-top: 3px;">
                   <div style="margin-bottom: 25px; padding-left: 15px;">
                     <span style="font-size: 0.95rem; color: #757575; ">Франшиза (%)</span>
                   </div>
@@ -705,7 +712,7 @@
           <div class="collapsible-content">
             <div class="content-inner">
               <v-row>
-                <v-col cols="12" md="5">
+                <v-col cols="12" md="5" sm="6" class="pt-0 pb-0">
                   <v-select
                     v-model="calcObj.promotion"
                     append-icon="mdi-chevron-down"
@@ -717,16 +724,31 @@
                     :dense="mediumAndDown">
                   </v-select>
                 </v-col>
-                <v-col cols="12" md="7" class="pt-6">
-                  <div style="margin-bottom: 25px; padding-left: 15px;">
+                <v-col cols="12" md="7" sm=6 class="pt-1">
+                  <div style="padding-left: 10px;">
                     <v-checkbox
                       v-model="calcObj.holiday"
                       :value="true"
                       :false-value="false"
                       color="red darken-3"
-                      class="mt-0">
+                      class="mt-0"
+                      :dense="mediumAndDown">
                       <template #prepend>
-                        <span style="display: inline-block; margin-top: 2px; font-size: 1.2rem; color: #757575; ">Канiкули</span>
+                        <span 
+                          style="display: inline-block; 
+                            margin-top: 2px; 
+                            font-size: 1.2rem; 
+                            color: #757575; 
+                            white-space: nowrap;
+                            position: relative;">
+                          Канiкули &nbsp;
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon v-on="on" size="19" style="position: absolute; right: -8px; top: -5px; cursor: pointer;" color="#e75d57" v-text="'mdi-information-variant'"></v-icon>
+                            </template>
+                            <span>Пояснення до термiну</span>
+                          </v-tooltip>
+                        </span>
                       </template>
                     </v-checkbox>
                   </div>
@@ -813,6 +835,7 @@ export default {
 
     calcObj: {
       // gpsTrackerQuantity: 1,
+      displayWindowSize: null,
       urkAssistService: 1,
       // gainEvenGraphicMonths: null,
       // gainEvenGraphicPercent: null,
@@ -821,7 +844,7 @@ export default {
       leasedAssertMark: null,
       leasedAssertModel: null,
       isNew: true,
-      leasingObjectType: 1,
+      leasingObjectType: {label: "Легкові та комерційні авто", value: 1},
       leasingQuantity: null,
       leasingObjectYear: null,
       leasedAssertEngine: null,
@@ -1098,6 +1121,9 @@ export default {
     mediumAndDown() {
       return this.windowInnerWidth <= 1145
     },
+    smallerThenMedium() {
+      return this.windowInnerWidth <= 823
+    },
     mediumAndDownCurrency() {
       return this.windowInnerWidth <= 1200
     },
@@ -1118,9 +1144,9 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log('event work')
-    },
+    // test() {
+    //   console.log('event work')
+    // },
     restrictToPercentAdvance(id) {
       let el = document.getElementById(id)
       let inputEvent = new Event('input', {bubbles: true})
@@ -1131,7 +1157,6 @@ export default {
         return
       }
       if(parseInt(temp) > 100 - (parseInt(this.calcObj.advance) + 10)) {
-        console.log('greater')
         temp = Math.ceil((100 - parseInt(this.calcObj.advance) - 10) / 5) * 5
       }
 
@@ -1145,33 +1170,18 @@ export default {
       let inputEvent = new Event('input', {bubbles: true})
       let temp = parseInt(el.value.replace(/[^\d]/g, ''))
       if(Number.isNaN(temp) && el.value !== '') {
-        console.log('number is nan')
         el.value = ''
         el.dispatchEvent(inputEvent)
         return
       }
-      
-      console.log(temp)
       if(parseInt(temp) > 100) {
         temp = 100
       }
-
       if(el.value != temp && !isNaN(parseInt(temp))) {
         el.value = temp
         el.dispatchEvent(inputEvent)
-       } // else if(el.value != temp && isNaN(parseInt(temp))) {
-      //   console.log('isNaN')
-      //   el.value = temp.replace(/[^\d]/g, '')
-      //   el.dispatchEvent(inputEvent)
-      // }
+       } 
     },
-
-
-    // parseInt(.replace(/ /g, '' ))
-    //     .toLocaleString()
-    //     .replace(/,/g, ' ')
-
-
     amountToLocalStr(id) {
       let el = document.getElementById(id)
       let discountPriceEl = document.getElementById('discount-price')
@@ -1250,7 +1260,6 @@ export default {
       if(event) event.target.nextSibling.nextSibling.classList.add('active')
     },
     getMarksByType() {
-      console.log(this.calcObj.leasingObjectType)
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.calcObj.leasingObjectType}`)
@@ -1266,17 +1275,14 @@ export default {
         })
     },
     getModelByMark() {
-      console.log(this.$v)
       this.modelItems = []
       this.$store.commit('toggleSpinner', true)
       let categorieId
-      // || this.calcObj.leasingObjectType !== null
       if(typeof this.calcObj.leasingObjectType === 'object') {
         categorieId = this.calcObj.leasingObjectType.value
       } else {
         categorieId = this.calcObj.leasingObjectType
       }
-      console.log(categorieId)
       axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
           console.log(response)
@@ -1324,8 +1330,6 @@ export default {
       this.$v.$touch()
     },
     submit() {
-      console.log(this.$v)
-      // console.log(this.calcObj)
       this.highlightErrors()
       !this.$v.$invalid
       && this.$v.$dirty
@@ -1366,9 +1370,6 @@ export default {
             this.$store.commit('toggleSpinner', false)
           })
     },
-    test() {
-      // console.log(this.calcObj)
-    },
     valueTotal(value, min, max) {
 			return ((value - min) / (max - min))
 		},
@@ -1405,7 +1406,6 @@ export default {
 			}
 		},
 		updateElRange(elRange, val, dataSelector) {
-      console.log(dataSelector)
       if (dataSelector === 'advance-payment' && this.calcObj.residualValue > this.maxResidualValue) {
         this.calcObj.residualValue = this.maxResidualValue
       } else if (dataSelector === 'advance-payment' && this.calcObj.residualValue < this.maxResidualValue) {
@@ -1486,11 +1486,9 @@ export default {
           .replace(/,/g, ' ')
       } else return
     },
-
-
     displayWindowSize() {
-      console.log(this.$vuetify.breakpoint.name)
       this.windowInnerWidth = window.innerWidth
+      console.log(this.windowInnerWidth)
     }
   },
   watch: {
@@ -1530,12 +1528,22 @@ export default {
     // },
     // добавь условие ниже в функцию запроса аксиос
     'calcObj.leasingObjectType': function() {
-      console.log(this.calcObj.leasingObjectType)
+      
+    },
+    'smallerThenMedium': function(state) {
+      //this.calcObj.leasinObjectType = 
+      if(state === true)  {
+        let leasingObjType = this.selects.itemTypes
+          .filter(val => {
+            return val.value === this.calcObj.leasingObjectType
+          })
+        this.calcObj.leasingObjectType = leasingObjType[0]
+        console.log(this.calcObj.leasingObjectType)
+      }
     },
     user() {
       if(this.user) {
         this.calcObj.agentId = this.$store.state.user.agent.id
-        console.log(this.$store.state.user)
       } else {
         return
       }
@@ -1607,6 +1615,7 @@ export default {
       0 3px 16px 2px rgba(0,0,0,.12)!important;
     .section-title {
       font-size: 1rem;
+      display: inline-block;
     }
     .advance-range-scale {
       display: flex;
@@ -1619,8 +1628,8 @@ export default {
     .leasing-term-append-label {
       color: grey !important;
       display: block;
-      font-size: 1.4rem;
-      margin-top: 0;
+      font-size: 1.2rem;
+      margin-top: 3px;
     }
     .advance-range-wrapper {
       width: 7%;
@@ -1674,7 +1683,6 @@ export default {
     label {
       margin-bottom: 0;
       padding-top: 3px;
-      font-size: 1.1rem;
     }
   }
   .calculator-red-block {
@@ -1725,10 +1733,13 @@ export default {
         }
       }
     }
-    .client-type-wrapper {
+    .client-type-radio  {
       &.small {
         .v-input--selection-controls {
           margin-top: 0!important;
+        }
+        .v-messages {
+          display: none!important;
         }
       }
     }
@@ -1792,10 +1803,6 @@ export default {
       .v-select__slot, .v-text-field__slot {
         label {
           font-size: 1.05rem!important;
-          // &.v-label--active {
-          //   top: -3px!important;
-          //   color: white!important;
-          // }
         }
       }
     }
@@ -1858,6 +1865,17 @@ export default {
   .calculator-white-block {
     margin: 0 39px 39px 39px;
     color: #424242;
+    &.small {
+      .v-select__selection, input {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+      .v-select__slot, .v-text-field__slot {
+        label {
+          font-size: 1.05rem!important;
+        }
+      }
+    }
     .v-input__slot {
       fieldset  {
         border: 2px solid #efefef!important;
@@ -1870,11 +1888,17 @@ export default {
       .v-input__slot {
         display: flex;
         justify-content: center;
+        label {
+          font-size: 1.1rem;
+        }
       }
       &.small {
         .v-input__slot {
           display: flex;
           justify-content: flex-start;
+          label {
+            font-size: 0.95rem!important;
+          }
         }
       }
       label {

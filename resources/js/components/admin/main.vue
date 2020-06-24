@@ -39,7 +39,7 @@ export default {
   computed: {
     loading() {
       return this.$store.state.adminLoader
-    }
+    }   
   },
   mounted() {
     console.log(this.$route.name)

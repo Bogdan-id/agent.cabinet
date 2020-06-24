@@ -18,14 +18,14 @@ import DashboardLayout from "../components/agent-cabinet/layout/dashboard/Dashbo
 // import NotFound from "../components/agent-cabinet//pages/NotFoundPage.vue"
 import Dashboard from "../components/agent-cabinet/pages/Dashboard"
 import UserProfile from "../components/agent-cabinet/pages/UserProfile"
-import UsefulMaterials from "../components/agent-cabinet/pages/UsefulMaterials"
+import UsefulMaterialsView from "../components/agent-cabinet/pages/UsefulMaterialsView"
 import RewardApplicationsDashboard from "../components/agent-cabinet/pages/RewardApplications"
 import Calculator from "../components/agent-cabinet/pages/Calculator"
 import CurrentMaterial from "../components/agent-cabinet/pages/CurrentMaterial"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications"
 import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalculation'
 // import CalculationEdit from '../components/agent-cabinet/pages/CalculationEdit.vue'
-import UsefulMaterialsDetail from '../components/agent-cabinet/pages/UsefulMaterialsDetail'
+import UsefulMaterialsCategoryMaterials from '../components/agent-cabinet/pages/UsefulMaterialsCategoryMaterials'
 import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram'
 import UserNotifications from '../components/agent-cabinet/pages/UserNotifications'
 
@@ -41,7 +41,7 @@ const routes = [
     children: [
       {
         path: 'useful-materials',
-        name: 'Кориснi матерiали',
+        name: 'Роздiл Кориснi матерiали',
         component: EditCategory,
         meta: {
           title: 'Кориснi матерiали'
@@ -164,23 +164,23 @@ const routes = [
         }
       },
       {
-        path: '/useful-materials',
+        path: '/useful-materials-categories',
         name: 'Кориснi матерiали',
-        component: UsefulMaterials,
+        component: UsefulMaterialsView,
         meta: {
-          title: 'Кориснi матерiали'
+          title: 'Категорії корисних матерiалiв'
         },
         children: [
           {
-            path: ':detail',
-            name: 'Кориснi матерiали вiд Best-leasing',
-            component: UsefulMaterialsDetail,
+            path: ':materials',
+            name: 'Матерiали категорiї',
+            component: UsefulMaterialsCategoryMaterials,
             meta: {
-              title: "Кориснi матерiалы вiд Best leasing"
+              title: "Матерiали категорiї"
             },
             children: [
               {
-                path: ':detail',
+                path: ':material',
                 name: 'Детально',
                 component: CurrentMaterial,
                 meta: {

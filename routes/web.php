@@ -39,6 +39,8 @@ Route::get('/agent/manager/{agent_id}', 'AgentsController@getAgentManager')
 
 Route::get('calculations/agent/{id}', 'CalculateController@getCalculationByAgent');
 Route::get('calculation/{id}', 'CalculateController@getCalculationById');
+Route::delete('calculation/delete/{id}', 'CalculateController@delete');
+
 
 Route::post('leasing-reqeust/create', 'LeasingRequestController@create');
 Route::get('leasing-reqeust/{id}', 'LeasingRequestController@getLeasingRequest')

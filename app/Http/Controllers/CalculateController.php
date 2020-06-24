@@ -142,4 +142,15 @@ class CalculateController extends Controller
 
         return response()->json($calculation);
     }
+
+    public function delete($id)
+    {
+        $calculation = Calculation::find($id);
+        abort_if(!$calculation, 422, 'Розрахунок не знайдено!');
+        $calculation->delete();
+
+        return response()->json([
+            'status' => 200
+        ]);
+    }
 }

@@ -3,7 +3,7 @@
         <v-app-bar-nav-icon @click="$emit('listenDrawer', !drawer)"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-btn 
-          @click="logOut(); test()"
+          @click="logOut()"
           small dense outlined>
           Вихiд
         </v-btn>    
@@ -19,13 +19,18 @@ export default {
 		drawerState: null,
   }),
   methods: {
-    test() {
-      console.log({_token: this.getCsrf()})
-    },
     logOut() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
-        .post('/admin/auth/logout', {_token: this.getCsrf()})
+        .get('/admin/auth/logout?_pjax=%23pjax-container', 
+          {
+            headers: {
+              'X-PJAX': true,
+              'X-PJAX-Container': '#pjax-container',
+              'X-Requested-Width': 'XMLHttpRequest'
+            }
+          }
+        )
         .then(response => {
           console.log(response)
           this.$store.commit('toggleAdminSpinner', false)

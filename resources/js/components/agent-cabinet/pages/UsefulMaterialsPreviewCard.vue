@@ -4,7 +4,6 @@
       v-slot:default="{ hover }">
       <v-card
         @click="toMaterial()"
-        :to="{name: 'Детально'}"
         :elevation="hover ? 8 : 3"
         class="d-flex ml-3 mr-3 mb-5">
         <v-row class="ml-1 mr-1">
@@ -36,14 +35,19 @@
 
 <script>
 export default {
-  props: ['item'],
+  props: ['item', 'route'],
   data: () => ({
     routeItem: null,
   }),
   methods: {
     toMaterial() {
-      this.$router.push({ name: 'Детально', params: this.item })
+      this.$router.push({path: `${this.$route.path}/${this.item.id}`, params: this.item})
     }
+  },
+  created() {
+    // console.log('***************')
+    console.log(this.$router.currentRoute)
+    // console.log('***************')
   }
 }
 </script>

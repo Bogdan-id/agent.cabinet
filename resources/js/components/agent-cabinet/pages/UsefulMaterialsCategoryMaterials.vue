@@ -11,32 +11,36 @@
       :item="item">
     </material-content>
   </v-card>
+  <router-view></router-view>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
 
-import MaterialContent from './UsefulMaterialsContent'
+import MaterialContent from './UsefulMaterialsPreviewCard'
 export default {
   components: {
     MaterialContent
   },
   data: () => ({
     articles: null,
-    breadcrumbs: null
+    breadcrumbs: null,
   }),
   created() {
-    let id = this.$router.currentRoute.params.itemId
-    axios
-      .get(`/materials/category/${id}`)
-      .then(response => {
-        console.log(response)
-        this.articles = response.data
-      })
-      .catch(error => {
-        console.log(error.response)
-      })
+    let id = this.$router.currentRoute.query.id
+    if(this.articles === null) {
+      // Else request has triggered on child component
+      axios
+        .get(`/materials/category/${id}`)
+        .then(response => {
+          console.log(response)
+          this.articles = response.data
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+      }
   },
 }
 </script>

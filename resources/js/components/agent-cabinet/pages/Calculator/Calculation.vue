@@ -1190,33 +1190,36 @@ export default {
       let el = document.getElementById(id)
       let discountPriceEl = document.getElementById('discount-price')
       let inputEvent = new Event('input', {bubbles: true})
-      let temp = parseInt(el.value.replace(/ /g, '' ))
+      let temp = parseInt(el.value.replace(/\s/g, '' ))
         .toLocaleString()
         .replace(/,/g, ' ')
-      let tempCopy = temp.replace(/[^\d]/g, '')
-      if(el.value != temp && !Number.isNaN(parseInt(temp))) {
+      let tempWithoutSpaces = parseInt(temp.replace(/[^\d]/g, ''))
+      if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
+        console.log('1')
         if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
-          if(parseInt(tempCopy) > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
+          if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
           }
         } else if(id === 'leasing-amount' && this.calcObj.discountPrice !== null) {
-          if(parseInt(tempCopy) < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
+          if(tempWithoutSpaces < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
             this.calcObj.discountPrice = temp
           }
         }
         el.value = temp
         el.dispatchEvent(inputEvent)
       } else if(el.value != temp.replace(/[^\d ]/g, '') && Number.isNaN(parseInt(temp))) {
+        console.log('2')
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
       } else {
+        console.log('3')
         if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
-          if(parseInt(tempCopy) > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
+          if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
           } 
         } else if(id === 'leasing-amount' && this.calcObj.discountPrice !== null) {
-          if(parseInt(tempCopy) < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
+          if(tempWithoutSpaces < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
           } else if (this.calcObj.leasingAmount === '') {

@@ -1,7 +1,7 @@
 <template>
 <div>
   <breads-crumb />
-  <div v-show="$route.name === 'Кориснi матерiали'">
+  <div v-show="$route.name === 'Роздiл Кориснi матерiали'">
     <v-card class="admin-categories">
       <v-dialog
         :max-width="430"

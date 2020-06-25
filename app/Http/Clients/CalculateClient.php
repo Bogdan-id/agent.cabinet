@@ -26,13 +26,14 @@ class CalculateClient
     }
 
     public function calc() {
-        return '/api/leasing/test.json';
+        return 'api/calculator.json';
     }
 
     public function runCalculate($data) : array
     {
+      
         $response = $this->client
-            ->post('/api/leasing/test.json', [
+            ->post('api/calculator.json', [
                 'query' => [
                     'authkey' => $this->api_key
                 ],
@@ -41,7 +42,7 @@ class CalculateClient
             ])
             ->getBody()
             ->getContents();
-
+       
         return json_decode($response, true);
     }
 }

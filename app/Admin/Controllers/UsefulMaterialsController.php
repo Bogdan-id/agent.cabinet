@@ -98,7 +98,7 @@ class UsefulMaterialsController extends Controller
         $path = $request->file('upload')->store('uploads', 'public');
 
         return response()->json([
-            'url' => "storage/{$path}"
+            'url' => url("/storage/{$path}")
         ]);
     }
 

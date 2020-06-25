@@ -69,9 +69,10 @@ export default {
   display: none;
 }
 .text >>> *:first-child {
-  display: block;
   padding: 0;
   margin: 0;
+  max-height: 130px;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

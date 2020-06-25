@@ -40,7 +40,23 @@ export default {
       .get(`/materials/category/${id}`)
       .then(response => {
         console.log(response)
-        this.articles = response.data
+        if(response.status == 500) {
+          // Помилка серверу
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `Помилка серверу`,
+          })
+        } else if(response.status == 422) {
+          // Невірна категорія
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `Невірна категорія`,
+          })
+        } else {
+          this.articles = response.data
+        }
       })
       .catch(error => {
         console.log(error.response)

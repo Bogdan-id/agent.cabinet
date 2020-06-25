@@ -11,7 +11,7 @@
           {{`${article.updated_at.substring(0,10).replace(/-/g, '/')}`}}&nbsp; {{`${article.updated_at.substring(12,19)}`}}
         </span>
       </div>
-      <v-card-text v-html="article.content">
+      <v-card-text v-html="article.content" class="current-material" style="overflow: hidden;">
       </v-card-text>
     </v-card>
   </v-col>
@@ -33,6 +33,19 @@ export default {
       .get(`/material/${material}`)
       .then(response => {
         console.log(response)
+        if(response.status == 500) {
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `Помилка серверу`,
+          })
+        } else if(response.status == 422) {
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `Матерiал не існує`,
+          })
+        }
         this.article = response.data
       })
       .catch(error => {
@@ -44,5 +57,21 @@ export default {
 }
 </script>
 
-<style>
+
+<style lang="scss">
+figure > img {
+  max-width: 100%;
+}
+.current-material {
+  figure {
+    margin: 0 auto;
+    padding: 0 15px 15px 15px;
+    &.image-style-align-right {
+      float: right;
+    }
+    &.image-style-align-left {
+      float: left;
+    }
+  }
+}
 </style>

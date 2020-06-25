@@ -67,14 +67,8 @@ class CalculateRequest extends JsonRequest
             'graphType' => 'required|array',
             'advance' => 'required|integer',
             'leasingTerm' => 'required|integer',
-            'paymentPf' => 'required|boolean',
-            'vehicleOwnerTax' => 'required|integer',
-            'gpsTrackerModel' => 'required|integer',
             'insuranceProgram' => 'required|integer',
-            'insuranceFranchise' => 'required|integer',
-            'gainEvenGraphicMonths' => 'integer',
-            'gainEvenGraphicPercent' => 'between:0,99.99',
-            'UnsrMonths' => 'integer'
+            'insuranceFranchise' => 'required|integer',     
         ];
     }
 }

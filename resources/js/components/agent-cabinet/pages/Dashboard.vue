@@ -23,12 +23,16 @@
         color="red">
       </v-progress-circular>
     </div>
-    <div class="d-flex justify-center" style="width: 100%;">
+    <div style="width: 100%; min-height: 65px;">
       <div v-if="hasUserManager && !loading && requestRecieved" class="mobile-manager-content">
-        <div class="empty-logo"><span class="logo-letter">{{ agentData.name }}</span></div>
-        <span style="font-size: 1.1rem; padding-right: 0.8rem;">{{ agentData.name }}</span>
-        <span style="font-weight: bold; font-size: 0.76rem; display: inline-block; padding-right: 0.8rem;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</span>
-        <span style="color: #bb433c; display: inline-block;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</span>
+        <div style="display: inline-block; width: 70px; position: relaitve;">
+          <div class="empty-logo-mobile"><span class="logo-letter">{{ agentData.name }}</span></div>
+        </div>
+        <div class="manager-data-wrapper">
+          <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; padding-right: 0.8rem;">{{ agentData.name }}</span>
+          <span style="font-weight: bold; white-space: nowrap; font-size: 0.76rem; display: inline-block; padding-right: 0.8rem;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</span>
+          <span style="color: #bb433c; white-space: nowrap; display: inline-block;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -448,9 +452,18 @@ export default {
 }
 .mobile-manager-content {
   padding: 1.6rem 1rem 0.3rem 1rem; 
+  display: flex;
   flex-direction: row;
   span, div:hover {
     cursor: pointer;
+  }
+  .manager-data-wrapper {
+    display: inline-flex; 
+    flex-wrap: wrap; 
+    justify-content: space-around; 
+    width: 90%; 
+    padding-top: 10; 
+    align-items: center;
   }
   .empty-logo {
     margin-right: 0.5rem; 
@@ -460,6 +473,18 @@ export default {
     width: 40px; 
     height: 40px; 
     border-radius: 100%; 
+    background-color: #dadada;
+  }
+  .empty-logo-mobile {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
     background-color: #dadada;
   }
 }

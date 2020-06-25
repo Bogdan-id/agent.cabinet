@@ -1,15 +1,18 @@
 <template>
 <div class="row">
-  <v-card class="usefull-material__detail" v-if="articles !== null">
+  <v-card class="usefull-material__detail" elevation="7" v-if="articles !== null " v-show="$route.name === 'Матерiали категорiї'">
     <v-card-title class="d-block">
-      <!-- <div>{{ article.name }}</div> -->
-      <v-divider></v-divider>
+       {{currentCategory }}
+      <v-divider style="margin-bottom: 0.5rem!important"></v-divider>
     </v-card-title>
-    <material-content
+    <v-card-text v-if="articles.length === 0">
+      <div style="text-align: center;">(Матерiали для вiдображення вiдсутнi)</div>
+    </v-card-text>
+    <useful-materials-preview-card
       v-for="(item, key) in articles"
       :key="key"
       :item="item">
-    </material-content>
+    </useful-materials-preview-card>
   </v-card>
   <router-view></router-view>
 </div>
@@ -18,49 +21,31 @@
 <script>
 import axios from 'axios'
 
-import MaterialContent from './UsefulMaterialsPreviewCard'
+import UsefulMaterialsPreviewCard from './UsefulMaterialsPreviewCard'
 export default {
   components: {
-    MaterialContent
+    UsefulMaterialsPreviewCard
   },
   data: () => ({
+    currentCategory: null,
     articles: null,
     breadcrumbs: null,
   }),
   created() {
-    let id = this.$router.currentRoute.query.id
-    if(this.articles === null) {
-      // Else request has triggered on child component
-      axios
-        .get(`/materials/category/${id}`)
-        .then(response => {
-          console.log(response)
-          this.articles = response.data
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-      }
+    console.log(this.$router.currentRoute)
+    let params = this.$router.currentRoute.params
+    this.currentCategory = params.name
+    let id = params.id
+    axios
+      .get(`/materials/category/${id}`)
+      .then(response => {
+        console.log(response)
+        this.articles = response.data
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
   },
 }
 </script>
 
-<style lang="scss">
-.usefull-material__detail {
-  width: 100%;
-  p {
-    font-size: 16px;
-    display: block;
-  }
-  .image-column {
-    width: 100%;
-    height: 200px;
-  }
-  .text-column {
-    width: 100%;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-  }
-}
-</style>

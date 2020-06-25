@@ -15,7 +15,7 @@
       <transition name="fade" mode="out-in">
         <!-- <keep-alive include="Головна"> 
           <keep-alive> -->
-        <router-view :key="$route.name"></router-view>
+        <router-view></router-view>
       </transition>
     </div>
   </div>

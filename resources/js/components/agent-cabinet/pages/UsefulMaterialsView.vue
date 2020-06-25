@@ -1,9 +1,11 @@
 <template>
-    <div class="row">
+    <div>
       <bread-scrumb />  
-      <div class="col-md-12 useful-materials">
-        <useful-material-categories v-show="$route.name === 'Кориснi матерiали'">
-        </useful-material-categories>
+      <div class="col-md-12 useful-materials pt-0">
+        <keep-alive>
+          <useful-material-categories v-show="$route.name === 'Кориснi матерiали'">
+          </useful-material-categories>
+        </keep-alive>
         <router-view></router-view>
       </div>
     </div>

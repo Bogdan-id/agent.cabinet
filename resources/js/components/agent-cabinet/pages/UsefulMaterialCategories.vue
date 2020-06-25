@@ -1,5 +1,5 @@
 <template>
-<v-card style="min-height: 350px;">
+<v-card style="min-height: 350px;" elevation="8">
   <v-card-title class="d-block grey darken-3 white--text">
     <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>
     Кориснi матерiали
@@ -23,7 +23,9 @@
         :elevation="hover ? 7 : 3"
         :class="hover ? `useful-materials__article mt-2 mb-2 ml-2` : `useful-materials__article mt-2 mb-2`"
         :style="hover ? 'border-left: 7px solid #e64833;' : 'border-left: 7px solid white'"
-        @click="toRoute(item.slug, item.id)">
+        :to="{name: 'Матерiали категорiї', params: {id: item.id, name: item.name}}"
+        >
+        <!-- @click="toRoute(item.slug, item.id)" -->
         <v-card-title class="custom-title" style="justify-content: center; font-size: 27px;">
           <a>{{ item.name }}</a>
         </v-card-title>
@@ -44,8 +46,8 @@ export default {
     test() {
       // console.log(this.$route)
     },
-    toRoute(routeName, id) {
-      this.$router.push({path: `/useful-materials-categories/${routeName}`, params: id, query: {id: id}})
+    toRoute(id, name) {
+      this.$router.push({name: 'Матерiали категорiї', params: {id: id, name: name}})
     }
   },
   created() {
@@ -76,7 +78,7 @@ export default {
 <style lang="scss">
   .useful-materials {
     p {
-      display: none;
+      // display: none;
       color: black;
     }
     .elevation-7 {

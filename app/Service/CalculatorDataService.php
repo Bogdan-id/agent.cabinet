@@ -35,23 +35,23 @@ class CalculatorDataService
         $this->pdfService = $pdfService;
         $this->bitrixClient = $bitrixClient;
     }
-
+   
     /**
      * @return array
      * @throws \Exception
      */
     public function getRequestData () {
-
+    
        $requestData = [
             'agent_id' => $this->calculateRequest->agentId,
             'leasing-object-type' => $this->getObjType(),
             'leasing-program' => $this->getProgram(),
             'leasing-term' => (int) $this->calculateRequest->leasingTerm,
-            'leasing-amount' =>  (int) $this->calculateRequest->leasingAmount,
+            'leasing-amount' =>  (int)(int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount),
             'advance' => (int) $this->calculateRequest->advance / 100,
             'leased-assert-mark' => ($this->calculateRequest->leasedAssertMark ?? [])['name'] ?? null,
             'leased-assert-model' => ($this->calculateRequest->leasedAssertModel ?? [])['name'] ?? null,
-            'leased-assert-engine' => (int) $this->calculateRequest->leasedAssertEngine,
+            'leased-assert-engine' =>  (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasedAssertEngine),
             'client-type' => (int) $this->calculateRequest->leasingClientType,  
             'currency' => $this->getCurrency(),
             'leasing-currency' => $this->getLeasingCurrency(),//
@@ -69,7 +69,6 @@ class CalculatorDataService
             'insurance-franchise' => $this->calculateRequest->insuranceFranchise,
             'insurance-program' => $this->getInsuranceProgram(),
             'leasing-start-date' => $this->getStartDate(),
-            //'insurance-vehicle-type' =>  $this->getVehicleType()
         ];
        
         $graphTypes = $this->calculateRequest->graphType;

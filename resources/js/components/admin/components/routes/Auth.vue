@@ -1,6 +1,6 @@
 <template>
   <div class="admin-auth-form">
-    <v-card width="400" class="admin-panel__login-card mx-auto">
+    <v-card width="400" class="admin-panel__login-card mx-auto" elevation="10">
 		<v-card-title class="headline">Авторизацiя</v-card-title>
       <v-card-text class="pb-0">
         <v-form>
@@ -81,6 +81,9 @@ export default {
   },
   methods: {
     signIn() {
+      console.log('sign-in')
+      console.log(this.$v.$dirty)
+      console.log(!this.$v.$invalid)
       this.$v.$dirty
       && !this.$v.$invalid
         ? this.sendRequest()
@@ -95,35 +98,36 @@ export default {
         post('/admin/auth/login', this.userObj)
         .then(response => {
           console.log(response)
-          if(response.status === 200) {
-            this.$notify({
-              group: 'success',
-              title: 'Успiшно',
-              text: '',
-            })
-          } else {
-            this.$notify({
-              group: 'warning',
-              title: 'Виникла помилка. Спробуйте пiзнiше',
-              text: '',
-            })
-          }
+          // this.$notify({
+          //   group: 'success',
+          //   title: 'Успiшно',
+          //   text: '',
+          // })
+          this.$router.go()
           this.loading = false
         })
         .catch(error => {
           console.log(error.response)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
+          this.$router.go()
+          // this.$notify({
+          //   group: 'error',
+          //   title: 'Помилка',
+          //   text: `${error.response.status} \n ${error.response.data.message}`,
+          // })
+
         })
     },
     highlightErrors() {
       this.$v.$anyError
       this.$v.$touch()
     },
+  },
+  created() {
+    let params = this.$router.currentRoute.params
+    if(params.reload && params.reload === true) {
+      this.$router.go()
+    } else return
   },
   mounted() {
     this.userObj._token = this.getCsrf()

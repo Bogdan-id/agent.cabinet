@@ -94,6 +94,7 @@ const routes = [
   { 
     path: '/admin/auth/login', 
     component: AdminAuth,
+    name: 'admin-authorization',
     meta: {
       title: 'Увiйти'
     }
@@ -172,7 +173,7 @@ const routes = [
         },
         children: [
           {
-            path: ':materials',
+            path: 'materials',
             name: 'Матерiали категорiї',
             component: UsefulMaterialsCategoryMaterials,
             meta: {
@@ -180,7 +181,7 @@ const routes = [
             },
             children: [
               {
-                path: ':material',
+                path: 'material',
                 name: 'Детально',
                 component: CurrentMaterial,
                 meta: {

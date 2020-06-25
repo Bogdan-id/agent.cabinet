@@ -32,9 +32,9 @@ class UsefulMaterialsController extends Controller
         return response()->json($materials);
     }
 
-    public function getMaterialById($id)
+    public function getMaterialBySlug($slug)
     {
-        $material = UsefulMaterial::find($id);
+        $material = UsefulMaterial::where('slug', '=', $slug)->first();
         abort_if(!$material, 422, 'Матеріал не знайдено!');
 
         return response()->json($material);

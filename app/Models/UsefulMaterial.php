@@ -15,6 +15,7 @@ class UsefulMaterial extends Model
         'useful_materials_category_id',
         'title_image',
         'title',
-        'content'
+        'content',
+        'slug'
     ];
 }

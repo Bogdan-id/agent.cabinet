@@ -64,6 +64,7 @@ class UsefulMaterialsController extends Controller
         $usefulMaterial->title_image = $data['titleImage'];
         $usefulMaterial->title = $data['title'];
         $usefulMaterial->content = $data['content'];
+        $usefulMaterial->slug = Str::slug($data['title'], '-');
         $usefulMaterial->save();
 
         return response()->json($usefulMaterial);
@@ -78,6 +79,7 @@ class UsefulMaterialsController extends Controller
             'title_image' =>$data['titleImage'],
             'title' => $data['title'],
             'content' =>$data['content'],
+            'slug' =>  Str::slug($data['title'], '-')
          ]);
 
         return response()->json($usefulMaterial);

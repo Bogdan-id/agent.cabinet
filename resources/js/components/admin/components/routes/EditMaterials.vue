@@ -205,8 +205,8 @@
       sendRequest() {
         this.loading = true
         let url
-        if(this.$route.params.edit) {
-          url = '/admin/useful-material/update/'
+        if(this.$route.params.edit === true) {
+          url = `/admin/useful-material/update/${this.$route.params.id}`
         } else {
           url = '/admin/useful-material/create'
         }
@@ -221,7 +221,7 @@
               text: ``,
             })
             setTimeout(() => {
-              this.$router.push({name: 'Кориснi матерiали', params: {reload: true}})
+              this.$router.push({name: 'Роздiл Кориснi матерiали', params: {reload: true}})
             }, 200);
           })
           .catch(error => {
@@ -276,13 +276,14 @@
         this.categories = this.$route.params.category
         this.editorData = material.content,
         this.materialName = material.title,
-        this.materialImg = material.title_image
+        // this.materialImg = material.title_image
+        this.imageName = '1'
         this.newCategorie = this.$route.params.category[0].id
         // this.materialImgPreview = null,
       } else {
         this.categories = this.$route.params.categories
       }
-      console.log(this.categories)
+      console.log(this.$route.params.id)
     }
   }
 </script>

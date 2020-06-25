@@ -382,7 +382,8 @@ export default {
         params: {
             edit: true, 
             category: category, 
-            material: material
+            material: material,
+            id: id
         }
       })
     },

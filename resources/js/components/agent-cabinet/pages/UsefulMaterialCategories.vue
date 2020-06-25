@@ -79,7 +79,9 @@ export default {
   .useful-materials {
     p {
       // display: none;
-      color: black;
+      color: #343a40;
+      letter-spacing: 0.02rem;
+      font-size: 14px;
     }
     .elevation-7 {
       a {

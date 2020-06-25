@@ -4,7 +4,7 @@
       v-slot:default="{ hover }">
       <v-card
         @click="toMaterial()"
-        :elevation="hover ? 5 : 2"
+        :elevation="hover ? 4 : 1"
         class="d-flex ml-3 mr-3 mb-5">
         <v-row class="ml-1 mr-1">
           <v-col xs="12" sm="4" md="2">
@@ -22,14 +22,16 @@
               </svg-gallery-icon>
             </div>
           </v-col>
-          <v-col xs="12" sm="8" md="10">
-            <div class="text-column pa-3">
+          <v-col xs="12" sm="8" md="10" style="display: flex; align-items: center;">
+            <div class="text-column pa-3 pt-0 pb-0">
               <div>
-                <h4 class="mt-0 mb-1">{{ item.title}}</h4>
+                <span class="mt-0 mb-1 presentation-card-paragraph" style="font-size: 1.1rem; line-height: 1.9rem;">{{ item.title}}</span>
               </div>
               <div class="text" v-html="item.content" style="position: relaitve">
               </div>
-              <span class="pt-2" style="letter-spacing: 0.065rem; font-size: 0.85rem; font-weight: bold; color: grey; display: inline-block;">12.06.2014 26.10</span>
+              <span style="letter-spacing: 0.065rem; font-size: 0.78rem; color: black; line-height: 2rem;">
+                12.06.2014 26.10
+              </span>
             </div>
           </v-col>
         </v-row>
@@ -67,7 +69,6 @@ export default {
   display: none;
 }
 .text >>> *:first-child {
-  font-size: 16px;
   display: block;
   padding: 0;
   margin: 0;
@@ -89,6 +90,11 @@ export default {
    display: -webkit-box;
    -webkit-line-clamp: 5; /* number of lines to show */
    -webkit-box-orient: vertical;
+}
+.presentation-card-paragraph {
+  p {
+    font-size: 0.85rem!important;
+  }
 }
 .usefull-material__detail {
   width: 100%;

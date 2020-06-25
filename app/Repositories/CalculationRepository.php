@@ -33,5 +33,18 @@ class CalculationRepository extends BaseRepository implements CalculationReposit
 
         return $this->model;
     }
+
+    public function update($id, array $attributes)
+    {
+        $calculation = $this->model->find($id);
+        $calculation->update([
+            'agent_id' => $attributes['request_data']['agentId'],
+            'request_id' => $attributes['result_data']['requestId'],
+            'result_data' => $attributes['result_data'],
+            'request_data' => $attributes['request_data']
+        ]);
+       
+        return $calculation;
+    }
   
 }

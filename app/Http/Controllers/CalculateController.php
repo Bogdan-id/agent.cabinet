@@ -42,11 +42,11 @@ class CalculateController extends Controller
      ) {
         try {
             $data = $calculateRequest->validated();
-          
+        
             $requestData = $calculatorDataService->getRequestData();
-            
+           
             $resultData = $calculateClient->runCalculate($requestData);
-            
+        
             $params = array_merge(
             [
                 'result_data' => $resultData
@@ -54,8 +54,13 @@ class CalculateController extends Controller
             [
                 'request_data' => $data
             ]);
-
-            $calculation = $calculationRepository->create($params);
+            if(array_key_exists('calculation_id', $params['request_data']))
+            {
+                $calculation = $calculationRepository->update($params['request_data']['calculation_id'], $params);
+            }else{
+                $calculation = $calculationRepository->create($params);
+            }
+          
            // $bitrixClient->addQuoteFromCalculator($calculatorDataService, $params); //Пока нет надобности отправлять предложения
         } catch (RequestException $e) {
             $message = Psr7\str($e->getRequest());
@@ -67,7 +72,7 @@ class CalculateController extends Controller
 
             abort($message);
         }
-     
+
         return response()->json($calculation);
     }
 

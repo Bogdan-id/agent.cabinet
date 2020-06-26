@@ -8,7 +8,7 @@
       <v-divider class="ml-4 mr-4 mb-1"></v-divider>
       <div style="padding: 0 25px; text-align: left;">
         <span style="letter-spacing: 0.05rem; font-size: 0.79rem; display: inline-block;">
-          {{`${article.updated_at.substring(0,10).replace(/-/g, '/')}`}}&nbsp; {{`${article.updated_at.substring(12,19)}`}}
+          <!-- {{`${article.updated_at.substring(0,10).replace(/-/g, '/')}`}}&nbsp; {{`${article.updated_at.substring(12,19)}`}} -->
         </span>
       </div>
       <v-card-text v-html="article.content" class="current-material" style="overflow: hidden;">
@@ -27,10 +27,10 @@ export default {
     article: null,
   }),
   created() {
-    console.log(this.$router.currentRoute.params)
-    let material = this.$router.currentRoute.params.id 
+    console.log(this.$router.currentRoute.path)
+    // let material = this.$router.currentRoute.params.material 
     axios
-      .get(`/material/${material}`)
+      .get(`${this.$router.currentRoute.path}`)
       .then(response => {
         console.log(response)
         if(response.status == 500) {

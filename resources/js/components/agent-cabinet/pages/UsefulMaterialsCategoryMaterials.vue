@@ -31,13 +31,13 @@ export default {
     articles: null,
     breadcrumbs: null,
   }),
-  created() {
+  mounted() {
     console.log(this.$router.currentRoute)
     let params = this.$router.currentRoute.params
-    this.currentCategory = params.name
-    let id = params.id
+    // this.currentCategory = params.name
+    let category = params.category
     axios
-      .get(`/materials/category/${id}`)
+      .get(`/useful-materials-categories/${category}`)
       .then(response => {
         console.log(response)
         if(response.status == 500) {

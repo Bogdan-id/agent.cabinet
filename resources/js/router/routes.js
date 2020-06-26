@@ -173,7 +173,7 @@ const routes = [
         },
         children: [
           {
-            path: 'materials',
+            path: ':category',
             name: 'Матерiали категорiї',
             component: UsefulMaterialsCategoryMaterials,
             meta: {
@@ -181,7 +181,7 @@ const routes = [
             },
             children: [
               {
-                path: 'material',
+                path: ':material',
                 name: 'Детально',
                 component: CurrentMaterial,
                 meta: {

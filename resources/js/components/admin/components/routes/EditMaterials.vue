@@ -91,11 +91,15 @@
   import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment'
   import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat'
   import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
+
   import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
   import Image from '@ckeditor/ckeditor5-image/src/image'
   import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
   import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
   import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
+  import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize'
+  // import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage'
+
   import List from '@ckeditor/ckeditor5-list/src/list'
 
   import axios from 'axios'
@@ -124,7 +128,9 @@
           ImageUpload,
           ImageStyle,
           ImageToolbar,
-          List
+          List,
+          ImageResize,
+          // LinkImage
         ],
         toolbar: {
           items: [
@@ -146,19 +152,21 @@
           upload: {
             types: ['jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff']
           },
-          toolbar: [
-            'imageStyle:full',
-            'imageStyle:side',
-            '|',
-            'imageTextAlternative'
-          ]
+          toolbar: [ 'imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight' ],
+          styles: [
+                'full',
+                'side',
+                'alignLeft',
+                'alignRight',
+                'alignCenter'
+            ]
         },
         language: 'uk',
         simpleUpload: {
           uploadUrl: '/admin/useful-material/image/upload',
           headers: {
             'X-CSRF-TOKEN': 'CSFR-Token',
-            Authorization: 'Bearer <JSON Web Token>'
+            Authorization: `Bearer this.getCsrf`
           }
         }
       },
@@ -197,6 +205,7 @@
         console.log(this.newCategorie)
       },
       submit() {
+        console.log(this.editorConfig)
         this.$v.$dirty
         && !this.$v.$invalid
           ? this.sendRequest()
@@ -205,8 +214,8 @@
       sendRequest() {
         this.loading = true
         let url
-        if(this.$route.params.edit) {
-          url = '/admin/useful-material/update/'
+        if(this.$route.params.edit === true) {
+          url = `/admin/useful-material/update/${this.$route.params.id}`
         } else {
           url = '/admin/useful-material/create'
         }
@@ -221,7 +230,7 @@
               text: ``,
             })
             setTimeout(() => {
-              this.$router.push({name: 'Кориснi матерiали', params: {reload: true}})
+              this.$router.push({name: 'Роздiл Кориснi матерiали', params: {reload: true}})
             }, 200);
           })
           .catch(error => {
@@ -263,7 +272,7 @@
         this.$v.$touch()
       },
       assignTokenToCkEditorConfig() {
-        this.editorConfig.simpleUpload.headers.Authorization = this.getCsrf()
+        this.editorConfig.simpleUpload.headers.Authorization = `Bearer ${this.getCsrf()}`
       }
     },
     mounted() {
@@ -276,13 +285,14 @@
         this.categories = this.$route.params.category
         this.editorData = material.content,
         this.materialName = material.title,
-        this.materialImg = material.title_image
+        // this.materialImg = material.title_image
+        this.imageName = '1'
         this.newCategorie = this.$route.params.category[0].id
         // this.materialImgPreview = null,
       } else {
         this.categories = this.$route.params.categories
       }
-      console.log(this.categories)
+      console.log(this.$route.params.id)
     }
   }
 </script>

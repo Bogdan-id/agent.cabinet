@@ -382,7 +382,8 @@ export default {
         params: {
             edit: true, 
             category: category, 
-            material: material
+            material: material,
+            id: id
         }
       })
     },
@@ -608,14 +609,18 @@ export default {
 }
 </script>
 <style scoped>
+.material-card-content {
+  display: inline-block;
+}
 .material-card-content >>> * {
   display: none;
 }
 .material-card-content >>> *:first-child {
   font-size: 16px;
-  display: block;
   padding: 0;
   margin: 0;
+  max-height: 130px;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

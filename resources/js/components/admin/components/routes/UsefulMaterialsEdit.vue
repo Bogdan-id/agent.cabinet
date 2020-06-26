@@ -264,9 +264,12 @@
                     :key="key" cols="12">
                       <v-row class="material-card">
                         <v-col cols="12" md="2" class="pt-0 pb-0" style="align-items: center; display: flex; padding-top: 0; padding-bottom: 0;">
-                          <v-icon size="90" style="width: 100%;">
+                          <v-icon v-if="!item.title_image" size="90" style="width: 100%;">
                             mdi-image
                           </v-icon>
+                          <div v-if="item.title_image" style="max-width: 180px;">
+                            <img style="max-width: 100%;":src="item.title_image" />
+                          </div>
                         </v-col>
                         <v-col cols="12" md="10">
                           <div class="material-card-title" style="font-size: 1.1rem; font-weight: bold;">

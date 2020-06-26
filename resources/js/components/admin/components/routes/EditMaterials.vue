@@ -205,7 +205,7 @@
         console.log(this.newCategorie)
       },
       submit() {
-        console.log(this.editorConfig)
+        console.log(this.finalObj())
         this.$v.$dirty
         && !this.$v.$invalid
           ? this.sendRequest()
@@ -254,15 +254,38 @@
       },
       previewImage(event) { 
         if(event) {
-          this.imageName = event.name
+          console.log(event)
+          // this.imageName = event.name
           const reader = new FileReader()
           reader.readAsDataURL(event)
           reader.onload = (data) => {
             this.materialImgPreview = data.currentTarget.result
           }
+          this.uploadTitleImage(event)
         } else {
           this.materialImgPreview = null
         }
+      },
+      uploadTitleImage(event) {
+        let formData = new FormData()
+        formData.append('upload', event)
+        axios
+          .post('/admin/useful-material/image/upload', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+          })
+          .then(response => {
+            console.log(response)
+            this.imageName = response.data.url
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.$notify({
+              message: 'Помилка',
+              type: 'error',
+            })
+          })
       },
       getCsrf() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -280,12 +303,15 @@
       console.log(this.$route)
     },
     created() {
+      let image = new Image()
+      let material = this.$route.params.material
+      image.src = material.title_image
+      console.log(image)
       if(this.$route.params.edit) {
-        let material = this.$route.params.material
         this.categories = this.$route.params.category
         this.editorData = material.content,
         this.materialName = material.title,
-        // this.materialImg = material.title_image
+        this.materialImg = image
         this.imageName = '1'
         this.newCategorie = this.$route.params.category[0].id
         // this.materialImgPreview = null,

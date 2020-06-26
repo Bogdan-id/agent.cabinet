@@ -23,16 +23,16 @@ class UsefulMaterialsController extends Controller
        return response()->json($usefulMaterialsCategories);
     }
 
-    public function getMaterialsByCategory($categoryId)
+    public function getMaterialsByCategory($slug)
     {
-        $category = UsefulMaterialsCategory::find($categoryId);
+        $category = UsefulMaterialsCategory::where('slug', '=', $slug)->first();
         abort_if(!$category, 422, 'Категорія не знайдена!');
         $materials = $category->materials;
 
         return response()->json($materials);
     }
 
-    public function getMaterialBySlug($slug)
+    public function getMaterialBySlug($categorySlug, $slug)
     {
         $material = UsefulMaterial::where('slug', '=', $slug)->first();
         abort_if(!$material, 422, 'Матеріал не знайдено!');

@@ -27,10 +27,10 @@ export default {
     article: null,
   }),
   created() {
-    console.log(this.$router.currentRoute.params)
-    let material = this.$router.currentRoute.params.id 
+    console.log(this.$router.currentRoute.path)
+    // let material = this.$router.currentRoute.params.material 
     axios
-      .get(`/material/${material}`)
+      .get(`${this.$router.currentRoute.path}`)
       .then(response => {
         console.log(response)
         if(response.status == 500) {

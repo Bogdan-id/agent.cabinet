@@ -4,18 +4,19 @@
     <div class="claculator-block-border">
     </div>
     <div style="margin: 0 39px">
-      <v-row v-if="!smallerThenMedium" :class="`${mediumAndDown ? 'leasing-types small' : 'leasing-types'}`">
+      <v-row v-show="!smallerThenMedium" :class="`${mediumAndDown ? 'leasing-types small' : 'leasing-types'}`">
         <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
           <input
             @change="getMarksByType($event);
               addActiveClass($event)"
             v-model="calcObj.leasingObjectType"
             type="radio"
+            class="radio-objectType"
             id="car"
             name="leasing-type"
             :value="1"
             checked>
-          <label for="car" :class="mediumAndDown ? 'leasing-type-block small active' : 'leasing-type-block'">
+          <label for="car" id="Легкові та комерційні авто" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <car :width="mediumAndDown ? '40' : '47'" :heiht="mediumAndDown ? '18' : '21'" class="leasing-type-icon"></car>
             <span class="leasing-type-label" style="white-space: nowrap">ЛЕГКОВI АВТО</span>
           </label>
@@ -26,10 +27,11 @@
               addActiveClass($event)"
             v-model="calcObj.leasingObjectType"
             type="radio"
+            class="radio-objectType"
             id="cargo"
             name="leasing-type"
             :value="6">
-          <label for="cargo" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+          <label for="cargo" id="Вантажні авто" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <cargo :width="mediumAndDown ? '44' : '65'" :heiht="mediumAndDown ? '23' : '31'" class="leasing-type-icon"></cargo>
             <span class="leasing-type-label">ВАНТАЖIВКИ</span>
           </label>
@@ -39,11 +41,12 @@
             @change="getMarksByType($event);
               addActiveClass($event)"
             v-model="calcObj.leasingObjectType"
+            class="radio-objectType"
             type="radio"
             id="special"
             name="leasing-type"
             :value="4">
-          <label for="special" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+          <label for="special" id="СПЕЦІАЛЬНІ ТЗ" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <special :width="mediumAndDown ? '39' : '50'" :heiht="mediumAndDown ? '39' : '50'" class="leasing-type-icon"></special>
             <span class="leasing-type-label">СПЕЦТЕХНIКА</span>
           </label>
@@ -54,10 +57,11 @@
               addActiveClass($event)"
             v-model="calcObj.leasingObjectType"
             type="radio"
+            class="radio-objectType"
             id="agricultural"
             name="leasing-type"
             :value="6">
-          <label for="agricultural" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+          <label for="agricultural" id="Сільгосптехніка" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <agricultural :width="mediumAndDown ? '35' : '45'" :heiht="mediumAndDown ? '35' : '39'" class="leasing-type-icon"></agricultural>
             <span class="leasing-type-label" style="white-space: nowrap">С/Г ТЕХНIКА</span>
           </label>
@@ -68,10 +72,11 @@
               addActiveClass($event)"
             v-model="calcObj.leasingObjectType"
             type="radio"
+            class="radio-objectType"
             id="equipment"
             name="leasing-type"
             :value="6">
-          <label for="equipment" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+          <label for="equipment" id="Обладнання" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <equipment :width="mediumAndDown ? '34' : '40'" :heiht="mediumAndDown ? '34' : '40'" class="leasing-type-icon"></equipment>
             <span class="leasing-type-label">ОБЛАДНАННЯ</span>
           </label>
@@ -82,16 +87,17 @@
               addActiveClass($event)"
             v-model="calcObj.leasingObjectType"
             type="radio"
+            class="radio-objectType"
             id="trailer"
             name="leasing-type"
             :value="6">
-          <label for="trailer" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+          <label for="trailer" id="Причепи та Напівпричепи" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <trailer :style=" mediumAndDown ? 'width: 34px; height: 50px; margin-left: 8px' : 'width: 47px; height: 50px; margin-left: 8px'"></trailer>
             <span class="leasing-type-label">ПРИЧЕПИ</span>
           </label>
         </v-col>
       </v-row>
-      <v-row v-if="smallerThenMedium" class="pt-8">
+      <v-row v-show="smallerThenMedium" class="pt-8">
         <v-col class="pb-0">
           <v-select
             v-model="calcObj.leasingObjectType"
@@ -459,7 +465,7 @@
                 <v-select
                   v-model="calcObj.leasingTerm"
                   :error-messages="leasingTermErr"
-                  :items="['12', '24', '36', '48', '60']"
+                  :items="[12, 24, 36, 48, 60]"
                   color="red darken-4"
                   itemColor="red darken-4"
                   outlined :dense="mediumAndDown">
@@ -827,23 +833,26 @@ export default {
 			currentProgress: '#d24a43',
 			remainingProgress: '#efefef'
 		},
+    advanceDisabled: false,
+
     stepGain: {
       oneThird: 33,
       twoThirds: 33,
       threeThirds: 34
     },
-    
-    emulateLeaseingAmount: null,
-    emulateDiscountPrice: null,
-    advanceDisabled: false,
-
     calcObj: {
       // gpsTrackerQuantity: 1,
-      displayWindowSize: null,
-      urkAssistService: 1,
+      // urkAssistService: 1,
       // gainEvenGraphicMonths: null,
       // gainEvenGraphicPercent: null,
       // UnsrMonths: null,
+      // vehicleOwnerTax: "2",
+      // paymentPf: false,
+      stepGain: {
+        oneThird: null,
+        twoThirds: null,
+        threeThirds: null
+      },
       agentId: null,
       leasedAssertMark: null,
       leasedAssertModel: null,
@@ -853,24 +862,24 @@ export default {
       leasingObjectYear: null,
       leasedAssertEngine: null,
       leasingClientType: 2,
-      residualValue: 0,
       currency: null,
       leasingCurrency: null,
       leasingCurrencyCourse: null,
       leasingAmount: null,
       graphType: [],
-      advance: 20,
+      advance: 15,
       leasingTerm: null,
-      vehicleOwnerTax: "2",
-
       universalGain: null,
 
-      // paymentPf: false,
+      // new fields
+      residualValue: 0,
+      promotion: null,
+      holiday: null,
       insuranceProgram: {text: 'Обережний', value: 2},
       insuranceFranchise: 0,
       discountPrice: null,
-      promotion: null,
-      holiday: null,
+
+      // token
       _token: null
     }
   }),
@@ -918,7 +927,7 @@ export default {
             return { required }
           } else return true
         })(),
-        vehicleOwnerTax: { required },
+        // vehicleOwnerTax: { required },
         // paymentPf: { required },
         leasingTerm: { required },
 
@@ -1079,10 +1088,10 @@ export default {
       if (!this.$v.calcObj.leasingTerm.$error) return
       return this.commonErr
     },
-    vehicleOwnerTaxErr() {
-      if (!this.$v.calcObj.vehicleOwnerTax.$error) return
-      return this.commonErr
-    },
+    // vehicleOwnerTaxErr() {
+    //   if (!this.$v.calcObj.vehicleOwnerTax.$error) return
+    //   return this.commonErr
+    // },
     paymentPfErr() {
       if (!this.$v.calcObj.paymentPf.$error ) return
       return this.commonErr
@@ -1145,12 +1154,31 @@ export default {
     },
     leasingTypeClass() {
       return `d-flex justify-center ${this.xs ? 'pt-0 pb-0' : ''}`
+    },
+    stepGainComputed() {
+      return this.stepGain
     }
   },
   methods: {
-    // test() {
-    //   console.log('event work')
-    // },
+    changeActiveClass() {
+      console.log('ChangeActive triggered')
+      let el = document.querySelectorAll('.leasing-type-block')
+      el.forEach(val => {
+        console.log(val)
+        val.classList.remove('active')
+      })
+      let elements = document.querySelectorAll('.radio-objectType')
+      elements
+        .forEach(val => {
+          if(val.value == this.calcObj.leasingObjectType || val.value == this.calcObj.leasingObjectType.value) {
+            console.log(val.nextSibling.nextSibling.id)
+            console.log(this.calcObj.leasingObjectType.label)
+            if(val.nextSibling.nextSibling.id == this.calcObj.leasingObjectType.label) {
+              val.nextSibling.nextSibling.classList.add('active')
+            }
+          }
+        })
+    },
     restrictToPercentAdvance(id) {
       let el = document.getElementById(id)
       let inputEvent = new Event('input', {bubbles: true})
@@ -1337,29 +1365,30 @@ export default {
       this.$v.$touch()
     },
     submit() {
+      this.checkIfHasIrregular()
+      this.checkIfHasCurrency()
+      console.log(this.calcObj)
+      console.log(this.stepGain)
       this.highlightErrors()
       !this.$v.$invalid
       && this.$v.$dirty
-          && !this.$v.$invalid
-          && this.$v.$dirty
-            ? this.sendRequest()
-            : this.notify('', 'Заповнiть даннi', 'error')
+        && !this.$v.$invalid
+        && this.$v.$dirty
+          ? this.sendRequest()
+          : this.notify('', 'Заповнiть даннi', 'error')
 
     },
     checkIfHasCurrency() {
       if(this.hasForeignCurrency) return
       this.calcObj.leasingCurrencyCourse = 1
     },
-    checkIfHasAnnuity() {
-      if(!this.hasAnnuity) {
-        delete this.calcObj.gainEvenGraphicMonths
-        delete this.calcObj.gainEvenGraphicPercent
-        delete this.calcObj.UnsrMonths
+    checkIfHasIrregular() {
+      if(!this.hasIrregular) {
+        delete this.calcObj.universalGain
+        delete this.calcObj.stepGain
       }
     },
     sendRequest() {
-      this.checkIfHasAnnuity()
-      this.checkIfHasCurrency()
       this.$store.commit('toggleSpinner', true)
       axios
         .post('/calculate', this.calcObj)
@@ -1496,70 +1525,9 @@ export default {
     displayWindowSize() {
       this.windowInnerWidth = window.innerWidth
       console.log(this.windowInnerWidth)
-    }
-  },
-  watch: {
-    insuranceProgram(val) {
-      this.calcObj.insuranceProgram = val.value
     },
-    'calcObj.leasingCurrencyCourse': function (course) {
-      if(course == null){
-        !this.hasForeignCurrency
-          ? this.calcObj.leasingCurrencyCourse = 1
-          : false
-      } else {
-        if(Number.isNaN(parseFloat(course))) return
-        this.calcObj.leasingCurrencyCourse = parseFloat(course)
-      }
-    },
-    'calcObj.gainEvenGraphicMonths': function(value) {
-      if(!value) return value
-      this.calcObj.gainEvenGraphicMonths = parseInt(value)
-    },
-    'calcObj.gainEvenGraphicPercent': function(value) {
-      if(!value) return value
-      else if(Number.isNaN(parseFloat(value))) return value
-      this.calcObj.gainEvenGraphicPercent = parseFloat(value)
-    },
-    'calcObj.UnsrMonths': function(value) {
-      if(!value) return value
-      this.calcObj.UnsrMonths = parseInt(value)
-    },
-    'calcObj.leasingQuantity': function(value) {
-      if(!value) return value
-      this.calcObj.leasingQuantity = parseInt(value)
-    },
-    // 'calcObj.leasedAssertEngine': function(value) {
-    //   if(!value) return value
-    //   this.calcObj.leasedAssertEngine = parseInt(value)
-    // },
-    // добавь условие ниже в функцию запроса аксиос
-    'calcObj.leasingObjectType': function() {
-      
-    },
-    'smallerThenMedium': function(state) {
-      //this.calcObj.leasinObjectType = 
-      if(state === true)  {
-        let leasingObjType = this.selects.itemTypes
-          .filter(val => {
-            return val.value === this.calcObj.leasingObjectType
-          })
-        this.calcObj.leasingObjectType = leasingObjType[0]
-        console.log(this.calcObj.leasingObjectType)
-      }
-    },
-    user() {
-      if(this.user) {
-        this.calcObj.agentId = this.$store.state.user.agent.id
-      } else {
-        return
-      }
-    },
-  },
-  created() {
-    window.addEventListener("resize", this.displayWindowSize)
-    if(this.$router.currentRoute.params.edit === true) {
-    axios
+    getUserCalculations() {
+      axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
         let data = response.data.request_data
@@ -1581,6 +1549,7 @@ export default {
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
         this.getMarksByType()
         this.getModelByMark()
+        this.changeActiveClass()
       })
       .catch(error => {
         console.log(error.response)
@@ -1590,16 +1559,120 @@ export default {
           text: error.response.data.message,
         })
       })
-    } else {
-      this.initAdvanceInputValue()
-      this.initFranchiseInput()
     }
   },
+  watch: {
+    insuranceProgram(val) {
+      this.calcObj.insuranceProgram = val.value
+    },
+    'stepGain.oneThird': function(val) {
+      this.calcObj.stepGain.oneThird = parseInt(val)
+    },
+    'stepGain.twoThirds': function(val) {
+      this.calcObj.stepGain.twoThirds = parseInt(val)
+    },
+    'stepGain.threeThirds': function(val) {
+      this.calcObj.stepGain.threeThirds = parseInt(val)
+    },
+    hasIrregular(val) {
+      console.log('hasIrregular triggered')
+      if(val === true) {
+        this.calcObj.universalGain = null
+        this.calcObj.stepGain = {
+          oneThird: 33,
+          twoThirds: 33,
+          threeThirds: 34
+        }
+      } else {
+        delete this.calcObj.universalGain
+        delete this.calcObj.stepGain
+      }
+    },
+    // stepGain.twoThirds
+    // stepGain.threeThirds
+    'calcObj.leasingTerm': function (value) {
+      this.calcObj.leasingTerm = parseInt(value)
+    },
+    'calcObj.leasingCurrencyCourse': function (course) {
+      if(course == null){
+        !this.hasForeignCurrency
+          ? this.calcObj.leasingCurrencyCourse = 1
+          : false
+      } else {
+        if(Number.isNaN(parseFloat(course))) return
+        this.calcObj.leasingCurrencyCourse = parseFloat(course)
+      }
+    },
+    // 'calcObj.gainEvenGraphicMonths': function(value) {
+    //   if(!value) return value
+    //   this.calcObj.gainEvenGraphicMonths = parseInt(value)
+    // },
+    // 'calcObj.gainEvenGraphicPercent': function(value) {
+    //   if(!value) return value
+    //   else if(Number.isNaN(parseFloat(value))) return value
+    //   this.calcObj.gainEvenGraphicPercent = parseFloat(value)
+    // },
+    // 'calcObj.UnsrMonths': function(value) {
+    //   if(!value) return value
+    //   this.calcObj.UnsrMonths = parseInt(value)
+    // },
+    'calcObj.leasingQuantity': function(value) {
+      if(!value) return value
+      this.calcObj.leasingQuantity = parseInt(value)
+    },
+    'calcObj.advance': function(value) {
+      if(!value) return value
+      this.calcObj.advance = parseInt(value)
+    },
+    // 'calcObj.leasedAssertEngine': function(value) {
+    //   if(!value) return value
+    //   this.calcObj.leasedAssertEngine = parseInt(value)
+    // },
+    // добавь условие ниже в функцию запроса аксиос
+    'calcObj.leasingObjectType': function(value) {
+      if(Number.isInteger(value)) {
+        let leasingObjType = this.selects.itemTypes
+          .filter(val => {
+            return val.value === this.calcObj.leasingObjectType
+          })
+        this.calcObj.leasingObjectType = leasingObjType[0]
+      } else return
+    },
+    smallerThenMedium(state) {
+      console.log('smaller than medium triggered')
+      if(state === false)  {
+        this.changeActiveClass()
+      } else return
+    },
+    mediumAndDown(state) {
+      console.log('medium and down triggerd')
+      console.log(state)
+      this.changeActiveClass()
+    },
+    user() {
+      if(this.user) {
+        this.calcObj.agentId = this.$store.state.user.agent.id
+      } else {
+        return
+      }
+    },
+  },
+  created() {
+    window.addEventListener("resize", this.displayWindowSize)
+  },
   mounted() {
-    this.initAdvanceInputValue()
+    // window.addEventListener("resize", this.displayWindowSize)
+    if(this.$router.currentRoute.params.edit === true) {
+      this.getUserCalculations()
+    } else {
+      this.calcObj.leasingObjectType = {label: "Легкові та комерційні авто", value: 1}
+    }
+    this.changeActiveClass()
     this.initFranchiseInput()
     this.getMarksByType()
     this.displayWindowSize()
+    this.initAdvanceInputValue()
+    
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
   }

@@ -47,18 +47,19 @@ export default {
   components: {
     svgGalleryIcon
   },
-  props: ['item', 'route'],
+  props: ['item'],
   data: () => ({
     routeItem: null,
   }),
   methods: {
     toMaterial() {
-      this.$router.push({name: 'Детально', params: {id: this.item.id}})
+      this.$router.push({path: `${this.$router.currentRoute.path}/${this.item.slug}`})
     }
   },
   created() {
+
     // console.log('***************')
-    // console.log(this.$router.currentRoute)
+    console.log(this.item)
     // console.log('***************')
   }
 }

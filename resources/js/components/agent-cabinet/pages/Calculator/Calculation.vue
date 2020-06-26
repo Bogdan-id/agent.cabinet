@@ -1164,20 +1164,21 @@ export default {
       console.log('ChangeActive triggered')
       let el = document.querySelectorAll('.leasing-type-block')
       el.forEach(val => {
-        console.log(val)
         val.classList.remove('active')
       })
-      let elements = document.querySelectorAll('.radio-objectType')
-      elements
+      setTimeout(()=> {
+        let elements = document.querySelectorAll('.radio-objectType')
+        elements
         .forEach(val => {
-          if(val.value == this.calcObj.leasingObjectType || val.value == this.calcObj.leasingObjectType.value) {
-            console.log(val.nextSibling.nextSibling.id)
-            console.log(this.calcObj.leasingObjectType.label)
+          if(val.value == this.calcObj.leasingObjectType.value) {
             if(val.nextSibling.nextSibling.id == this.calcObj.leasingObjectType.label) {
               val.nextSibling.nextSibling.classList.add('active')
             }
           }
         })
+      }, 200)
+      
+      
     },
     restrictToPercentAdvance(id) {
       let el = document.getElementById(id)
@@ -1223,7 +1224,6 @@ export default {
         .replace(/,/g, ' ')
       let tempWithoutSpaces = parseInt(temp.replace(/[^\d]/g, ''))
       if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
-        console.log('1')
         if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
@@ -1236,11 +1236,9 @@ export default {
         el.value = temp
         el.dispatchEvent(inputEvent)
       } else if(el.value != temp.replace(/[^\d ]/g, '') && Number.isNaN(parseInt(temp))) {
-        console.log('2')
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
       } else {
-        console.log('3')
         if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             discountPriceEl.value = this.calcObj.leasingAmount
@@ -1289,7 +1287,6 @@ export default {
     addActiveClass(event) {
       let el = document.querySelectorAll('.leasing-type-block')
       el.forEach(val => {
-        console.log(val)
         val.classList.remove('active')
       })
       if(event) event.target.nextSibling.nextSibling.classList.add('active')
@@ -1644,9 +1641,8 @@ export default {
         this.changeActiveClass()
       } else return
     },
-    mediumAndDown(state) {
+    mediumAndDown() {
       console.log('medium and down triggerd')
-      console.log(state)
       this.changeActiveClass()
     },
     user() {

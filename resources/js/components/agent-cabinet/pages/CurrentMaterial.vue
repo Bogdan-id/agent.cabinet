@@ -12,7 +12,7 @@
         </span>
       </div>
       <div style="display: flex; justify-content: center; padding: 15px 22px 25px 22px;">
-        <img :src="article.title_image" style="width: 100%; max-width: 920px;"/>
+        <img :src="article.title_image" style="width: 100%; max-width: 990px;"/>
       </div>
       <v-card-text v-html="article.content" class="current-material" style="overflow: hidden;">
       </v-card-text>

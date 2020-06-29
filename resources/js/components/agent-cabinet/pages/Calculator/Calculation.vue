@@ -689,7 +689,7 @@
                     name="franchise"
                     :min="franchise.min"
                     :max="franchise.max"
-                    v-model="calcObj.insuranceFranchise"
+                    v-model="insuranceFranchise"
                     step="0.5"
                     class="slider"
                     @input="initElRange($event)">
@@ -722,9 +722,11 @@
               <v-row>
                 <v-col cols="12" md="5" sm="6" class="pt-0 pb-0">
                   <v-select
-                    v-model="calcObj.promotion"
+                    v-model="calcObj.stock"
                     append-icon="mdi-chevron-down"
-                    :items="['Акцiя 1', 'Акцiя 2', 'Акцiя 3']"
+                    :items="selects.stock"
+                    item-text="text"
+                    item-value="value"
                     label="Акцiя"
                     itemColor="red darken-4"
                     color="red darken-4"
@@ -735,9 +737,9 @@
                 <v-col cols="12" md="7" sm=6 class="pt-1">
                   <div style="padding-left: 10px;">
                     <v-checkbox
-                      v-model="calcObj.holiday"
-                      :value="true"
-                      :false-value="false"
+                      v-model="calcObj.holidays"
+                      :value="1"
+                      :false-value="2"
                       color="red darken-3"
                       class="mt-0"
                       :style="mediumAndDown ? '' : 'padding-top: 14px;'"
@@ -839,6 +841,7 @@ export default {
       twoThirds: 33,
       threeThirds: 34
     },
+    insuranceFranchise: 0,
     calcObj: {
       // gpsTrackerQuantity: 1,
       // urkAssistService: 1,
@@ -872,10 +875,10 @@ export default {
 
       // new fields
       residualValue: 0,
-      promotion: null,
-      holiday: null,
+      stock: null,
+      holidays: 2,
       insuranceProgram: 2,
-      insuranceFranchise: 0,
+      insuranceFranchise: 1,
       discountPrice: null,
 
       // token
@@ -1597,8 +1600,20 @@ export default {
         delete this.calcObj.stepGain
       }
     },
-    'calcObj.insuranceFranchise': function(value) {
-      this.calcObj.insuranceFranchise = parseFloat(value)
+    insuranceFranchise(value) {
+      console.log('insuranceFranchise')
+      switch(value) {
+        case '0': return this.calcObj.insuranceFranchise = 1
+        case '0.5': return this.calcObj.insuranceFranchise = 2
+        case '1': return this.calcObj.insuranceFranchise = 3
+        case '1.5': return this.calcObj.insuranceFranchise = 4
+        case '2': return this.calcObj.insuranceFranchise = 5
+      }
+    },
+    'calcObj.holidays': function(value) {
+      if(value != 1) {
+        this.calcObj.holidays = 2
+      }
     },
     'stepGain.oneThird': function(value) {
       console.log('watch')

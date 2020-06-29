@@ -957,10 +957,14 @@ export default {
       }
     },
     threeThirds() {
-      if(Number.isNaN(100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds)))) {
-        return 0
+      let threeThirds = 100
+      if (!Number.isNaN(parseInt(this.stepGain.oneThird))) {
+        threeThirds = threeThirds - this.stepGain.oneThird
       }
-      return 100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds))
+      if (!Number.isNaN(parseInt(this.stepGain.twoThirds))) {
+        threeThirds = threeThirds - this.stepGain.twoThirds
+      }
+      return threeThirds
     },
 
     maxResidualValue() {
@@ -1155,9 +1159,6 @@ export default {
     leasingTypeClass() {
       return `d-flex justify-center ${this.xs ? 'pt-0 pb-0' : ''}`
     },
-    stepGainComputed() {
-      return this.stepGain
-    }
   },
   methods: {
     changeActiveClass() {
@@ -1256,6 +1257,8 @@ export default {
       }
     },
     setGraphProportion(event, selector) {
+      let oneThird = document.querySelector('#stepGain-oneThird')
+      let twoThirds = document.querySelector('#stepGain-twoThirds')
       let currentEl = document.getElementById(selector)
       let inputEvent = new Event('input', {bubbles: true})
       currentEl.value = parseInt(currentEl.value.replace(/[^\d]/g, ''))
@@ -1263,19 +1266,29 @@ export default {
         currentEl.value = 100
         currentEl.dispatchEvent(inputEvent)
       }
+      if(Number.isNaN(currentEl.value)) {
+        currentEl.value = 0
+        currentEl.dispatchEvent(inputEvent)
+      }
       if(selector == 'stepGain-oneThird') {
-        if(parseInt(currentEl.value) + parseInt(this.stepGain.twoThirds) > 100) {
-          this.stepGain.twoThirds = 100 - currentEl.value
-        } else if(Number.isNaN(currentEl.value)) {
-          this.stepGain.twoThirds = null
-        } else return
+        console.log('OneThird')
+        if(parseInt(currentEl.value) + parseInt(twoThirds.value) > 100) {
+          console.log(`${currentEl.value} + ${parseInt(twoThirds.value)}`)
+          console.log(currentEl.value + parseInt(twoThirds.value))
+          twoThirds.value = 100 - currentEl.value
+          twoThirds.dispatchEvent(inputEvent)
+        }
+        return
       } 
       else if(selector == 'stepGain-twoThirds') {
-        if(parseInt(currentEl.value) + parseInt(this.stepGain.oneThird) > 100) {
-          this.stepGain.oneThird = 100 - currentEl.value
-        } else if(Number.isNaN(currentEl.value)) {
-          this.stepGain.oneThird = null
-        } else return
+        console.log('TwoThird')
+        if(parseInt(currentEl.value) + parseInt(oneThird.value) > 100) {
+          console.log(`${currentEl.value} + ${parseInt(oneThird.value)}`)
+          console.log(currentEl.value + parseInt(oneThird.value))
+          oneThird.value = 100 - currentEl.value
+          oneThird.dispatchEvent(inputEvent)
+        } 
+        return
       }
     },
     changeCustomGraph(id) {
@@ -1562,15 +1575,15 @@ export default {
     insuranceProgram(val) {
       this.calcObj.insuranceProgram = val.value
     },
-    'stepGain.oneThird': function(val) {
-      this.calcObj.stepGain.oneThird = parseInt(val)
-    },
-    'stepGain.twoThirds': function(val) {
-      this.calcObj.stepGain.twoThirds = parseInt(val)
-    },
-    'stepGain.threeThirds': function(val) {
-      this.calcObj.stepGain.threeThirds = parseInt(val)
-    },
+    // 'stepGain.oneThird': function(val) {
+    //   this.calcObj.stepGain.oneThird = parseInt(val)
+    // },
+    // 'stepGain.twoThirds': function(val) {
+    //   this.calcObj.stepGain.twoThirds = parseInt(val)
+    // },
+    // 'stepGain.threeThirds': function(val) {
+    //   this.calcObj.stepGain.threeThirds = parseInt(val)
+    // },
     hasIrregular(val) {
       console.log('hasIrregular triggered')
       if(val === true) {
@@ -1585,8 +1598,17 @@ export default {
         delete this.calcObj.stepGain
       }
     },
-    // stepGain.twoThirds
-    // stepGain.threeThirds
+    'stepGain.oneThird': function(value) {
+      console.log('watch')
+      this.calcObj.stepGain.oneThird = parseInt(value)
+    },
+    'stepGain.twoThirds': function(value) {
+      console.log('watch')
+      this.calcObj.stepGain.twoThirds = parseInt(value)
+    },
+    threeThirds(val) {
+      this.calcObj.stepGain.threeThirds = val
+    },
     'calcObj.leasingTerm': function (value) {
       this.calcObj.leasingTerm = parseInt(value)
     },
@@ -1600,19 +1622,6 @@ export default {
         this.calcObj.leasingCurrencyCourse = parseFloat(course)
       }
     },
-    // 'calcObj.gainEvenGraphicMonths': function(value) {
-    //   if(!value) return value
-    //   this.calcObj.gainEvenGraphicMonths = parseInt(value)
-    // },
-    // 'calcObj.gainEvenGraphicPercent': function(value) {
-    //   if(!value) return value
-    //   else if(Number.isNaN(parseFloat(value))) return value
-    //   this.calcObj.gainEvenGraphicPercent = parseFloat(value)
-    // },
-    // 'calcObj.UnsrMonths': function(value) {
-    //   if(!value) return value
-    //   this.calcObj.UnsrMonths = parseInt(value)
-    // },
     'calcObj.leasingQuantity': function(value) {
       if(!value) return value
       this.calcObj.leasingQuantity = parseInt(value)
@@ -1621,11 +1630,6 @@ export default {
       if(!value) return value
       this.calcObj.advance = parseInt(value)
     },
-    // 'calcObj.leasedAssertEngine': function(value) {
-    //   if(!value) return value
-    //   this.calcObj.leasedAssertEngine = parseInt(value)
-    // },
-    // добавь условие ниже в функцию запроса аксиос
     'calcObj.leasingObjectType': function(value) {
       if(Number.isInteger(value)) {
         let leasingObjType = this.selects.itemTypes

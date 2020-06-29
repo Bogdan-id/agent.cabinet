@@ -1,6 +1,7 @@
 <template>
+  <!-- @click addRouteToLocalStorage() -->
   <component :is="tag"
-             @click.native="hideSidebar; addRouteToLocalStorage()"
+             @click.native="hideSidebar"
              class="nav-item"
              v-bind="$attrs"
              tag="li">
@@ -60,11 +61,11 @@ export default {
         this.addLink(this)
       }
     },
-    addRouteToLocalStorage() {
-      const route = this.$router.currentRoute.name
-      const routeStorage = window.localStorage
-      routeStorage.setItem('route', route)
-    },
+    // addRouteToLocalStorage() {
+    //   const route = this.$router.currentRoute.name
+    //   const routeStorage = window.localStorage
+    //   routeStorage.setItem('route', route)
+    // },
     readRootFromStorage() {
       const routeStorage = window.localStorage
       const route = routeStorage.getItem('route')

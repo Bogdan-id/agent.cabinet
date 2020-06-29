@@ -147,8 +147,8 @@ export default {
       axios.post(`/logout`, token)
 			.then(() => {
         this.$router.go()
-        const routeStorage = window.localStorage
-        routeStorage.setItem('user', false)
+        // const routeStorage = window.localStorage
+        // routeStorage.setItem('user', false)
         this.$store.commit('toggleSpinner', false)
 			})
 			.catch(e => {

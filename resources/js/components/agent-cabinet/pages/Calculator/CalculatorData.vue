@@ -271,6 +271,7 @@
         :headers="tableHeader"
         :items="tabledata"
         :items-per-page="10"
+        :custom-sort="customSort"
         class="elevation-1">
         <template v-slot:item.test>
           <span>{{ $store.state.user.agent.ab_size }}</span>
@@ -620,6 +621,14 @@ export default {
     },
   },
   methods: {
+    customSort(items) {
+      items
+        .sort((a, b) => {
+          console.log(a.created_at, b.created_at)
+          return new Date(b.updated_at) - new Date(a.updated_at)
+      })
+      return items
+    },
     object() {
       return {
         agentId: this.agentId,
@@ -858,7 +867,9 @@ export default {
         axios
           .get(`calculations/agent/${agentId}`)
           .then(response => {
+            console.log('*************')
             console.log(response)
+            console.log('*************')
             this.loading = false
             if(response.data.length > 0)  {
               this.tabledata = response.data

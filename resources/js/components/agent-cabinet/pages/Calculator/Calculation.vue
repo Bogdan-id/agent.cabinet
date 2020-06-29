@@ -671,8 +671,7 @@
                       :items="selects.insurancePrograms"
                       :error-messages="insuranceProgramErr"
                       item-text="text"
-                      item-value="text"
-                      return-object
+                      item-value="value"
                       label="Програма страхування"
                       itemColor="red darken-4"
                       color="red darken-4"
@@ -875,7 +874,7 @@ export default {
       residualValue: 0,
       promotion: null,
       holiday: null,
-      insuranceProgram: {text: 'Обережний', value: 2},
+      insuranceProgram: 2,
       insuranceFranchise: 0,
       discountPrice: null,
 
@@ -1597,6 +1596,9 @@ export default {
         delete this.calcObj.universalGain
         delete this.calcObj.stepGain
       }
+    },
+    'calcObj.insuranceFranchise': function(value) {
+      this.calcObj.insuranceFranchise = parseFloat(value)
     },
     'stepGain.oneThird': function(value) {
       console.log('watch')

@@ -290,7 +290,6 @@ export default {
   },
   methods: {
     applyChanges(status, index) {
-      console.log(index)
       switch(status) {
         case '1': return {text: 'в обробцi', color: `${index <= 1 ? 'orange' : 'grey'}`};
         case '2': return {text: 'схвалено', color: `${index <= 5 ? 'green' : 'grey'}`};

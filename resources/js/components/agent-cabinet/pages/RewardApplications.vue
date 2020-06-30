@@ -109,7 +109,7 @@ export default {
     tableHeader: [
       { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
       // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
-      { text: 'Модель', value: 'leasing_request.leasing_object', align: 'center' },
+      { text: 'Авто', value: 'leasing_request.leasing_object', align: 'center' },
       { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },
       { text: 'Дата заявки', value: 'leasing_request.created_at', align: 'center', sortable: true },
       { text: 'Статус', value: 'status', align: 'center' },

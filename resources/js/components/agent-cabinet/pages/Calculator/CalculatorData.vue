@@ -478,7 +478,7 @@ export default {
     tableHeader: [
       { text: 'Код розрахунку', value: 'request_id', align: 'start'},
       { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
-      { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
+      { text: 'Авто', value: 'request_data.leasedAssertModel.name', align: 'center' },
       { text: 'Цiна, грн', value: 'request_data', align: 'center' },
       { text: 'АВ, %', value: 'test', align: 'center' },
       { text: 'Дата', value: 'created_at', align: 'center' },

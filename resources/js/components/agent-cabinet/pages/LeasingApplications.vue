@@ -176,22 +176,22 @@
           </span>
         </template>
         <template #item.actions="{ item }">
-          <div class="d-flex">
-            <!-- <v-tooltip bottom>
+          <div class="d-flex justify-space-around">
+            <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
-                  @click="toDetail(item.id)"
+                  @click=""
                   class="mr-3"
                   v-on="on"
                   icon>
                   <v-icon
                     color="red lighten-1">
-                    mdi-plus-circle
+                    mdi-sack-percent
                   </v-icon>
                 </v-btn>
               </template>
               <span>Подати заявку на виплату АВ</span>
-            </v-tooltip> -->
+            </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 

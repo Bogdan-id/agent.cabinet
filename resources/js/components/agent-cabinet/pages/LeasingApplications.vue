@@ -171,7 +171,7 @@
             {{ 
               parseInt(item.leasing_amount.replace(/ /g, '' ))
                 .toLocaleString()
-                .replace(/,/g, ' ') + ' грн'
+                .replace(/,/g, ' ')
             }}
           </span>
         </template>
@@ -249,8 +249,8 @@ export default {
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start'},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
-      { text: 'Цiна', value: 'leasing_amount', align: 'center' },
-      { text: 'Розмір агентської винагороди', value: 'leasing_amount', align: 'center' },
+      { text: 'Цiна, грн', value: 'leasing_amount', align: 'center' },
+      { text: 'Розмір агентської винагороди, грн', value: 'leasing_amount', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },
       { text: 'Дата', value: 'data', align: 'center' },
       { text: 'Статус заявки', value: 'request_status', align: 'center', width: 200 },

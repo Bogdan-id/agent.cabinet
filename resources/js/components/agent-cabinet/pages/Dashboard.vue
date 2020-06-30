@@ -97,7 +97,7 @@
             {{ 
               parseInt(item.leasing_amount.replace(/ /g, '' ))
                 .toLocaleString()
-                .replace(/,/g, ' ') + ' грн'
+                .replace(/,/g, ' ')
             }}
           </span>
         </template>
@@ -267,7 +267,7 @@ export default {
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center', sortable: false},
-      { text: 'Цiна', value: 'leasing_amount', align: 'center', sortable: false },
+      { text: 'Цiна, грн', value: 'leasing_amount', align: 'center', sortable: false },
       { text: 'АВ, %', value: 'agency_remuneration', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },
       { text: 'Дата', value: 'data', align: 'center', sortable: false },

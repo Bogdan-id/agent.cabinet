@@ -23,22 +23,62 @@
                 <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
                   <v-data-table
                     class="leasing-object-table"
-                    v-if="leasingObjectData !== null"
+                    v-if="graphData"
                     color="black"
                     :headers="leasingObjectDataHeader"
-                    :items="leasingObjectData"
+                    :items="[graphData]"
                     :items-per-page="180"
                     :hide-default-footer="true"
                     :must-sort="false"
                     dense
                     :mobile-breakpoint="6500">
-                    <template v-slot:item.actions="{ item }">
-                      {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
+                    <template v-slot:item.offer_price_brutto="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{
+                          item.result_data.even['offer-price-brutto']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
                     </template>
-                    <template v-slot:item.leasingAmount="{ item }">
+                    <template v-slot:item.offer_advance="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{ 
+                          item.result_data.even['offer-advance']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_month_payment="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{ item.result_data.even['offer-month-payment']
+                          .toLocaleString()
+                          .replace(/,/g, ' ')  
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.one_time_commission="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{ (item.result_data.even['offer-leasing-appreciation'] * 100).toFixed(2) }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_rest="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{ 
+                          item.result_data.even['offer-rest']
+                            .toLocaleString()
+                            .replace(/,/g, ' ') 
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.actions="{ item }">
+                      {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
+                    </template>
+                    <template v-slot:item.request_data.leasingAmount="{ item }">
                       <span>
                         {{ 
-                          parseInt(item.leasingAmount.replace(/ /g, '' ))
+                          parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}
@@ -64,6 +104,33 @@
                   :graph="currentTab" 
                   :data="graphData"/>
               </template>
+              <template v-slot:item.interest="{ item }">
+                <span>
+                  {{  
+                    item.interest
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
+              <template v-slot:item.payment="{ item }">
+                <span>
+                  {{  
+                    item.payment
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
+              <template v-slot:item.payment_principal="{ item }">
+                <span>
+                  {{
+                    item['payment-principal']
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
             </v-data-table>
           </v-card>
           </div>
@@ -88,22 +155,62 @@
                 <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
                   <v-data-table
                     class="leasing-object-table"
-                    v-if="leasingObjectData !== null"
+                    v-if="graphData"
                     color="black"
                     :headers="leasingObjectDataHeader"
-                    :items="leasingObjectData"
+                    :items="[graphData]"
                     :items-per-page="180"
                     :hide-default-footer="true"
                     :must-sort="false"
                     dense
                     :mobile-breakpoint="6500">
-                    <template v-slot:item.actions="{ item }">
-                      {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
+                    <template v-slot:item.offer_price_brutto="{ item }">
+                      <span v-if="item.result_data.annuity">
+                        {{
+                          item.result_data.annuity['offer-price-brutto']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
                     </template>
-                    <template v-slot:item.leasingAmount="{ item }">
+                    <template v-slot:item.offer_advance="{ item }">
+                      <span v-if="item.result_data.annuity">
+                        {{ 
+                          item.result_data.annuity['offer-advance']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_month_payment="{ item }">
+                      <span v-if="item.result_data.annuity">
+                        {{ item.result_data.annuity['offer-month-payment']
+                          .toLocaleString()
+                          .replace(/,/g, ' ')  
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.one_time_commission="{ item }">
+                      <span v-if="item.result_data.annuity">
+                        {{ (item.result_data.annuity['offer-leasing-appreciation'] * 100).toFixed(2) }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_rest="{ item }">
+                      <span v-if="item.result_data.annuity">
+                        {{ 
+                          item.result_data.annuity['offer-rest']
+                            .toLocaleString()
+                            .replace(/,/g, ' ') 
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.actions="{ item }">
+                      {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
+                    </template>
+                    <template v-slot:item.request_data.leasingAmount="{ item }">
                       <span>
                         {{ 
-                          parseInt(item.leasingAmount.replace(/ /g, '' ))
+                          parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}
@@ -125,10 +232,37 @@
                 dense>
                 <template v-slot:footer>
                   <chart-buttons 
-                    v-if="graphData !== null"
+                    v-if="graphData"
                     :graph="currentTab" 
                     :data="graphData"/>
                 </template>
+                <template v-slot:item.interest="{ item }">
+                <span>
+                  {{  
+                    item.interest
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
+              <template v-slot:item.payment="{ item }">
+                <span>
+                  {{  
+                    item.payment
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
+              <template v-slot:item.payment_principal="{ item }">
+                <span>
+                  {{
+                    item['payment-principal']
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
               </v-data-table>
             </v-card>
           </div>
@@ -153,22 +287,63 @@
                 <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
                   <v-data-table
                     class="leasing-object-table"
-                    v-if="leasingObjectData !== null"
+                    v-if="graphData"
                     color="black"
                     :headers="leasingObjectDataHeader"
-                    :items="leasingObjectData"
+                    :items="[graphData]"
                     :items-per-page="180"
                     :hide-default-footer="true"
                     :must-sort="false"
                     dense
                     :mobile-breakpoint="6500">
-                    <template v-slot:item.actions="{ item }">
-                      {{ `${item.leasedAssertMark.name}   ${item.leasedAssertModel.name}` }}
+                    <template v-slot:item.offer_price_brutto="{ item }">
+                      <span v-if="item.result_data.irregular">
+                        {{
+                          item.result_data.irregular['offer-price-brutto']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
                     </template>
-                    <template v-slot:item.leasingAmount="{ item }">
+                    <template v-slot:item.offer_advance="{ item }">
+                      <span v-if="item.result_data.irregular">
+                        {{ 
+                          item.result_data.irregular['offer-advance']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_month_payment="{ item }">
+                      <span v-if="item.result_data.irregular">
+                        {{ 
+                          item.result_data.irregular['offer-month-payment']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')  
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.one_time_commission="{ item }">
+                      <span v-if="item.result_data.irregular">
+                        {{ (item.result_data.irregular['offer-leasing-appreciation'] * 100).toFixed(2) }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_rest="{ item }">
+                      <span v-if="item.result_data.irregular">
+                        {{ 
+                          item.result_data.irregular['offer-rest']
+                            .toLocaleString()
+                            .replace(/,/g, ' ') 
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.actions="{ item }">
+                      {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
+                    </template>
+                    <template v-slot:item.request_data.leasingAmount="{ item }">
                       <span>
                         {{ 
-                          parseInt(item.leasingAmount.replace(/ /g, '' ))
+                          parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}
@@ -188,12 +363,39 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:item.payment_principal="{ item }">
+                  <span>
+                    {{
+                      item['payment-principal']
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
                 <template v-slot:footer>
                   <chart-buttons 
                     v-if="graphData !== null"
                     :graph="currentTab" 
                     :data="graphData"/>
                 </template>
+                <template v-slot:item.interest="{ item }">
+                <span>
+                  {{  
+                    item.interest
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
+              <template v-slot:item.payment="{ item }">
+                <span>
+                  {{  
+                    item.payment
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
               </v-data-table>
             </v-card>
           </div>
@@ -216,20 +418,20 @@ export default {
     search: '',
     leasingObjectDataHeader: [
       { text: 'Автомобiль', value: 'actions', align: 'center', sortable: false},
-      { text: 'Вартiсть автомобiля, грн', value: 'leasingAmount', align: 'end', sortable: false},
-      { text: 'Вартість автомобіля з реєстрацією, грн', value: 'leasingAmount', align: 'end', sortable: false },
-      { text: 'Авансовий платiж, грн', value: 'advance', align: 'center', sortable: false},
-      { text: 'Термiн лiзингу, мiс', value: 'leasingTerm', align: 'end', sortable: false },
-      { text: 'Валюта фiнансування', value: 'leasingCurrency', align: 'end', sortable: false },
-      { text: 'Єдиноразова комiсiя, %', value: '', align: 'end', sortable: false},
-      { text: 'Залишкова вартiсть, грн', value: '', align: 'end', sortable: false },
-      { text: 'Середньомiсячний платiж, грн', value: '', align: 'end', sortable: false },
+      { text: 'Вартiсть автомобiля, грн', value: 'request_data.leasingAmount', align: 'end', sortable: false},
+      { text: 'Вартість автомобіля з реєстрацією, грн', value: 'offer_price_brutto', align: 'end', sortable: false },
+      { text: 'Авансовий платiж, грн', value: 'offer_advance', align: 'center', sortable: false},
+      { text: 'Термiн лiзингу, мiс', value: 'request_data.leasingTerm', align: 'end', sortable: false },
+      { text: 'Валюта фiнансування', value: 'request_data.leasingCurrency', align: 'end', sortable: false },
+      { text: 'Єдиноразова комiсiя, %', value: 'one_time_commission', align: 'end', sortable: false},
+      { text: 'Залишкова вартiсть, грн', value: 'offer_rest', align: 'end', sortable: false },
+      { text: 'Середньомiсячний платiж, грн', value: 'offer_month_payment', align: 'end', sortable: false },
     ],
     tableHeader: [
       { text: '№', value: 'n', align: 'center', sortable: false},
-      { text: 'Оплата за авто', value: 'payment-principal', align: 'start', sortable: false},
-      { text: 'Винагорода лiзингодавця', value: 'interest', align: 'start', sortable: false },
-      { text: 'Сума платежу', value: 'payment', align: 'start', sortable: false },
+      { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'start', sortable: false},
+      { text: 'Винагорода лiзингодавця, грн', value: 'interest', align: 'start', sortable: false },
+      { text: 'Сума платежу, грн', value: 'payment', align: 'start', sortable: false },
     ],
     even: [],
     irregular: [],
@@ -243,7 +445,6 @@ export default {
       if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
     },
     changeActive(event) {
-      console.log(event)
       let tabs = document.querySelectorAll('#chart-diagram .tabs-input')
       tabs.forEach(element => element.classList.remove('active'))
       event.target.parentNode.classList.add('active')
@@ -262,8 +463,10 @@ export default {
   },
   mounted() {
     this.graphData = this.$router.currentRoute.params.data
-    this.leasingObjectData = [this.graphData.request_data]
-    console.log(this.leasingObjectData)
+    // this.leasingObjectData = [this.graphData.request_data]
+    // this.leasingObjectData = Object.assign([this.leasingObjectData, this.graphData.result_data[0]])
+    // console.log(this.leasingObjectData)
+    console.log(this.graphData)
 
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {

@@ -73,6 +73,7 @@
           v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
           color="black"
           :headers="tableHeader"
+          :custom-sort="customSort"
           :items="agentCommisions"
           :hide-default-footer="true"
           class="elevation-1 mr-3 ml-3 mt-4">
@@ -108,7 +109,7 @@ export default {
     tableHeader: [
       { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
       // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
-      { text: 'Модель', value: 'leasing_request.leasing_object', align: 'center' },
+      { text: 'Авто', value: 'leasing_request.leasing_object', align: 'center' },
       { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },
       { text: 'Дата заявки', value: 'leasing_request.created_at', align: 'center', sortable: true },
       { text: 'Статус', value: 'status', align: 'center' },
@@ -130,6 +131,15 @@ export default {
     }
   },
   methods: {
+    customSort(items) {
+      console.log(items)
+      items
+        .sort((a, b) => {
+          console.log(a.created_at, b.created_at)
+          return new Date(b.updated_at) - new Date(a.updated_at)
+      })
+      return items
+    },
     getCommisionRequests() {
       if(this.$store.state.user.agent){
         this.$store.commit('toggleAdminSpinner', true)

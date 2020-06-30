@@ -258,41 +258,54 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-                <v-row id="material-card-container">
-                  <v-col 
-                    v-for="(item, key) in filteredMaterials"
-                    :key="key" cols="12">
-                      <v-row class="material-card">
-                        <v-col cols="12" md="2" class="pt-0 pb-0" style="align-items: center; display: flex; padding-top: 0; padding-bottom: 0;">
-                          <v-icon size="90" style="width: 100%;">
-                            mdi-image
-                          </v-icon>
-                        </v-col>
-                        <v-col cols="12" md="10">
-                          <div class="material-card-title" style="font-size: 1.1rem; font-weight: bold;">
-                            {{ item.title }}
-                          </div>
-                          <div class="material-card-content" v-html="item.content"></div>
-                          <div class="material-card-data" style="font-weight: bold; color:#757575; letter-spacing: 0.10rem">
-                            {{`${item.updated_at.substring(0,10)}  ${item.updated_at.substring(12,19)}`}}
-                          </div>
-                          <div class="material-btn-actions" style="position: absolute; right: 1rem; top: 0.2rem;">
-                            <v-btn 
-                              @click.stop="editMaterial(item.id, item)" 
-                              icon>
-                              <v-icon  size="29" color="green" v-text="'mdi-square-edit-outline'"></v-icon>
-                            </v-btn>
-                            <v-btn 
-                              @click.stop="openDialogToDeleteMaterial(item.id, item)" 
-                              icon>
-                              <v-icon size="29" color="#e65048" v-text="'mdi-delete-forever'"></v-icon>
-                            </v-btn>
-                          </div>
-                        </v-col>
-                      </v-row>
-                  </v-col>
-                </v-row>
-                </v-card-text>
+                <v-hover 
+                  v-for="(item, key) in filteredMaterials"
+                  :key="key"
+                  v-slot:default="{ hover }">
+                  <v-card
+                    :elevation="hover ? 4 : 1"
+                    class="d-flex ml-3 mr-3 mb-5 material-card">
+                    <v-row id="material-card-container" class="ml-1 mr-1">
+                      <v-col cols="12" class="d-flex">
+                          <v-col xs="12" sm="4" md="3" xl="2" class="d-flex align-items-center">
+                            <div class="d-flex justify-center" style="border-radius: 5px; overflow: hidden;">
+                              <!-- <v-icon v-if="!item.title_image" size="90" style="width: 100%;">
+                                mdi-image
+                              </v-icon> -->
+                              <div v-if="item.title_image" style="max-width: 180px;">
+                                <img :style="`width: 100%; max-width: ${$vuetify.breakpoint.xs ? '100%;' : '250px;'}`" :src="item.title_image" />
+                              </div>
+                            </div>
+                          </v-col>
+                          <v-col cols="12" xs="12" sm="8" md="9" xl="10" style="display: flex; align-items: center;">
+                            <div class="text-column pa-3 pt-0 pb-0">
+                              <div>
+                                <span class="mt-0 mb-1 presentation-card-paragraph" style="font-size: 1.1rem; line-height: 1.5rem; padding-bottom: 2px; display: inline-block;">{{ item.title}}</span>
+                              </div>
+                              <div class="text" v-html="item.content" style="position: relaitve">
+                              </div>
+                              <span style="letter-spacing: 0.065rem; font-size: 0.78rem; color: black; line-height: 2rem;">
+                                {{`${item.updated_at.substring(0,10)}  ${item.updated_at.substring(12,19)}`}}
+                              </span>
+                            </div>
+                            <div class="material-btn-actions" style="position: absolute; right: 1rem; top: 0.2rem;">
+                              <v-btn 
+                                @click.stop="editMaterial(item.id, item)" 
+                                icon>
+                                <v-icon  size="29" color="green" v-text="'mdi-square-edit-outline'"></v-icon>
+                              </v-btn>
+                              <v-btn 
+                                @click.stop="openDialogToDeleteMaterial(item.id, item)" 
+                                icon>
+                                <v-icon size="29" color="#e65048" v-text="'mdi-delete-forever'"></v-icon>
+                              </v-btn>
+                            </div>
+                          </v-col>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                </v-hover>
+              </v-card-text>
             </div>
           </div>
         </div>
@@ -609,14 +622,10 @@ export default {
 }
 </script>
 <style scoped>
-.material-card-content {
-  display: inline-block;
-}
-.material-card-content >>> * {
+.text >>> * {
   display: none;
 }
-.material-card-content >>> *:first-child {
-  font-size: 16px;
+.text >>> p:first-of-type {
   padding: 0;
   margin: 0;
   max-height: 130px;
@@ -646,24 +655,6 @@ export default {
       text-decoration: underline;
     }
     .material-card {
-      .v-card__subtitle, .v-card__text {
-        line-height: 0.95rem;
-      }
-      box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),
-        0 6px 10px 0 rgba(0,0,0,.14),
-        0 1px 18px 0 rgba(0,0,0,.12)!important; 
-      min-height: 120px; 
-      transition: box-shadow 0.25s;
-      &:hover {
-        box-shadow: 0 6px 6px -3px rgba(0,0,0,.2),
-          0 10px 14px 1px rgba(0,0,0,.14),
-          0 4px 18px 3px rgba(0,0,0,.12)!important
-      }
-      .material-card-content {
-        padding: 8px 0px 5px 0; 
-        margin-bottom: 0px!important; 
-      }
-      
       cursor: pointer; 
       position:relative;
       .material-btn-actions {

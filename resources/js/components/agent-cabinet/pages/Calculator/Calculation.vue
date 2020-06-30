@@ -427,21 +427,21 @@
                       <div class="range-dashed-line"></div>
                       <div class="arrow-directions-wrapper" :style="`right: ${xs ? '-119px;' : '-147px;'}`">
                         <div class="arrow-directions-content">
-                          <div :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
-                            <span style="white-space: nowrap; ">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
+                          <div :class="calcObj.advance <= 29 ? 'range-active-label' : ''" :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
+                            <span style="white-space: nowrap; transition: color 0.4s">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
                           </div>
                           <div>
                             <calculator-left-arrow></calculator-left-arrow>
                           </div>
                         </div>
-                        <div style="display: inline-flex; color: #d24a43; align-items: center;">
+                        <div style="display: inline-flex; align-items: center;">
                           <div style="display: inline-block;">
                             <calculator-right-arrow></calculator-right-arrow>
                           </div>
                           <div style="display: inline-block; margin-left: 1.2rem">
-                            <b :style="`text-decoration: underline; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
-                              <span style="white-space: nowrap;">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ
-                            </b>
+                            <span :class="calcObj.advance >= 30 ? 'range-active-label' : ''" :style="`font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
+                              <span style="white-space: nowrap; transition: color 0.4s">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -671,8 +671,7 @@
                       :items="selects.insurancePrograms"
                       :error-messages="insuranceProgramErr"
                       item-text="text"
-                      item-value="text"
-                      return-object
+                      item-value="value"
                       label="Програма страхування"
                       itemColor="red darken-4"
                       color="red darken-4"
@@ -690,7 +689,7 @@
                     name="franchise"
                     :min="franchise.min"
                     :max="franchise.max"
-                    v-model="calcObj.insuranceFranchise"
+                    v-model="insuranceFranchise"
                     step="0.5"
                     class="slider"
                     @input="initElRange($event)">
@@ -723,9 +722,11 @@
               <v-row>
                 <v-col cols="12" md="5" sm="6" class="pt-0 pb-0">
                   <v-select
-                    v-model="calcObj.promotion"
+                    v-model="calcObj.stock"
                     append-icon="mdi-chevron-down"
-                    :items="['Акцiя 1', 'Акцiя 2', 'Акцiя 3']"
+                    :items="selects.stock"
+                    item-text="text"
+                    item-value="value"
                     label="Акцiя"
                     itemColor="red darken-4"
                     color="red darken-4"
@@ -736,9 +737,9 @@
                 <v-col cols="12" md="7" sm=6 class="pt-1">
                   <div style="padding-left: 10px;">
                     <v-checkbox
-                      v-model="calcObj.holiday"
-                      :value="true"
-                      :false-value="false"
+                      v-model="calcObj.holidays"
+                      :value="1"
+                      :false-value="2"
                       color="red darken-3"
                       class="mt-0"
                       :style="mediumAndDown ? '' : 'padding-top: 14px;'"
@@ -840,6 +841,7 @@ export default {
       twoThirds: 33,
       threeThirds: 34
     },
+    insuranceFranchise: 0,
     calcObj: {
       // gpsTrackerQuantity: 1,
       // urkAssistService: 1,
@@ -873,10 +875,10 @@ export default {
 
       // new fields
       residualValue: 0,
-      promotion: null,
-      holiday: null,
-      insuranceProgram: {text: 'Обережний', value: 2},
-      insuranceFranchise: 0,
+      stock: null,
+      holidays: 2,
+      insuranceProgram: 2,
+      insuranceFranchise: 1,
       discountPrice: null,
 
       // token
@@ -957,10 +959,14 @@ export default {
       }
     },
     threeThirds() {
-      if(Number.isNaN(100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds)))) {
-        return 0
+      let threeThirds = 100
+      if (!Number.isNaN(parseInt(this.stepGain.oneThird))) {
+        threeThirds = threeThirds - this.stepGain.oneThird
       }
-      return 100 - (parseInt(this.stepGain.oneThird) + parseInt(this.stepGain.twoThirds))
+      if (!Number.isNaN(parseInt(this.stepGain.twoThirds))) {
+        threeThirds = threeThirds - this.stepGain.twoThirds
+      }
+      return threeThirds
     },
 
     maxResidualValue() {
@@ -1155,29 +1161,27 @@ export default {
     leasingTypeClass() {
       return `d-flex justify-center ${this.xs ? 'pt-0 pb-0' : ''}`
     },
-    stepGainComputed() {
-      return this.stepGain
-    }
   },
   methods: {
     changeActiveClass() {
       console.log('ChangeActive triggered')
       let el = document.querySelectorAll('.leasing-type-block')
       el.forEach(val => {
-        console.log(val)
         val.classList.remove('active')
       })
-      let elements = document.querySelectorAll('.radio-objectType')
-      elements
+      setTimeout(()=> {
+        let elements = document.querySelectorAll('.radio-objectType')
+        elements
         .forEach(val => {
-          if(val.value == this.calcObj.leasingObjectType || val.value == this.calcObj.leasingObjectType.value) {
-            console.log(val.nextSibling.nextSibling.id)
-            console.log(this.calcObj.leasingObjectType.label)
+          if(val.value == this.calcObj.leasingObjectType.value) {
             if(val.nextSibling.nextSibling.id == this.calcObj.leasingObjectType.label) {
               val.nextSibling.nextSibling.classList.add('active')
             }
           }
         })
+      }, 200)
+      
+      
     },
     restrictToPercentAdvance(id) {
       let el = document.getElementById(id)
@@ -1223,7 +1227,6 @@ export default {
         .replace(/,/g, ' ')
       let tempWithoutSpaces = parseInt(temp.replace(/[^\d]/g, ''))
       if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
-        console.log('1')
         if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
@@ -1236,11 +1239,9 @@ export default {
         el.value = temp
         el.dispatchEvent(inputEvent)
       } else if(el.value != temp.replace(/[^\d ]/g, '') && Number.isNaN(parseInt(temp))) {
-        console.log('2')
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
       } else {
-        console.log('3')
         if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             discountPriceEl.value = this.calcObj.leasingAmount
@@ -1258,6 +1259,8 @@ export default {
       }
     },
     setGraphProportion(event, selector) {
+      let oneThird = document.querySelector('#stepGain-oneThird')
+      let twoThirds = document.querySelector('#stepGain-twoThirds')
       let currentEl = document.getElementById(selector)
       let inputEvent = new Event('input', {bubbles: true})
       currentEl.value = parseInt(currentEl.value.replace(/[^\d]/g, ''))
@@ -1265,19 +1268,29 @@ export default {
         currentEl.value = 100
         currentEl.dispatchEvent(inputEvent)
       }
+      if(Number.isNaN(currentEl.value)) {
+        currentEl.value = 0
+        currentEl.dispatchEvent(inputEvent)
+      }
       if(selector == 'stepGain-oneThird') {
-        if(parseInt(currentEl.value) + parseInt(this.stepGain.twoThirds) > 100) {
-          this.stepGain.twoThirds = 100 - currentEl.value
-        } else if(Number.isNaN(currentEl.value)) {
-          this.stepGain.twoThirds = null
-        } else return
+        console.log('OneThird')
+        if(parseInt(currentEl.value) + parseInt(twoThirds.value) > 100) {
+          console.log(`${currentEl.value} + ${parseInt(twoThirds.value)}`)
+          console.log(currentEl.value + parseInt(twoThirds.value))
+          twoThirds.value = 100 - currentEl.value
+          twoThirds.dispatchEvent(inputEvent)
+        }
+        return
       } 
       else if(selector == 'stepGain-twoThirds') {
-        if(parseInt(currentEl.value) + parseInt(this.stepGain.oneThird) > 100) {
-          this.stepGain.oneThird = 100 - currentEl.value
-        } else if(Number.isNaN(currentEl.value)) {
-          this.stepGain.oneThird = null
-        } else return
+        console.log('TwoThird')
+        if(parseInt(currentEl.value) + parseInt(oneThird.value) > 100) {
+          console.log(`${currentEl.value} + ${parseInt(oneThird.value)}`)
+          console.log(currentEl.value + parseInt(oneThird.value))
+          oneThird.value = 100 - currentEl.value
+          oneThird.dispatchEvent(inputEvent)
+        } 
+        return
       }
     },
     changeCustomGraph(id) {
@@ -1289,7 +1302,6 @@ export default {
     addActiveClass(event) {
       let el = document.querySelectorAll('.leasing-type-block')
       el.forEach(val => {
-        console.log(val)
         val.classList.remove('active')
       })
       if(event) event.target.nextSibling.nextSibling.classList.add('active')
@@ -1530,6 +1542,7 @@ export default {
       axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
+        this.calcObj.calculation_id = response.data.request_id
         let data = response.data.request_data
         let advance = response.data.request_data.advance
         let franchise = response.data.request_data.insuranceFranchise
@@ -1565,15 +1578,15 @@ export default {
     insuranceProgram(val) {
       this.calcObj.insuranceProgram = val.value
     },
-    'stepGain.oneThird': function(val) {
-      this.calcObj.stepGain.oneThird = parseInt(val)
-    },
-    'stepGain.twoThirds': function(val) {
-      this.calcObj.stepGain.twoThirds = parseInt(val)
-    },
-    'stepGain.threeThirds': function(val) {
-      this.calcObj.stepGain.threeThirds = parseInt(val)
-    },
+    // 'stepGain.oneThird': function(val) {
+    //   this.calcObj.stepGain.oneThird = parseInt(val)
+    // },
+    // 'stepGain.twoThirds': function(val) {
+    //   this.calcObj.stepGain.twoThirds = parseInt(val)
+    // },
+    // 'stepGain.threeThirds': function(val) {
+    //   this.calcObj.stepGain.threeThirds = parseInt(val)
+    // },
     hasIrregular(val) {
       console.log('hasIrregular triggered')
       if(val === true) {
@@ -1588,8 +1601,32 @@ export default {
         delete this.calcObj.stepGain
       }
     },
-    // stepGain.twoThirds
-    // stepGain.threeThirds
+    insuranceFranchise(value) {
+      console.log('insuranceFranchise')
+      switch(value) {
+        case '0': return this.calcObj.insuranceFranchise = 1
+        case '0.5': return this.calcObj.insuranceFranchise = 2
+        case '1': return this.calcObj.insuranceFranchise = 3
+        case '1.5': return this.calcObj.insuranceFranchise = 4
+        case '2': return this.calcObj.insuranceFranchise = 5
+      }
+    },
+    'calcObj.holidays': function(value) {
+      if(value != 1) {
+        this.calcObj.holidays = 2
+      }
+    },
+    'stepGain.oneThird': function(value) {
+      console.log('watch')
+      this.calcObj.stepGain.oneThird = parseInt(value)
+    },
+    'stepGain.twoThirds': function(value) {
+      console.log('watch')
+      this.calcObj.stepGain.twoThirds = parseInt(value)
+    },
+    threeThirds(val) {
+      this.calcObj.stepGain.threeThirds = val
+    },
     'calcObj.leasingTerm': function (value) {
       this.calcObj.leasingTerm = parseInt(value)
     },
@@ -1603,19 +1640,6 @@ export default {
         this.calcObj.leasingCurrencyCourse = parseFloat(course)
       }
     },
-    // 'calcObj.gainEvenGraphicMonths': function(value) {
-    //   if(!value) return value
-    //   this.calcObj.gainEvenGraphicMonths = parseInt(value)
-    // },
-    // 'calcObj.gainEvenGraphicPercent': function(value) {
-    //   if(!value) return value
-    //   else if(Number.isNaN(parseFloat(value))) return value
-    //   this.calcObj.gainEvenGraphicPercent = parseFloat(value)
-    // },
-    // 'calcObj.UnsrMonths': function(value) {
-    //   if(!value) return value
-    //   this.calcObj.UnsrMonths = parseInt(value)
-    // },
     'calcObj.leasingQuantity': function(value) {
       if(!value) return value
       this.calcObj.leasingQuantity = parseInt(value)
@@ -1624,11 +1648,6 @@ export default {
       if(!value) return value
       this.calcObj.advance = parseInt(value)
     },
-    // 'calcObj.leasedAssertEngine': function(value) {
-    //   if(!value) return value
-    //   this.calcObj.leasedAssertEngine = parseInt(value)
-    // },
-    // добавь условие ниже в функцию запроса аксиос
     'calcObj.leasingObjectType': function(value) {
       if(Number.isInteger(value)) {
         let leasingObjType = this.selects.itemTypes
@@ -1644,9 +1663,8 @@ export default {
         this.changeActiveClass()
       } else return
     },
-    mediumAndDown(state) {
+    mediumAndDown() {
       console.log('medium and down triggerd')
-      console.log(state)
       this.changeActiveClass()
     },
     user() {
@@ -1748,6 +1766,12 @@ export default {
             color: #969599;
             align-items: center;
             margin-right: 40px;
+          }
+          .range-active-label {
+            text-decoration: underline; 
+            font-weight: bold;
+            color: #d24a43; 
+            font-weight: bold;
           }
         }
       }

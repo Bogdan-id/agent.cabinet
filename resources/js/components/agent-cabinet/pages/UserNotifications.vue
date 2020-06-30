@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card elevation="8">
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>
       Повiдомлення
@@ -13,10 +13,10 @@
       color="red lighten-1">
     </v-progress-linear>
     </v-card-title>
-    <v-card-text>
+    <v-card-text style="min-height: 100vh">
       <section class="section" id="section">
-        <div class="tabs" style="display: inline-flex;">
-          <div class="tabs-input active" style="width: auto">
+        <div class="notification-tabs" style="display: inline-flex;">
+          <div class="notification-tabs-input active" style="width: auto">
             <label
               @click.stop="changeActive($event)" 
               for="tab-1"
@@ -38,7 +38,7 @@
               </v-card-text>
             </div>
           </div>
-          <div class="tabs-input" style="width: auto">
+          <div class="notification-tabs-input" style="width: auto">
             <label 
               @click.stop="changeActive($event)" 
               for="tab-2" 
@@ -61,7 +61,7 @@
               </v-card-text>
             </div>
           </div>
-          <div class="tabs-input" style="width: auto">
+          <div class="notification-tabs-input" style="width: auto">
             <label 
               @click.stop="changeActive($event)"
               for="tab-3" 
@@ -79,7 +79,7 @@
             <div class="content">
               <v-card-text>
                 <v-card-title class="edit-title pb-6">
-                  Новини компанії 
+                  Акції та умови лізингу
                 </v-card-title>
               </v-card-text>
             </div>
@@ -100,7 +100,7 @@ export default {
   methods: {
     changeActive(event) {
       console.log(event)
-      let tabs = document.querySelectorAll('#section .tabs-input')
+      let tabs = document.querySelectorAll('#section .notification-tabs-input')
       tabs.forEach(element => element.classList.remove('active'))
       event.target.parentNode.classList.add('active')
     },
@@ -108,20 +108,35 @@ export default {
 }
 </script>
 
-<style scoped>
-  .tabs {
+<style scoped lang="scss">
+  .notification-tabs {
     border-bottom: 2px solid #d85151;
   }
-  .tabs .tabs-input {
+  .notification-tabs .notification-tabs-input {
     opacity: 1;
+    input {
+      display: none;
+    }
+    .content {
+      position: absolute;
+      left: 100%;
+      opacity: 0;
+      transition: left 0.5s, opacity 0.2s;
+    }
+    &.active {
+      .content {
+        left: 0;
+        opacity: 1;
+      }
+    }
   }
-  .tabs .tabs-input label {
+  .notification-tabs .notification-tabs-input label {
     transition: background 0.25s ease-in, color 0.25s ease-in;
     font-size: 1rem; 
     margin-bottom: auto; 
     padding: 6px 10px;
   }
-  .tabs .tabs-input.active label {
+  .notification-tabs .notification-tabs-input.active label {
     background: #d85151!important;
     color: white!important;
   }

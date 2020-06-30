@@ -43,6 +43,11 @@ export default {
     {text: 'Стандарт', value: 1},
     {text: 'Обережний', value: 2},
   ],
+  stock: [
+    {text: 'Зниження страхової вартостi', value: 1},
+    {text: 'Cтраховка на останній рік не включена', value: 2},
+    {text: 'Зниж. стр. вартостi + стр. на останнiй рiк не вкл.', value: 3}
+  ],
   franchises: [
     {text: '0%', value: 1},
     {text: '0.3%', value: 2},

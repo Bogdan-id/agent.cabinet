@@ -6,6 +6,7 @@ import RewardApplications from '../components/admin/components/routes/RewardAppl
 import Agents from '../components/admin/components/routes/Agents'
 import ApplicationsToRegister from '../components/admin/components/routes/ApplicationsToRegister'
 import EditMaterials from '../components/admin/components/routes/EditMaterials.vue'
+import Managers from '../components/admin/components/routes/Managers'
 
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
@@ -64,6 +65,14 @@ const routes = [
             },
           }
         ]
+      },
+      {
+        path: 'admin-managers',
+        name: 'admin-managers',
+        component: Managers,
+        meta: {
+          title: 'Менеджери'
+        }
       },
       {
         path: 'application-for-registration',

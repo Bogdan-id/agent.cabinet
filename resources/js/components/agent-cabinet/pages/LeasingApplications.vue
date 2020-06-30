@@ -249,8 +249,8 @@ export default {
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start'},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
-      { text: 'Цiна', value: 'leasing_amount', align: 'center' },
-      { text: 'Розмір агентської винагороди', value: 'leasing_amount', align: 'center' },
+      { text: 'Цiна, грн', value: 'leasing_amount', align: 'center' },
+      { text: 'Розмір агентської винагороди, грн', value: 'leasing_amount', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },
       { text: 'Дата', value: 'data', align: 'center' },
       { text: 'Статус заявки', value: 'request_status', align: 'center', width: 200 },
@@ -290,7 +290,6 @@ export default {
   },
   methods: {
     applyChanges(status, index) {
-      console.log(index)
       switch(status) {
         case '1': return {text: 'в обробцi', color: `${index <= 1 ? 'orange' : 'grey'}`};
         case '2': return {text: 'схвалено', color: `${index <= 5 ? 'green' : 'grey'}`};

@@ -7,30 +7,28 @@
         :elevation="hover ? 4 : 1"
         class="d-flex ml-3 mr-3 mb-5">
         <v-row class="ml-1 mr-1">
-          <v-col xs="12" sm="4" md="2">
-            <div class="image-column d-flex justify-center">
-              <v-img
-                v-if="item.image"
-                :src="item.image"
-                width="365">
-              </v-img>
-              <svg-gallery-icon 
-                v-if="!item.img"
+          <v-col cols="12" xs="12" sm="4" md="3" xl="2" class="d-flex align-items-center">
+            <div class="d-flex justify-center" style="border-radius: 5px; overflow: hidden;">
+              <div v-if="item.title_image">
+                <img :style="`width: 100%; max-width: ${$vuetify.breakpoint.xs ? '100%;' : '250px;'}`" :src="item.title_image" />
+              </div>
+              <!-- <svg-gallery-icon 
+                v-if="!item.title_image"
                 :width="'100%'"
                 :height="'auto'"
                 style="max-width: 180px!important; min-width: 110px">
-              </svg-gallery-icon>
+              </svg-gallery-icon> -->
             </div>
           </v-col>
-          <v-col xs="12" sm="8" md="10" style="display: flex; align-items: center;">
+          <v-col cols="12" xs="12" sm="8" md="9" xl="10" style="display: flex; align-items: center;">
             <div class="text-column pa-3 pt-0 pb-0">
               <div>
-                <span class="mt-0 mb-1 presentation-card-paragraph" style="font-size: 1.1rem; line-height: 1.9rem;">{{ item.title}}</span>
+                <span class="mt-0 mb-1 presentation-card-paragraph" style="font-size: 1.1rem; line-height: 1.5rem; padding-bottom: 2px; display: inline-block;">{{ item.title}}</span>
               </div>
               <div class="text" v-html="item.content" style="position: relaitve">
               </div>
               <span style="letter-spacing: 0.065rem; font-size: 0.78rem; color: black; line-height: 2rem;">
-                12.06.2014 26.10
+                {{`${item.updated_at.substring(0,10)}  ${item.updated_at.substring(12,19)}`}}
               </span>
             </div>
           </v-col>
@@ -69,7 +67,7 @@ export default {
 .text >>> * {
   display: none;
 }
-.text >>> *:first-child {
+.text >>> p:first-of-type {
   padding: 0;
   margin: 0;
   max-height: 130px;

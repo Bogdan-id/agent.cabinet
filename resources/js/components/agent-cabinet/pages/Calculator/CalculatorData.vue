@@ -219,6 +219,24 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+  <v-dialog
+    v-model="deleteCalculationDialog"
+    max-width="420">
+    <v-card>
+      <v-card-title style="color: white; background: #424242">
+        Видалення
+      </v-card-title>
+      <v-card-text>
+        <div style="line-height: 1.5rem; font-size: 1.15rem; padding: 35px 10px 25px 10px; color: black">
+          Розрахунок буде видалено назавжди. <b style="color: black;">Продовжити?</b>
+        </div>
+        <div class="d-flex justify-space-between">
+          <span><v-btn @click="deleteCalculation()" dark color="#e94949">Так</v-btn></span>
+          <span><v-btn @click="openDeleteCalculationDialog = false" dark color="#333333">Нi</v-btn></span>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
   <v-card class="pb-4" min-height="300" elevation="12">
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-calculator-variant'"></v-icon>
@@ -346,7 +364,23 @@
               </template>
               <span>Подати заявку на лiзинг</span>
             </v-tooltip>
-
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <span>
+                  <v-btn 
+                    @click="openDeleteCalculationDialog(item.id)"
+                    v-on="on"
+                    icon>
+                    <v-icon
+                      color="red darken-2"
+                      >
+                      mdi-delete-forever-outline
+                    </v-icon>
+                  </v-btn>
+                </span>
+              </template>
+              <span>Видалити</span>
+            </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <span>
@@ -402,6 +436,7 @@ export default {
     /* v-dialog data  */
     select: selectItems,
     leasingApplicationForm: false,
+    calculationToDelete: null,
     commonErr: ['Обов`язкове поле'],
     pasteEvent: false,
     loading: false,
@@ -437,6 +472,7 @@ export default {
       equity: null,
       // balances: null, // - waiting... (пока не отправляй)
     },
+    deleteCalculationDialog: false,
     _token: null,
 
     tableHeader: [
@@ -621,6 +657,35 @@ export default {
     },
   },
   methods: {
+    openDeleteCalculationDialog(id) {
+      console.log(id)
+      this.deleteCalculationDialog = true
+      this.calculationToDelete = id
+    },
+    deleteCalculation() {
+      axios
+        .delete(`/calculation/delete/${this.calculationToDelete}`)
+        .then(response => {
+          console.log(response)
+          this.$notify({
+            group: 'success',
+            title: 'Розрахунок видалено',
+            text: '',
+          })
+          this.getUserCalculations()
+          setTimeout(() => {
+            this.deleteCalculationDialog = false
+          }, 800)
+        })
+        .catch(error => {
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+          console.log(error.response)
+        })
+    },
     customSort(items) {
       items
         .sort((a, b) => {
@@ -913,6 +978,11 @@ export default {
     // },
   },
   watch: {
+    deleteCalculationDialog(value) {
+      if(value === false) {
+        this.calculationToDelete = null
+      }
+    },
     leasingApplicationForm() {
       this.clearObject()
       this.$v.$reset()

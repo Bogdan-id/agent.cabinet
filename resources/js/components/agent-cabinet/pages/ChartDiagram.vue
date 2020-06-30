@@ -237,32 +237,32 @@
                     :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
-                <span>
-                  {{  
-                    item.interest
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
-              <template v-slot:item.payment="{ item }">
-                <span>
-                  {{  
-                    item.payment
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
-              <template v-slot:item.payment_principal="{ item }">
-                <span>
-                  {{
-                    item['payment-principal']
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
+                  <span>
+                    {{  
+                      item.interest
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
+                <template v-slot:item.payment="{ item }">
+                  <span>
+                    {{  
+                      item.payment
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
+                <template v-slot:item.payment_principal="{ item }">
+                  <span>
+                    {{
+                      item['payment-principal']
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
               </v-data-table>
             </v-card>
           </div>

@@ -277,7 +277,7 @@ export default {
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center', sortable: false },
       { text: 'АВ, %', value: 'agency_remuneration', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },
-      { text: 'Дата', value: 'data', align: 'center', sortable: false },
+      { text: 'Дата подачi', value: 'data', align: 'center', sortable: false },
       { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },
       // { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],

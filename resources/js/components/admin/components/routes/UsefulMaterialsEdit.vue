@@ -264,7 +264,7 @@
                   v-slot:default="{ hover }">
                   <v-card
                     :elevation="hover ? 4 : 1"
-                    class="d-flex ml-3 mr-3 mb-5">
+                    class="d-flex ml-3 mr-3 mb-5 material-card">
                     <v-row id="material-card-container" class="ml-1 mr-1">
                       <v-col cols="12" class="d-flex">
                           <v-col xs="12" sm="4" md="3" xl="2" class="d-flex align-items-center">
@@ -655,24 +655,6 @@ export default {
       text-decoration: underline;
     }
     .material-card {
-      .v-card__subtitle, .v-card__text {
-        line-height: 0.95rem;
-      }
-      box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),
-        0 6px 10px 0 rgba(0,0,0,.14),
-        0 1px 18px 0 rgba(0,0,0,.12)!important; 
-      min-height: 120px; 
-      transition: box-shadow 0.25s;
-      &:hover {
-        box-shadow: 0 6px 6px -3px rgba(0,0,0,.2),
-          0 10px 14px 1px rgba(0,0,0,.14),
-          0 4px 18px 3px rgba(0,0,0,.12)!important
-      }
-      .material-card-content {
-        padding: 8px 0px 5px 0; 
-        margin-bottom: 0px!important; 
-      }
-      
       cursor: pointer; 
       position:relative;
       .material-btn-actions {

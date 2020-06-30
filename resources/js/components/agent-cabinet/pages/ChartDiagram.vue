@@ -60,7 +60,7 @@
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
                       <span v-if="item.result_data.even">
-                        {{ item.result_data.even['offer-leasing-appreciation'] * 100 }}
+                        {{ (item.result_data.even['offer-leasing-appreciation'] * 100).toFixed(2) }}
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">
@@ -183,7 +183,7 @@
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
                       <span v-if="item.result_data.annuity">
-                        {{ item.result_data.annuity['offer-leasing-appreciation'] * 100 }}
+                        {{ (item.result_data.annuity['offer-leasing-appreciation'] * 100).toFixed(2) }}
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">
@@ -307,7 +307,7 @@
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
                       <span v-if="item.result_data.irregular">
-                        {{ item.result_data.irregular['offer-leasing-appreciation'] * 100 }}
+                        {{ (item.result_data.irregular['offer-leasing-appreciation'] * 100).toFixed(2) }}
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">

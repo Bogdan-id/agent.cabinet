@@ -171,7 +171,7 @@
             {{ 
               parseInt(item.leasing_amount.replace(/ /g, '' ))
                 .toLocaleString()
-                .replace(/,/g, ' ')
+                .replace(/,/g, ' ') + ' грн'
             }}
           </span>
         </template>

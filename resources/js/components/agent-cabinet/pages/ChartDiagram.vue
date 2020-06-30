@@ -64,6 +64,24 @@
                   :graph="currentTab" 
                   :data="graphData"/>
               </template>
+              <template v-slot:item.interest="{ item }">
+                <span>
+                  {{  
+                    item.interest
+                      .toLocaleString()
+                      .replace(/,/g, ' ') + ' грн'
+                  }}
+                </span>
+              </template>
+              <template v-slot:item.payment="{ item }">
+                <span>
+                  {{  
+                    item.payment
+                      .toLocaleString()
+                      .replace(/,/g, ' ') + ' грн'
+                  }}
+                </span>
+              </template>
             </v-data-table>
           </v-card>
           </div>
@@ -174,6 +192,15 @@
                         }}
                       </span>
                     </template>
+                    <!-- eslint disable-next-line -->
+                    <template v-slot:item.paymentPrincipal="{ item }">
+                      <span>
+                        {{ item.paymentPrincipal
+                            .toLocaleString()
+                            .replace(/,/g, ' ') 
+                        }}
+                      </span>
+                    </template>
                   </v-data-table>
                 </v-col>
               </v-row>
@@ -263,7 +290,7 @@ export default {
   mounted() {
     this.graphData = this.$router.currentRoute.params.data
     this.leasingObjectData = [this.graphData.request_data]
-    console.log(this.leasingObjectData)
+    console.log(this.graphData)
 
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {

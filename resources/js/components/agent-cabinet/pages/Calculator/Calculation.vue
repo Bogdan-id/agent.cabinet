@@ -427,21 +427,21 @@
                       <div class="range-dashed-line"></div>
                       <div class="arrow-directions-wrapper" :style="`right: ${xs ? '-119px;' : '-147px;'}`">
                         <div class="arrow-directions-content">
-                          <div :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
-                            <span style="white-space: nowrap; ">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
+                          <div :class="calcObj.advance <= 29 ? 'range-active-label' : ''" :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
+                            <span style="white-space: nowrap; transition: color 0.4s">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
                           </div>
                           <div>
                             <calculator-left-arrow></calculator-left-arrow>
                           </div>
                         </div>
-                        <div style="display: inline-flex; color: #d24a43; align-items: center;">
+                        <div style="display: inline-flex; align-items: center;">
                           <div style="display: inline-block;">
                             <calculator-right-arrow></calculator-right-arrow>
                           </div>
                           <div style="display: inline-block; margin-left: 1.2rem">
-                            <b :style="`text-decoration: underline; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
-                              <span style="white-space: nowrap;">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ
-                            </b>
+                            <span :class="calcObj.advance >= 30 ? 'range-active-label' : ''" :style="`font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
+                              <span style="white-space: nowrap; transition: color 0.4s">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -1765,6 +1765,12 @@ export default {
             color: #969599;
             align-items: center;
             margin-right: 40px;
+          }
+          .range-active-label {
+            text-decoration: underline; 
+            font-weight: bold;
+            color: #d24a43; 
+            font-weight: bold;
           }
         }
       }

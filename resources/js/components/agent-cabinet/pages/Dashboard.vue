@@ -26,7 +26,10 @@
     <div style="width: 100%; min-height: 65px;">
       <div v-if="hasUserManager && !loading && requestRecieved" class="mobile-manager-content">
         <div style="display: inline-block; width: 70px; position: relaitve;">
-          <div class="empty-logo-mobile"><span class="logo-letter">{{ agentData.name }}</span></div>
+          <div v-if="agentData.photo == null" class="empty-logo-mobile"><span class="logo-letter">{{ agentData.name }}</span></div>
+          <div style="display: inline-flex; justify-content: center; align-items: center; position: absolute; top: 3px; left: 4px; width: 60px; height: 60px;">
+            <img style="max-width: 100%; border-radius: 100%;" :src="agentData.photo" />
+          </div>
         </div>
         <div class="manager-data-wrapper">
           <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; padding-right: 0.8rem;">{{ agentData.name }}</span>
@@ -151,15 +154,18 @@
             </div>
           </div> -->
           <div style="display: flex; justify-content: center;">
-            <div style="display: flex; align-text: center; justify-content: center; align-items: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
+            <div v-if="agentData.photo == null" style="display: flex; align-text: center; justify-content: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
               <span class="logo-letter">{{ agentData.name }}</span>
+            </div>
+            <div v-if="agentData.photo != null" style="display: flex; align-text: center; justify-content: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
+              <img style="max-width: 100%; border-radius: 100%;" :src="agentData.photo" />
             </div>
           </div>
           <div class="manager-list-wrapper">
             <ul>
               <li style="font-size: 1.06rem; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
               <li style="font-weight: bold; font-size: 0.76rem"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</li>
-              <li style="color: #bb433c;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</li>
+              <li style="color: #bb433c; "><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</li>
             </ul>
           </div>
         </div>
@@ -217,6 +223,7 @@
   <v-card class="dashboard-news">
     <v-card-title class="headline red--text">
       Новини
+      <!-- <v-btn @click="test()"></v-btn> -->
     </v-card-title>
     <v-divider></v-divider>
     <v-card-text class="dashboard-news__wrapper">
@@ -320,6 +327,9 @@ export default {
     }
   },
   methods: {
+    test() {
+      console.log(this.$store.state.user.agent.manager_id)
+    },
     imageLoaded() {
       console.log('onload event')
       setTimeout(() => {
@@ -401,7 +411,7 @@ export default {
   mounted() {
     setTimeout(() => {
       console.log(this.agentData)
-    }, 1000)
+    }, 2000)
   }
 }
 </script>

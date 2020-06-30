@@ -274,7 +274,7 @@
         :custom-sort="customSort"
         class="elevation-1">
         <template v-slot:item.test>
-          <span>{{ $store.state.user.agent.ab_size }}</span>
+          <span style="white-space: nowrap">{{ $store.state.user.agent.ab_size }}</span>
         </template>
         <template v-slot:item.request_data.leasedAssertModel.name="{ item }">
           <span style="white-space: nowrap">{{ item.request_data.leasedAssertModel.name }}</span>
@@ -284,7 +284,7 @@
             {{ 
               parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
                 .toLocaleString()
-                .replace(/,/g, ' ') + ' грн'
+                .replace(/,/g, ' ')
             }}
           </span>
         </template>

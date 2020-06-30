@@ -122,6 +122,15 @@
                   }}
                 </span>
               </template>
+              <template v-slot:item.payment_principal="{ item }">
+                <span>
+                  {{
+                    item['payment-principal']
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
             </v-data-table>
           </v-card>
           </div>
@@ -245,6 +254,15 @@
                   }}
                 </span>
               </template>
+              <template v-slot:item.payment_principal="{ item }">
+                <span>
+                  {{
+                    item['payment-principal']
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
               </v-data-table>
             </v-card>
           </div>
@@ -345,6 +363,15 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:item.payment_principal="{ item }">
+                  <span>
+                    {{
+                      item['payment-principal']
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
                 <template v-slot:footer>
                   <chart-buttons 
                     v-if="graphData !== null"
@@ -402,7 +429,7 @@ export default {
     ],
     tableHeader: [
       { text: '№', value: 'n', align: 'center', sortable: false},
-      { text: 'Оплата за авто, грн', value: 'payment-principal', align: 'start', sortable: false},
+      { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'start', sortable: false},
       { text: 'Винагорода лiзингодавця, грн', value: 'interest', align: 'start', sortable: false },
       { text: 'Сума платежу, грн', value: 'payment', align: 'start', sortable: false },
     ],
@@ -413,7 +440,7 @@ export default {
   methods: {
     addObjects(data) {
       /* eslint-disable */
-      if(data.result_data.hasOwnProperty('annuity')) this.annuity = data.result_data.annuity.graph
+      if(data.result_data.hasOwnProperty('annuity')) {console.log(data.result_data.annuity.graph); this.annuity = data.result_data.annuity.graph}
       if(data.result_data.hasOwnProperty('irregular')) this.irregular = data.result_data.irregular.graph
       if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
     },

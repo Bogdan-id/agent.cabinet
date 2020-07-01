@@ -573,7 +573,6 @@ export default {
     cursor: pointer;
     display: block;
     width: 100%;
-    height: 95%;
     font-size: 1.2rem;
     text-align: center;
     line-height: 2rem;
@@ -592,7 +591,6 @@ export default {
   .tabs .tabs-input {
     width: 50%;
     display: block;
-    height: 100%;
     opacity: 1;
     // transition: opacity 0.3s ease;
   }

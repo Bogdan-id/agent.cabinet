@@ -76,7 +76,7 @@
           :custom-sort="customSort"
           :items="agentCommisions"
           :hide-default-footer="true"
-          class="elevation-1 mr-3 ml-3 mt-4">
+          class="elevation-1 mr-3 ml-3 mt-4 reward-aplication-table">
           <template v-slot:item.leasing_request.created_at="{ item }">
             <div class="text-center">
               {{ item.created_at.substr(0, 10) }}

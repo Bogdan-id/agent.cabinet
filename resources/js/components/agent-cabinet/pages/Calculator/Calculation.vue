@@ -406,7 +406,7 @@
                 <percent style="margin-top: 5px;"></percent>
               </template>
             </v-text-field>
-            <div>
+            <div style="position: relative">
               <input
                 type="range"
                 id="advance-payment"
@@ -430,20 +430,20 @@
                   </span>
                   <div v-if="v === 7" style="position: absolute; top: -34px;">
                     <div class="range-black-dot">
-                      <div class="range-dashed-line"></div>
-                      <div class="arrow-directions-wrapper" :style="`right: ${xs ? '-119px;' : '-147px;'}`">
+                      <advance-hint style="position: absolute; right: -61px; margin-right: 1px; color: black; transform: translateX(-50%)"></advance-hint>
+                      <div class="arrow-directions-wrapper">
                         <div class="arrow-directions-content">
                           <div :class="calcObj.advance <= 29 ? 'range-active-label' : ''" :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
                             <span style="white-space: nowrap; transition: color 0.4s">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
                           </div>
-                          <div>
+                          <!-- <div>
                             <calculator-left-arrow></calculator-left-arrow>
-                          </div>
+                          </div> -->
                         </div>
                         <div style="display: inline-flex; align-items: center;">
-                          <div style="display: inline-block;">
+                          <!-- <div style="display: inline-block;">
                             <calculator-right-arrow></calculator-right-arrow>
-                          </div>
+                          </div> -->
                           <div style="display: inline-block; margin-left: 1.2rem">
                             <span :class="calcObj.advance >= 30 ? 'range-active-label' : ''" :style="`font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
                               <span style="white-space: nowrap; transition: color 0.4s">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ
@@ -802,6 +802,7 @@ import Trailer from '../../assets/svg-icons/trailer.vue'
 import CalculatorRightArrow from '../../assets/svg-icons/calculator-right-arrow'
 import CalculatorLeftArrow from '../../assets/svg-icons/calculator-left-arrow'
 import Percent from '../../assets/svg-icons/percent'
+import advanceHint from '../../assets/svg-icons/avans-hint'
 
 export default {
   mixins: [validationMixin],
@@ -814,7 +815,8 @@ export default {
     Trailer,
     CalculatorRightArrow,
     CalculatorLeftArrow,
-    Percent
+    Percent,
+    advanceHint
   },
   data:() => ({
     selects: selectsItemAndValue,
@@ -1760,8 +1762,10 @@ export default {
       display: inline-block;
     }
     .advance-range-scale {
+      width: 100%;
       display: flex;
-      position: relative
+      position: absolute;
+      right: 6px;
     }
     .current-currency-label {
       font-size: 1.1rem;
@@ -1774,7 +1778,8 @@ export default {
       margin-top: 3px;
     }
     .advance-range-wrapper {
-      width: 7%;
+      // width: 7%;
+      width: 7.1%;
       height: 10px;
       color: #969599;
       position: relative;
@@ -1802,7 +1807,9 @@ export default {
         }
         .arrow-directions-wrapper {
           position: absolute;
-          top: 70px;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          top: 90px;
           display: flex;
           justify-content: space-between;
           .arrow-directions-content {
@@ -2127,7 +2134,9 @@ export default {
     z-index:5;
 		box-shadow: -1px -1px 9px -4px rgba(0,0,0,0.75);
     appearance: none;
-    width: 9px;
+    width: 6px;
+    padding: 0px;
+    margin: 0;
 		height: 25px!important;
 		// border-radius: 50%;
 		background: #d24a43;

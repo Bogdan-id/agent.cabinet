@@ -5,7 +5,7 @@
        {{currentCategory }}
       <!-- <v-divider style="margin-bottom: 0.5rem!important"></v-divider> -->
     </v-card-title>
-    <v-card-text v-if="articles.length === 0">
+    <v-card-text v-if="articles.length === 0 || articles === null">
       <div style="text-align: center;">(Матерiали для вiдображення вiдсутнi)</div>
     </v-card-text>
     <useful-materials-preview-card

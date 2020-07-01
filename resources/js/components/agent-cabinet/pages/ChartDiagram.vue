@@ -91,6 +91,7 @@
               Графiк виплат
             </div>
             <v-data-table
+              v-if="graphData"
               :search="search"
               color="black"
               :headers="tableHeader"
@@ -98,6 +99,15 @@
               :items-per-page="180"
               :hide-default-footer="true"
               dense>
+              <template v-slot:body.append>
+                <tr style="color: black; border-left: 8px solid black;">
+                  <td style="text-align: center;">Всього</td>
+                  <td style="text-align: center;">{{ graphData.result_data.even['total-payment-principal'] }}</td>
+                  <td style="text-align: center;">{{ graphData.result_data.even['total-interest'] }}</td>
+                  <td style="text-align: center;">{{ graphData.result_data.even['total-payment'] }}</td>
+                </tr>
+                <span></span>
+              </template>
               <template v-slot:footer>
                 <chart-buttons 
                   v-if="graphData !== null"
@@ -223,6 +233,7 @@
                 Графiк виплат
               </div>
               <v-data-table
+                v-if="graphData"
                 :search="search"
                 color="black"
                 :headers="tableHeader"
@@ -230,6 +241,15 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:body.append>
+                  <tr style="color: black; border-left: 8px solid black;">
+                    <td style="text-align: center;">Всього</td>
+                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-payment-principal'] }}</td>
+                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-interest'] }}</td>
+                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-payment'] }}</td>
+                  </tr>
+                  <span></span>
+                </template>
                 <template v-slot:footer>
                   <chart-buttons 
                     v-if="graphData"
@@ -356,6 +376,7 @@
                 Графiк виплат
               </div>
               <v-data-table
+                v-if="graphData"
                 :search="search"
                 color="black"
                 :headers="tableHeader"
@@ -363,6 +384,15 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:body.append>
+                  <tr style="color: black; border-left: 8px solid black;">
+                    <td style="text-align: center;">Всього</td>
+                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-payment-principal'] }}</td>
+                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-interest'] }}</td>
+                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-payment'] }}</td>
+                  </tr>
+                  <span></span>
+                </template>
                 <template v-slot:item.payment_principal="{ item }">
                   <span>
                     {{
@@ -429,9 +459,9 @@ export default {
     ],
     tableHeader: [
       { text: '№', value: 'n', align: 'center', sortable: false},
-      { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'start', sortable: false},
-      { text: 'Винагорода лiзингодавця, грн', value: 'interest', align: 'start', sortable: false },
-      { text: 'Сума платежу, грн', value: 'payment', align: 'start', sortable: false },
+      { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'center', sortable: false},
+      { text: 'Винагорода лiзингодавця, грн', value: 'interest', align: 'center', sortable: false },
+      { text: 'Сума платежу, грн', value: 'payment', align: 'center', sortable: false },
     ],
     even: [],
     irregular: [],
@@ -466,8 +496,10 @@ export default {
     // this.leasingObjectData = [this.graphData.request_data]
     // this.leasingObjectData = Object.assign([this.leasingObjectData, this.graphData.result_data[0]])
     // console.log(this.leasingObjectData)
+    console.log('**************')
     console.log(this.graphData)
-
+    console.log(this.graphData.result_data.even['total-payment'])
+    console.log('**************')
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {
         this.graphData.result_data[object].graph[0].n = 'Аванс'

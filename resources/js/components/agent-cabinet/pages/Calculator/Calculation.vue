@@ -655,7 +655,6 @@
                     :error-messages="universalGainErr"
                     v-model="calcObj.customUniversalOption"
                     id="universalGain"
-                    @input="restrictToPercent('universalGain')"
                     dense>
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -1373,7 +1372,6 @@ export default {
       if(event) event.target.nextSibling.nextSibling.classList.add('active')
     },
     getMarksByType(event) {
-      console.log(event)
       if(event) {
         this.resetForm()
         this.calcObj.leasingObjectType = parseInt(event.target.value)
@@ -1649,13 +1647,18 @@ export default {
         this.insuranceProgram = this.selects.insurancePrograms
           .find(obj => obj.value === data.insuranceProgram)
         Object.assign(this.calcObj, data)
+        
 
         this.calcObj.leasingAmountDkp = this.setIndentation(this.calcObj.leasingAmountDkp)
         this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
+        
         this.getMarksByType()
         this.getModelByMark()
         this.changeActiveClass()
+        console.log('****')
+        console.log(this.calcObj.customUniversalOption)
+        console.log('****')
       })
       .catch(error => {
         console.log(error.response)
@@ -1674,7 +1677,7 @@ export default {
     hasIrregular(val) {
       console.log('hasIrregular triggered')
       if(val === true) {
-        this.calcObj.customUniversalOption = null
+        // this.calcObj.customUniversalOption = null
         this.calcObj.customStepOptionFirst = 33,
         this.calcObj.customStepOptionMiddle = 33,
         this.calcObj.threeThirds = 34
@@ -1717,6 +1720,7 @@ export default {
       }
     },
     'calcObj.customUniversalOption': function(value) {
+      console.log('customUniversalOption watcher', value)
       if(!value) return
       this.calcObj.customUniversalOption = parseInt(value)
     },
@@ -1778,7 +1782,6 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
-    // window.addEventListener("resize", this.displayWindowSize)
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
     } else {
@@ -1791,7 +1794,6 @@ export default {
     this.initAdvanceInputValue()
     
     this.calcObj._token = this.getCsrf()
-    console.log('agent id ' + this.$store.state.user.agent.id)
     this.calcObj.agentId = this.$store.state.user.agent.id
   }
 }

@@ -54,11 +54,9 @@ class CalculatorDataService
             'leased-assert-engine' =>  (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasedAssertEngine),
             'client-type' => (int) $this->calculateRequest->leasingClientType,  
             'currency' => $this->getCurrency(),
-            'leasing-currency' => $this->getLeasingCurrency(),//
-            'payment-PF' => (int) $this->calculateRequest->paymentPf,
-            'vehicle-owner-tax' => (int) $this->calculateRequest->vehicleOwnerTax,
-            'gps-tracker-model' =>(int) $this->calculateRequest->gpsTrackerModel, 
-            'leasing-rest' => 0,
+            'leasing-currency' => $this->getLeasingCurrency(),
+            'leasing-rest' => (int) $this->calculateRequest->leasingRest / 100,
+            'leasing-currency-course' => $this->calculateRequest->leasingCurrencyCourse,
             'request-source' => 2,
             'gps-tracker-quantity' => 1,
             'assist-service' => 1,
@@ -69,30 +67,66 @@ class CalculatorDataService
             'insurance-franchise' => $this->calculateRequest->insuranceFranchise,
             'insurance-program' => $this->getInsuranceProgram(),
             'leasing-start-date' => $this->getStartDate(),
+            'holidays' => $this->calculateRequest->holidays,
+            'UNPGA' => 0.1,
+            'pre-financing-days' => 0,
+            'leasing-currency' => 1,
+            'rate-reduction' => 0,
+            'pre-financing-amount' => 0,
+            'insurance-term' => 1,
+            'rate-manipulate' => 0,
+            'client-type' => 2,
+            'insurance-casco-manipulate' => 0,
+            'agent-commission' => 0,
+            'request-source' => 1,
+            'leasing-quantity' => 1,
+            'insurance-vehicle-type' => 1,
+            'commission-manipulate' => 0,
+            'vehicle-owner-tax' => 2,
+            'insurance-lpg' => 0,
+            'commission-lk' => 0,
+            'gps-tracker-model' => 2,
+            'registration' => 0,
+            'gps-tracker-quantity' => 1,
+            'annual-expenses' => 0,
+            'patrol-cards-support' => 2,
+            'removal-registration' => 0,
+            'assist-service' => 1,
+            'replacement-car-support' => 2,
+            'maintenance' => 1,
         ];
        
         $graphTypes = $this->calculateRequest->graphType;
 
         if(in_array('irregular', $graphTypes))
         {
-            $requestData['custom-graphic-type'] = 5;
-            $requestData['custom-universal-option'] = 1;
-            $requestData['custom-fixed-months'] = 3;
+            if($this->calculateRequest->customGraphicType = 5){
+                $requestData['custom-graphic-type'] = $this->calculateRequest->customGraphicType;
+                $requestData['custom-universal-option'] = $this->calculateRequest->customUniversalOption / 100;
+            }elseif($this->calculateRequest->customGraphicType = 3){
+                $requestData['custom-graphic-type'] = $this->calculateRequest->customGraphicType;
+                $requestData['custom-step-option-first'] = $this->calculateRequest->customStepOptionFirst / 100;
+                $requestData['custom-step-option-middle'] = $this->calculateRequest->customStepOptionMiddle / 100;
+            }
         };
         
         $requestData['output'] = [
             'sets' => $graphTypes
         ];
-        if($this->calculateRequest->gainEvenGraphicMonths && in_array('annuity', $graphTypes)){
-            $requestData['gain-even-graphic-months'] = $this->calculateRequest->gainEvenGraphicMonths;
+        if($this->calculateRequest->leasingAmountDkp){
+            $requestData['leasing-amount-dkp'] = $this->calculateRequest->leasingAmountDkp;
+            $requestData['leasing-currency-course-dkp'] = $this->calculateRequest->leasingCurrencyCourse;
         }
-        if($this->calculateRequest->gainEvenGraphicPercent && in_array('annuity', $graphTypes)){
-            $requestData['gain-even-graphic-percent'] = $this->calculateRequest->gainEvenGraphicPercent;
-        }
-        if($this->calculateRequest->UnsrMonths && in_array('annuity', $graphTypes)){
-            $requestData['UNSPR-month'] = $this->calculateRequest->UnsrMonths;
+        if($this->calculateRequest->stock){
+            $requestData['stock'] = $this->calculateRequest->stock;
         }
 
+        if($this->calculateRequest->leasingTerm = 12){
+            $requestData['UNSPR-month'] = 11;
+        }else{
+            $requestData['UNSPR-month'] = 12;
+        }
+        
         return $requestData;
     }
 

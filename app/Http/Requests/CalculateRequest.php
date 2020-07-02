@@ -68,7 +68,15 @@ class CalculateRequest extends JsonRequest
             'advance' => 'required|integer',
             'leasingTerm' => 'required|integer',
             'insuranceProgram' => 'required|integer',
-            'insuranceFranchise' => 'required|integer',     
+            'insuranceFranchise' => 'required|integer',    
+            'holidays' => 'required|integer', 
+            'stock' => 'integer',
+            'customGraphicType' => 'integer',
+            'customUniversalOption'  => 'integer',
+            'customStepOptionFirst' => 'integer',
+            'customStepOptionMiddle' => 'integer',
+            'leasingAmountDkp' => 'string',
+            'leasingRest' => 'required|integer'
         ];
     }
 }

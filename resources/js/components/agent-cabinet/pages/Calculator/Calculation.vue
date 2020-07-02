@@ -334,7 +334,7 @@
             @input="amountToLocalStr('discount-price')"
             id="discount-price"
             :error-messages="discountPriceErr"
-            v-model="calcObj.discountPrice"
+            v-model="calcObj.leasingAmountDkp"
             background-color="white"
             color="red darken-4"
             outlined :dense="mediumAndDown">
@@ -492,9 +492,11 @@
                   <span class="section-title" style="white-space: nowrap">Залишкова вартiсть</span>
                 </div>
                 <!-- :error-messages="residualValueErr" -->
-                <v-text-field
-                  v-model="calcObj.residualValue"
+                <v-select
+                  v-model="calcObj.leasingRest"
                   @input="restrictToPercentAdvance('residual-value')"
+                  :error-messages="leasingRestErr"
+                  :items="leasingRestItems"
                   label="Вiдсоток"
                   id="residual-value"
                   color="red darken-4"
@@ -503,7 +505,7 @@
                   <template v-slot:append>
                     <percent style="margin-top: 5px;"></percent>
                   </template>
-                </v-text-field>
+                </v-select>
               </v-col>
               <v-col cols="12" md="6" sm="12" class="pb-0 pt-0 leasing-term-sm">
                 <span class="section-title" :style="mediumAndDown ? 'display: block' : 'display: inline-block;'">Валюта фiнансування</span>
@@ -559,22 +561,22 @@
             <v-row class="d-flex justify-space-around">
               <v-col cols="5" xs="12" class="text-center">
                 <span
-                  @click="changeCustomGraph(1)"
+                  @click="changeCustomGraph(3)"
                   text
-                  :style="`cursor: pointer; color: ${customGraphType === 1 ? '#d24a43' : 'black'}`"
+                  :style="`cursor: pointer; color: ${calcObj.customGraphicType === 3 ? '#d24a43' : 'black'}`"
                   ><b>СТУПIНЧАТЕ ПОСИЛЕННЯ</b>
                 </span>
               </v-col>
               <v-col cols="6" xs="12" class="text-center">
                 <span
-                  @click="changeCustomGraph(2)"
+                  @click="changeCustomGraph(5)"
                   text
-                  :style="`cursor: pointer;  color: ${customGraphType === 2 ? '#d24a43' : 'black'}`"
+                  :style="`cursor: pointer;  color: ${calcObj.customGraphicType === 5 ? '#d24a43' : 'black'}`"
                   ><b>УНIВЕРСАЛЬНЕ ПОСИЛЕННЯ</b>
                 </span>
               </v-col>
             </v-row>
-            <v-col cols="12" v-if="customGraphType === 1" class="pt-0">
+            <v-col cols="12" v-if="calcObj.customGraphicType === 3" class="pt-0">
               <v-row style="display: flex; justify-content: space-around">
                 <v-col cols="12" md="6" sm="6"  class="pt-0 pb-0">
                   <span style="font-size: 1rem; color: #787878;">Параметри ступеневого графiку</span>
@@ -584,11 +586,13 @@
                     type="number"
                     id="stepGain-oneThird"
                     name="stepGain-oneThird"
-                    @input="setGraphProportion($event, 'stepGain-oneThird')"
+                    @input="setGraphProportion($event, 'stepGain-oneThird');
+                      $v.calcObj.customStepOptionFirst.$touch()"
+                    @blur="$v.calcObj.customStepOptionFirst.$touch()"
                     min="0"
                     max="100"
                     :dense="mediumAndDown"
-                    v-model="stepGain.oneThird"
+                    v-model="customStepOptionFirst"
                     class="pt-0">
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -602,7 +606,9 @@
               <v-row style="display: flex; justify-content: space-around">
                 <v-col cols="12" md="6" sm="6" class="pt-0 pb-0">
                   <v-text-field
-                    @input="setGraphProportion($event, 'stepGain-twoThirds')"
+                    @input="setGraphProportion($event, 'stepGain-twoThirds');
+                      $v.calcObj.customStepOptionMiddle.$touch()"
+                    @blur="$v.calcObj.customStepOptionMiddle.$touch()"
                     :error-messages="twoThirdsErr"
                     color="red darken-3"
                     type="number"
@@ -611,7 +617,7 @@
                     min="0"
                     max="100"
                     :dense="mediumAndDown"
-                    v-model="stepGain.twoThirds"
+                    v-model="customStepOptionMiddle"
                     class="pt-0">
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -640,16 +646,15 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col cols="12" v-if="customGraphType === 2" class="pt-0">
+            <v-col cols="12" v-if="calcObj.customGraphicType === 5" class="pt-0">
               <v-row style="justify-content: center;">
                 <v-col cols="12" md="6" sm="6" class="pt-0 pb-0">
                   <span style="font-size: 1rem; color: #787878">Параметри унiверсального посилення</span>
                   <v-text-field
                     color="red darken-3"
                     :error-messages="universalGainErr"
-                    v-model="calcObj.universalGain"
+                    v-model="calcObj.customUniversalOption"
                     id="universalGain"
-                    @input="restrictToPercent('universalGain')"
                     dense>
                     <template v-slot:append-outer>
                       <percent style="margin-top: 5px;"></percent>
@@ -799,8 +804,8 @@ import Equipment from '../../assets/svg-icons/equipment.vue'
 import Special from '../../assets/svg-icons/special.vue'
 import Cargo from '../../assets/svg-icons/cargo.vue'
 import Trailer from '../../assets/svg-icons/trailer.vue'
-import CalculatorRightArrow from '../../assets/svg-icons/calculator-right-arrow'
-import CalculatorLeftArrow from '../../assets/svg-icons/calculator-left-arrow'
+// import CalculatorRightArrow from '../../assets/svg-icons/calculator-right-arrow'
+// import CalculatorLeftArrow from '../../assets/svg-icons/calculator-left-arrow'
 import Percent from '../../assets/svg-icons/percent'
 import advanceHint from '../../assets/svg-icons/avans-hint'
 
@@ -813,8 +818,8 @@ export default {
     Special,
     Cargo,
     Trailer,
-    CalculatorRightArrow,
-    CalculatorLeftArrow,
+    // CalculatorRightArrow,
+    // CalculatorLeftArrow,
     Percent,
     advanceHint
   },
@@ -825,7 +830,6 @@ export default {
     commonErr: ['Обов`язкове поле'],
     windowInnerWidth: null,
     discountPrice: false,
-    customGraphType: 1,
 
     brandItems: [],
     modelItems: [],
@@ -844,12 +848,12 @@ export default {
 		},
     advanceDisabled: false,
 
-    stepGain: {
-      oneThird: 33,
-      twoThirds: 33,
-      threeThirds: 34
-    },
+    customStepOptionFirst: 33,
+    customStepOptionMiddle: 33,
+    threeThirds: 34,
+
     insuranceFranchise: 0,
+
     calcObj: {
       // gpsTrackerQuantity: 1,
       // urkAssistService: 1,
@@ -858,11 +862,11 @@ export default {
       // UnsrMonths: null,
       // vehicleOwnerTax: "2",
       // paymentPf: false,
-      stepGain: {
-        oneThird: null,
-        twoThirds: null,
-        threeThirds: null
-      },
+      
+      customStepOptionFirst: null,
+      customStepOptionMiddle: null,
+      threeThirds: null,
+
       agentId: null,
       leasedAssertMark: null,
       leasedAssertModel: null,
@@ -879,15 +883,16 @@ export default {
       graphType: [],
       advance: 15,
       leasingTerm: null,
-      universalGain: null,
+      customUniversalOption: null,
 
       // new fields
-      residualValue: 0,
+      customGraphicType: 3,
+      leasingRest: null,
       stock: null,
       holidays: 2,
       insuranceProgram: 2,
       insuranceFranchise: 1,
-      discountPrice: null,
+      leasingAmountDkp: null,
 
       // token
       _token: null
@@ -896,17 +901,25 @@ export default {
   validations() {
     return {
       calcObj: this.validationRules,
-      stepGain: (() => {
-        if (this.hasIrregular && this.customGraphType === 1){
-          return {
-            oneThird: { required },
-            twoThirds: { required },
-          }
-        } else return true
-      })(),
+      // stepGain: (() => {
+      //   if (this.hasIrregular && this.calcObj.customGraphicType === 3){
+      //     return {
+      //       customStepOptionFirst: { required },
+      //       customStepOptionMiddle: { required },
+      //     }
+      //   } else return true
+      // })(),
     }
   },
   computed: {
+    leasingRestItems() {
+      let arr = []
+      let test = this.maxResidualValue / 10
+      for (let i = 1; i <= test; i++) {
+        arr.push(i * 10);
+      }
+      return arr
+    },
     user() {
       return Object.keys(this.$store.state.user.agent).length > 0
     },
@@ -927,6 +940,7 @@ export default {
         leasingCurrency: { required },
         leasingQuantity: { required },
         leasingAmount: { required },
+        leasingRest: { required },
         //   minCost: val => {
         //     if(val == null) return false
         //     return parseInt(val.replace(/[^\d]/g, '')) >= this.minCarCost
@@ -937,16 +951,26 @@ export default {
             return { required }
           } else return true
         })(),
+        customStepOptionFirst: (() => {
+          if (this.hasIrregular && this.calcObj.customGraphicType === 3){
+            return { required }
+          } else return true
+        })(),
+        customStepOptionMiddle: (() => {
+          if (this.hasIrregular && this.calcObj.customGraphicType === 3){
+            return { required }
+          } else return true
+        })(),
         // vehicleOwnerTax: { required },
         // paymentPf: { required },
         leasingTerm: { required },
 
-        universalGain: (() => { 
-          if(this.hasIrregular && this.customGraphType === 2) {
+        customUniversalOption: (() => { 
+          if(this.hasIrregular && this.calcObj.customGraphicType === 5) {
             return { required }
           } else return true
         })(),
-        discountPrice: (() => { 
+        leasingAmountDkp: (() => { 
           if(this.discountPrice) {
             return { required }
           } else return true
@@ -966,19 +990,19 @@ export default {
         // UnsrMonths: { required },
       }
     },
-    threeThirds() {
+    computedThreeThirds() {
       let threeThirds = 100
-      if (!Number.isNaN(parseInt(this.stepGain.oneThird))) {
-        threeThirds = threeThirds - this.stepGain.oneThird
+      if (!Number.isNaN(parseInt(this.customStepOptionFirst))) {
+        threeThirds = threeThirds - this.customStepOptionFirst
       }
-      if (!Number.isNaN(parseInt(this.stepGain.twoThirds))) {
-        threeThirds = threeThirds - this.stepGain.twoThirds
+      if (!Number.isNaN(parseInt(this.customStepOptionMiddle))) {
+        threeThirds = threeThirds - this.customStepOptionMiddle
       }
       return threeThirds
     },
 
     maxResidualValue() {
-      return -Math.ceil(-(100 - parseInt(this.calcObj.advance) - 10) / 5) * 5
+      return -Math.ceil(-(100 - parseInt(this.calcObj.advance) - 10) / 10) * 10
     },
     /* boolean */
 
@@ -1106,6 +1130,10 @@ export default {
     //   if (!this.$v.calcObj.vehicleOwnerTax.$error) return
     //   return this.commonErr
     // },
+    leasingRestErr() {
+      if (!this.$v.calcObj.leasingRest.$error ) return
+      return this.commonErr
+    },
     paymentPfErr() {
       if (!this.$v.calcObj.paymentPf.$error ) return
       return this.commonErr
@@ -1127,21 +1155,21 @@ export default {
     //   return this.commonErr
     // },
     discountPriceErr() {
-      if (!this.$v.calcObj.discountPrice.$error) return
+      if (!this.$v.calcObj.leasingAmountDkp.$error) return
       return this.commonErr
     },
 
     universalGainErr() {
-      if (!this.$v.calcObj.universalGain.$error) return
+      if (!this.$v.calcObj.customUniversalOption.$error) return
       return this.commonErr
     },
 
     oneThirdErr() {
-      if (!this.$v.stepGain.oneThird.$error) return
+      if (!this.$v.calcObj.customStepOptionFirst.$error) return
       return this.commonErr
     },
     twoThirdsErr() {
-      if (!this.$v.stepGain.twoThirds.$error) return
+      if (!this.$v.calcObj.customStepOptionMiddle.$error) return
       return this.commonErr
     },
 
@@ -1173,11 +1201,9 @@ export default {
   methods: {
     resetForm() {
       this.calcObj = {
-        stepGain: {
-          oneThird: null,
-          twoThirds: null,
-          threeThirds: null
-        },
+        customStepOptionFirst: null,
+        customStepOptionMiddle: null,
+        threeThirds: null,
         leasedAssertMark: null,
         leasedAssertModel: null,
         isNew: true,
@@ -1193,15 +1219,15 @@ export default {
         graphType: [],
         advance: 15,
         leasingTerm: null,
-        universalGain: null,
+        customUniversalOption: null,
 
         // new fields
-        residualValue: 0,
+        leasingRest: null,
         stock: null,
         holidays: 2,
         insuranceProgram: 2,
         insuranceFranchise: 1,
-        discountPrice: null,
+        leasingAmountDkp: null,
         agentId: this.$store.state.user.agent.id,
         _token: this.getCsrf()
       }
@@ -1274,9 +1300,9 @@ export default {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
           }
-        } else if(id === 'leasing-amount' && this.calcObj.discountPrice !== null) {
-          if(tempWithoutSpaces < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
-            this.calcObj.discountPrice = temp
+        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp !== null) {
+          if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
+            this.calcObj.leasingAmountDkp = temp
           }
         }
         el.value = temp
@@ -1290,8 +1316,8 @@ export default {
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
           } 
-        } else if(id === 'leasing-amount' && this.calcObj.discountPrice !== null) {
-          if(tempWithoutSpaces < parseInt(this.calcObj.discountPrice.toString().replace(/[^\d]/g, ''))){
+        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp !== null) {
+          if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
           } else if (this.calcObj.leasingAmount === '') {
@@ -1333,7 +1359,7 @@ export default {
       }
     },
     changeCustomGraph(id) {
-      this.customGraphType = id
+      this.calcObj.customGraphicType = id
     },
     closeSelect() {
       this.$refs.graphType.blur()
@@ -1346,7 +1372,6 @@ export default {
       if(event) event.target.nextSibling.nextSibling.classList.add('active')
     },
     getMarksByType(event) {
-      console.log(event)
       if(event) {
         this.resetForm()
         this.calcObj.leasingObjectType = parseInt(event.target.value)
@@ -1420,11 +1445,30 @@ export default {
       this.$v.$anyError
       this.$v.$touch()
     },
+    deleteStepData() {
+      delete this.calcObj.customStepOptionFirst
+      delete this.calcObj.customStepOptionMiddle
+    },
+    deleteUnneccessaryFields() {
+      delete this.calcObj.threeThirds
+      this.calcObj.leasingAmountDkp === null 
+        ? delete this.calcObj.leasingAmountDkp : false
+      this.calcObj.stock === null 
+        ? delete this.calcObj.stock : false
+        console.log(this.calcObj.customGraphicType)
+        console.log('this.hasIrregular && this.customGraphicType === 3', this.hasIrregular && this.calcObj.customGraphicType === 3)
+      this.hasIrregular && this.calcObj.customGraphicType === 3
+        ? delete this.calcObj.customUniversalOption : false
+        console.log('this.hasIrregular && this.customGraphicType === 5', this.hasIrregular && this.calcObj.customGraphicType === 5)
+      this.hasIrregular && this.calcObj.customGraphicType === 5
+        ? delete this.deleteStepData() : false
+    },
     submit() {
       this.checkIfHasIrregular()
       this.checkIfHasCurrency()
+      this.deleteUnneccessaryFields()
       console.log(this.calcObj)
-      console.log(this.stepGain)
+      console.log(this.$v)
       this.highlightErrors()
       !this.$v.$invalid
       && this.$v.$dirty
@@ -1440,8 +1484,11 @@ export default {
     },
     checkIfHasIrregular() {
       if(!this.hasIrregular) {
-        delete this.calcObj.universalGain
-        delete this.calcObj.stepGain
+        delete this.calcObj.customGraphicType
+        delete this.calcObj.customUniversalOption
+
+        delete this.calcObj.customStepOptionFirst
+        delete this.calcObj.customStepOptionMiddle
       }
     },
     sendRequest() {
@@ -1498,11 +1545,11 @@ export default {
 			}
 		},
 		updateElRange(elRange, val, dataSelector) {
-      if (dataSelector === 'advance-payment' && this.calcObj.residualValue > this.maxResidualValue) {
-        this.calcObj.residualValue = this.maxResidualValue
-      } else if (dataSelector === 'advance-payment' && this.calcObj.residualValue < this.maxResidualValue) {
-        if(this.calcObj.residualValue != 0) {
-          this.calcObj.residualValue = this.maxResidualValue
+      if (dataSelector === 'advance-payment' && this.calcObj.leasingRest > this.maxResidualValue) {
+        this.calcObj.leasingRest = this.maxResidualValue
+      } else if (dataSelector === 'advance-payment' && this.calcObj.leasingRest < this.maxResidualValue) {
+        if(this.calcObj.leasingRest != 0) {
+          this.calcObj.leasingRest = this.maxResidualValue
         }
       }
 			let ratio = this.valueTotal(val, elRange.min, elRange.max)
@@ -1600,13 +1647,18 @@ export default {
         this.insuranceProgram = this.selects.insurancePrograms
           .find(obj => obj.value === data.insuranceProgram)
         Object.assign(this.calcObj, data)
+        
 
-        this.calcObj.discountPrice = this.setIndentation(this.calcObj.discountPrice)
+        this.calcObj.leasingAmountDkp = this.setIndentation(this.calcObj.leasingAmountDkp)
         this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
+        
         this.getMarksByType()
         this.getModelByMark()
         this.changeActiveClass()
+        console.log('****')
+        console.log(this.calcObj.customUniversalOption)
+        console.log('****')
       })
       .catch(error => {
         console.log(error.response)
@@ -1622,27 +1674,18 @@ export default {
     insuranceProgram(val) {
       this.calcObj.insuranceProgram = val.value
     },
-    // 'stepGain.oneThird': function(val) {
-    //   this.calcObj.stepGain.oneThird = parseInt(val)
-    // },
-    // 'stepGain.twoThirds': function(val) {
-    //   this.calcObj.stepGain.twoThirds = parseInt(val)
-    // },
-    // 'stepGain.threeThirds': function(val) {
-    //   this.calcObj.stepGain.threeThirds = parseInt(val)
-    // },
     hasIrregular(val) {
       console.log('hasIrregular triggered')
       if(val === true) {
-        this.calcObj.universalGain = null
-        this.calcObj.stepGain = {
-          oneThird: 33,
-          twoThirds: 33,
-          threeThirds: 34
-        }
+        // this.calcObj.customUniversalOption = null
+        this.calcObj.customStepOptionFirst = 33,
+        this.calcObj.customStepOptionMiddle = 33,
+        this.calcObj.threeThirds = 34
       } else {
-        delete this.calcObj.universalGain
-        delete this.calcObj.stepGain
+        delete this.calcObj.customUniversalOption
+        delete this.calcObj.customStepOptionFirst
+        delete this.calcObj.customStepOptionMiddle
+        delete this.calcObj.customGraphicType
       }
     },
     insuranceFranchise(value) {
@@ -1660,16 +1703,31 @@ export default {
         this.calcObj.holidays = 2
       }
     },
-    'stepGain.oneThird': function(value) {
+    'customStepOptionFirst': function(value) {
       console.log('watch')
-      this.calcObj.stepGain.oneThird = parseInt(value)
+      console.log(isNaN(parseInt(value)))
+      if(isNaN(parseInt(value))) {
+        this.calcObj.customStepOptionFirst = null
+      } else { 
+        this.calcObj.customStepOptionFirst = parseInt(value) 
+      }
     },
-    'stepGain.twoThirds': function(value) {
-      console.log('watch')
-      this.calcObj.stepGain.twoThirds = parseInt(value)
+    'customStepOptionMiddle': function(value) {
+      if(isNaN(parseInt(value))) { 
+        this.calcObj.customStepOptionMiddle = null 
+      } else {
+        this.calcObj.customStepOptionMiddle = parseInt(value)
+      }
     },
-    threeThirds(val) {
-      this.calcObj.stepGain.threeThirds = val
+    'calcObj.customUniversalOption': function(value) {
+      console.log('customUniversalOption watcher', value)
+      if(!value) return
+      this.calcObj.customUniversalOption = parseInt(value)
+    },
+    computedThreeThirds(val) {
+      console.log('watcher-computed three thirds')
+      console.log(val)
+      this.threeThirds = val
     },
     'calcObj.leasingTerm': function (value) {
       if(!value) return
@@ -1724,7 +1782,6 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
-    // window.addEventListener("resize", this.displayWindowSize)
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
     } else {
@@ -1737,7 +1794,6 @@ export default {
     this.initAdvanceInputValue()
     
     this.calcObj._token = this.getCsrf()
-    console.log('agent id ' + this.$store.state.user.agent.id)
     this.calcObj.agentId = this.$store.state.user.agent.id
   }
 }

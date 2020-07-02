@@ -46,12 +46,6 @@ export default {
     padding: 0 18px;
     line-height: 40px;
   }
-  .content .v-card__title {
-    padding-bottom: 0;
-  }
-  .content .v-card__actions {
-    padding-left: 20px;
-  }
   .tab-btn--active {
     background: black;
     color: white;

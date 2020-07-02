@@ -1,10 +1,9 @@
 <template>
 <div class="row">
-  <v-card class="usefull-material__detail" elevation="7" v-if="articles !== null " v-show="$route.name === 'Матерiали категорiї'">
-    <v-card-title class="d-block pt-3 pb-1" style="border-left: 4px solid #e75d57;">
+  <v-card class="usefull-material__detail" elevation="7" v-if="articles !== null " v-show="$route.name === 'Матерiали категорiї'" style="min-height: 160px; padding-top: 20px;">
+    <!-- <v-card-title class="d-block pt-3 pb-1" style="border-left: 4px solid #e75d57;">
        {{currentCategory }}
-      <!-- <v-divider style="margin-bottom: 0.5rem!important"></v-divider> -->
-    </v-card-title>
+    </v-card-title> -->
     <v-card-text v-if="articles.length === 0 || articles === null">
       <div style="text-align: center;">(Матерiали для вiдображення вiдсутнi)</div>
     </v-card-text>

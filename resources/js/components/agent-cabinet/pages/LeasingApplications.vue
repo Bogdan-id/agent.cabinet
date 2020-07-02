@@ -119,16 +119,15 @@
   <v-card-title class="d-block grey darken-3 white--text">
     <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-clipboard-list-outline'"></v-icon>
     Заявки на лiзинг
-    <v-divider></v-divider>
-    </v-card-title>
+  </v-card-title>
     <v-progress-linear
       :height="3"
       :active="loading"
       :indeterminate="loading"
       absolute
       top
-      color="red lighten-1"
-    ></v-progress-linear>
+      color="red lighten-1">
+    </v-progress-linear>
     <v-card-title
       v-if="!loading && !tableDataPresent"
       absolute

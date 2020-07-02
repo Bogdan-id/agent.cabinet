@@ -3,7 +3,6 @@
   <v-card-title class="d-block grey darken-3 white--text">
     <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>
     Кориснi матерiали
-  <v-divider></v-divider>
   <v-progress-linear
     :height="3"
     :active="loading"
@@ -91,7 +90,7 @@ export default {
     }
     .useful-materials__article {
       transition: all 0.3s ease;
-      padding-bottom: 15px;
+      // padding-bottom: 15px;
       p:first-of-type {
         display: inline-block;
         & ::after {

@@ -511,25 +511,38 @@ export default {
   },
 }
 </script>
+
 <style lang="scss">
-  .payout-schedule {
-    border-bottom: 1px solid #e0e0e0;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #424242;
-    padding-left: 1rem;
-  }
+.payout-schedule {
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #424242;
+  padding-left: 1rem;
+}
 .v-data-table {
   &.leasing-object-table{
     margin-bottom: 0.7rem;
+    .v-data-table__mobile-table-row {
+      display: flex;
+      flex-direction: column;
+    }
     .v-data-table__mobile-row {
       min-height: 22px!important;
       border-bottom: 1px solid #eeedeb;
       margin: 0 25px 0 25px;
       padding: 0;
+      display: flex;
+      justify-content: space-between;
       .v-data-table__mobile-row__cell {
         font-weight: bold;
         color: #424242;
+        display: inline-block;
+        float: right;
+      }
+      .v-data-table__mobile-row__header {
+        display: inline-block;
+        float: left;
       }
     }
     thead {
@@ -548,6 +561,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .v-data-table.leasing-object-table {
+
   .v-data-table__mobile-row {
     min-height: 22px!important;
   }

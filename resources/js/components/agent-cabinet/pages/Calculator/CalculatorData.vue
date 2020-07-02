@@ -241,7 +241,6 @@
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-calculator-variant'"></v-icon>
       Калькулятор лiзингу
-      <v-divider></v-divider>
     </v-card-title>
     <v-card-title
       class="calculator-custom-title"

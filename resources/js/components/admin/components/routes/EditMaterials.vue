@@ -8,6 +8,7 @@
         <v-row>
           <v-col md="4" class="pb-0 pt-0">
             <v-select
+              v-if="categories.length > 0"
               @blur="$v.newCategorie.$touch()"
               @change="$v.newCategorie.$touch(); test()"
               :error-messages="newCategorieErr"
@@ -299,24 +300,22 @@
       }
     },
     mounted() {
-      this.assignTokenToCkEditorConfig()
-      console.log(this.$route)
+      this.categories = this.$route.params.categories
     },
     created() {
       let image = new Image()
       let material = this.$route.params.material
       image.src = material.title_image
+      
+      console.log(this.categories)
       console.log(image)
-      if(this.$route.params.edit) {
-        this.categories = this.$route.params.category
+      if(this.$route.params.edit === true) {
         this.editorData = material.content,
         this.materialName = material.title,
         this.materialImg = image
         this.imageName = '1'
         this.newCategorie = this.$route.params.category[0].id
         // this.materialImgPreview = null,
-      } else {
-        this.categories = this.$route.params.categories
       }
       console.log(this.$route.params.id)
     }

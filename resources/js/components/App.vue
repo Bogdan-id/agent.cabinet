@@ -34,7 +34,8 @@ export default {
 	@import "../assets/scss/loader.scss";
 	@import "../assets/scss/scroll.scss";
   .calculations-table,
-  .dashboard-table {
+  .dashboard-table,
+  .reward-aplication-table {
     thead th {
       vertical-align: top!important;
       text-align: center!important;

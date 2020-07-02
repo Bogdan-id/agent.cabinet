@@ -231,8 +231,8 @@
           Розрахунок буде видалено назавжди. <b style="color: black;">Продовжити?</b>
         </div>
         <div class="d-flex justify-space-between">
-          <span><v-btn @click="deleteCalculation()" dark color="#e94949">Так</v-btn></span>
-          <span><v-btn @click="openDeleteCalculationDialog = false" dark color="#333333">Нi</v-btn></span>
+          <span><v-btn @click="deleteCalculation()" dark color="#e94949" :loading="btnLoading">Так</v-btn></span>
+          <span><v-btn @click="deleteCalculationDialog = false" dark color="#333333">Нi</v-btn></span>
         </div>
       </v-card-text>
     </v-card>
@@ -241,7 +241,6 @@
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-calculator-variant'"></v-icon>
       Калькулятор лiзингу
-      <v-divider></v-divider>
     </v-card-title>
     <v-card-title
       class="calculator-custom-title"
@@ -663,6 +662,7 @@ export default {
       this.calculationToDelete = id
     },
     deleteCalculation() {
+      this.btnLoading = true
       axios
         .delete(`/calculation/delete/${this.calculationToDelete}`)
         .then(response => {
@@ -672,6 +672,7 @@ export default {
             title: 'Розрахунок видалено',
             text: '',
           })
+          this.btnLoading = false
           this.getUserCalculations()
           setTimeout(() => {
             this.deleteCalculationDialog = false
@@ -684,6 +685,7 @@ export default {
             text: `${error.response.status} \n ${error.response.data.message}`,
           })
           console.log(error.response)
+          this.btnLoading = false
         })
     },
     customSort(items) {

@@ -91,6 +91,7 @@
               Графiк виплат
             </div>
             <v-data-table
+              v-if="graphData"
               :search="search"
               color="black"
               :headers="tableHeader"
@@ -98,6 +99,15 @@
               :items-per-page="180"
               :hide-default-footer="true"
               dense>
+              <template v-slot:body.append>
+                <tr style="color: black; border-left: 8px solid black;">
+                  <td style="text-align: center;">Всього</td>
+                  <td style="text-align: center;">{{ graphData.result_data.even['total-payment-principal'] }}</td>
+                  <td style="text-align: center;">{{ graphData.result_data.even['total-interest'] }}</td>
+                  <td style="text-align: center;">{{ graphData.result_data.even['total-payment'] }}</td>
+                </tr>
+                <span></span>
+              </template>
               <template v-slot:footer>
                 <chart-buttons 
                   v-if="graphData !== null"
@@ -223,6 +233,7 @@
                 Графiк виплат
               </div>
               <v-data-table
+                v-if="graphData"
                 :search="search"
                 color="black"
                 :headers="tableHeader"
@@ -230,6 +241,15 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:body.append>
+                  <tr style="color: black; border-left: 8px solid black;">
+                    <td style="text-align: center;">Всього</td>
+                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-payment-principal'] }}</td>
+                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-interest'] }}</td>
+                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-payment'] }}</td>
+                  </tr>
+                  <span></span>
+                </template>
                 <template v-slot:footer>
                   <chart-buttons 
                     v-if="graphData"
@@ -237,32 +257,32 @@
                     :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
-                <span>
-                  {{  
-                    item.interest
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
-              <template v-slot:item.payment="{ item }">
-                <span>
-                  {{  
-                    item.payment
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
-              <template v-slot:item.payment_principal="{ item }">
-                <span>
-                  {{
-                    item['payment-principal']
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
+                  <span>
+                    {{  
+                      item.interest
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
+                <template v-slot:item.payment="{ item }">
+                  <span>
+                    {{  
+                      item.payment
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
+                <template v-slot:item.payment_principal="{ item }">
+                  <span>
+                    {{
+                      item['payment-principal']
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </span>
+                </template>
               </v-data-table>
             </v-card>
           </div>
@@ -356,6 +376,7 @@
                 Графiк виплат
               </div>
               <v-data-table
+                v-if="graphData"
                 :search="search"
                 color="black"
                 :headers="tableHeader"
@@ -363,6 +384,15 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:body.append>
+                  <tr style="color: black; border-left: 8px solid black;">
+                    <td style="text-align: center;">Всього</td>
+                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-payment-principal'] }}</td>
+                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-interest'] }}</td>
+                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-payment'] }}</td>
+                  </tr>
+                  <span></span>
+                </template>
                 <template v-slot:item.payment_principal="{ item }">
                   <span>
                     {{
@@ -429,9 +459,9 @@ export default {
     ],
     tableHeader: [
       { text: '№', value: 'n', align: 'center', sortable: false},
-      { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'start', sortable: false},
-      { text: 'Винагорода лiзингодавця, грн', value: 'interest', align: 'start', sortable: false },
-      { text: 'Сума платежу, грн', value: 'payment', align: 'start', sortable: false },
+      { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'center', sortable: false},
+      { text: 'Винагорода лiзингодавця, грн', value: 'interest', align: 'center', sortable: false },
+      { text: 'Сума платежу, грн', value: 'payment', align: 'center', sortable: false },
     ],
     even: [],
     irregular: [],
@@ -466,8 +496,10 @@ export default {
     // this.leasingObjectData = [this.graphData.request_data]
     // this.leasingObjectData = Object.assign([this.leasingObjectData, this.graphData.result_data[0]])
     // console.log(this.leasingObjectData)
+    console.log('**************')
     console.log(this.graphData)
-
+    console.log(this.graphData.result_data.even['total-payment'])
+    console.log('**************')
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {
         this.graphData.result_data[object].graph[0].n = 'Аванс'
@@ -479,25 +511,38 @@ export default {
   },
 }
 </script>
+
 <style lang="scss">
-  .payout-schedule {
-    border-bottom: 1px solid #e0e0e0;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #424242;
-    padding-left: 1rem;
-  }
+.payout-schedule {
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #424242;
+  padding-left: 1rem;
+}
 .v-data-table {
   &.leasing-object-table{
     margin-bottom: 0.7rem;
+    .v-data-table__mobile-table-row {
+      display: flex;
+      flex-direction: column;
+    }
     .v-data-table__mobile-row {
       min-height: 22px!important;
       border-bottom: 1px solid #eeedeb;
       margin: 0 25px 0 25px;
       padding: 0;
+      display: flex;
+      justify-content: space-between;
       .v-data-table__mobile-row__cell {
         font-weight: bold;
         color: #424242;
+        display: inline-block;
+        float: right;
+      }
+      .v-data-table__mobile-row__header {
+        display: inline-block;
+        float: left;
       }
     }
     thead {
@@ -516,6 +561,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .v-data-table.leasing-object-table {
+
   .v-data-table__mobile-row {
     min-height: 22px!important;
   }
@@ -541,7 +587,6 @@ export default {
     cursor: pointer;
     display: block;
     width: 100%;
-    height: 95%;
     font-size: 1.2rem;
     text-align: center;
     line-height: 2rem;
@@ -560,7 +605,6 @@ export default {
   .tabs .tabs-input {
     width: 50%;
     display: block;
-    height: 100%;
     opacity: 1;
     // transition: opacity 0.3s ease;
   }

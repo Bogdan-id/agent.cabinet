@@ -119,16 +119,15 @@
   <v-card-title class="d-block grey darken-3 white--text">
     <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-clipboard-list-outline'"></v-icon>
     Заявки на лiзинг
-    <v-divider></v-divider>
-    </v-card-title>
+  </v-card-title>
     <v-progress-linear
       :height="3"
       :active="loading"
       :indeterminate="loading"
       absolute
       top
-      color="red lighten-1"
-    ></v-progress-linear>
+      color="red lighten-1">
+    </v-progress-linear>
     <v-card-title
       v-if="!loading && !tableDataPresent"
       absolute
@@ -176,22 +175,22 @@
           </span>
         </template>
         <template #item.actions="{ item }">
-          <div class="d-flex">
-            <!-- <v-tooltip bottom>
+          <div class="d-flex justify-space-around">
+            <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
-                  @click="toDetail(item.id)"
+                  @click=""
                   class="mr-3"
                   v-on="on"
                   icon>
                   <v-icon
                     color="red lighten-1">
-                    mdi-plus-circle
+                    mdi-sack-percent
                   </v-icon>
                 </v-btn>
               </template>
               <span>Подати заявку на виплату АВ</span>
-            </v-tooltip> -->
+            </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
@@ -250,7 +249,7 @@ export default {
       { text: 'Клієнт', value: 'initials', align: 'start'},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center' },
-      { text: 'Розмір агентської винагороди, грн', value: 'leasing_amount', align: 'center' },
+      { text: 'АВ, грн', value: 'leasing_amount', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },
       { text: 'Дата', value: 'data', align: 'center' },
       { text: 'Статус заявки', value: 'request_status', align: 'center', width: 200 },

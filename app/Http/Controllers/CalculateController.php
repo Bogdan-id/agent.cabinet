@@ -6,7 +6,7 @@ use App\Http\Clients\BitrixClient;
 use App\Http\Clients\CalculateClient;
 use App\Http\Controllers\Controller;
 use App\Service\CalculatorDataService;
-// use App\Models\Service\CarImageService;
+use App\Service\CarImageService;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Mpdf\Config\ConfigVariables;

@@ -40,7 +40,7 @@ Route::get('/agent/manager/{agent_id}', 'AgentsController@getAgentManager')
 Route::get('calculations/agent/{id}', 'CalculateController@getCalculationByAgent');
 Route::get('calculation/{id}', 'CalculateController@getCalculationById');
 Route::delete('calculation/delete/{id}', 'CalculateController@delete');
-
+Route::post('calculation/getPdf', 'CalculateController@createExcel');
 
 Route::post('leasing-reqeust/create', 'LeasingRequestController@create');
 Route::get('leasing-reqeust/{id}', 'LeasingRequestController@getLeasingRequest')
@@ -59,6 +59,7 @@ Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
+
 
 Route::get('json/useful-materials-categories/{slug}', 'UsefulMaterialsController@getMaterialsByCategory');
 Route::get('json/useful-materials-categories/{categorySlug}/{slug}', 'UsefulMaterialsController@getMaterialBySlug');

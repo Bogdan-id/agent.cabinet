@@ -33,7 +33,7 @@ export default {
     console.log(this.$router.currentRoute.path)
     // let material = this.$router.currentRoute.params.material 
     axios
-      .get(`${this.$router.currentRoute.path}`)
+      .get(`/json${this.$router.currentRoute.path}`)
       .then(response => {
         console.log(response)
         if(response.status == 500) {

@@ -32,11 +32,11 @@ export default {
   }),
   mounted() {
     console.log(this.$router.currentRoute)
-    let params = this.$router.currentRoute.params
+    // let params = this.$router.currentRoute.params
     // this.currentCategory = params.name
-    let category = params.category
+    // let category = params.category
     axios
-      .get(`/useful-materials-categories/${category}`)
+      .get(`/json${this.$router.currentRoute.path}`)
       .then(response => {
         console.log(response)
         if(response.status == 500) {

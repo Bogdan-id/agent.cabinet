@@ -8,9 +8,9 @@
         <v-row>
           <v-col md="4" class="pb-0 pt-0">
             <v-select
-              v-if="categories.length > 0"
+              v-if="categoriesPresent"
               @blur="$v.newCategorie.$touch()"
-              @change="$v.newCategorie.$touch(); test()"
+              @change="$v.newCategorie.$touch();"
               :error-messages="newCategorieErr"
               v-model="newCategorie"
               label="Оберiть категорiю"
@@ -36,24 +36,29 @@
           <v-col md="4" class="pb-0">
             <!-- :disabled="!categoriesPresent" -->
             <v-file-input
+              v-if="imageName === null"
               @change="previewImage($event)"
               v-model="materialImg"
+              :error-messages="materialImgErr"
               :rules="rules"
               accept="image/png, image/jpeg, image/bmp"
               prepend-inner-icon="mdi-camera"
               label="Зображення до матерiалу"
-              
               outlined show-size dense>
             </v-file-input>
           </v-col>
         </v-row>
-        <v-img
-          v-if="materialImgPreview !== null"
-          :src="materialImgPreview"
+        <div v-if="materialImgPreview !== null || imageName !== null" style="width: 365px; position: relative;">
+          <v-btn @click="clearImage()" icon style="position: absolute; right: -5px; top: -35px;">
+            <v-icon large color="black" v-text="'mdi-close'"></v-icon>
+          </v-btn>
+        </div>
+        <img
+          v-if="materialImgPreview !== null || imageName !== null"
+          :src="materialImgPreview || imageName"
           width="365"
           style="border: 2px solid black; border-radius: 5px;"
-          class="grey darken-4">
-        </v-img>
+          class="grey darken-4" />
       </v-card-text>
       <v-card-text>
         <v-card-title 
@@ -179,19 +184,23 @@
 
       editorData: '',
       materialName: null,
+
       materialImg: null,
       materialImgPreview: null,
       imageName: null,
+
       newCategorie: null
     }),
     validations: {
       newCategorie: { required },
       materialName: { required },
+      materialImg: {required}
     },
     computed: {
-      // categoriesPresent() {
-      //   return this.categories.length > 0 && this.newCategorie !== null
-      // },
+      categoriesPresent() {
+        if(!this.categories) return false
+        return this.categories.length > 0
+      },
       newCategorieErr() {
         if (!this.$v.newCategorie.$error) return
         return this.commonErr
@@ -199,11 +208,22 @@
       materialNameErr() {
         if (!this.$v.materialName.$error) return
         return this.commonErr
+      },
+      materialImgErr() {
+        if (!this.$v.materialImg.$error) return
+        return this.commonErr
       }
     },
     methods: {
-      test() {
-        console.log(this.newCategorie)
+      clearImage() {
+        console.log('clear image')
+        this.imageName = null 
+        this.materialImg = null
+        this.materialImgPreview = null
+        console.log(this.materialImg, this.imageName, this.materialImgPreview)
+        setTimeout(() => {
+          console.log(this.materialImg, this.imageName, this.materialImgPreview)
+        }, 1000)
       },
       submit() {
         console.log(this.finalObj())
@@ -256,7 +276,7 @@
       previewImage(event) { 
         if(event) {
           console.log(event)
-          // this.imageName = event.name
+          this.imageName = event.name
           const reader = new FileReader()
           reader.readAsDataURL(event)
           reader.onload = (data) => {
@@ -301,23 +321,17 @@
     },
     mounted() {
       this.categories = this.$route.params.categories
+      console.log(this.$route.params.material)
     },
     created() {
-      let image = new Image()
       let material = this.$route.params.material
-      image.src = material.title_image
-      
-      console.log(this.categories)
-      console.log(image)
       if(this.$route.params.edit === true) {
         this.editorData = material.content,
         this.materialName = material.title,
-        this.materialImg = image
-        this.imageName = '1'
+        this.materialImg = material.title_image
+        this.imageName = material.title_image
         this.newCategorie = this.$route.params.category[0].id
-        // this.materialImgPreview = null,
       }
-      console.log(this.$route.params.id)
     }
   }
 </script>

@@ -60,8 +60,8 @@ Route::get('/updateManagers', 'ManagerController@updateManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
 
-Route::get('useful-materials-categories/{slug}', 'UsefulMaterialsController@getMaterialsByCategory');
-Route::get('useful-materials-categories/{categorySlug}/{slug}', 'UsefulMaterialsController@getMaterialBySlug');
+Route::get('json/useful-materials-categories/{slug}', 'UsefulMaterialsController@getMaterialsByCategory');
+Route::get('json/useful-materials-categories/{categorySlug}/{slug}', 'UsefulMaterialsController@getMaterialBySlug');
 Route::post('/calculate', 'CalculateController@create');
 Route::get('/models', 'ModelController@index');
 Route::get('/mark', 'MarkController@index');

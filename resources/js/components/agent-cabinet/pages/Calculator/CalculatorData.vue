@@ -347,7 +347,7 @@
         <template v-slot:item.request_data="{ item }">
           <span style="white-space: nowrap">
             {{ 
-              parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
+              parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
                 .toLocaleString()
                 .replace(/,/g, ' ')
             }}
@@ -475,6 +475,7 @@ import selectItems from './selectItems.js'
 import { validationMixin } from 'vuelidate'
 import { required, email } from 'vuelidate/lib/validators'
 import axios from 'axios'
+import { saveAs } from 'file-saver'
 
 export default {
   mixins: [validationMixin],
@@ -483,20 +484,6 @@ export default {
     dialogToDownload: false,
     graphName: 'even',
     currentGraphToDownload: null,
-    // graphObjToSend: {
-    //   mark: null,
-    //   model: null,
-    //   price: null,
-    //   term: null,
-    //   prepaid: null,
-    //   advance: null,
-    //   avg: null,
-    //   currency: null,
-    //   leasingRest: null,
-    //   table: null,
-    //   agg: null,
-    //   requestId: null
-    // },
 
     select: selectItems,
     leasingApplicationForm: false,
@@ -1050,9 +1037,10 @@ export default {
         _token: this.getCsrf()
       }
       axios
-        .post('/calculation/getPdf', test)
+        .post('/calculation/getPdf', test, {responseType: 'blob'})
         .then(response => {
           console.log(response)
+          saveAs(response.data, "leasing-graph.pdf")
         })
         .catch(error => {
           console.log(error.response)

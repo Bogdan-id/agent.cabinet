@@ -1620,9 +1620,15 @@ export default {
 		},
     setIndentation(value) {
       if(value) {
-        return parseInt(value.toString().replace(/ /g, '' ))
-          .toLocaleString()
-          .replace(/,/g, ' ')
+        if(Number.isNaN(value)) {
+          return value.replace(/ /g, '' )
+            .toLocaleString()
+            .replace(/,/g, ' ')
+        } else {
+          return parseInt(value.toString().replace(/ /g, '' ))
+            .toLocaleString()
+            .replace(/,/g, ' ')
+        }
       } else return
     },
     displayWindowSize() {

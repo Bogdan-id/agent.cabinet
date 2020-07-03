@@ -5,37 +5,37 @@
     max-width="600">
     <v-card class="graphs-to-delete">
       <v-card-title style="background: #424242;" class="white--text">
-        Збереження графiку выплат
+        Графiки виплат
       </v-card-title>
       <v-card-text>
         <div style="margin-top: 23px;">
-          <span style="line-height: 2rem; font-size: 0.93rem;">Оберiть типи графiку</span>
+          <span style="line-height: 2rem; font-size: 0.93rem; color: black;">Оберiть тип графiку</span>
         </div>
         <v-checkbox
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
-          v-model="graphsToDownload"
+          v-model="graphName"
           value="annuity"
           color="black">
           <template v-slot:label>
-            <span :style="graphsToDownload == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
+            <span :style="graphName == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
           </template>
         </v-checkbox>
         <v-checkbox
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('even')"
           value="even"
-          v-model="graphsToDownload"
+          v-model="graphName"
           color="black">
           <template v-slot:label>
-            <span :style="graphsToDownload == 'even' ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
+            <span :style="graphName == 'even' ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
           </template>
         </v-checkbox>
         <v-checkbox
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('irregular')"
           value="irregular"
-          v-model="graphsToDownload"
+          v-model="graphName"
           color="black">
           <template v-slot:label>
-            <span :style="graphsToDownload == 'irregular' ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
+            <span :style="graphName == 'irregular' ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
           </template>
         </v-checkbox>
         <v-divider></v-divider>
@@ -481,8 +481,23 @@ export default {
   data:() => ({
     /* v-dialog data  */
     dialogToDownload: false,
-    graphsToDownload: null,
+    graphName: null,
     currentGraphToDownload: null,
+    graphObjToSend: {
+      mark: null,
+      model: null,
+      price: null,
+      term: null,
+      prepaid: null,
+      advance: null,
+      avg: null,
+      currency: null,
+      leasingRest: null,
+      table: null,
+      agg: null,
+      requestId: null
+    },
+
     select: selectItems,
     leasingApplicationForm: false,
     calculationToDelete: null,
@@ -1011,8 +1026,35 @@ export default {
         }
     },
     test() {
-      console.log(this.graphsToDownload)
-      console.log(this.tabledata)
+      let graph = this.currentGraphToDownload.result_data[this.graphName]
+      let calcData = this.currentGraphToDownload.request_data
+      let rootCalcData = this.currentGraphToDownload
+      console.log('********')
+      // console.log(rootCalcData)
+      // console.log(calcData)
+      // console.log(graph)
+      console.log('********')
+      let test ={
+        mark: calcData.leasedAssertMark.name,
+        model: calcData.leasedAssertModel.name,
+        price: calcData.leasingAmount,
+        term: calcData.leasingTerm,
+        advance: calcData.advance,
+        prepaid: graph['offer-advance'],
+        avg: graph['offer-month-payment'],
+        currency: calcData.currency,
+        leasingRest: graph['offer-rest'],
+        table: graph.graph,
+        agg: {
+          'payment-principal': graph['total-payment-principal'],
+          'interest': graph['total-interest'],
+          'payment': graph['total-payment'],
+        },
+        requestId: rootCalcData.request_id
+      }
+      console.log('**********')
+      console.log(test)
+      console.log('**********')
     },
     sortData(a, b) {
       return new Date(b.created_at) - new Date(a.created_at)

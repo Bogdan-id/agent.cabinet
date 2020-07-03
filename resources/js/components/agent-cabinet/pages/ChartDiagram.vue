@@ -78,7 +78,7 @@
                     <template v-slot:item.request_data.leasingAmount="{ item }">
                       <span>
                         {{ 
-                          parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
+                          parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}
@@ -212,9 +212,10 @@
                     </template>
                     <template v-slot:item.offer_month_payment="{ item }">
                       <span v-if="item.result_data.annuity">
-                        {{ item.result_data.annuity['offer-month-payment']
-                          .toLocaleString()
-                          .replace(/,/g, ' ')  
+                        {{ 
+                          item.result_data.annuity['offer-month-payment']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')  
                         }}
                       </span>
                     </template>
@@ -238,7 +239,7 @@
                     <template v-slot:item.request_data.leasingAmount="{ item }">
                       <span v-if="item.request_data && item.request_data.leasingAmount">
                         {{ 
-                          parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
+                          parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}
@@ -399,7 +400,7 @@
                     <template v-slot:item.request_data.leasingAmount="{ item }">
                       <span v-if="item.request_data && item.request_data.leasingAmount">
                         {{ 
-                          parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
+                          parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}

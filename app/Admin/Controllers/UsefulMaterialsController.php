@@ -9,7 +9,10 @@ use App\Models\{
 };
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use App\Admin\Requests\ImageUploadRequest;
+use App\Admin\Requests\{
+    ImageUploadRequest,
+    ImageDeleteRequest
+};
 use Illuminate\Support\Facades\Storage;
 
 class UsefulMaterialsController extends Controller
@@ -101,6 +104,16 @@ class UsefulMaterialsController extends Controller
 
         return response()->json([
             'url' => url("/storage/{$path}")
+        ]);
+    }
+
+    public function deleteImage(ImageDeleteRequest $request)
+    {
+        $data = $request->validated();
+        unlink(public_path("storage/uploads/{$data['image']}")); 
+ 
+        return response()->json([
+            'status' => 200
         ]);
     }
 

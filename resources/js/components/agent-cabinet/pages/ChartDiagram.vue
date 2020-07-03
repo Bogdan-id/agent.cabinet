@@ -91,7 +91,7 @@
               Графiк виплат
             </div>
             <v-data-table
-              v-if="graphData"
+              v-if="graphData && graphData.result_data && graphData.result_data.even"
               :search="search"
               color="black"
               :headers="tableHeader"
@@ -100,7 +100,7 @@
               :hide-default-footer="true"
               dense>
               <template v-slot:body.append>
-                <tr style="color: black; border-left: 8px solid black;">
+                <tr style="color: black; border-left: 8px solid black;" >
                   <td style="text-align: center;">Всього</td>
                   <td style="text-align: center;">{{ graphData.result_data.even['total-payment-principal'] }}</td>
                   <td style="text-align: center;">{{ graphData.result_data.even['total-interest'] }}</td>
@@ -233,7 +233,7 @@
                 Графiк виплат
               </div>
               <v-data-table
-                v-if="graphData"
+                v-if="graphData && graphData.result_data && graphData.result_data.annuity"
                 :search="search"
                 color="black"
                 :headers="tableHeader"
@@ -376,7 +376,7 @@
                 Графiк виплат
               </div>
               <v-data-table
-                v-if="graphData"
+                v-if="graphData && graphData.result_data && graphData.result_data.irregular"
                 :search="search"
                 color="black"
                 :headers="tableHeader"
@@ -385,7 +385,7 @@
                 :hide-default-footer="true"
                 dense>
                 <template v-slot:body.append>
-                  <tr style="color: black; border-left: 8px solid black;">
+                  <tr style="color: black; border-left: 8px solid black;" >
                     <td style="text-align: center;">Всього</td>
                     <td style="text-align: center;">{{ graphData.result_data.irregular['total-payment-principal'] }}</td>
                     <td style="text-align: center;">{{ graphData.result_data.irregular['total-interest'] }}</td>
@@ -498,7 +498,6 @@ export default {
     // console.log(this.leasingObjectData)
     console.log('**************')
     console.log(this.graphData)
-    console.log(this.graphData.result_data.even['total-payment'])
     console.log('**************')
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {

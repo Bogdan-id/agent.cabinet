@@ -2184,19 +2184,23 @@ export default {
 		-webkit-transition: .2s;
 		transition: opacity .2s;
 	}
+  // input[type=range]::-webkit-slider-thumb {
+  //   -webkit-appearance: none;
+  // }
 	.slider::-webkit-slider-thumb {
 		// border: 8px solid #FAFAFA;
     position: relative;
     z-index:5;
 		box-shadow: -1px -1px 9px -4px rgba(0,0,0,0.75);
     appearance: none;
-    width: 6px;
+    width: 6px!important;
     padding: 0px;
     margin: 0;
 		height: 25px!important;
 		// border-radius: 50%;
-		background: #d24a43;
+		background: #d24a43!important;
 		cursor: pointer;
+    -webkit-appearance: none;
 	}
 
   /* Collapsible */

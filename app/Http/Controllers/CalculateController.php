@@ -56,10 +56,12 @@ class CalculateController extends Controller
             [
                 'request_data' => $data
             ]);
-            if(array_key_exists('calculation_id', $params['request_data']))
+
+            if($calculateRequest->calculation_id)
             {
-                $calculation = $calculationRepository->update($params['request_data']['calculation_id'], $params);
+                $calculation = $calculationRepository->update($calculateRequest->calculation_id, $params);
             }else{
+
                 $calculation = $calculationRepository->create($params);
             }
           

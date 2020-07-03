@@ -128,6 +128,7 @@ class CalculateController extends Controller
         if(array_key_exists('email', $data)){
             $mpdf->Output("pdf/$fileName", 'F');
             Mail::to($data['email'])->send(new OfferPdfMail($fileName));
+            unlink(public_path("pdf/$fileName"));
         }else{
             $mpdf->Output($fileName, 'D');
         }

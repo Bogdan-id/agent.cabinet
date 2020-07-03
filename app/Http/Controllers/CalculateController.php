@@ -46,9 +46,11 @@ class CalculateController extends Controller
             $data = $calculateRequest->validated();
         
             $requestData = $calculatorDataService->getRequestData();
-           
+
             $resultData = $calculateClient->runCalculate($requestData);
-        
+           
+            $resultData = $this->getCleanData($resultData);
+
             $params = array_merge(
             [
                 'result_data' => $resultData
@@ -164,4 +166,46 @@ class CalculateController extends Controller
             'status' => 200
         ]);
     }
+
+    protected function getCleanData($resultData)
+    {
+        if(array_key_exists('even', $resultData))
+        {
+            $resultData['even']['graph'] = $this->floatToIntGraph($resultData['even']['graph']);
+            $resultData['even']['offer-month-payment'] = (int) $resultData['even']['offer-month-payment'];
+            $resultData['even']['offer-rest'] = (int)  $resultData['even']['offer-rest'];
+        }
+        if(array_key_exists('annuity', $resultData))
+        {
+            $resultData['annuity']['graph'] = $this->floatToIntGraph($resultData['annuity']['graph']);
+            $resultData['annuity']['offer-month-payment'] = (int) $resultData['annuity']['offer-month-payment'];
+            $resultData['annuity']['offer-rest'] = (int)  $resultData['annuity']['offer-rest'];
+        }
+        if(array_key_exists('irregular', $resultData))
+        {
+            $resultData['irregular']['graph'] = $this->floatToIntGraph($resultData['irregular']['graph']);
+            $resultData['irregular']['offer-month-payment'] = (int) $resultData['irregular']['offer-month-payment'];
+            $resultData['irregular']['offer-rest'] = (int)  $resultData['irregular']['offer-rest'];
+        }
+
+        return $resultData;
+    }
+
+    protected function floatToIntGraph($graph)
+    {
+        foreach($graph as $key => $value)
+        {
+            $graph[$key] = [
+                'n' => $value['n'],
+                'date' => $value['date'],
+                'title' => $value['title'],
+                'payment-principal' => (int)$value['payment-principal'],
+                'interest' =>  (int)$value['interest'],
+                'payment' =>  (int)$value['payment'],
+            ];
+        }
+
+        return $graph;
+    }
+
 }

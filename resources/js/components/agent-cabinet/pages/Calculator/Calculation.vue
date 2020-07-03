@@ -494,6 +494,7 @@
                 <!-- :error-messages="residualValueErr" -->
                 <v-select
                   v-model="calcObj.leasingRest"
+                  :placeholder="`${calcObj.leasingRest}`"
                   @input="restrictToPercentAdvance('residual-value')"
                   :error-messages="leasingRestErr"
                   :items="leasingRestItems"
@@ -887,7 +888,7 @@ export default {
 
       // new fields
       customGraphicType: 3,
-      leasingRest: null,
+      leasingRest: 0,
       stock: null,
       holidays: 2,
       insuranceProgram: 2,
@@ -915,7 +916,7 @@ export default {
     leasingRestItems() {
       let arr = []
       let test = this.maxResidualValue / 10
-      for (let i = 1; i <= test; i++) {
+      for (let i = 0; i <= test; i++) {
         arr.push(i * 10);
       }
       return arr
@@ -1816,6 +1817,16 @@ export default {
     box-shadow: 0 5px 6px -3px rgba(0,0,0,.2),
       0 9px 12px 1px rgba(0,0,0,.14),
       0 3px 16px 2px rgba(0,0,0,.12)!important;
+    // ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    //   color: black!important;
+    //   opacity: 1; /* Firefox */
+    // }
+    // :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    //   color: black!important;
+    // }
+    // ::-ms-input-placeholder { /* Microsoft Edge */
+    //   color: black!important;
+    // }
     .section-title {
       font-size: 1rem;
       display: inline-block;

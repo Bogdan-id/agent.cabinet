@@ -60,7 +60,7 @@
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
                       <span v-if="item.result_data.even">
-                        {{ (item.result_data.even['offer-leasing-appreciation'] * 100).toFixed(2) }}
+                        {{ (item.result_data.even['offer-administrative-payment-per'] * 100).toFixed(2) }}
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">
@@ -102,9 +102,27 @@
               <template v-slot:body.append>
                 <tr style="color: black; border-left: 8px solid black;" >
                   <td style="text-align: center;">Всього</td>
-                  <td style="text-align: center;">{{ graphData.result_data.even['total-payment-principal'] }}</td>
-                  <td style="text-align: center;">{{ graphData.result_data.even['total-interest'] }}</td>
-                  <td style="text-align: center;">{{ graphData.result_data.even['total-payment'] }}</td>
+                  <td style="text-align: center;">
+                    {{ 
+                      parseInt(graphData.result_data.even['total-payment-principal'].toFixed())
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </td>
+                  <td style="text-align: center;">
+                    {{ 
+                      parseInt(graphData.result_data.even['total-interest'].toFixed()) 
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </td>
+                  <td style="text-align: center;">
+                    {{ 
+                      parseInt(graphData.result_data.even['total-payment'].toFixed())
+                        .toLocaleString()
+                        .replace(/,/g, ' ') 
+                    }}
+                  </td>
                 </tr>
                 <span></span>
               </template>
@@ -115,27 +133,27 @@
                   :data="graphData"/>
               </template>
               <template v-slot:item.interest="{ item }">
-                <span>
+                <span v-if="item.interest !== null">
                   {{  
-                    item.interest
+                    parseInt(item.interest.toFixed())
                       .toLocaleString()
                       .replace(/,/g, ' ')
                   }}
                 </span>
               </template>
               <template v-slot:item.payment="{ item }">
-                <span>
+                <span v-if="item.payment !== null">
                   {{  
-                    item.payment
+                    parseInt(item.payment.toFixed())
                       .toLocaleString()
                       .replace(/,/g, ' ')
                   }}
                 </span>
               </template>
               <template v-slot:item.payment_principal="{ item }">
-                <span>
+                <span v-if="item['payment-principal'] !== null">
                   {{
-                    item['payment-principal']
+                    parseInt(item['payment-principal'].toFixed())
                       .toLocaleString()
                       .replace(/,/g, ' ')
                   }}
@@ -202,7 +220,7 @@
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
                       <span v-if="item.result_data.annuity">
-                        {{ (item.result_data.annuity['offer-leasing-appreciation'] * 100).toFixed(2) }}
+                        {{ (item.result_data.annuity['offer-administrative-payment-per'] * 100).toFixed(2) }}
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">
@@ -218,7 +236,7 @@
                       {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
                     </template>
                     <template v-slot:item.request_data.leasingAmount="{ item }">
-                      <span>
+                      <span v-if="item.request_data && item.request_data.leasingAmount">
                         {{ 
                           parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
                             .toLocaleString()
@@ -244,9 +262,27 @@
                 <template v-slot:body.append>
                   <tr style="color: black; border-left: 8px solid black;">
                     <td style="text-align: center;">Всього</td>
-                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-payment-principal'] }}</td>
-                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-interest'] }}</td>
-                    <td style="text-align: center;">{{ graphData.result_data.annuity['total-payment'] }}</td>
+                    <td style="text-align: center;">
+                      {{ 
+                        parseInt(graphData.result_data.annuity['total-payment-principal'].toFixed())
+                          .toLocaleString()
+                          .replace(/,/g, ' ')
+                      }}
+                    </td>
+                    <td style="text-align: center;">
+                      {{ 
+                        parseInt(graphData.result_data.annuity['total-interest'].toFixed()) 
+                          .toLocaleString()
+                          .replace(/,/g, ' ')
+                      }}
+                    </td>
+                    <td style="text-align: center;">
+                      {{ 
+                        parseInt(graphData.result_data.annuity['total-payment'].toFixed())
+                          .toLocaleString()
+                          .replace(/,/g, ' ') 
+                      }}
+                    </td>
                   </tr>
                   <span></span>
                 </template>
@@ -257,27 +293,27 @@
                     :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
-                  <span>
+                  <span v-if="item.interest !== null">
                     {{  
-                      item.interest
+                      parseInt(item.interest.toFixed())
                         .toLocaleString()
                         .replace(/,/g, ' ')
                     }}
                   </span>
                 </template>
                 <template v-slot:item.payment="{ item }">
-                  <span>
+                  <span v-if="item.payment !== null">
                     {{  
-                      item.payment
+                      parseInt(item.payment.toFixed())
                         .toLocaleString()
                         .replace(/,/g, ' ')
                     }}
                   </span>
                 </template>
                 <template v-slot:item.payment_principal="{ item }">
-                  <span>
+                  <span v-if="item['payment-principal'] !== null">
                     {{
-                      item['payment-principal']
+                      parseInt(item['payment-principal'].toFixed())
                         .toLocaleString()
                         .replace(/,/g, ' ')
                     }}
@@ -345,7 +381,7 @@
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
                       <span v-if="item.result_data.irregular">
-                        {{ (item.result_data.irregular['offer-leasing-appreciation'] * 100).toFixed(2) }}
+                        {{ (item.result_data.irregular['offer-administrative-payment-per'] * 100).toFixed(2) }}
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">
@@ -361,7 +397,7 @@
                       {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
                     </template>
                     <template v-slot:item.request_data.leasingAmount="{ item }">
-                      <span>
+                      <span v-if="item.request_data && item.request_data.leasingAmount">
                         {{ 
                           parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
                             .toLocaleString()
@@ -387,16 +423,34 @@
                 <template v-slot:body.append>
                   <tr style="color: black; border-left: 8px solid black;" >
                     <td style="text-align: center;">Всього</td>
-                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-payment-principal'] }}</td>
-                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-interest'] }}</td>
-                    <td style="text-align: center;">{{ graphData.result_data.irregular['total-payment'] }}</td>
+                    <td style="text-align: center;">
+                      {{ 
+                        parseInt(graphData.result_data.irregular['total-payment-principal'].toFixed())
+                          .toLocaleString()
+                          .replace(/,/g, ' ')
+                      }}
+                    </td>
+                    <td style="text-align: center;">
+                      {{ 
+                        parseInt(graphData.result_data.irregular['total-interest'].toFixed()) 
+                          .toLocaleString()
+                          .replace(/,/g, ' ')
+                      }}
+                    </td>
+                    <td style="text-align: center;">
+                      {{ 
+                        parseInt(graphData.result_data.irregular['total-payment'].toFixed())
+                          .toLocaleString()
+                          .replace(/,/g, ' ') 
+                      }}
+                    </td>
                   </tr>
                   <span></span>
                 </template>
                 <template v-slot:item.payment_principal="{ item }">
-                  <span>
+                  <span v-if="item['payment-principal'] !== null">
                     {{
-                      item['payment-principal']
+                      parseInt(item['payment-principal'].toFixed())
                         .toLocaleString()
                         .replace(/,/g, ' ')
                     }}
@@ -409,18 +463,18 @@
                     :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
-                <span>
+                <span v-if="item.interest !== null">
                   {{  
-                    item.interest
+                    parseInt(item.interest.toFixed())
                       .toLocaleString()
                       .replace(/,/g, ' ')
                   }}
                 </span>
               </template>
               <template v-slot:item.payment="{ item }">
-                <span>
+                <span v-if="item.payment !== null">
                   {{  
-                    item.payment
+                    parseInt(item.payment.toFixed())
                       .toLocaleString()
                       .replace(/,/g, ' ')
                   }}
@@ -470,7 +524,7 @@ export default {
   methods: {
     addObjects(data) {
       /* eslint-disable */
-      if(data.result_data.hasOwnProperty('annuity')) {console.log(data.result_data.annuity.graph); this.annuity = data.result_data.annuity.graph}
+      if(data.result_data.hasOwnProperty('annuity')) { this.annuity = data.result_data.annuity.graph}
       if(data.result_data.hasOwnProperty('irregular')) this.irregular = data.result_data.irregular.graph
       if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
     },

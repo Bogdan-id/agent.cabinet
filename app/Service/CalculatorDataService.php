@@ -47,7 +47,7 @@ class CalculatorDataService
             'leasing-object-type' => $this->getObjType(),
             'leasing-program' => $this->getProgram(),
             'leasing-term' => (int) $this->calculateRequest->leasingTerm,
-            'leasing-amount' =>  (int)(int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount),
+            'leasing-amount' =>  (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount),
             'advance' => (int) $this->calculateRequest->advance / 100,
             'leased-assert-mark' => ($this->calculateRequest->leasedAssertMark ?? [])['name'] ?? null,
             'leased-assert-model' => ($this->calculateRequest->leasedAssertModel ?? [])['name'] ?? null,
@@ -114,7 +114,7 @@ class CalculatorDataService
             'sets' => $graphTypes
         ];
         if($this->calculateRequest->leasingAmountDkp){
-            $requestData['leasing-amount-dkp'] = $this->calculateRequest->leasingAmountDkp;
+            $requestData['leasing-amount-dkp'] =  (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmountDkp);
             $requestData['leasing-currency-course-dkp'] = $this->calculateRequest->leasingCurrencyCourse;
         }
         if($this->calculateRequest->stock){

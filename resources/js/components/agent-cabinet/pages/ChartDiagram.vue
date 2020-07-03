@@ -115,7 +115,7 @@
                   :data="graphData"/>
               </template>
               <template v-slot:item.interest="{ item }">
-                <span>
+                <span v-if="item.interest">
                   {{  
                     item.interest
                       .toLocaleString()
@@ -124,7 +124,7 @@
                 </span>
               </template>
               <template v-slot:item.payment="{ item }">
-                <span>
+                <span v-if="item.payment">
                   {{  
                     item.payment
                       .toLocaleString()
@@ -133,7 +133,7 @@
                 </span>
               </template>
               <template v-slot:item.payment_principal="{ item }">
-                <span>
+                <span v-if="item['payment-principal']">
                   {{
                     item['payment-principal']
                       .toLocaleString()
@@ -218,7 +218,7 @@
                       {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
                     </template>
                     <template v-slot:item.request_data.leasingAmount="{ item }">
-                      <span>
+                      <span v-if="item.request_data && item.request_data.leasingAmount">
                         {{ 
                           parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
                             .toLocaleString()
@@ -257,7 +257,7 @@
                     :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
-                  <span>
+                  <span v-if="item.interest">
                     {{  
                       item.interest
                         .toLocaleString()
@@ -266,7 +266,7 @@
                   </span>
                 </template>
                 <template v-slot:item.payment="{ item }">
-                  <span>
+                  <span v-if="item.payment">
                     {{  
                       item.payment
                         .toLocaleString()
@@ -275,7 +275,7 @@
                   </span>
                 </template>
                 <template v-slot:item.payment_principal="{ item }">
-                  <span>
+                  <span v-if="item['payment-principal']">
                     {{
                       item['payment-principal']
                         .toLocaleString()
@@ -361,7 +361,7 @@
                       {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
                     </template>
                     <template v-slot:item.request_data.leasingAmount="{ item }">
-                      <span>
+                      <span v-if="item.request_data && item.request_data.leasingAmount">
                         {{ 
                           parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
                             .toLocaleString()
@@ -394,7 +394,7 @@
                   <span></span>
                 </template>
                 <template v-slot:item.payment_principal="{ item }">
-                  <span>
+                  <span v-if="item['payment-principal']">
                     {{
                       item['payment-principal']
                         .toLocaleString()
@@ -409,7 +409,7 @@
                     :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
-                <span>
+                <span v-if="item.interest">
                   {{  
                     item.interest
                       .toLocaleString()
@@ -418,7 +418,7 @@
                 </span>
               </template>
               <template v-slot:item.payment="{ item }">
-                <span>
+                <span v-if="item.payment">
                   {{  
                     item.payment
                       .toLocaleString()

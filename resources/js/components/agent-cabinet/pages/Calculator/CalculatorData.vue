@@ -12,21 +12,21 @@
           <span style="line-height: 2rem; font-size: 0.93rem; color: black;">Оберiть тип графiку</span>
         </div>
         <v-checkbox
-          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
-          v-model="graphName"
-          value="annuity"
-          color="black">
-          <template v-slot:label>
-            <span :style="graphName == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
-          </template>
-        </v-checkbox>
-        <v-checkbox
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('even')"
           value="even"
           v-model="graphName"
           color="black">
           <template v-slot:label>
             <span :style="graphName == 'even' ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
+          </template>
+        </v-checkbox>
+        <v-checkbox
+          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
+          v-model="graphName"
+          value="annuity"
+          color="black">
+          <template v-slot:label>
+            <span :style="graphName == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
           </template>
         </v-checkbox>
         <v-checkbox
@@ -481,22 +481,22 @@ export default {
   data:() => ({
     /* v-dialog data  */
     dialogToDownload: false,
-    graphName: null,
+    graphName: 'even',
     currentGraphToDownload: null,
-    graphObjToSend: {
-      mark: null,
-      model: null,
-      price: null,
-      term: null,
-      prepaid: null,
-      advance: null,
-      avg: null,
-      currency: null,
-      leasingRest: null,
-      table: null,
-      agg: null,
-      requestId: null
-    },
+    // graphObjToSend: {
+    //   mark: null,
+    //   model: null,
+    //   price: null,
+    //   term: null,
+    //   prepaid: null,
+    //   advance: null,
+    //   avg: null,
+    //   currency: null,
+    //   leasingRest: null,
+    //   table: null,
+    //   agg: null,
+    //   requestId: null
+    // },
 
     select: selectItems,
     leasingApplicationForm: false,
@@ -1029,15 +1029,11 @@ export default {
       let graph = this.currentGraphToDownload.result_data[this.graphName]
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
-      console.log('********')
-      // console.log(rootCalcData)
-      // console.log(calcData)
-      // console.log(graph)
-      console.log('********')
-      let test ={
+
+      let test = {
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
-        price: calcData.leasingAmount,
+        price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,
         advance: calcData.advance,
         prepaid: graph['offer-advance'],
@@ -1050,9 +1046,19 @@ export default {
           'interest': graph['total-interest'],
           'payment': graph['total-payment'],
         },
-        requestId: rootCalcData.request_id
+        requestId: rootCalcData.request_id,
+        _token: this.getCsrf()
       }
+      axios
+        .post('/calculation/getPdf', test)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
       console.log('**********')
+      console.log(rootCalcData)
       console.log(test)
       console.log('**********')
     },

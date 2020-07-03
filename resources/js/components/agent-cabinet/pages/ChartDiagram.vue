@@ -20,7 +20,7 @@
           <div class="content">
             <v-card  class="view-charts">
               <v-row>
-                <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
+                <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
                   <v-data-table
                     class="leasing-object-table"
                     v-if="graphData"
@@ -180,7 +180,7 @@
           <div class="content">
             <v-card class="view-charts">
               <v-row>
-                <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
+                <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
                   <v-data-table
                     class="leasing-object-table"
                     v-if="graphData"
@@ -341,7 +341,7 @@
           <div class="content">
             <v-card  class="view-charts">
               <v-row>
-                <v-col cols="12" md="8" sm="9" lg="5" class="pt-0 pb-0">
+                <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
                   <v-data-table
                     class="leasing-object-table"
                     v-if="graphData"

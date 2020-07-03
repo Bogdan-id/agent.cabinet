@@ -83,6 +83,7 @@ class CalculateController extends Controller
      * @throws \Throwable
      */
     public function createExcel (Request $request, CarImageService $carImageService) {
+        $data = $request->post();
         $defaultConfig = (new ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];
 
@@ -112,16 +113,7 @@ class CalculateController extends Controller
         $mpdf->WriteHTML(
             view(
                 'pdf.index',
-                array_merge($request->only([
-                    'price',
-                    'term',
-                    'prepaid',
-                    'avg',
-                    'rest',
-                    'table',
-                    'agg',
-                    'currency'
-                ]), [
+                array_merge($data, [
                     'car' => $request->get('mark') . ' ' . $request->get('model'),
                     'image' => $carImageService->getFileName(
                         $request->get('mark'),
@@ -131,7 +123,7 @@ class CalculateController extends Controller
             )->render()
         );
 
-        $mpdf->Output();
+        $mpdf->Output("{$data['mark']}_{$data['model']}_{$data['advance']}%_{$data['term']}міс_{$data['currency']}.pdf", 'D');
     }
 
     public function getCalculationByAgent($agent_id)

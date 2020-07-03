@@ -16,6 +16,8 @@ use GuzzleHttp\Psr7;
 use App\Repositories\CalculationRepository;
 use App\Models\Calculation;
 use App\Http\Requests\CalculateRequest;
+use App\Mail\OfferPdfMail;
+use Mail;
 
 class CalculateController extends Controller
 {
@@ -122,8 +124,17 @@ class CalculateController extends Controller
                 ])
             )->render()
         );
+        $fileName = "{$data['mark']}_{$data['model']}_{$data['advance']}%_{$data['term']}міс_{$data['currency']}_{$data['requestId']}.pdf";
+        if(array_key_exists('email', $data)){
+            $mpdf->Output("pdf/$fileName", 'F');
+            Mail::to($data['email'])->send(new OfferPdfMail($fileName));
+        }else{
+            $mpdf->Output($fileName, 'D');
+        }
 
-        $mpdf->Output("{$data['mark']}_{$data['model']}_{$data['advance']}%_{$data['term']}міс_{$data['currency']}.pdf", 'D');
+        return response()->json([
+            'status' => 200
+        ]);
     }
 
     public function getCalculationByAgent($agent_id)

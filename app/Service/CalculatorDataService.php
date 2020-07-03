@@ -122,9 +122,9 @@ class CalculatorDataService
         }
 
         if($this->calculateRequest->leasingTerm = 12){
-            $requestData['UNSPR-month'] = 11;
+            $requestData['UNSPR-months'] = 11;
         }else{
-            $requestData['UNSPR-month'] = 12;
+            $requestData['UNSPR-months'] = 12;
         }
         
         return $requestData;

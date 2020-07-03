@@ -1,5 +1,53 @@
 <template>
 <div class="col-12">
+  <v-dialog 
+    v-model="dialogToDownload"
+    max-width="600">
+    <v-card class="graphs-to-delete">
+      <v-card-title style="background: #424242;" class="white--text">
+        Збереження графiку выплат
+      </v-card-title>
+      <v-card-text>
+        <div style="margin-top: 23px;">
+          <span style="line-height: 2rem; font-size: 0.93rem;">Оберiть типи графiку</span>
+        </div>
+        <v-checkbox
+          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
+          v-model="graphsToDownload"
+          value="annuity"
+          color="black">
+          <template v-slot:label>
+            <span :style="graphsToDownload == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
+          </template>
+        </v-checkbox>
+        <v-checkbox
+          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('even')"
+          value="even"
+          v-model="graphsToDownload"
+          color="black">
+          <template v-slot:label>
+            <span :style="graphsToDownload == 'even' ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
+          </template>
+        </v-checkbox>
+        <v-checkbox
+          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('irregular')"
+          value="irregular"
+          v-model="graphsToDownload"
+          color="black">
+          <template v-slot:label>
+            <span :style="graphsToDownload == 'irregular' ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
+          </template>
+        </v-checkbox>
+        <v-divider></v-divider>
+        <v-btn 
+          style="border-radius: 0; text-transform: capitalize; border-color: rgb(224, 77, 69); font-size: 1rem;"
+          class="send-graph-btn"
+          @click="test()" dark color="#e04d45">
+          Вiдправити
+        </v-btn>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
   <v-dialog
     v-model="leasingApplicationForm"
     max-width="600">
@@ -401,12 +449,11 @@
               <template #activator="{ on }">
                 <span>
                   <v-btn 
-                    @click=""
+                    @click="openDialogToDownload(item)"
                     v-on="on"
                     icon>
                     <v-icon
-                      color="grey darken-2"
-                      >
+                      color="grey darken-2">
                       mdi-download
                     </v-icon>
                   </v-btn>
@@ -433,6 +480,9 @@ export default {
   mixins: [validationMixin],
   data:() => ({
     /* v-dialog data  */
+    dialogToDownload: false,
+    graphsToDownload: null,
+    currentGraphToDownload: null,
     select: selectItems,
     leasingApplicationForm: false,
     calculationToDelete: null,
@@ -656,6 +706,11 @@ export default {
     },
   },
   methods: {
+    openDialogToDownload(item){
+      this.dialogToDownload = true
+      this.currentGraphToDownload = item
+      console.log(this.currentGraphToDownload)
+    },
     openDeleteCalculationDialog(id) {
       console.log(id)
       this.deleteCalculationDialog = true
@@ -956,6 +1011,7 @@ export default {
         }
     },
     test() {
+      console.log(this.graphsToDownload)
       console.log(this.tabledata)
     },
     sortData(a, b) {
@@ -1013,6 +1069,27 @@ export default {
   .calculator-data-leasing-obj-type {
     font-weight: bold;
     font-size: 0.91rem!important;
+  }
+  .graphs-to-delete {
+    .v-input--selection-controls {
+      margin: 0!important;
+    }
+    .v-input__slot {
+      margin: 0!important;
+    }
+  }
+  .send-graph-btn {
+    transition: box-shadow 0.5s;
+    &:hover {
+      -webkit-box-shadow: 1px 3px 17px -6px rgba(0,0,0,0.75);
+      -moz-box-shadow: 1px 3px 17px -6px rgba(0,0,0,0.75);
+      box-shadow: 1px 3px 17px -6px rgba(0,0,0,0.75);
+    }
+  }
+  .graph-label-to-download {
+    font-size: 1.05rem;
+    letter-spacing: 0.09rem;
+    margin-bottom: 4px;
   }
   .calculator-custom-title {
     .v-text-field {

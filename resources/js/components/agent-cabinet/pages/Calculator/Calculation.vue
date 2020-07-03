@@ -1619,16 +1619,13 @@ export default {
 			this.updateElRange(elRange, elRange.value, dataSelector)
 		},
     setIndentation(value) {
+      console.log('*****')
+      console.log(value)
+      console.log('*****')
       if(value) {
-        if(Number.isNaN(value)) {
-          return value.replace(/ /g, '' )
-            .toLocaleString()
-            .replace(/,/g, ' ')
-        } else {
-          return parseInt(value.toString().replace(/ /g, '' ))
-            .toLocaleString()
-            .replace(/,/g, ' ')
-        }
+        return parseInt(value.replace(/\s/g, '' ))
+          .toLocaleString()
+          .replace(/,/g, ' ')
       } else return
     },
     displayWindowSize() {

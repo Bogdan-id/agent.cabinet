@@ -1637,7 +1637,11 @@ export default {
       axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
-        this.calcObj.calculation_id = response.data.request_id
+        this.calcObj.calculation_id = response.data.id
+        console.log('**********')
+        console.log(response.data)
+        console.log(this.calcObj.calculation_id, this.$router.currentRoute.params.id)
+        console.log('**********')
         let data = response.data.request_data
         let advance = response.data.request_data.advance
         let franchise = response.data.request_data.insuranceFranchise

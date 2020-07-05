@@ -1,11 +1,11 @@
 <template>
 <div class="col-12">
   <v-dialog 
-    v-model="dialogToDownload"
-    max-width="600">
+    v-model="dialogToSend"
+    max-width="490">
     <v-card class="graphs-to-delete">
       <v-card-title style="background: #424242;" class="white--text">
-        Графiки виплат
+        {{ formatToSave === 'email' ? 'Вiдправити на email' : 'Завантажити'}}
       </v-card-title>
       <v-card-text>
         <div style="margin-top: 23px;">
@@ -15,7 +15,7 @@
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('even')"
           value="even"
           v-model="graphName"
-          color="black">
+          color="red darken-4">
           <template v-slot:label>
             <span :style="graphName == 'even' ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
           </template>
@@ -24,7 +24,7 @@
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
           v-model="graphName"
           value="annuity"
-          color="black">
+          color="red darken-4">
           <template v-slot:label>
             <span :style="graphName == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
           </template>
@@ -33,17 +33,28 @@
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('irregular')"
           value="irregular"
           v-model="graphName"
-          color="black">
+          color="red darken-4">
           <template v-slot:label>
             <span :style="graphName == 'irregular' ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
           </template>
         </v-checkbox>
-        <v-divider></v-divider>
+        <v-text-field 
+          v-if="formatToSave === 'email'"
+          class="email-to-send"
+          @input="$v.emailToSend.$touch()"
+          @blur="$v.emailToSend.$touch()"
+          :error-messages="emailToSendErr"
+          v-model="emailToSend"
+          label="email"
+          outlined dense>
+        </v-text-field>
+        <v-divider class="mt-0"></v-divider>
         <v-btn 
           style="border-radius: 0; text-transform: capitalize; border-color: rgb(224, 77, 69); font-size: 1rem;"
           class="send-graph-btn"
-          @click="test()" dark color="#e04d45">
-          Вiдправити
+          @click="test()" dark color="#e04d45"
+          :loading="loading">
+          {{ formatToSave === 'email' ? 'Вiдправити' : 'Завантажити' }}
         </v-btn>
       </v-card-text>
     </v-card>
@@ -432,7 +443,7 @@
               <template #activator="{ on }">
                 <span>
                   <v-btn 
-                    @click=""
+                    @click="openDialogToSave(item, 'email')"
                     v-on="on"
                     icon>
                     <v-icon
@@ -449,7 +460,7 @@
               <template #activator="{ on }">
                 <span>
                   <v-btn 
-                    @click="openDialogToDownload(item)"
+                    @click="openDialogToSave(item, 'pdf')"
                     v-on="on"
                     icon>
                     <v-icon
@@ -481,9 +492,11 @@ export default {
   mixins: [validationMixin],
   data:() => ({
     /* v-dialog data  */
-    dialogToDownload: false,
+    dialogToSend: false,
     graphName: 'even',
     currentGraphToDownload: null,
+    formatToSave: null,
+    emailToSend: null,
 
     select: selectItems,
     leasingApplicationForm: false,
@@ -550,19 +563,21 @@ export default {
     },
     validationRules() {
       let validateObj = null
-      !this.leasingApplicationForm 
-        ? validateObj = {}
-        : this.clientTypeId === 1 
-          ? validateObj = Object.assign({},
-            this.commonRules,
-            this.individualPerson
-          )
-          : this.clientTypeId === 2
+      this.formatToSave == 'email'
+        ? validateObj = {emailToSend: { email, required }}
+        : !this.leasingApplicationForm 
+          ? validateObj = {}
+          : this.clientTypeId === 1 
             ? validateObj = Object.assign({},
               this.commonRules,
-              this.legalPerson
+              this.individualPerson
             )
-            : false
+            : this.clientTypeId === 2
+              ? validateObj = Object.assign({},
+                this.commonRules,
+                this.legalPerson
+              )
+              : false
       return validateObj
     },
     commonRules() {
@@ -575,6 +590,11 @@ export default {
         creditPayment: { required },
       }
     },
+    // verifyEmailToSend() {
+    //   return {
+    //     emailToSend: { required }
+    //   }
+    // },
     individualPerson() {
       return {
         phone: { 
@@ -634,6 +654,13 @@ export default {
       if (!this.$v.patronymic) return
       if (!this.$v.patronymic.$error) return
       return this.commonErr
+    },
+    emailToSendErr() {
+      let errors = []
+      if (!this.$v.emailToSend || !this.$v.emailToSend.$error) return
+      !this.$v.emailToSend.required && errors.push('Вкажiть ваш email')
+      !this.$v.emailToSend.email && errors.push('Невiрний email')
+      return errors
     },
     regionErr() {
       if (!this.$v.region) return
@@ -708,13 +735,12 @@ export default {
     },
   },
   methods: {
-    openDialogToDownload(item){
-      this.dialogToDownload = true
+    openDialogToSave(item, format){
+      this.formatToSave = format
+      this.dialogToSend = true
       this.currentGraphToDownload = item
-      console.log(this.currentGraphToDownload)
     },
     openDeleteCalculationDialog(id) {
-      console.log(id)
       this.deleteCalculationDialog = true
       this.calculationToDelete = id
     },
@@ -748,7 +774,6 @@ export default {
     customSort(items) {
       items
         .sort((a, b) => {
-          console.log(a.created_at, b.created_at)
           return new Date(b.updated_at) - new Date(a.updated_at)
       })
       return items
@@ -879,21 +904,16 @@ export default {
       this.graphType = this.getGraphById(id)[0]
       this.getDefaultProperties()
       this.leasingApplicationForm = true
-      console.log(this.$v)
     },
     submit() {
-      console.log(!this.$v.$invalid)
-      console.log(this.$v.$dirty)
       !this.$v.$invalid
       && this.$v.$dirty
         ? this.sendRequest()
         : this.highlightErrors()
     },
     sendRequest() {
-      console.log('send request')
       this.loading = true
       let object = this.object()
-      console.log(this.requestObj(object))
       axios.
         post('/leasing-reqeust/create', this.requestObj(object))
         .then(response => {
@@ -1017,7 +1037,7 @@ export default {
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
 
-      let test = {
+      let dataToSave = {
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
         price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
@@ -1036,42 +1056,53 @@ export default {
         requestId: rootCalcData.request_id,
         _token: this.getCsrf()
       }
+      if(this.formatToSave === 'email') {
+        dataToSave.email = this.emailToSend
+      }
+      !this.$v.$invalid
+        ? this.sendData(dataToSave)
+        : this.highlightErrors()
+    },
+    sendData(dataToSave) {
+      this.loading = true
       axios
-        .post('/calculation/getPdf', test, {responseType: 'blob'})
+        .post('/calculation/getPdf', dataToSave, { responseType: 'blob' })
         .then(response => {
           console.log(response)
-          saveAs(response.data, "leasing-graph.pdf")
+          if(this.formatToSave === 'pdf') saveAs(response.data, 'graph.pdf')
+          if(this.formatToSave === 'email') {
+            this.$notify({
+              group: 'success',
+              title: 'Графiк успiшно вiдправлено',
+              text: '',
+            })
+          }
+          this.loading = false
+          setTimeout(() => {
+            this.dialogToSend = false
+          }, 1200)
         })
         .catch(error => {
           console.log(error.response)
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+          this.loading = false
         })
-      console.log('**********')
-      console.log(rootCalcData)
-      console.log(test)
-      console.log('**********')
     },
     sortData(a, b) {
       return new Date(b.created_at) - new Date(a.created_at)
     },
-    // async createTableData(object) {
-    //   let arr = []
-    //   await object.map(val => {
-    //     let dataObj = {
-    //       'Тип': val.request_data.leasingObjectType.label,
-    //       'Марка': val.request_data.leasedAssertMark.name,
-    //       'Модель': val.request_data.leasedAssertModel.name,
-    //       'amount': val.request_data.leasingAmount,
-    //       'Дата': val.created_at.substr(0, 10),
-    //       'id': val.id
-    //     }
-    //     arr.push(dataObj)
-    //   })
-    //   this.tabledata = arr
-    //     .sort(this.sortData)
-    //     .reverse()
-    // },
   },
   watch: {
+    dialogToSend(value) {
+      if(value === false) {
+        this.formatToSave = null
+        this.currentGraphToDownload = null
+      }
+    },
     deleteCalculationDialog(value) {
       if(value === false) {
         this.calculationToDelete = null
@@ -1092,7 +1123,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$v)
     this.getListItem()
     this.$store.state.user.agent 
       ? this.getUserCalculations()
@@ -1102,6 +1132,11 @@ export default {
 </script>
 
 <style lang="scss">
+  .email-to-send {
+    .v-text-field__details {
+      margin-bottom: 0!important;
+    }
+  }
   .calculator-data-leasing-obj-type {
     font-weight: bold;
     font-size: 0.91rem!important;

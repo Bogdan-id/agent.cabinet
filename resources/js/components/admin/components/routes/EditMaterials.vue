@@ -188,6 +188,7 @@
       materialImg: null,
       materialImgPreview: null,
       imageName: null,
+      imageToDelete: null,
 
       newCategorie: null
     }),
@@ -220,10 +221,16 @@
         this.imageName = null 
         this.materialImg = null
         this.materialImgPreview = null
-        console.log(this.materialImg, this.imageName, this.materialImgPreview)
-        setTimeout(() => {
-          console.log(this.materialImg, this.imageName, this.materialImgPreview)
-        }, 1000)
+        if(this.$route.params.edit === true) {
+          axios
+            .post('/admin/useful-material/image/delete', {image: this.imageToDelete})
+            .then(response => {
+              console.log(response.data)
+            })
+            .catch(error => {
+              console.log(error.response)
+            })
+        }
       },
       submit() {
         console.log(this.finalObj())
@@ -328,8 +335,13 @@
       if(this.$route.params.edit === true) {
         this.editorData = material.content,
         this.materialName = material.title,
-        this.materialImg = material.title_image
         this.imageName = material.title_image
+
+        let index = material.title_image.lastIndexOf("/") + 1
+        this.imageToDelete = material.title_image.substr(index)
+        console.log(this.imageToDelete)
+
+        this.materialImg = material.title_image
         this.newCategorie = this.$route.params.category[0].id
       }
     }

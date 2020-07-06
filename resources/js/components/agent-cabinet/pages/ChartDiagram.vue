@@ -459,9 +459,9 @@
                 </template>
                 <template v-slot:footer>
                   <chart-buttons 
-                    v-if="graphData !== null"
+                    v-if="graphDataProp !== null"
                     :graph="currentTab" 
-                    :data="graphData"/>
+                    :data="graphDataProp"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
                 <span v-if="item.interest !== null">
@@ -498,6 +498,7 @@ export default {
   },
   data: () => ({
     graphData: null,
+    graphDataProp: null,
     leasingObjectData: null,
     currentTab: '2',
     search: '',
@@ -547,13 +548,8 @@ export default {
     }
   },
   mounted() {
+    this.graphDataProp = this.$router.currentRoute.params.data
     this.graphData = this.$router.currentRoute.params.data
-    // this.leasingObjectData = [this.graphData.request_data]
-    // this.leasingObjectData = Object.assign([this.leasingObjectData, this.graphData.result_data[0]])
-    // console.log(this.leasingObjectData)
-    console.log('**************')
-    console.log(this.graphData)
-    console.log('**************')
     Object.keys(this.graphData.result_data).forEach(object => {
       if(this.graphData.result_data[object].graph) {
         this.graphData.result_data[object].graph[0].n = 'Аванс'

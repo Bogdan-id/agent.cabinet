@@ -15,7 +15,7 @@
                 fab 
                 @click="emailField = !emailField; 
                   formatToSave = 'email'; 
-                  test2()" 
+                  sendDataToUser()" 
                 v-on="on" 
                 dark 
                 color="#e94949">
@@ -39,7 +39,7 @@
                     <v-btn 
                       v-show="!$v.$invalid"
                       :loading="emailDownloadLoading"
-                      @click="test2()"
+                      @click="sendDataToUser()"
                       v-on="on" 
                       width="50" 
                       height="50" 
@@ -73,7 +73,7 @@
                 fab 
                 @click="emailField = false; 
                   formatToSave = 'pdf'; 
-                  test2()" 
+                  sendDataToUser()" 
                 v-on="on" 
                 dark 
                 color="#e94949">
@@ -498,7 +498,7 @@ export default {
     }
   },
   methods: {
-    test2() {
+    sendDataToUser() {
       let graph = this.data.result_data[this.switchGraphName(this.graph)]
       let calcData = this.data.request_data
       let rootCalcData = this.data

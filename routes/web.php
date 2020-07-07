@@ -60,6 +60,8 @@ Route::get('/updateManagers', 'ManagerController@updateManagers');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
 Route::get('/slides', 'SliderController@getSlides');
+Route::get('/slides/{slug}', 'SliderController@getSlide');
+
 
 
 Route::get('json/useful-materials-categories/{slug}', 'UsefulMaterialsController@getMaterialsByCategory');

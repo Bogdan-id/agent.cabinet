@@ -7,6 +7,7 @@ import Agents from '../components/admin/components/routes/Agents'
 import ApplicationsToRegister from '../components/admin/components/routes/ApplicationsToRegister'
 import EditMaterials from '../components/admin/components/routes/EditMaterials.vue'
 import Managers from '../components/admin/components/routes/Managers'
+import AdminNews from '../components/admin/components/routes/AdminNews'
 
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
@@ -16,7 +17,7 @@ import CompleteRegistration from '../components/authentication/CompleteRegistrat
 
 /* Dashboard components */
 import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout"
-// import NotFound from "../components/agent-cabinet//pages/NotFoundPage.vue"
+import DashboardNews from "../components/agent-cabinet/pages/DashboardNews"
 import Dashboard from "../components/agent-cabinet/pages/Dashboard"
 import UserProfile from "../components/agent-cabinet/pages/UserProfile"
 import UsefulMaterialsView from "../components/agent-cabinet/pages/UsefulMaterialsView"
@@ -80,6 +81,14 @@ const routes = [
         component: ApplicationsToRegister,
         meta: {
           title: 'Заявки на реєстрацію'
+        }
+      },
+      {
+        path: 'news',
+        name: 'news',
+        component: AdminNews,
+        meta: {
+          title: 'Новини'
         }
       },
       {
@@ -163,6 +172,14 @@ const routes = [
         component: Dashboard,
         meta: {
           title: 'Головна'
+        }
+      },
+      {
+        path: '/news',
+        name: 'Новини',
+        component: DashboardNews,
+        meta: {
+          title: 'Новини'
         }
       },
       {

@@ -1,10 +1,110 @@
 <template>
 <div>
+  <v-dialog 
+    v-model="dialogToSend"
+    max-width="390">
+    <v-card class="graphs-to-delete">
+      <v-card-title style="background: #424242;" class="white--text">
+        Оберiть тип збереження
+        <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
+      </v-card-title>
+      <v-card-text :style="`display: flex; justify-content: space-around; margin-top: 35px; ${emailField ? 'min-height: 140px;' : 'min-height: 90px;'} position: relative;`">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              @click="emailField = false"
+              v-on="on"
+              icon 
+              v-show="emailField"
+              style="position: absolute; left: 0; top: -32px;">
+              <v-icon size="28" v-text="'mdi-arrow-left-bold'"></v-icon>
+            </v-btn>
+          </template>
+          <span>Назад</span>
+        </v-tooltip>
+        <span style="position: relative" v-show="!pdfDownloadLoading">
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn 
+                fab 
+                @click="emailField = !emailField; 
+                  formatToSave = 'email'" 
+                v-on="on" 
+                dark 
+                color="#e94949">
+                <v-icon v-text="'mdi-email-send-outline'"></v-icon>
+              </v-btn>
+            </template>
+            <span>Вiдправити на email</span>
+          </v-tooltip>
+          <v-card elevation="7" style="position: absolute; min-width: 250px!important; bottom: -10px; left: 50%; transform: translate(-50%, -50%);">
+            <v-text-field
+              v-show="emailField"
+              v-model="emailToSend"
+              @input="$v.emailToSend.$touch()"
+              @blur="$v.emailToSend.$touch()"
+              class="send-email-field"
+              label="email"
+              dense outlined>
+              <template v-slot:append>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn 
+                      v-show="!$v.$invalid"
+                      :loading="emailDownloadLoading"
+                      @click="sendDataToUser()"
+                      v-on="on" 
+                      width="50" 
+                      height="50" 
+                      icon 
+                      style="position: absolute; top: -5px; bottom: 2px; left: 255px;">
+                      <v-icon size="32" v-text="'mdi-send-check'"></v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Надiслати</span>
+                </v-tooltip>
+              </template>
+              <template v-slot:prepend-inner>
+                <span v-if="emailToSendErr && emailToSendErr.length > 0" style="min-width: 200px;
+                  color: #424242;
+                  position: absolute;
+                  display: block!important;
+                  bottom: -22px;
+                  font-size: 0.79rem;
+                  left: 0;">
+                  {{ emailToSendErr[0] }}
+                </span>
+              </template>
+            </v-text-field>
+          </v-card>
+        </span>
+        <span v-show="!emailField">
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn 
+                :loading="pdfDownloadLoading"
+                fab 
+                @click="emailField = false; 
+                  formatToSave = 'pdf'; 
+                  sendDataToUser()" 
+                v-on="on" 
+                dark 
+                color="#e94949">
+                <v-icon v-text="'mdi-download'"></v-icon>
+              </v-btn>
+            </template>
+            <span>Завантажити</span>
+          </v-tooltip>
+        </span>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
   <v-dialog
     v-model="leasingApplicationForm"
     max-width="600">
-    <v-card>
-      <div class="complete-reg-form__title title">
+    <v-card v-if="leasingApplicationForm">
+      <div style="position: relative;" class="complete-reg-form__title title">
+        <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'"></v-icon></v-btn>
         <div class="complete-reg-form__title-logo"></div>
         <span class="d-block title">Заявка на лiзинг</span>
       </div>
@@ -174,21 +274,7 @@
     </v-card>
   </v-dialog>
   <v-card-text style="display: flex; justify-content: flex-end;">
-    <div style="width: 165px; display: flex; justify-content: space-around;">
-      <span>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-          <v-btn
-            v-on="on"
-            @click="test()"
-            color="grey darken-2" 
-            dark large icon>
-            <v-icon size="22" dark v-text="'mdi-email-send'"></v-icon>
-          </v-btn>
-          </template>
-          <span>Надiслати розрахунок на email</span>
-        </v-tooltip>
-      </span>
+    <div style="width: 165px; display: flex; justify-content: center;">
       <span>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -207,13 +293,14 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn 
+              @click="openDialogToSend()"
               v-on="on"
               color="grey darken-2" 
               icon large dark>
               <v-icon size="22" dark v-text="'mdi-download'"></v-icon>
             </v-btn>
           </template>
-          <span>Завантажити розрахунок у форматi Pdf</span>
+          <span>Зберегти рузультат розрахунку</span>
         </v-tooltip>
       </span>
     </div>
@@ -226,6 +313,7 @@ import selectItems from './Calculator/selectItems.js'
 import { validationMixin } from 'vuelidate'
 import { required, email } from 'vuelidate/lib/validators'
 import axios from 'axios'
+import { saveAs } from 'file-saver'
 
 export default {
   props: ['graph', 'data'],
@@ -237,6 +325,13 @@ export default {
     pasteEvent: false,
     loading: false,
     creditPayment: null,
+    dialogToSend: false,
+    emailField: false,
+    emailToSend: null,
+    formatToSave: null,
+
+    emailDownloadLoading: false,
+    pdfDownloadLoading: false,
 
     listItem: null,
 
@@ -275,15 +370,21 @@ export default {
       return !this.$v.$invalid && this.$v.$dirty
     },
     validationRules() {
-      let validateObj = null
-      this.clientTypeId === 1
+      let validateObj = {}
+
+      this.emailField === true
+        ? validateObj = {
+          emailToSend: {required, email}
+        }
+        : false
+      this.clientTypeId === 1 && this.leasingApplicationForm
         ? validateObj = Object.assign({},
           this.commonRules,
           this.individualPerson
         )
         : false
 
-      this.clientTypeId === 2
+      this.clientTypeId === 2 && this.leasingApplicationForm
         ? validateObj = Object.assign({},
           this.commonRules,
           this.legalPerson
@@ -340,6 +441,13 @@ export default {
       return this.clientTypeId === 2
     },
     /* error handlers */
+    emailToSendErr() {
+      let errors = []
+      if (!this.$v.emailToSend || !this.$v.emailToSend.$error) return
+      !this.$v.emailToSend.required && errors.push('Вкажiть email')
+      !this.$v.emailToSend.email && errors.push('Невiрний email')
+      return errors
+    },
     lastNameErr() {
       if (!this.$v.lastName.$error) return
       return this.commonErr
@@ -404,6 +512,85 @@ export default {
     }
   },
   methods: {
+    sendDataToUser() {
+      let graph = this.data.result_data[this.switchGraphName(this.graph)]
+      let calcData = this.data.request_data
+      let rootCalcData = this.data
+
+      let dataToSave = {
+        mark: calcData.leasedAssertMark.name,
+        model: calcData.leasedAssertModel.name,
+        price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
+        term: calcData.leasingTerm,
+        advance: calcData.advance,
+        prepaid: graph['offer-advance'],
+        avg: graph['offer-month-payment'],
+        currency: calcData.currency,
+        leasingRest: graph['offer-rest'],
+        table: graph.graph,
+        agg: {
+          'payment-principal': graph['total-payment-principal'],
+          'interest': graph['total-interest'],
+          'payment': graph['total-payment'],
+        },
+        requestId: rootCalcData.request_id,
+        _token: this.getCsrf()
+      }
+      if(this.formatToSave === 'email') {
+        dataToSave.email = this.emailToSend
+      }
+      !this.$v.$invalid
+        ? this.sendData(dataToSave)
+        : this.highlightErrors()
+    },
+    highlightErrors() {
+      this.$v.$anyError
+      this.$v.$touch()
+    },
+    sendData(dataToSave) {
+      if(this.formatToSave === 'email') {
+        this.emailDownloadLoading = true
+      } else if(this.formatToSave === 'pdf') {
+        this.pdfDownloadLoading = true
+      }
+      axios
+        .post('/calculation/getPdf', dataToSave, { responseType: 'blob' })
+        .then(response => {
+          console.log(response)
+          if(this.formatToSave === 'pdf') saveAs(response.data, 'graph.pdf')
+          if(this.formatToSave === 'email') {
+            this.$notify({
+              group: 'success',
+              title: 'Графiк успiшно вiдправлено',
+              text: '',
+            })
+          }
+          if(this.formatToSave === 'email') {
+            this.emailDownloadLoading = false
+          } else if(this.formatToSave === 'pdf') {
+            this.pdfDownloadLoading = false
+          }
+          setTimeout(() => {
+            this.dialogToSend = false
+          }, 1200)
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+          if(this.formatToSave === 'email') {
+            this.emailDownloadLoading = false
+          } else if(this.formatToSave === 'pdf') {
+            this.pdfDownloadLoading = false
+          }
+        })
+    },
+    openDialogToSend() {
+      this.dialogToSend = true
+    },
     submit() {
       !this.$v.$invalid
       && this.$v.$dirty
@@ -476,10 +663,6 @@ export default {
             text: `${error.response.status} \n ${error.response.data.message}`,
           })
         })
-    },
-    highlightErrors() {
-      this.$v.$anyError
-      this.$v.$touch()
     },
     deleteIndividualFields(object) {
       if(object.phone === null || object.phone === 'undefined') delete object.phone
@@ -596,8 +779,21 @@ export default {
 			}
 			this.pasteEvent = false
 		},
+    switchGraphName(graphID) {
+      switch (graphID) {
+        case '1': return 'annuity'
+        case '2': return 'even'
+        case '3': return 'irregular'
+      }
+    }
   },
   watch: {
+    dialogToSend(value) {
+      if(value === false) {
+        this.formatToSave = null
+        this.currentGraphToDownload = null
+      }
+    },
     'legalInfo.currencyBalance': function(value) {
       if(!value) return value
       this.legalInfo.currencyBalance = parseInt(value)
@@ -620,6 +816,19 @@ export default {
   },
   mounted() {
     this.graphType = this.graph
+    Object.keys(this.data.result_data).forEach(object => {
+      if(this.data.result_data[object].graph) {
+        this.data.result_data[object].graph[0].n = 0
+      }
+    })
   }
 }
 </script>
+
+<style lang="scss">
+  .send-email-field {
+    .v-text-field__details {
+      display: none!important;
+    }
+  }
+</style>

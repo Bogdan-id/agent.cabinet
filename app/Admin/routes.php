@@ -39,4 +39,11 @@ Route::group([
             ->where('id', '[0-9]+');
     $router->delete('slide/delete/{id}', 'SliderController@destroySlide')
             ->where('id', '[0-9]+');
+
+    $router->get('news/all', 'NewsController@getNews');
+    $router->post('news/create', 'NewsController@createNews');
+    $router->post('news/update/{id}', 'NewsController@updateNews')
+                ->where('id', '[0-9]+');
+    $router->delete('news/delete/{id}', 'NewsController@destroyNews')
+                ->where('id', '[0-9]+');
 });

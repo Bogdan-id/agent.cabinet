@@ -33,4 +33,10 @@ Route::group([
     $router->get('useful-materials/all', 'UsefulMaterialsController@getMaterials');
     $router->get('useful-materials/category/{id}', 'UsefulMaterialsController@getMaterialsByCategory');
 
+    $router->get('slide/all', 'SliderController@getSlides');
+    $router->post('slide/create', 'SliderController@createSlide');
+    $router->post('slide/update/{id}', 'SliderController@updateSlide')
+            ->where('id', '[0-9]+');
+    $router->delete('slide/delete/{id}', 'SliderController@destroySlide')
+            ->where('id', '[0-9]+');
 });

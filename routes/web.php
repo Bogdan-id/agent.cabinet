@@ -61,9 +61,8 @@ Route::get('/updateManagers', 'ManagerController@updateManagers');
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
 Route::get('/slides', 'SliderController@getSlides');
 Route::get('/slides/{slug}', 'SliderController@getSlide');
-
-
-
+Route::get('/news', 'NewsController@getAllNews');
+Route::get('/news/{slug}', 'NewsController@getNews');
 Route::get('json/useful-materials-categories/{slug}', 'UsefulMaterialsController@getMaterialsByCategory');
 Route::get('json/useful-materials-categories/{categorySlug}/{slug}', 'UsefulMaterialsController@getMaterialBySlug');
 Route::post('/calculate', 'CalculateController@create');

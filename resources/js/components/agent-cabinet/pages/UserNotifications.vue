@@ -3,7 +3,6 @@
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>
       Повiдомлення
-    <v-divider></v-divider>
     <v-progress-linear
       :height="3"
       :active="loading"
@@ -14,7 +13,7 @@
     </v-progress-linear>
     </v-card-title>
     <v-card-text style="min-height: 100vh">
-      <section class="section" id="section">
+      <section class="section" style="margin-top: 10px;" id="section">
         <div class="notification-tabs" style="display: inline-flex;">
           <div class="notification-tabs-input active" style="width: auto">
             <label

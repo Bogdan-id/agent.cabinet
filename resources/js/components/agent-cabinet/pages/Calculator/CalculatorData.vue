@@ -1,49 +1,75 @@
 <template>
 <div class="col-12">
+  <v-dialog
+    v-model="dialogToSwitchBetweenTypesOfSave"
+    max-width="530">
+    <v-card>
+      <v-card-title style="background: #424242; position: relative" class="white--text">
+        <v-btn @click="dialogToSwitchBetweenTypesOfSave = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
+        Оберiть тип збереження
+      </v-card-title>
+      <v-card-text class="calculator-data__custom-btn-wrapper" style="display: flex; justify-content: space-around; margin-top: 25px;">
+        <span><v-btn @click="openDialogToSave('email')" dark color="#e94949">Вiдправити на email</v-btn></span>
+        <span><v-btn @click="openDialogToSave('pdf')" dark color="#e94949">Зберегти у форматi .pdf</v-btn></span>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
   <v-dialog 
-    v-model="dialogToDownload"
-    max-width="600">
+    v-model="dialogToSend"
+    max-width="490">
     <v-card class="graphs-to-delete">
-      <v-card-title style="background: #424242;" class="white--text">
-        Графiки виплат
+      <v-card-title style="background: #424242; position: relative" class="white--text">
+        <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
+        {{ formatToSave === 'email' ? 'Вiдправити на email' : 'Зберегти'}}
       </v-card-title>
       <v-card-text>
         <div style="margin-top: 23px;">
           <span style="line-height: 2rem; font-size: 0.93rem; color: black;">Оберiть тип графiку</span>
         </div>
         <v-checkbox
-          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
-          v-model="graphName"
-          value="annuity"
-          color="black">
-          <template v-slot:label>
-            <span :style="graphName == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
-          </template>
-        </v-checkbox>
-        <v-checkbox
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('even')"
           value="even"
           v-model="graphName"
-          color="black">
+          color="red darken-4">
           <template v-slot:label>
             <span :style="graphName == 'even' ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
+          </template>
+        </v-checkbox>
+        <v-checkbox
+          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
+          v-model="graphName"
+          value="annuity"
+          color="red darken-4">
+          <template v-slot:label>
+            <span :style="graphName == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
           </template>
         </v-checkbox>
         <v-checkbox
           v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('irregular')"
           value="irregular"
           v-model="graphName"
-          color="black">
+          color="red darken-4">
           <template v-slot:label>
             <span :style="graphName == 'irregular' ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
           </template>
         </v-checkbox>
-        <v-divider></v-divider>
+        <v-text-field 
+          v-if="formatToSave === 'email'"
+          class="email-to-send"
+          @input="$v.emailToSend.$touch()"
+          @blur="$v.emailToSend.$touch()"
+          :error-messages="emailToSendErr"
+          v-model="emailToSend"
+          label="email"
+          outlined dense>
+        </v-text-field>
+        <v-divider class="mt-0"></v-divider>
         <v-btn 
           style="border-radius: 0; text-transform: capitalize; border-color: rgb(224, 77, 69); font-size: 1rem;"
           class="send-graph-btn"
-          @click="test()" dark color="#e04d45">
-          Вiдправити
+          @click="test()" dark color="#e04d45"
+          :loading="loading">
+          {{ formatToSave === 'email' ? 'Вiдправити' : 'Зберегти' }}
         </v-btn>
       </v-card-text>
     </v-card>
@@ -52,7 +78,10 @@
     v-model="leasingApplicationForm"
     max-width="600">
     <v-card>
-      <v-card-title style="background: #424242;" class="white--text">Заявка на лiзинг</v-card-title>
+      <v-card-title style="background: #424242; position: relative" class="white--text">
+        Заявка на лiзинг
+        <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
+      </v-card-title>
       <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
       </div>
@@ -271,8 +300,9 @@
     v-model="deleteCalculationDialog"
     max-width="420">
     <v-card>
-      <v-card-title style="color: white; background: #424242">
+      <v-card-title style="color: white; background: #424242; position: relative">
         Видалення
+        <v-btn @click="deleteCalculationDialog = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
       </v-card-title>
       <v-card-text>
         <div style="line-height: 1.5rem; font-size: 1.15rem; padding: 35px 10px 25px 10px; color: black">
@@ -291,7 +321,7 @@
       Калькулятор лiзингу
     </v-card-title>
     <v-card-title
-      class="calculator-custom-title"
+      class="calculator-custom-title pb-0 pt-7"
       :style="`transition: all 0.5s; opacity: ${!loading ? '1' : '0'}`">
         <v-btn
           to="/calculator/new"
@@ -347,7 +377,7 @@
         <template v-slot:item.request_data="{ item }">
           <span style="white-space: nowrap">
             {{ 
-              parseInt(item.request_data.leasingAmount.replace(/ /g, '' ))
+              parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
                 .toLocaleString()
                 .replace(/,/g, ' ')
             }}
@@ -391,7 +421,7 @@
                     </v-icon>
                   </v-btn>
                 </span>
-                </template>
+              </template>
               <span>Переглянути</span>
             </v-tooltip>
             <v-tooltip bottom>
@@ -402,8 +432,7 @@
                     v-on="on"
                     icon>
                     <v-icon
-                      color="red darken-2"
-                      >
+                      color="red darken-2">
                       mdi-file-document-edit-outline
                     </v-icon>
                   </v-btn>
@@ -429,10 +458,10 @@
               <span>Видалити</span>
             </v-tooltip>
             <v-tooltip bottom>
-              <template #activator="{ on }">
+              <!-- <template #activator="{ on }">
                 <span>
                   <v-btn 
-                    @click=""
+                    @click="openDialogToSave(item, 'email')"
                     v-on="on"
                     icon>
                     <v-icon
@@ -443,13 +472,14 @@
                   </v-btn>
                 </span>
               </template>
-              <span>Вiдправити на пошту</span>
+              <span>Вiдправити на пошту</span>  -->
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <span>
+                  <!-- @click="openDialogToSave(item, 'pdf')" -->
                   <v-btn 
-                    @click="openDialogToDownload(item)"
+                    @click="openDialogToSwitchBetweenTypesOfSave(item)"
                     v-on="on"
                     icon>
                     <v-icon
@@ -459,7 +489,7 @@
                   </v-btn>
                 </span>
               </template>
-              <span>Завантажити</span>
+              <span>Зберегти розрахунок</span>
             </v-tooltip>
           </div>
         </template>
@@ -475,28 +505,19 @@ import selectItems from './selectItems.js'
 import { validationMixin } from 'vuelidate'
 import { required, email } from 'vuelidate/lib/validators'
 import axios from 'axios'
+import { saveAs } from 'file-saver'
 
 export default {
   mixins: [validationMixin],
   data:() => ({
     /* v-dialog data  */
-    dialogToDownload: false,
-    graphName: null,
+    dialogToSend: false,
+    graphName: 'even',
     currentGraphToDownload: null,
-    graphObjToSend: {
-      mark: null,
-      model: null,
-      price: null,
-      term: null,
-      prepaid: null,
-      advance: null,
-      avg: null,
-      currency: null,
-      leasingRest: null,
-      table: null,
-      agg: null,
-      requestId: null
-    },
+    formatToSave: null,
+    emailToSend: null,
+    graphObj: null,
+    dialogToSwitchBetweenTypesOfSave: false,
 
     select: selectItems,
     leasingApplicationForm: false,
@@ -563,19 +584,21 @@ export default {
     },
     validationRules() {
       let validateObj = null
-      !this.leasingApplicationForm 
-        ? validateObj = {}
-        : this.clientTypeId === 1 
-          ? validateObj = Object.assign({},
-            this.commonRules,
-            this.individualPerson
-          )
-          : this.clientTypeId === 2
+      this.formatToSave == 'email'
+        ? validateObj = {emailToSend: { email, required }}
+        : !this.leasingApplicationForm 
+          ? validateObj = {}
+          : this.clientTypeId === 1 
             ? validateObj = Object.assign({},
               this.commonRules,
-              this.legalPerson
+              this.individualPerson
             )
-            : false
+            : this.clientTypeId === 2
+              ? validateObj = Object.assign({},
+                this.commonRules,
+                this.legalPerson
+              )
+              : false
       return validateObj
     },
     commonRules() {
@@ -588,6 +611,11 @@ export default {
         creditPayment: { required },
       }
     },
+    // verifyEmailToSend() {
+    //   return {
+    //     emailToSend: { required }
+    //   }
+    // },
     individualPerson() {
       return {
         phone: { 
@@ -647,6 +675,13 @@ export default {
       if (!this.$v.patronymic) return
       if (!this.$v.patronymic.$error) return
       return this.commonErr
+    },
+    emailToSendErr() {
+      let errors = []
+      if (!this.$v.emailToSend || !this.$v.emailToSend.$error) return
+      !this.$v.emailToSend.required && errors.push('Вкажiть ваш email')
+      !this.$v.emailToSend.email && errors.push('Невiрний email')
+      return errors
     },
     regionErr() {
       if (!this.$v.region) return
@@ -721,13 +756,16 @@ export default {
     },
   },
   methods: {
-    openDialogToDownload(item){
-      this.dialogToDownload = true
-      this.currentGraphToDownload = item
-      console.log(this.currentGraphToDownload)
+    openDialogToSwitchBetweenTypesOfSave(item) {
+      this.graphObj = item
+      this.dialogToSwitchBetweenTypesOfSave = true
+    },
+    openDialogToSave(format){
+      this.formatToSave = format
+      this.dialogToSend = true
+      this.currentGraphToDownload = this.graphObj
     },
     openDeleteCalculationDialog(id) {
-      console.log(id)
       this.deleteCalculationDialog = true
       this.calculationToDelete = id
     },
@@ -761,7 +799,6 @@ export default {
     customSort(items) {
       items
         .sort((a, b) => {
-          console.log(a.created_at, b.created_at)
           return new Date(b.updated_at) - new Date(a.updated_at)
       })
       return items
@@ -892,21 +929,16 @@ export default {
       this.graphType = this.getGraphById(id)[0]
       this.getDefaultProperties()
       this.leasingApplicationForm = true
-      console.log(this.$v)
     },
     submit() {
-      console.log(!this.$v.$invalid)
-      console.log(this.$v.$dirty)
       !this.$v.$invalid
       && this.$v.$dirty
         ? this.sendRequest()
         : this.highlightErrors()
     },
     sendRequest() {
-      console.log('send request')
       this.loading = true
       let object = this.object()
-      console.log(this.requestObj(object))
       axios.
         post('/leasing-reqeust/create', this.requestObj(object))
         .then(response => {
@@ -1029,15 +1061,11 @@ export default {
       let graph = this.currentGraphToDownload.result_data[this.graphName]
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
-      console.log('********')
-      // console.log(rootCalcData)
-      // console.log(calcData)
-      // console.log(graph)
-      console.log('********')
-      let test ={
+
+      let dataToSave = {
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
-        price: calcData.leasingAmount,
+        price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,
         advance: calcData.advance,
         prepaid: graph['offer-advance'],
@@ -1050,34 +1078,56 @@ export default {
           'interest': graph['total-interest'],
           'payment': graph['total-payment'],
         },
-        requestId: rootCalcData.request_id
+        requestId: rootCalcData.request_id,
+        _token: this.getCsrf()
       }
-      console.log('**********')
-      console.log(test)
-      console.log('**********')
+      if(this.formatToSave === 'email') {
+        dataToSave.email = this.emailToSend
+      }
+      !this.$v.$invalid
+        ? this.sendData(dataToSave)
+        : this.highlightErrors()
+    },
+    sendData(dataToSave) {
+      this.loading = true
+      axios
+        .post('/calculation/getPdf', dataToSave, { responseType: 'blob' })
+        .then(response => {
+          console.log(response)
+          if(this.formatToSave === 'pdf') saveAs(response.data, 'graph.pdf')
+          if(this.formatToSave === 'email') {
+            this.$notify({
+              group: 'success',
+              title: 'Графiк успiшно вiдправлено',
+              text: '',
+            })
+          }
+          this.loading = false
+          setTimeout(() => {
+            this.dialogToSend = false
+          }, 1200)
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+          this.loading = false
+        })
     },
     sortData(a, b) {
       return new Date(b.created_at) - new Date(a.created_at)
     },
-    // async createTableData(object) {
-    //   let arr = []
-    //   await object.map(val => {
-    //     let dataObj = {
-    //       'Тип': val.request_data.leasingObjectType.label,
-    //       'Марка': val.request_data.leasedAssertMark.name,
-    //       'Модель': val.request_data.leasedAssertModel.name,
-    //       'amount': val.request_data.leasingAmount,
-    //       'Дата': val.created_at.substr(0, 10),
-    //       'id': val.id
-    //     }
-    //     arr.push(dataObj)
-    //   })
-    //   this.tabledata = arr
-    //     .sort(this.sortData)
-    //     .reverse()
-    // },
   },
   watch: {
+    dialogToSend(value) {
+      if(value === false) {
+        this.formatToSave = null
+        this.currentGraphToDownload = null
+      }
+    },
     deleteCalculationDialog(value) {
       if(value === false) {
         this.calculationToDelete = null
@@ -1098,7 +1148,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$v)
     this.getListItem()
     this.$store.state.user.agent 
       ? this.getUserCalculations()
@@ -1108,6 +1157,11 @@ export default {
 </script>
 
 <style lang="scss">
+  .email-to-send {
+    .v-text-field__details {
+      margin-bottom: 0!important;
+    }
+  }
   .calculator-data-leasing-obj-type {
     font-weight: bold;
     font-size: 0.91rem!important;
@@ -1144,6 +1198,12 @@ export default {
   .calculator-data-graph {
     .v-input--selection-controls {
       margin-top: 8px!important;
+    }
+  }
+  .calculator-data__custom-btn-wrapper {
+    .v-btn__content {
+      text-transform: none!important;
+      font-size: 1rem;
     }
   }
 </style>

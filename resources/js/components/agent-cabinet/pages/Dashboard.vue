@@ -257,6 +257,11 @@
         </v-card>
       </v-hover>
     </v-card-text>
+    <v-card-text class="pt-0">
+      <div style="text-align: center">
+        <router-link to="/news" class="see-all-news" tag="span">Дивитись всi</router-link>
+      </div>
+    </v-card-text>
   </v-card>
 </div>
 </template>
@@ -706,6 +711,17 @@ export default {
         }
       }
     }
+  }
+}
+
+.see-all-news {
+  transition: font-size 0.14s ease, color 0.18s ease;
+  font-size: 1.23rem;
+  color: #e65048; 
+  cursor: pointer;
+  &:hover {
+    font-size: 1.3rem;
+    color: #e3706a;
   }
 }
 </style>

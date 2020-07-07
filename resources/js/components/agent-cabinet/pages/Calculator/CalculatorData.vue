@@ -2,7 +2,7 @@
 <div class="col-12">
   <v-dialog
     v-model="dialogToSwitchBetweenTypesOfSave"
-    max-width="510">
+    max-width="530">
     <v-card>
       <v-card-title style="background: #424242; position: relative" class="white--text">
         <v-btn @click="dialogToSwitchBetweenTypesOfSave = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
@@ -20,7 +20,7 @@
     <v-card class="graphs-to-delete">
       <v-card-title style="background: #424242; position: relative" class="white--text">
         <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
-        {{ formatToSave === 'email' ? 'Вiдправити на email' : 'Завантажити'}}
+        {{ formatToSave === 'email' ? 'Вiдправити на email' : 'Зберегти'}}
       </v-card-title>
       <v-card-text>
         <div style="margin-top: 23px;">
@@ -69,7 +69,7 @@
           class="send-graph-btn"
           @click="test()" dark color="#e04d45"
           :loading="loading">
-          {{ formatToSave === 'email' ? 'Вiдправити' : 'Завантажити' }}
+          {{ formatToSave === 'email' ? 'Вiдправити' : 'Зберегти' }}
         </v-btn>
       </v-card-text>
     </v-card>
@@ -321,7 +321,7 @@
       Калькулятор лiзингу
     </v-card-title>
     <v-card-title
-      class="calculator-custom-title"
+      class="calculator-custom-title pb-0 pt-7"
       :style="`transition: all 0.5s; opacity: ${!loading ? '1' : '0'}`">
         <v-btn
           to="/calculator/new"

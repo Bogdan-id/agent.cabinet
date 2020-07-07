@@ -44,7 +44,8 @@ export default {
 			{subj: 'Агенти', link: 'agents-edit', icon: 'mdi-face-agent'},
       {subj: 'Кориснi матерiали', link: 'Роздiл Кориснi матерiали', icon: 'mdi-bookmark'},
       {subj: 'Заявки на винагороду', link: 'reward-applications', icon: 'mdi-format-list-checks'},
-      {subj: 'Менеджери', link: 'admin-managers', icon: 'mdi-account-star-outline'}
+      {subj: 'Менеджери', link: 'admin-managers', icon: 'mdi-account-star-outline'},
+      {subj: 'Новини', link: 'news', icon: 'mdi-account-star-outline'}
 		]
 	}),
 	computed: {

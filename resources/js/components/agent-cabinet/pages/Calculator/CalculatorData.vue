@@ -1,10 +1,25 @@
 <template>
 <div class="col-12">
+  <v-dialog
+    v-model="dialogToSwitchBetweenTypesOfSave"
+    max-width="510">
+    <v-card>
+      <v-card-title style="background: #424242; position: relative" class="white--text">
+        <v-btn @click="dialogToSwitchBetweenTypesOfSave = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
+        Оберiть тип збереження
+      </v-card-title>
+      <v-card-text class="calculator-data__custom-btn-wrapper" style="display: flex; justify-content: space-around; margin-top: 25px;">
+        <span><v-btn @click="openDialogToSave('email')" dark color="#e94949">Вiдправити на email</v-btn></span>
+        <span><v-btn @click="openDialogToSave('pdf')" dark color="#e94949">Зберегти у форматi .pdf</v-btn></span>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
   <v-dialog 
     v-model="dialogToSend"
     max-width="490">
     <v-card class="graphs-to-delete">
-      <v-card-title style="background: #424242;" class="white--text">
+      <v-card-title style="background: #424242; position: relative" class="white--text">
+        <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
         {{ formatToSave === 'email' ? 'Вiдправити на email' : 'Завантажити'}}
       </v-card-title>
       <v-card-text>
@@ -402,7 +417,7 @@
                     </v-icon>
                   </v-btn>
                 </span>
-                </template>
+              </template>
               <span>Переглянути</span>
             </v-tooltip>
             <v-tooltip bottom>
@@ -413,8 +428,7 @@
                     v-on="on"
                     icon>
                     <v-icon
-                      color="red darken-2"
-                      >
+                      color="red darken-2">
                       mdi-file-document-edit-outline
                     </v-icon>
                   </v-btn>
@@ -440,7 +454,7 @@
               <span>Видалити</span>
             </v-tooltip>
             <v-tooltip bottom>
-              <template #activator="{ on }">
+              <!-- <template #activator="{ on }">
                 <span>
                   <v-btn 
                     @click="openDialogToSave(item, 'email')"
@@ -454,13 +468,14 @@
                   </v-btn>
                 </span>
               </template>
-              <span>Вiдправити на пошту</span>
+              <span>Вiдправити на пошту</span>  -->
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <span>
+                  <!-- @click="openDialogToSave(item, 'pdf')" -->
                   <v-btn 
-                    @click="openDialogToSave(item, 'pdf')"
+                    @click="openDialogToSwitchBetweenTypesOfSave(item)"
                     v-on="on"
                     icon>
                     <v-icon
@@ -470,7 +485,7 @@
                   </v-btn>
                 </span>
               </template>
-              <span>Завантажити</span>
+              <span>Зберегти розрахунок</span>
             </v-tooltip>
           </div>
         </template>
@@ -497,6 +512,8 @@ export default {
     currentGraphToDownload: null,
     formatToSave: null,
     emailToSend: null,
+    graphObj: null,
+    dialogToSwitchBetweenTypesOfSave: false,
 
     select: selectItems,
     leasingApplicationForm: false,
@@ -735,10 +752,14 @@ export default {
     },
   },
   methods: {
-    openDialogToSave(item, format){
+    openDialogToSwitchBetweenTypesOfSave(item) {
+      this.graphObj = item
+      this.dialogToSwitchBetweenTypesOfSave = true
+    },
+    openDialogToSave(format){
       this.formatToSave = format
       this.dialogToSend = true
-      this.currentGraphToDownload = item
+      this.currentGraphToDownload = this.graphObj
     },
     openDeleteCalculationDialog(id) {
       this.deleteCalculationDialog = true
@@ -1173,6 +1194,12 @@ export default {
   .calculator-data-graph {
     .v-input--selection-controls {
       margin-top: 8px!important;
+    }
+  }
+  .calculator-data__custom-btn-wrapper {
+    .v-btn__content {
+      text-transform: none!important;
+      font-size: 1rem;
     }
   }
 </style>

@@ -15,4 +15,12 @@ class SliderController extends Controller
 
        return response()->json($slides);
     }
+
+    public function getSlide($slug)
+    {
+        $slide = Slide::where('slug', '=', $slug)->first();
+        abort_if(!$slide, 422, 'Акцію не знайдено!');
+
+       return response()->json($slide);
+    }
 }

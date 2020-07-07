@@ -9,10 +9,6 @@ use App\Models\{
 };
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use App\Admin\Requests\{
-    ImageUploadRequest,
-    ImageDeleteRequest
-};
 use Illuminate\Support\Facades\Storage;
 
 class UsefulMaterialsController extends Controller
@@ -93,25 +89,6 @@ class UsefulMaterialsController extends Controller
         $usefulMaterial = UsefulMaterial::find($id);
         $usefulMaterial->delete();
 
-        return response()->json([
-            'status' => 200
-        ]);
-    }
-
-    public function uploadImage(ImageUploadRequest $request)
-    {
-        $path = $request->file('upload')->store('uploads', 'public');
-
-        return response()->json([
-            'url' => url("/storage/{$path}")
-        ]);
-    }
-
-    public function deleteImage(ImageDeleteRequest $request)
-    {
-        $data = $request->validated();
-        unlink(public_path("storage/uploads/{$data['image']}")); 
- 
         return response()->json([
             'status' => 200
         ]);

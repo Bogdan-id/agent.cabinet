@@ -78,7 +78,10 @@
     v-model="leasingApplicationForm"
     max-width="600">
     <v-card>
-      <v-card-title style="background: #424242;" class="white--text">Заявка на лiзинг</v-card-title>
+      <v-card-title style="background: #424242; position: relative" class="white--text">
+        Заявка на лiзинг
+        <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
+      </v-card-title>
       <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
       </div>
@@ -297,8 +300,9 @@
     v-model="deleteCalculationDialog"
     max-width="420">
     <v-card>
-      <v-card-title style="color: white; background: #424242">
+      <v-card-title style="color: white; background: #424242; position: relative">
         Видалення
+        <v-btn @click="deleteCalculationDialog = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
       </v-card-title>
       <v-card-text>
         <div style="line-height: 1.5rem; font-size: 1.15rem; padding: 35px 10px 25px 10px; color: black">

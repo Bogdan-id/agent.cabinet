@@ -45,7 +45,7 @@ export default {
       {subj: 'Кориснi матерiали', link: 'Роздiл Кориснi матерiали', icon: 'mdi-bookmark'},
       {subj: 'Заявки на винагороду', link: 'reward-applications', icon: 'mdi-format-list-checks'},
       {subj: 'Менеджери', link: 'admin-managers', icon: 'mdi-account-star-outline'},
-      {subj: 'Новини', link: 'news', icon: 'mdi-account-star-outline'}
+      {subj: 'Новини', link: 'news', icon: 'mdi-newspaper-variant-outline'}
 		]
 	}),
 	computed: {

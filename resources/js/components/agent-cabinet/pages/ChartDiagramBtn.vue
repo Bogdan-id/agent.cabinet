@@ -6,6 +6,7 @@
     <v-card class="graphs-to-delete">
       <v-card-title style="background: #424242;" class="white--text">
         Оберiть тип збереження
+        <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
       </v-card-title>
       <v-card-text :style="`display: flex; justify-content: space-around; margin-top: 35px; ${emailField ? 'min-height: 140px;' : 'min-height: 90px;'} position: relative;`">
         <v-tooltip bottom>
@@ -102,7 +103,8 @@
     v-model="leasingApplicationForm"
     max-width="600">
     <v-card v-if="leasingApplicationForm">
-      <div class="complete-reg-form__title title">
+      <div style="position: relative;" class="complete-reg-form__title title">
+        <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'"></v-icon></v-btn>
         <div class="complete-reg-form__title-logo"></div>
         <span class="d-block title">Заявка на лiзинг</span>
       </div>
@@ -551,7 +553,6 @@ export default {
       } else if(this.formatToSave === 'pdf') {
         this.pdfDownloadLoading = true
       }
-      this.loading = true
       axios
         .post('/calculation/getPdf', dataToSave, { responseType: 'blob' })
         .then(response => {

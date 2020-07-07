@@ -2,20 +2,32 @@
 <div>
   <v-dialog 
     v-model="dialogToSend"
-    max-width="490">
+    max-width="390">
     <v-card class="graphs-to-delete">
       <v-card-title style="background: #424242;" class="white--text">
         Оберiть тип збереження
       </v-card-title>
-      <v-card-text :style="`display: flex; justify-content: space-around; margin-top: 35px; ${emailField ? 'min-height: 140px' : 'min-height: 90px'}`">
+      <v-card-text :style="`display: flex; justify-content: space-around; margin-top: 35px; ${emailField ? 'min-height: 140px;' : 'min-height: 90px;'} position: relative;`">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              @click="emailField = false"
+              v-on="on"
+              icon 
+              v-show="emailField"
+              style="position: absolute; left: 0; top: -32px;">
+              <v-icon size="28" v-text="'mdi-arrow-left-bold'"></v-icon>
+            </v-btn>
+          </template>
+          <span>Назад</span>
+        </v-tooltip>
         <span style="position: relative" v-show="!pdfDownloadLoading">
           <v-tooltip bottom>
             <template #activator="{ on }">
               <v-btn 
                 fab 
                 @click="emailField = !emailField; 
-                  formatToSave = 'email'; 
-                  sendDataToUser()" 
+                  formatToSave = 'email'" 
                 v-on="on" 
                 dark 
                 color="#e94949">
@@ -24,7 +36,7 @@
             </template>
             <span>Вiдправити на email</span>
           </v-tooltip>
-          <v-card elevation="7" style="position: absolute; min-width: 250px!important; bottom: 9px; left: -87px;">
+          <v-card elevation="7" style="position: absolute; min-width: 250px!important; bottom: -10px; left: 50%; transform: translate(-50%, -50%);">
             <v-text-field
               v-show="emailField"
               v-model="emailToSend"
@@ -57,7 +69,7 @@
                   position: absolute;
                   display: block!important;
                   bottom: -22px;
-                  font-size: 0.9rem;
+                  font-size: 0.79rem;
                   left: 0;">
                   {{ emailToSendErr[0] }}
                 </span>
@@ -65,7 +77,7 @@
             </v-text-field>
           </v-card>
         </span>
-        <span v-show="!emailDownloadLoading">
+        <span v-show="!emailField">
           <v-tooltip bottom>
             <template #activator="{ on }">
               <v-btn 

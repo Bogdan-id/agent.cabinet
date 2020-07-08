@@ -47,6 +47,7 @@ Route::get('leasing-reqeust/{id}', 'LeasingRequestController@getLeasingRequest')
             ->where('id', '[0-9]+');
 Route::get('leasing-reqeust/agent/{agent_id}', 'LeasingRequestController@getLeasingRequestByAgent')
             ->where('agent_id', '[0-9]+');
+Route::post('leasing-reqeust/document/upload', 'LeasingRequestController@documetnUpload');
 
 Route::get('/getAcquisitionTargets', 'AcquisitionTargetController@getAcquisitionTargets');
 

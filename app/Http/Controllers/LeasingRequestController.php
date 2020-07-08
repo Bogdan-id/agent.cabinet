@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\LeasingRequestRequest;
+use App\Http\Requests\{
+    LeasingRequestRequest,
+    DocumentsUploadRequest
+};
 use App\Repositories\LeasingRequestRepository;
 use App\Models\{
     LeasingRequest,
@@ -41,5 +44,15 @@ class LeasingRequestController extends Controller
        $leasingRequests = $agent->leasingRequests;
 
        return response()->json($leasingRequests);
+    }
+
+    public function documetnUpload(DocumentsUploadRequest $request)
+    {
+        $request->validated();
+        $path = $request->file('doc')->store('documents', 'public');
+
+        return response()->json([
+            'url' => url("/storage/{$path}")
+        ]);
     }
 }

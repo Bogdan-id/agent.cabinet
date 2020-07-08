@@ -42,6 +42,8 @@ class LeasingRequestRepository extends BaseRepository implements LeasingRequestR
             $this->model->email = $attributes['email'];
             $this->model->phone = $attributes['phone'];
         }
+        $this->model->documents = $attributes['documents'];
+
         $this->model->save();
 
         return $this->model;

@@ -40,6 +40,7 @@ class AgentCreateRequest extends JsonRequest
             'card_number' => 'required|string',
             'iban' => 'required',
             'oferta_accepted' => 'required|boolean',
+            'purposeOfPayment' => 'required|string',
         ];
     }
 }

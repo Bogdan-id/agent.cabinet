@@ -174,18 +174,24 @@ class CalculateController extends Controller
             $resultData['even']['graph'] = $this->floatToIntGraph($resultData['even']['graph']);
             $resultData['even']['offer-month-payment'] = (int) $resultData['even']['offer-month-payment'];
             $resultData['even']['offer-rest'] = (int)  $resultData['even']['offer-rest'];
+            $resultData['even']['offer-price-brutto'] = (int)  $resultData['even']['offer-price-brutto'];
+
         }
         if(array_key_exists('annuity', $resultData))
         {
             $resultData['annuity']['graph'] = $this->floatToIntGraph($resultData['annuity']['graph']);
             $resultData['annuity']['offer-month-payment'] = (int) $resultData['annuity']['offer-month-payment'];
             $resultData['annuity']['offer-rest'] = (int)  $resultData['annuity']['offer-rest'];
+            $resultData['annuity']['offer-price-brutto'] = (int)  $resultData['annuity']['offer-price-brutto'];
+
         }
         if(array_key_exists('irregular', $resultData))
         {
             $resultData['irregular']['graph'] = $this->floatToIntGraph($resultData['irregular']['graph']);
             $resultData['irregular']['offer-month-payment'] = (int) $resultData['irregular']['offer-month-payment'];
             $resultData['irregular']['offer-rest'] = (int)  $resultData['irregular']['offer-rest'];
+            $resultData['irregular']['offer-price-brutto'] = (int)  $resultData['irregular']['offer-price-brutto'];
+
         }
 
         return $resultData;

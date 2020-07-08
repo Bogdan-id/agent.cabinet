@@ -36,6 +36,7 @@ class AgentsController extends Controller
         $agent->card_number = $data['card_number'];
         $agent->iban = $data['iban'];
         $agent->oferta_accepted = $data['oferta_accepted'];
+        $agent->purpose_of_payment = $data['purposeOfPayment'];
         $agent->save();
 
         if($data['passport_type_id'] == 1)

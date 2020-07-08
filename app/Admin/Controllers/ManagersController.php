@@ -32,4 +32,11 @@ class ManagersController extends Controller
             'status' => 200
         ]);
     }
+
+    public function getManagers()
+    {
+       $managers = Manager::all();
+
+       return response()->json($managers);
+    }
 }

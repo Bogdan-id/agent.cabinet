@@ -1,11 +1,10 @@
 <template>
-  <v-card class="edit-profile">
+  <v-card class="edit-profile" elevation="7">
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-account'"></v-icon>
         Профiль
-      <v-divider></v-divider>
     </v-card-title>
-    <v-card-text>
+    <v-card-text class="pt-7">
     <div>
       <form @submit.prevent>
         <!--  -->
@@ -85,14 +84,14 @@
                     outlined dense>
                 </v-select>
               </div>
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <v-text-field
                     v-model="user.satus"
                     label="Статус"
                     :placeholder="user.status || 'Статус'"
                     outlined dense readonly>
                 </v-text-field>
-              </div>
+              </div> -->
               <div class="col-md-4">
                 <v-text-field
                     v-model="user.position"
@@ -356,7 +355,7 @@ export default {
     }
     .v-card {
       &.custom-border {
-        border-left: 3px solid red;
+        border-left: 5px solid #e65048;
       }
     }
     // .profile-data-wrapper {

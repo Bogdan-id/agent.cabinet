@@ -4,9 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\{
-    Agent,
-    IdCard,
-    Passport
+    AgentCommission,
 };
 use App\Mail\{
     AgentAcceptMail,
@@ -17,5 +15,10 @@ use App\User;
 
 class AgentCommisionController extends Controller
 {
-    //
+    public function getAgentCommisions()
+    {
+        $agentCommission = AgentCommission::all();
+
+        return response()->json($agentCommission);
+    }
 }

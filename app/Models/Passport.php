@@ -14,7 +14,8 @@ class Passport extends Model
      * @var array
      */
     protected $fillable = [
-       //
+       'serie',
+       'passport_number'
     ];
 
 

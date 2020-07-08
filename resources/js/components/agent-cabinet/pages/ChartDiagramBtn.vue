@@ -5,41 +5,12 @@
     max-width="390">
     <v-card class="graphs-to-delete">
       <v-card-title style="background: #424242;" class="white--text">
-        Оберiть тип збереження
+        Вкажiть email
         <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
       </v-card-title>
-      <v-card-text :style="`display: flex; justify-content: space-around; margin-top: 35px; ${emailField ? 'min-height: 140px;' : 'min-height: 90px;'} position: relative;`">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn 
-              @click="emailField = false"
-              v-on="on"
-              icon 
-              v-show="emailField"
-              style="position: absolute; left: 0; top: -32px;">
-              <v-icon size="28" v-text="'mdi-arrow-left-bold'"></v-icon>
-            </v-btn>
-          </template>
-          <span>Назад</span>
-        </v-tooltip>
-        <span style="position: relative" v-show="!pdfDownloadLoading">
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn 
-                fab 
-                @click="emailField = !emailField; 
-                  formatToSave = 'email'" 
-                v-on="on" 
-                dark 
-                color="#e94949">
-                <v-icon v-text="'mdi-email-send-outline'"></v-icon>
-              </v-btn>
-            </template>
-            <span>Вiдправити на email</span>
-          </v-tooltip>
-          <v-card elevation="7" style="position: absolute; min-width: 250px!important; bottom: -10px; left: 50%; transform: translate(-50%, -50%);">
+      <v-card-text :style="`margin-top: 5px; ${emailToSendErr && emailToSendErr.length > 0 ? 'min-height: 78px;' : 'min-height: 70px;'} position: relative;`">
+          <v-card elevation="7" :style="`position: absolute; ${emailToSend === null || emailToSendErr && emailToSendErr.length > 0 ? 'width: 340px;' : 'width: 270px;' } top: 13px;`">
             <v-text-field
-              v-show="emailField"
               v-model="emailToSend"
               @input="$v.emailToSend.$touch()"
               @blur="$v.emailToSend.$touch()"
@@ -57,8 +28,8 @@
                       width="50" 
                       height="50" 
                       icon 
-                      style="position: absolute; top: -5px; bottom: 2px; left: 255px;">
-                      <v-icon size="32" v-text="'mdi-send-check'"></v-icon>
+                      style="position: absolute; top: -5px; bottom: 2px; left: 278px;">
+                      <v-icon size="32" color="red darken-1" v-text="'mdi-send-check'"></v-icon>
                     </v-btn>
                   </template>
                   <span>Надiслати</span>
@@ -69,7 +40,7 @@
                   color: #424242;
                   position: absolute;
                   display: block!important;
-                  bottom: -22px;
+                  bottom: -18px;
                   font-size: 0.79rem;
                   left: 0;">
                   {{ emailToSendErr[0] }}
@@ -78,7 +49,7 @@
             </v-text-field>
           </v-card>
         </span>
-        <span v-show="!emailField">
+        <!-- <span v-show="!emailField">
           <v-tooltip bottom>
             <template #activator="{ on }">
               <v-btn 
@@ -95,7 +66,7 @@
             </template>
             <span>Завантажити</span>
           </v-tooltip>
-        </span>
+        </span> -->
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -293,14 +264,32 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn 
-              @click="openDialogToSend()"
+              @click="formatToSave = 'pdf'; 
+                sendDataToUser()"
               v-on="on"
               color="grey darken-2" 
-              icon large dark>
+              icon large dark
+              :loading="pdfDownloadLoading">
               <v-icon size="22" dark v-text="'mdi-download'"></v-icon>
             </v-btn>
           </template>
-          <span>Зберегти рузультат розрахунку</span>
+          <span>Зберегти результат розрахунку</span>
+        </v-tooltip>
+      </span>
+      <span>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              @click="dialogToSend = true;
+                formatToSave = 'email'; emailField = true"
+              v-on="on"
+              color="grey darken-2"
+              :disabled="pdfDownloadLoading"
+              icon large dark>
+              <v-icon size="22" dark v-text="'mdi-email-send'"></v-icon>
+            </v-btn>
+          </template>
+          <span>Вiдправити результат розрахунку на email</span>
         </v-tooltip>
       </span>
     </div>
@@ -792,6 +781,7 @@ export default {
       if(value === false) {
         this.formatToSave = null
         this.currentGraphToDownload = null
+        this.emailField = false
       }
     },
     'legalInfo.currencyBalance': function(value) {

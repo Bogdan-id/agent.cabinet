@@ -34,6 +34,9 @@ Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');
 
 Route::get('/getUserAgent', 'AgentsController@getUserAgent');
 Route::post('/agent/create', 'AgentsController@create');
+Route::post('/agent/update/{id}', 'AgentsController@update')
+            ->where('id', '[0-9]+');
+
 Route::get('/agent/manager/{agent_id}', 'AgentsController@getAgentManager')
             ->where('agent_id', '[0-9]+');
 

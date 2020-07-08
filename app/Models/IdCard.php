@@ -14,7 +14,8 @@ class IdCard extends Model
      * @var array
      */
     protected $fillable = [
-        //
+        'unzr_number',
+        'id_card_number'
     ];
 
 

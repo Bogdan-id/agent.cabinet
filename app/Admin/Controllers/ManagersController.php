@@ -21,15 +21,29 @@ class ManagersController extends Controller
                 $managerModel = new Manager;
                 $managerModel->name = "{$manager['NAME']} {$manager['LAST_NAME']}";
                 $managerModel->email = $manager['EMAIL'];
-                $managerModel->phone = $manager['WORK_PHONE'] ?? 'Номер не указан';
+                $managerModel->phone = $manager['WORK_PHONE'] ?? 'Номер не зазначено!';
                 $managerModel->bitrix_id = $manager['ID'];
                 $managerModel->photo = $manager['PERSONAL_PHOTO'];
                 $managerModel->save();
+            }else{
+                $managerExists->update([
+                    'name' => "{$manager['NAME']} {$manager['LAST_NAME']}",
+                    'email' => $manager['EMAIL'],
+                    'phone' => $manager['WORK_PHONE'] ?? 'Номер не зазначено!',
+                    'photo' => $manager['PERSONAL_PHOTO']
+                ]);
             }
         }
 
         return response()->json([
             'status' => 200
         ]);
+    }
+
+    public function getManagers()
+    {
+       $managers = Manager::all();
+
+       return response()->json($managers);
     }
 }

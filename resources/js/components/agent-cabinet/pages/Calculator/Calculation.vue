@@ -208,7 +208,7 @@
             return-object
             label="Модель"
             loaderHeight="1"
-            :loading="$store.state.loader && modelOfItem"
+            :loading="modelLoader && modelOfItem"
             :disabled="calcObj.leasedAssertMark === null"
             color="grey darken-2"
             outlined :dense="mediumAndDown">
@@ -831,6 +831,7 @@ export default {
     commonErr: ['Обов`язкове поле'],
     windowInnerWidth: null,
     discountPrice: false,
+    modelLoader: false,
 
     brandItems: [],
     modelItems: [],
@@ -1394,6 +1395,7 @@ export default {
     getModelByMark() {
       this.modelItems = []
       this.$store.commit('toggleSpinner', true)
+      this.modelLoader = true
       let categorieId
       if(typeof this.calcObj.leasingObjectType === 'object') {
         categorieId = this.calcObj.leasingObjectType.value
@@ -1404,12 +1406,14 @@ export default {
         .then(response => {
           console.log(response)
           this.modelItems = response.data
+          this.modelLoader = false
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
           this.$store.commit('toggleSpinner', false)
+          this.modelLoader = false
         })
     },
     parseToInt(id) {

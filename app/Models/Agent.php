@@ -12,7 +12,18 @@ class Agent extends Model
      * @var array
      */
     protected $fillable = [
-       //
+       'last_name',
+       'first_name',
+       'patronymic',
+       'company_type',
+       'company_name',
+       'position',
+       'passport_type_id',
+       'inn',
+       'birth',
+       'card_number',
+       'iban',
+       'purpose_of_payment'
     ];
 
 

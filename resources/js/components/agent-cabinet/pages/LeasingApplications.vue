@@ -168,7 +168,16 @@
         <template v-slot:item.leasing_amount="{ item }">
           <span style="white-space: nowrap">
             {{ 
-              parseInt(item.leasing_amount.replace(/ /g, '' ))
+              parseInt(item.leasing_amount.replace(/\s/g, '' ))
+                .toLocaleString()
+                .replace(/,/g, ' ')
+            }}
+          </span>
+        </template>
+        <template v-slot:item.agents_reward="{ item }">
+          <span style="white-space: nowrap">
+            {{ 
+              (parseInt(item.leasing_amount.replace(/\s/g, '' )) / 100)
                 .toLocaleString()
                 .replace(/,/g, ' ')
             }}
@@ -249,7 +258,7 @@ export default {
       { text: 'Клієнт', value: 'initials', align: 'start'},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center' },
-      { text: 'АВ, грн', value: 'leasing_amount', align: 'center' },
+      { text: 'АВ, грн', value: 'agents_reward', align: 'center' },
       { text: 'Тип графiку', value: 'graph_type', align: 'center' },
       { text: 'Дата', value: 'data', align: 'center' },
       { text: 'Статус заявки', value: 'request_status', align: 'center', width: 200 },

@@ -570,9 +570,15 @@ export default {
   color: #424242;
   padding-left: 1rem;
 }
+
 .v-data-table {
   &.leasing-object-table{
     margin-bottom: 0.7rem;
+    tr {
+      &:hover {
+        background: none!important;
+      }
+    }
     .v-data-table__mobile-table-row {
       display: flex;
       flex-direction: column;

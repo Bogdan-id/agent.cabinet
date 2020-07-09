@@ -1,6 +1,23 @@
 <template>
 <div class="col-12">
   <v-dialog
+    v-model="dialogToAgentReward"
+    max-width="390">
+    <v-card>
+      <v-card-title class="grey darken-3 white--text" style="position: relative;">
+        Агентська винагорода
+        <v-btn dark @click="dialogToAgentReward = false" style="position: absolute; right: 5px; top: 5px" icon><v-icon v-text="'mdi-close'"></v-icon></v-btn>
+      </v-card-title>
+      <v-card-text class="mt-8" style="font-size: 1.2rem; text-align: center;">
+        Пiдтвердити виплату агентської винагороди?
+      </v-card-text>
+      <v-card-text style="display: flex; justify-content: space-around">
+        <span><v-btn color="#e94949" dark @click="">Так</v-btn></span>
+        <span><v-btn color="#333333" dark @click="dialogToAgentReward = false">Нi</v-btn></span>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+  <v-dialog
     v-model="leasingApplicationForm"
     max-width="600">
     <v-card style="position: relative;">
@@ -154,16 +171,22 @@
         color="black"
         :headers="tableHeader"
         :items="tabledata"
+        :custom-sort="customSort"
         :items-per-page="10"
         class="elevation-1">
+        <template v-slot:item.graph="{ item }">
+          <span>{{ item.graph_type }}</span>
+          <!-- <v-btn small @click="getCalculationById(item.id)">test</v-btn> -->
+          <!-- <router-link :to="{name: 'Графiки ', params: this.userCalculations(this.tabledata, item.id)}" tag="a">{{ item.graph_type }}</router-link> -->
+        </template>
         <template v-slot:item.initials="{ item }">
-          <span style="white-space: nowrap;"> {{ item.initials }}</span>
+          <span style="white-space: nowrap;"> {{ `${item.first_name} ${item.last_name} ${item.patronymic}` }}</span>
         </template>
         <template v-slot:item.leasing_object="{ item }">
           <span style="white-space: nowrap;"> {{ item.leasing_object }}</span>
         </template>
         <template v-slot:item.data="{ item }">
-          <span style="white-space: nowrap;"> {{ item.data }}</span>
+          <span style="white-space: nowrap;"> {{ item.updated_at.substr(0, 10) }}</span>
         </template>
         <template v-slot:item.leasing_amount="{ item }">
           <span style="white-space: nowrap">
@@ -188,10 +211,11 @@
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
-                  @click=""
+                  @click="showDialogToAgentReward(item)"
                   class="mr-3"
                   v-on="on"
-                  icon>
+                  icon
+                  :disabled="item.status_id != 5">
                   <v-icon
                     color="red lighten-1">
                     mdi-sack-percent
@@ -227,12 +251,12 @@
                       v-for="key in progressDivision"
                       :key="key"
                       small
-                      :color="applyChanges(item.request_status, key).color">
+                      :color="applyChanges(item.status_id, key).color">
                       mdi-brightness-1
                     </v-icon>
                   </div>
                 </template>
-                <span>{{ applyChanges(item.request_status).text }}</span>
+                <span>{{ applyChanges(item.status_id).text }}</span>
               </v-tooltip>
             </div>
           </div>
@@ -254,12 +278,13 @@ export default {
   data:() => ({
     search: '',
     leasingApplicationForm: false,
+    dialogToAgentReward: false,
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start'},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center' },
       { text: 'АВ, грн', value: 'agents_reward', align: 'center' },
-      { text: 'Тип графiку', value: 'graph_type', align: 'center' },
+      { text: 'Тип графiку', value: 'graph', align: 'center' },
       { text: 'Дата', value: 'data', align: 'center' },
       { text: 'Статус заявки', value: 'request_status', align: 'center', width: 200 },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
@@ -297,13 +322,31 @@ export default {
     },
   },
   methods: {
+    showDialogToAgentReward() {
+      this.dialogToAgentReward = true
+    },
+    customSort(items) {
+      console.log(items)
+      items
+        .sort((a, b) => {
+          return new Date(b.updated_at) - new Date(a.updated_at)
+      })
+      return items
+    },
+    getCalculationById(id) {
+      console.log(id)
+      // let temp = this.userCalculations
+      //   .filter()
+      console.log(this.$store.state.graphs)
+    },
     applyChanges(status, index) {
       switch(status) {
         case '1': return {text: 'в обробцi', color: `${index <= 1 ? 'orange' : 'grey'}`};
-        case '2': return {text: 'схвалено', color: `${index <= 5 ? 'green' : 'grey'}`};
+        case '2': return {text: 'скасовано клієнтом', color: `${index <= 5 ? 'red' : 'grey'}`};
         case '3': return {text: 'вiдхилено', color: `${index <= 5 ? 'red' : 'grey'}`};
         case '4': return {text: 'iнший статус', color: `${index <= 2 ? 'purple' : 'grey'}` };
-        case '5': return {text: 'скасовано клієнтом', color: `${index <= 5 ? 'red' : 'grey'}`};
+        case '5': return {text: 'схвалено', color: `${index <= 5 ? 'green' : 'grey'}`};
+        
       }
     },
     toEdit(id) {
@@ -328,7 +371,7 @@ export default {
             console.log(response)
             this.loading = false
             if(response.data.length > 0)  {
-              this.createTableData(response.data)
+              this.tabledata = response.data
               this.$store.commit('addGraph', response.data)
             } else {
               this.tabledata = []
@@ -357,24 +400,24 @@ export default {
         case 'irregular': return 'Індивідуальний'
       }
     },
-    async createTableData(object) {
-      let arr = []
-      await object.map(val => {
-        let dataObj = {
-          'initials': `${val.last_name} ${val.first_name} ${val.patronymic}`,
-          'leasing_object': val.leasing_object,
-          'leasing_amount': val.leasing_amount,
-          'graph_type': this.switchValue(val.graph_type),
-          'data': val.created_at.substr(0, 10),
-          'request_status': val.status_id,
-          'id': val.id
-        }
-        arr.push(dataObj)
-      })
-      this.tabledata = arr
-        .sort(this.sortData)
-        .reverse()
-    },
+    // async createTableData(object) {
+    //   let arr = []
+    //   await object.map(val => {
+    //     let dataObj = {
+    //       'initials': `${val.last_name} ${val.first_name} ${val.patronymic}`,
+    //       'leasing_object': val.leasing_object,
+    //       'leasing_amount': val.leasing_amount,
+    //       'graph_type': this.switchValue(val.graph_type),
+    //       'data': val.created_at.substr(0, 10),
+    //       'request_status': val.status_id,
+    //       'id': val.id
+    //     }
+    //     arr.push(dataObj)
+    //   })
+    //   this.tabledata = arr
+    //     .sort(this.sortData)
+    //     .reverse()
+    // },
   },
   watch: {
     user() {

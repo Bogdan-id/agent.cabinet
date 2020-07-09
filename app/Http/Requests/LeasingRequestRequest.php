@@ -40,7 +40,8 @@ class LeasingRequestRequest extends JsonRequest
             'leasingTerm' => 'required|integer',
             'leasingAmount' => 'required|string',
             'graphType' => 'required|string',
-            'legalInfo' => 'required|array'
+            'legalInfo' => 'required|array',
+            'documents' => 'required|array'
         ];
 
         if($data['clientTypeId'] === 1){

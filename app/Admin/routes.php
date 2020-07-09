@@ -30,6 +30,7 @@ Route::group([
     $router->post('image/upload', 'ImagesController@uploadImage');
     $router->post('image/delete', 'ImagesController@deleteImage');
     $router->get('managers/update', 'ManagersController@updateManagers');
+    $router->get('managers/all', 'ManagersController@getManagers');
     $router->get('useful-materials/all', 'UsefulMaterialsController@getMaterials');
     $router->get('useful-materials/category/{id}', 'UsefulMaterialsController@getMaterialsByCategory');
 

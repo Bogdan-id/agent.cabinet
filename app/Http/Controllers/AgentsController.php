@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\AgentCreateRequest;
+use App\Http\Requests\{
+    AgentCreateRequest,
+    AgentUpdateRequest,
+};
+use App\User;
 use App\Models\{
     Agent,
     IdCard,
@@ -36,6 +40,7 @@ class AgentsController extends Controller
         $agent->card_number = $data['card_number'];
         $agent->iban = $data['iban'];
         $agent->oferta_accepted = $data['oferta_accepted'];
+        $agent->purpose_of_payment = $data['purposeOfPayment'];
         $agent->save();
 
         if($data['passport_type_id'] == 1)
@@ -58,9 +63,50 @@ class AgentsController extends Controller
         ]);
     }
 
-    public function update()
+    public function update($id, AgentUpdateRequest $request)
     {
-       //
+        $data = $request->validated();
+        $agent = Agent::find($id);
+        $agent->update($data);
+        $user = User::find($agent->user_id);
+
+        $user->update([
+            'name' => $data['first_name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+        ]);
+        if($data['passport_type_id'] == 1)
+        {
+            $passportExists = Passport::where('agent_id', '=', $agent->id)->first();
+            if(!$passportExists){
+                $passport->agent_id = $agent->id;
+                $passport->serie = $data['passport_serie'];
+                $passport->passport_number = $data['passport_number'];
+                $passport->save();
+            }else{
+                $passportExists->update([
+                    'serie' => $data['passport_serie'],
+                    'passport_number' =>  $data['passport_number']
+                ]);
+            }
+        }else{
+            $idCardExists = IdCard::where('agent_id', '=', $agent->id)->first();
+            if(!$idCardExists){
+            $idCard->agent_id = $agent ->id;
+            $idCard->unzr_number = $data['passport_serie'];
+            $idCard->id_card_number = $data['passport_number'];
+            $idCard->save();
+            }else{
+                $idCardExists->update([
+                    'unzr_number' => $data['passport_serie'],
+                    'id_card_number' =>  $data['passport_number']
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => 200
+        ]);
     }
 
     public function getUserAgent()

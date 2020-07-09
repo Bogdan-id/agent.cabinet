@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\JsonRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class AgentCreateRequest extends JsonRequest
+class AgentUpdateRequest extends JsonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,12 @@ class AgentCreateRequest extends JsonRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|integer',
             'last_name' => 'required|string',
             'first_name' => 'required|string',
             'patronymic' => 'required|string',
             'company_type' => 'required|string',
             'company_name' => 'required|string',
             'position' => 'required|string',
-           // 'status' => 'string',
             'passport_type_id' => 'required|integer',
             'passport_serie' => 'required|string',
             'passport_number' => 'required|string',
@@ -39,8 +37,9 @@ class AgentCreateRequest extends JsonRequest
             'birth' => 'required|string',
             'card_number' => 'required|string',
             'iban' => 'required',
-            'oferta_accepted' => 'required|boolean',
-            'purposeOfPayment' => 'required|string',
+            'purpose_of_payment' => 'required|string',
+            'phone' =>  'required|string',
+            'email' => 'required|string'
         ];
     }
 }

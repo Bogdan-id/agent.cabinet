@@ -215,20 +215,29 @@
             <div class="row">
               <div class="col-md-3">
                 <v-text-field
-                    v-model="user.ab_size"
-                    label="Розмiр АВ"
-                    placeholder="Розмiр АВ"
-                    append-icon="mdi-percent-outline"
-                    dense readonly>
+                  v-model="user.ab_size"
+                  label="Розмiр АВ"
+                  placeholder="Розмiр АВ"
+                  append-icon="mdi-percent-outline"
+                  dense readonly>
                 </v-text-field>
               </div>
               <div class="col-md-4">
                 <v-text-field
-                    v-if="user.manager !== null"
-                    v-model="user.manager.name"
-                    label="Куратор"
-                    placeholder="Куратор"
-                    dense readonly>
+                  v-if="user.purpose_of_payment !== null"
+                  v-model="user.purpose_of_payment"
+                  label="Призначення платежу"
+                  placeholder="Призначення платежу"
+                  dense readonly>
+                </v-text-field>
+              </div>
+              <div class="col-md-4">
+                <v-text-field
+                  v-if="user.manager !== null"
+                  v-model="user.manager.name"
+                  label="Куратор"
+                  placeholder="Куратор"
+                  dense readonly>
                 </v-text-field>
               </div>
             </div>
@@ -324,7 +333,6 @@ export default {
     }
   },
   created() {
-    console.log(this.$store.state.user)
     let agentId = this.$store.state.user.agent.id
     let userId = this.$store.state.user.user.id
     Object.assign(this.user, 
@@ -332,6 +340,7 @@ export default {
       this.$store.state.user.user,
       this.$store.state.user.agent.document
     ) 
+    console.log(this.user)
     this.user['agentId'] = agentId
     this.user['userId'] = userId
     delete this.user.agent

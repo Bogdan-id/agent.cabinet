@@ -25,8 +25,7 @@ class AgentCommisionRequest extends FormRequest
     {
         return [
             'agentId' => 'required|integer',
-            'leasingRequestId' => 'required|integer',
-            'purposeOfPayment' => 'string',
+            'leasingRequestId' => 'required|integer'
         ];
     }
 }

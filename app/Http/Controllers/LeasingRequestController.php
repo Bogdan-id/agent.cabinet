@@ -33,16 +33,14 @@ class LeasingRequestController extends Controller
     public function getLeasingRequest($id)
     {
        $leasingRequest = LeasingRequest::find($id);
-
+       // dd($leasingRequest->calculation);
        return response()->json($leasingRequest);
     }
 
     public function getLeasingRequestByAgent($agent_id)
     {
-       $agent = Agent::find($agent_id);
-
-       $leasingRequests = $agent->leasingRequests;
-
+       $leasingRequests = LeasingRequest::where('agent_id', '=', $agent_id)->with('calculation')->get();
+        
        return response()->json($leasingRequests);
     }
 

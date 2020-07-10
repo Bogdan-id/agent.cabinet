@@ -84,14 +84,14 @@
                     outlined dense>
                 </v-select>
               </div>
-              <!-- <div class="col-md-3">
+              <div class="col-md-3">
                 <v-text-field
-                    v-model="user.satus"
-                    label="Статус"
+                    v-model="user.company_name"
+                    label="Назва компанії"
                     :placeholder="user.status || 'Статус'"
                     outlined dense readonly>
                 </v-text-field>
-              </div> -->
+              </div>
               <div class="col-md-4">
                 <v-text-field
                     v-model="user.position"

@@ -278,7 +278,7 @@
               accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*"
               label="Натиснiть"
               multiple
-              outlined show-size dense>
+              outlined show-size dense chips>
             </v-file-input>
           </v-col>
         </v-row>
@@ -850,7 +850,6 @@ export default {
       this.region = null,
       this.phone = null,
       this.email = null,
-      this.graphType = null,
       this.legalInfo = {
         creditPayment: null,
         inn: null,
@@ -933,6 +932,7 @@ export default {
     },
     openForm(id) {
       this.graphType = this.getGraphById(id)[0]
+      console.log(this.graphType)
       this.getDefaultProperties()
       this.leasingApplicationForm = true
     },
@@ -1163,9 +1163,11 @@ export default {
         this.calculationToDelete = null
       }
     },
-    leasingApplicationForm() {
-      this.clearObject()
-      this.$v.$reset()
+    leasingApplicationForm(val) {
+      if(val === false) {
+        this.clearObject()
+        this.$v.$reset()
+      }
     },
     user() {
       if(this.userData) this.getUserCalculations()

@@ -1123,8 +1123,8 @@ export default {
       axios
         .post('/calculation/getPdf', dataToSave, { responseType: 'blob' })
         .then(response => {
-          console.log(response)
-          if(this.formatToSave === 'pdf') saveAs(response.data, 'graph.pdf')
+          let index = response.headers['content-disposition'].indexOf('"') + 1
+          if(this.formatToSave === 'pdf') saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
           if(this.formatToSave === 'email') {
             this.$notify({
               group: 'success',

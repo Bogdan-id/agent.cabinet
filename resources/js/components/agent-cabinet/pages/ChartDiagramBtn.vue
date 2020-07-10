@@ -248,7 +248,7 @@
               accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*"
               label="Натиснiть"
               multiple
-              outlined show-size dense>
+              outlined show-size dense chips>
             </v-file-input>
           </v-col>
         </v-row>
@@ -738,6 +738,7 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
+      // this.graphType = this.getGraphById(id)[0]
       this.leasingApplicationForm = true
       this.getListItem()
     },
@@ -840,12 +841,35 @@ export default {
         case '2': return 'even'
         case '3': return 'irregular'
       }
-    }
+    },
+    clearObject() {
+      this.docs = []
+      this.creditPayment = null,
+      this.selectedGraph = null,
+      this.lastName = null,
+      this.firstName = null,
+      this.patronymic = null,
+      this.region = null,
+      this.phone = null,
+      this.email = null,
+      this.legalInfo = {
+        creditPayment: null,
+        inn: null,
+        monthlyIncome: null,
+        acquisitionTargetId: null,
+        edrpou: null,
+        companyName: null,
+        currencyBalance: null,
+        equity: null,
+      }
+    },
   },
   watch: {
-    leasingApplicationForm() {
-      this.clearObject()
-      this.$v.$reset()
+    leasingApplicationForm(val) {
+      if(val === false) {
+        this.clearObject()
+        this.$v.$reset()
+      }
     },
     dialogToSend(value) {
       if(value === false) {
@@ -867,8 +891,11 @@ export default {
       this.legalInfo.creditPayment = parseInt(value)
     },
     graph(val) {
-      this.graphType = val
-      console.log(val)
+      if(!Number.isNaN(parseInt(val))) {
+        console.log('value not string')
+        this.graphType = this.switchGraphName(val)
+      }
+      console.log(this.graphType)
     }
   },
   created() {
@@ -876,11 +903,6 @@ export default {
   },
   mounted() {
     this.graphType = this.graph
-    Object.keys(this.data.result_data).forEach(object => {
-      if(this.data.result_data[object].graph) {
-        this.data.result_data[object].graph[0].n = 0
-      }
-    })
   }
 }
 </script>

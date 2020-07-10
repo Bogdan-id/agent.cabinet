@@ -211,18 +211,25 @@
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
+                  v-if="item.status_id == 5"
                   @click="showDialogToAgentReward(item)"
                   class="mr-3"
                   v-on="on"
-                  icon
-                  :disabled="item.status_id != 5">
+                  icon>
                   <v-icon
                     color="red lighten-1">
                     mdi-sack-percent
                   </v-icon>
                 </v-btn>
+                <v-icon
+                  v-if="item.status_id != 5"
+                  v-on="on"
+                  >
+                  mdi-sack-percent
+                </v-icon>
               </template>
-              <span>Подати заявку на виплату АВ</span>
+              <span v-if="item.status_id == 5">Подати заявку на виплату АВ</span>
+              <span v-if="item.status_id != 5">Ви не можете подати заявку на винагороду з даним статусом заявки на лізинг</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">

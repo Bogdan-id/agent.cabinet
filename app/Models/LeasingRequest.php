@@ -29,4 +29,9 @@ class LeasingRequest extends Model
         'legal_info' => 'array',
         'documents' => 'array',
     ];
+
+    public function calculation()
+    {
+        return $this->belongsTo('App\Models\Calculation');
+    }
 }

@@ -33,5 +33,8 @@ class Calculation extends Model
         'result_data' => 'array',
     ];
 
-
+    public function leasingRequest()
+    {
+        return $this->hasOne('App\Models\LeasingRequest');
+    }
 }

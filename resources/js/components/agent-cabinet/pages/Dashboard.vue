@@ -149,7 +149,7 @@
         </div>
         <div v-if="hasUserManager && !loading && requestRecieved" class="manager-content d-flex flex-column">
           <div style="display: flex; justify-content: center;">
-            <div v-if="agentData.photo == null" style="display: flex; align-text: center; justify-content: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
+            <div v-if="agentData.photo == null" style="display: flex; align-items: center; justify-content: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
               <span class="logo-letter">{{ agentData.name }}</span>
             </div>
             <div v-if="agentData.photo != null" style="display: flex; align-text: center; justify-content: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">

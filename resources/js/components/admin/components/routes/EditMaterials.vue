@@ -169,7 +169,7 @@
         },
         language: 'uk',
         simpleUpload: {
-          uploadUrl: '/admin/useful-material/image/upload',
+          uploadUrl: '/admin/image/upload',
           headers: {
             'X-CSRF-TOKEN': 'CSFR-Token',
             Authorization: `Bearer this.getCsrf`
@@ -223,7 +223,7 @@
         this.materialImgPreview = null
         if(this.$route.params.edit === true) {
           axios
-            .post('/admin/useful-material/image/delete', {image: this.imageToDelete})
+            .post('/admin/image/delete', {image: this.imageToDelete})
             .then(response => {
               console.log(response.data)
             })
@@ -284,6 +284,9 @@
         if(event) {
           console.log(event)
           this.imageName = event.name
+          console.log('****************')
+          console.log(this.imageName)
+          console.log('****************')
           const reader = new FileReader()
           reader.readAsDataURL(event)
           reader.onload = (data) => {
@@ -298,7 +301,7 @@
         let formData = new FormData()
         formData.append('upload', event)
         axios
-          .post('/admin/useful-material/image/upload', formData, {
+          .post('/admin/image/upload', formData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               }

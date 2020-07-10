@@ -223,7 +223,6 @@
             itemColor="red darken-4"
             :error-messages="leasingObjectYearErr"
             label="Рік"
-            :disabled="calcObj.leasedAssertModel === null"
             color="red darken-4"
             outlined :dense="mediumAndDown">
           </v-select>
@@ -283,7 +282,6 @@
             label="Валюта"
             color="red darken-4"
             outlined
-            :disabled="calcObj.leasingAmount === null"
             :dense="mediumAndDown">
           </v-select>
         </v-col>
@@ -874,17 +872,17 @@ export default {
       leasedAssertModel: null,
       isNew: true,
       leasingObjectType: {label: "Легкові та комерційні авто", value: 1},
-      leasingQuantity: null,
-      leasingObjectYear: null,
-      leasedAssertEngine: null,
+      leasingQuantity: 1,
+      leasingObjectYear: 2020,
+      leasedAssertEngine: '2 000',
       leasingClientType: 2,
-      currency: null,
-      leasingCurrency: null,
+      currency: 'UAH',
+      leasingCurrency: 'UAH',
       leasingCurrencyCourse: null,
       leasingAmount: null,
       graphType: [],
       advance: 15,
-      leasingTerm: null,
+      leasingTerm: 12,
       customUniversalOption: null,
 
       // new fields

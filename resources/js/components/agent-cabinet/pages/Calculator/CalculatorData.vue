@@ -272,7 +272,9 @@
           <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
             <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem; padding-bottom: 0.5rem;">Додати файли</div>
             <v-file-input
+              @change="uploadDoc()"
               v-model="docs"
+              :rules="rules"
               accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*"
               label="Натиснiть"
               multiple
@@ -287,8 +289,7 @@
                   :loading="loading"
                   class="d-block white--text" 
                   color="grey darken-3">
-                <v-icon v-if="validData" v-text="'mdi-check-bold'"></v-icon>
-                &nbsp;Вiдправити заявку
+                Вiдправити заявку
               </v-btn>
             </span>
           </v-col>
@@ -511,6 +512,13 @@ export default {
   mixins: [validationMixin],
   data:() => ({
     /* v-dialog data  */
+    rules: [
+      value => {
+        if(value.length === 0) return true
+        if(value.every(val => val.size < 5000000)) return true
+        return 'Розмiр документу не повинен перевищувати 5 MB!'
+      }
+    ],
     dialogToSend: false,
     graphName: 'even',
     currentGraphToDownload: null,
@@ -528,7 +536,7 @@ export default {
     creditPayment: null,
     selectedGraph: null,
 
-    docs: null,
+    docs: [],
 
     listItem: null,
 
@@ -557,6 +565,7 @@ export default {
       equity: null,
       // balances: null, // - waiting... (пока не отправляй)
     },
+    documentUrls: [],
     deleteCalculationDialog: false,
     _token: null,
 
@@ -580,7 +589,7 @@ export default {
   },
   computed: {
     validData() {
-      return !this.$v.$invalid && this.$v.$dirty
+      return !this.$v.$invalid
     },
     validationRules() {
       let validateObj = null
@@ -611,11 +620,6 @@ export default {
         creditPayment: { required },
       }
     },
-    // verifyEmailToSend() {
-    //   return {
-    //     emailToSend: { required }
-    //   }
-    // },
     individualPerson() {
       return {
         phone: { 
@@ -819,6 +823,7 @@ export default {
         leasingTerm: this.leasingTerm,
         leasingAmount: this.leasingAmount,
         graphType: this.selectedGraph,
+        documents: this.documentUrls,
         legalInfo: {
           creditPayment: this.creditPayment,
 
@@ -836,6 +841,7 @@ export default {
       }
     },
     clearObject() {
+      this.docs = []
       this.creditPayment = null,
       this.selectedGraph = null,
       this.lastName = null,
@@ -932,9 +938,32 @@ export default {
     },
     submit() {
       !this.$v.$invalid
-      && this.$v.$dirty
         ? this.sendRequest()
         : this.highlightErrors()
+    },
+    async uploadDoc() {
+      this.documentUrls = []
+      for await (let key of this.docs) {
+        let formData = new FormData()
+        formData.append('doc', key)
+        axios
+          .post('/leasing-reqeust/document/upload', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+          })
+          .then(response => {
+            console.log(response)
+            this.documentUrls.push(response.data.url)
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.$notify({
+              message: 'Помилка',
+              type: 'error',
+            })
+          })
+      }
     },
     sendRequest() {
       this.loading = true
@@ -967,6 +996,7 @@ export default {
     },
     requestObj(object) {
       let finalObj = null
+      if(this.documentUrls.length === 0) delete object.documents
       this.isLegalPerson === false
         ? finalObj = this.deleteLegalFields(object)
         : finalObj = this.deleteIndividualFields(object)

@@ -99,6 +99,9 @@
               :items-per-page="180"
               :hide-default-footer="true"
               dense>
+              <template v-slot:item.n="{ item }">
+                <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
+              </template>
               <template v-slot:body.append>
                 <tr style="color: black; border-left: 8px solid black;" >
                   <td style="text-align: center;">Всього</td>
@@ -260,6 +263,9 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:item.n="{ item }">
+                  <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
+                </template>
                 <template v-slot:body.append>
                   <tr style="color: black; border-left: 8px solid black;">
                     <td style="text-align: center;">Всього</td>
@@ -421,6 +427,9 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:item.n="{ item }">
+                  <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
+                </template>
                 <template v-slot:body.append>
                   <tr style="color: black; border-left: 8px solid black;" >
                     <td style="text-align: center;">Всього</td>
@@ -459,9 +468,9 @@
                 </template>
                 <template v-slot:footer>
                   <chart-buttons 
-                    v-if="graphDataProp !== null"
+                    v-if="graphData !== null"
                     :graph="currentTab" 
-                    :data="graphDataProp"/>
+                    :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
                 <span v-if="item.interest !== null">
@@ -498,7 +507,6 @@ export default {
   },
   data: () => ({
     graphData: null,
-    graphDataProp: null,
     leasingObjectData: null,
     currentTab: '2',
     search: '',
@@ -548,13 +556,7 @@ export default {
     }
   },
   mounted() {
-    this.graphDataProp = this.$router.currentRoute.params.data
     this.graphData = this.$router.currentRoute.params.data
-    Object.keys(this.graphData.result_data).forEach(object => {
-      if(this.graphData.result_data[object].graph) {
-        this.graphData.result_data[object].graph[0].n = 'Аванс'
-      }
-    })
 
     this.addObjects(this.graphData)
     document.body.scrollTop = 0
@@ -570,9 +572,15 @@ export default {
   color: #424242;
   padding-left: 1rem;
 }
+
 .v-data-table {
   &.leasing-object-table{
     margin-bottom: 0.7rem;
+    tr {
+      &:hover {
+        background: none!important;
+      }
+    }
     .v-data-table__mobile-table-row {
       display: flex;
       flex-direction: column;

@@ -5,41 +5,12 @@
     max-width="390">
     <v-card class="graphs-to-delete">
       <v-card-title style="background: #424242;" class="white--text">
-        Оберiть тип збереження
+        Вкажiть email
         <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
       </v-card-title>
-      <v-card-text :style="`display: flex; justify-content: space-around; margin-top: 35px; ${emailField ? 'min-height: 140px;' : 'min-height: 90px;'} position: relative;`">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn 
-              @click="emailField = false"
-              v-on="on"
-              icon 
-              v-show="emailField"
-              style="position: absolute; left: 0; top: -32px;">
-              <v-icon size="28" v-text="'mdi-arrow-left-bold'"></v-icon>
-            </v-btn>
-          </template>
-          <span>Назад</span>
-        </v-tooltip>
-        <span style="position: relative" v-show="!pdfDownloadLoading">
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn 
-                fab 
-                @click="emailField = !emailField; 
-                  formatToSave = 'email'" 
-                v-on="on" 
-                dark 
-                color="#e94949">
-                <v-icon v-text="'mdi-email-send-outline'"></v-icon>
-              </v-btn>
-            </template>
-            <span>Вiдправити на email</span>
-          </v-tooltip>
-          <v-card elevation="7" style="position: absolute; min-width: 250px!important; bottom: -10px; left: 50%; transform: translate(-50%, -50%);">
+      <v-card-text :style="`margin-top: 5px; ${emailToSendErr && emailToSendErr.length > 0 ? 'min-height: 78px;' : 'min-height: 70px;'} position: relative;`">
+          <v-card elevation="7" :style="`position: absolute; ${emailToSend === null || emailToSendErr && emailToSendErr.length > 0 ? 'width: 340px;' : 'width: 270px;' } top: 13px;`">
             <v-text-field
-              v-show="emailField"
               v-model="emailToSend"
               @input="$v.emailToSend.$touch()"
               @blur="$v.emailToSend.$touch()"
@@ -57,8 +28,8 @@
                       width="50" 
                       height="50" 
                       icon 
-                      style="position: absolute; top: -5px; bottom: 2px; left: 255px;">
-                      <v-icon size="32" v-text="'mdi-send-check'"></v-icon>
+                      style="position: absolute; top: -5px; bottom: 2px; left: 278px;">
+                      <v-icon size="32" color="red darken-1" v-text="'mdi-send-check'"></v-icon>
                     </v-btn>
                   </template>
                   <span>Надiслати</span>
@@ -69,7 +40,7 @@
                   color: #424242;
                   position: absolute;
                   display: block!important;
-                  bottom: -22px;
+                  bottom: -18px;
                   font-size: 0.79rem;
                   left: 0;">
                   {{ emailToSendErr[0] }}
@@ -78,7 +49,7 @@
             </v-text-field>
           </v-card>
         </span>
-        <span v-show="!emailField">
+        <!-- <span v-show="!emailField">
           <v-tooltip bottom>
             <template #activator="{ on }">
               <v-btn 
@@ -95,7 +66,7 @@
             </template>
             <span>Завантажити</span>
           </v-tooltip>
-        </span>
+        </span> -->
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -103,169 +74,192 @@
     v-model="leasingApplicationForm"
     max-width="600">
     <v-card v-if="leasingApplicationForm">
-      <div style="position: relative;" class="complete-reg-form__title title">
-        <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'"></v-icon></v-btn>
+      <v-card-title style="background: #424242; position: relative" class="white--text">
+        Заявка на лiзинг
+        <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
+      </v-card-title>
+      <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
-        <span class="d-block title">Заявка на лiзинг</span>
       </div>
       <v-card-text class="pb-0">
         <v-row>
-        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-          <v-text-field
-            v-model="lastName"
-            @blur="$v.lastName.$touch()"
-            @input="$v.lastName.$touch()" 
-            :error-messages="lastNameErr"
-            label="Прiзвище"
-            dense outlined>
-          </v-text-field>
-          <v-text-field
-            v-model="firstName"
-            @blur="$v.firstName.$touch()"
-            @input="$v.firstName.$touch()" 
-            :error-messages="firstNameErr"
-            label="Им`я"
-            dense outlined>
-          </v-text-field>
-          <v-text-field
-            v-model="patronymic"
-            @blur="$v.patronymic.$touch()"
-            @input="$v.patronymic.$touch()" 
-            :error-messages="patronymicErr"
-            label="Побатьковi"
-            dense outlined>
-          </v-text-field>
-          <v-select
-            v-model="region"
-            @blur="$v.region.$touch()"
-            @change="$v.region.$touch()" 
-            :error-messages="regionErr"
-            :items="select.regions"
-            label="Область"
-            dense outlined>
-          </v-select>
-          <v-text-field
-            v-model="phone"
-            @blur="isLegalPerson ? false : $v.phone.$touch()"
-            @input="isLegalPerson ? false : $v.phone.$touch();
-              applyMask()" 
-            id="number"
-            :error-messages="isLegalPerson ? legalPhone : phoneErr"
-            label="Телефон"
-            dense outlined>
-          </v-text-field>
-          <v-text-field
-            v-model="email"
-            @blur="isLegalPerson ? false : $v.email.$touch()"
-            @input="isLegalPerson ? false : $v.email.$touch()" 
-            :error-messages="isLegalPerson ? legalEmail : emailErr"
-            label="email"
-            dense outlined>
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-          <v-text-field
-            v-model="creditPayment"
-            :error-messages="creditPaymentErr"
-            @blur="$v.creditPayment.$touch()"
-            @input="parseToInt('creditPayment');
-              $v.creditPayment.$touch()"
-            id="creditPayment"
-            label="Щомісячний платіж (за міс. грн) по кредитам та ін."
-            dense outlined>
-          </v-text-field>
-
-          <div v-if="clientTypeId === 1">
+          <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
+            <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem">Оберiть тип графiку платежiв</div>
+            <v-radio-group 
+              v-model="selectedGraph" 
+              :error-messages="selectedGraphErr"
+              row>
+              <v-radio label="Класичний" value="even"></v-radio>
+              <v-radio label="Ануїтет" value="annuity"></v-radio>
+              <v-radio label="Індивідуальний" value="irregular"></v-radio>
+            </v-radio-group>
+          </v-col>
+          <v-col cols="12" sm="6" md="6" lg="6" xl="6">
             <v-text-field
-              @input="parseToInt('inn');
-                $v.legalInfo.inn.$touch()"
-              @blur="$v.legalInfo.inn.$touch()"
-              v-model="legalInfo.inn"
-              :error-messages="innErr"
-              id="inn"
-              max="10"
-              label="Iдентифiкацiйний код"
+              v-model="lastName"
+              @blur="$v.lastName.$touch()"
+              @input="$v.lastName.$touch()" 
+              :error-messages="lastNameErr"
+              label="Прiзвище"
               dense outlined>
             </v-text-field>
             <v-text-field
-              @input="parseToInt('monthlyIncome');
-                $v.legalInfo.monthlyIncome.$touch()"
-              @blur="$v.legalInfo.monthlyIncome.$touch()"
-              v-model="legalInfo.monthlyIncome"
-              :error-messages="monthlyIncomeErr"
-              id="monthlyIncome"
-              label="Середньомісячний дохід (грн)"
+              v-model="firstName"
+              @blur="$v.firstName.$touch()"
+              @input="$v.firstName.$touch()" 
+              :error-messages="firstNameErr"
+              label="Им`я"
+              dense outlined>
+            </v-text-field>
+            <v-text-field
+              v-model="patronymic"
+              @blur="$v.patronymic.$touch()"
+              @input="$v.patronymic.$touch()" 
+              :error-messages="patronymicErr"
+              label="Побатьковi"
               dense outlined>
             </v-text-field>
             <v-select
-              v-model="legalInfo.acquisitionTargetId"
-              :items="listItem"
-              item-text="target"
-              item-value="id"
-              @blur="$v.legalInfo.acquisitionTargetId.$touch()"
-              @change="$v.legalInfo.acquisitionTargetId.$touch()" 
-              :error-messages="acquisitionTargetIdErr"
-              label="Мета придбання авто"
+              v-model="region"
+              @blur="$v.region.$touch()"
+              @change="$v.region.$touch()" 
+              :error-messages="regionErr"
+              :items="select.regions"
+              label="Область"
               dense outlined>
             </v-select>
-          </div>
+            <v-text-field
+              v-model="phone"
+              @blur="isLegalPerson ? false : $v.phone.$touch()"
+              @input="isLegalPerson ? false : $v.phone.$touch();
+                applyMask()" 
+              id="number"
+              :error-messages="isLegalPerson ? legalPhone : phoneErr"
+              label="Телефон"
+              dense outlined>
+            </v-text-field>
+            <v-text-field
+              v-model="email"
+              @blur="isLegalPerson ? false : $v.email.$touch()"
+              @input="isLegalPerson ? false : $v.email.$touch()" 
+              :error-messages="isLegalPerson ? legalEmail : emailErr"
+              label="email"
+              dense outlined>
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6" md="6" lg="6" xl="6">
+            <v-text-field
+              v-model="creditPayment"
+              :error-messages="creditPaymentErr"
+              @blur="$v.creditPayment.$touch()"
+              @input="parseToInt('creditPayment');
+                $v.creditPayment.$touch()"
+              id="creditPayment"
+              label="Щомісячний платіж (за міс. грн) по кредитам та ін."
+              dense outlined>
+            </v-text-field>
 
-          <div v-if="clientTypeId === 2">
-            <v-text-field
-              @input="parseToInt('edrpou');
-                $v.legalInfo.edrpou.$touch()"
-              @blur="$v.legalInfo.edrpou.$touch()"
-              v-model="legalInfo.edrpou"
-              :error-messages="edrpouErr"
-              id="edrpou"
-              max="8"
-              label="ЄДРПОУ"
-              dense outlined>
-            </v-text-field>
-            <v-text-field
-              v-model="legalInfo.companyName"
-              @blur="$v.legalInfo.companyName.$touch()"
-              @input="$v.legalInfo.companyName.$touch()" 
-              :error-messages="companyNameErr"
-              label="Назва компанії"
-              dense outlined>
-            </v-text-field>
-            <v-text-field
-              @input="parseToInt('currencyBalance');
-                $v.legalInfo.currencyBalance.$touch()"
-              v-model="legalInfo.currencyBalance"
-              @blur="$v.legalInfo.currencyBalance.$touch()"
-              :error-messages="currencyBalanceErr"
-              id="currencyBalance"
-              label="Валютний баланс"
-              dense outlined>
-            </v-text-field>
-            <v-text-field
-              v-model="legalInfo.equity"
-              @blur="$v.legalInfo.equity.$touch()"
-              @input="$v.legalInfo.equity.$touch()" 
-              :error-messages="equityErr"
-              label="Власный капiтал"
-              dense outlined>
-            </v-text-field>
-            <!-- <v-text-field
-              v-model="legalInfo.balances"
-              label="Мета придбання авто"
-              dense outlined>
-            </v-text-field> -->
-          </div>
-        </v-col>
+            <div v-if="clientTypeId === 1">
+              <v-text-field
+                @input="parseToInt('inn');
+                  $v.legalInfo.inn.$touch()"
+                @blur="$v.legalInfo.inn.$touch()"
+                v-model="legalInfo.inn"
+                :error-messages="innErr"
+                id="inn"
+                max="10"
+                label="Iдентифiкацiйний код"
+                dense outlined>
+              </v-text-field>
+              <v-text-field
+                @input="parseToInt('monthlyIncome');
+                  $v.legalInfo.monthlyIncome.$touch()"
+                @blur="$v.legalInfo.monthlyIncome.$touch()"
+                v-model="legalInfo.monthlyIncome"
+                :error-messages="monthlyIncomeErr"
+                id="monthlyIncome"
+                label="Середньомісячний дохід (грн)"
+                dense outlined>
+              </v-text-field>
+              <v-select
+                v-model="legalInfo.acquisitionTargetId"
+                :items="listItem"
+                item-text="target"
+                item-value="id"
+                @blur="$v.legalInfo.acquisitionTargetId.$touch()"
+                @change="$v.legalInfo.acquisitionTargetId.$touch()" 
+                :error-messages="acquisitionTargetIdErr"
+                label="Мета придбання авто"
+                dense outlined>
+              </v-select>
+            </div>
+
+            <div v-if="clientTypeId === 2">
+              <v-text-field
+                @input="parseToInt('edrpou');
+                  $v.legalInfo.edrpou.$touch()"
+                @blur="$v.legalInfo.edrpou.$touch()"
+                v-model="legalInfo.edrpou"
+                :error-messages="edrpouErr"
+                id="edrpou"
+                max="8"
+                label="ЄДРПОУ"
+                dense outlined>
+              </v-text-field>
+              <v-text-field
+                v-model="legalInfo.companyName"
+                @blur="$v.legalInfo.companyName.$touch()"
+                @input="$v.legalInfo.companyName.$touch()" 
+                :error-messages="companyNameErr"
+                label="Назва компанії"
+                dense outlined>
+              </v-text-field>
+              <v-text-field
+                @input="parseToInt('currencyBalance');
+                  $v.legalInfo.currencyBalance.$touch()"
+                v-model="legalInfo.currencyBalance"
+                @blur="$v.legalInfo.currencyBalance.$touch()"
+                :error-messages="currencyBalanceErr"
+                id="currencyBalance"
+                label="Валютний баланс"
+                dense outlined>
+              </v-text-field>
+              <v-text-field
+                v-model="legalInfo.equity"
+                @blur="$v.legalInfo.equity.$touch()"
+                @input="$v.legalInfo.equity.$touch()" 
+                :error-messages="equityErr"
+                label="Власный капiтал"
+                dense outlined>
+              </v-text-field>
+              <!-- <v-text-field
+                v-model="legalInfo.balances"
+                label="Мета придбання авто"
+                dense outlined>
+              </v-text-field> -->
+            </div>
+          </v-col>
+          <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
+            <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem; padding-bottom: 0.5rem;">Додати файли</div>
+            <v-file-input
+              @change="uploadDoc()"
+              v-model="docs"
+              :rules="rules"
+              accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*"
+              label="Натиснiть"
+              multiple
+              outlined show-size dense>
+            </v-file-input>
+          </v-col>
         </v-row>
         <v-row>
           <v-col class="d-flex justify-center pb-6 pt-3">
             <span>
               <v-btn @click="submit()" 
-                  :loading="loading"
-                  class="d-block white--text" 
-                  color="grey darken-3">
-                <v-icon v-show="validData" v-text="'mdi-check-bold'">
-                </v-icon>
-                &nbsp;Вiдправити заявку
+                :loading="loading"
+                class="d-block white--text" 
+                color="grey darken-3">
+                Вiдправити заявку
               </v-btn>
             </span>
           </v-col>
@@ -293,14 +287,32 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn 
-              @click="openDialogToSend()"
+              @click="formatToSave = 'pdf'; 
+                sendDataToUser()"
               v-on="on"
               color="grey darken-2" 
-              icon large dark>
+              icon large dark
+              :loading="pdfDownloadLoading">
               <v-icon size="22" dark v-text="'mdi-download'"></v-icon>
             </v-btn>
           </template>
-          <span>Зберегти рузультат розрахунку</span>
+          <span>Зберегти результат розрахунку</span>
+        </v-tooltip>
+      </span>
+      <span>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              @click="dialogToSend = true;
+                formatToSave = 'email'; emailField = true"
+              v-on="on"
+              color="grey darken-2"
+              :disabled="pdfDownloadLoading"
+              icon large dark>
+              <v-icon size="22" dark v-text="'mdi-email-send'"></v-icon>
+            </v-btn>
+          </template>
+          <span>Вiдправити результат розрахунку на email</span>
         </v-tooltip>
       </span>
     </div>
@@ -319,6 +331,17 @@ export default {
   props: ['graph', 'data'],
   mixins: [validationMixin],
   data: () => ({
+    selectedGraph: null,
+    docs: [],
+    documentUrls: [],
+    rules: [
+      value => {
+        if(value.length === 0) return true
+        if(value.every(val => val.size < 5000000)) return true
+        return 'Розмiр документу не повинен перевищувати 5 MB!'
+      }
+    ],
+
     select: selectItems,
     leasingApplicationForm: false,
     commonErr: ['Обов`язкове поле'],
@@ -367,7 +390,7 @@ export default {
   },
   computed: {
     validData() {
-      return !this.$v.$invalid && this.$v.$dirty
+      return !this.$v.$invalid
     },
     validationRules() {
       let validateObj = {}
@@ -394,6 +417,7 @@ export default {
     },
     commonRules() {
       return {
+        selectedGraph: { required },
         lastName: { required },
         firstName: { required },
         patronymic: { required },
@@ -441,6 +465,11 @@ export default {
       return this.clientTypeId === 2
     },
     /* error handlers */
+    selectedGraphErr() {
+      if (!this.$v.selectedGraph) return
+      if (!this.$v.selectedGraph.$error) return
+      return this.commonErr
+    },
     emailToSendErr() {
       let errors = []
       if (!this.$v.emailToSend || !this.$v.emailToSend.$error) return
@@ -512,6 +541,31 @@ export default {
     }
   },
   methods: {
+    async uploadDoc() {
+      this.object.documents = []
+      this.documentUrls = []
+      for await (let key of this.docs) {
+        let formData = new FormData()
+        formData.append('doc', key)
+        axios
+          .post('/leasing-reqeust/document/upload', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+          })
+          .then(response => {
+            console.log(response)
+            this.documentUrls.push(response.data.url)
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.$notify({
+              message: 'Помилка',
+              type: 'error',
+            })
+          })
+      }
+    },
     sendDataToUser() {
       let graph = this.data.result_data[this.switchGraphName(this.graph)]
       let calcData = this.data.request_data
@@ -593,13 +647,13 @@ export default {
     },
     submit() {
       !this.$v.$invalid
-      && this.$v.$dirty
         ? this.sendRequest()
         : this.highlightErrors()
     },
     object() {
       return {
         agentId: this.agentId,
+        documents: this.documentUrls,
         calculationId: this.calculationId,
         clientTypeId: this.clientTypeId,
         lastName: this.lastName,
@@ -631,6 +685,7 @@ export default {
     },
     requestObj(object) {
       let finalObj = null
+      if(this.documentUrls.length === 0) delete object.documents
       this.isLegalPerson === false
         ? finalObj = this.deleteLegalFields(object)
         : finalObj = this.deleteIndividualFields(object)
@@ -788,10 +843,15 @@ export default {
     }
   },
   watch: {
+    leasingApplicationForm() {
+      this.clearObject()
+      this.$v.$reset()
+    },
     dialogToSend(value) {
       if(value === false) {
         this.formatToSave = null
         this.currentGraphToDownload = null
+        this.emailField = false
       }
     },
     'legalInfo.currencyBalance': function(value) {

@@ -88,6 +88,14 @@
                         label="Посада" 
                         outlined dense clearable>
                     </v-text-field>
+                    <v-text-field 
+                        :error-messages="purposeOfPaymentErr" 
+                        @blur="$v.purposeOfPayment.$touch()" 
+                        @input="$v.purposeOfPayment.$touch()" 
+                        v-model="purposeOfPayment"
+                        label="Призначення платежу" 
+                        outlined dense clearable>
+                    </v-text-field>
                   </div>
                 </div>
               </div>
@@ -289,6 +297,7 @@ export default {
     inn: null,
     cardNumber: null,
     iban: null,
+    purposeOfPayment: null,
 
     /* temporary data */
     choosedDate: null,
@@ -304,63 +313,84 @@ export default {
     passportNumberMaxLength: 6,
     unzrMaxLength: 14,
   }),
-  validations: {
-    iban: {
-      required,
-      minLength: minLength(29)
-    },
-    lastName: {
-      required,
-    },
-    patronymic: {
-      required
-    },
-    companyName: {
-      required
-    },
-    position: {
-      required
-    },
-    companyType: {
-      checked: value => value != null
-    },
-    passportType: {
-      checked: value => value != null
-    },
-    passportSeries: {
-      required,
-      minLength: minLength(2)
-    },
-    passportNumber: {
-      required,
-      minLength: minLength(6)
-    },
-    unzr: {
-      required,
-      minLength: minLength(14)
-    },
-    bioPassportNumber: {
-      required,
-      minLength: minLength(9)
-    },
-    inn: {
-      required,
-      minLength: minLength(10)
-    },
-    cardNumber: {
-      minLength: minLength(16),
-      required,
-      lunValid: function luhn(array) {
-        return number => {
-          if(number === null) return false
-          let pureNum = number.replace(/[^\d]/g, '')
-          let len = pureNum ? pureNum.length : 0, bit = 1, sum = 0;
-          while (len--) {sum += !(bit ^= 1) 
-            ? parseInt(pureNum[len], 10) 
-            : array[pureNum[len]]}
-          return sum % 10 === 0 && sum > 0;
-        } 
-      }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9])
+  validations() {
+    return {
+      iban: {
+        required,
+        minLength: minLength(29)
+      },
+      lastName: {
+        required,
+      },
+      patronymic: {
+        required
+      },
+      companyName: {
+        required
+      },
+      position: {
+        required
+      },
+      purposeOfPayment: {
+        required
+      },
+      companyType: {
+        checked: value => value != null
+      },
+      passportType: {
+        checked: value => value != null
+      },
+      passportSeries: (() => { 
+        if(this.passportType && this.passportType == '1') {
+          return {
+            required,
+            minLength: minLength(2)
+          }
+        } else return true
+      })(),
+      passportNumber: (() => { 
+        if(this.passportType && this.passportType == '1') {
+          return {
+            required,
+            minLength: minLength(6)
+          }
+        } else return true
+      })(),
+      unzr: (() => { 
+        if(this.passportType && this.passportType == '2') {
+          return {
+            required,
+            minLength: minLength(14)
+          }
+        } else return true
+      })(),
+      bioPassportNumber: (() => { 
+        if(this.passportType && this.passportType == '2') {
+          return {
+            required,
+            minLength: minLength(9)
+          }
+        } else return true
+      })(),
+      inn: {
+        required,
+        minLength: minLength(10)
+      },
+      cardNumber: {
+        minLength: minLength(16),
+        required,
+        lunValid: function luhn(array) {
+          return number => {
+            if(number === null) return false
+            let pureNum = number.replace(/[^\d]/g, '')
+            let len = pureNum ? pureNum.length : 0, bit = 1, sum = 0;
+            while (len--) {sum += !(bit ^= 1) 
+              ? parseInt(pureNum[len], 10) 
+              : array[pureNum[len]]}
+            return sum % 10 === 0 && sum > 0;
+          } 
+        }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9])
+      }
     }
   },
   methods: {
@@ -408,6 +438,7 @@ export default {
         'card_number': this.cardNumber.replace(/[^\d]/g, ''),
         'oferta_accepted': true,
         'iban': this.iban,
+        'purposeOfPayment': this.purposeOfPayment,
         '_token': this.getCsrf()
       }
     },
@@ -481,6 +512,12 @@ export default {
     },
     getPassportNumber() {
       return this.passportType === "1" ? this.passportNumber : this.bioPassportNumber
+    },
+    purposeOfPaymentErr() {
+      const errors = []
+			if (!this.$v.purposeOfPayment.$error) return errors
+			!this.$v.purposeOfPayment.required && errors.push('Поле "Призначення платежу" - обов\'язкове для заповнення')
+			return errors
     },
     lastNameErrors() {
 			const errors = []
@@ -614,11 +651,7 @@ export default {
       return check
     },
     dataValid() {
-      let check = false
-      this.passport || this.bioPassport
-        ? check = true
-        : false
-      return check
+      return !this.$v.$invalid
     },
   },
   created() {

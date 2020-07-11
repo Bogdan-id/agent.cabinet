@@ -60,17 +60,17 @@
         :interval="7000"
         show-arrows-on-hover>
         <v-carousel-item
-          v-for="(item, i) in items"
+          v-for="(item, key) in slides"
           @load="imageLoaded()"
-          :src="item.image"
-          :key="i"
+          :src="item.slide_image"
+          :key="key"
           reverse-transition="fade-transition"
           transition="fade-transition">
           <div>
             <div style="height: 120px;">
               <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
                 <h3><b>{{ item.title}}</b></h3>
-                <p style="font-size: 0.88rem"> {{ item.text }} </p>
+                <p style="font-size: 0.88rem"> {{ item.description }} </p>
               </div>
             </div>
             <div style="height: 240px; display: flex; width: 100%; justify-content: flex-end; align-items: flex-end;">
@@ -218,7 +218,6 @@
   <v-card class="dashboard-news">
     <v-card-title class="headline red--text">
       Новини
-      <!-- <v-btn @click="test()"></v-btn> -->
     </v-card-title>
     <v-divider></v-divider>
     <v-card-text class="dashboard-news__wrapper">
@@ -279,26 +278,9 @@ export default {
       { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },
       { text: 'Дата подачi', value: 'data', align: 'center', sortable: false },
       { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },
-      // { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     carouselVisibility: false,
-    items: [
-      {
-        image: require('../assets/img/carousel-1.jpg'),
-        title: 'Subaru в лiзинг',
-        text: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.'
-      },
-      {
-        image: require('../assets/img/carousel-2.jpg'),
-        title: 'Another car в лiзинг',
-        text: 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'
-      },
-      {
-        image: require('../assets/img/carousel-4.jpg'),
-        title: 'Mercedes в лiзинг',
-        text: 'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. '
-      },
-    ],
+    slides: null,
     tabledata: [],
     requestRecieved: false,
   }),
@@ -390,6 +372,17 @@ export default {
         .sort(this.sortData)
         .reverse()
     },
+    getSlides() {
+      axios
+        .get('/slides')
+        .then(response => {
+          console.log(response)
+          this.slides = response.data
+        })
+        .catch(error => {
+          error.response
+        })
+    }
   },
   watch: {
     hasUser() {
@@ -407,6 +400,7 @@ export default {
     if(this.hasUser) {
       this.getUserCalculcations()
     }
+    this.getSlides()
   },
   mounted() {
     setTimeout(() => {

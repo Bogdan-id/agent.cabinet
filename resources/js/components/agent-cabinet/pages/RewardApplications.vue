@@ -52,12 +52,12 @@
         </v-progress-linear>
       </v-card-title>
       <v-card-text class="mt-9">
-        <v-btn 
+        <!-- <v-btn 
           dark class="red lighten-1"
           @click.stop="commissionRequestsDialog = !commissionRequestsDialog">
           Подати нову заявку&nbsp;
           <v-icon v-text="'mdi-plus'"></v-icon>
-        </v-btn>
+        </v-btn> -->
         <v-card-title
           v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
           class="d-flex justify-center headline black--text mt-3 mb-6">
@@ -109,7 +109,7 @@ export default {
       { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
       // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
       { text: 'Авто', value: 'leasing_request.leasing_object', align: 'center' },
-      { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },
+      // { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },
       { text: 'Дата заявки', value: 'leasing_request.created_at', align: 'center', sortable: true },
       { text: 'Статус', value: 'status', align: 'center' },
     ],

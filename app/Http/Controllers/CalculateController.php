@@ -97,6 +97,10 @@ class CalculateController extends Controller
         $fontData = $defaultFontConfig['fontdata'];
 
         $mpdf = new Mpdf([
+            'margin_left' => 0,
+			'margin_right' => 0,
+			'margin_top' => 0,
+            'margin_bottom' => 0,
             'fontDir' => array_merge($fontDirs, [
                 resource_path('sass/fonts'),
             ]),

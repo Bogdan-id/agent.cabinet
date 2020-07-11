@@ -17,14 +17,14 @@
             </li>
             <li class="contact-title">
               <v-icon class="icon-position" small v-text="'mdi-email'"></v-icon>
-              <a href="#">office@bestleasing.com.ua</a>
+              <a style="color: #70706e;" href="#">office@bestleasing.com.ua</a>
             </li>
           </ul>
         </div>
         <div class="footer__feedback">
           <div class="d-flex flex-column pa-1 feedback__text">
             <span>Перейти на сайт</span>
-            <a href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
+            <a style="color: #70706e;" href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
           </div>
           <a class="footer__custom-btn" style="background: #e65048;">Зворотнiй зв`язок</a>
         </div>

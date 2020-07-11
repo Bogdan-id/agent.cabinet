@@ -608,10 +608,13 @@ export default {
         this.pdfDownloadLoading = true
       }
       axios
-        .post('/calculation/getPdf', dataToSave, { responseType: 'blob' })
+        .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
         .then(response => {
           console.log(response)
-          if(this.formatToSave === 'pdf') saveAs(response.data, 'graph.pdf')
+          if(this.formatToSave === 'pdf') {
+            let index = response.headers['content-disposition'].indexOf('"') + 1
+            saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
+          }
           if(this.formatToSave === 'email') {
             this.$notify({
               group: 'success',
@@ -620,6 +623,7 @@ export default {
             })
           }
           if(this.formatToSave === 'email') {
+            this.emailField = false
             this.emailDownloadLoading = false
           } else if(this.formatToSave === 'pdf') {
             this.pdfDownloadLoading = false

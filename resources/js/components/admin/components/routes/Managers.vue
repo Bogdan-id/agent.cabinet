@@ -10,7 +10,7 @@
       </v-progress-circular>
     </v-card-text>
     <v-card-text>
-      <v-btn color="#e94949" dark @click="getManagerList()">Оновити список менеджерiв</v-btn>
+      <v-btn color="#e94949" dark @click="getManagerList()" :loading="managerLoading">Оновити список менеджерiв</v-btn>
       <v-data-table
         v-if="managers"
         :items="managers"
@@ -59,14 +59,17 @@ export default {
       { text: 'Им`я', value: 'name', align: 'center', sortable: false },
       { text: 'Телефон', value: 'phone', align: 'center', sortable: false },
       { text: 'Email', value: 'email', align: 'center', sortable: false },
-    ]
+    ],
+    managerLoading: false,
   }),
   methods: {
     getManagerList() {
+      this.managerLoading = true
       axios
         .get('/admin/managers/update')
         .then(response => {
           console.log(response)
+          this.managerLoading = false
           this.$notify({
             group: 'success',
             title: 'Список менеджерiв оновлено',
@@ -75,6 +78,7 @@ export default {
         })
         .catch(error => {
           console.log(error.response)
+          this.managerLoading = false
           this.$notify({
             group: 'error',
             title: 'Помилка',

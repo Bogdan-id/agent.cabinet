@@ -1121,10 +1121,13 @@ export default {
     sendData(dataToSave) {
       this.loading = true
       axios
-        .post('/calculation/getPdf', dataToSave, { responseType: 'blob' })
+        .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
         .then(response => {
-          let index = response.headers['content-disposition'].indexOf('"') + 1
-          if(this.formatToSave === 'pdf') saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
+          console.log(response)
+          if(this.formatToSave === 'pdf') {
+            let index = response.headers['content-disposition'].indexOf('"') + 1
+            saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
+          }
           if(this.formatToSave === 'email') {
             this.$notify({
               group: 'success',
@@ -1139,12 +1142,12 @@ export default {
         })
         .catch(error => {
           console.log(error.response)
+          this.loading = false
           this.$notify({
             group: 'error',
             title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
+            text: `${error.response.status} \n ${error.response.data.message}`
           })
-          this.loading = false
         })
     },
     sortData(a, b) {

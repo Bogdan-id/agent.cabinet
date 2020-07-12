@@ -182,8 +182,8 @@
         <template v-slot:item.initials="{ item }">
           <span style="white-space: nowrap;"> {{ `${item.first_name} ${item.last_name} ${item.patronymic}` }}</span>
         </template>
-        <template v-slot:item.leasing_object="{ item }">
-          <span style="white-space: nowrap;"> {{ item.leasing_object }}</span>
+        <template v-slot:item.leasing="{ item }">
+          <router-link tag="a" style="white-space: nowrap; text-transform: lowercase;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</router-link>
         </template>
         <template v-slot:item.data="{ item }">
           <span style="white-space: nowrap;"> {{ item.updated_at.substr(0, 10) }}</span>
@@ -288,7 +288,7 @@ export default {
     dialogToAgentReward: false,
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start'},
-      { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
+      { text: 'Предмет лiзингу', value: 'leasing', align: 'center'},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center' },
       { text: 'АВ, грн', value: 'agents_reward', align: 'center' },
       { text: 'Тип графiку', value: 'graph', align: 'center' },

@@ -4,7 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\{
-    AgentCommission,
+    AgentCommission
 };
 use App\Mail\{
     AgentAcceptMail,
@@ -17,7 +17,7 @@ class AgentCommisionController extends Controller
 {
     public function getAgentCommisions()
     {
-        $agentCommission = AgentCommission::all();
+        $agentCommission = AgentCommission::with('agent', 'leasingRequest')->get();
 
         return response()->json($agentCommission);
     }

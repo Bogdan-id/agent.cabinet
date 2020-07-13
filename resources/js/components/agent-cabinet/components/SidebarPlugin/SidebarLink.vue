@@ -20,6 +20,7 @@ import calculatorSvg from '../../assets/svg-icons/calculator.vue'
 import leasingRequestSvg from '../../assets/svg-icons/leasing-requests.vue'
 import usefulMaterialsSvg from '../../assets/svg-icons/useful-materials.vue'
 import rewardRequests from '../../assets/svg-icons/rewardRequests.vue'
+import fileChart from "../../assets/svg-icons/charts.vue"
 
 export default {
   components: {
@@ -27,7 +28,8 @@ export default {
     calculatorSvg,
     leasingRequestSvg,
     usefulMaterialsSvg,
-    rewardRequests
+    rewardRequests,
+    fileChart
   },
   name: "sidebar-link",
   inheritAttrs: false,

@@ -5,9 +5,11 @@ import EditCategory from '../components/admin/components/routes/UsefulMaterialsE
 import RewardApplications from '../components/admin/components/routes/RewardApplication'
 import Agents from '../components/admin/components/routes/Agents'
 import ApplicationsToRegister from '../components/admin/components/routes/ApplicationsToRegister'
-import EditMaterials from '../components/admin/components/routes/EditMaterials.vue'
+import EditMaterials from '../components/admin/components/routes/EditMaterials'
+import EditNews from '../components/admin/components/routes/EditNews'
 import Managers from '../components/admin/components/routes/Managers'
 import AdminNews from '../components/admin/components/routes/AdminNews'
+import Slider from '../components/admin/components/routes/slider'
 
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
@@ -17,7 +19,8 @@ import CompleteRegistration from '../components/authentication/CompleteRegistrat
 
 /* Dashboard components */
 import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout"
-import DashboardNews from "../components/agent-cabinet/pages/DashboardNews"
+import DashboardNews from '../components/agent-cabinet/pages/DashboardNews'
+import DashboardCurrentNews from "../components/agent-cabinet/pages/DashboardCurrentNews"
 import Dashboard from "../components/agent-cabinet/pages/Dashboard"
 import UserProfile from "../components/agent-cabinet/pages/UserProfile"
 import UsefulMaterialsView from "../components/agent-cabinet/pages/UsefulMaterialsView"
@@ -30,6 +33,8 @@ import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalc
 import UsefulMaterialsCategoryMaterials from '../components/agent-cabinet/pages/UsefulMaterialsCategoryMaterials'
 import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram'
 import UserNotifications from '../components/agent-cabinet/pages/UserNotifications'
+import DashboardSlider from '../components/agent-cabinet/pages/DashboardSlider'
+import Reporting from '../components/agent-cabinet/pages/Reporting'
 
 const routes = [
   { 
@@ -89,6 +94,32 @@ const routes = [
         component: AdminNews,
         meta: {
           title: 'Новини'
+        },
+        children: [
+          {
+            path: 'new',
+            name: 'new-news',
+            component: EditNews,
+            meta: {
+              title: 'Створити новину'
+            },
+          },
+          {
+            path: 'Редагувати новину',
+            name: 'edit-news',
+            component: EditNews,
+            meta: {
+              title: 'Редагувати новину'
+            },
+          }
+        ]
+      },
+      {
+        path: 'slider',
+        name: 'slider',
+        component: Slider,
+        meta: {
+          title: 'Слайдер'
         }
       },
       {
@@ -176,11 +207,21 @@ const routes = [
       },
       {
         path: '/news',
-        name: 'Новини',
+        name: 'dashboard-news',
         component: DashboardNews,
         meta: {
           title: 'Новини'
-        }
+        },
+        children: [
+          {
+            path: ':slug',
+            name: 'current-news',
+            component: DashboardCurrentNews,
+            meta: {
+              title: 'Поточна новина'
+            }
+          }
+        ]
       },
       {
         path: '/agent-profile',
@@ -188,6 +229,22 @@ const routes = [
         component: UserProfile,
         meta: {
           title: 'Профiль'
+        }
+      },
+      {
+        path: '/slides/:slug',
+        name: 'DashboardSlider',
+        component: DashboardSlider,
+        meta: {
+          title: 'Пропозицiя'
+        },
+      },
+      {
+        path: '/reporting',
+        name: 'reporting',
+        component: Reporting,
+        meta: {
+          title: 'Звiтнiсть'
         }
       },
       {

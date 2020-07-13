@@ -12,6 +12,7 @@ use App\Mail\{
     AgentAcceptMail,
     AgentRejectMail
 };
+use Illuminate\Http\Request;
 use Mail;
 use App\User;
 

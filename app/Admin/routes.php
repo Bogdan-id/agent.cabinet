@@ -47,4 +47,6 @@ Route::group([
                 ->where('id', '[0-9]+');
     $router->delete('news/delete/{id}', 'NewsController@destroyNews')
                 ->where('id', '[0-9]+');
+
+    $router->get('agent-commission/all', 'AgentCommisionController@getAgentCommisions');
 });

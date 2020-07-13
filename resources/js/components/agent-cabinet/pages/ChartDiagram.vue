@@ -549,18 +549,19 @@ export default {
       setTimeout(() => {
         let getValue = document.querySelectorAll('#chart-diagram .tabs-input input')
         getValue.forEach(val => {
+          console.log(val)
           if(val.value === this.currentTab) {
             val.parentNode.classList.add('active')
+            console.log(val.value)
           }
         })
       }, 50)
     },
     switchGraphName(graph) {
-      switch (graph) {
-        case 'annuity': return '1'
-        case 'even': return '2'
-        case 'irregular': return '3'
-      }
+      console.log(graph)
+      if(graph === 'annuity' || graph === 'Ануїтет') {return '1'}
+      if(graph === 'even' || graph ===  'Класичний') {return '2'}
+      if(graph === 'irregular' || graph === 'Індивідуальний') {return '3'}
     },
   },
   computed: {
@@ -576,10 +577,12 @@ export default {
   },
   mounted() {
     this.graphData = this.$route.params.data
+    console.log(this.graphs)
     console.log(this.$route.params)
     this.addObjects(this.graphData)
     if(this.$route.params.preview === true) {
       this.currentTab = this.switchGraphName(this.$route.params.graph)
+      console.log(this.currentTab)
       this.changeActive()
     }
     document.body.scrollTop = 0

@@ -119,6 +119,9 @@
             {{ item.initials }}
           </span>
         </template>
+        <template v-slot:item.whole_object="{ item }">
+          <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.obj.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</v-btn>
+        </template>
       </v-data-table>
       <div class="d-flex justify-center">
         <span>
@@ -262,7 +265,7 @@ export default {
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center', sortable: false },
       { text: 'АВ, %', value: 'agency_remuneration', align: 'center' },
-      { text: 'Тип графiку', value: 'graph_type', align: 'center', sortable: false },
+      { text: 'Тип графiку', value: 'whole_object', align: 'center', sortable: false },
       { text: 'Дата подачi', value: 'data', align: 'center', sortable: false },
       { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },
     ],
@@ -297,6 +300,13 @@ export default {
     }
   },
   methods: {
+    switchValue(val) {
+      switch(val) {
+        case 'even': return 'Класичний'
+        case 'annuity': return 'Ануїтет'
+        case 'irregular': return 'Індивідуальний'
+      }
+    },
     test() {
       console.log(this.$store.state.user.agent.manager_id)
     },
@@ -345,6 +355,7 @@ export default {
       await object
         .map(val => {
           let dataObj = {
+            'obj': val,
             'initials': `${val.last_name} ${val.first_name} ${val.patronymic}`,
             'leasing_object': val.leasing_object,
             'leasing_amount': val.leasing_amount,
@@ -359,6 +370,7 @@ export default {
       this.tabledata = arr
         .sort(this.sortData)
         .reverse()
+      console.log(this.tabledata)
     },
     getSlides() {
       axios

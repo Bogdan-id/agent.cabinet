@@ -567,12 +567,13 @@ export default {
       }
     },
     hasOnlyOneGraph() {
-      let count
-      if(this.data.result_data.hasOwnProperty('even')) count ++
-      if(this.data.result_data.hasOwnProperty('annuity')) count ++
-      if(this.data.result_data.hasOwnProperty('irregular')) count ++
-      if(count === 1) return true
-      return false
+      let count = 0
+      let graph
+      if(this.data.result_data.hasOwnProperty('even')) {count ++, graph = 'even'}
+      if(this.data.result_data.hasOwnProperty('annuity')) {count ++, graph = 'annuity'}
+      if(this.data.result_data.hasOwnProperty('irregular')) {count ++, graph = 'irregular'}
+      if(count === 1) return {state: true, graph}
+      return {state: false}
     },
     sendDataToUser() {
       let graph = this.data.result_data[this.switchGraphName(this.graph)]
@@ -750,8 +751,7 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
-      // this.graphType = this.getGraphById(id)[0]
-      console.log(this.graphType)
+      console.log(this.hasOnlyOneGraph())
       this.leasingApplicationForm = true
       this.getListItem()
     },
@@ -919,7 +919,6 @@ export default {
   },
   mounted() {
     this.graphType = this.graph
-    console.log(this.hasOnlyOneGraph())
   }
 }
 </script>

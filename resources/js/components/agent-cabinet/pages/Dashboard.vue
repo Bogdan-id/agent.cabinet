@@ -362,7 +362,7 @@ export default {
     },
     getSlides() {
       axios
-        .get('/slides')
+        .get('/json/slides')
         .then(response => {
           console.log(response)
           this.slides = response.data
@@ -373,7 +373,7 @@ export default {
     },
     getNews() {
       axios
-        .get('/news')
+        .get('/json/news')
         .then(response => {
           console.log(response)
           this.news = response.data

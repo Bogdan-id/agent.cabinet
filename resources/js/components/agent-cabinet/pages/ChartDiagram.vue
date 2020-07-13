@@ -105,6 +105,7 @@
               <template v-slot:body.append>
                 <tr style="color: black; border-left: 8px solid black;" >
                   <td style="text-align: center;">Всього</td>
+                  <td></td>
                   <td style="text-align: center;">
                     {{ 
                       parseInt(graphData.result_data.even['total-payment-principal'].toFixed())
@@ -112,7 +113,6 @@
                         .replace(/,/g, ' ')
                     }}
                   </td>
-                  <td style="text-align: center;"></td>
                   <td style="text-align: center;">
                     {{ 
                       parseInt(graphData.result_data.even['total-interest'].toFixed()) 
@@ -270,6 +270,7 @@
                 <template v-slot:body.append>
                   <tr style="color: black; border-left: 8px solid black;">
                     <td style="text-align: center;">Всього</td>
+                    <td></td>
                     <td style="text-align: center;">
                       {{ 
                         parseInt(graphData.result_data.annuity['total-payment-principal'].toFixed())
@@ -277,7 +278,6 @@
                           .replace(/,/g, ' ')
                       }}
                     </td>
-                    <td style="text-align: center;"></td>
                     <td style="text-align: center;">
                       {{ 
                         parseInt(graphData.result_data.annuity['total-interest'].toFixed()) 
@@ -435,6 +435,7 @@
                 <template v-slot:body.append>
                   <tr style="color: black; border-left: 8px solid black;" >
                     <td style="text-align: center;">Всього</td>
+                    <td></td>
                     <td style="text-align: center;">
                       {{ 
                         parseInt(graphData.result_data.irregular['total-payment-principal'].toFixed())
@@ -442,7 +443,6 @@
                           .replace(/,/g, ' ')
                       }}
                     </td>
-                    <td style="text-align: center;"></td>
                     <td style="text-align: center;">
                       {{ 
                         parseInt(graphData.result_data.irregular['total-interest'].toFixed()) 
@@ -526,7 +526,7 @@ export default {
     ],
     tableHeader: [
       { text: '№', value: 'n', align: 'center', sortable: false},
-      { text: 'Термін оплати', value: 'waiting', align: 'center', sortable: false},
+      { text: 'Термін оплати', value: 'date', align: 'center', sortable: false},
       { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'center', sortable: false},
       { text: 'Винагорода лiзингодавця, грн', value: 'interest', align: 'center', sortable: false },
       { text: 'Сума платежу, грн', value: 'payment', align: 'center', sortable: false },

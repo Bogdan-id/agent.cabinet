@@ -93,9 +93,9 @@
               v-model="selectedGraph" 
               :error-messages="selectedGraphErr"
               row>
-              <v-radio label="Класичний" value="even"></v-radio>
-              <v-radio label="Ануїтет" value="annuity"></v-radio>
-              <v-radio label="Індивідуальний" value="irregular"></v-radio>
+              <v-radio v-if="graphType && graphType.result_data && graphType.result_data.hasOwnProperty('even')" label="Класичний" value="even"></v-radio>
+              <v-radio v-if="graphType && graphType.result_data && graphType.result_data.hasOwnProperty('annuity')" label="Ануїтет" value="annuity"></v-radio>
+              <v-radio v-if="graphType && graphType.result_data && graphType.result_data.hasOwnProperty('irregular')" label="Індивідуальний" value="irregular"></v-radio>
             </v-radio-group>
           </v-col>
           <v-col cols="12" sm="6" md="6" lg="6" xl="6">
@@ -932,7 +932,6 @@ export default {
     },
     openForm(id) {
       this.graphType = this.getGraphById(id)[0]
-      console.log(this.graphType)
       this.getDefaultProperties()
       this.leasingApplicationForm = true
     },

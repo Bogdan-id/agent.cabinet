@@ -89,9 +89,9 @@
               v-model="selectedGraph" 
               :error-messages="selectedGraphErr"
               row>
-              <v-radio label="Класичний" value="even"></v-radio>
-              <v-radio label="Ануїтет" value="annuity"></v-radio>
-              <v-radio label="Індивідуальний" value="irregular"></v-radio>
+              <v-radio v-if="data && data.result_data && data.result_data && data.result_data.hasOwnProperty('even')" label="Класичний" value="even"></v-radio>
+              <v-radio v-if="data && data.result_data && data.result_data && data.result_data.hasOwnProperty('annuity')"  label="Ануїтет" value="annuity"></v-radio>
+              <v-radio v-if="data && data.result_data && data.result_data && data.result_data.hasOwnProperty('irregular')"  label="Індивідуальний" value="irregular"></v-radio>
             </v-radio-group>
           </v-col>
           <v-col cols="12" sm="6" md="6" lg="6" xl="6">
@@ -566,6 +566,14 @@ export default {
           })
       }
     },
+    hasOnlyOneGraph() {
+      let count
+      if(this.data.result_data.hasOwnProperty('even')) count ++
+      if(this.data.result_data.hasOwnProperty('annuity')) count ++
+      if(this.data.result_data.hasOwnProperty('irregular')) count ++
+      if(count === 1) return true
+      return false
+    },
     sendDataToUser() {
       let graph = this.data.result_data[this.switchGraphName(this.graph)]
       let calcData = this.data.request_data
@@ -743,6 +751,7 @@ export default {
     },
     openForm() {
       // this.graphType = this.getGraphById(id)[0]
+      console.log(this.graphType)
       this.leasingApplicationForm = true
       this.getListItem()
     },
@@ -761,6 +770,9 @@ export default {
       console.log(this.$v)
     },
     getDefaultProperties() {
+      console.log('************')
+      console.log(this.data)
+      console.log('************')
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.data.id
       this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`
@@ -907,6 +919,7 @@ export default {
   },
   mounted() {
     this.graphType = this.graph
+    console.log(this.hasOnlyOneGraph())
   }
 }
 </script>

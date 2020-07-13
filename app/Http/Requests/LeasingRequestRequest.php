@@ -28,7 +28,7 @@ class LeasingRequestRequest extends JsonRequest
         $rules = [
             'agentId' =>  'required|integer|exists:agents,id',
             'calculationId' =>  'required|integer|exists:calculations,id',
-            'clientTypeId' =>  'required|integer|exists:client_types,id', //TODO: |exists:clients_types,id
+            'clientTypeId' =>  'required|integer', //TODO: |exists:clients_types,id
             'lastName' => 'required|string',
             'firstName' => 'required|string',
             'patronymic' => 'required|string',

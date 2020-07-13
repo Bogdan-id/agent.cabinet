@@ -526,8 +526,8 @@ export default {
     ],
     tableHeader: [
       { text: '№', value: 'n', align: 'center', sortable: false},
-      { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'center', sortable: false},
       { text: 'Термін оплати', value: 'waiting', align: 'center', sortable: false},
+      { text: 'Оплата за авто, грн', value: 'payment_principal', align: 'center', sortable: false},
       { text: 'Винагорода лiзингодавця, грн', value: 'interest', align: 'center', sortable: false },
       { text: 'Сума платежу, грн', value: 'payment', align: 'center', sortable: false },
     ],

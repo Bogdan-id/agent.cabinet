@@ -157,90 +157,91 @@
         </v-card>
       </div>
 
-
-      <div 
+      <div
         v-for="(item, key) in sliders"
         class="mb-12"
         :key="key">
-        <v-card
-          :style="`margin: 0 auto; position: relative; background: url('${item.slide_image || sliderImage}'); background-size: cover;`"
-          class="slider-card"
-          max-width="900"
-          height="400" 
-          elevation="8">
-          <v-btn
-            v-show="!formToAddSlider && !editMode"
-            class="slider-edit-button"
-            @click="activateEditMode(item, key)"
-            style="position: absolute; right: 0; top: 0;"
-            dark 
-            small
-            color="grey darken-2">
-            Редагувати
-          </v-btn>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                v-show="!formToAddSlider && !editMode"
-                v-on="on"
-                class="slider-edit-button"
-                @click="activateEditMode(item, key, true, item.id);"
-                fab
-                x-small
-                color="red lighten-1"
-                style="position: absolute; right: 132px; top: 0px;">
-                <v-icon v-text="'mdi-close'"></v-icon>
-              </v-btn>
-            </template>
-            <span>Видалити слайдер</span>
-          </v-tooltip>
-          <span v-show="sliderImageErr && sliderImageErr.length > 0 && editKey === key" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
-            Додайте зображення!
-          </span>
-          <div style="height: 120px;">
-            <div v-show="item.slide_image || sliderImage !== null" :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
-              <h3><b>{{ item.title || sliderTitle || 'Заголовок матерiалу' }}</b></h3>
-              <p style="font-size: 0.88rem"> {{ item.description ||  sliderDescription || 'Короткый опис матерiалу' }} </p>
-            </div>
-          </div>
-          <div style="height: 240px; display: flex; width: 100%; justify-content: flex-end; align-items: flex-end;">
-            <span v-show="item.slide_image || sliderImage !== null" style="display: inline-block; margin-right: 40px; margin-bottom: 15px">
-              <v-btn class="vuetify_custom-btn white--text ml-1 mt-7" @click="">Ознайомитись</v-btn>
+        <v-hover v-slot:default="{ hover }">
+          <v-card
+            :style="`margin: 0 auto; position: relative; background: url('${item.slide_image || sliderImage}'); background-size: cover;`"
+            class="slider-card"
+            max-width="900"
+            height="400" 
+            :elevation="hover ? 12 : 4">
+            <v-btn
+              v-show="!formToAddSlider && !editMode"
+              class="slider-edit-button"
+              @click="activateEditMode(item, key)"
+              style="position: absolute; right: 0; top: 0;"
+              dark 
+              small
+              color="grey darken-2">
+              Редагувати
+            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-show="!formToAddSlider && !editMode"
+                  v-on="on"
+                  class="slider-edit-button"
+                  @click="activateEditMode(item, key, true, item.id);"
+                  fab
+                  x-small
+                  color="red lighten-1"
+                  style="position: absolute; right: 132px; top: 0px;">
+                  <v-icon v-text="'mdi-close'"></v-icon>
+                </v-btn>
+              </template>
+              <span>Видалити слайдер</span>
+            </v-tooltip>
+            <span v-show="sliderImageErr && sliderImageErr.length > 0 && editKey === key" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
+              Додайте зображення!
             </span>
-          </div>
-          <span v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  @click="addImageToSlider()"  
-                  v-on="on" 
-                  width="90" 
-                  height="90" 
-                  x-large 
-                  icon>
-                  <v-icon size="58" v-text="'mdi-image-plus'"></v-icon>
-                </v-btn>
-              </template>
-              <span>Додати зображення</span>
-            </v-tooltip>
-          </span>
-          <span class="slider-delete-image-icon" v-show="editMode && editKey == key && item.slide_image" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 25;">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  @click="removeImageSlider(key)"  
-                  v-on="on" 
-                  width="90" 
-                  height="90" 
-                  x-large 
-                  icon>
-                  <v-icon size="58" v-text="'mdi-close-circle'"></v-icon>
-                </v-btn>
-              </template>
-              <span>Видалити зображення</span>
-            </v-tooltip>
-          </span>
-        </v-card>
+            <div style="height: 120px;">
+              <div v-show="item.slide_image || sliderImage !== null" :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
+                <h3><b>{{ item.title || sliderTitle || 'Заголовок матерiалу' }}</b></h3>
+                <p style="font-size: 0.88rem"> {{ item.description ||  sliderDescription || 'Короткый опис матерiалу' }} </p>
+              </div>
+            </div>
+            <div style="height: 240px; display: flex; width: 100%; justify-content: flex-end; align-items: flex-end;">
+              <span v-show="item.slide_image || sliderImage !== null" style="display: inline-block; margin-right: 40px; margin-bottom: 15px">
+                <v-btn class="vuetify_custom-btn white--text ml-1 mt-7" @click="">Ознайомитись</v-btn>
+              </span>
+            </div>
+            <span v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    @click="addImageToSlider()"  
+                    v-on="on" 
+                    width="90" 
+                    height="90" 
+                    x-large 
+                    icon>
+                    <v-icon size="58" v-text="'mdi-image-plus'"></v-icon>
+                  </v-btn>
+                </template>
+                <span>Додати зображення</span>
+              </v-tooltip>
+            </span>
+            <span class="slider-delete-image-icon" v-show="editMode && editKey == key && item.slide_image" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 25;">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    @click="removeImageSlider(key)"  
+                    v-on="on" 
+                    width="90" 
+                    height="90" 
+                    x-large 
+                    icon>
+                    <v-icon size="58" v-text="'mdi-close-circle'"></v-icon>
+                  </v-btn>
+                </template>
+                <span>Видалити зображення</span>
+              </v-tooltip>
+            </span>
+          </v-card>
+        </v-hover>
         <v-card
           v-show="editMode && editKey == key"
           max-width="900"

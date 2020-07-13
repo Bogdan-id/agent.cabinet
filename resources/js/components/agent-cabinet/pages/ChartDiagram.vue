@@ -542,10 +542,25 @@ export default {
       if(data.result_data.hasOwnProperty('irregular')) this.irregular = data.result_data.irregular.graph
       if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
     },
-    changeActive(event) {
+    changeActive() {
       let tabs = document.querySelectorAll('#chart-diagram .tabs-input')
       tabs.forEach(element => element.classList.remove('active'))
-      event.target.parentNode.classList.add('active')
+
+      setTimeout(() => {
+        let getValue = document.querySelectorAll('#chart-diagram .tabs-input input')
+        getValue.forEach(val => {
+          if(val.value === this.currentTab) {
+            val.parentNode.classList.add('active')
+          }
+        })
+      }, 50)
+    },
+    switchGraphName(graph) {
+      switch (graph) {
+        case 'annuity': return '1'
+        case 'even': return '2'
+        case 'irregular': return '3'
+      }
     },
   },
   computed: {
@@ -560,9 +575,13 @@ export default {
     }
   },
   mounted() {
-    this.graphData = this.$router.currentRoute.params.data
-
+    this.graphData = this.$route.params.data
+    console.log(this.$route.params)
     this.addObjects(this.graphData)
+    if(this.$route.params.preview === true) {
+      this.currentTab = this.switchGraphName(this.$route.params.graph)
+      this.changeActive()
+    }
     document.body.scrollTop = 0
   },
 }

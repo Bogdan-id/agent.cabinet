@@ -75,7 +75,7 @@
             </div>
             <div style="height: 240px; display: flex; width: 100%; justify-content: flex-end; align-items: flex-end;">
               <span style="display: inline-block; margin-right: 40px; margin-bottom: 15px">
-                <v-btn class="vuetify_custom-btn white--text ml-1 mt-7" @click="">Ознайомитись</v-btn>
+                <v-btn class="vuetify_custom-btn white--text ml-1 mt-7" :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">Ознайомитись</v-btn>
               </span>
             </div>
           </div>
@@ -170,40 +170,30 @@
           Новини
         </v-card-title>
         <v-divider></v-divider>
-        <v-card-text>
-          <v-hover v-slot:default="{ hover }">
-            <v-card :elevation="hover ? 5 : 2" class="news">
+        <v-card-text class="pb-0">
+          <v-hover 
+            v-for="(item, key) in news"
+            :key="key"
+            v-slot:default="{ hover }">
+            <v-card 
+              v-if="key < 2"
+              :elevation="hover ? 5 : 2" 
+              class="news">
               <v-img
                 class="white--text align-end"
                 style="width: 100%"
-                :src="require('../assets/img/car1.jpg')">
-                <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
+                :src="item['news_title_image']">
+                <v-card-title class="subtitle-1" style="padding-bottom: 4px;">{{ item.title }}</v-card-title>
               </v-img>
               <v-card-text>
-                <span>Neque porro quisquam est qui dolorem ipsum</span>
+                <span>{{ item.description }}</span>
                 <div style="text-align: right">
                   <span>
-                    <v-btn :small="mdAndDown" class="vuetify_custom-btn --small capitalize mt-2" text>
-                      Детально
-                    </v-btn>
-                  </span>
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-hover>
-          <v-hover v-slot:default="{ hover }">
-            <v-card :elevation="hover ? 5 : 2" class="news">
-              <v-img
-                class="white--text align-end"
-                style="width: 100%"
-                :src="require('../assets/img/car2.jpg')">
-                <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
-              </v-img>
-              <v-card-text>
-                <span>Neque porro quisquam est qui dolorem...</span>
-                <div style="text-align: right">
-                  <span>
-                    <v-btn :small="mdAndDown" class="vuetify_custom-btn --small capitalize mt-2" text>
+                    <v-btn 
+                      :to="{name: 'current-news', path: `/news/${item.slug}`, params: item}" 
+                      :small="mdAndDown" 
+                      class="vuetify_custom-btn --small capitalize mt-2" 
+                      text>
                       Детально
                     </v-btn>
                   </span>
@@ -212,44 +202,41 @@
             </v-card>
           </v-hover>
         </v-card-text>
+        <v-card-text class="pt-0">
+          <div style="text-align: right">
+            <router-link :to="{name: 'dashboard-news', path: '/news', params: this.news}" class="see-all-news" style="font-size: 1rem; text-decoration: underline" tag="span">Всi новини</router-link>
+          </div>
+        </v-card-text>
       </v-card>
     </div>
   </div>
   <v-card class="dashboard-news">
-    <v-card-title class="headline red--text">
+    <v-card-title class="headline" style="border-left: 5px solid #e75d57">
       Новини
     </v-card-title>
-    <v-divider></v-divider>
     <v-card-text class="dashboard-news__wrapper">
-      <v-hover v-slot:default="{ hover }">
-        <v-card class="news-card" :elevation="hover ? 5 : 2">
+      <v-hover 
+        v-for="(item, key) in news"
+        :key="key"
+        v-slot:default="{ hover }">
+        <v-card 
+          v-if="key < 2"
+          class="news-card" 
+          :elevation="hover ? 5 : 2">
           <v-img
             class="white--text align-end"
-            style="width: 100%"
-            :src="require('../assets/img/car1.jpg')">
-            <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
+            style="width: 100%; height: 200px;"
+            :src="item['news_title_image']">
+            <v-card-title class="subtitle-1">{{ item.title }}</v-card-title>
           </v-img>
-          <v-card-text>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</v-card-text>
+          <v-card-text class="pb-0">{{ item.description }}</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="vuetify_custom-btn capitalize pl-4 pr-4">
-              Детально
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-hover>
-      <v-hover v-slot:default="{ hover }">
-        <v-card class="news-card" :elevation="hover ? 5 : 2">
-          <v-img
-            class="white--text align-end"
-            style="width: 100%"
-            :src="require('../assets/img/car2.jpg')">
-            <v-card-title class="subtitle-1">Тайтл для новини</v-card-title>
-          </v-img>
-          <v-card-text>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn class="vuetify_custom-btn capitalize  pl-4 pr-4">
+            <v-btn 
+              :to="{name: 'current-news', path: `/news/${item.slug}`, params: item}" 
+              :small="mdAndDown" 
+              class="vuetify_custom-btn --small capitalize mt-2" 
+              text>
               Детально
             </v-btn>
           </v-card-actions>
@@ -258,7 +245,7 @@
     </v-card-text>
     <v-card-text class="pt-0">
       <div style="text-align: center">
-        <router-link to="/news" class="see-all-news" tag="span">Дивитись всi</router-link>
+        <v-btn color="#e75d57" outlined :to="{name: 'dashboard-news', path: '/news', params: this.news}" tag="span">всi новини&nbsp;<v-icon v-text="'mdi-arrow-right-bold'"></v-icon></v-btn>
       </div>
     </v-card-text>
   </v-card>
@@ -283,6 +270,7 @@ export default {
     slides: null,
     tabledata: [],
     requestRecieved: false,
+    news: null,
   }),
   computed: {
     loading() {
@@ -382,6 +370,17 @@ export default {
         .catch(error => {
           error.response
         })
+    },
+    getNews() {
+      axios
+        .get('/news')
+        .then(response => {
+          console.log(response)
+          this.news = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   watch: {
@@ -401,6 +400,7 @@ export default {
       this.getUserCalculcations()
     }
     this.getSlides()
+    this.getNews()
   },
   mounted() {
     setTimeout(() => {
@@ -710,7 +710,7 @@ export default {
 
 .see-all-news {
   transition: font-size 0.14s ease, color 0.18s ease;
-  font-size: 1.23rem;
+  font-size: 1.25rem;
   color: #e65048; 
   cursor: pointer;
   &:hover {

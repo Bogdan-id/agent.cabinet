@@ -34,4 +34,9 @@ class AgentCommission extends Model
     {
         return $this->belongsTo('App\Models\LeasingRequest', 'leasing_requests_id');
     }
+
+    public function agent()
+    {
+        return $this->belongsTo('App\Models\Agent');
+    }
 }

@@ -56,16 +56,9 @@ export default {
       }
     }
   }
-  .v-data-table {
-    tbody {
-      // tr:last-child {
-      //   height: 70px!important;
-      // }
-    }
+  .v-data-table td, .v-data-table th {
+    padding: 0 10px!important;
   }
-  // .v-data-table-header th {
-  //   white-space: nowrap;
-  // }
 </style>
 
 <script>

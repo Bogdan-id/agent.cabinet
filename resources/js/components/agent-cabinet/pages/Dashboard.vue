@@ -95,8 +95,14 @@
         class="elevation-1 pb-3"
         :hide-default-footer="true"
         :items-per-page="5">
-        <template v-slot:item.agent_reward>
-          <span> {{ $store.state.user.agent.ab_size }} </span>
+        <template v-slot:item.agent_reward="{ item }">
+          <span style="white-space: nowrap">
+            {{ 
+              (parseInt(item.leasing_amount.replace(/\s/g, '' )) / 100)
+                .toLocaleString()
+                .replace(/,/g, ' ')
+            }}
+          </span>
         </template>
         <template v-slot:item.leasing_amount="{ item }">
           <span style="white-space: nowrap">
@@ -287,7 +293,7 @@ export default {
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center', sortable: false },
-      // { text: 'АВ, %', value: 'agent_reward', align: 'center' },
+      { text: 'АВ, %', value: 'agent_reward', align: 'center' },
       { text: 'Тип графiку', value: 'whole_object', align: 'center', sortable: false },
       { text: 'Дата подачi', value: 'data', align: 'center', sortable: false },
       { text: 'Статус', value: 'status', align: 'center', sortable: false, width: 120 },

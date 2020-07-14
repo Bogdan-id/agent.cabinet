@@ -612,7 +612,8 @@ export default {
       flex-direction: column;
     }
     .v-data-table__mobile-row {
-      height: 22px!important;
+      min-height: 10px!important;
+      height: 20px;
       border-bottom: 1px solid #eeedeb;
       margin: 0 25px 0 25px;
       padding: 0;
@@ -656,6 +657,8 @@ export default {
 
   .v-data-table__mobile-row {
     min-height: 22px!important;
+    min-height: 10px!important;
+    height: 20px;
   }
 }
 .chart-diagram {

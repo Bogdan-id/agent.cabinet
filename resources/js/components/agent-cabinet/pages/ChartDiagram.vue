@@ -623,10 +623,18 @@ export default {
         color: #424242;
         display: inline-block;
         float: right;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 0;
+        margin-bottom: 0;
       }
       .v-data-table__mobile-row__header {
         display: inline-block;
         float: left;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-top: 0;
+        margin-bottom: 0;
       }
     }
     thead {
@@ -692,9 +700,13 @@ export default {
     opacity: 1;
     // transition: opacity 0.3s ease;
   }
+  .tabs .tabs-input
   .tabs .tabs-input.active,
   .tabs .tabs-input:hover {
     opacity: 1;
+  }
+  .tabs-input [type="radio"] {
+    opacity: 0;
   }
   .tabs-input [type="radio"] + .content {
     display: block;

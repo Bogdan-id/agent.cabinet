@@ -29,6 +29,10 @@ class AgentCommission extends Model
        //
      ];
 
+     protected $attributes = [
+      'status' => 'not_paid'
+  ];
+
      
     public function leasingRequest()
     {

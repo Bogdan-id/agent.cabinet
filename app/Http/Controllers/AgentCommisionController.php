@@ -22,7 +22,6 @@ class AgentCommisionController extends Controller
         $agentCommission = new AgentCommission;
         $agentCommission->agent_id = $data['agentId'];
         $agentCommission->leasing_requests_id = $data['leasingRequestId'];
-        $agentCommission->status = 'Не сплачено';
         $agentCommission->save();
 
         return response()->json([

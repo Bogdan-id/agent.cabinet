@@ -11,8 +11,8 @@
       <v-card-text class="mt-8" style="font-size: 1.2rem; text-align: center;">
         Пiдтвердити виплату агентської винагороди?
       </v-card-text>
-      <v-card-text style="display: flex; justify-content: space-around">
-        <span><v-btn color="#e94949" dark @click="">Так</v-btn></span>
+      <v-card-text style="display: flex; justify-content: space-between">
+        <span><v-btn :loading="requestToRewardLoading" color="#e94949" dark @click="sendRequestToReward()">Так</v-btn></span>
         <span><v-btn color="#333333" dark @click="dialogToAgentReward = false">Нi</v-btn></span>
       </v-card-text>
     </v-card>
@@ -306,6 +306,7 @@ export default {
     search: '',
     leasingApplicationForm: false,
     dialogToAgentReward: false,
+    requestToRewardLoading: false,
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start'},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
@@ -319,6 +320,9 @@ export default {
     tabledata: [],
     loading: false,
     progressDivision: 5,
+
+    requestIdToReward: null,
+    agentIdToReward: null,
 
     // request detail data
     reqObj: {
@@ -351,11 +355,40 @@ export default {
     },
   },
   methods: {
+    sendRequestToReward() {
+      this.requestToRewardLoading = true
+      let obj = {agentId: this.agentIdToReward, leasingRequestId: this.requestIdToReward}
+      axios
+        .post('/agent-commission/create', obj)
+        .then(response => {
+          this.requestToRewardLoading = false
+          console.log(response)
+          this.$notify({
+            group: 'success',
+            title: 'Заявку успiшно вiдправлено',
+            text: '',
+          })
+          setTimeout(() => {
+            this.dialogToAgentReward = false
+          }, 1200)
+        })
+        .catch(error => {
+          this.requestToRewardLoading = false
+          console.log(error.response)
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+        })
+    },
     returnDocumentName(url) {
       let index = url.lastIndexOf('/') + 1
       return url.substr(index)
     },
-    showDialogToAgentReward() {
+    showDialogToAgentReward(item) {
+      this.requestIdToReward = item.id
+      this.agentIdToReward = item.agent_id
       this.dialogToAgentReward = true
     },
     customSort(items) {

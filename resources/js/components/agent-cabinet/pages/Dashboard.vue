@@ -307,9 +307,9 @@ export default {
         case 'irregular': return 'Індивідуальний'
       }
     },
-    test() {
-      console.log(this.$store.state.user.agent.manager_id)
-    },
+    // test() {
+    //   console.log(this.$store.state.user.agent.manager_id)
+    // },
     imageLoaded() {
       console.log('onload event')
       setTimeout(() => {

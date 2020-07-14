@@ -95,6 +95,9 @@
         class="elevation-1 pb-3"
         :hide-default-footer="true"
         :items-per-page="5">
+        <template v-slot:item.agent_reward>
+          <span> {{ $store.state.user.agent.ab_size }} </span>
+        </template>
         <template v-slot:item.leasing_amount="{ item }">
           <span style="white-space: nowrap">
             {{ 
@@ -106,7 +109,7 @@
         </template>
         <template v-slot:item.data="{item}">
           <span style="white-space: nowrap">
-            {{ item.data }}
+            {{ item.updated_at.substr(0, 10) }}
           </span>
         </template>
         <template v-slot:item.leasing_object="{ item }">
@@ -116,13 +119,13 @@
         </template>
         <template v-slot:item.initials="{ item }">
           <span style="white-space: nowrap">
-            {{ item.initials }}
+            <!-- {{ item.initials }} -->
           </span>
         </template>
         <template v-slot:item.whole_object="{ item }">
-          <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.obj.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</v-btn>
+          <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</v-btn>
         </template>
-        <template #item.request_status="{ item }">
+        <template #item.status="{ item }">
           <div class="d-flex justify-center">
             <div style="display: inline-block">
               <v-tooltip bottom>
@@ -132,12 +135,12 @@
                       v-for="key in progressDivision"
                       :key="key"
                       small
-                      :color="applyChanges(item.request_status, key).color">
+                      :color="applyChanges(item.status_id, key).color">
                       mdi-brightness-1
                     </v-icon>
                   </div>
                 </template>
-                <span>{{ applyChanges(item.request_status).text }}</span>
+                <span>{{ applyChanges(item.status_id).text }}</span>
               </v-tooltip>
             </div>
           </div>
@@ -284,10 +287,10 @@ export default {
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center', sortable: false },
-      { text: 'АВ, %', value: 'agency_remuneration', align: 'center' },
+      { text: 'АВ, %', value: 'agent_reward', align: 'center' },
       { text: 'Тип графiку', value: 'whole_object', align: 'center', sortable: false },
       { text: 'Дата подачi', value: 'data', align: 'center', sortable: false },
-      { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false, width: 120 },
+      { text: 'Статус', value: 'status', align: 'center', sortable: false, width: 120 },
     ],
     carouselVisibility: false,
     slides: null,
@@ -356,7 +359,11 @@ export default {
         .then(response => {
           this.$store.commit('toggleSpinner', false)
           if(response.data.length > 0)  {
-            this.createTableData(response.data)
+            this.tabledata = response.data
+            // this.createTableData(response.data)
+            console.log('**********')
+            console.log(this.tabledata)
+            console.log('**********')
             this.$store.commit('addGraph', response.data)
           } else {
             this.tabledata = []
@@ -374,28 +381,28 @@ export default {
     sortData(a, b) {
       return new Date(b.created_at) - new Date(a.created_at)
     },
-    async createTableData(object) {
-      let arr = []
-      await object
-        .map(val => {
-          let dataObj = {
-            'obj': val,
-            'initials': `${val.last_name} ${val.first_name} ${val.patronymic}`,
-            'leasing_object': val.leasing_object,
-            'leasing_amount': val.leasing_amount,
-            'graph_type': this.switchValue(val.graph_type),
-            'data': val.created_at.substr(0, 10),
-            'request_status': val.status_id,
-            'agency_remuneration': this.$store.state.user.agent.ab_size,
-            'id': val.id
-          }
-          arr.push(dataObj)
-        })
-      this.tabledata = arr
-        .sort(this.sortData)
-        .reverse()
-      console.log(this.tabledata)
-    },
+    // async createTableData(object) {
+    //   // let arr = []
+    //   // await object
+    //   //   .map(val => {
+    //   //     let dataObj = {
+    //   //       'obj': val,
+    //   //       'initials': `${val.last_name} ${val.first_name} ${val.patronymic}`,
+    //   //       'leasing_object': val.leasing_object,
+    //   //       'leasing_amount': val.leasing_amount,
+    //   //       'graph_type': this.switchValue(val.graph_type),
+    //   //       'data': val.created_at.substr(0, 10),
+    //   //       'request_status': val.status_id,
+    //   //       'agency_remuneration': this.$store.state.user.agent.ab_size,
+    //   //       'id': val.id
+    //   //     }
+    //   //     arr.push(dataObj)
+    //   //   })
+    //   // this.tabledata = arr
+    //   //   .sort(this.sortData)
+    //   //   .reverse()
+    //   console.log(this.tabledata)
+    // },
     getSlides() {
       axios
         .get('/json/slides')

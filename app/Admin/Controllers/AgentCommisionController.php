@@ -21,4 +21,14 @@ class AgentCommisionController extends Controller
 
         return response()->json($agentCommission);
     }
+
+    public function paidAgentCommision($id)
+    {
+        $agentCommission = AgentCommission::find($id);
+        abort_if(!$agentCommission, 422, 'Заявку на виплату АВ не знайдено!');
+        $agentCommission->update([
+            'status' => 'paid'
+        ]);
+        return response()->json($agentCommission);
+    }
 }

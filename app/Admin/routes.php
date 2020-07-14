@@ -49,4 +49,6 @@ Route::group([
                 ->where('id', '[0-9]+');
 
     $router->get('agent-commission/all', 'AgentCommisionController@getAgentCommisions');
+    $router->get('agent-commission/paid/{id}', 'AgentCommisionController@paidAgentCommision')
+                ->where('id', '[0-9]+');
 });

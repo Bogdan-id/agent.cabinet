@@ -229,13 +229,12 @@
           <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ switchValue(item.graph_type) }}</v-btn>
         </template>
         <template #item.actions="{ item }">
-          <div class="d-flex justify-space-around">
+          <div class="d-flex justify-center">
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
                   v-if="item.status_id == 5"
                   @click="showDialogToAgentReward(item)"
-                  class="mr-3"
                   v-on="on"
                   icon>
                   <v-icon
@@ -246,6 +245,7 @@
                 <v-icon
                   v-if="item.status_id != 5"
                   v-on="on"
+                  style="padding: 6px"
                   >
                   mdi-sack-percent
                 </v-icon>
@@ -315,7 +315,7 @@ export default {
       { text: 'АВ, грн', value: 'agents_reward', align: 'center' },
       { text: 'Тип графiку', value: 'graph', align: 'center' },
       { text: 'Дата', value: 'data', align: 'center' },
-      { text: 'Статус заявки', value: 'request_status', align: 'center', width: 200 },
+      { text: 'Статус', value: 'request_status', align: 'center', width: 120 },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],

@@ -270,7 +270,6 @@
           </div>
         </template>
         <template #item.request_status="{ item }">
-          <!--  class="d-flex align-center flex-column" -->
           <div class="d-flex justify-center">
             <div style="display: inline-block">
               <v-tooltip bottom>
@@ -289,9 +288,6 @@
               </v-tooltip>
             </div>
           </div>
-            <!-- <div>
-              {{applyChanges(item.request_status, i).text}}
-            </div> -->
         </template>
       </v-data-table>
       <!-- <v-btn @click="test()">test</v-btn> -->

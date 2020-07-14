@@ -122,6 +122,26 @@
         <template v-slot:item.whole_object="{ item }">
           <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.obj.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</v-btn>
         </template>
+        <template #item.request_status="{ item }">
+          <div class="d-flex justify-center">
+            <div style="display: inline-block">
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <div v-on="on"  style="display: inline-block">
+                    <v-icon
+                      v-for="key in progressDivision"
+                      :key="key"
+                      small
+                      :color="applyChanges(item.request_status, key).color">
+                      mdi-brightness-1
+                    </v-icon>
+                  </div>
+                </template>
+                <span>{{ applyChanges(item.request_status).text }}</span>
+              </v-tooltip>
+            </div>
+          </div>
+        </template>
       </v-data-table>
       <div class="d-flex justify-center">
         <span>
@@ -267,13 +287,14 @@ export default {
       { text: 'АВ, %', value: 'agency_remuneration', align: 'center' },
       { text: 'Тип графiку', value: 'whole_object', align: 'center', sortable: false },
       { text: 'Дата подачi', value: 'data', align: 'center', sortable: false },
-      { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false },
+      { text: 'Статус заявки', value: 'request_status', align: 'center', sortable: false, width: 120 },
     ],
     carouselVisibility: false,
     slides: null,
     tabledata: [],
     requestRecieved: false,
     news: null,
+    progressDivision: 5,
   }),
   computed: {
     loading() {
@@ -300,6 +321,16 @@ export default {
     }
   },
   methods: {
+    applyChanges(status, index) {
+      switch(status) {
+        case '1': return {text: 'в обробцi', color: `${index <= 1 ? 'orange' : 'grey'}`};
+        case '2': return {text: 'скасовано клієнтом', color: `${index <= 5 ? 'red' : 'grey'}`};
+        case '3': return {text: 'вiдхилено', color: `${index <= 5 ? 'red' : 'grey'}`};
+        case '4': return {text: 'iнший статус', color: `${index <= 2 ? 'purple' : 'grey'}` };
+        case '5': return {text: 'схвалено', color: `${index <= 5 ? 'green' : 'grey'}`};
+        
+      }
+    },
     switchValue(val) {
       switch(val) {
         case 'even': return 'Класичний'

@@ -32,7 +32,7 @@ export default {
 	@import "../assets/scss/check-box.scss";
 	@import "../assets/scss/media-queries.scss";
 	@import "../assets/scss/loader.scss";
-	@import "../assets/scss/scroll.scss";
+  @import "../assets/scss/scroll.scss";
   .calculations-table,
   .dashboard-table,
   .reward-aplication-table {

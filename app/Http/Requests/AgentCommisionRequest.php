@@ -25,7 +25,19 @@ class AgentCommisionRequest extends JsonRequest
     {
         return [
             'agentId' => 'required|integer',
-            'leasingRequestId' => 'required|integer'
+            'leasingRequestId' => 'required|integer|exists:leasing_requests,id'
+        ];
+    }
+
+     /**
+     * Get the validation messages that apply to the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'leasingRequestId.exists' => 'Заявку на лизінг не знайдено!'
         ];
     }
 }

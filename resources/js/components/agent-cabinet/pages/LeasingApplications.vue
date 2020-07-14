@@ -199,7 +199,9 @@
           <span>{{ item.graph_type }}</span>
         </template>
         <template v-slot:item.initials="{ item }">
-          <span style="white-space: nowrap;"> {{ `${item.first_name} ${item.last_name} ${item.patronymic}` }}</span>
+          <span style="white-space: nowrap;">
+            {{ item.client_type_id == 2 ? item.legal_info.companyName : item.last_name + '. ' + item.first_name[0] + '. ' + item.patronymic[0]  }}
+          </span>
         </template>
         <template v-slot:item.leasing_object="{ item }">
           <span style="white-space: nowrap">{{ item.leasing_object}}</span><!-- <router-link tag="a" style="white-space: nowrap; text-transform: lowercase;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</router-link> -->

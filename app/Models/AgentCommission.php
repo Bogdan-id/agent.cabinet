@@ -12,7 +12,7 @@ class AgentCommission extends Model
      * @var array
      */
     protected $fillable = [
-        //
+        'status'
      ];
  
  

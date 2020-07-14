@@ -16,9 +16,10 @@ class OfferPdfMail extends Mailable
      *
      * @return void
      */
-    public function __construct($fileName)
+    public function __construct($data, $fileName)
     {
         $this->fileName = $fileName;
+        $this->data = $data;
     }
 
     /**
@@ -28,8 +29,8 @@ class OfferPdfMail extends Mailable
      */
     public function build()
     {
-        $subject = 'Комерційна пропозиція';
-
+        $subject = "Комерційна пропозиція {$this->data['mark']} {$this->data['model']} {$this->data['advance']}% {$this->data['term']}міс {$this->data['currency']}";
+        
         return $this->from('agent.bestleasing@gmail.com')
                     ->view('emails.offer_pdf')
                     ->subject($subject)

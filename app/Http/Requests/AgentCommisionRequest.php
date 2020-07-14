@@ -25,7 +25,7 @@ class AgentCommisionRequest extends JsonRequest
     {
         return [
             'agentId' => 'required|integer',
-            'leasingRequestId' => 'required|integer|exists:leasing_requests,id'
+            'leasingRequestId' => 'required|integer|exists:leasing_requests,id|unique:agent_commissions,leasing_requests_id'
         ];
     }
 
@@ -37,7 +37,8 @@ class AgentCommisionRequest extends JsonRequest
     public function messages()
     {
         return [
-            'leasingRequestId.exists' => 'Заявку на лизінг не знайдено!'
+            'leasingRequestId.exists' => 'Заявку на лизінг не знайдено!',
+            'leasingRequestId.unique' => 'Заявку на виплату АВ вже подано!',
         ];
     }
 }

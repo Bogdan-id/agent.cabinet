@@ -123,7 +123,7 @@
           </span>
         </template>
         <template v-slot:item.whole_object="{ item }">
-          <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</v-btn>
+          <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ switchValue(item.graph_type) }}</v-btn>
         </template>
         <template #item.status="{ item }">
           <div class="d-flex justify-center">

@@ -293,7 +293,7 @@ export default {
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center', sortable: false},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center', sortable: false },
-      { text: 'АВ, %', value: 'agent_reward', align: 'center' },
+      { text: 'АВ, грн', value: 'agent_reward', align: 'center' },
       { text: 'Тип графiку', value: 'whole_object', align: 'center', sortable: false },
       { text: 'Дата подачi', value: 'data', align: 'center', sortable: false },
       { text: 'Статус', value: 'status', align: 'center', sortable: false, width: 120 },

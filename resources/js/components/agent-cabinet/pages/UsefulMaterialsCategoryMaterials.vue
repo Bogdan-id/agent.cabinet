@@ -4,8 +4,8 @@
     <!-- <v-card-title class="d-block pt-3 pb-1" style="border-left: 4px solid #e75d57;">
        {{currentCategory }}
     </v-card-title> -->
-    <v-card-text v-if="articles.length === 0 || articles === null">
-      <div style="text-align: center;">(Матерiали для вiдображення вiдсутнi)</div>
+    <v-card-text v-if="articles === null || articles.length === 0">
+      <div style="text-align: center; font-size: 0.95rem;">(Матерiали для вiдображення вiдсутнi)</div>
     </v-card-text>
     <useful-materials-preview-card
       v-for="(item, key) in articles"
@@ -29,6 +29,8 @@ export default {
     currentCategory: null,
     articles: null,
     breadcrumbs: null,
+    
+    loading: false
   }),
   mounted() {
     console.log(this.$router.currentRoute)
@@ -36,8 +38,10 @@ export default {
     // this.currentCategory = params.name
     // let category = params.category
     axios
+      this.loading = true
       .get(`/json${this.$router.currentRoute.path}`)
       .then(response => {
+        this.loading = false
         console.log(response)
         if(response.status == 500) {
           // Помилка серверу
@@ -58,6 +62,7 @@ export default {
         }
       })
       .catch(error => {
+        this.loading = false
         console.log(error.response)
       })
   },

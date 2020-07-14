@@ -175,7 +175,7 @@
                   color="red">
                 </v-progress-circular>
               </v-card-text>
-              <v-card-text v-if="categories.length > 0">
+              <v-card-text>
                 <v-card-title class="edit-title pb-6">Редагувати категорiї</v-card-title>
                 <!-- <v-divider class="pl-8 pr-8"></v-divider> -->
                 <v-btn 
@@ -185,7 +185,7 @@
                   Додати категорiю&nbsp;
                   <v-icon v-text="'mdi-plus'"></v-icon>
                 </v-btn>
-                <ul id="categories-list">
+                <ul id="categories-list" v-if="categories.length > 0">
                   <li
                     v-for="item in categories"
                     :key="item.id"

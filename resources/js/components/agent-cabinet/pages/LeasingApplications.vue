@@ -364,12 +364,6 @@ export default {
       })
       return items
     },
-    getCalculationById(id) {
-      console.log(id)
-      // let temp = this.userCalculations
-      //   .filter()
-      console.log(this.$store.state.graphs)
-    },
     applyChanges(status, index) {
       switch(status) {
         case '1': return {text: 'в обробцi', color: `${index <= 1 ? 'orange' : 'grey'}`};

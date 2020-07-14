@@ -30,6 +30,8 @@ class AgentCommisionController extends Controller
             'status' => 'paid'
         ]);
         
-        return response()->json($agentCommission);
+        return response()->json([
+            'status' => 200
+        ]);
     }
 }

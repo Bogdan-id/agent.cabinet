@@ -207,7 +207,7 @@
         </v-card-text>
         <v-card-text class="pt-0">
           <div style="text-align: right">
-            <router-link :to="{name: 'dashboard-news', path: '/news', params: this.news}" class="see-all-news" style="font-size: 1rem; text-decoration: underline" tag="span">Всi новини</router-link>
+            <router-link :to="{name: 'dashboard-news', path: '/news', params: {news: this.news}}" class="see-all-news" style="font-size: 1rem; text-decoration: underline" tag="span">Всi новини</router-link>
           </div>
         </v-card-text>
       </v-card>
@@ -248,7 +248,7 @@
     </v-card-text>
     <v-card-text class="pt-0">
       <div style="text-align: center">
-        <v-btn color="#e75d57" outlined :to="{name: 'dashboard-news', path: '/news', params: this.news}" tag="span">всi новини&nbsp;<v-icon v-text="'mdi-arrow-right-bold'"></v-icon></v-btn>
+        <v-btn color="#e75d57" outlined :to="{name: 'dashboard-news', path: '/news', params: {news: this.news}}" tag="span">всi новини&nbsp;<v-icon v-text="'mdi-arrow-right-bold'"></v-icon></v-btn>
       </div>
     </v-card-text>
   </v-card>
@@ -340,13 +340,6 @@ export default {
           })
         })
     },
-    switchValue(val) {
-      switch(val) {
-        case 'even': return 'Класичний'
-        case 'annuity': return 'Ануїтет'
-        case 'irregular': return 'Індивідуальний'
-      }
-    },
     sortData(a, b) {
       return new Date(b.created_at) - new Date(a.created_at)
     },
@@ -387,7 +380,6 @@ export default {
       axios
         .get('/json/news')
         .then(response => {
-          console.log(response)
           this.news = response.data
         })
         .catch(error => {

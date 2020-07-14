@@ -58,7 +58,13 @@ export default {
     }
   },
   created() {
-    this.news = Object.values(this.$route.params)
+    console.log(this.$route.params)
+    this.news = Object.values(this.$route.params.news)
+    console.log('************')
+    console.log(this.news.length)
+    console.log(this.news)
+    console.log(this.$route.params)
+    console.log('************')
   }
 }
 </script>

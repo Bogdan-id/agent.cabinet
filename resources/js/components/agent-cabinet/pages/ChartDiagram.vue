@@ -612,7 +612,7 @@ export default {
       flex-direction: column;
     }
     .v-data-table__mobile-row {
-      min-height: 22px!important;
+      height: 22px!important;
       border-bottom: 1px solid #eeedeb;
       margin: 0 25px 0 25px;
       padding: 0;

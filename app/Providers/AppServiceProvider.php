@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use App\Models\{
+    LeasingRequest
+};
+use App\Observers\LeasingRequestObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        LeasingRequest::observe(LeasingRequestObserver::class);
         Schema::defaultStringLength(191);
     }
 }

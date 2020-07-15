@@ -81,6 +81,9 @@
               {{ item.created_at.substr(0, 10) }}
             </div>
           </template>
+          <template v-slot:item.status="{ item }">
+            <v-chip color="orange" dark>{{ item.status }}</v-chip>
+          </template>
         </v-data-table>
       </v-card-text>
     </v-card>
@@ -153,7 +156,9 @@ export default {
             this.object._token = this.getCsrf()
             this.$store.commit('toggleAdminSpinner', false)
             // this.agentCommisions = response.data
+            console.log('commision request')
             console.log(response)
+            console.log('commision request')
           })
           .catch(error => {
             this.$store.commit('toggleAdminSpinner', false)

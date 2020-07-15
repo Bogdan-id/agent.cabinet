@@ -1,5 +1,8 @@
 <template>
 <div class="row">
+  <div style="width: 100%;">
+  <bread-scrumb></bread-scrumb>
+  </div>
   <v-card class="usefull-material__detail" elevation="7" v-if="news !== null && $route.name === 'dashboard-news'" style="min-height: 160px;">
     <v-card-title style="border-left: 5px solid #e75d57">
       <div style="width: 100%;">Всi новини сайту</div>
@@ -47,7 +50,12 @@
 </template>
 
 <script>
+import breadScrumb from '../components/breadScrumb'
+
 export default {
+  components: {
+    breadScrumb
+  },
   data: () => ({
     routeItem: null,
     news: null,

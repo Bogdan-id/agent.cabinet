@@ -1,11 +1,12 @@
 <template>
   <v-card elevation="9">
     <section class="chart-diagram" id="chart-diagram">
-      <div class="tabs">
+      <div class="tabs" v-if="graphData && graphData.result_data">
         <div class="tabs-input active">
           <label 
             @click.stop="changeActive($event)" 
-            for="tab-2" 
+            for="tab-2"
+            :style="`${!graphData.result_data.hasOwnProperty('even') ? 'background: grey' : ''}`"
             class="label">
             КЛАСИЧНИЙ
           </label>
@@ -18,7 +19,8 @@
             checked  
             v-model="currentTab">
           <div class="content">
-            <v-card  class="view-charts">
+            <div v-if="!graphData.result_data.hasOwnProperty('even')" class="empty-chart"></div>
+            <v-card  class="view-charts" v-if="graphData.result_data.hasOwnProperty('even')">
               <v-row>
                 <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
                   <v-data-table
@@ -87,7 +89,7 @@
                   </v-data-table>
                 </v-col>
               </v-row>
-            <div class="payout-schedule">
+            <div class="payout-schedule"  v-if="graphData.result_data.hasOwnProperty('even')">
               Графiк виплат
             </div>
             <v-data-table
@@ -171,6 +173,7 @@
           <label
             @click.stop="changeActive($event)" 
             for="tab-1" 
+            :style="`${!graphData.result_data.hasOwnProperty('annuity') ? 'background: grey' : ''}`"
             class="label">
             АНУЇТЕТ
           </label>
@@ -182,7 +185,8 @@
             value="1" 
             v-model="currentTab"/>
           <div class="content">
-            <v-card class="view-charts">
+            <div v-if="!graphData.result_data.hasOwnProperty('annuity')" class="empty-chart"></div>
+            <v-card class="view-charts"  v-if="graphData.result_data.hasOwnProperty('annuity')">
               <v-row>
                 <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
                   <v-data-table
@@ -336,6 +340,7 @@
           <label 
             @click.stop="changeActive($event)" 
             for="tab-3" 
+            :style="`${!graphData.result_data.hasOwnProperty('irregular') ? 'background: grey' : ''}`"
             class="label">
             IНДИВIДУАЛЬНИЙ
           </label>
@@ -347,7 +352,8 @@
             value="3" 
             v-model="currentTab">
           <div class="content">
-            <v-card  class="view-charts">
+            <div v-if="!graphData.result_data.hasOwnProperty('irregular')" class="empty-chart"></div>
+            <v-card  class="view-charts" v-if="graphData.result_data.hasOwnProperty('irregular')">
               <v-row>
                 <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
                   <v-data-table
@@ -577,7 +583,6 @@ export default {
   },
   mounted() {
     this.graphData = this.$route.params.data
-    console.log(this.graphs)
     console.log(this.$route.params)
     this.addObjects(this.graphData)
     if(this.$route.params.preview === true) {
@@ -727,6 +732,13 @@ export default {
     left: 0;
     opacity: 1;
   }
+}
+.empty-chart {
+  width: 100%; 
+  height: 100vh; 
+  background-image: url('../assets/img/empty-graph-backgound.png'); 
+  background-size: contain; 
+  filter: blur(0.15rem);
 }
   
 </style>

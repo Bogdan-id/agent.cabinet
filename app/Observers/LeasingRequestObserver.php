@@ -17,14 +17,17 @@ class LeasingRequestObserver
      */
     public function created(LeasingRequest $leasingRequest)
     {
-        // if(){
-
-        // }
+        if($leasingRequest->client_type_id == 1){
+            $firstName = mb_substr($leasingRequest->first_name, 0, 1);
+            $patronymic = mb_substr($leasingRequest->patronymic, 0, 1);
+            $notificationTitle = "Створено нову заявку на лизінг на им'я {$leasingRequest->last_name} {$firstName}.{$patronymic}.";
+        }elseif($leasingRequest->client_type_id == 2){
+            $notificationTitle = "Створено нову заявку на лизінг на компанію {$leasingRequest->legal_info['companyName']}";
+        }
         $notification = new Notification;
         $notification->agent_id = $leasingRequest->agent_id;
-        $notification->title = "Створено нову заявку на лизінг на {$leasingRequest->first_name}";
+        $notification->title = $notificationTitle;
         $notification->save();
-       // dd($leasingRequest);
     }
 
     /**

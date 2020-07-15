@@ -33,7 +33,7 @@ class LeasingRequestController extends Controller
     public function getLeasingRequest($id)
     {
        $leasingRequest = LeasingRequest::find($id);
-       // dd($leasingRequest->calculation);
+    
        return response()->json($leasingRequest);
     }
 

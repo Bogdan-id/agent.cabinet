@@ -53,4 +53,9 @@ class LeasingRequestController extends Controller
             'url' => url("/storage/{$path}")
         ]);
     }
+
+    public function updateStatus($id)
+    {
+        //
+    }
 }

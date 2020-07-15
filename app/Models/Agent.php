@@ -63,4 +63,12 @@ class Agent extends Model
     {
         return $this->hasMany('App\Models\AgentCommission')->with('leasingRequest');
     }
+
+    /**
+     * Get the notifications records associated with the agent.
+     */
+    public function notifications()
+    {
+        return $this->hasMany('App\Models\Notification');
+    }
 }

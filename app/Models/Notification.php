@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AgentCommission extends Model
+class Notification extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -30,17 +30,6 @@ class AgentCommission extends Model
      ];
 
      protected $attributes = [
-      'status' => 'not_paid'
+      'status' => 'not_checked'
   ];
-
-     
-    public function leasingRequest()
-    {
-        return $this->belongsTo('App\Models\LeasingRequest', 'leasing_requests_id');
-    }
-
-    public function agent()
-    {
-        return $this->belongsTo('App\Models\Agent');
-    }
 }

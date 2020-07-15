@@ -277,7 +277,7 @@
     </v-card-text>
     <v-card-text class="pt-0">
       <div style="text-align: center">
-        <v-btn color="#e75d57" outlined :to="{name: 'dashboard-news', path: '/news', params: {news: this.news}}" tag="span">всi новини&nbsp;<v-icon v-text="'mdi-arrow-right-bold'"></v-icon></v-btn>
+        <v-btn color="#e75d57" outlined :to="{name: 'dashboard-news', path: '/news', params: {news: this.news}}" tag="span">всi новини</v-icon></v-btn>
       </div>
     </v-card-text>
   </v-card>

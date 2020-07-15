@@ -105,6 +105,7 @@ export default {
       _token: null
     },
     tableHeader: [
+      { text: 'Код заявки', value: 'id'},
       { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
       // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
       { text: 'Авто', value: 'leasing_request.leasing_object', align: 'center' },

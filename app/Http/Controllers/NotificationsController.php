@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{
     Agent,
-    IdCard,
-    Passport
+    Notification
 };
 
 class NotificationsController extends Controller
@@ -22,5 +21,16 @@ class NotificationsController extends Controller
         $agentNotifications = $agent->notifications;
 
         return response()->json($agentNotifications);
+    }
+
+    public function delete($id)
+    {
+        $notification = Notification::find($id);
+        abort_if(!$notification, 422, 'Повідомлення не знайдено!');
+        $notification->delete();
+
+        return response()->json([
+            'status' => 200
+        ]);
     }
 }

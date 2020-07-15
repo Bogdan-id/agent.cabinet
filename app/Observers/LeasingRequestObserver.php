@@ -9,6 +9,10 @@ use App\Models\{
 
 class LeasingRequestObserver
 {
+    protected $oldStatus;
+    
+    protected $newStatus;
+
     /**
      * Handle the leasing request "created" event.
      *
@@ -31,6 +35,17 @@ class LeasingRequestObserver
     }
 
     /**
+     * Handle the leasing request "updating" event.
+     *
+     * @param  \App\LeasingRequest  $leasingRequest
+     * @return void
+     */
+    public function updating(LeasingRequest $leasingRequest)
+    {
+        $this->oldStatus = $leasingRequest->status_id;
+    }
+
+    /**
      * Handle the leasing request "updated" event.
      *
      * @param  \App\LeasingRequest  $leasingRequest
@@ -38,7 +53,7 @@ class LeasingRequestObserver
      */
     public function updated(LeasingRequest $leasingRequest)
     {
-        //
+        dd($this->oldStatus);
     }
 
     /**

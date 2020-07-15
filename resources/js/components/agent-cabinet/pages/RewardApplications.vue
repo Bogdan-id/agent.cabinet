@@ -9,15 +9,11 @@
           Заявка на винагороду
       </v-card-title>
       <v-card-text class="mt-8 pb-0">
-        <!--           
-          item-text="id"
-          item-value="id" -->
         <v-select
           :error-messages="leasingRequestIdErr"
           v-model="object.leasingRequestId"
           :items="[7]"
           label="Оберiть ID заявки"
-
           dense outlined>
         </v-select>
         <v-text-field
@@ -68,24 +64,24 @@
           class="d-flex justify-center">
           (Iсторiя заявок порожня)
         </v-card-title>
-        <v-data-table
-          v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
-          color="black"
-          :headers="tableHeader"
-          :custom-sort="customSort"
-          :items="agentCommisions"
-          :hide-default-footer="true"
-          class="elevation-1 mr-3 ml-3 mt-4 reward-aplication-table">
-          <template v-slot:item.leasing_request.created_at="{ item }">
-            <div class="text-center">
-              {{ item.created_at.substr(0, 10) }}
-            </div>
-          </template>
-          <template v-slot:item.status="{ item }">
-            <v-chip color="orange" dark>{{ item.status }}</v-chip>
-          </template>
-        </v-data-table>
       </v-card-text>
+      <v-data-table
+        v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
+        color="black"
+        :headers="tableHeader"
+        :custom-sort="customSort"
+        :items="agentCommisions"
+        :hide-default-footer="true"
+        class="elevation-1 mr-3 ml-3 mt-4 reward-aplication-table">
+        <template v-slot:item.leasing_request.created_at="{ item }">
+          <div class="text-center">
+            {{ item.created_at.substr(0, 10) }}
+          </div>
+        </template>
+        <template v-slot:item.status="{ item }">
+          <v-chip small :color="item.status === 'paid'? 'success' : 'error'" dark>{{ switchStatus(item.status) }}</v-chip>
+        </template>
+      </v-data-table>
     </v-card>
   </div>
  </div>
@@ -133,6 +129,10 @@ export default {
     }
   },
   methods: {
+    switchStatus(status) {
+      if(status === 'not_paid') return 'Не оплачено'
+      if(status === 'paid') return 'Оплачено'
+    },
     customSort(items) {
       console.log(items)
       items

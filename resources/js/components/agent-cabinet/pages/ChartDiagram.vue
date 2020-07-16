@@ -563,6 +563,7 @@
 <script>
 import ChartButtons from './ChartDiagramBtn'
 export default {
+  name: 'Графiки',
   components: {
     ChartButtons
   },
@@ -637,6 +638,7 @@ export default {
     }
   },
   mounted() {
+    console.log('TEST TEST')
     this.graphData = this.$route.params.data
     console.log(this.$route.params)
     this.addObjects(this.graphData)

@@ -79,7 +79,7 @@
           </div>
         </template>
         <template v-slot:item.status="{ item }">
-          <v-chip small :color="item.status === 'paid'? 'success' : 'error'" dark>{{ switchStatus(item.status) }}</v-chip>
+          <v-chip style=" text-align: center;" small :color="item.status === 'paid'? 'success' : 'error'" dark>{{ switchStatus(item.status) }}</v-chip>
         </template>
       </v-data-table>
     </v-card>
@@ -227,5 +227,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.v-chip {
+  min-width: 95px;
+  span {
+    margin: 0 auto;
+  }
+}
 </style>

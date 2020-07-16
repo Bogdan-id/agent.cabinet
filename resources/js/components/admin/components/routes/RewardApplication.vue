@@ -137,7 +137,8 @@ export default {
         })
     },
     sendToPay() {
-      if(!this.status === 'paid') {
+      if(this.status != 'paid') {
+        console.log('input')
         this.loading = true
         this.sendRequest()
       }

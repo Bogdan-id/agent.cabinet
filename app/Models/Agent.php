@@ -40,6 +40,11 @@ class Agent extends Model
       //
     ];
 
+    public function getNameAttribute()
+    {
+        return "{$this->last_name} {$this->first_name} {$this->patronymic}";  
+    }
+
     /**
      * Get the manager record associated with the agent.
      */
@@ -70,5 +75,13 @@ class Agent extends Model
     public function notifications()
     {
         return $this->hasMany('App\Models\Notification');
+    }
+
+    /**
+     * Get the notifications records associated with the agent.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 }

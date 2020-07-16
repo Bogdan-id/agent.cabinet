@@ -33,4 +33,21 @@ class NotificationsController extends Controller
             'status' => 200
         ]);
     }
+
+    public function checkingNotifications(Request $request)
+    {
+        $data = $request->post();
+        foreach($data['notifications'] as $notificationId){
+            $notification = Notification::find($notificationId);
+            if($notification){
+                $notification->update([
+                    'status' => 'checked'
+                ]);
+            }      
+        }
+
+        return response()->json([
+            'status' => 200
+        ]);
+    }
 }

@@ -378,7 +378,7 @@ export default {
           this.$notify({
             group: 'error',
             title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
+            text: `${error.response.data.errors.leasingRequestId}`,
           })
         })
     },

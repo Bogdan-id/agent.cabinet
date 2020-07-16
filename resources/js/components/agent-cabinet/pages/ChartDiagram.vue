@@ -19,10 +19,18 @@
             checked  
             v-model="currentTab">
           <div class="content">
-            <div v-if="!graphData.result_data.hasOwnProperty('even')" class="empty-chart"></div>
+            <div style="position: relative;">
+              <div v-if="!graphData.result_data.hasOwnProperty('even')" class="empty-chart">
+              </div>
+              <div class="router-link-to-no-calc">
+                <p style="font-size: 1.3rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+                  <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
+                </p>
+              </div>
+            </div>
             <v-card  class="view-charts" v-if="graphData.result_data.hasOwnProperty('even')">
               <v-row>
-                <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
+                <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0 pr-0">
                   <v-data-table
                     class="leasing-object-table"
                     v-if="graphData"
@@ -87,6 +95,14 @@
                       </span>
                     </template>
                   </v-data-table>
+                </v-col>
+                <v-col cols="12" md="4" sm="3" lg="6" class="pl-0" v-if="graphData.result_data.hasOwnProperty('even')">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn class="mt-5" v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" width="45" height="45" fab dark color="#d24a43"><v-icon color="white" size="30">mdi-file-find-outline</v-icon></v-btn>
+                    </template>
+                    <span>Переглянути графiк в режимi редагування</span>
+                  </v-tooltip>
                 </v-col>
               </v-row>
             <div class="payout-schedule"  v-if="graphData.result_data.hasOwnProperty('even')">
@@ -185,7 +201,19 @@
             value="1" 
             v-model="currentTab"/>
           <div class="content">
-            <div v-if="!graphData.result_data.hasOwnProperty('annuity')" class="empty-chart"></div>
+            <div style="position: relative;">
+              <div v-if="!graphData.result_data.hasOwnProperty('annuity')" class="empty-chart">
+              </div>
+              <div class="router-link-to-no-calc">
+                <p style="font-size: 1.3rem">
+                  <span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;">
+                    <v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon>
+                  </span>
+                  Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+                  <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
+                </p>
+              </div>
+            </div>
             <v-card class="view-charts"  v-if="graphData.result_data.hasOwnProperty('annuity')">
               <v-row>
                 <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
@@ -254,6 +282,14 @@
                       </span>
                     </template>
                   </v-data-table>
+                </v-col>
+                <v-col cols="12" md="4" sm="3" lg="6" class="pl-0" v-if="graphData.result_data.hasOwnProperty('annuity')">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn class="mt-5" v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" width="45" height="45" fab dark color="#d24a43"><v-icon color="white" size="30">mdi-file-find-outline</v-icon></v-btn>
+                    </template>
+                    <span>Переглянути графiк в режимi редагування</span>
+                  </v-tooltip>
                 </v-col>
               </v-row>
               <div class="payout-schedule">
@@ -352,7 +388,15 @@
             value="3" 
             v-model="currentTab">
           <div class="content">
-            <div v-if="!graphData.result_data.hasOwnProperty('irregular')" class="empty-chart"></div>
+            <div style="position: relative;">
+              <div v-if="!graphData.result_data.hasOwnProperty('irregular')" class="empty-chart">
+              </div>
+              <div class="router-link-to-no-calc">
+                <p style="font-size: 1.3rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+                  <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
+                </p>
+              </div>
+            </div>
             <v-card  class="view-charts" v-if="graphData.result_data.hasOwnProperty('irregular')">
               <v-row>
                 <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
@@ -421,6 +465,14 @@
                       </span>
                     </template>
                   </v-data-table>
+                </v-col>
+                <v-col cols="12" md="4" sm="3" lg="6" class="pl-0" v-if="graphData.result_data.hasOwnProperty('irregular')">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn class="mt-5" v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" width="45" height="45" fab dark color="#d24a43"><v-icon color="white" size="30">mdi-file-find-outline</v-icon></v-btn>
+                    </template>
+                    <span>Переглянути графiк в режимi редагування</span>
+                  </v-tooltip>
                 </v-col>
               </v-row>
               <div class="payout-schedule">
@@ -542,6 +594,9 @@ export default {
     annuity: [],
   }),
   methods: {
+    test() {
+      console.log(this.graphData.id)
+    },
     addObjects(data) {
       /* eslint-disable */
       if(data.result_data.hasOwnProperty('annuity')) { this.annuity = data.result_data.annuity.graph}
@@ -658,6 +713,19 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.router-link-to-no-calc {
+  border-radius: 10px; 
+  padding: 25px 25px 10px 25px; 
+  border: 1px solid darkgrey; 
+  backdrop-filter: blur(4px); 
+  background: rgba(252, 252, 252, 0.7); 
+  position: absolute; 
+  left: 50%; 
+  top: 22%; 
+  transform: translate(-50%, 0%); 
+  font-size: 1.5rem; 
+  text-align: center;
+}
 .v-data-table.leasing-object-table {
 
   .v-data-table__mobile-row {

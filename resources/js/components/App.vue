@@ -33,6 +33,9 @@ export default {
 	@import "../assets/scss/media-queries.scss";
 	@import "../assets/scss/loader.scss";
   @import "../assets/scss/scroll.scss";
+  .v-dialog {
+    overflow-x: hidden!important;
+  }
   .calculations-table,
   .dashboard-table,
   .reward-aplication-table {

@@ -79,7 +79,7 @@
           </div>
         </template>
         <template v-slot:item.status="{ item }">
-          <v-chip small :color="item.status === 'paid'? 'success' : 'error'" dark>{{ switchStatus(item.status) }}</v-chip>
+          <v-chip style=" text-align: center;" small :color="item.status === 'paid'? 'success' : 'error'" dark>{{ switchStatus(item.status) }}</v-chip>
         </template>
       </v-data-table>
     </v-card>
@@ -105,6 +105,7 @@ export default {
       _token: null
     },
     tableHeader: [
+      { text: 'Код заявки', value: 'id'},
       { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
       // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
       { text: 'Авто', value: 'leasing_request.leasing_object', align: 'center' },
@@ -226,5 +227,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.v-chip {
+  min-width: 95px;
+  span {
+    margin: 0 auto;
+  }
+}
 </style>

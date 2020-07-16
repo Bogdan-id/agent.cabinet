@@ -18,6 +18,7 @@ use App\Models\Calculation;
 use App\Http\Requests\CalculateRequest;
 use App\Mail\OfferPdfMail;
 use Mail;
+use App\Models\Agent;
 
 class CalculateController extends Controller
 {
@@ -90,6 +91,13 @@ class CalculateController extends Controller
      */
     public function createExcel (Request $request, CarImageService $carImageService) {
         $data = $request->post();
+        $agent = Agent::find($data['agentId']);
+        $data['agentInfo'] = [
+            'name' => $agent->name,
+            'email' => $agent->user->email,
+            'phone' => $agent->user->phone
+        ];
+
         $defaultConfig = (new ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];
 

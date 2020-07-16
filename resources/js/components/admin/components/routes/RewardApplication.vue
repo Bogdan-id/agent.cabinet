@@ -183,7 +183,7 @@ export default {
       this.agentComissionDialog = true
       this.cardNumber = itemObject.agent.card_number
       this.iban = itemObject.agent.iban
-      this.amount = (parseInt(itemObject.leasing_request.leasing_amount.replace(/[^\d]/g, ''))  / 100) * 2
+      this.amount = (parseInt(itemObject.leasing_request.leasing_amount.replace(/[^\d]/g, ''))  / 100) * parseInt(itemObject.agent.ab_size)
       this.id = itemObject.id
       this.status = itemObject.status
     },

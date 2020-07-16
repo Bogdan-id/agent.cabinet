@@ -349,6 +349,20 @@ export default {
 		repeatPasswordError() {
 			return this.repeatPasswordErrors.length > 0 
 		}
-	},
+  },
+  mounted() {
+    window.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        this.submit()
+      }
+    })
+  },
+  beforeDestroy() {
+    window.removeEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        this.submit()
+      }
+    })
+  }
 }
 </script>

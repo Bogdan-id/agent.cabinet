@@ -43,6 +43,7 @@ Route::get('/agent/notifications/{agent_id}', 'NotificationsController@getAgentN
             ->where('agent_id', '[0-9]+');
 Route::delete('/agent/notifications/delete/{id}', 'NotificationsController@delete')
             ->where('id', '[0-9]+');
+Route::post('/agent/notifications/checking', 'NotificationsController@checkingNotifications');
 Route::get('calculations/agent/{id}', 'CalculateController@getCalculationByAgent');
 Route::get('calculation/{id}', 'CalculateController@getCalculationById');
 Route::delete('calculation/delete/{id}', 'CalculateController@delete');

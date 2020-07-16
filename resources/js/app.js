@@ -14,8 +14,6 @@ import VueMask from 'v-mask'
 import store from './store/store'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 
-
-
 /* eslint-disable */
 Vue.use(CKEditor)
 Vue.use(PaperDashboard)

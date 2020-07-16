@@ -1,7 +1,9 @@
 <template>
   <div>
     <breads-crumb></breads-crumb>
-    <router-view :key="$route.path"></router-view>
+    <keep-alive include="Графiки"> 
+      <router-view :key="$route.path"></router-view>
+    </keep-alive>
     <calculator-data  v-if="$route.name === 'Калькулятор лізингу'"></calculator-data>
   </div>
 </template>

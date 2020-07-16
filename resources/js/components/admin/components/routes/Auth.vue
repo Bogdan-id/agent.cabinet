@@ -33,7 +33,9 @@
       <v-card-actions style="justify-content: center;">
         <span>
           <v-btn 
-            @click="signIn()" 
+            @click="signIn()"
+            id="admin-sign-in-btn"
+            @keydown.esc="$emit('test')"
             class="error white--text" 
             :loading="loading">
             Увiйти
@@ -80,6 +82,9 @@ export default {
     },
   },
   methods: {
+    test() {
+      console.log('OK')
+    },
     signIn() {
       console.log('sign-in')
       console.log(this.$v.$dirty)
@@ -131,6 +136,18 @@ export default {
   },
   mounted() {
     this.userObj._token = this.getCsrf()
+    window.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        this.signIn()
+      }
+    })
+  },
+  beforeDestroy() {
+    window.removeEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        this.signIn()
+      }
+    })
   }
 }
 </script>

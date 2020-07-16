@@ -13,9 +13,9 @@
     </div>
     <div>
       <transition name="fade" mode="out-in">
-        <!-- <keep-alive include="Головна"> 
-          <keep-alive> -->
+        <!-- <keep-alive include="Графiкии">  -->
         <router-view></router-view>
+        <!-- </keep-alive> -->
       </transition>
     </div>
   </div>

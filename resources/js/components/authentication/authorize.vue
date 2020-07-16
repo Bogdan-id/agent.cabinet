@@ -17,6 +17,12 @@
 						@paste="pasteEvent = true"
 						@input=" applyMask()"
 						/>
+          <span 
+						:class="numberErrors.length > 0 
+							? 'app__input-error input-error--active' 
+							: 'app__input-error'"> 
+              {{ numberErrors[0] }}
+          </span>
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
@@ -31,8 +37,8 @@
 						:class="passwordErrors.length > 0 
 							? 'app__input-error input-error--active' 
 							: 'app__input-error'"> 
-						{{ passwordErrors[0] }}
-					</span>
+              {{ passwordErrors[0] }}
+            </span>
 				</div>
 				<div class="app__register-checkbox-wrapper">
 					<input
@@ -47,7 +53,7 @@
 					</label>
 				</div>
 				<div class="app__button-wrapper">
-					<button @click="submit()" class="app__btn-primary">
+					<button @click="submit()" id="sign-in-btn" class="app__btn-primary">
 						<span v-if="!request">Увiйти</span>
 						<div v-if="request" class="lds-dual-ring"></div>
 					</button>
@@ -80,13 +86,22 @@ export default {
 	validations: {
 		password: {
 			required,
-		},
+    },
+    number: {
+      required
+    }
 	},
 	methods: {
 		getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-		},
+    },
+    highlightErrors() {
+      this.$v.$anyError
+      this.$v.$touch()
+    },
 		submit() {
+      console.log(this.numberErrors.length > 0)
+      this.highlightErrors()
 			if(!this.$v.$invalid && this.$v.$dirty ){
 				this.signIn(this.getRegObject())
 			} else {
@@ -234,7 +249,14 @@ export default {
 				el.dispatchEvent(event)
 			}
 			this.pasteEvent = false
-		},
+    },
+    signInByEnter() {
+      window.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          this.submit()
+        }
+      })
+    }
 	},
 	computed: {
 		passwordErrors() {
@@ -242,10 +264,26 @@ export default {
 			if (!this.$v.password.$error) return errors
 			!this.$v.password.required && errors.push('Поле пароль обов\'язкове для заповнення')
 			return errors
-		}
+    },
+    numberErrors() {
+      const errors = []
+			if (!this.$v.number.$error) return errors
+			!this.$v.number.required && errors.push('Поле номер телефону обов\'язкове для заповнення')
+			return errors
+    }
 	},
 	created() {
 		this.checkUser()
-	},
+  },
+  mounted() {
+    this.signInByEnter()
+  },
+  beforeDestroy() {
+    window.removeEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        this.submit()
+      }
+    })
+  },
 }
 </script>

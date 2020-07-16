@@ -79,8 +79,8 @@
       <template v-slot:item.initials="{ item }">
         <span>{{ item.agent.last_name + ' ' + item.agent.first_name[0] + '. ' + item.agent.patronymic[0] + '. '}}</span>
       </template>
-      <template v-slot:item.leasing_request.leasing_amount="{ item }">
-        <span>{{ item.leasing_request.leasing_amount }}</span>
+      <template v-slot:item.amountSum="{ item }">
+        <span>{{ (parseInt(item.leasing_request.leasing_amount.replace(/[^\d]/g, ''))  / 100) * parseInt(item.agent.ab_size) }}</span>
       </template>
       <template v-slot:item.created_at="{ item }">
         <span>{{ item.created_at.substr(0, 10) }}</span>
@@ -110,7 +110,7 @@ export default {
 
     tableHeader: [
       { text: 'Iм`я', value: 'initials', align: 'start', sortable: false},
-      { text: 'Сума, грн', value: 'leasing_request.leasing_amount', align: 'center', sortable: false},
+      { text: 'Сума, грн', value: 'amountSum', align: 'center', sortable: false},
       { text: 'Дата', value: 'created_at', align: 'center' },
       { text: 'Статус', value: 'status', align: 'center', sortable: false },
       { text: 'Сплатити', value: 'actions', align: 'center', sortable: false },
@@ -125,8 +125,6 @@ export default {
   }),
   methods: {
     filterCommisitonsByPaid(event) {
-      console.log(this.agentComissions)
-      console.log(event)
       this.filteredAgentComissions = this.agentComissions
         .filter(value => {
           if(event !== 'all'){
@@ -184,6 +182,7 @@ export default {
       this.cardNumber = itemObject.agent.card_number
       this.iban = itemObject.agent.iban
       this.amount = (parseInt(itemObject.leasing_request.leasing_amount.replace(/[^\d]/g, ''))  / 100) * parseInt(itemObject.agent.ab_size)
+      console.log(this.amount)
       this.id = itemObject.id
       this.status = itemObject.status
     },

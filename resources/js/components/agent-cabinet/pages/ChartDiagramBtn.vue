@@ -576,6 +576,7 @@ export default {
       return {state: false}
     },
     sendDataToUser() {
+      console.log(this.data.result_data)
       let graph = this.data.result_data[this.switchGraphName(this.graph)]
       let calcData = this.data.request_data
       let rootCalcData = this.data
@@ -919,7 +920,8 @@ export default {
     this.getDefaultProperties()
   },
   mounted() {
-    this.graphType = this.graph
+    console.log(this.graph)
+    this.graphType = this.switchGraphName(this.graph)
   }
 }
 </script>

@@ -32,6 +32,9 @@ Route::get('/finish-register', function () {
 Route::get('/verification/accept/{id}', 'VerificationController@acceptAgent');
 Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');
 
+Route::post('password/reset/sendSms', 'Auth\ResetPasswordSmsController@sendCodeMessage');
+Route::post('password/reset/checkCode', 'Auth\ResetPasswordSmsController@checkVerificationCode');
+
 Route::get('/getUserAgent', 'AgentsController@getUserAgent');
 Route::post('/agent/create', 'AgentsController@create');
 Route::post('/agent/update/{id}', 'AgentsController@update')

@@ -803,8 +803,6 @@ import Equipment from '../../assets/svg-icons/equipment.vue'
 import Special from '../../assets/svg-icons/special.vue'
 import Cargo from '../../assets/svg-icons/cargo.vue'
 import Trailer from '../../assets/svg-icons/trailer.vue'
-// import CalculatorRightArrow from '../../assets/svg-icons/calculator-right-arrow'
-// import CalculatorLeftArrow from '../../assets/svg-icons/calculator-left-arrow'
 import Percent from '../../assets/svg-icons/percent'
 import advanceHint from '../../assets/svg-icons/avans-hint'
 
@@ -817,8 +815,6 @@ export default {
     Special,
     Cargo,
     Trailer,
-    // CalculatorRightArrow,
-    // CalculatorLeftArrow,
     Percent,
     advanceHint
   },
@@ -855,14 +851,6 @@ export default {
     insuranceFranchise: 0,
 
     calcObj: {
-      // gpsTrackerQuantity: 1,
-      // urkAssistService: 1,
-      // gainEvenGraphicMonths: null,
-      // gainEvenGraphicPercent: null,
-      // UnsrMonths: null,
-      // vehicleOwnerTax: "2",
-      // paymentPf: false,
-      
       customStepOptionFirst: null,
       customStepOptionMiddle: null,
       threeThirds: null,
@@ -901,14 +889,6 @@ export default {
   validations() {
     return {
       calcObj: this.validationRules,
-      // stepGain: (() => {
-      //   if (this.hasIrregular && this.calcObj.customGraphicType === 3){
-      //     return {
-      //       customStepOptionFirst: { required },
-      //       customStepOptionMiddle: { required },
-      //     }
-      //   } else return true
-      // })(),
     }
   },
   computed: {

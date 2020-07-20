@@ -7,7 +7,7 @@
         <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="leasingRequestSvg"/>
         <sidebar-link to="/commission-requests" name="Заявки на винагороду" icon="rewardRequests"/>
         <sidebar-link to="/useful-materials-categories" name="Кориснi матерiали" icon="usefulMaterialsSvg"/>
-        <sidebar-link to="/reporting" name="reporting" icon="fileChart"/>
+        <sidebar-link to="/reporting" name="Звiтнiсть" icon="fileChart"/>
         <!-- <sidebar-link to="/agent-profile" name="профiль" icon="ti-user"/> -->
         <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->
         <!-- <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/> -->

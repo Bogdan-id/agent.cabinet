@@ -320,7 +320,7 @@ const routes = [
           },
           {
             path: 'charts',
-            name: 'Графiки ',// indentation important
+            name: 'Графiки ', // indentation important
             component: ChartDiagram,
             meta: {
               title: 'Графiк розрахункiв'

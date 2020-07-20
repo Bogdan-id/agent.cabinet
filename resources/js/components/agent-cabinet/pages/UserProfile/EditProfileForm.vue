@@ -2,12 +2,11 @@
   <v-card class="edit-profile" elevation="7">
     <v-card-title class="d-block grey darken-3 white--text">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-account'"></v-icon>
-        Профiль
+      Профiль
     </v-card-title>
     <v-card-text class="pt-7">
-    <div>
+    <div class="profile-block">
       <form @submit.prevent>
-        <!--  -->
         <v-card class="mb-6 custom-border">
           <v-card-title>
             ПIБ
@@ -16,26 +15,33 @@
             <v-row>
               <div class="col-md-4">
                 <v-text-field
-                    v-model="user.last_name"
-                    label="Прізвище"
-                    :placeholder="user.last_name"
-                    dense>
+                  v-model="user.last_name"
+                  :error-messages="last_nameErr"
+                  @input="$v.user.last_name.$touch()"
+                  @blur="$v.user.last_name.$touch()"
+                  label="Прізвище"
+                  :placeholder="user.last_name"
+                  dense>
                 </v-text-field>
               </div>
               <div class="col-md-4">
                 <v-text-field
-                    v-model="user.first_name"
-                    label="Ім'я"
-                    :placeholder="user.first_name"
-                    dense>
+                  v-model="user.first_name"
+                  :error-messages="first_nameErr"
+                  @input="$v.user.first_name.$touch()"
+                  @blur="$v.user.first_name.$touch()"
+                  label="Ім'я"
+                  dense>
                 </v-text-field>
               </div>
               <div class="col-md-4">
                 <v-text-field
-                    v-model="user.patronymic"
-                    label="По батькові"
-                    :placeholder="user.patronymic"
-                    dense>
+                  @input="$v.user.patronymic.$touch()"
+                  @blur="$v.user.patronymic.$touch()"
+                  :error-messages="patronymicErr"
+                  v-model="user.patronymic"
+                  label="По батькові"
+                  dense>
                 </v-text-field>
               </div>
             </v-row>
@@ -50,24 +56,28 @@
             <v-row>
               <div class="col-md-5">
                 <v-text-field
-                    v-model="user.phone"
-                    label="Телефон"
-                    :placeholder="user.phone"
-                    outlined dense>
+                  v-model="user.phone"
+                  :error-messages="phoneErr"
+                  @input="$v.user.phone.$touch(); applyMask()"
+                  @blur="$v.user.phone.$touch()"
+                  id="number"
+                  label="Телефон"
+                  outlined dense>
                 </v-text-field>
               </div>
               <div class="col-md-6">
                 <v-text-field
-                    v-model="user.email"
-                    label="Email"
-                    :placeholder="user.email"
-                    outlined dense>
+                  :error-messages="emailErr"
+                  @input="$v.user.email.$touch()"
+                  @blur="$v.user.email.$touch()"
+                  v-model="user.email"
+                  label="Email"
+                  outlined dense>
                 </v-text-field>
               </div>
             </v-row>
           </v-card-text>
         </v-card>
-        <!--  -->
         <v-card class="mb-6 custom-border">
           <v-card-title>
             Посадовi данi
@@ -76,28 +86,35 @@
             <v-row>
               <div class="col-md-5">
                 <v-select
-                    v-model="user.company_type"
-                    append-icon=""
-                    label="Місце роботи"
-                    :placeholder="companyType"
-                    :items="companyTypes"
-                    outlined dense>
+                  v-model="user.company_type"
+                  :error-messages="company_typeErr"
+                  @input="$v.user.company_type.$touch()"
+                  @blur="$v.user.company_type.$touch()"
+                  append-icon=""
+                  label="Місце роботи"
+                  :items="companyTypes"
+                  outlined dense>
                 </v-select>
               </div>
               <div class="col-md-3">
                 <v-text-field
-                    v-model="user.company_name"
-                    label="Назва компанії"
-                    :placeholder="user.status || 'Статус'"
-                    outlined dense readonly>
+                  v-model="user.company_name"
+                  :error-messages="company_nameErr"
+                  @input="$v.user.company_name.$touch()"
+                  @blur="$v.user.company_name.$touch()"
+                  label="Назва компанії"
+                  outlined dense>
                 </v-text-field>
               </div>
               <div class="col-md-4">
                 <v-text-field
-                    v-model="user.position"
-                    label="Посада"
-                    :placeholder="user.position"
-                    outlined dense>
+                  v-model="user.position"
+                  :error-messages="positionErr"
+                  @input="$v.user.position.$touch()"
+                  @blur="$v.user.position.$touch()"
+                  label="Посада"
+                  :placeholder="user.position"
+                  outlined dense>
                 </v-text-field>
               </div>
             </v-row>
@@ -112,66 +129,87 @@
             <v-row>
               <div class="col-md-4">
                 <v-dialog
-                    v-model="modal"
-                    ref="modal"
-                    width="290px">
+                  v-model="modal"
+                  ref="modal"
+                  width="290px">
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                      v-model="user.birth"
-                      v-on="on"
-                      label="Дата народження"
-                      :placeholder="user.birth"
-                      prepend-icon="mdi-calendar-range"
-                      dense readonly>
+                    v-model="user.birth"
+                    v-on="on"
+                    label="Дата народження"
+                    :error-messages="birthErr"
+                    @input="$v.user.birth.$touch()"
+                    @blur="$v.user.birth.$touch()"
+                    prepend-icon="mdi-calendar-range"
+                    dense readonly>
                   </v-text-field>
                 </template>
                 <v-date-picker 
-                    @change="save"
-                    v-model="choosedDate"  
-                    ref="picker"
-                    color="red lighten-1"
-                    :min="hundredYears" 
-                    :max="eighteenYearsAgo">
+                  @change="save"
+                  v-model="choosedDate"  
+                  ref="picker"
+                  color="red lighten-1"
+                  :min="hundredYears" 
+                  :max="eighteenYearsAgo">
                 </v-date-picker>
               </v-dialog>
               </div>
             </v-row>
             <div class="row">
-              <div class="col-md-3">
-                <v-text-field
-                    :value="showPassportType"
-                    append-icon=""
-                    :label="showPassportType"
-                    :items="pasportItems"
-                    outlined dense readonly>
+              <div class="col-md-4">
+                <v-select
+                  append-icon=""
+                  label="Тип паспорту"
+                  @change="clearPassportData()"
+                  v-model="user.passport_type_id"
+                  :items="pasportItems"
+                  item-text="text"
+                  item-value="value"
+                  outlined dense>
+                </v-select>
+              </div>
+              <div class="col-md-4">
+                <v-text-field v-if="!bioPassport"
+                  :error-messages="passport_serieErr"
+                  @input="$v.user.passport_serie.$touch(); 
+                    trimExceededLength('passport-serie', 2, (arg) => {return arg.replace(/[^\а-яА-Я]/g, '').toUpperCase()})"
+                  @blur="$v.user.passport_serie.$touch()"
+                  v-model="user.passport_serie"
+                  id="passport-serie"
+                  label="Серiя паспорту"
+                  outlined dense>
+                </v-text-field>
+                <v-text-field v-if="bioPassport"
+                  label="Номер УНЗР"
+                  :error-messages="passport_serieErr"
+                  @input="$v.user.passport_serie.$touch();
+                    trimExceededLength('profile-unzr', 13, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
+                  id="profile-unzr"
+                  @blur="$v.user.passport_serie.$touch()"
+                  v-model="user.passport_serie"
+                  outlined dense>
                 </v-text-field>
               </div>
               <div class="col-md-4">
                 <v-text-field v-if="!bioPassport"
-                    v-model="user.serie"
-                    label="Серiя паспорту"
-                    placeholder="Серія паспорту"
-                    outlined dense readonly>
+                  v-model="user.passport_number"
+                  :error-messages="passport_numberErr"
+                  @input="$v.user.passport_number.$touch(); 
+                    trimExceededLength('profile-passport-number', 6, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
+                  @blur="$v.user.passport_number.$touch()"
+                  id="profile-passport-number"
+                  label="Номер паспорту"
+                  outlined dense>
                 </v-text-field>
                 <v-text-field v-if="bioPassport"
-                    label="Номер УНЗР"
-                    placeholder="номер УНЗР"
-                    v-model="user.unzr_number"
-                    outlined dense readonly>
-                </v-text-field>
-              </div>
-              <div class="col-md-4">
-                <v-text-field v-if="!bioPassport"
-                    v-model="user.passport_number"
-                    label="Номер паспорту"
-                    placeholder="номер паспорту"
-                    outlined dense readonly>
-                </v-text-field>
-                <v-text-field v-if="bioPassport"
-                    v-model="user.id_card_number"
-                    label="Номер документа"
-                    placeholder="номер документа"
-                    outlined dense readonly>
+                  v-model="user.passport_number"
+                  :error-messages="passport_numberErr"
+                  @input="$v.user.passport_number.$touch(); 
+                    trimExceededLength('profile-passport-bio-number', 9, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
+                  @blur="$v.user.passport_number.$touch()"
+                  id="profile-passport-bio-number"
+                  label="Номер документа"
+                  outlined dense>
                 </v-text-field>
               </div>
             </div>
@@ -179,28 +217,37 @@
             <div class="row">
               <div class="col-md-4">
                 <v-text-field
-                    v-model="user.inn"
-                    label="Ідентифікаційний код"
-                    :placeholder="user.inn"
-                    outlined dense>
+                  v-model="user.inn"
+                  v-mask="'##########'"
+                  :error-messages="innErr"
+                  @input="$v.user.inn.$touch()"
+                  @blur="$v.user.inn.$touch()"
+                  label="Ідентифікаційний код"
+                  outlined dense>
                 </v-text-field>
               </div>
               <div class="col-md-4">
                 <v-text-field
-                    v-model="user.card_number"
-                    label="Реквiзити картки"
-                    :placeholder="user.card_number"
-                    outlined dense>
+                  v-model="user.card_number"
+                  v-mask="'#### #### #### ####'"
+                  :error-messages="card_numberErr"
+                  @input="$v.user.card_number.$touch()"
+                  @blur="$v.user.card_number.$touch()"
+                  label="Реквiзити картки"
+                  outlined dense>
                 </v-text-field>
               </div>
             </div>
             <div class="row">
               <div class="col-md-8">
                 <v-text-field
-                    v-model="user.iban"
-                    label="IBAN"
-                    :placeholder="user.iban"
-                    outlined dense readonly>
+                  v-model="user.iban"
+                  :error-messages="ibanErr"
+                  @input="$v.user.iban.$touch(); trimExceededLength('profile-iban', 29)"
+                  @blur="$v.user.iban.$touch()"
+                  id="profile-iban"
+                  label="IBAN"
+                  outlined dense>
                 </v-text-field>
               </div>
             </div>
@@ -215,7 +262,7 @@
             <div class="row">
               <div class="col-md-3">
                 <v-text-field
-                  v-model="user.ab_size"
+                  v-model="ab_size"
                   label="Розмiр АВ"
                   placeholder="Розмiр АВ"
                   append-icon="mdi-percent-outline"
@@ -226,15 +273,17 @@
                 <v-text-field
                   v-if="user.purpose_of_payment !== null"
                   v-model="user.purpose_of_payment"
+                  :error-messages="purpose_of_paymentErr"
+                  @input="$v.user.purpose_of_payment.$touch()"
+                  @blur="$v.user.purpose_of_payment.$touch()"
                   label="Призначення платежу"
-                  placeholder="Призначення платежу"
-                  dense readonly>
+                  dense>
                 </v-text-field>
               </div>
               <div class="col-md-4">
                 <v-text-field
-                  v-if="user.manager !== null"
-                  v-model="user.manager.name"
+                  v-if="manager !== null"
+                  v-model="manager.name"
                   label="Куратор"
                   placeholder="Куратор"
                   dense readonly>
@@ -245,9 +294,11 @@
         </v-card>
         <div class="text-center">
           <v-btn
-            dark
             color="red darken-1"
-            @click.native.prevent="updateProfile">
+            style="color: white;"
+            :loading="loading"
+            :disabled="profileHasNoChanges"
+            @click="updateProfile()">
             Оновити профіль
           </v-btn>
         </div>
@@ -258,19 +309,58 @@
   </v-card>
 </template>
 <script>
+import axios from 'axios'
+
+import { validationMixin } from 'vuelidate'
+import { required, minLength, email } from 'vuelidate/lib/validators'
+
 export default {
+  mixins: [validationMixin],
   data: () => ({
-    user: {},
+    user: {
+      last_name: null,
+      first_name: null,
+      patronymic: null,
+      phone: null,
+      email: null,
+      company_type: null,
+      company_name: null,
+      position: null,
+      passport_type_id: null,
+      passport_serie: null,
+      passport_number: null,
+      inn: null,
+      birth: null,
+      card_number: null,
+      purpose_of_payment: null,
+      iban: null,
+      leasingCurrencyCourse: null,
+      customStepOptionFirst: null,
+      customStepOptionMiddle: null,
+      customUniversalOption: null,
+      leasingAmountDkp: null,
+      advance: null,
+    },
+    userBeckup: {},
+
+    loading: false,
+    manager: null,
+    ab_size: null,
+    leasingTerm: null,
+    leasingAmountDkp: null,
+
     /* temp data */
     choosedDate: null,
+    pasteEvent: false,
+    
 
     /* item v-model */
     passportType: null,
 
     /* item types */
     pasportItems: [
-      { text: 'ID-картка', value: '2' },
-      { text: 'Книжкового зразка', value: '1' }
+      { text: 'ID-картка', value: 2 },
+      { text: 'Книжкового зразка', value: 1 }
     ],
     companyTypes: [
       { text: 'Салон', value: 'salon' },
@@ -280,25 +370,406 @@ export default {
     /* modals */
     modal: false,
   }),
+  validations() {
+    return {
+      user: this.validateObj,
+    }
+  },
   methods: {
+    assignObject() {
+      this.user = {
+        last_name: this.$store.state.user.agent.last_name,
+        first_name: this.$store.state.user.agent.first_name, // user
+        patronymic: this.$store.state.user.agent.patronymic,
+        phone: this.$store.state.user.user.phone, // user
+        email: this.$store.state.user.user.email, // user
+        company_type: this.$store.state.user.agent.company_type,
+        company_name: this.$store.state.user.agent.company_name,
+        position: this.$store.state.user.agent.position,
+        passport_type_id: this.$store.state.user.agent.passport_type_id,
+        passport_serie: this.$store.state.user.agent.document.id_card_number || this.$store.state.user.agent.document.serie,
+        passport_number: this.$store.state.user.agent.document.unzr_number || this.$store.state.user.agent.document.passport_number,
+        inn: this.$store.state.user.agent.inn,
+        birth: this.$store.state.user.agent.birth,
+        card_number: this.$store.state.user.agent.card_number,
+        purpose_of_payment: this.$store.state.user.agent.purpose_of_payment,
+        iban: this.$store.state.user.agent.iban,
+        _token: this.getCsrf()
+      }
+
+      Object.assign(this.userBeckup, this.user)
+
+      this.manager = this.$store.state.user.agent.manager
+      this.ab_size = this.$store.state.user.agent.ab_size
+      this.leasingTerm = this.$store.state.user.agent.leasingTerm
+      this.leasingAmountDkp = this.$store.state.user.agent.leasingAmountDkp
+    },
+    getCsrf() {
+			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    clearPassportData() {
+      this.user.passport_serie = null
+      this.user.passport_number = null
+    },
     updateProfile() {
-      /* */
+      console.log('updateProfile')
+      console.log(this.$v)
+      console.log(this.user)
+      !this.$v.$invalid
+        ? this.sendRequest()
+        : this.highlightErrors()
+    },
+    highlightErrors() {
+      this.$v.$anyError
+      this.$v.$touch()
+    },
+    sendRequest() {
+      this.loading = true
+      axios
+        .post(`/agent/update/${this.$store.state.user.agent.id}`, this.user)
+        .then(response => {
+          console.log(response)
+          this.$notify({
+            group: 'success',
+            title: 'Профiль успiшно оновлено',
+            text: '',
+          })
+          this.loading = false
+          this.$store.dispatch('getCurrentUser')
+          this.assignObject()
+        })
+        .catch(error => {
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
+          this.loading = false
+          console.log(error.response)
+        })
     },
     save (date) {
       this.$refs.modal.save(date)
     },
+    trimExceededLength(elId, maxLength, callback) {
+      let el = document.getElementById(elId)
+      let event = new Event('input', {bubbles: true})
+      if(el.value && typeof callback === "function") {
+        if(el.value !== callback(el.value)) {
+          el.value = callback(el.value)
+          el.dispatchEvent(event)
+        }
+      }
+      if(el.value && el.value.length > maxLength) {
+        el.value = el.value.substr(0, maxLength)
+        el.dispatchEvent(event)
+      }
+    },
+    applyMask() {
+			const el = document.getElementById('number')
+			const event = new Event('input', {bubbles: true})
+			const mask = '+38 (0##) ### - ## - ##'
+			const sign = '#'
+
+			const numLengthRe = /[^#\d+]/g
+			const notDigit = /[^\d]/g
+
+			const firstIndex = mask.indexOf(sign)
+			const countryCode = mask.slice(0, firstIndex)
+			const numLength = mask.slice(firstIndex).replace(numLengthRe, '').length
+			const number = this.user.phone.replace(countryCode, '').replace(numLengthRe, '')
+			const cCpresent = this.user.phone.indexOf(countryCode)
+
+			let splitMask = mask.split('')
+			let indexes = []
+
+			splitMask.forEach((val, i) => {
+				val === sign ? indexes.push(i) : false
+			})
+			let fillMask = (val) => {
+				val.split('').forEach((val, i) => {
+						indexes[i] ? splitMask[indexes[i]] = val : false
+				})
+			}
+			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
+				fillMask(
+					this.user.phone
+						.replace(countryCode, '')
+						.replace(numLengthRe, '')
+						.slice(number.length - numLength)
+				)
+			} else if(number.length >= numLength && cCpresent === -1) {
+				fillMask(
+					this.user.phone
+						.replace(numLengthRe, '')
+						.slice(number.length - numLength)
+				)
+			} else if (this.user.phone.length > 1){
+				fillMask(
+					this.user.phone
+						.slice(firstIndex)
+						.replace(notDigit, '')
+				)
+			} else if (this.user.phone.length <= 1) {
+				fillMask(
+					this.user.phone
+						.replace(notDigit, '')
+				)
+			}
+
+			const joinMask = splitMask.join('').replace(/[^\d]+$/, '')
+
+			if(el.value !== joinMask) {
+				el.value = joinMask
+				el.setSelectionRange(splitMask.indexOf(sign), splitMask.indexOf(sign))
+				el.dispatchEvent(event)
+			}
+			this.pasteEvent = false
+    },
+    signInByEnter() {
+      window.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          this.submit()
+        }
+      })
+    }
   },
   computed: {
-    showPassportType() {
-      return parseInt(this.user.passport_type_id) === 1
-        ? "Книжкового зразка" 
-        : "ID-картка"
+    profileHasNoChanges() {
+      return JSON.stringify(this.userBeckup) === JSON.stringify(this.user)
+    },
+    last_nameErr() {
+      const errors = []
+			if (!this.$v.user.last_name.$error) return errors
+			!this.$v.user.last_name.required && errors.push('Поле "Прiзвище" - обов\'язкове для заповнення')
+			return errors
+    },
+    first_nameErr() {
+      const errors = []
+			if (!this.$v.user.first_name.$error) return errors
+			!this.$v.user.first_name.required && errors.push('Поле "Iм`я" - обов\'язкове для заповнення')
+			return errors
+    },
+    patronymicErr() {
+      const errors = []
+			if (!this.$v.user.patronymic.$error) return errors
+			!this.$v.user.patronymic.required && errors.push('Поле "По батьковi" - обов\'язкове для заповнення')
+			return errors
+    },
+    phoneErr() {
+      const errors = []
+			if (!this.$v.user.phone.$error) return errors
+      !this.$v.user.phone.required && errors.push('Поле "Телефон" - обов\'язкове для заповнення')
+      !this.$v.user.phone.minLength && errors.push('Нe вiрний номер')
+			return errors
+    },
+    emailErr() {
+      const errors = []
+			if (!this.$v.user.email.$error) return errors
+      !this.$v.user.email.required && errors.push('Поле "Email" - обов\'язкове для заповнення')
+      !this.$v.user.email.email && errors.push('Невiрний email')
+			return errors
+    },
+    company_typeErr() {
+      const errors = []
+			if (!this.$v.user.company_type.$error) return errors
+			!this.$v.user.company_type.required && errors.push('Поле "Тип компанії" - обов\'язкове для заповнення')
+			return errors
+    },
+    company_nameErr() {
+      const errors = []
+			if (!this.$v.user.company_name.$error) return errors
+			!this.$v.user.company_name.required && errors.push('Поле "Назва компанiї" - обов\'язкове для заповнення')
+			return errors
+    },
+    positionErr() {
+      const errors = []
+			if (!this.$v.user.position.$error) return errors
+			!this.$v.user.position.required && errors.push('Поле "Посада" - обов\'язкове для заповнення')
+			return errors
+    },
+    birthErr() {
+      const errors = []
+			if (!this.$v.user.birth.$error) return errors
+			!this.$v.user.birth.required && errors.push('Поле "Дата народження" - обов\'язкове для заповнення')
+			return errors
+    },
+    passport_serieErr() {
+      const errors = []
+			if (!this.$v.user.passport_serie.$error) return errors
+			!this.$v.user.passport_serie.required && errors.push('Обов\'язкове для заповнення поле')
+      !this.$v.user.passport_serie.minLength && errors.push('Невiрна кiлькiсть знакiв')
+      return errors
+    },
+    passport_numberErr() {
+      const errors = []
+			if (!this.$v.user.passport_number.$error) return errors
+			!this.$v.user.passport_number.required && errors.push('Поле "Номер паспорту" - обов\'язкове для заповнення')
+      !this.$v.user.passport_number.minLength && errors.push('Невiрна кiлькiсть знакiв')
+      return errors
+    },
+    innErr() {
+      const errors = []
+			if (!this.$v.user.inn.$error) return errors
+			!this.$v.user.inn.required && errors.push('Поле "Iдентифiкацiйний код" - обов\'язкове для заповнення')
+      !this.$v.user.inn.minLength && errors.push('Невiрний iдентифiкацiйний код')
+      return errors
+    },
+    card_numberErr() {
+      const errors = []
+			if (!this.$v.user.card_number.$error) return errors
+			!this.$v.user.card_number.required && errors.push('Поле "Номер банкiвської картки" - обов\'язкове для заповнення')
+      !this.$v.user.card_number.lunValid && errors.push('Невiрний номер банкiвської картки')
+      return errors
+    },
+    ibanErr() {
+      const errors = []
+			if (!this.$v.user.iban.$error) return errors
+			!this.$v.user.iban.required && errors.push('Поле "IBAN" - обов\'язкове для заповнення')
+      !this.$v.user.iban.isValidIban && errors.push('Невiрний IBAN')
+      return errors
+    },
+    purpose_of_paymentErr() {
+      const errors = []
+			if (!this.$v.user.purpose_of_payment.$error) return errors
+			!this.$v.user.purpose_of_payment.required && errors.push('Поле "Призначення платежу" - обов\'язкове для заповнення')
+			return errors
+    },
+    validateObj() {
+      return {
+        last_name: { required },
+        first_name: { required },
+        patronymic: { required },
+        phone: { 
+          required,
+          minLength: minLength(23),
+          },
+        email: { 
+          required,
+          email },
+        company_type: { required },
+        company_name: { required },
+        position: { required },
+        passport_type_id: { required },
+        passport_serie:
+          (() => { 
+          if(this.user.passport_type_id.value === 1 || this.user.passport_type_id === 1) {
+            // паспорт старого образца
+            return {
+              required,
+              minLength: minLength(2),
+              // maxLength: maxLength(2)
+            }
+          } else if(this.user.passport_type_id.value === 2 || this.user.passport_type_id === 2) {
+            // id картка
+            return {
+              required,
+              minLength: minLength(13),
+            }
+          } else return true
+        })(),
+        passport_number:
+          (() => { 
+          if(this.user.passport_type_id.value === 1 || this.user.passport_type_id === 1) {
+            // паспорт старого образца
+            return {
+              required,
+              minLength: minLength(6),
+              // maxLength: maxLength(14)
+            }
+          } else if(this.user.passport_type_id.value === 2 || this.user.passport_type_id === 2) {
+            // id карточка
+            return {
+              required,
+              minLength: minLength(9),
+            }
+          } else return true
+        })(),
+        inn: { 
+          required,
+          minLength: minLength(10)
+        },
+        birth: { required },
+        card_number: { 
+          required,
+          lunValid: function luhn(array) {
+            return number => {
+              if(number === null) return false
+              let pureNum = number.replace(/[^\d]/g, '')
+              let len = pureNum ? pureNum.length : 0, bit = 1, sum = 0;
+              while (len--) {sum += !(bit ^= 1) 
+                ? parseInt(pureNum[len], 10) 
+                : array[pureNum[len]]}
+              return sum % 10 === 0 && sum > 0;
+            } 
+          }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9]) },
+        purpose_of_payment: { required },
+        iban: { 
+          required,
+          isValidIban: function isValidIBANNumber(input) {
+            let countriesCode = {
+                AD: 24, AE: 23, AT: 20, AZ: 28, BA: 20, BE: 16, BG: 22, BH: 22, BR: 29,
+                CH: 21, CR: 21, CY: 28, CZ: 24, DE: 22, DK: 18, DO: 28, EE: 20, ES: 24,
+                FI: 18, FO: 18, FR: 27, GB: 22, GI: 23, GL: 18, GR: 27, GT: 28, HR: 21,
+                HU: 28, IE: 22, IL: 23, IS: 26, IT: 27, JO: 30, KW: 30, KZ: 20, LB: 28,
+                LI: 21, LT: 20, LU: 20, LV: 21, MC: 27, MD: 24, ME: 22, MK: 19, MR: 27,
+                MT: 31, MU: 30, NL: 18, NO: 15, PK: 24, PL: 28, PS: 29, PT: 25, QA: 29,
+                RO: 24, RS: 22, SA: 24, SE: 24, SI: 19, SK: 24, SM: 27, TN: 24, TR: 26,
+                UA: 29
+            }
+            let iban = String(input).toUpperCase().replace(/[^A-Z0-9]/g, ''), // keep only alphanumeric characters
+                code = iban.match(/^([A-Z]{2})(\d{2})([A-Z\d]+)$/) // match and capture (1) the country code, (2) the check digits, and (3) the rest digits
+            // check syntax and length
+            if (!code || iban.length !== countriesCode[code[1]]) {
+                return false
+            }
+            // rearrange country code and check digits, and convert chars to ints
+            let digits = (code[3] + code[1] + code[2]).replace(/[A-Z]/g, (letter) => {
+                return letter.charCodeAt(0) - 55
+            })
+            return (digits) => {
+              console.log('digits', digits)
+              let checksum = digits.slice(0, 2), fragment
+              for (let offset = 2; offset < digits.length; offset += 7) {
+                  fragment = String(checksum) + digits.substring(offset, offset + 7)
+                  checksum = parseInt(fragment, 10) % 97
+              }
+              return checksum === 55
+            }
+          }
+        },
+        leasingCurrencyCourse: (() => { 
+          if(this.hasForeignCurrency) {
+            return null
+          } else return true
+        })(),
+        customStepOptionFirst: (() => {
+          if (this.hasIrregular && this.calcObj.customGraphicType === 3){
+            return null
+          } else return true
+        })(),
+        customStepOptionMiddle: (() => {
+          if (this.hasIrregular && this.calcObj.customGraphicType === 3){
+            return null
+          } else return true
+        })(),
+        customUniversalOption: (() => { 
+          if(this.hasIrregular && this.calcObj.customGraphicType === 5) {
+            return null
+          } else return true
+        })(),
+        // leasingAmountDkp: (() => { 
+        //   if(this.discountPrice) {
+        //     return null
+        //   } else return true
+        // })(),
+      }
     },
     userEditPassword() {
       return this.passportType !== null
     },
     bioPassport() {
-      return parseInt(this.user.passport_type_id) === 2
+      return this.user.passport_type_id === 2 || this.user.passport_type_id.value === 2
     },
     companyType() {
       return this.user.company_type === 'salon'
@@ -328,26 +799,15 @@ export default {
 			const [year, month, day] = val.split('-')
 			this.user.birth = `${day}.${month}.${year}`
     },
-    showPassportType(val) {
-      this.user.passport_type_id = val
-    }
   },
   created() {
-    let agentId = this.$store.state.user.agent.id
-    let userId = this.$store.state.user.user.id
-    Object.assign(this.user, 
-      this.$store.state.user.agent,
-      this.$store.state.user.user,
-      this.$store.state.user.agent.document
-    ) 
-    console.log(this.user)
-    this.user['agentId'] = agentId
-    this.user['userId'] = userId
+    console.log(this.$store.state.user)
+    this.assignObject()
+    // this.user['agentId'] = this.$store.state.user.agent.id
+    // this.user['userId'] = this.$store.state.user.user.id
+
     delete this.user.agent
   },
-  mounted() {
-    this.user.passport_type_id = this.showPassportType
-  }
 }
 </script>
 <style lang="scss">
@@ -367,20 +827,11 @@ export default {
         border-left: 5px solid #e65048;
       }
     }
-    // .profile-data-wrapper {
-    //   border: 2px solid #818080;
-    //   position: relative;
-    //   padding: 25px 15px 0 15px;
-    //   border-radius: 15px;
-    //   margin-bottom: 25px;
-    //   font-size: 1.3rem;
-    //   .profile-data-title {
-    //     position: absolute;
-    //     top: -11px;
-    //     z-index: 3;
-    //     background: #ffffff;
-    //     padding: 0 10px 0 10px;
-    //   }
-    // }
+  }
+  .profile-block {
+    .v-card__title {
+      color: #727170!important;
+      font-size: 1.15rem!important;
+    }
   }
 </style>

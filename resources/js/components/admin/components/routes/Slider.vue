@@ -683,6 +683,7 @@ export default {
     backdrop-filter: blur(5px); 
     padding: 0 15px; 
     border-radius: 3px;
+    color: black!important;
     background-color: rgba(252, 252, 252, 0.7); 
     max-width: 48%;
     margin: 25px 0 5px 25px; 

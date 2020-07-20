@@ -703,6 +703,7 @@ export default {
     border-radius: 3px;
     background-color: rgba(252, 252, 252, 0.7); 
     max-width: 48%;
+    color: black!important;
     margin: 25px 0 5px 25px; 
     display: inline-block;
     &.small-screen {

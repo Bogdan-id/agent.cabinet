@@ -5,11 +5,14 @@
         @click.native="toggleCustomSidebar()"
         :class="showSidebar ? 'sidebar__toggle-icon' : 'sidebar__toggle-icon --toggle-icon-active'">
       </toggleIcon>
-      <div>
+      <div class="notification-wrapper">
         <v-tooltip bottom>
           <template #activator="{ on }">
             <span style="display: inline-block; height: 52px; width: 52px;">
-              <v-btn v-on="on" @click="toggleNotifyCard($event)" large icon>
+              <v-btn style="position: relative;" v-on="on" @click="toggleNotifyCard($event)" large icon>
+                <div class="notification-count" v-if="notificationCount > 0">
+                  {{ notificationCount > 3 ? '3+' :  notificationCount === 0 ? '' : notificationCount}}
+                </div>
                 <v-icon large v-text="'mdi-bell-outline'" id="notify-btn"></v-icon>
               </v-btn>
               <span style="position: relative;">
@@ -17,37 +20,28 @@
                 <v-card-title style="border-left: 4px solid #e57373" class="subtitle-1">
                   Повiдомлення
                 </v-card-title>
-                <v-timeline dense>
+                <v-card-text v-if="notificationCount == 0">
+                  <div><span>(Повiдомлення вiдсутнi)</span></div>
+                </v-card-text>
+                <v-timeline dense v-if="notificationCount > 0">
                   <v-timeline-item
+                    v-for="(item, key) in notifications"
+                    v-if="key <= maxNotificationsToShow -1 && item.status !== 'checked'"
+                    :key="key"
                     color="red lighten-2"
                     small
                     right>
-                    <div>
-                      <div style="font-size: 1rem" color="red">Перше повiдомлення</div>
-                      <span style="font-size: 0.85rem; color: #808080">25.07.20 20:35</span>
-                    </div>
-                  </v-timeline-item>
-                  <v-timeline-item
-                    color="red lighten-2"
-                    small
-                    right>
-                    <div>
-                      <div style="font-size: 1rem" color="red">Друге повiдомлення</div>
-                      <span style="font-size: 0.85rem; color: #808080">11.04.20 13:01</span>
-                    </div>
-                  </v-timeline-item>
-                  <v-timeline-item
-                    color="red lighten-2"
-                    small
-                    right>
-                    <div>
-                      <div style="font-size: 1rem" color="red">Третє повiдомлення</div>
-                      <span style="font-size: 0.85rem; color: #808080">23.07.20 10:35</span>
+                    <div class="time-line-content">
+                      <div style="font-size: 1rem" color="red">{{ item.title }}</div>
+                      <span style="font-size: 0.85rem; color: #808080">{{ item.updated_at.substr(0, 10) }}</span>
                     </div>
                   </v-timeline-item>
                 </v-timeline>
                 <div class="pt-2 pb-2 pl-6" style="border-top: 1px solid #e9ecef">
-                  <router-link @click.native.stop="toggleNotifyCard()" class="notification-card-link" to="/notifications">
+                  <router-link 
+                    @click.native.stop="toggleNotifyCard()" 
+                    class="notification-card-link" 
+                    :to="{name: 'Повiдомлення', path: '/notifications', params: {notifications: notifications}}">
                     Дивитись всi 
                   </router-link>
                 </div>
@@ -72,7 +66,8 @@
           <span>Вихiд</span>
         </v-tooltip>
       </div>
-    </div></nav>
+    </div>
+  </nav>
 </template>
 <script>
 import toggleIcon from "../../assets/svg-icons/arrow.vue"
@@ -80,9 +75,24 @@ import axios from 'axios'
 
 export default {
   components: {
-    toggleIcon
+    toggleIcon,
   },
+  data:() => ({
+    activeNotifications: false,
+    showSidebar: true,
+    notifications: null,
+    notificationKeys: [],
+    maxNotificationsToShow: 3,
+  }),
   computed: {
+    notificationCount() {
+      if(!this.notifications) return 0
+      let index = this.notifications
+        .filter(val => {
+          return val.status === 'not_checked'
+        })
+      return index.length
+    },
     routeName() {
       const { name } = this.$route;
       return this.capitalizeFirstLetter(name)
@@ -92,13 +102,23 @@ export default {
     },
     mdAndUp() {
       return this.$vuetify.breakpoint.mdAndUp
-    }
+    },
+    hasUser() {
+    if(!this.$store.state.user.agent) return false
+      return this.$store.state.user.agent.id !== null
+    },
   },
-  data:() => ({
-    activeNotifications: false,
-    showSidebar: true
-  }),
   methods: {
+    changeNotificationsStatus(object) {
+      axios
+        .post(`/agent/notifications/checking`, object)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    },
     toggleCustomSidebar() {
       let sidebar = document.getElementById('sidebar')
       let mainPanel = document.getElementById('main-panel')
@@ -118,12 +138,19 @@ export default {
         if(!card.classList.contains('show-card')) {
           card.classList.add('show-card')
         } else card.classList.remove('show-card')
-      }, 150);
+      }, 150)
+      this.notificationKeys = []
+      for(let i = 0; i <= this.maxNotificationsToShow - 1; i ++) {
+        if(this.notifications[i].status === 'not_checked') {
+          this.notificationKeys.push(this.notifications[i].id)
+        }
+      }
+      this.changeNotificationsStatus({notifications: this.notificationKeys})
     },
     listenCardState() {
       let body = document.getElementById('app')
-      console.log(body)
       let notifyCard = document.getElementById('cadr-notification')
+      console.log(notifyCard)
       body.addEventListener('click', event => {
         if(notifyCard.classList.contains('show-card') && event.target.id !== "notify-btn") {
           notifyCard.classList.remove('show-card')
@@ -144,8 +171,6 @@ export default {
       axios.post(`/logout`, token)
 			.then(() => {
         this.$router.go()
-        // const routeStorage = window.localStorage
-        // routeStorage.setItem('user', false)
         this.$store.commit('toggleSpinner', false)
 			})
 			.catch(e => {
@@ -156,12 +181,28 @@ export default {
         })
         this.$store.commit('toggleSpinner', false)
 			})
-		},
+    },
+    getAgentNotifications() {
+      axios
+        .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
+        .then(response => {
+          console.log(response)
+          this.notifications = response.data.sort((a, b) => {
+            return new Date(b.updated_at) - new Date(a.updated_at);
+          })
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
   },
   watch: {
+    hasUser() {
+      this.getAgentNotifications()
+    },
     smAndDown(val) {
       val && this.showSidebar
         ? this.toggleCustomSidebar()
@@ -184,24 +225,33 @@ export default {
     right: auto;
     left: 25px!important;
   }
-.v-timeline {
-  .v-timeline-item {
-    .v-timeline-item__divider {
-      min-width: 45px!important;
-      margin-top: 10px;
-      position: absolute;
-      left: 3px!important;
+  .notification-wrapper {
+    .v-timeline {
+      .v-timeline-item {
+        .v-timeline-item__divider {
+          min-width: 45px!important;
+          margin-top: 10px;
+          position: absolute;
+          left: 3px!important;
+        }
+        .v-timeline-item__body {
+          max-width: 220px!important;
+          position: relative!important;
+          margin-right: 0.5rem!important;
+        }
+      }
     }
-    .v-timeline-item__body {
-      max-width: 180px!important;
-      position: relative!important;
-      margin-right: 0.5rem!important;
-    }
+  }
+
+.time-line-content {
+  position: relative;
+  &:hover {
+    cursor: pointer;
   }
 }
 #cadr-notification {
   position: absolute; 
-  min-width: 240px; 
+  min-width: 290px; 
   right: 0;
   top: 80px!important;
   transition: opacity ease-out 0.15s, 
@@ -222,5 +272,20 @@ export default {
       color: #e57373;
     }
   }
+}
+.notification-count {
+  color: white; 
+  background: #ff5252; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  border-radius: 100%; 
+  padding: 3px;
+  min-height: 20px;
+  min-width: 20px;
+  position: absolute; 
+  font-size: 0.68rem;
+  right: -10px;
+  top: -10px;
 }
 </style>

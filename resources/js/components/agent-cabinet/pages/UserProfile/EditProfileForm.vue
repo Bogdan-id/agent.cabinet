@@ -341,7 +341,7 @@ export default {
       leasingAmountDkp: null,
       advance: null,
     },
-    userBeckup: {},
+    userBackUp: {},
 
     loading: false,
     manager: null,
@@ -387,8 +387,8 @@ export default {
         company_name: this.$store.state.user.agent.company_name,
         position: this.$store.state.user.agent.position,
         passport_type_id: this.$store.state.user.agent.passport_type_id,
-        passport_serie: this.$store.state.user.agent.document.id_card_number || this.$store.state.user.agent.document.serie,
-        passport_number: this.$store.state.user.agent.document.unzr_number || this.$store.state.user.agent.document.passport_number,
+        passport_serie: this.$store.state.user.agent.document.unzr_number || this.$store.state.user.agent.document.serie,
+        passport_number: this.$store.state.user.agent.document.id_card_number || this.$store.state.user.agent.document.passport_number,
         inn: this.$store.state.user.agent.inn,
         birth: this.$store.state.user.agent.birth,
         card_number: this.$store.state.user.agent.card_number,
@@ -397,7 +397,7 @@ export default {
         _token: this.getCsrf()
       }
 
-      Object.assign(this.userBeckup, this.user)
+      Object.assign(this.userBackUp, this.user)
 
       this.manager = this.$store.state.user.agent.manager
       this.ab_size = this.$store.state.user.agent.ab_size
@@ -536,7 +536,7 @@ export default {
   },
   computed: {
     profileHasNoChanges() {
-      return JSON.stringify(this.userBeckup) === JSON.stringify(this.user)
+      return JSON.stringify(this.userBackUp) === JSON.stringify(this.user)
     },
     last_nameErr() {
       const errors = []

@@ -405,7 +405,7 @@ export default {
       this.ab_size = this.$store.state.user.agent.ab_size
       this.leasingTerm = this.$store.state.user.agent.leasingTerm
       this.leasingAmountDkp = this.$store.state.user.agent.leasingAmountDkp
-      console.log(this.user)
+      console.log(JSON.stringify(this.user) === JSON.stringify(this.userBackUp))
     },
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -772,7 +772,7 @@ export default {
       return this.passportType !== null
     },
     bioPassport() {
-      return this.user.passport_type_id === 2 || this.user.passport_type_id.value === 2
+      return this.user.passport_type_id === 2
     },
     companyType() {
       return this.user.company_type === 'salon'
@@ -803,7 +803,7 @@ export default {
 			this.user.birth = `${day}.${month}.${year}`
     },
   },
-  created() {
+  mounted() {
     console.log(this.$store.state.user)
     this.assignObject()
     // this.user['agentId'] = this.$store.state.user.agent.id

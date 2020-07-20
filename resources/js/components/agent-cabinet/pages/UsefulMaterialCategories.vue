@@ -25,9 +25,8 @@
         :elevation="hover ? 7 : 3"
         :class="hover ? `useful-materials__article mt-2 mb-2 ml-2` : `useful-materials__article mt-2 mb-2`"
         :style="hover ? 'border-left: 7px solid #e64833;' : 'border-left: 7px solid white'"
-        :to="{path: `/useful-materials-categories/${item.slug}`}"
+        :to="{path: `/useful-materials-categories/${item.slug}`, name: 'Матерiали категорiї', params: {category: item.slug}}"
         >
-        <!-- @click="toRoute(item.slug, item.id)" -->
         <v-card-title class="custom-title" style="justify-content: center; font-size: 27px;">
           <a>{{ item.name }}</a>
         </v-card-title>

@@ -566,18 +566,23 @@ export default {
           })
       }
     },
-    hasOnlyOneGraph() {
-      let count = 0
-      let graph
-      if(this.data.result_data.hasOwnProperty('even')) {count ++, graph = 'even'}
-      if(this.data.result_data.hasOwnProperty('annuity')) {count ++, graph = 'annuity'}
-      if(this.data.result_data.hasOwnProperty('irregular')) {count ++, graph = 'irregular'}
-      if(count === 1) return {state: true, graph}
-      return {state: false}
-    },
+    // hasOnlyOneGraph() {
+    //   let count = 0
+    //   let graph
+    //   if(this.data.result_data.hasOwnProperty('even')) {count ++, graph = 'even'}
+    //   if(this.data.result_data.hasOwnProperty('annuity')) {count ++, graph = 'annuity'}
+    //   if(this.data.result_data.hasOwnProperty('irregular')) {count ++, graph = 'irregular'}
+    //   if(count === 1) return {state: true, graph}
+    //   return {state: false}
+    // },
     sendDataToUser() {
-      console.log(this.data.result_data)
       let graph = this.data.result_data[this.switchGraphName(this.graph)]
+      graph.agg = {}
+      graph.agg['avg'] = graph['offer-month-payment']
+      graph.agg['payment-principal'] = graph['total-payment-principal']
+      graph.agg['interest'] = graph['total-interest']
+      graph.agg['payment'] = graph['total-payment']
+      console.log(graph)
       let calcData = this.data.request_data
       let rootCalcData = this.data
 
@@ -589,18 +594,18 @@ export default {
         term: calcData.leasingTerm,
         advance: calcData.advance,
         prepaid: graph['offer-advance'],
-        avg: graph['offer-month-payment'],
+        offerBrutto: graph['offer-price-brutto'],
+        oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
         currency: calcData.currency,
         leasingRest: graph['offer-rest'],
-        table: graph.graph,
-        agg: {
-          'payment-principal': graph['total-payment-principal'],
-          'interest': graph['total-interest'],
-          'payment': graph['total-payment'],
-        },
         requestId: rootCalcData.request_id,
+        date: rootCalcData.updated_at.substring(0, 10),
         _token: this.getCsrf()
       }
+
+      dataToSave[this.switchGraphName(this.graph)] = graph
+
+      console.log(dataToSave)
       if(this.formatToSave === 'email') {
         dataToSave.email = this.emailToSend
       }

@@ -13,21 +13,6 @@ use App\Models\UserResetPassword;
 
 class ResetPasswordSmsController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset requests
-    | and uses a simple trait to include this behavior. You're free to
-    | explore this trait and override any methods you wish to tweak.
-    |
-    */
-
-    public function resetPassword(Request $request)
-    {
-        //
-    }
 
     public function sendCodeMessage(Request $request, AlphaSmsClient $alphaSmsClient)
     {
@@ -47,7 +32,7 @@ class ResetPasswordSmsController extends Controller
         ]);
     }
 
-    public function checkVerificationCode(Request $request)
+    public function resetPassword(Request $request)
     {
         $data = $request->post();
         $userResetPassword = UserResetPassword::where('user_id', '=', $data['userId'])
@@ -64,10 +49,12 @@ class ResetPasswordSmsController extends Controller
                 'is_active' => false
             ]);
             $response = [
+                'status' => true,
                 'massage' => 'Пароль успішно змінено!'
             ];
         }else{
             $response = [
+                'status' => false,
                 'massage' => 'Невірний код!'
             ];
         }

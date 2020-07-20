@@ -12,7 +12,8 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title
-  next()
+  if(from.name === 'Редагувати' && to.name === 'Графiки ') next({name: 'Калькулятор лізингу'})
+  else next()
 })
 
 export default router

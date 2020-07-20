@@ -2,71 +2,63 @@
 <div>
   <v-dialog 
     v-model="dialogToSend"
-    max-width="390">
+    max-width="490">
     <v-card class="graphs-to-delete">
-      <v-card-title style="background: #424242;" class="white--text">
-        Вкажiть email
-        <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
+      <v-card-title style="background: #424242; position: relative" class="white--text">
+        <v-btn @click="dialogToSend = false" :loading="loading" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
+        {{ formatToSave === 'email' ? 'Вiдправити на email' : 'Зберегти'}}
       </v-card-title>
-      <v-card-text :style="`margin-top: 5px; ${emailToSendErr && emailToSendErr.length > 0 ? 'min-height: 78px;' : 'min-height: 70px;'} position: relative;`">
-          <v-card elevation="7" :style="`position: absolute; ${emailToSend === null || emailToSendErr && emailToSendErr.length > 0 ? 'width: 340px;' : 'width: 270px;' } top: 13px;`">
-            <v-text-field
-              v-model="emailToSend"
-              @input="$v.emailToSend.$touch()"
-              @blur="$v.emailToSend.$touch()"
-              class="send-email-field"
-              label="email"
-              dense outlined>
-              <template v-slot:append>
-                <v-tooltip bottom>
-                  <template #activator="{ on }">
-                    <v-btn 
-                      v-show="!$v.$invalid"
-                      :loading="emailDownloadLoading"
-                      @click="sendDataToUser()"
-                      v-on="on" 
-                      width="50" 
-                      height="50" 
-                      icon 
-                      style="position: absolute; top: -5px; bottom: 2px; left: 278px;">
-                      <v-icon size="32" color="red darken-1" v-text="'mdi-send-check'"></v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Надiслати</span>
-                </v-tooltip>
-              </template>
-              <template v-slot:prepend-inner>
-                <span v-if="emailToSendErr && emailToSendErr.length > 0" style="min-width: 200px;
-                  color: #424242;
-                  position: absolute;
-                  display: block!important;
-                  bottom: -18px;
-                  font-size: 0.79rem;
-                  left: 0;">
-                  {{ emailToSendErr[0] }}
-                </span>
-              </template>
-            </v-text-field>
-          </v-card>
-        </span>
-        <!-- <span v-show="!emailField">
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn 
-                :loading="pdfDownloadLoading"
-                fab 
-                @click="emailField = false; 
-                  formatToSave = 'pdf'; 
-                  sendDataToUser()" 
-                v-on="on" 
-                dark 
-                color="#e94949">
-                <v-icon v-text="'mdi-download'"></v-icon>
-              </v-btn>
-            </template>
-            <span>Завантажити</span>
-          </v-tooltip>
-        </span> -->
+      <v-card-text>
+        <div style="margin-top: 23px;">
+          <span style="line-height: 2rem; font-size: 0.93rem; color: black;">Оберiть тип графiку</span>
+        </div>
+        <v-checkbox
+          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('even')"
+          value="even"
+          v-model="graphName"
+          color="red darken-4">
+          <template v-slot:label>
+            <span :style="graphName.indexOf('even') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
+          </template>
+        </v-checkbox>
+        <v-checkbox
+          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
+          v-model="graphName"
+          value="annuity"
+          color="red darken-4">
+          <template v-slot:label>
+            <span :style="graphName.indexOf('annuity') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
+          </template>
+        </v-checkbox>
+        <v-checkbox
+          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('irregular')"
+          value="irregular"
+          v-model="graphName"
+          color="red darken-4">
+          <template v-slot:label>
+            <span :style="graphName.indexOf('irregular') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
+          </template>
+        </v-checkbox>
+        <v-text-field 
+          v-if="formatToSave === 'email'"
+          class="email-to-send"
+          @input="$v.emailToSend.$touch()"
+          @blur="$v.emailToSend.$touch()"
+          :error-messages="emailToSendErr"
+          v-model="emailToSend"
+          label="email"
+          outlined dense>
+        </v-text-field>
+        <v-divider class="mt-0"></v-divider>
+        <v-btn 
+          style="border-radius: 0; text-transform: capitalize; border-color: rgb(224, 77, 69); font-size: 1rem; color: white;"
+          class="send-graph-btn"
+          @click="sendGraph()" 
+          color="#e04d45"
+          :loading="loading"
+          :disabled="graphName.length === 0">
+          {{ formatToSave === 'email' ? 'Вiдправити' : 'Зберегти' }}
+        </v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -287,12 +279,10 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn 
-              @click="formatToSave = 'pdf'; 
-                sendDataToUser()"
+              @click="openDialogToSave(); formatToSave = 'pdf'" 
               v-on="on"
               color="grey darken-2" 
-              icon large dark
-              :loading="pdfDownloadLoading">
+              icon large dark>
               <v-icon size="22" dark v-text="'mdi-download'"></v-icon>
             </v-btn>
           </template>
@@ -303,7 +293,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn 
-              @click="dialogToSend = true;
+              @click="openDialogToSave();
                 formatToSave = 'email'; emailField = true"
               v-on="on"
               color="grey darken-2"
@@ -341,6 +331,9 @@ export default {
         return 'Розмiр документу не повинен перевищувати 5 MB!'
       }
     ],
+
+    graphName: [],
+    currentGraphToDownload: null,
 
     select: selectItems,
     leasingApplicationForm: false,
@@ -541,6 +534,82 @@ export default {
     }
   },
   methods: {
+    sendGraph() {
+      let graphs = this.currentGraphToDownload.result_data
+      let graph = graphs[Object.keys(graphs)[0]]
+      let calcData = this.currentGraphToDownload.request_data
+      let rootCalcData = this.currentGraphToDownload
+
+      let dataToSave = {
+        agentId: this.$store.state.user.agent.id,
+        mark: calcData.leasedAssertMark.name,
+        model: calcData.leasedAssertModel.name,
+        price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
+        term: calcData.leasingTerm,
+        advance: calcData.advance,
+        prepaid: graph['offer-advance'],
+        offerBrutto: graph['offer-price-brutto'],
+        oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
+        currency: calcData.currency,
+        leasingRest: graph['offer-rest'],
+        requestId: rootCalcData.request_id,
+        date: this.currentGraphToDownload.updated_at.substring(0, 10),
+        _token: this.getCsrf()
+      }
+      this.graphName
+        .forEach(val => {
+          dataToSave[val] = graphs[val]
+          dataToSave[val].agg = {}
+          dataToSave[val].agg['avg'] = graphs[val]['offer-month-payment']
+          dataToSave[val].agg['payment-principal'] = graphs[val]['total-payment-principal']
+          dataToSave[val].agg['interest'] = graphs[val]['total-interest']
+          dataToSave[val].agg['payment'] = graphs[val]['total-payment']
+        })
+
+      if(this.formatToSave === 'email') dataToSave.email = this.emailToSend
+
+      !this.$v.$invalid
+        ? this.sendData(dataToSave)
+        : this.highlightErrors()
+    },
+    sendData(dataToSave) {
+      this.loading = true
+      axios
+        .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
+        .then(response => {
+          console.log(response)
+          if(this.formatToSave === 'pdf') {
+            let index = response.headers['content-disposition'].indexOf('"') + 1
+            saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
+          }
+          if(this.formatToSave === 'email') {
+            this.$notify({
+              group: 'success',
+              title: 'Графiк успiшно вiдправлено',
+              text: '',
+            })
+          }
+          this.loading = false
+          setTimeout(() => {
+            this.dialogToSend = false
+          }, 1200)
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.loading = false
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`
+          })
+        })
+    },
+    openDialogToSave(format){
+      this.formatToSave = format
+      this.dialogToSend = true
+      this.currentGraphToDownload = this.data
+      console.log(this.currentGraphToDownload)
+    },
     async uploadDoc() {
       this.object.documents = []
       this.documentUrls = []
@@ -566,15 +635,15 @@ export default {
           })
       }
     },
-    // hasOnlyOneGraph() {
-    //   let count = 0
-    //   let graph
-    //   if(this.data.result_data.hasOwnProperty('even')) {count ++, graph = 'even'}
-    //   if(this.data.result_data.hasOwnProperty('annuity')) {count ++, graph = 'annuity'}
-    //   if(this.data.result_data.hasOwnProperty('irregular')) {count ++, graph = 'irregular'}
-    //   if(count === 1) return {state: true, graph}
-    //   return {state: false}
-    // },
+    hasOnlyOneGraph() {
+      let count = 0
+      let graph
+      if(this.data.result_data.hasOwnProperty('even')) {count ++, graph = 'even'}
+      if(this.data.result_data.hasOwnProperty('annuity')) {count ++, graph = 'annuity'}
+      if(this.data.result_data.hasOwnProperty('irregular')) {count ++, graph = 'irregular'}
+      if(count === 1) return {state: true, graph}
+      return {state: false}
+    },
     sendDataToUser() {
       let graph = this.data.result_data[this.switchGraphName(this.graph)]
       graph.agg = {}
@@ -617,51 +686,51 @@ export default {
       this.$v.$anyError
       this.$v.$touch()
     },
-    sendData(dataToSave) {
-      if(this.formatToSave === 'email') {
-        this.emailDownloadLoading = true
-      } else if(this.formatToSave === 'pdf') {
-        this.pdfDownloadLoading = true
-      }
-      axios
-        .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
-        .then(response => {
-          console.log(response)
-          if(this.formatToSave === 'pdf') {
-            let index = response.headers['content-disposition'].indexOf('"') + 1
-            saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
-          }
-          if(this.formatToSave === 'email') {
-            this.$notify({
-              group: 'success',
-              title: 'Графiк успiшно вiдправлено',
-              text: '',
-            })
-          }
-          if(this.formatToSave === 'email') {
-            this.emailField = false
-            this.emailDownloadLoading = false
-          } else if(this.formatToSave === 'pdf') {
-            this.pdfDownloadLoading = false
-          }
-          setTimeout(() => {
-            this.dialogToSend = false
-          }, 1200)
-        })
-        .catch(error => {
-          console.log(error.response)
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
-          if(this.formatToSave === 'email') {
-            this.emailDownloadLoading = false
-          } else if(this.formatToSave === 'pdf') {
-            this.pdfDownloadLoading = false
-          }
-        })
-    },
+    // sendData(dataToSave) {
+    //   if(this.formatToSave === 'email') {
+    //     this.emailDownloadLoading = true
+    //   } else if(this.formatToSave === 'pdf') {
+    //     this.pdfDownloadLoading = true
+    //   }
+    //   axios
+    //     .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
+    //     .then(response => {
+    //       console.log(response)
+    //       if(this.formatToSave === 'pdf') {
+    //         let index = response.headers['content-disposition'].indexOf('"') + 1
+    //         saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
+    //       }
+    //       if(this.formatToSave === 'email') {
+    //         this.$notify({
+    //           group: 'success',
+    //           title: 'Графiк успiшно вiдправлено',
+    //           text: '',
+    //         })
+    //       }
+    //       if(this.formatToSave === 'email') {
+    //         this.emailField = false
+    //         this.emailDownloadLoading = false
+    //       } else if(this.formatToSave === 'pdf') {
+    //         this.pdfDownloadLoading = false
+    //       }
+    //       setTimeout(() => {
+    //         this.dialogToSend = false
+    //       }, 1200)
+    //     })
+    //     .catch(error => {
+    //       console.log(error.response)
+    //       this.$notify({
+    //         group: 'error',
+    //         title: 'Помилка',
+    //         text: `${error.response.status} \n ${error.response.data.message}`,
+    //       })
+    //       if(this.formatToSave === 'email') {
+    //         this.emailDownloadLoading = false
+    //       } else if(this.formatToSave === 'pdf') {
+    //         this.pdfDownloadLoading = false
+    //       }
+    //     })
+    // },
     openDialogToSend() {
       this.dialogToSend = true
     },
@@ -925,7 +994,9 @@ export default {
     this.getDefaultProperties()
   },
   mounted() {
-    console.log(this.graph)
+    console.log('DATA')
+    console.log(this.data)
+    console.log('DATA')
     this.graphType = this.switchGraphName(this.graph)
   }
 }

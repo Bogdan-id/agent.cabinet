@@ -387,8 +387,10 @@ export default {
         company_name: this.$store.state.user.agent.company_name,
         position: this.$store.state.user.agent.position,
         passport_type_id: this.$store.state.user.agent.passport_type_id,
-        passport_serie: this.$store.state.user.agent.document.unzr_number || this.$store.state.user.agent.document.serie,
-        passport_number: this.$store.state.user.agent.document.id_card_number || this.$store.state.user.agent.document.passport_number,
+        ...this.$store.state.user.agent.document.unzr_number && {passport_serie: this.$store.state.user.agent.document.unzr_number},
+        ...this.$store.state.user.agent.document.serie && {passport_serie: this.$store.state.user.agent.document.serie},
+        ...this.$store.state.user.agent.document.id_card_number && {passport_number: this.$store.state.user.agent.document.id_card_number},
+        ...this.$store.state.user.agent.document.passport_number && {passport_number: this.$store.state.user.agent.document.passport_number},
         inn: this.$store.state.user.agent.inn,
         birth: this.$store.state.user.agent.birth,
         card_number: this.$store.state.user.agent.card_number,
@@ -403,6 +405,7 @@ export default {
       this.ab_size = this.$store.state.user.agent.ab_size
       this.leasingTerm = this.$store.state.user.agent.leasingTerm
       this.leasingAmountDkp = this.$store.state.user.agent.leasingAmountDkp
+      console.log(this.user)
     },
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -653,14 +656,14 @@ export default {
         passport_type_id: { required },
         passport_serie:
           (() => { 
-          if(this.user.passport_type_id.value === 1 || this.user.passport_type_id === 1) {
+          if(this.user.passport_type_id === 1) {
             // паспорт старого образца
             return {
               required,
               minLength: minLength(2),
               // maxLength: maxLength(2)
             }
-          } else if(this.user.passport_type_id.value === 2 || this.user.passport_type_id === 2) {
+          } else if(this.user.passport_type_id === 2) {
             // id картка
             return {
               required,
@@ -670,14 +673,14 @@ export default {
         })(),
         passport_number:
           (() => { 
-          if(this.user.passport_type_id.value === 1 || this.user.passport_type_id === 1) {
+          if(this.user.passport_type_id === 1) {
             // паспорт старого образца
             return {
               required,
               minLength: minLength(6),
               // maxLength: maxLength(14)
             }
-          } else if(this.user.passport_type_id.value === 2 || this.user.passport_type_id === 2) {
+          } else if(this.user.passport_type_id === 2) {
             // id карточка
             return {
               required,

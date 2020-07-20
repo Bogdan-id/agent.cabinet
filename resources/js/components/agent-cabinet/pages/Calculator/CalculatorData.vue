@@ -1111,6 +1111,8 @@ export default {
         date: this.currentGraphToDownload.updated_at.substring(0, 10),
         _token: this.getCsrf()
       }
+
+      if(this.formatToSave === 'email') dataToSave.email = this.emailToSend
       
       this.graphName
         .forEach(val => {
@@ -1121,7 +1123,9 @@ export default {
           dataToSave[val].agg['interest'] = graphs[val]['total-interest']
           dataToSave[val].agg['payment'] = graphs[val]['total-payment']
         })
-      this.sendData(dataToSave)
+      !this.$v.$invalid
+        ? this.sendData(dataToSave)
+        : this.highlightErrors()
     },
     sendData(dataToSave) {
       this.loading = true

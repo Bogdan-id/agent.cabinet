@@ -341,7 +341,7 @@ export default {
       leasingAmountDkp: null,
       advance: null,
     },
-    userBeckup: {},
+    userBackUp: {},
 
     loading: false,
     manager: null,
@@ -397,7 +397,7 @@ export default {
         _token: this.getCsrf()
       }
 
-      Object.assign(this.userBeckup, this.user)
+      Object.assign(this.userBackUp, this.user)
 
       this.manager = this.$store.state.user.agent.manager
       this.ab_size = this.$store.state.user.agent.ab_size
@@ -536,7 +536,7 @@ export default {
   },
   computed: {
     profileHasNoChanges() {
-      return JSON.stringify(this.userBeckup) === JSON.stringify(this.user)
+      return JSON.stringify(this.userBackUp) === JSON.stringify(this.user)
     },
     last_nameErr() {
       const errors = []

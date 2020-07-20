@@ -65,10 +65,13 @@
         </v-text-field>
         <v-divider class="mt-0"></v-divider>
         <v-btn 
-          style="border-radius: 0; text-transform: capitalize; border-color: rgb(224, 77, 69); font-size: 1rem;"
+          style="border-radius: 0; text-transform: capitalize; border-color: rgb(224, 77, 69); font-size: 1rem; color: white;"
           class="send-graph-btn"
-          @click="test()" dark color="#e04d45"
-          :loading="loading">
+          @click="sendGraph()" 
+          color="#e04d45"
+          :loading="loading"
+          :disabled="graphName.length === 0"
+          >
           {{ formatToSave === 'email' ? 'Вiдправити' : 'Зберегти' }}
         </v-btn>
       </v-card-text>
@@ -369,7 +372,7 @@
         :items-per-page="10"
         :custom-sort="customSort"
         class="elevation-1">
-        <template v-slot:item.test>
+        <template v-slot:item.sendGraph>
           <span style="white-space: nowrap">{{ $store.state.user.agent.ab_size }}</span>
         </template>
         <template v-slot:item.request_data.leasedAssertModel.name="{ item }">
@@ -495,7 +498,7 @@
           </div>
         </template>
       </v-data-table>
-      <!-- <v-btn @click="test()">test</v-btn> -->
+      <!-- <v-btn @click="sendGraph()">sendGraph</v-btn> -->
     </v-card-text>
   </v-card>
 </div>
@@ -520,7 +523,7 @@ export default {
       }
     ],
     dialogToSend: false,
-    graphName: 'even',
+    graphName: [],
     currentGraphToDownload: null,
     formatToSave: null,
     emailToSend: null,
@@ -574,7 +577,7 @@ export default {
       { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
       { text: 'Авто', value: 'request_data.leasedAssertModel.name', align: 'center' },
       { text: 'Цiна, грн', value: 'request_data', align: 'center' },
-      // { text: 'АВ, %', value: 'test', align: 'center' },
+      // { text: 'АВ, %', value: 'sendGraph', align: 'center' },
       { text: 'Дата', value: 'created_at', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
@@ -1086,8 +1089,9 @@ export default {
           })
         }
     },
-    test() {
-      let graph = this.currentGraphToDownload.result_data[this.graphName]
+    sendGraph() {
+      let graphs = this.currentGraphToDownload.result_data
+      let graph = graphs[Object.keys(graphs)[0]]
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
 
@@ -1099,24 +1103,25 @@ export default {
         term: calcData.leasingTerm,
         advance: calcData.advance,
         prepaid: graph['offer-advance'],
-        avg: graph['offer-month-payment'],
+        offerBrutto: graph['offer-price-brutto'],
+        oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
         currency: calcData.currency,
         leasingRest: graph['offer-rest'],
-        table: graph.graph,
-        agg: {
-          'payment-principal': graph['total-payment-principal'],
-          'interest': graph['total-interest'],
-          'payment': graph['total-payment'],
-        },
         requestId: rootCalcData.request_id,
+        date: this.currentGraphToDownload.updated_at.substring(0, 10),
         _token: this.getCsrf()
       }
-      if(this.formatToSave === 'email') {
-        dataToSave.email = this.emailToSend
-      }
-      !this.$v.$invalid
-        ? this.sendData(dataToSave)
-        : this.highlightErrors()
+      
+      this.graphName
+        .forEach(val => {
+          dataToSave[val] = graphs[val]
+          dataToSave[val].agg = {}
+          dataToSave[val].agg['avg'] = graphs[val]['offer-month-payment']
+          dataToSave[val].agg['payment-principal'] = graphs[val]['total-payment-principal']
+          dataToSave[val].agg['interest'] = graphs[val]['total-interest']
+          dataToSave[val].agg['payment'] = graphs[val]['total-payment']
+        })
+      this.sendData(dataToSave)
     },
     sendData(dataToSave) {
       this.loading = true

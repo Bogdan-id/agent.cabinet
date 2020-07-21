@@ -267,8 +267,12 @@ export default {
 			})
 			let fillMask = (val) => {
 				val.split('').forEach((val, i) => {
-						indexes[i] ? splitMask[indexes[i]] = val : false
-				})
+            if(this.number[6] == 0) {
+              this.number = this.number.substr(0, 6) + this.number.substr(6) 
+            } else {
+              indexes[i] ? splitMask[indexes[i]] = val : false
+            }
+          })
 			}
 			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
 				fillMask(

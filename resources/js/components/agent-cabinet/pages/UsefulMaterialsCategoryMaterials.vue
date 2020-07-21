@@ -37,8 +37,8 @@ export default {
     // let params = this.$router.currentRoute.params
     // this.currentCategory = params.name
     // let category = params.category
+    this.loading = true
     axios
-      this.loading = true
       .get(`/json${this.$router.currentRoute.path}`)
       .then(response => {
         this.loading = false

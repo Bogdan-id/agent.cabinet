@@ -204,16 +204,20 @@ export default {
 			const number = this.number.replace(countryCode, '').replace(numLengthRe, '')
 			const cCpresent = this.number.indexOf(countryCode)
 
-			let splitMask = mask.split('')
+      let splitMask = mask.split('')
 			let indexes = []
 
 			splitMask.forEach((val, i) => {
 				val === sign ? indexes.push(i) : false
 			})
 			let fillMask = (val) => {
-				val.split('').forEach((val, i) => {
-						indexes[i] ? splitMask[indexes[i]] = val : false
-				})
+        val.split('').forEach((val, i) => {
+            if(this.number[6] == 0) {
+              this.number = this.number.substr(0, 6) + this.number.substr(6) 
+            } else {
+              indexes[i] ? splitMask[indexes[i]] = val : false
+            }
+          })
 			}
 			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
 				fillMask(
@@ -232,7 +236,7 @@ export default {
 				fillMask(
 					this.number
 						.slice(firstIndex)
-						.replace(notDigit, '')
+            .replace(notDigit, '')
 				)
 			} else if (this.number.length <= 1) {
 				fillMask(

@@ -216,9 +216,9 @@
         </td>
         <td style="width: 80%; padding-left: 5px; vertical-align: top;">
           <div style="font-size: 13px">З повагою,</div>
-          <div style="font-size: 13px">Товкач Богдан Васильович</div>
-          <div style="font-size: 13px">Моб.: +38 095 741 92 42</div>
-          <div style="font-size: 13px">E-mail.: user332145@gmail.com</div>
+          <div style="font-size: 13px">{{ $agentInfo['name'] }}</div>
+          <div style="font-size: 13px">{{ $agentInfo['phone'] }}</div>
+          <div style="font-size: 13px">{{ $agentInfo['email'] }}</div>
         </td>
       </tr>
     </table>

@@ -4,6 +4,11 @@
 			<div class="app__form-logo-wrapper">
 				<div class="app__header-logo-card"></div>
 			</div>
+      <!-- fake autofill form -->
+      <div style="position: absolute; opacity: 0;">
+        <label for="_email">email</label><input name="_email" type="email">
+        <label for="_password">password</label><input name="_password" type="password">
+      </div>
 			<p class="app__login-form-title">Реєстрація</p>
 			<p class="app__login-form-subtitle">Зареєструватися за номером телефону</p>
 			<div class="app__form">
@@ -27,7 +32,7 @@
 					<input 
 						class="app__input-text"
 						id="number"
-						type="tel" 
+            autocomplete="anyrandomstring"
 						placeholder="+38 (0__) ___ __ __"
 						v-model="number"
 						@paste="pasteEvent = true"
@@ -37,7 +42,7 @@
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text" 
-						type="email" 
+						autocomplete="anyrandomstring"
 						placeholder="Email"
 						v-model="email"
 						@blur="$v.email.$touch()"

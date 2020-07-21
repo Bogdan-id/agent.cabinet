@@ -27,7 +27,7 @@
 					<input 
 						class="app__input-text"
 						id="number"
-						type="text" 
+						type="tel" 
 						placeholder="+38 (0__) ___ __ __"
 						v-model="number"
 						@paste="pasteEvent = true"
@@ -37,7 +37,7 @@
 				<div class="app__input-text-wrapper">
 					<input 
 						class="app__input-text" 
-						type="text" 
+						type="email" 
 						placeholder="Email"
 						v-model="email"
 						@blur="$v.email.$touch()"

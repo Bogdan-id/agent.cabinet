@@ -11,7 +11,7 @@
 					<input 
 						class="app__input-text"
 						id="number"
-						type="text" 
+						type="tel" 
 						placeholder="+38 (0__) ___ __ __"
 						v-model="number"
 						@paste="pasteEvent = true"
@@ -34,10 +34,10 @@
 						@input="$v.password.$touch()"
 						/>
 						<span 
-						:class="passwordErrors.length > 0 
-							? 'app__input-error input-error--active' 
-							: 'app__input-error'"> 
-              {{ passwordErrors[0] }}
+              :class="passwordErrors.length > 0 
+                ? 'app__input-error input-error--active' 
+                : 'app__input-error'"> 
+                {{ passwordErrors[0] }}
             </span>
 				</div>
 				<div class="app__register-checkbox-wrapper">
@@ -58,7 +58,7 @@
 						<div v-if="request" class="lds-dual-ring"></div>
 					</button>
 					<div class="app__sign-navigate">
-						<a class="app__sign-navigate-link --link" href="#">Забули пароль?</a>
+						<router-link class="app__sign-navigate-link --link" :to="{path: '/login/forget'}">Забули пароль?</router-link>
 						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
 					</div>
 				</div>

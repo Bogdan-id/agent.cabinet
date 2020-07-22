@@ -144,7 +144,7 @@ export default {
           console.log(response)
           this.loading = false
           this.userId = response.data.userId
-          this.timer(40)
+          this.timer(120)
         })
         .catch(error => {
           console.log(error.response)
@@ -353,7 +353,7 @@ export default {
   watch: {
     userId(val) {
       if(val !== null) {
-        this.timer(40)
+        this.timer(120)
       }
     } 
   },

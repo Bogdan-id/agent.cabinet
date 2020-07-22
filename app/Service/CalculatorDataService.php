@@ -214,6 +214,14 @@ class CalculatorDataService
                 return 13;
             case 'Mercedes-Benz':
                 return 14;
+            case 'Fiat':
+                return 15;
+            case 'Alfa Romeo':
+                return 15;
+            case 'Mitsubishi':
+                return 16;
+            case 'Opel':
+                return 17;
             default:
                 return 1;
         }

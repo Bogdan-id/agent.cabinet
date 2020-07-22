@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\JsonRequest;
+use Illuminate\Http\Request;
 
 class AgentCreateRequest extends JsonRequest
 {
@@ -21,9 +22,10 @@ class AgentCreateRequest extends JsonRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
+        $data = $request->post();
+        $rules = [
             'user_id' => 'required|integer',
             'last_name' => 'required|string',
             'first_name' => 'required|string',
@@ -33,8 +35,6 @@ class AgentCreateRequest extends JsonRequest
             'position' => 'required|string',
            // 'status' => 'string',
             'passport_type_id' => 'integer',
-            'passport_serie' => 'string',
-            'passport_number' => 'string',
             'inn' => 'string',
             'birth' => 'string',
             'card_number' => 'string',
@@ -42,5 +42,12 @@ class AgentCreateRequest extends JsonRequest
             'oferta_accepted' => 'required|boolean',
             'purpose_of_payment' => 'string', 
         ];
+
+        if(array_key_exists('passport_type_id', $data)){
+            $rules['passport_serie'] = 'required|string';
+            $rules['passport_number'] = 'required|string';
+        }
+
+        return $rules;
     }
 }

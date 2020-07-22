@@ -26,37 +26,31 @@ class LeasingRequestRequest extends JsonRequest
     {
         $data = $request->post();
         $rules = [
-            'agentId' =>  'required|integer|exists:agents,id',
-            'calculationId' =>  'required|integer|exists:calculations,id',
-            'clientTypeId' =>  'required|integer', //TODO: |exists:clients_types,id
-            'lastName' => 'required|string',
-            'firstName' => 'required|string',
+            'agent_id' =>  'required|integer|exists:agents,id',
+            'calculation_id' =>  'required|integer|exists:calculations,id',
+            'client_type_id' =>  'required|integer', //TODO: |exists:clients_types,id
+            'last_name' => 'required|string',
+            'first_name' => 'required|string',
             'patronymic' => 'required|string',
-            'region' => 'required|string',
-            'leasingObject' => 'required|string',
+           // 'region' => 'required|string',
+            'leasing_object' => 'required|string',
             'advance' => 'required|integer',
-            'leasingObject' => 'required|string',
+            'leasing_object' => 'required|string',
             'advance' => 'required|integer',
-            'leasingTerm' => 'required|integer',
-            'leasingAmount' => 'required|string',
-            'graphType' => 'required|string',
-            'legalInfo' => 'required|array',
+            'leasing_term' => 'required|integer',
+            'leasing_amount' => 'required|string',
+            'graph_type' => 'required|string',
+            'legal_info' => 'required|array',
             'documents' => 'required|array'
         ];
 
-        if($data['clientTypeId'] === 1){
+        if($data['client_type_id'] === 1){
             $rules['email'] = 'required|string';
             $rules['phone'] = 'required|string';
-            $rules['legalInfo.inn'] = 'required|string';
-            $rules['legalInfo.monthlyIncome'] = 'required|integer';
-            $rules['legalInfo.creditPayment'] = 'required|integer';
-            $rules['legalInfo.acquisitionTargetId'] = 'required|integer'; //TODO:  |exists:acquisition_targets,id
-        }elseif($data['clientTypeId'] === 2){
-            $rules['legalInfo.edrpou'] = 'required|string';
-            $rules['legalInfo.companyName'] = 'required|string';
-            $rules['legalInfo.equity'] = 'required|string';
-            $rules['legalInfo.currencyBalance'] = 'required|integer';
-            $rules['legalInfo.creditPayment'] = 'required|integer';
+            $rules['legal_info.inn'] = 'required|string';
+        }elseif($data['client_type_id'] === 2){
+            $rules['legal_info.edrpou'] = 'required|string';
+            $rules['legal_info.company_name'] = 'required|string';
         }
 
         return $rules;

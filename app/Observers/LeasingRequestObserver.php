@@ -26,7 +26,7 @@ class LeasingRequestObserver
             $patronymic = mb_substr($leasingRequest->patronymic, 0, 1);
             $notificationTitle = "Створено нову заявку на лизінг на им'я {$leasingRequest->last_name} {$firstName}.{$patronymic}.";
         }elseif($leasingRequest->client_type_id == 2){
-            $notificationTitle = "Створено нову заявку на лизінг на компанію {$leasingRequest->legal_info['companyName']}";
+            $notificationTitle = "Створено нову заявку на лизінг на компанію {$leasingRequest->legal_info['company_name']}";
         }
         $notification = new Notification;
         $notification->agent_id = $leasingRequest->agent_id;

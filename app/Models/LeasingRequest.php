@@ -12,7 +12,21 @@ class LeasingRequest extends Model
      * @var array
      */
     protected $fillable = [
-        //
+        'agent_id',
+        'calculation_id',
+        'client_type_id',
+        'last_name',
+        'first_name',
+        'patronymic',
+        'leasing_object',
+        'advance',
+        'leasing_object',
+        'advance',
+        'leasing_term',
+        'leasing_amount',
+        'graph_type',
+        'legal_info',
+        'documents'
     ];
 
 

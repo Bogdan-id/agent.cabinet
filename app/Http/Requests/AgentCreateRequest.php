@@ -32,15 +32,15 @@ class AgentCreateRequest extends JsonRequest
             'company_name' => 'required|string',
             'position' => 'required|string',
            // 'status' => 'string',
-            'passport_type_id' => 'required|integer',
-            'passport_serie' => 'required|string',
-            'passport_number' => 'required|string',
-            'inn' => 'required|string',
-            'birth' => 'required|string',
-            'card_number' => 'required|string',
-            'iban' => 'required',
+            'passport_type_id' => 'integer',
+            'passport_serie' => 'string',
+            'passport_number' => 'string',
+            'inn' => 'string',
+            'birth' => 'string',
+            'card_number' => 'string',
+            'iban' => 'string', 
             'oferta_accepted' => 'required|boolean',
-            'purposeOfPayment' => 'required|string',
+            'purpose_of_payment' => 'string', 
         ];
     }
 }

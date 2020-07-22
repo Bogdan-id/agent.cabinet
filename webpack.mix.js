@@ -5,8 +5,8 @@ const CKERegex = {
     svg: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
     css: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css/,
 }
-require('laravel-mix-polyfill')
-const TargetsPlugin = require('targets-webpack-plugin')
+// require('laravel-mix-polyfill')
+// const TargetsPlugin = require('targets-webpack-plugin')
 
 /*
  |--------------------------------------------------------------------------
@@ -33,9 +33,9 @@ mix.js('resources/js/app.js', 'public/js')
         language: 'uk',
         addMainLanguageTranslationsToAllAssets: true
       }),
-      new TargetsPlugin({
-        browsers: ['last 2 versions', 'chrome >= 41', 'IE 11'],
-      }),
+      // new TargetsPlugin({
+      //   browsers: ['last 2 versions', 'chrome >= 41', 'IE 11'],
+      // }),
     ],
     module: {
       rules: [

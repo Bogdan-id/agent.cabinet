@@ -166,12 +166,13 @@
       top
       color="red lighten-1">
     </v-progress-linear>
-    <v-card-title
+    <v-card-text
       v-if="!loading && !tableDataPresent"
       absolute
-      class="headline d-block text-center grey--text">
-      Iсторiя заявок на лiзинг порожня
-    </v-card-title>
+      style="font-size: 1.3rem; padding-top: 90px;"
+      class="d-block text-center">
+      (Iсторiя заявок на лiзинг порожня)
+    </v-card-text>
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">

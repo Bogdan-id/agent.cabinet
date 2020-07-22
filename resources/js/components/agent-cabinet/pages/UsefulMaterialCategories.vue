@@ -13,7 +13,7 @@
   </v-progress-linear>
   </v-card-title>
   <v-card-text style="padding-top: 90px;" v-if="sections === null && !$store.state.loader || sections && sections.length === 0 && !$store.state.loader">
-    <div style="text-align: center; font-size: 0.95rem;">(Категорії для вiдображення вiдсутнi)</div>
+    <div style="text-align: center; font-size: 1.3rem;">(Категорії для вiдображення вiдсутнi)</div>
   </v-card-text>
   <v-card-text>
     <v-hover

@@ -12,12 +12,14 @@ use App\Models\{
     LeasingRequest,
     Agent
 };
+use App\Http\Clients\OpenDataBotClient;
 
 class LeasingRequestController extends Controller
 {
-    public function __construct()
+    public function __construct(OpenDataBotClient $openDataBotClient)
     {
         //$this->middleware('auth');
+        $this->openDataBotClient = $openDataBotClient;
     }
 
     public function create(
@@ -57,5 +59,16 @@ class LeasingRequestController extends Controller
     public function updateStatus($id)
     {
         //
+    }
+
+    public function getCompanyName($edrpou)
+    {
+        $company = $this->openDataBotClient->getCompanyByEdrpou($edrpou);
+        $company = current($company);
+        $companyShortName = $company['short_name'];
+
+        return response()->json([
+            'companyShortName' => $companyShortName
+        ]);
     }
 }

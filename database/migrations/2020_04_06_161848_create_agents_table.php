@@ -19,7 +19,7 @@ class CreateAgentsTable extends Migration
             $table->string('bitrix_id')->nullable();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('patronymic');
+            $table->string('patronymic')->nullable();
             $table->string('company_type');
             $table->string('company_name');
             $table->string('position');

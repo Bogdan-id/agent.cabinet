@@ -27,7 +27,7 @@ class AgentCreateRequest extends JsonRequest
             'user_id' => 'required|integer',
             'last_name' => 'required|string',
             'first_name' => 'required|string',
-            'patronymic' => 'required|string',
+            'patronymic' => 'string',
             'company_type' => 'required|string',
             'company_name' => 'required|string',
             'position' => 'required|string',

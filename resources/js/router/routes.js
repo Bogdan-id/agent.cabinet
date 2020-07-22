@@ -216,7 +216,7 @@ const routes = [
       },
       {
         path: '/news',
-        name: 'dashboard-news',
+        name: 'Новини',
         component: DashboardNews,
         meta: {
           title: 'Новини'
@@ -224,10 +224,10 @@ const routes = [
         children: [
           {
             path: ':slug',
-            name: 'current-news',
+            name: 'Детально ', // indentation important
             component: DashboardCurrentNews,
             meta: {
-              title: 'Поточна новина'
+              title: 'Новини'
             }
           }
         ]

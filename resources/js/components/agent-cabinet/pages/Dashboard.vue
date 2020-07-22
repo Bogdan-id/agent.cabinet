@@ -129,7 +129,14 @@
           </span>
         </template>
         <template v-slot:item.whole_object="{ item }">
-          <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ switchValue(item.graph_type) }}</v-btn>
+          <v-btn 
+            x-small 
+            style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" 
+            small dark 
+            color="grey darken-3" 
+            :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">
+            {{ switchValue(item.graph_type) }}
+          </v-btn>
         </template>
         <template #item.status="{ item }">
           <div class="d-flex justify-center">
@@ -222,7 +229,7 @@
                 <div style="text-align: right">
                   <span>
                     <v-btn 
-                      :to="{name: 'current-news', path: `/news/${item.slug}`, params: item}" 
+                      :to="{name: 'Детально ', path: `/news/${item.slug}`, params: item}" 
                       :small="mdAndDown" 
                       class="vuetify_custom-btn --small capitalize mt-2" 
                       text>
@@ -236,7 +243,11 @@
         </v-card-text>
         <v-card-text class="pt-0">
           <div style="text-align: right">
-            <router-link :to="{name: 'dashboard-news', path: '/news', params: {news: this.news}}" class="see-all-news" style="font-size: 1rem; text-decoration: underline" tag="span">Всi новини</router-link>
+            <router-link 
+              :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" 
+              class="see-all-news" style="font-size: 1rem; text-decoration: underline" tag="span">
+              Всi новини
+            </router-link>
           </div>
         </v-card-text>
       </v-card>
@@ -265,7 +276,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn 
-              :to="{name: 'current-news', path: `/news/${item.slug}`, params: item}" 
+              :to="{name: 'Детально ', path: `/news/${item.slug}`, params: item}" 
               :small="mdAndDown" 
               class="vuetify_custom-btn --small capitalize mt-2" 
               text>
@@ -277,7 +288,10 @@
     </v-card-text>
     <v-card-text class="pt-0">
       <div style="text-align: center">
-        <v-btn color="#e75d57" outlined :to="{name: 'dashboard-news', path: '/news', params: {news: this.news}}" tag="span">всi новини</v-icon></v-btn>
+        <v-btn color="#e75d57" outlined 
+          :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" tag="span">
+          всi новини
+        </v-btn>
       </div>
     </v-card-text>
   </v-card>
@@ -402,6 +416,7 @@ export default {
       axios
         .get('/json/news')
         .then(response => {
+          console.log(response)
           this.news = response.data
         })
         .catch(error => {

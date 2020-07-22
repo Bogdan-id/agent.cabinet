@@ -8,12 +8,6 @@
         bottom
         color="red">
       </v-progress-linear>
-      <div v-if="secondTimer" class="wrap">
-        <div class="loading">
-          <div class="bounceball"></div>
-          <div class="bounceball-text" id="bounceball-text"></div>
-        </div>
-      </div>
 			<div class="app__form-logo-wrapper">
 				<div class="app__header-logo-card"></div>
 			</div>
@@ -23,11 +17,8 @@
         <label for="_password">password</label><input name="_password" type="password">
       </div>
 			<p class="app__login-form-title">Відновлення паролю</p>
-      <div v-if="messageToReload">
-        <span style="font-size: 1rem">Сторiнку буде оновлено</span>
-      </div>
       <!--  -->
-			<div class="app__form" v-if="!messageToReload">
+			<div class="app__form">
 				<div 
           v-if="this.userId === null" 
           class="app__input-text-wrapper" >
@@ -38,8 +29,7 @@
 						placeholder="Вкажiть номер телефону"
 						v-model="number"
 						@paste="pasteEvent = true"
-						@input="applyMask(); $v.number.$touch()"
-            @blur="$v.number.$touch()"/>
+						@input="applyMask()"/>
           <span 
 						:class="numberErrors.length > 0 
 							? 'app__input-error input-error--active' 
@@ -52,10 +42,18 @@
             <input 
               class="app__input-text"
               type="text" 
-              placeholder="код"
+              placeholder="Код з SMS"
               v-model="verificationCode"
               @input="$v.verificationCode.$touch()"
               @blur="$v.verificationCode.$touch()"/>
+            <div v-if="secondTimer" class="wrap">
+              <span style="font-size: 0.8rem; color: #808080;">Повторно вiдправити код через&nbsp;</span>
+              <div style="display: inline-block;">
+                <div class="bounceball"></div>
+                <div class="bounceball-text" id="bounceball-text"></div>
+              </div>
+            </div>
+            <div v-if="repeatSendSms && !secondTimer" style="padding-top: 23px; padding-left: 2px"><a style="font-size: 0.8rem;" @click="sendSms()">вiдправити код повторно</a></div>
             <span 
               :class="verificationCodeErrors.length > 0 
                 ? 'app__input-error input-error--active' 
@@ -63,6 +61,7 @@
                 {{ verificationCodeErrors[0] }}
             </span>
           </div>
+          <div style="height: 32px;"></div>
           <div class="app__input-text-wrapper">
             <input 
               class="app__input-text"
@@ -99,6 +98,7 @@
 						<span v-if="!request">{{ userId ? 'Змiнити пароль' : 'Надiслати код'}}</span>
 						<div v-if="request" class="lds-dual-ring"></div>
 					</button>
+          <!-- <v-btn @click="test()">timer</v-btn> -->
 					<div class="app__sign-navigate">
 						<a class="app__sign-navigate-link --link" href="/login">Авторизацiя</a>
 						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
@@ -123,12 +123,12 @@ export default {
     loading: false,
 
     secondTimer: false,
-    messageToReload: false,
+    repeatSendSms: false,
 
     number: null,
     repeatedPassword: null,
 
-    userId: null,
+    userId: null, 
     password: null,
     verificationCode: null,
   }),
@@ -144,6 +144,7 @@ export default {
           console.log(response)
           this.loading = false
           this.userId = response.data.userId
+          this.timer(40)
         })
         .catch(error => {
           console.log(error.response)
@@ -279,25 +280,23 @@ export default {
       })
     },
     timer(seconds) {
+      this.repeatSendSms = false
       this.secondTimer = true
       let timer = setInterval(() => {
         if(seconds <= 0){
           clearInterval(timer)
           document.getElementById("bounceball-text").innerHTML = ""
           this.secondTimer = false
-          this.messageToReload = true
-          setTimeout(() => {
-            this.$router.go()
-          }, 1300)
+          this.repeatSendSms = true
         } else {
           document.getElementById("bounceball-text").innerHTML = seconds + " с."
         }
         seconds -= 1
       }, 1000)
     },
-    test() {
-      console.log(this.$v)
-    }
+    // test() {
+    //   this.timer(10)
+    // }
 	},
 	computed: {
 		passwordErrors() {
@@ -354,7 +353,7 @@ export default {
   watch: {
     userId(val) {
       if(val !== null) {
-        this.timer(120)
+        this.timer(40)
       }
     } 
   },
@@ -381,22 +380,22 @@ body {
   height: 100vh;
   font-family: Montserrat;
 }
-.wrap {
-  position: absolute;
-  top: 20px;
-  right: 10px;
-}
+// .wrap {
+//   position: absolute;
+//   top: 20px;
+//   right: 10px;
+// }
 .bounceball-text {
   color: black;
   display: inline-block;
   margin-left: 5px;
   min-width: 60px;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
 }
 .bounceball {
   position: relative;
   display: inline-block;
-  height: 37px;
+  height: 35px;
   width: 15px;
   &:before {
     position: absolute;

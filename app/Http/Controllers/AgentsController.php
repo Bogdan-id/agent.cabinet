@@ -61,32 +61,34 @@ class AgentsController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
         ]);
-        if($data['passport_type_id'] == 1)
-        {
-            $passportExists = Passport::where('agent_id', '=', $agent->id)->first();
-            if(!$passportExists){
-                $passport->agent_id = $agent->id;
-                $passport->serie = $data['passport_serie'];
-                $passport->passport_number = $data['passport_number'];
-                $passport->save();
+        if(array_key_exists('passport_type_id', $data)){
+            if($data['passport_type_id'] == 1)
+            {
+                $passportExists = Passport::where('agent_id', '=', $agent->id)->first();
+                if(!$passportExists){
+                    $passport->agent_id = $agent->id;
+                    $passport->serie = $data['passport_serie'];
+                    $passport->passport_number = $data['passport_number'];
+                    $passport->save();
+                }else{
+                    $passportExists->update([
+                        'serie' => $data['passport_serie'],
+                        'passport_number' =>  $data['passport_number']
+                    ]);
+                }
             }else{
-                $passportExists->update([
-                    'serie' => $data['passport_serie'],
-                    'passport_number' =>  $data['passport_number']
-                ]);
-            }
-        }else{
-            $idCardExists = IdCard::where('agent_id', '=', $agent->id)->first();
-            if(!$idCardExists){
-            $idCard->agent_id = $agent ->id;
-            $idCard->unzr_number = $data['passport_serie'];
-            $idCard->id_card_number = $data['passport_number'];
-            $idCard->save();
-            }else{
-                $idCardExists->update([
-                    'unzr_number' => $data['passport_serie'],
-                    'id_card_number' =>  $data['passport_number']
-                ]);
+                $idCardExists = IdCard::where('agent_id', '=', $agent->id)->first();
+                if(!$idCardExists){
+                $idCard->agent_id = $agent ->id;
+                $idCard->unzr_number = $data['passport_serie'];
+                $idCard->id_card_number = $data['passport_number'];
+                $idCard->save();
+                }else{
+                    $idCardExists->update([
+                        'unzr_number' => $data['passport_serie'],
+                        'id_card_number' =>  $data['passport_number']
+                    ]);
+                }
             }
         }
 

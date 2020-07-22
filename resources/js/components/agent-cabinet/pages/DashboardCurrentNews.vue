@@ -27,6 +27,7 @@ export default {
     currentNews: null,
   }),
   created() {
+    console.log(this.$route.params)
     this.currentNews = this.$route.params
   }
 }

@@ -23,7 +23,7 @@
               <div v-if="!graphData.result_data.hasOwnProperty('even')" class="empty-chart">
               </div>
               <div class="router-link-to-no-calc">
-                <p style="font-size: 1.3rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+                <p style="font-size: 1rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
                   <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
                 </p>
               </div>
@@ -205,7 +205,7 @@
               <div v-if="!graphData.result_data.hasOwnProperty('annuity')" class="empty-chart">
               </div>
               <div class="router-link-to-no-calc">
-                <p style="font-size: 1.3rem">
+                <p style="font-size: 1rem">
                   <span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;">
                     <v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon>
                   </span>
@@ -392,7 +392,7 @@
               <div v-if="!graphData.result_data.hasOwnProperty('irregular')" class="empty-chart">
               </div>
               <div class="router-link-to-no-calc">
-                <p style="font-size: 1.3rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+                <p style="font-size: 1rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
                   <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
                 </p>
               </div>

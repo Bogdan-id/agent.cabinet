@@ -16,6 +16,7 @@ import Authorization from '../components/authentication/Authorization'
 import Registration from '../components/authentication/Registration'
 import WaitAnswer from '../components/authentication/Wait-answer'
 import CompleteRegistration from '../components/authentication/CompleteRegistration'
+import ForgotPassword from '../components/authentication/ForgotPassword'
 
 /* Dashboard components */
 import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout"
@@ -163,6 +164,14 @@ const routes = [
     name: 'authorization',
     meta: {
       title: 'Увiйти'
+    },
+  },
+  {
+    path: '/login/forget',
+    name: 'Відновлення паролю',
+    component: ForgotPassword,
+    meta: {
+      title: 'Відновлення паролю'
     }
   },
   { 
@@ -207,7 +216,7 @@ const routes = [
       },
       {
         path: '/news',
-        name: 'dashboard-news',
+        name: 'Новини',
         component: DashboardNews,
         meta: {
           title: 'Новини'
@@ -215,10 +224,10 @@ const routes = [
         children: [
           {
             path: ':slug',
-            name: 'current-news',
+            name: 'Детально ', // indentation important
             component: DashboardCurrentNews,
             meta: {
-              title: 'Поточна новина'
+              title: 'Новини'
             }
           }
         ]

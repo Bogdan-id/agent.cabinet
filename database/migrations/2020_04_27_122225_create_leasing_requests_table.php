@@ -23,7 +23,7 @@ class CreateLeasingRequestsTable extends Migration
             $table->string('patronymic');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
-            $table->string('region');
+            $table->string('region')->nullable();
             $table->string('leasing_object');
             $table->integer('advance');
             $table->string('leasing_term');

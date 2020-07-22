@@ -18,16 +18,15 @@ class LeasingRequestController extends Controller
 {
     public function __construct(OpenDataBotClient $openDataBotClient)
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
         $this->openDataBotClient = $openDataBotClient;
     }
 
-    public function create(
-                        LeasingRequestRequest $request,
-                        LeasingRequestRepository $leasingRequestRepository)
+    public function create(LeasingRequestRequest $request)
     {
         $data = $request->validated();
-        $leasingRequest = $leasingRequestRepository->create($data);
+        $leasingRequest = new LeasingRequest;
+        $leasingRequest = $leasingRequest->create($data);
 
         return response()->json($leasingRequest);
     }

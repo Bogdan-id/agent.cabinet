@@ -14,7 +14,7 @@ class AddPurposeOfPaymentColumnToAgentsTable extends Migration
     public function up()
     {
         Schema::table('agents', function (Blueprint $table) {
-            $table->text('purpose_of_payment');
+            $table->text('purpose_of_payment')->nullable();
         });
     }
 

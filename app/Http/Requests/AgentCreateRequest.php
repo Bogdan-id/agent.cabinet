@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\JsonRequest;
+use Illuminate\Http\Request;
 
 class AgentCreateRequest extends JsonRequest
 {
@@ -21,26 +22,32 @@ class AgentCreateRequest extends JsonRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
+        $data = $request->post();
+        $rules = [
             'user_id' => 'required|integer',
             'last_name' => 'required|string',
             'first_name' => 'required|string',
-            'patronymic' => 'required|string',
+            'patronymic' => 'string',
             'company_type' => 'required|string',
             'company_name' => 'required|string',
             'position' => 'required|string',
            // 'status' => 'string',
-            'passport_type_id' => 'required|integer',
-            'passport_serie' => 'required|string',
-            'passport_number' => 'required|string',
-            'inn' => 'required|string',
-            'birth' => 'required|string',
-            'card_number' => 'required|string',
-            'iban' => 'required',
+            'passport_type_id' => 'integer',
+            'inn' => 'string',
+            'birth' => 'string',
+            'card_number' => 'string',
+            'iban' => 'string', 
             'oferta_accepted' => 'required|boolean',
-            'purposeOfPayment' => 'required|string',
+            'purpose_of_payment' => 'string', 
         ];
+
+        if(array_key_exists('passport_type_id', $data)){
+            $rules['passport_serie'] = 'required|string';
+            $rules['passport_number'] = 'required|string';
+        }
+
+        return $rules;
     }
 }

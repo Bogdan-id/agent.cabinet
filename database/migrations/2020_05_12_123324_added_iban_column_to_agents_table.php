@@ -14,7 +14,7 @@ class AddedIbanColumnToAgentsTable extends Migration
     public function up()
     {
         Schema::table('agents', function (Blueprint $table) {
-            $table->text('iban')->after('card_number');
+            $table->text('iban')->after('card_number')->nullable();
         });
     }
 

@@ -23,7 +23,9 @@ class Agent extends Model
        'birth',
        'card_number',
        'iban',
-       'purpose_of_payment'
+       'purpose_of_payment',
+       'user_id',
+       'oferta_accepted'
     ];
 
 

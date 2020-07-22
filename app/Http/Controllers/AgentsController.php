@@ -25,39 +25,25 @@ class AgentsController extends Controller
     public function create(AgentCreateRequest $request)
     {
         $data = $request->validated();
-
         $agent = new Agent;
-        $agent->user_id = $data['user_id'];
-        $agent->last_name = $data['last_name'];
-        $agent->first_name = $data['first_name'];
-        $agent->patronymic = $data['patronymic'];
-        $agent->company_type = $data['company_type'];
-        $agent->company_name = $data['company_name'];
-        $agent->position = $data['position'];
-        $agent->passport_type_id = $data['passport_type_id'];
-        $agent->inn = $data['inn'];
-        $agent->birth = $data['birth'];
-        $agent->card_number = $data['card_number'];
-        $agent->iban = $data['iban'];
-        $agent->oferta_accepted = $data['oferta_accepted'];
-        $agent->purpose_of_payment = $data['purposeOfPayment'];
-        $agent->save();
-
-        if($data['passport_type_id'] == 1)
-        {
-            $passport = new Passport;
-            $passport->agent_id = $agent ->id;
-            $passport->serie = $data['passport_serie'];
-            $passport->passport_number = $data['passport_number'];
-            $passport->save();
-        }else{
-            $idCard = new IdCard;
-            $idCard->agent_id = $agent ->id;
-            $idCard->unzr_number = $data['passport_serie'];
-            $idCard->id_card_number = $data['passport_number'];
-            $idCard->save();
+        $agent = $agent->create($data);
+        if($agent->passport_type_id){
+            if($data['passport_type_id'] == 1)
+            {
+                $passport = new Passport;
+                $passport->agent_id = $agent ->id;
+                $passport->serie = $data['passport_serie'];
+                $passport->passport_number = $data['passport_number'];
+                $passport->save();
+            }else{
+                $idCard = new IdCard;
+                $idCard->agent_id = $agent ->id;
+                $idCard->unzr_number = $data['passport_serie'];
+                $idCard->id_card_number = $data['passport_number'];
+                $idCard->save();
+            }
         }
-
+        
         return response()->json([
             'status' => 200
         ]);

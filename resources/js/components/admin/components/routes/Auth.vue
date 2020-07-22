@@ -9,7 +9,7 @@
             @input="$v.userObj.username.$touch()"
             :error-messages="usernameErr"
             v-model="userObj.username"
-            label="Iм`я користувача"
+            placeholder="Iм`я користувача"
             prepend-icon="mdi-account-circle"/>
           <v-text-field
             @blur="$v.userObj.password.$touch()"
@@ -17,7 +17,7 @@
             :error-messages="passwordErr"
             v-model="userObj.password"
             :type="showPassword ? 'text' : 'password'"
-            label="Пароль"
+            placeholder="Пароль"
             prepend-icon="mdi-lock"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showPassword = !showPassword"/>

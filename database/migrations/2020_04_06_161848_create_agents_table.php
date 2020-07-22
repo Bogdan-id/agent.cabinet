@@ -24,10 +24,10 @@ class CreateAgentsTable extends Migration
             $table->string('company_name');
             $table->string('position');
             $table->string('status')->nullable();
-            $table->integer('passport_type_id');
-            $table->string('inn');
-            $table->string('birth');
-            $table->string('card_number');
+            $table->integer('passport_type_id')->nullable();
+            $table->string('inn')->nullable();
+            $table->string('birth')->nullable();
+            $table->string('card_number')->nullable();
             $table->string('ab_size')->nullable();
             $table->integer('manager_id')->nullable();
             $table->timestamps();

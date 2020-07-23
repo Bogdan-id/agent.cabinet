@@ -7,6 +7,7 @@ use App\Http\Requests\{
     AgentCreateRequest,
     AgentUpdateRequest
 };
+use App\Http\Clients\BitrixClient;
 use App\User;
 use App\Models\{
     Agent,
@@ -127,6 +128,31 @@ class AgentsController extends Controller
        $manager = $agent->manager;
 
        return response()->json($manager);
+    }
+
+    public function getAgentContact(Request $request, BitrixClient $bitrixClient)
+    {
+        $result = [];
+        $data = $request->post();
+        $contactId = $bitrixClient->searchContact($data['phone'], $data['email']);
+        if($contactId){
+            $contact = $bitrixClient->getContactById($contactId);
+            $result = [
+                'contact' => [
+                    'first_name' =>  $contact['NAME'],
+                    'last_name' => $contact['LAST_NAME'],
+                    'patronymic' => $contact['SECOND_NAME'],
+                    'post' => $contact['POST']
+                ],
+                'company_name' => null
+            ];
+            if($contact['COMPANY_ID']){
+                $company = $bitrixClient->getCompanyById($contact['COMPANY_ID']);
+                $result['company_name'] = $company['TITLE'];
+            }
+        }
+     
+        return response()->json($result);      
     }
 
 }

@@ -345,4 +345,36 @@ class BitrixClient
             
             return $result['result'];
     }
+
+    public function getContactById($id)
+    {
+        $response = $this->client
+                ->get("/rest/3/{$this->token}/crm.contact.get", [
+                    'query' => [
+                        "ID" => $id,
+                    ]
+                ])
+                ->getBody()
+                ->getContents();
+
+        $result = json_decode($response, true);
+        
+        return $result['result'];
+    }
+
+    public function getCompanyById($id)
+    {
+        $response = $this->client
+                ->get("/rest/3/{$this->token}/crm.company.get", [
+                    'query' => [
+                        "ID" => $id,
+                    ]
+                ])
+                ->getBody()
+                ->getContents();
+
+        $result = json_decode($response, true);
+
+        return $result['result'];
+    }
 }

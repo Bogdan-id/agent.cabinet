@@ -135,6 +135,19 @@
                 :error-messages="companyNameErr"
                 label="Назва компанії"
                 dense outlined readonly>
+                <template v-slot:append>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-icon 
+                        v-on="on"
+                        style="cursor: pointer;" 
+                        color="#d24a43" 
+                        v-text="'mdi-information-outline'">
+                      </v-icon>
+                    </template>
+                    <span>Поле заполняеться автоматично за вказаним ЄДРПОУ</span>
+                  </v-tooltip>
+                </template>
               </v-text-field>
             </v-col>
             <v-col 

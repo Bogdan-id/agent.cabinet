@@ -133,19 +133,25 @@ export default {
       }
     },
     toggleNotifyCard() {
-      setTimeout(() => {
-        let card = document.getElementById('cadr-notification')
-        if(!card.classList.contains('show-card')) {
-          card.classList.add('show-card')
-        } else card.classList.remove('show-card')
-      }, 150)
-      this.notificationKeys = []
-      for(let i = 0; i <= this.maxNotificationsToShow - 1; i ++) {
-        if(this.notifications[i].status === 'not_checked') {
-          this.notificationKeys.push(this.notifications[i].id)
+      let card = document.getElementById('cadr-notification')
+      if(!card.classList.contains('show-card')) {
+        card.classList.add('show-card')
+        if(this.notifications.length === 0) return
+        this.notifications.length < this.maxNotificationsToShow
+          ? this.maxNotificationsToShow = this.notifications.length
+          : false
+        for(let i = 0; i <= this.maxNotificationsToShow -1; i ++) {
+          this.notifications[i].status === 'not_checked'
+          ? this.notificationKeys.push(this.notifications[i].id)
+          : false
         }
+      } else {
+        card.classList.remove('show-card')
+        if(this.notificationKeys.length === 0) return
+        this.changeNotificationsStatus({notifications: this.notificationKeys})
+        this.notificationKeys = []
+        this.getAgentNotifications()
       }
-      this.changeNotificationsStatus({notifications: this.notificationKeys})
     },
     listenCardState() {
       let body = document.getElementById('app')

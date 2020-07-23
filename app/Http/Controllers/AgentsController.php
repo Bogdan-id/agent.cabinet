@@ -102,7 +102,7 @@ class AgentsController extends Controller
     {
         $user = Auth::user();
         $agent = Agent::where('user_id', '=', $user->id)->with('manager')->first();
-        if($agent){
+        if($agent && $agent->passport_type_id){
             switch ($agent->passport_type_id) {
                 case 1:
                     $document = Passport::where('agent_id', '=', $agent->id)->first();

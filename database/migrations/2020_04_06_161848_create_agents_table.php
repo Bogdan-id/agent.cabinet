@@ -21,8 +21,8 @@ class CreateAgentsTable extends Migration
             $table->string('last_name');
             $table->string('patronymic')->nullable();
             $table->string('company_type');
-            $table->string('company_name');
-            $table->string('position');
+            $table->string('company_name')->nullable();
+            $table->string('position')->nullable();
             $table->string('status')->nullable();
             $table->integer('passport_type_id')->nullable();
             $table->string('inn')->nullable();

@@ -41,12 +41,12 @@ class LeasingRequestRequest extends JsonRequest
             'leasing_amount' => 'required|string',
             'graph_type' => 'required|string',
             'legal_info' => 'required|array',
-            'documents' => 'required|array'
+            'documents' => 'array',
+            'email' => 'required|string',
+            'phone' => 'required|string'
         ];
 
         if($data['client_type_id'] === 1){
-            $rules['email'] = 'required|string';
-            $rules['phone'] = 'required|string';
             $rules['legal_info.inn'] = 'required|string';
         }elseif($data['client_type_id'] === 2){
             $rules['legal_info.edrpou'] = 'required|string';

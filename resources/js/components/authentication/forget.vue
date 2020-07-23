@@ -53,7 +53,16 @@
                 <div class="bounceball-text" id="bounceball-text"></div>
               </div>
             </div>
-            <div v-if="repeatSendSms && !secondTimer" style="padding-top: 23px; padding-left: 2px"><a style="font-size: 0.8rem;" @click="sendSms()">вiдправити код повторно</a></div>
+            <div 
+              v-if="repeatSendSms && !secondTimer" 
+              style="padding-top: 23px; padding-left: 2px">
+              <v-btn 
+                small dark color="grey darken-3"
+                @click="sendSms()"
+                style="font-size: 0.8rem; text-transform: none; height: 20px;">
+                Надiслати код
+              </v-btn>
+            </div>
             <span 
               :class="verificationCodeErrors.length > 0 
                 ? 'app__input-error input-error--active' 
@@ -145,10 +154,18 @@ export default {
           this.loading = false
           this.userId = response.data.userId
           this.timer(120)
+          console.log('response')
         })
         .catch(error => {
           console.log(error.response)
-          this.loadign = false
+          this.loading = false
+          if(error.response.status == 422) {
+            this.$notify({
+              group: 'error',
+              title: 'Помилка',
+              text: `Користувача з таким номером не існує!`,
+            })
+          }
         })
     },
     resetPassword() {

@@ -33,7 +33,7 @@
       </div>
     </v-card>
   </v-dialog>
-  <div class="col-md-12">
+  <div class="col-md-12 pt-0">
     <v-card style="min-height: 350px;">
       <v-card-title class="d-block grey darken-3 white--text">
         <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-clipboard-check'"></v-icon>
@@ -59,11 +59,12 @@
           class="d-flex justify-center headline black--text mt-3 mb-6">
           Iсторiя заявок на винагороду
         </v-card-title>
-        <v-card-title 
-          v-if="agentCommisions.lenght === 0 && !$store.state.adminLoader"
-          class="d-flex justify-center">
-          (Iсторiя заявок порожня)
-        </v-card-title>
+        <v-card-text 
+          v-if="agentCommisions.length === 0 && !$store.state.adminLoader"
+          class="d-flex justify-center"
+          style="font-size: 1.3rem; padding-top: 85px;">
+          (Iсторiя заявок на винагороду порожня)
+        </v-card-text>
       </v-card-text>
       <v-data-table
         v-if="agentCommisions.length > 0 && !$store.state.adminLoader"

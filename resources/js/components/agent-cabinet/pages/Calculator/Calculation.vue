@@ -2237,7 +2237,7 @@ input[type='checkbox'] {
 .lbl-toggle::before {
   content: ' ';
   display: inline-block;
-
+  margin-top: 3px;
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   border-left: 6px solid currentColor;

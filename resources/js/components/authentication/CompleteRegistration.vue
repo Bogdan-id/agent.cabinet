@@ -8,14 +8,14 @@
       <div class="rhombus-1"></div>
       <div class="rhombus-2"></div>
       <div class="rhombus-3"></div>
-      <v-container class="fill-height pa-11" fluid>
-        <v-row align="center" justify="center">
-          <v-col cols="12" sm="11" md="8" lg="6" xl="4">
-            <v-card class="elevation-9 form-card" flat>
-              <div class="complete-reg-form__title title">
-                <div class="complete-reg-form__title-logo"></div>
-                <span class="d-block headline">Заповніть особові дані:</span>
-              </div>
+<v-container class="fill-height pa-11" fluid style="overflow-x: scroll;">
+  <v-row align="center" justify="center">
+    <v-col cols="12" sm="11" md="8" lg="6" xl="4">
+      <v-card class="elevation-9 form-card" flat min-width="620">
+        <div class="complete-reg-form__title title">
+          <div class="complete-reg-form__title-logo"></div>
+          <span class="d-block headline">Заповніть особові дані:</span>
+        </div>
           <v-row class="pl-5 pr-5 pb-5">
             <v-col cols="12" sm="6" md="6" lg="6" xl="6">
               <div class="pt-6">
@@ -88,14 +88,14 @@
                         label="Посада" 
                         outlined dense clearable>
                     </v-text-field>
-                    <v-text-field 
+                    <!-- <v-text-field 
                         :error-messages="purposeOfPaymentErr" 
                         @blur="$v.purposeOfPayment.$touch()" 
                         @input="$v.purposeOfPayment.$touch()" 
                         v-model="purposeOfPayment"
                         label="Призначення платежу" 
                         outlined dense clearable>
-                    </v-text-field>
+                    </v-text-field> -->
                   </div>
                 </div>
               </div>
@@ -106,12 +106,10 @@
                   <span class="title d-block mt-3">Тип паспорту</span>
                   <v-radio-group
                     style="margin-top: 0;"
-                    :error-messages="passportTypeErrors" 
-                    @input="$v.passportType.$touch()" 
                     v-model="passportType"
                     dense row>
                     <v-radio label="ID - картка" color="black" value="2"></v-radio>
-                    <v-radio label="Книжковий" color="black" value="1"></v-radio>
+                    <v-radio label="Книжковий" color="black" value="1" style="margin-right: 0!important;"></v-radio>
                   </v-radio-group>
                   <v-text-field
                       v-show="passportType === '1'" 
@@ -168,9 +166,6 @@
                 </div>
                 <div class="input__text">
                   <v-text-field 
-                      :error-messages="innErrors" 
-                      @blur="$v.inn.$touch()" 
-                      @input="$v.inn.$touch()"
                       v-mask="innMask"
                       v-model="inn" 
                       prepend-inner-icon="mdi-account-outline"
@@ -201,9 +196,6 @@
                     </v-date-picker>
                   </v-dialog>
                   <v-text-field 
-                      :error-messages="cardNumberErrors" 
-                      @blur="$v.cardNumber.$touch()" 
-                      @input="$v.cardNumber.$touch()"
                       v-model="cardNumber" 
                       v-mask="cardNumberMask"
                       prepend-inner-icon="mdi-credit-card-outline" 
@@ -211,10 +203,7 @@
                       outlined dense>
                   </v-text-field>
                   <v-textarea
-                      :error-messages="ibanErrors" 
-                      @blur="$v.iban.$touch()" 
-                      @input="$v.iban.$touch();
-                        trimExceededLength('complete-register-iban', 29)"
+                      @input="trimExceededLength('complete-register-iban', 29)"
                       v-model="iban"
                       name="input-7-4"
                       id="complete-register-iban"
@@ -299,7 +288,7 @@ export default {
     inn: null,
     cardNumber: null,
     iban: null,
-    purposeOfPayment: null,
+    // purposeOfPayment: null,
 
     /* temporary data */
     choosedDate: null,
@@ -317,40 +306,40 @@ export default {
   }),
   validations() {
     return {
-      iban: {
-        required,
-        isValidIban: function isValidIBANNumber(input) {
-          let countriesCode = {
-              AD: 24, AE: 23, AT: 20, AZ: 28, BA: 20, BE: 16, BG: 22, BH: 22, BR: 29,
-              CH: 21, CR: 21, CY: 28, CZ: 24, DE: 22, DK: 18, DO: 28, EE: 20, ES: 24,
-              FI: 18, FO: 18, FR: 27, GB: 22, GI: 23, GL: 18, GR: 27, GT: 28, HR: 21,
-              HU: 28, IE: 22, IL: 23, IS: 26, IT: 27, JO: 30, KW: 30, KZ: 20, LB: 28,
-              LI: 21, LT: 20, LU: 20, LV: 21, MC: 27, MD: 24, ME: 22, MK: 19, MR: 27,
-              MT: 31, MU: 30, NL: 18, NO: 15, PK: 24, PL: 28, PS: 29, PT: 25, QA: 29,
-              RO: 24, RS: 22, SA: 24, SE: 24, SI: 19, SK: 24, SM: 27, TN: 24, TR: 26,
-              UA: 29
-          }
-          let iban = String(input).toUpperCase().replace(/[^A-Z0-9]/g, ''), // keep only alphanumeric characters
-              code = iban.match(/^([A-Z]{2})(\d{2})([A-Z\d]+)$/) // match and capture (1) the country code, (2) the check digits, and (3) the rest digits
-          // check syntax and length
-          if (!code || iban.length !== countriesCode[code[1]]) {
-              return false
-          }
-          // rearrange country code and check digits, and convert chars to ints
-          let digits = (code[3] + code[1] + code[2]).replace(/[A-Z]/g, (letter) => {
-              return letter.charCodeAt(0) - 55
-          })
-          return (digits) => {
-            console.log('digits', digits)
-            let checksum = digits.slice(0, 2), fragment
-            for (let offset = 2; offset < digits.length; offset += 7) {
-                fragment = String(checksum) + digits.substring(offset, offset + 7)
-                checksum = parseInt(fragment, 10) % 97
-            }
-            return checksum === 55
-          }
-        }
-      },
+      // iban: {
+      //   required,
+      //   isValidIban: function isValidIBANNumber(input) {
+      //     let countriesCode = {
+      //         AD: 24, AE: 23, AT: 20, AZ: 28, BA: 20, BE: 16, BG: 22, BH: 22, BR: 29,
+      //         CH: 21, CR: 21, CY: 28, CZ: 24, DE: 22, DK: 18, DO: 28, EE: 20, ES: 24,
+      //         FI: 18, FO: 18, FR: 27, GB: 22, GI: 23, GL: 18, GR: 27, GT: 28, HR: 21,
+      //         HU: 28, IE: 22, IL: 23, IS: 26, IT: 27, JO: 30, KW: 30, KZ: 20, LB: 28,
+      //         LI: 21, LT: 20, LU: 20, LV: 21, MC: 27, MD: 24, ME: 22, MK: 19, MR: 27,
+      //         MT: 31, MU: 30, NL: 18, NO: 15, PK: 24, PL: 28, PS: 29, PT: 25, QA: 29,
+      //         RO: 24, RS: 22, SA: 24, SE: 24, SI: 19, SK: 24, SM: 27, TN: 24, TR: 26,
+      //         UA: 29
+      //     }
+      //     let iban = String(input).toUpperCase().replace(/[^A-Z0-9]/g, ''), // keep only alphanumeric characters
+      //         code = iban.match(/^([A-Z]{2})(\d{2})([A-Z\d]+)$/) // match and capture (1) the country code, (2) the check digits, and (3) the rest digits
+      //     // check syntax and length
+      //     if (!code || iban.length !== countriesCode[code[1]]) {
+      //         return false
+      //     }
+      //     // rearrange country code and check digits, and convert chars to ints
+      //     let digits = (code[3] + code[1] + code[2]).replace(/[A-Z]/g, (letter) => {
+      //         return letter.charCodeAt(0) - 55
+      //     })
+      //     return (digits) => {
+      //       console.log('digits', digits)
+      //       let checksum = digits.slice(0, 2), fragment
+      //       for (let offset = 2; offset < digits.length; offset += 7) {
+      //           fragment = String(checksum) + digits.substring(offset, offset + 7)
+      //           checksum = parseInt(fragment, 10) % 97
+      //       }
+      //       return checksum === 55
+      //     }
+      //   }
+      // },
       lastName: {
         required,
       },
@@ -363,17 +352,17 @@ export default {
       position: {
         required
       },
-      purposeOfPayment: {
-        required
-      },
+      // purposeOfPayment: {
+      //   required
+      // },
       companyType: {
         checked: value => value != null
       },
-      passportType: {
-        checked: value => value != null
-      },
+      // passportType: {
+      //   checked: value => value != null
+      // },
       passportSeries: (() => { 
-        if(this.passportType && this.passportType == '1') {
+        if(this.passportType == '1') {
           return {
             required,
             minLength: minLength(2)
@@ -381,7 +370,7 @@ export default {
         } else return true
       })(),
       passportNumber: (() => { 
-        if(this.passportType && this.passportType == '1') {
+        if(this.passportType == '1') {
           return {
             required,
             minLength: minLength(6)
@@ -389,7 +378,7 @@ export default {
         } else return true
       })(),
       unzr: (() => { 
-        if(this.passportType && this.passportType == '2') {
+        if(this.passportType == '2') {
           return {
             required,
             minLength: minLength(14)
@@ -397,32 +386,32 @@ export default {
         } else return true
       })(),
       bioPassportNumber: (() => { 
-        if(this.passportType && this.passportType == '2') {
+        if(this.passportType == '2') {
           return {
             required,
             minLength: minLength(9)
           }
         } else return true
       })(),
-      inn: {
-        required,
-        minLength: minLength(10)
-      },
-      cardNumber: {
-        minLength: minLength(16),
-        required,
-        lunValid: function luhn(array) {
-          return number => {
-            if(number === null) return false
-            let pureNum = number.replace(/[^\d]/g, '')
-            let len = pureNum ? pureNum.length : 0, bit = 1, sum = 0;
-            while (len--) {sum += !(bit ^= 1) 
-              ? parseInt(pureNum[len], 10) 
-              : array[pureNum[len]]}
-            return sum % 10 === 0 && sum > 0;
-          } 
-        }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9])
-      }
+      // inn: {
+      //   required,
+      //   minLength: minLength(10)
+      // },
+      // cardNumber: {
+      //   minLength: minLength(16),
+      //   required,
+      //   lunValid: function luhn(array) {
+      //     return number => {
+      //       if(number === null) return false
+      //       let pureNum = number.replace(/[^\d]/g, '')
+      //       let len = pureNum ? pureNum.length : 0, bit = 1, sum = 0;
+      //       while (len--) {sum += !(bit ^= 1) 
+      //         ? parseInt(pureNum[len], 10) 
+      //         : array[pureNum[len]]}
+      //       return sum % 10 === 0 && sum > 0;
+      //     } 
+      //   }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9])
+      // }
     }
   },
   methods: {
@@ -430,10 +419,16 @@ export default {
       return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     submit() {
-      console.log(this.finalObj())
+      let object = {}
+      for (let val in this.finalObj()) {
+        if(this.finalObj()[val] !== null) {
+          object[val] = this.finalObj()[val]
+        }
+      }
+      console.log(object)
       if(this.dataValid) {
         this.request = true
-        axios.post(`/agent/create`, this.finalObj())
+        axios.post(`/agent/create`, object)
           .then((response) => {
             if(response.status === 200) {
               const message = 'Зараз вас буде перенаправлено до остобистого кабiнету'
@@ -465,13 +460,13 @@ export default {
         'position': this.position,
         'birth': this.dateOfBirth,
         'passport_type_id': this.passportType,
-        'passport_serie': this.getPassportCode,
-        'passport_number': this.getPassportNumber,
+        'passport_serie': this.passportType !== null ? this.getPassportCode : null,
+        'passport_number': this.passportType !== null ? this.getPassportNumber : null,
         'inn': this.inn,
-        'card_number': this.cardNumber.replace(/[^\d]/g, ''),
+        'card_number': this.cardNumber !== null ? this.cardNumber.replace(/[^\d]/g, '') : null,
         'oferta_accepted': true,
         'iban': this.iban,
-        'purposeOfPayment': this.purposeOfPayment,
+        // 'purposeOfPayment': this.purposeOfPayment,
         '_token': this.getCsrf()
       }
     },
@@ -555,17 +550,17 @@ export default {
       return new Date(year - 100, month, day).toISOString().substr(0, 10)
     },
     getPassportCode() {
-      return this.passportType === "1" ? this.passportSeries : this.unzr.replace(/[^\d]/g, '')
+      return this.passportType == "1" ? this.passportSeries : this.passportType == "2" ? this.unzr.replace(/[^\d]/g, '') : false
     },
     getPassportNumber() {
-      return this.passportType === "1" ? this.passportNumber : this.bioPassportNumber
+      return this.passportType == "1" ? this.passportNumber : this.passportType == "2" ? this.bioPassportNumber : false
     },
-    purposeOfPaymentErr() {
-      const errors = []
-			if (!this.$v.purposeOfPayment.$error) return errors
-			!this.$v.purposeOfPayment.required && errors.push('Поле "Призначення платежу" - обов\'язкове для заповнення')
-			return errors
-    },
+    // purposeOfPaymentErr() {
+    //   const errors = []
+		// 	if (!this.$v.purposeOfPayment.$error) return errors
+		// 	!this.$v.purposeOfPayment.required && errors.push('Поле "Призначення платежу" - обов\'язкове для заповнення')
+		// 	return errors
+    // },
     lastNameErrors() {
 			const errors = []
 			if (!this.$v.lastName.$error) return errors
@@ -611,21 +606,21 @@ export default {
 			!this.$v.unzr.required && errors.push('Поле "унікальний номер запису у реєстрі" - обов\'язкове для заповнення (Цифри)')
 			return errors
     },
-    innErrors() {
-			const errors = []
-      if (!this.$v.inn.$error) return errors
-      !this.$v.inn.minLength && errors.push(`Поле "Iдентифікаційний код" - має складатися з 10 цифр`)
-			!this.$v.inn.required && errors.push('Поле "Iдентифікаційний код" - обов\'язкове для заповнення (Цифри)')
-			return errors
-    },
-    cardNumberErrors() {
-			const errors = []
-      if (!this.$v.cardNumber.$error) return errors
-      !this.$v.cardNumber.required && errors.push('Поле "Карта для виплат" - обов\'язкове для заповнення (Цифри)')
-      !this.$v.cardNumber.minLength && errors.push('Поле "Карта для виплат" - має складатися з 16 цифр')
-      !this.$v.cardNumber.lunValid && errors.push('Не вiрна картка')
-			return errors
-    },
+    // innErrors() {
+		// 	const errors = []
+    //   if (!this.$v.inn.$error) return errors
+    //   !this.$v.inn.minLength && errors.push(`Поле "Iдентифікаційний код" - має складатися з 10 цифр`)
+		// 	!this.$v.inn.required && errors.push('Поле "Iдентифікаційний код" - обов\'язкове для заповнення (Цифри)')
+		// 	return errors
+    // },
+    // cardNumberErrors() {
+		// 	const errors = []
+    //   if (!this.$v.cardNumber.$error) return errors
+    //   !this.$v.cardNumber.required && errors.push('Поле "Карта для виплат" - обов\'язкове для заповнення (Цифри)')
+    //   !this.$v.cardNumber.minLength && errors.push('Поле "Карта для виплат" - має складатися з 16 цифр')
+    //   !this.$v.cardNumber.lunValid && errors.push('Не вiрна картка')
+		// 	return errors
+    // },
     bioPassportNumberErrors() {
       const errors = []
       if (!this.$v.bioPassportNumber.$error) return errors
@@ -649,19 +644,19 @@ export default {
       !this.$v.companyType.checked && errors.push(`Оберiть мiсце роботи`)
 			return errors
     },
-    passportTypeErrors() {
-      const errors = []
-      if (!this.$v.passportType.$error) return errors
-      !this.$v.passportType.checked && errors.push(`Оберiть тип паспорту`)
-			return errors
-    },
-    ibanErrors() {
-      const errors = []
-      if (!this.$v.iban.$error) return errors
-      !this.$v.iban.required && errors.push(`Поле обов\`язкове для заповнення`)
-      !this.$v.iban.isValidIban && errors.push(`Невiрний IBAN`)
-			return errors
-    },
+    // passportTypeErrors() {
+    //   const errors = []
+    //   if (!this.$v.passportType.$error) return errors
+    //   !this.$v.passportType.checked && errors.push(`Оберiть тип паспорту`)
+		// 	return errors
+    // },
+    // ibanErrors() {
+    //   const errors = []
+    //   if (!this.$v.iban.$error) return errors
+    //   !this.$v.iban.required && errors.push(`Поле обов\`язкове для заповнення`)
+    //   !this.$v.iban.isValidIban && errors.push(`Невiрний IBAN`)
+		// 	return errors
+    // },
     passport() {
       let check = false
       !this.$v.lastName.$invalid
@@ -671,11 +666,7 @@ export default {
       && !this.$v.position.$invalid
       && !this.$v.passportType.$invalid
       && !this.$v.passportSeries.$invalid
-      && !this.dateOfBirth != null
       && !this.$v.passportNumber.$invalid
-      && !this.$v.inn.$invalid
-      && !this.$v.cardNumber.$invalid
-      && !this.$v.iban.$invalid
         ? check = true
         : false
       return check
@@ -689,10 +680,7 @@ export default {
       && !this.$v.position.$invalid
       && !this.$v.passportType.$invalid
       && !this.$v.unzr.$invalid
-      && !this.dateOfBirth != null
       && !this.$v.inn.$invalid
-      && !this.$v.cardNumber.$invalid
-      && !this.$v.iban.$invalid
         ? check = true
         : false
       return check

@@ -166,12 +166,13 @@
       top
       color="red lighten-1">
     </v-progress-linear>
-    <v-card-title
+    <v-card-text
       v-if="!loading && !tableDataPresent"
       absolute
-      class="headline d-block text-center grey--text">
-      Iсторiя заявок на лiзинг порожня
-    </v-card-title>
+      style="font-size: 1.3rem; padding-top: 90px;"
+      class="d-block text-center">
+      (Iсторiя заявок на лiзинг порожня)
+    </v-card-text>
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">
@@ -200,7 +201,7 @@
         </template>
         <template v-slot:item.initials="{ item }">
           <span style="white-space: nowrap;">
-            {{ item.client_type_id == 2 ? item.legal_info.companyName : item.last_name + '. ' + item.first_name[0] + '. ' + item.patronymic[0]  }}
+            {{ item.client_type_id == 2 ? item.legal_info.company_name : item.last_name + '. ' + item.first_name[0] + '. ' + item.patronymic[0]  }}
           </span>
         </template>
         <template v-slot:item.leasing_object="{ item }">
@@ -461,24 +462,6 @@ export default {
         case 'irregular': return 'Індивідуальний'
       }
     },
-    // async createTableData(object) {
-    //   let arr = []
-    //   await object.map(val => {
-    //     let dataObj = {
-    //       'initials': `${val.last_name} ${val.first_name} ${val.patronymic}`,
-    //       'leasing_object': val.leasing_object,
-    //       'leasing_amount': val.leasing_amount,
-    //       'graph_type': this.switchValue(val.graph_type),
-    //       'data': val.created_at.substr(0, 10),
-    //       'request_status': val.status_id,
-    //       'id': val.id
-    //     }
-    //     arr.push(dataObj)
-    //   })
-    //   this.tabledata = arr
-    //     .sort(this.sortData)
-    //     .reverse()
-    // },
   },
   watch: {
     user() {

@@ -8,7 +8,7 @@
         <v-icon v-text="'mdi-information'" class="pr-3" size="50" color="red lighten-1"></v-icon>
       </div>
       <div style="display: flex; align-items: center;">
-        <b>За Вами не закрiплений жоден з менеджерів!</b>
+        За Вами не закрiплений жоден з менеджерів!
       </div>
     </div>
   </div>
@@ -42,13 +42,17 @@
   <!-- Dashboard container -->
   <div class="dashboard-container">
     <v-card elevation="9" height="400">
-      <div v-if="!carouselVisibility" style="position: relative; width: 100%; height: 100%;">
+      <div v-if="!carouselVisibility && slidesLoader" style="position: relative; width: 100%; height: 100%;">
         <v-skeleton-loader
           style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
           height="800"
           min-height="800"
           type="image">
         </v-skeleton-loader>
+      </div>
+      <div v-if="!carouselVisibility && !slidesLoader" 
+        style="position: relative; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+        <span style="font-size: 1.3rem; color: #727170;">(Пропозиції вiдсутнi)</span>
       </div>
       <v-carousel
         cycle
@@ -318,6 +322,8 @@ export default {
     requestRecieved: false,
     news: null,
     progressDivision: 5,
+
+    slidesLoader: false,
   }),
   computed: {
     loading() {
@@ -402,14 +408,17 @@ export default {
       return new Date(b.created_at) - new Date(a.created_at)
     },
     getSlides() {
+      this.slidesLoader = true
       axios
         .get('/json/slides')
         .then(response => {
           console.log(response)
+          this.slidesLoader = false
           this.slides = response.data
         })
         .catch(error => {
           error.response
+          this.slidesLoader = false
         })
     },
     getNews() {

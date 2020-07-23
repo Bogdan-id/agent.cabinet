@@ -387,10 +387,10 @@ export default {
         company_name: this.$store.state.user.agent.company_name,
         position: this.$store.state.user.agent.position,
         passport_type_id: this.$store.state.user.agent.passport_type_id,
-        ...this.$store.state.user.agent.document.unzr_number && {passport_serie: this.$store.state.user.agent.document.unzr_number},
-        ...this.$store.state.user.agent.document.serie && {passport_serie: this.$store.state.user.agent.document.serie},
-        ...this.$store.state.user.agent.document.id_card_number && {passport_number: this.$store.state.user.agent.document.id_card_number},
-        ...this.$store.state.user.agent.document.passport_number && {passport_number: this.$store.state.user.agent.document.passport_number},
+        ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.unzr_number && {passport_serie: this.$store.state.user.agent.document.unzr_number},
+        ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.serie && {passport_serie: this.$store.state.user.agent.document.serie},
+        ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.id_card_number && {passport_number: this.$store.state.user.agent.document.id_card_number},
+        ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.passport_number && {passport_number: this.$store.state.user.agent.document.passport_number},
         inn: this.$store.state.user.agent.inn,
         birth: this.$store.state.user.agent.birth,
         card_number: this.$store.state.user.agent.card_number,
@@ -405,7 +405,6 @@ export default {
       this.ab_size = this.$store.state.user.agent.ab_size
       this.leasingTerm = this.$store.state.user.agent.leasingTerm
       this.leasingAmountDkp = this.$store.state.user.agent.leasingAmountDkp
-      console.log(JSON.stringify(this.user) === JSON.stringify(this.userBackUp))
     },
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')

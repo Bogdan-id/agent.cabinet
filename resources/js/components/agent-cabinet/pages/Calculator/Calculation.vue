@@ -1671,6 +1671,7 @@ export default {
         this.calcObj.customStepOptionFirst = 33,
         this.calcObj.customStepOptionMiddle = 33,
         this.calcObj.threeThirds = 34
+        this.calcObj.customGraphicType = 3
       } else {
         delete this.calcObj.customUniversalOption
         delete this.calcObj.customStepOptionFirst

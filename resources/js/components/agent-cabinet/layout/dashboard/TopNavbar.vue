@@ -19,6 +19,7 @@
               <v-card id="cadr-notification" elevation="8">
                 <v-card-title style="border-left: 4px solid #e57373" class="subtitle-1">
                   Повiдомлення
+                  <!-- <v-btn @click="test()">test</v-btn> -->
                 </v-card-title>
                 <v-card-text v-if="notificationCount == 0">
                   <div><span>(Повiдомлення вiдсутнi)</span></div>
@@ -26,7 +27,7 @@
                 <v-timeline dense v-if="notificationCount > 0">
                   <v-timeline-item
                     v-for="(item, key) in notifications"
-                    v-if="key <= maxNotificationsToShow -1 && item.status !== 'checked'"
+                    v-if="key <= maxNotificationsToShow -1"
                     :key="key"
                     color="red lighten-2"
                     small
@@ -109,6 +110,9 @@ export default {
     },
   },
   methods: {
+    test() {
+      console.log(this.notificationCount)
+    },
     changeNotificationsStatus(object) {
       axios
         .post(`/agent/notifications/checking`, object)
@@ -142,9 +146,10 @@ export default {
           : false
         for(let i = 0; i <= this.maxNotificationsToShow -1; i ++) {
           this.notifications[i].status === 'not_checked'
-          ? this.notificationKeys.push(this.notifications[i].id)
-          : false
+            ? this.notificationKeys.push(this.notifications[i].id)
+            : false
         }
+        console.log(this.notificationKeys)
       } else {
         card.classList.remove('show-card')
         if(this.notificationKeys.length === 0) return
@@ -193,7 +198,7 @@ export default {
         .then(response => {
           console.log(response)
           this.notifications = response.data.sort((a, b) => {
-            return new Date(b.updated_at) - new Date(a.updated_at);
+            return ('' + b.status).localeCompare(a.status)
           })
         })
         .catch(error => {
@@ -201,7 +206,7 @@ export default {
         })
     },
     capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+      return string.charAt(0).toUpperCase() + string.slice(1)
     },
   },
   watch: {

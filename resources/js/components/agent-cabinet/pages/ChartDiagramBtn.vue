@@ -92,42 +92,9 @@
               v-if="clientTypeId === 2 && leasingApplicationForm"
               class="pt-0 pb-0">
               <v-text-field
-                v-model="legalInfo.companyName"
-                @blur="$v.legalInfo.companyName.$touch()"
-                @input="$v.legalInfo.companyName.$touch()" 
-                :error-messages="companyNameErr"
-                label="Назва компанії"
-                dense outlined>
-              </v-text-field>
-            </v-col>
-            <!-- <v-btn @click="test()">test</v-btn> -->
-            <v-col 
-              cols="12" md="6" 
-              v-if="clientTypeId === 2 && leasingApplicationForm"
-              class="pt-0 pb-0">
-              <v-text-field
-                v-if="companyNameByEdrpou !== null"
-                v-model="companyNameByEdrpou"
-                id="edrpou"
-                max="8"
-                label="Юридична назва"
-                dense outlined>
-                <template v-slot:append>
-                  <v-hover v-slot:default="{ hover }">
-                    <v-icon 
-                      @click="companyNameByEdrpou = null" 
-                      :color="hover ? 'primary' : 'grey darken-1'" 
-                      v-text="'mdi-close'"
-                      style="cursor: pointer;">
-                    </v-icon>
-                  </v-hover>
-                </template>
-              </v-text-field>
-              <v-text-field
-                v-if="companyNameByEdrpou === null"
                 @input="parseToInt('edrpou');
-                  $v.legalInfo.edrpou.$touch()"
-                @blur="$v.legalInfo.edrpou.$touch(); getEdropu()"
+                  $v.legalInfo.edrpou.$touch(); getEdropu()"
+                @blur="$v.legalInfo.edrpou.$touch();"
                 v-model="legalInfo.edrpou"
                 :error-messages="edrpouErr"
                 v-mask="'########'"
@@ -141,6 +108,20 @@
                     icon>
                   </v-btn>
                 </template>
+              </v-text-field>
+            </v-col>
+            <!-- <v-btn @click="test()">test</v-btn> -->
+            <v-col 
+              cols="12" md="6" 
+              v-if="clientTypeId === 2 && leasingApplicationForm"
+              class="pt-0 pb-0">
+              <v-text-field
+                v-model="legalInfo.companyName"
+                @blur="$v.legalInfo.companyName.$touch()"
+                @input="$v.legalInfo.companyName.$touch()" 
+                :error-messages="companyNameErr"
+                label="Назва компанії"
+                dense outlined>
               </v-text-field>
             </v-col>
             <v-col 
@@ -493,7 +474,6 @@ export default {
       // balances: null, // - waiting... (пока не отправляй)
     },
     _token: null,
-    companyNameByEdrpou: null,
     edrpouLoading: false,
   }),
   validations() {
@@ -654,11 +634,8 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log(this.companyNameByEdrpou)
-    },
     getEdropu() {
-      if(!this.$v.legalInfo.edrpou.$invalid){
+      if(!this.$v.legalInfo.edrpou.$invalid && !this.edrpouLoading){
         this.edrpouLoading = true
         axios
           .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
@@ -666,7 +643,7 @@ export default {
             console.log(response)
             this.edrpouLoading = false
             if(response.status === 200) {
-              this.companyNameByEdrpou = response.data.companyShortName
+              this.legalInfo.companyName = response.data.companyShortName
             } else {
               console.log('Another than status')
             }
@@ -683,13 +660,13 @@ export default {
               this.$notify({
                 group: 'error',
                 title: 'Помилка',
-                text: `Компанія не знайдена`,
+                text: `Компанію не знайдено`,
               })
             } else {
               this.$notify({
                 group: 'error',
-                title: `Помилка - ${error.response.status}`,
-                text: `${error.response.data.message}`,
+                title: 'Помилка',
+                text: `Зверніться в технічну підтримку`,
               })
             }
             this.edrpouLoading = false

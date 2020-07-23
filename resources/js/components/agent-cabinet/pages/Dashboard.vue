@@ -213,7 +213,10 @@
           Новини
         </v-card-title>
         <v-divider></v-divider>
-        <v-card-text class="pb-0">
+        <v-card-text v-if="news === null || news === 'undefined' || news.length === 0" class="pt-5 pb-5 text-center">
+          <span>Новини вiдсутнi</span>
+        </v-card-text>
+        <v-card-text class="pb-0" v-if="news !== null || news !== 'undefined' || news.length > 0">
           <v-hover 
             v-for="(item, key) in news"
             :key="key"
@@ -261,6 +264,9 @@
     <v-card-title class="headline" style="border-left: 5px solid #e75d57">
       Новини
     </v-card-title>
+    <v-card-text v-if="news === null || news === 'undefined' || news.length === 0" class="pt-5 pb-5 text-center">
+      <span style="font-size: 1.3rem;">Новини вiдсутнi</span>
+    </v-card-text>
     <v-card-text class="dashboard-news__wrapper">
       <v-hover 
         v-for="(item, key) in news"
@@ -290,7 +296,7 @@
         </v-card>
       </v-hover>
     </v-card-text>
-    <v-card-text class="pt-0">
+    <v-card-text class="pt-0" v-if="news !== null && news !== 'undefined' && news.length > 0">
       <div style="text-align: center">
         <v-btn color="#e75d57" outlined 
           :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" tag="span">

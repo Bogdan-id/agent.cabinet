@@ -12,6 +12,11 @@
       color="red lighten-1">
     </v-progress-linear>
     </v-card-title>
+    <v-card-text style="font-size: 1.3rem; padding-top: 90px; padding-bottom: 90px;">
+      <div style="text-align: center;">
+        <span>Повiдомлення вiдсутнi</span>
+      </div>
+    </v-card-text>
     <v-card-text class="user-notification-page" style="min-height: 100vh" v-if="notifications && notifications.length > 0">
       <v-timeline dense>
         <v-timeline-item

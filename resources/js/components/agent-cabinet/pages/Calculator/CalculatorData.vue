@@ -108,15 +108,11 @@
               v-if="clientTypeId === 2 && leasingApplicationForm"
               class="pt-0 pb-0">
               <v-text-field
-                @input="parseToInt('edrpou');
-                  $v.legalInfo.edrpou.$touch()"
-                @blur="$v.legalInfo.edrpou.$touch()"
-                v-model="legalInfo.edrpou"
-                :error-messages="edrpouErr"
-                v-mask="'########'"
-                id="edrpou"
-                max="8"
-                label="ЄДРПОУ"
+                v-model="legalInfo.companyName"
+                @blur="$v.legalInfo.companyName.$touch()"
+                @input="$v.legalInfo.companyName.$touch()" 
+                :error-messages="companyNameErr"
+                label="Назва компанії"
                 dense outlined>
               </v-text-field>
             </v-col>
@@ -125,12 +121,41 @@
               v-if="clientTypeId === 2 && leasingApplicationForm"
               class="pt-0 pb-0">
               <v-text-field
-                v-model="legalInfo.companyName"
-                @blur="$v.legalInfo.companyName.$touch()"
-                @input="$v.legalInfo.companyName.$touch()" 
-                :error-messages="companyNameErr"
-                label="Назва компанії"
+                v-if="companyNameByEdrpou !== null"
+                v-model="companyNameByEdrpou"
+                id="edrpou"
+                max="8"
+                label="Юридична назва"
                 dense outlined>
+                <template v-slot:append>
+                  <v-hover v-slot:default="{ hover }">
+                    <v-icon 
+                      @click="companyNameByEdrpou = null" 
+                      :color="hover ? 'primary' : 'grey darken-1'" 
+                      v-text="'mdi-close'"
+                      style="cursor: pointer;">
+                    </v-icon>
+                  </v-hover>
+                </template>
+              </v-text-field>
+              <v-text-field
+                v-if="companyNameByEdrpou === null"
+                @input="parseToInt('edrpou');
+                  $v.legalInfo.edrpou.$touch()"
+                @blur="$v.legalInfo.edrpou.$touch(); getEdropu()"
+                v-model="legalInfo.edrpou"
+                :error-messages="edrpouErr"
+                v-mask="'########'"
+                id="edrpou"
+                max="8"
+                label="ЄДРПОУ"
+                dense outlined>
+                <template v-slot:append>
+                  <v-btn 
+                    :loading="edrpouLoading"
+                    icon>
+                  </v-btn>
+                </template>
               </v-text-field>
             </v-col>
             <v-col 
@@ -656,6 +681,8 @@ export default {
     pasteEvent: false,
     loading: false,
 
+    companyNameByEdrpou: null,
+
     legalDocs: [
       {text: 'Копія свідоцтва про державну реєстрацію та / або виписка з ЄДР', prop: 'state_registration_certificate'},
       {text: 'Статут', prop: 'regulations'},
@@ -705,6 +732,7 @@ export default {
     },
     documentUrls: {},
     deleteCalculationDialog: false,
+    edrpouLoading: false,
     _token: null,
 
     tableHeader: [
@@ -898,9 +926,48 @@ export default {
     },
   },
   methods: {
-    test() {
-      console.log(this.$refs)
+    getEdropu() {
+      if(!this.$v.legalInfo.edrpou.$invalid){
+        this.edrpouLoading = true
+        axios
+          .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
+          .then(response => {
+            console.log(response)
+            this.edrpouLoading = false
+            if(response.status === 200) {
+              this.companyNameByEdrpou = response.data.companyShortName
+            } else {
+              console.log('Another than status')
+            }
+          })
+          .catch(error => {
+            console.log(error.response)
+            if(error.response.status === 403 || error.response.status === 503) {
+              this.$notify({
+                group: 'error',
+                title: 'Помилка',
+                text: `Зверніться в технічну підтримку`,
+              })
+            } else if (error.response.status === 404) {
+              this.$notify({
+                group: 'error',
+                title: 'Помилка',
+                text: `Компанія не знайдена`,
+              })
+            } else {
+              this.$notify({
+                group: 'error',
+                title: `Помилка - ${error.response.status}`,
+                text: `${error.response.data.message}`,
+              })
+            }
+            this.edrpouLoading = false
+          })
+      } else return
     },
+    // test() {
+    //   console.log(this.$refs)
+    // },
     deleteDoc(property) {
       this.$delete(this.documentUrls, property)
       let el = document.querySelector(`.${property}`)
@@ -975,8 +1042,8 @@ export default {
         .catch(error => {
           this.$notify({
             group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
+            title: `Помилка - ${error.response.status}`,
+            text: `${error.response.data.message}`,
           })
           console.log(error.response)
           this.btnLoading = false

@@ -13,6 +13,7 @@ use App\Models\{
     Agent
 };
 use App\Http\Clients\OpenDataBotClient;
+use GuzzleHttp\Exception\ClientException;
 
 class LeasingRequestController extends Controller
 {
@@ -62,12 +63,20 @@ class LeasingRequestController extends Controller
 
     public function getCompanyName($edrpou)
     {
-        $company = $this->openDataBotClient->getCompanyByEdrpou($edrpou);
-        $company = current($company);
-        $companyShortName = $company['short_name'];
-
-        return response()->json([
-            'companyShortName' => $companyShortName
-        ]);
+        try{
+            $company = $this->openDataBotClient->getCompanyByEdrpou($edrpou);
+            $company = current($company);
+            $companyShortName = $company['short_name'];
+            $response = [
+                'companyShortName' => $companyShortName
+            ];
+        }catch (ClientException $exception) {
+            $statusCode = $exception->getResponse()->getStatusCode();
+            $response = [
+                'status' => $statusCode
+            ];
+        }
+       
+        return response()->json($response);
     }
 }

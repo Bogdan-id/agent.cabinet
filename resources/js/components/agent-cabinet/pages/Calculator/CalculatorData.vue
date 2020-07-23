@@ -473,7 +473,7 @@
     <v-card-text
       v-if="!loading && !tableDataPresent"
       absolute
-      style="font-size: 1.3rem"
+      style="font-size: 1.3rem; padding-top: 25px;"
       class="d-block text-center">
       (Iсторiя розрахункiв порожня)
     </v-card-text>

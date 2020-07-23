@@ -21,7 +21,6 @@
     v-model="leasingApplicationForm"
     max-width="600">
     <v-card style="position: relative;">
-
       <v-card-title style="background: #424242; position: relative" class="white--text">
         <span class="d-block title">Заявка вiд розрахунку на 
           <span class="font-weight-bold">{{ reqObj.leasing_object }}</span>
@@ -34,121 +33,200 @@
 
       <v-card-text class="pb-0">
         <v-row>
-          <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
-            <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem">Тип графiку платежiв</div>
-            <v-radio-group 
-              v-model="reqObj.graph_type" 
-              readonly
-              row>
-              <v-radio  label="Класичний" value="even"></v-radio>
-              <v-radio label="Ануїтет" value="annuity"></v-radio>
-              <v-radio label="Індивідуальний" value="irregular"></v-radio>
-            </v-radio-group>
-          </v-col>
-          <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-            <v-text-field
-              :value="reqObj.last_name"
-              label="Прiзвище"
-              dense outlined readonly>
-            </v-text-field>
-            <v-text-field
-              :value="reqObj.first_name"
-              label="Iм`я"
-              dense outlined readonly>
-            </v-text-field>
-            <v-text-field
-              :value="reqObj.patronymic"
-              label="По батьковi"
-              dense outlined readonly>
-            </v-text-field>
-            <v-text-field
-              :value="reqObj.region"
-              label="Область"
-              dense outlined readonly>
-            </v-text-field>
-            <v-text-field
-              v-if="reqObj.phone"
-              :value="reqObj.phone"
-              label="Телефон"
-              dense outlined readonly>
-            </v-text-field>
-            <v-text-field
-              v-if="reqObj.email"
-              :value="reqObj.email"
-              label="Email"
-              dense outlined readonly>
-            </v-text-field>
-          </v-col>
-          <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-            <v-text-field
-              :value="reqObj.legal_info.creditPayment"
-              label="Щомісячний платіж (за міс. грн) по кредитам та ін."
-              dense outlined readonly>
-            </v-text-field>
-            <div v-if="reqObj.client_type_id === 1">
+          <v-row>
+            <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
+              <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem">Тип графiку платежiв</div>
+              <v-radio-group 
+                v-model="reqObj.graph_type" 
+                readonly
+                row>
+                <v-radio  label="Класичний" value="even"></v-radio>
+                <v-radio label="Ануїтет" value="annuity"></v-radio>
+                <v-radio label="Індивідуальний" value="irregular"></v-radio>
+              </v-radio-group>
+            </v-col>
+          </v-row>
+          <v-row style="width: 100%;">
+            <v-col cols="12" md="6" class="pt-0 pb-0">
               <v-text-field
-                :value="reqObj.legal_info.inn"
-                label="IПН"
+                :value="reqObj.last_name"
+                label="Прiзвище"
                 dense outlined readonly>
               </v-text-field>
+            </v-col>
+            <v-col cols="12" md="6" class="pt-0 pb-0">
               <v-text-field
-                :value="reqObj.legal_info.monthlyIncome"
-                label="Середньомісячний дохід (грн)"
+                :value="reqObj.first_name"
+                label="Iм`я"
                 dense outlined readonly>
               </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row style="width: 100%;">
+            <v-col cols="12" md="6" class="pt-0 pb-0">
               <v-text-field
-                :value="reqObj.legal_info.acquisitionTargetId"
-                label="Мета придбання авто"
+                :value="reqObj.patronymic"
+                label="По батьковi"
                 dense outlined readonly>
               </v-text-field>
-            </div>
-            <div v-if="reqObj.client_type_id === 2">
-              <v-text-field
-                :value="reqObj.legal_info.edrpou"
-                label="ЄДРПОУ"
-                dense outlined readonly>
-              </v-text-field>
-              <v-text-field
-                :value="reqObj.legal_info.companyName"
-                label="Назва компанії"
-                dense outlined readonly>
-              </v-text-field>
-              <v-text-field
-                :value="reqObj.legal_info.currencyBalance"
-                label="Валютний баланс"
-                dense outlined readonly>
-              </v-text-field>
-              <v-text-field
-                :value="reqObj.legal_info.equity"
-                label="Власный капiтал"
-                dense outlined readonly>
-              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row style="width: 100%;">
+            <v-col cols="12" md="6" class="pt-0 pb-0">
               <!-- <v-text-field
-                v-model="legalInfo.balances"
-                label="Мета придбання авто"
-                dense outlined>
+                :value="reqObj.region"
+                label="Область"
+                dense outlined readonly>
               </v-text-field> -->
-            </div>
-          </v-col>
-          <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
-            <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem; padding-bottom: 0.5rem;">Доданi файли</div>
-            <div 
-              v-for="(item, key) in reqObj.documents"
-              :key="key">
-              <span>{{ returnDocumentName(item) }}</span>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="d-flex justify-center pb-6 pt-3">
-            <span>
-              <v-btn @click="leasingApplicationForm = false" 
-                class="d-block white--text" 
-                color="grey darken-3">
-                Закрити
-              </v-btn>
-            </span>
-          </v-col>
+              <v-text-field
+                v-if="reqObj.phone"
+                :value="reqObj.phone"
+                label="Телефон"
+                dense outlined readonly>
+              </v-text-field>
+            </v-col>
+            <v-col cols="12" md="6" class="pt-0 pb-0">
+              <v-text-field
+                v-if="reqObj.email"
+                :value="reqObj.email"
+                label="Email"
+                dense outlined readonly>
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row style="width: 100%;">
+            <v-col cols="12" md="6" class="pt-0 pb-0">
+              <!-- <v-text-field
+                :value="reqObj.legal_info.creditPayment"
+                label="Щомісячний платіж (за міс. грн) по кредитам та ін."
+                dense outlined readonly>
+              </v-text-field> -->
+                <v-text-field
+                  v-if="reqObj.client_type_id === 1"
+                  :value="reqObj.legal_info.inn"
+                  label="IПН"
+                  dense outlined readonly>
+                </v-text-field>
+                <!-- <v-text-field
+                  :value="reqObj.legal_info.monthlyIncome"
+                  label="Середньомісячний дохід (грн)"
+                  dense outlined readonly>
+                </v-text-field> -->
+                <!-- <v-text-field
+                  :value="reqObj.legal_info.acquisitionTargetId"
+                  label="Мета придбання авто"
+                  dense outlined readonly>
+                </v-text-field> -->
+                <v-text-field
+                  v-if="reqObj.client_type_id === 2"
+                  :value="reqObj.legal_info.edrpou"
+                  label="ЄДРПОУ"
+                  dense outlined readonly>
+                </v-text-field>
+                <!-- <v-text-field
+                  :value="reqObj.legal_info.companyName"
+                  label="Назва компанії"
+                  dense outlined readonly>
+                </v-text-field> -->
+                <!-- <v-text-field
+                  :value="reqObj.legal_info.currencyBalance"
+                  label="Валютний баланс"
+                  dense outlined readonly>
+                </v-text-field> -->
+                <!-- <v-text-field
+                  :value="reqObj.legal_info.equity"
+                  label="Власный капiтал"
+                  dense outlined readonly>
+                </v-text-field> -->
+                <!-- <v-text-field
+                  v-model="legalInfo.balances"
+                  label="Мета придбання авто"
+                  dense outlined>
+                </v-text-field> -->
+            </v-col>
+          </v-row>
+          <v-row style="width: 100%;">
+            <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
+              <input id="insurance" class="toggle" type="checkbox">
+              <label for="insurance" class="lbl-toggle" style="background: white; color: #5f6368; padding-top: 0rem; margin-bottom: 0;">
+                Документи
+              </label>
+                <div class="collapsible-content">
+                  <div class="content-inner">
+                  <div class="document-list" v-if="reqObj.client_type_id == 2">
+                    <div 
+                      v-for="(item, key) in legalDocs"
+                      :key="key"
+                      :style="reqObj.documents[item.prop] ? '' : 'display: none;'">
+                      <span style="color: black">{{ 
+                        reqObj.documents[item.prop] && reqObj.documents[item.prop].text 
+                          ? reqObj.documents[item.prop].text + ' ' + `(${(reqObj.documents[item.prop].size / 1000).toFixed(2)} - kb)` 
+                          : ''
+                        }}
+                      </span>&nbsp;
+                      <div 
+                        v-if="reqObj.documents[item.prop]"
+                        style="display: inline-block; min-width: 15px; position: relative;">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on }">
+                            <v-icon 
+                              style="position: absolute; left: -10px; top: -15px;" 
+                              v-text="'mdi-information-variant'" 
+                              color="#d24a43"
+                              v-on="on"
+                              small>
+                            </v-icon>
+                          </template>
+                          <span>{{ item.text }}</span>
+                        </v-tooltip>
+                      </div>
+                    </div>
+                    <!-- <v-btn @click="test()">test</v-btn> -->
+                  </div>
+                  <div class="document-list" v-if="reqObj.client_type_id == 1">
+                    <div 
+                      v-for="(item, key) in personDocs"
+                      :key="key"
+                      :style="reqObj.documents[item.prop] ? '' : 'display: none;'">
+                      <span style="color: black;">{{ 
+                        reqObj.documents[item.prop] && reqObj.documents[item.prop].text 
+                          ? reqObj.documents[item.prop].text + ' ' + `(${(reqObj.documents[item.prop].size / 1000).toFixed(2)} - kb)` 
+                          : ''
+                        }}
+                      </span>&nbsp;
+                      <div 
+                        v-if="reqObj.documents[item.prop]"
+                        style="display: inline-block; min-width: 15px; position: relative;">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on }">
+                            <v-icon 
+                              style="position: absolute; left: -10px; top: -15px;" 
+                              v-text="'mdi-information-variant'" 
+                              color="#d24a43"
+                              v-on="on"
+                              small>
+                            </v-icon>
+                          </template>
+                          <span>{{ item.text }}</span>
+                        </v-tooltip>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row style="width: 100%;">
+            <v-col class="d-flex justify-center pb-6 pt-3">
+              <span>
+                <v-btn @click="leasingApplicationForm = false" 
+                  class="d-block white--text" 
+                  color="grey darken-3">
+                  Закрити
+                </v-btn>
+              </span>
+            </v-col>
+          </v-row>
         </v-row>
       </v-card-text>
     </v-card>
@@ -319,6 +397,21 @@ export default {
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
+    legalDocs: [
+      {text: 'Копія свідоцтва про державну реєстрацію та / або виписка з ЄДР', prop: 'state_registration_certificate'},
+      {text: 'Статут', prop: 'regulations'},
+      {text: 'Баланс Ф1 та Ф2', prop: 'balance'},
+      {text: 'Протокол засновників про обрання керівника (підписувача)', prop: 'protocol'},
+      {text: 'Наказ про призначення керівника (підписувача)', prop: 'order'},
+      {text: 'Паспорт / ID-карта керівника (підписувача)', prop: 'passport'},
+      {text: 'Довідка про присвоєння ІПН керівника (підписувача)', prop: 'taxNumber'},
+    ],
+    personDocs: [
+      {text: 'Паспорт громадянина України / ID-карта', prop: 'passport'},
+      {text: 'Довідка про присвоєння ІПН', prop: 'taxNumber'},
+      {text: 'Довідка про заробітну плату', prop: 'salary_certificate'},
+      {text: 'Паспорт дружини (чоловіка) позичальника', prop: 'relatives_passport'},
+    ],
     loading: false,
     progressDivision: 5,
 
@@ -371,7 +464,7 @@ export default {
           })
           setTimeout(() => {
             this.dialogToAgentReward = false
-          }, 1200)
+          }, 700)
         })
         .catch(error => {
           this.requestToRewardLoading = false
@@ -383,10 +476,10 @@ export default {
           })
         })
     },
-    returnDocumentName(url) {
-      let index = url.lastIndexOf('/') + 1
-      return url.substr(index)
-    },
+    // returnDocumentName(url) {
+    //   let index = url.lastIndexOf('/') + 1
+    //   return url.substr(index)
+    // },
     showDialogToAgentReward(item) {
       this.requestIdToReward = item.id
       this.agentIdToReward = item.agent_id

@@ -499,7 +499,7 @@ export default {
     trimReplaceNum(id) {
       const event = new Event('input', {bubbles: true})
       const el = document.getElementById(id)
-      let value = el.value.trim().replace(/[^А-Яа-я]/g, '')
+      let value = el.value.trim()
       if(el.value !== value) {
         el.value = value
         el.dispatchEvent(event)

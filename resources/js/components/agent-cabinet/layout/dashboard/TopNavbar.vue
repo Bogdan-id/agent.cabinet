@@ -158,7 +158,7 @@ export default {
       let notifyCard = document.getElementById('cadr-notification')
       body.addEventListener('click', event => {
         if(notifyCard.classList.contains('show-card') && event.target.id !== "notify-btn") {
-          notifyCard.classList.remove('show-card')
+          this.toggleNotifyCard()
         }
       })
       notifyCard.addEventListener('click', event => {

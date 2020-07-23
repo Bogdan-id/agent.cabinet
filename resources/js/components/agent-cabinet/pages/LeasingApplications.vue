@@ -19,7 +19,7 @@
   </v-dialog>
   <v-dialog
     v-model="leasingApplicationForm"
-    max-width="600">
+    max-width="520">
     <v-card style="position: relative;">
       <v-card-title style="background: #424242; position: relative" class="white--text">
         <span class="d-block title">Заявка вiд розрахунку на 
@@ -44,6 +44,24 @@
                 <v-radio label="Ануїтет" value="annuity"></v-radio>
                 <v-radio label="Індивідуальний" value="irregular"></v-radio>
               </v-radio-group>
+            </v-col>
+          </v-row>
+          <v-row style="width: 100%;">
+            <v-col cols="12" md="6" class="pt-0 pb-0">
+              <v-text-field
+                v-if="reqObj.client_type_id === 2"
+                :value="reqObj.legal_info.company_name"
+                label="Назва компанії"
+                dense outlined readonly>
+              </v-text-field>
+            </v-col>
+            <v-col cols="12" md="6" class="pt-0 pb-0">
+              <v-text-field
+                v-if="reqObj.client_type_id === 2"
+                :value="reqObj.legal_info.edrpou"
+                label="ЄДРПОУ"
+                dense outlined readonly>
+              </v-text-field>
             </v-col>
           </v-row>
           <v-row style="width: 100%;">
@@ -74,29 +92,6 @@
           <v-row style="width: 100%;">
             <v-col cols="12" md="6" class="pt-0 pb-0">
               <!-- <v-text-field
-                :value="reqObj.region"
-                label="Область"
-                dense outlined readonly>
-              </v-text-field> -->
-              <v-text-field
-                v-if="reqObj.phone"
-                :value="reqObj.phone"
-                label="Телефон"
-                dense outlined readonly>
-              </v-text-field>
-            </v-col>
-            <v-col cols="12" md="6" class="pt-0 pb-0">
-              <v-text-field
-                v-if="reqObj.email"
-                :value="reqObj.email"
-                label="Email"
-                dense outlined readonly>
-              </v-text-field>
-            </v-col>
-          </v-row>
-          <v-row style="width: 100%;">
-            <v-col cols="12" md="6" class="pt-0 pb-0">
-              <!-- <v-text-field
                 :value="reqObj.legal_info.creditPayment"
                 label="Щомісячний платіж (за міс. грн) по кредитам та ін."
                 dense outlined readonly>
@@ -117,17 +112,6 @@
                   label="Мета придбання авто"
                   dense outlined readonly>
                 </v-text-field> -->
-                <v-text-field
-                  v-if="reqObj.client_type_id === 2"
-                  :value="reqObj.legal_info.edrpou"
-                  label="ЄДРПОУ"
-                  dense outlined readonly>
-                </v-text-field>
-                <!-- <v-text-field
-                  :value="reqObj.legal_info.companyName"
-                  label="Назва компанії"
-                  dense outlined readonly>
-                </v-text-field> -->
                 <!-- <v-text-field
                   :value="reqObj.legal_info.currencyBalance"
                   label="Валютний баланс"
@@ -146,6 +130,32 @@
             </v-col>
           </v-row>
           <v-row style="width: 100%;">
+            <v-col cols="12" md="6" class="pt-0 pb-0">
+              <!-- <v-text-field
+                :value="reqObj.region"
+                label="Область"
+                dense outlined readonly>
+              </v-text-field> -->
+              <v-text-field
+                v-if="reqObj.phone"
+                :value="reqObj.phone"
+                label="Телефон"
+                dense outlined readonly>
+              </v-text-field>
+            </v-col>
+            <v-col cols="12" md="6" class="pt-0 pb-0">
+              <v-text-field
+                v-if="reqObj.email"
+                :value="reqObj.email"
+                label="Email"
+                dense outlined readonly>
+              </v-text-field>
+            </v-col>
+          </v-row>
+          
+          <v-row 
+            v-if="reqObj.documents && reqObj.documents.constructor === Object"
+            style="width: 100%;">
             <v-col cols="12" class="pt-0 pb-0 calculator-data-graph">
               <input id="insurance" class="toggle" type="checkbox">
               <label for="insurance" class="lbl-toggle" style="background: white; color: #5f6368; padding-top: 0rem; margin-bottom: 0;">
@@ -156,8 +166,9 @@
                   <div class="document-list" v-if="reqObj.client_type_id == 2">
                     <div 
                       v-for="(item, key) in legalDocs"
+                      v-if="reqObj.documents && reqObj.documents[item.prop]"
                       :key="key"
-                      :style="reqObj.documents[item.prop] ? '' : 'display: none;'">
+                      :style="reqObj.documents && reqObj.documents[item.prop] ? '' : 'display: none;'">
                       <span style="color: black">{{ 
                         reqObj.documents[item.prop] && reqObj.documents[item.prop].text 
                           ? reqObj.documents[item.prop].text + ' ' + `(${(reqObj.documents[item.prop].size / 1000).toFixed(2)} - kb)` 
@@ -186,8 +197,9 @@
                   <div class="document-list" v-if="reqObj.client_type_id == 1">
                     <div 
                       v-for="(item, key) in personDocs"
+                      v-if="reqObj.documents && reqObj.documents[item.prop]"
                       :key="key"
-                      :style="reqObj.documents[item.prop] ? '' : 'display: none;'">
+                      :style="reqObj.documents && reqObj.documents[item.prop] ? '' : 'display: none;'">
                       <span style="color: black;">{{ 
                         reqObj.documents[item.prop] && reqObj.documents[item.prop].text 
                           ? reqObj.documents[item.prop].text + ' ' + `(${(reqObj.documents[item.prop].size / 1000).toFixed(2)} - kb)` 
@@ -427,6 +439,7 @@ export default {
       graph_type: null,
       documents: null,
       legal_info: {
+        company_name: null,
         acquisitionTargetId: null,
         creditPayment: null,
         inn: null,

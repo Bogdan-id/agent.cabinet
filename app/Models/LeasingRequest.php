@@ -26,7 +26,10 @@ class LeasingRequest extends Model
         'leasing_amount',
         'graph_type',
         'legal_info',
-        'documents'
+        'documents',
+        'email',
+        'phone',
+        'region'
     ];
 
 

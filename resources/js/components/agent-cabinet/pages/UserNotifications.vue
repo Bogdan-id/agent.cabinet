@@ -12,9 +12,11 @@
       color="red lighten-1">
     </v-progress-linear>
     </v-card-title>
-    <v-card-text style="font-size: 1.3rem; padding-top: 90px; padding-bottom: 90px;">
+    <v-card-text 
+      v-if="!notifications || notifications.length === 0"
+      style="font-size: 1.3rem; padding-top: 90px; padding-bottom: 90px;">
       <div style="text-align: center;">
-        <span>Повiдомлення вiдсутнi</span>
+        <span>(Повiдомлення вiдсутнi)</span>
       </div>
     </v-card-text>
     <v-card-text class="user-notification-page" style="min-height: 100vh" v-if="notifications && notifications.length > 0">
@@ -115,6 +117,7 @@ export default {
   },
   mounted() {
     this.notifications = this.$route.params.notifications
+    console.log(this.notifications.length)
     let notificationsArrIds = this.notifications.map(val => {
       return val.id
     })

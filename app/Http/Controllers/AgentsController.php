@@ -144,11 +144,18 @@ class AgentsController extends Controller
                     'patronymic' => $contact['SECOND_NAME'],
                     'post' => $contact['POST']
                 ],
-                'company_name' => null
+                'company' => [
+                    'company_name' => null,
+                    'company_type' => null
+                ]
+                
             ];
             if($contact['COMPANY_ID']){
                 $company = $bitrixClient->getCompanyById($contact['COMPANY_ID']);
-                $result['company_name'] = $company['TITLE'];
+                $result['company'] = [
+                    'company_name' => $company['TITLE'],
+                    'company_type' => $company['COMPANY_TYPE']
+                ];
             }
         }
      

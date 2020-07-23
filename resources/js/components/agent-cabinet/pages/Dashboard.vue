@@ -8,7 +8,7 @@
         <v-icon v-text="'mdi-information'" class="pr-3" size="50" color="red lighten-1"></v-icon>
       </div>
       <div style="display: flex; align-items: center;">
-        <b>За Вами не закрiплений жоден з менеджерів!</b>
+        За Вами не закрiплений жоден з менеджерів!
       </div>
     </div>
   </div>

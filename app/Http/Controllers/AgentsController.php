@@ -18,9 +18,10 @@ use Auth;
 
 class AgentsController extends Controller
 {
-    public function __construct()
+    public function __construct(BitrixClient $bitrixClient)
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
+        $this->bitrixClient = $bitrixClient;
     }
 
     public function create(AgentCreateRequest $request)
@@ -44,7 +45,26 @@ class AgentsController extends Controller
                 $idCard->save();
             }
         }
-        
+        $contact = $this->bitrixClient->searchContact($agent->user->phone, $agent->user->email);
+        if(!$contact)
+        {
+            $contact = $this->bitrixClient->createContact([
+                'name' => $agent->first_name,
+                'last_name' => $agent->last_name,
+                'second_name' => $agent->patronymic,
+            ]);
+            
+            if($agent->company_type == 'dealer')
+            {
+                $company = $this->bitrixClient->createCompany([
+                    'company_name' => $agent->company_name
+                ]);
+                $this->bitrixClient->setContactCompany($contact, $company);
+            }
+        }
+       $agent->bitrix_id = $contact;
+       $agent->save();
+       
         return response()->json([
             'status' => 200
         ]);
@@ -130,13 +150,13 @@ class AgentsController extends Controller
        return response()->json($manager);
     }
 
-    public function getAgentContact(Request $request, BitrixClient $bitrixClient)
+    public function getAgentContact(Request $request)
     {
         $result = [];
         $data = $request->post();
-        $contactId = $bitrixClient->searchContact($data['phone'], $data['email']);
+        $contactId = $this->bitrixClient->searchContact($data['phone'], $data['email']);
         if($contactId){
-            $contact = $bitrixClient->getContactById($contactId);
+            $contact = $this->bitrixClient->getContactById($contactId);
             $result = [
                 'contact' => [
                     'first_name' =>  $contact['NAME'],
@@ -151,7 +171,7 @@ class AgentsController extends Controller
                 
             ];
             if($contact['COMPANY_ID']){
-                $company = $bitrixClient->getCompanyById($contact['COMPANY_ID']);
+                $company = $this->bitrixClient->getCompanyById($contact['COMPANY_ID']);
                 $result['company'] = [
                     'company_name' => $company['TITLE'],
                     'company_type' => $company['COMPANY_TYPE']

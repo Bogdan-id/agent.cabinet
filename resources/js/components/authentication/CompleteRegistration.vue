@@ -551,7 +551,7 @@ export default {
     submit() {
       let object = {}
       for (let val in this.finalObj()) {
-        if(this.finalObj()[val] !== null) {
+        if(this.finalObj()[val]) {
           object[val] = this.finalObj()[val]
         }
       }

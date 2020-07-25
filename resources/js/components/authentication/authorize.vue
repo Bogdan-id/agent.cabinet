@@ -31,7 +31,6 @@
 						placeholder="Пароль"
 						v-model="password"
 						@blur="$v.password.$touch()"
-						@input="$v.password.$touch()"
 						/>
 						<span 
               :class="passwordErrors.length > 0 

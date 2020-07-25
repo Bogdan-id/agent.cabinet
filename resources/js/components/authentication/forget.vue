@@ -44,7 +44,6 @@
               type="text" 
               placeholder="Код з SMS"
               v-model="verificationCode"
-              @input="$v.verificationCode.$touch()"
               @blur="$v.verificationCode.$touch()"/>
             <div v-if="secondTimer" class="wrap">
               <span style="font-size: 0.8rem; color: #808080;">Повторно вiдправити код через&nbsp;</span>
@@ -77,7 +76,6 @@
               type="password" 
               placeholder="Новий пароль"
               v-model="password"
-              @input="$v.password.$touch()"
               @blur="$v.password.$touch()"/>
             <span 
               :class="passwordErrors.length > 0 
@@ -92,7 +90,6 @@
               type="password" 
               placeholder="Пiдтвердiть пароль"
               v-model="repeatedPassword"
-              @input="$v.repeatedPassword.$touch()"
               @blur="$v.repeatedPassword.$touch()"/>
             <span 
               :class="repeatedPasswordErrors.length > 0 

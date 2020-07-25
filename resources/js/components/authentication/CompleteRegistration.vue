@@ -16,42 +16,77 @@
           <div class="complete-reg-form__title-logo"></div>
           <span class="d-block headline">Заповніть особові дані:</span>
         </div>
-          <v-row class="pl-5 pr-5 pb-5">
+          <v-row class="pl-9 pr-9 pb-9">
             <v-col cols="12" sm="6" md="6" lg="6" xl="6">
               <div class="pt-6">
                 <div class="input__text">
                   <v-text-field 
-                      :error-messages="lastNameErrors" 
-                      @blur="$v.lastName.$touch()" 
-                      @input="$v.lastName.$touch(); trimReplaceNum('crf-last-name')"
-                      v-model="lastName"
-                      :maxlength="lastNameMaxLength"
-                      id="crf-last-name"
-                      label="Прізвище" 
-                      outlined dense clearable>
+                    :error-messages="lastNameErrors" 
+                    @blur="$v.lastName.$touch()" 
+                    @input="trimReplaceNum('crf-last-name')"
+                    v-model="lastName"
+                    :maxlength="lastNameMaxLength"
+                    id="crf-last-name"
+                    label="Прізвище" 
+                    outlined dense clearable>
+                    <template v-slot:append-outer>
+                      <span style="position: relative;">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on }">
+                            <v-icon 
+                              v-on="on"
+                              size="12" 
+                              color="#e57373" 
+                              style="position: absolute; top: -6px; right: -9px;" 
+                              v-text="'mdi-information'">
+                            </v-icon>
+                          </template>
+                          <span>Обов`язкове поле</span>
+                        </v-tooltip>
+                      </span>
+                    </template>
                   </v-text-field>
                   <v-text-field 
-                      v-model="knownUserData.name" 
+                      v-model="knownUserData.first_name" 
+                      style="margin-right: 9px;"
                       readonly outlined dense>
                   </v-text-field>
                   <v-text-field 
                       :error-messages="patronymicErrors" 
                       @blur="$v.patronymic.$touch()" 
-                      @input="$v.patronymic.$touch(); trimReplaceNum('crf-patronymic')"
+                      @input="trimReplaceNum('crf-patronymic')"
                       v-model="patronymic"
                       :maxlength="patronymicMaxLength"
                       id="crf-patronymic"
                       label="По батькові"
                       outlined dense clearable>
+                      <template v-slot:append-outer>
+                        <span style="position: relative;">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon 
+                                v-on="on"
+                                size="12" 
+                                color="#e57373" 
+                                style="position: absolute; top: -6px; right: -9px;" 
+                                v-text="'mdi-information'">
+                              </v-icon>
+                            </template>
+                            <span>Обов`язкове поле</span>
+                          </v-tooltip>
+                        </span>
+                      </template>
                   </v-text-field>
                   <v-text-field 
                       v-model="knownUserData.phone"
                       prepend-inner-icon="mdi-cellphone-android" 
+                      style="margin-right: 9px;"
                       outlined dense readonly>
                   </v-text-field>
                   <v-text-field
                       v-model="knownUserData.email"
                       prepend-inner-icon="mdi-at" 
+                      style="margin-right: 9px;"
                       outlined dense readonly>
                   </v-text-field>
                 </div>
@@ -64,29 +99,59 @@
                       :error-messages="companyTypeErrors" 
                       v-model="companyType"
                       dense row>
-                    <v-radio label="Салон" color="black" value="salon"></v-radio>
-                    <v-radio label="Дилер" color="black" value="dealer"></v-radio>
+                      <v-radio label="Дилер" color="black" value="dealer"></v-radio>
+                      <v-radio label="Незалежний агент" color="black" value="freelance"></v-radio>
                   </v-radio-group>
                 </div>
                 <div>
-                  <div class="input__text">
+                  <div class="input__text" v-if="companyType !== 'freelance'">
                     <v-text-field 
                         :error-messages="companyNameErrors" 
                         @blur="$v.companyName.$touch();" 
-                        @input="$v.companyName.$touch()" 
                         v-model="companyName" 
                         :maxlength="companyNameMaxLength"
                         label="Назва компанії" 
                         outlined dense clearable>
+                        <template v-slot:append-outer>
+                        <span style="position: relative;">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon 
+                                v-on="on"
+                                size="12"
+                                color="#e57373" 
+                                style="position: absolute; top: -6px; right: -9px;" 
+                                v-text="'mdi-information'">
+                              </v-icon>
+                            </template>
+                            <span>Обов`язкове поле</span>
+                          </v-tooltip>
+                        </span>
+                      </template>
                     </v-text-field>
                     <v-text-field 
                         :error-messages="positionErrors" 
                         @blur="$v.position.$touch()" 
-                        @input="$v.position.$touch()" 
                         v-model="position"
                         :maxlength="positionMaxLength"
                         label="Посада" 
                         outlined dense clearable>
+                        <template v-slot:append-outer>
+                        <span style="position: relative;">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon 
+                                v-on="on"
+                                size="12" 
+                                color="#e57373" 
+                                style="position: absolute; top: -6px; right: -9px;" 
+                                v-text="'mdi-information'">
+                              </v-icon>
+                            </template>
+                            <span>Обов`язкове поле</span>
+                          </v-tooltip>
+                        </span>
+                      </template>
                     </v-text-field>
                     <!-- <v-text-field 
                         :error-messages="purposeOfPaymentErr" 
@@ -114,7 +179,7 @@
                   <v-text-field
                       v-show="passportType === '1'" 
                       :error-messages="passportSeriesErrors" 
-                      @input="lettersToUpperCase(); $v.passportSeries.$touch()" 
+                      @input="lettersToUpperCase();" 
                       @blur="$v.passportSeries.$touch()"
                       v-model="passportSeries" 
                       class="passport-serries" 
@@ -123,12 +188,27 @@
                       hint="Серія паспорта"
                       label="Серія" 
                       dense outlined counter persistent-hint>
+                      <template v-slot:append-outer>
+                        <span style="position: relative;">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon 
+                                v-on="on"
+                                size="12"
+                                color="#e57373" 
+                                style="position: absolute; top: -6px; right: -9px;" 
+                                v-text="'mdi-information'">
+                              </v-icon>
+                            </template>
+                            <span>Обов`язкове поле</span>
+                          </v-tooltip>
+                        </span>
+                      </template>
                   </v-text-field>
                   <v-text-field
                       v-show="passportType === '1'" 
                       :error-messages="passportNumberErrors" 
                       @blur="$v.passportNumber.$touch()" 
-                      @input="$v.passportNumber.$touch()"
                       v-mask="passportNumberMask"  
                       v-model="passportNumber" 
                       class="passport-number"
@@ -136,12 +216,27 @@
                       :maxlength="passportNumberMaxLength"
                       hint="Номер паспорта"
                       outlined counter dense persistent-hint>
+                      <template v-slot:append-outer>
+                        <span style="position: relative;">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon 
+                                v-on="on"
+                                size="12"
+                                color="#e57373" 
+                                style="position: absolute; top: -6px; right: -9px;" 
+                                v-text="'mdi-information'">
+                              </v-icon>
+                            </template>
+                            <span>Обов`язкове поле</span>
+                          </v-tooltip>
+                        </span>
+                      </template>
                   </v-text-field>
                   <v-text-field 
                       v-show="passportType === '2'"
                       :error-messages="unzrErrors" 
                       @blur="$v.unzr.$touch()"
-                      @input="$v.unzr.$touch()"
                       v-model="unzr"
                       v-mask="unzrMask"
                       class="passport-number"
@@ -149,12 +244,27 @@
                       hint="Унікальний номер запису у реєстрі"
                       :maxlength="unzrMaxLength" 
                       outlined dense counter clearable>
+                      <template v-slot:append-outer>
+                        <span style="position: relative;">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon 
+                                v-on="on"
+                                size="12"
+                                color="#e57373" 
+                                style="position: absolute; top: -6px; right: -9px;" 
+                                v-text="'mdi-information'">
+                              </v-icon>
+                            </template>
+                            <span>Обов`язкове поле</span>
+                          </v-tooltip>
+                        </span>
+                      </template>
                   </v-text-field>
                   <v-text-field
                       v-show="passportType === '2'"
                       :error-messages="bioPassportNumberErrors" 
                       @blur="$v.bioPassportNumber.$touch()" 
-                      @input="$v.bioPassportNumber.$touch()" 
                       v-model="bioPassportNumber" 
                       v-mask="bioPassportNumberMask" 
                       class="passport-serries"
@@ -162,6 +272,22 @@
                       :maxlength="bioPassportNumberMaxLength"
                       hint="Номер документа"
                       outlined counter dense persistent-hint>
+                      <template v-slot:append-outer>
+                        <span style="position: relative;">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon 
+                                v-on="on"
+                                size="12"
+                                color="#e57373" 
+                                style="position: absolute; top: -6px; right: -9px;" 
+                                v-text="'mdi-information'">
+                              </v-icon>
+                            </template>
+                            <span>Обов`язкове поле</span>
+                          </v-tooltip>
+                        </span>
+                      </template>
                   </v-text-field>
                 </div>
                 <div class="input__text">
@@ -195,7 +321,9 @@
                         color="red">
                     </v-date-picker>
                   </v-dialog>
-                  <v-text-field 
+                  <v-text-field
+                      @blur="$v.cardNumber.$touch()"
+                      :error-messages="cardNumberErrors"
                       v-model="cardNumber" 
                       v-mask="cardNumberMask"
                       prepend-inner-icon="mdi-credit-card-outline" 
@@ -204,6 +332,8 @@
                   </v-text-field>
                   <v-textarea
                       @input="trimExceededLength('complete-register-iban', 29)"
+                      @blur="$v.iban.$touch()"
+                      :error-messages="ibanErrors"
                       v-model="iban"
                       name="input-7-4"
                       id="complete-register-iban"
@@ -254,7 +384,7 @@ export default {
     /* known user data */
     knownUserData: {
       id: null,
-      name: null,
+      first_name: null,
       email: null,
       phone: null,
     },
@@ -274,7 +404,7 @@ export default {
     /* Personal data */
     lastName: null,
     patronymic: null,
-    companyType: null,
+    companyType: 'dealer',
     companyName: null,
     position: null,
     dateOfBirth: null,
@@ -297,8 +427,8 @@ export default {
     passportSeriesMaxLength: 2,
     lastNameMaxLength: 46,
     patronymicMaxLength: 46,
-    companyNameMaxLength: 120,
-    positionMaxLength: 120,
+    companyNameMaxLength: 320,
+    positionMaxLength: 320,
     innMaxLength: 10,
     bioPassportNumberMaxLength: 9,
     passportNumberMaxLength: 6,
@@ -306,52 +436,55 @@ export default {
   }),
   validations() {
     return {
-      // iban: {
-      //   required,
-      //   isValidIban: function isValidIBANNumber(input) {
-      //     let countriesCode = {
-      //         AD: 24, AE: 23, AT: 20, AZ: 28, BA: 20, BE: 16, BG: 22, BH: 22, BR: 29,
-      //         CH: 21, CR: 21, CY: 28, CZ: 24, DE: 22, DK: 18, DO: 28, EE: 20, ES: 24,
-      //         FI: 18, FO: 18, FR: 27, GB: 22, GI: 23, GL: 18, GR: 27, GT: 28, HR: 21,
-      //         HU: 28, IE: 22, IL: 23, IS: 26, IT: 27, JO: 30, KW: 30, KZ: 20, LB: 28,
-      //         LI: 21, LT: 20, LU: 20, LV: 21, MC: 27, MD: 24, ME: 22, MK: 19, MR: 27,
-      //         MT: 31, MU: 30, NL: 18, NO: 15, PK: 24, PL: 28, PS: 29, PT: 25, QA: 29,
-      //         RO: 24, RS: 22, SA: 24, SE: 24, SI: 19, SK: 24, SM: 27, TN: 24, TR: 26,
-      //         UA: 29
-      //     }
-      //     let iban = String(input).toUpperCase().replace(/[^A-Z0-9]/g, ''), // keep only alphanumeric characters
-      //         code = iban.match(/^([A-Z]{2})(\d{2})([A-Z\d]+)$/) // match and capture (1) the country code, (2) the check digits, and (3) the rest digits
-      //     // check syntax and length
-      //     if (!code || iban.length !== countriesCode[code[1]]) {
-      //         return false
-      //     }
-      //     // rearrange country code and check digits, and convert chars to ints
-      //     let digits = (code[3] + code[1] + code[2]).replace(/[A-Z]/g, (letter) => {
-      //         return letter.charCodeAt(0) - 55
-      //     })
-      //     return (digits) => {
-      //       console.log('digits', digits)
-      //       let checksum = digits.slice(0, 2), fragment
-      //       for (let offset = 2; offset < digits.length; offset += 7) {
-      //           fragment = String(checksum) + digits.substring(offset, offset + 7)
-      //           checksum = parseInt(fragment, 10) % 97
-      //       }
-      //       return checksum === 55
-      //     }
-      //   }
-      // },
+      iban: { 
+        isValidIban: function isValidIBANNumber(input) {
+          if(!input) return true
+          let countriesCode = {
+              AD: 24, AE: 23, AT: 20, AZ: 28, BA: 20, BE: 16, BG: 22, BH: 22, BR: 29,
+              CH: 21, CR: 21, CY: 28, CZ: 24, DE: 22, DK: 18, DO: 28, EE: 20, ES: 24,
+              FI: 18, FO: 18, FR: 27, GB: 22, GI: 23, GL: 18, GR: 27, GT: 28, HR: 21,
+              HU: 28, IE: 22, IL: 23, IS: 26, IT: 27, JO: 30, KW: 30, KZ: 20, LB: 28,
+              LI: 21, LT: 20, LU: 20, LV: 21, MC: 27, MD: 24, ME: 22, MK: 19, MR: 27,
+              MT: 31, MU: 30, NL: 18, NO: 15, PK: 24, PL: 28, PS: 29, PT: 25, QA: 29,
+              RO: 24, RS: 22, SA: 24, SE: 24, SI: 19, SK: 24, SM: 27, TN: 24, TR: 26,
+              UA: 29
+          }
+          let iban = String(input).toUpperCase().replace(/[^A-Z0-9]/g, ''), // keep only alphanumeric characters
+              code = iban.match(/^([A-Z]{2})(\d{2})([A-Z\d]+)$/) // match and capture (1) the country code, (2) the check digits, and (3) the rest digits
+          // check syntax and length
+          if (!code || iban.length !== countriesCode[code[1]]) {
+              return false
+          }
+          // rearrange country code and check digits, and convert chars to ints
+          let digits = (code[3] + code[1] + code[2]).replace(/[A-Z]/g, (letter) => {
+              return letter.charCodeAt(0) - 55
+          })
+          return (digits) => {
+            let checksum = digits.slice(0, 2), fragment
+            for (let offset = 2; offset < digits.length; offset += 7) {
+                fragment = String(checksum) + digits.substring(offset, offset + 7)
+                checksum = parseInt(fragment, 10) % 97
+            }
+            return checksum === 55
+          }
+        }
+      },
       lastName: {
         required,
       },
       patronymic: {
         required
       },
-      companyName: {
-        required
-      },
-      position: {
-        required
-      },
+      companyName: (() => {
+        if (this.companyType === 'dealer'){
+          return { required }
+        } else return true
+      })(),
+      position: (() => {
+        if (this.companyType === 'dealer'){
+          return { required }
+        } else return true
+      })(),
       // purposeOfPayment: {
       //   required
       // },
@@ -397,21 +530,18 @@ export default {
       //   required,
       //   minLength: minLength(10)
       // },
-      // cardNumber: {
-      //   minLength: minLength(16),
-      //   required,
-      //   lunValid: function luhn(array) {
-      //     return number => {
-      //       if(number === null) return false
-      //       let pureNum = number.replace(/[^\d]/g, '')
-      //       let len = pureNum ? pureNum.length : 0, bit = 1, sum = 0;
-      //       while (len--) {sum += !(bit ^= 1) 
-      //         ? parseInt(pureNum[len], 10) 
-      //         : array[pureNum[len]]}
-      //       return sum % 10 === 0 && sum > 0;
-      //     } 
-      //   }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9])
-      // }
+      cardNumber: { 
+        lunValid: function luhn(array) {
+          return number => {
+            if(!number) return true
+            let pureNum = number.replace(/[^\d]/g, '')
+            let len = pureNum ? pureNum.length : 0, bit = 1, sum = 0;
+            while (len--) {sum += !(bit ^= 1) 
+              ? parseInt(pureNum[len], 10) 
+              : array[pureNum[len]]}
+            return sum % 10 === 0 && sum > 0;
+          } 
+        }([0, 2, 4, 6, 8, 1, 3, 5, 7, 9]) },
     }
   },
   methods: {
@@ -452,12 +582,14 @@ export default {
     finalObj() {
       return {
         'user_id': this.knownUserData.id,
-        'first_name': this.knownUserData.name,
+        
+        'first_name': this.knownUserData.first_name,
         'last_name': this.lastName,
         'patronymic': this.patronymic,
         'company_type': this.companyType,
         'company_name': this.companyName,
         'position': this.position,
+
         'birth': this.dateOfBirth,
         'passport_type_id': this.passportType,
         'passport_serie': this.passportType !== null ? this.getPassportCode : null,
@@ -507,8 +639,9 @@ export default {
     },
     getCurrentUser() {
       axios.get('/getCurrentUser').then(({data}) => {
-        console.log(data)
+        console.log({data})
         Object.assign(this.knownUserData, data)
+        this.searchContact()
       })
       .catch(e => {
         console.log(e.response)
@@ -524,6 +657,40 @@ export default {
 				text: text,
 			})
 		},
+    searchContact() {
+      let obj = {
+        phone: this.knownUserData.phone,
+        email: this.knownUserData.email,
+        _token: this.getCsrf()
+      }
+      axios
+        .post(`/agent/searchContact`, obj)
+        .then(response => {
+          console.log(response)
+          if(Object.keys(response.data > 0)) {
+            if(response.data.company && response.data.company.company_type) {
+              if(response.data.company.company_type == 1) {
+                this.companyType = 'dealer'
+              } else {
+                this.companyType = 'freelance'
+              }
+            }
+            if(response.data.contact && response.data.contact.first_name) {
+              this.knownUserData.first_name =  response.data.contact.first_name
+            }
+            this.lastName = response.data.contact && response.data.contact.last_name ? response.data.contact.last_name : null
+            this.patronymic = response.data.contact && response.data.contact.patronymic ? response.data.contact.patronymic : null
+            this.position = response.data.contact && response.data.contact.post ? response.data.contact.post : null
+            this.companyName = response.data.company && response.data.company.company_name ? response.data.company.company_name : null
+            console.log('*************')
+            console.log(this.knownUserData)
+            console.log('*************')
+          }
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    }
   },
   watch: {
     modal(val) {
@@ -613,14 +780,12 @@ export default {
 		// 	!this.$v.inn.required && errors.push('Поле "Iдентифікаційний код" - обов\'язкове для заповнення (Цифри)')
 		// 	return errors
     // },
-    // cardNumberErrors() {
-		// 	const errors = []
-    //   if (!this.$v.cardNumber.$error) return errors
-    //   !this.$v.cardNumber.required && errors.push('Поле "Карта для виплат" - обов\'язкове для заповнення (Цифри)')
-    //   !this.$v.cardNumber.minLength && errors.push('Поле "Карта для виплат" - має складатися з 16 цифр')
-    //   !this.$v.cardNumber.lunValid && errors.push('Не вiрна картка')
-		// 	return errors
-    // },
+    cardNumberErrors() {
+			const errors = []
+      if (!this.$v.cardNumber.$error) return errors
+      !this.$v.cardNumber.lunValid && errors.push('Не вiрна картка')
+			return errors
+    },
     bioPassportNumberErrors() {
       const errors = []
       if (!this.$v.bioPassportNumber.$error) return errors
@@ -650,13 +815,12 @@ export default {
     //   !this.$v.passportType.checked && errors.push(`Оберiть тип паспорту`)
 		// 	return errors
     // },
-    // ibanErrors() {
-    //   const errors = []
-    //   if (!this.$v.iban.$error) return errors
-    //   !this.$v.iban.required && errors.push(`Поле обов\`язкове для заповнення`)
-    //   !this.$v.iban.isValidIban && errors.push(`Невiрний IBAN`)
-		// 	return errors
-    // },
+    ibanErrors() {
+      const errors = []
+      if (!this.$v.iban.$error) return errors
+      !this.$v.iban.isValidIban && errors.push(`Невiрний IBAN`)
+			return errors
+    },
     passport() {
       let check = false
       !this.$v.lastName.$invalid

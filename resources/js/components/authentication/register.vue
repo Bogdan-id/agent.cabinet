@@ -18,7 +18,6 @@
 						type="text" 
 						placeholder="Ім'я"
 						v-model="firstName"
-						@input="$v.firstName.$touch()"
 						@blur="$v.firstName.$touch()"
 						/>
 						<span 
@@ -46,7 +45,6 @@
 						placeholder="Email"
 						v-model="email"
 						@blur="$v.email.$touch()"
-						@input="$v.email.$touch()"
 						/>
 						<span 
 							:class="emailError
@@ -62,7 +60,6 @@
 						placeholder="Пароль"
 						v-model="password"
 						@blur="$v.password.$touch()"
-						@input="$v.password.$touch()"
 						/>
 						<span 
 							:class="passwordError
@@ -78,7 +75,6 @@
 						placeholder="Повторіть пароль"
 						v-model="repeatPassword"
 						@blur="$v.repeatPassword.$touch()"
-						@input="$v.repeatPassword.$touch()"
 						/>
 						<span 
 							:class="repeatPasswordErrors

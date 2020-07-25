@@ -132,7 +132,7 @@
                         v-text="'mdi-information-outline'">
                       </v-icon>
                     </template>
-                    <span>Поле заполняеться автоматично за вказаним ЄДРПОУ</span>
+                    <span>Поле заповнюється автоматично за вказаним ЄДРПОУ</span>
                   </v-tooltip>
                 </template>
               </v-text-field>
@@ -655,36 +655,39 @@ export default {
           .then(response => {
             console.log(response)
             this.edrpouLoading = false
-            if(response.status === 200) {
+            if(response.status === 200 && response.data.companyShortName) {
               this.legalInfo.companyName = response.data.companyShortName
-            } else {
-              console.log('Another than status')
+            } else if (response.data.status !== 200) {
+              this.getEdrpouErrorHandler(response.data.status)
             }
           })
           .catch(error => {
             console.log(error.response)
-            if(error.response.status === 403 || error.response.status === 503) {
-              this.$notify({
-                group: 'error',
-                title: 'Помилка',
-                text: `Зверніться в технічну підтримку`,
-              })
-            } else if (error.response.status === 404) {
-              this.$notify({
-                group: 'error',
-                title: 'Помилка',
-                text: `Компанію не знайдено`,
-              })
-            } else {
-              this.$notify({
-                group: 'error',
-                title: 'Помилка',
-                text: `Зверніться в технічну підтримку`,
-              })
-            }
+            this.getEdrpouErrorHandler(error.response.status)
             this.edrpouLoading = false
           })
       } else return
+    },
+    getEdrpouErrorHandler(status) {
+      if(status === 403 || status === 503) {
+        this.$notify({
+          group: 'error',
+          title: 'Помилка',
+          text: `Зверніться в технічну підтримку`,
+        })
+      } else if (status === 404) {
+        this.$notify({
+          group: 'error',
+          title: 'Помилка',
+          text: `Компанію не знайдено`,
+        })
+      } else {
+        this.$notify({
+          group: 'error',
+          title: 'Помилка',
+          text: `Зверніться в технічну підтримку`,
+        })
+      }
     },
     deleteDoc(property) {
       this.$delete(this.documentUrls, property)

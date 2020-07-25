@@ -153,14 +153,14 @@
               </div>
             </v-row>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" class="pb-0">
                 <v-checkbox 
                   v-model="showPassportEditField" label="Паспортнi данi" color="#d24a43">
                 </v-checkbox>
               </v-col>
             </v-row>
             <div class="row" v-if="showPassportEditField">
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pt-0">
                 <v-select
                   append-icon=""
                   label="Тип паспорту"
@@ -215,7 +215,7 @@
             </div>
             <!--  -->
             <div class="row">
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pb-0">
                 <v-text-field
                   :error-messages="innErr"
                   @blur="$v.user.inn.$touch()"
@@ -225,7 +225,7 @@
                   outlined dense>
                 </v-text-field>
               </div>
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pb-0">
                 <v-text-field
                   :error-messages="card_numberErr"
                   @blur="$v.user.card_number.$touch()"
@@ -811,8 +811,8 @@ export default {
   },
   watch: {
     showPassportEditField() {
-      if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = null
-      if(this.$v.user.passport_number.$invalid) this.user.passport_number = null
+      if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = ''
+      if(this.$v.user.passport_number.$invalid) this.user.passport_number = ''
       
     },
     modal(val) {

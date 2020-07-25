@@ -377,4 +377,63 @@ class BitrixClient
 
         return $result['result'];
     }
+
+    public function createContact($attributes)
+    {
+        $response = $this->client
+                ->get("/rest/3/{$this->token}/crm.contact.add", [
+                    'query' => [
+                        'fields' => [
+                            "NAME" => $attributes['name'],
+                            "SECOND_NAME" => $attributes['second_name'],
+                            "LAST_NAME" => $attributes['last_name'],
+                            "OPENED" => 'Y',
+                            "STATUS_ID" => "NEW"
+                            ]
+                    ]
+                ])
+                ->getBody()
+                ->getContents();
+
+        $result = json_decode($response, true);
+
+        return $result['result'];
+    }
+
+    public function createCompany($attributes)
+    {
+        $response = $this->client
+                ->get("/rest/3/{$this->token}/crm.company.add", [
+                    'query' => [
+                        'fields' => [
+                            "TITLE" => $attributes['company_name'],
+                            ]
+                    ]
+                ])
+                ->getBody()
+                ->getContents();
+
+        $result = json_decode($response, true);
+
+        return $result['result'];
+    }
+
+    public function setContactCompany($contactId, $companyId)
+    {
+        $response = $this->client
+                ->get("/rest/3/{$this->token}/crm.contact.company.add", [
+                    'query' => [
+                        'ID' => $contactId, 
+                        'fields' => [
+                            "COMPANY_ID" => $companyId,
+                            ]
+                    ]
+                ])
+                ->getBody()
+                ->getContents();
+
+        $result = json_decode($response, true);
+
+        return $result['result'];
+    }
 }

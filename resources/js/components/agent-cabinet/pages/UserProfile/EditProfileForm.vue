@@ -352,7 +352,6 @@ export default {
 
     showPassportEditField: false,
     pasteEvent: false,
-    
 
     /* item v-model */
     passportType: null,
@@ -376,17 +375,21 @@ export default {
     }
   },
   methods: {
-    // below fixed bug for v-mask
-    needInputToApplyVMask() {
-      let inputEvent = new Event('input', {bubbles: true})
-      let blurEvent = new Event('blur', {bubbles: true})
-      let el = document.getElementById('user-profile-card-number')
-      el.dispatchEvent(inputEvent)
-      el.dispatchEvent(blurEvent)
+    cc_format(value) {
+      var v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
+      var matches = v.match(/\d{4,16}/g);
+      var match = matches && matches[0] || ''
+      var parts = []
+      for (let i=0, len=match.length; i<len; i+=4) {
+        parts.push(match.substring(i, i+4))
+      }
+      if (parts.length) {
+        return parts.join(' ')
+      } else {
+        return value
+      }
     },
     assignObject() {
-      this.needInputToApplyVMask()
-
       let user = {
         last_name: this.$store.state.user.agent.last_name,
         first_name: this.$store.state.user.agent.first_name, // user
@@ -403,7 +406,7 @@ export default {
         ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.passport_number && {passport_number: this.$store.state.user.agent.document.passport_number},
         inn: this.$store.state.user.agent.inn,
         birth: this.$store.state.user.agent.birth,
-        card_number: this.$store.state.user.agent.card_number,
+        card_number: this.$store.state.user.agent && this.$store.state.user.agent.card_number ? this.cc_format(this.$store.state.user.agent.card_number) : null,
         purpose_of_payment: this.$store.state.user.agent.purpose_of_payment,
         iban: this.$store.state.user.agent.iban,
         _token: this.getCsrf()

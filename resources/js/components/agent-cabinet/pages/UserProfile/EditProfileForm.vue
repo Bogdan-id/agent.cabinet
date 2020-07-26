@@ -376,10 +376,10 @@ export default {
   },
   methods: {
     cc_format(value) {
-      var v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
-      var matches = v.match(/\d{4,16}/g);
-      var match = matches && matches[0] || ''
-      var parts = []
+      let v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
+      let matches = v.match(/\d{4,16}/g);
+      let match = matches && matches[0] || ''
+      let parts = []
       for (let i=0, len=match.length; i<len; i+=4) {
         parts.push(match.substring(i, i+4))
       }

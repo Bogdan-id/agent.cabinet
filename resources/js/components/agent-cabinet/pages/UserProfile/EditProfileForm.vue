@@ -230,6 +230,7 @@
                   :error-messages="card_numberErr"
                   @blur="$v.user.card_number.$touch()"
                   v-model="user.card_number"
+                  id="user-profile-card-number"
                   v-mask="'#### #### #### ####'"
                   label="Реквiзити картки"
                   outlined dense>
@@ -375,7 +376,17 @@ export default {
     }
   },
   methods: {
+    // below fixed bug for v-mask
+    needInputToApplyVMask() {
+      let inputEvent = new Event('input', {bubbles: true})
+      let blurEvent = new Event('blur', {bubbles: true})
+      let el = document.getElementById('user-profile-card-number')
+      el.dispatchEvent(inputEvent)
+      el.dispatchEvent(blurEvent)
+    },
     assignObject() {
+      this.needInputToApplyVMask()
+
       let user = {
         last_name: this.$store.state.user.agent.last_name,
         first_name: this.$store.state.user.agent.first_name, // user
@@ -397,7 +408,6 @@ export default {
         iban: this.$store.state.user.agent.iban,
         _token: this.getCsrf()
       }
-
       Object.assign(this.user, user)
       for (let value in this.user) {
         if(!this.user[value]) {
@@ -552,7 +562,7 @@ export default {
   },
   computed: {
     profileHasNoChanges() {
-      return JSON.stringify(this.userBackUp) === JSON.stringify(this.user)
+      return JSON.stringify(this.user) === JSON.stringify(this.userBackUp)
     },
     last_nameErr() {
       const errors = []
@@ -813,6 +823,7 @@ export default {
     showPassportEditField() {
       if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = ''
       if(this.$v.user.passport_number.$invalid) this.user.passport_number = ''
+      this.user.passport_type
       
     },
     modal(val) {

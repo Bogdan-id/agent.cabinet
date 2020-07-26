@@ -748,10 +748,10 @@ export default {
       return !this.$v.$invalid
     },
     validationRules() {
-      let validateObj = null
-      this.formatToSave == 'email'
+      let validateObj = {}
+      this.formatToSave === 'email'
         ? validateObj = {emailToSend: { email, required }}
-        : validateObj = {}
+        : false
       this.clientTypeId === 1 && this.leasingApplicationForm
         ? validateObj = Object.assign({},
           this.commonRules,
@@ -762,7 +762,7 @@ export default {
             this.commonRules,
             this.legalPerson
           )
-          : validateObj = {}
+          : false
       return validateObj 
     },
     commonRules() {

@@ -16,7 +16,7 @@
           <div class="complete-reg-form__title-logo"></div>
           <span class="d-block headline">Заповніть особові дані:</span>
         </div>
-          <v-row class="pl-9 pr-9 pb-9">
+          <v-row class="pl-9 pr-9">
             <v-col cols="12" sm="6" md="6" lg="6" xl="6">
               <div class="pt-6">
                 <div class="input__text">

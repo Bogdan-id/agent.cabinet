@@ -2,9 +2,11 @@
   <nav class="navbar navbar-expand-lg navbar-light">
     <div style="position: relative" class="container-fluid d-flex justify-space-between">
       <toggleIcon
+        v-show="!smAndDown"
         @click.native="toggleCustomSidebar()"
         :class="showSidebar ? 'sidebar__toggle-icon' : 'sidebar__toggle-icon --toggle-icon-active'">
       </toggleIcon>
+      <div style="display: inline-flex"></div>
       <div class="notification-wrapper">
         <v-tooltip bottom>
           <template #activator="{ on }">

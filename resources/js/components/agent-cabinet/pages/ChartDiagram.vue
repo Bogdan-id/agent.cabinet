@@ -595,9 +595,6 @@ export default {
     annuity: [],
   }),
   methods: {
-    test() {
-      console.log(this.graphData.id)
-    },
     addObjects(data) {
       /* eslint-disable */
       if(data.result_data.hasOwnProperty('annuity')) { this.annuity = data.result_data.annuity.graph}
@@ -611,16 +608,13 @@ export default {
       setTimeout(() => {
         let getValue = document.querySelectorAll('#chart-diagram .tabs-input input')
         getValue.forEach(val => {
-          console.log(val)
-          if(val.value === this.currentTab) {
+          if(val.value == this.currentTab) {
             val.parentNode.classList.add('active')
-            console.log(val.value)
           }
         })
       }, 50)
     },
     switchGraphName(graph) {
-      console.log(graph)
       if(graph === 'annuity' || graph === 'Ануїтет') {return '1'}
       if(graph === 'even' || graph ===  'Класичний') {return '2'}
       if(graph === 'irregular' || graph === 'Індивідуальний') {return '3'}
@@ -638,13 +632,17 @@ export default {
     }
   },
   mounted() {
-    console.log('TEST TEST')
     this.graphData = this.$route.params.data
-    console.log(this.$route.params)
+    let firstGraphFromArray = Object.keys(this.graphData.result_data).filter(val => {
+      if(val !== 'requestId') {
+        return this.graphData.result_data[val]
+      }
+    })
     this.addObjects(this.graphData)
+    this.currentTab = this.switchGraphName(firstGraphFromArray[0])
+    this.changeActive()
     if(this.$route.params.preview === true) {
       this.currentTab = this.switchGraphName(this.$route.params.graph)
-      console.log(this.currentTab)
       this.changeActive()
     }
     document.body.scrollTop = 0

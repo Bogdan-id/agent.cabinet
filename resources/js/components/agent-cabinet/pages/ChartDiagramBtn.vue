@@ -857,51 +857,6 @@ export default {
       this.$v.$anyError
       this.$v.$touch()
     },
-    // sendData(dataToSave) {
-    //   if(this.formatToSave === 'email') {
-    //     this.emailDownloadLoading = true
-    //   } else if(this.formatToSave === 'pdf') {
-    //     this.pdfDownloadLoading = true
-    //   }
-    //   axios
-    //     .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
-    //     .then(response => {
-    //       console.log(response)
-    //       if(this.formatToSave === 'pdf') {
-    //         let index = response.headers['content-disposition'].indexOf('"') + 1
-    //         saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
-    //       }
-    //       if(this.formatToSave === 'email') {
-    //         this.$notify({
-    //           group: 'success',
-    //           title: 'Графiк успiшно вiдправлено',
-    //           text: '',
-    //         })
-    //       }
-    //       if(this.formatToSave === 'email') {
-    //         this.emailField = false
-    //         this.emailDownloadLoading = false
-    //       } else if(this.formatToSave === 'pdf') {
-    //         this.pdfDownloadLoading = false
-    //       }
-    //       setTimeout(() => {
-    //         this.dialogToSend = false
-    //       }, 1200)
-    //     })
-    //     .catch(error => {
-    //       console.log(error.response)
-    //       this.$notify({
-    //         group: 'error',
-    //         title: 'Помилка',
-    //         text: `${error.response.status} \n ${error.response.data.message}`,
-    //       })
-    //       if(this.formatToSave === 'email') {
-    //         this.emailDownloadLoading = false
-    //       } else if(this.formatToSave === 'pdf') {
-    //         this.pdfDownloadLoading = false
-    //       }
-    //     })
-    // },
     openDialogToSend() {
       this.dialogToSend = true
     },
@@ -1005,9 +960,6 @@ export default {
       this.leasingApplicationForm = true
     },
     getDefaultProperties() {
-      console.log('************')
-      console.log(this.data)
-      console.log('************')
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.data.id
       this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`

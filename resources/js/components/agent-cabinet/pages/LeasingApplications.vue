@@ -259,7 +259,7 @@
     <v-card-text
       v-if="!loading && !tableDataPresent"
       absolute
-      style="font-size: 1.3rem; padding-top: 90px;"
+      style="font-size: 1.3rem; padding-top: 90px; text-align: center;"
       class="d-block text-center">
       (Iсторiя заявок на лiзинг порожня)
     </v-card-text>

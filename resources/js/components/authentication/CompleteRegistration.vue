@@ -557,29 +557,28 @@ export default {
           object[val] = this.finalObj()[val]
         }
       }
-      console.log(object)
-      // if(this.dataValid) {
-      //   this.request = true
-      //   axios.post(`/agent/create`, object)
-      //     .then((response) => {
-      //       if(response.status === 200) {
-      //         const message = 'Зараз вас буде перенаправлено до остобистого кабiнету'
-      //         this.simpleNotify('Успiшно', message, 'success')
-      //         setTimeout(() => { this.$router.go() }, 5000)
-      //         this.request = false
-      //       } else {
-      //         const message = `Не вдалося зареєструвати. Оновiть сторінку і 
-      //           спробуйте знову, або повторiть - завершення реєстрації через кілька хвилин`
-      //         this.simpleNotify('Помилка', message, 'warning')
-      //         this.request = false
-      //       }
-      //     })
-      //     .catch(error => {
-      //       console.log(error.response)
-      //       this.simpleNotify('Помилка', error.response.statusText, 'warning')
-      //       this.request = false
-      //     })
-      // }
+      if(this.dataValid) {
+        this.request = true
+        axios.post(`/agent/create`, object)
+          .then((response) => {
+            if(response.status === 200) {
+              const message = 'Зараз вас буде перенаправлено до остобистого кабiнету'
+              this.simpleNotify('Успiшно', message, 'success')
+              setTimeout(() => { this.$router.go() }, 5000)
+              this.request = false
+            } else {
+              const message = `Не вдалося зареєструвати. Оновiть сторінку і 
+                спробуйте знову, або повторiть - завершення реєстрації через кілька хвилин`
+              this.simpleNotify('Помилка', message, 'warning')
+              this.request = false
+            }
+          })
+          .catch(error => {
+            console.log(error.response)
+            this.simpleNotify('Помилка', error.response.statusText, 'warning')
+            this.request = false
+          })
+      }
     },
     finalObj() {
       return {

@@ -41,6 +41,7 @@
       <input
         style="visibility: hidden; position: absolute; left: 0; top: 0;"
         type="file"
+        accept="image/x-png, image/gif, image/jpeg, image/jpg, image/svg+xml"
         ref="sliderImageInput"
         class="slider-image-input"
         @change="listenImageInput()">
@@ -136,7 +137,7 @@
             <div class="d-flex justify-space-between mt-5">
               <span>
                 <v-btn 
-                  @click="createSlider()" 
+                  @click="createSlider(); formToAddSlider = false" 
                   color="#e65048"
                   dark
                   :loading="saveLoading">
@@ -279,7 +280,7 @@
             <div class="d-flex justify-space-between mt-5">
               <span>
                 <v-btn 
-                  @click="createSlider(item.id)" 
+                  @click="createSlider(item.id); formToAddSlider = false" 
                   color="#e65048"
                   dark
                   :loading="saveLoading">
@@ -288,7 +289,7 @@
               </span>
               <span>
                 <v-btn 
-                  @click="stopEditMode()" 
+                  @click="stopEditMode(); formToAddSlider = false" 
                   color="grey"
                   dark>
                   Вiдмiнити
@@ -371,7 +372,7 @@ export default {
       },
       image: {
         upload: {
-          types: ['jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff']
+          types: ['jpeg', 'png', 'gif', 'jpg', 'svg']
         },
         toolbar: [ 'imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight' ],
         styles: [
@@ -500,10 +501,15 @@ export default {
       return this.sliders[key || this.editKey].slide_image.substr(index)
     },
     removeImageSlider(key) {
-      this.sliderImage = null
-      console.log(this.sliders[key])
-      this.deleteImage(this.getImageNameFromUrl(key, this.editKey))
-      this.sliders[key].slide_image = null
+      let file = document.querySelector('.slider-image-input')
+      file.value = null
+      if(key !== null && key !== '' && key !== undefined) {
+        this.deleteImage(this.getImageNameFromUrl(key, this.editKey))
+        this.sliders[key].slide_image = null
+      } else {
+        console.log(this.sliderImageName)
+        this.deleteImage()
+      }
     },
     uploadImage(file) {
       let formData = new FormData()
@@ -519,7 +525,9 @@ export default {
           let index = response.data.url.lastIndexOf("/") + 1
           this.sliderImageName = response.data.url.substr(index)
           this.sliderImageUrl = response.data.url
-          this.sliders[this.editKey].slide_image = response.data.url
+          if(this.editKey !== undefined && this.editKey !== null) {
+            this.sliders[this.editKey].slide_image = response.data.url
+          }
         })
         .catch(error => {
           console.log(error.response)
@@ -616,12 +624,11 @@ export default {
       }
     },
     deleteImage(imageFromArray) {
-      console.log(imageFromArray)
       axios
         .post('/admin/image/delete', {image: imageFromArray || this.sliderImageName})
         .then(response => {
           console.log(response.data)
-
+          this.sliderImage = null
           this.sliderImageUrl = null
           this.sliderImageName = null
           this.sliderImage = null
@@ -638,18 +645,26 @@ export default {
       let file = document.querySelector('.slider-image-input').files[0]
       let reader = new FileReader()
       this.sliderImageName = file.name
-
-      this.uploadImage(file)
-
-      if (file) {
-        reader.readAsDataURL(file)
-      }
-
-      await new Promise(resolve => {
-        reader.onloadend = () => {
-          resolve(reader.result)
+      if(file.size > 2000000) {
+        // this.materialImg = null
+        file.value = null
+        this.$notify({
+          group: 'error',
+          title: 'Помилка',
+          text: `Розмiр зображення не повинен перевищувати 2 mb`,
+        })
+        return
+      } else {
+        this.uploadImage(file)
+        if (file) {
+          reader.readAsDataURL(file)
         }
-      }).then(value => this.sliderImage = value)
+        await new Promise(resolve => {
+          reader.onloadend = () => {
+            resolve(reader.result)
+          }
+        }).then(value => this.sliderImage = value)
+      }
     },
     getCsrf() {
       return document.querySelector('meta[name="csrf-token"]').getAttribute('content')

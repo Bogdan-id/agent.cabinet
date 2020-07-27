@@ -30,7 +30,7 @@ class AgentAcceptMail extends Mailable
      */
     public function build()
     {
-        $subject = 'Ваша заявка принята';
+        $subject = 'Вашу заявку на реєстрацію в кабінеті агента схвалено';
 
         return $this->from('agent.bestleasing@gmail.com')
         ->view('emails.accept_agent')->subject($subject);

@@ -1001,19 +1001,8 @@ export default {
     },
     openForm() {
       this.selectedGraph = this.switchGraphName(this.graph)
+      console.log(this.selectedGraph)
       this.leasingApplicationForm = true
-      this.getListItem()
-    },
-    getListItem() {
-      axios
-        .get('/getAcquisitionTargets')
-        .then(response => {
-          console.log(response)
-          this.listItem = response.data
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
     },
     getDefaultProperties() {
       console.log('************')

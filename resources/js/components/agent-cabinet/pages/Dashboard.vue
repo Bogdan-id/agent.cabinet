@@ -595,7 +595,7 @@ export default {
     justify-content: space-around;
     .news-card {
       width: 320px!important; 
-      margin: 0 25px 15px 0
+      margin: 10px 0;
     }
   }
 }

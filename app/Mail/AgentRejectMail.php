@@ -30,7 +30,7 @@ class AgentRejectMail extends Mailable
      */
     public function build()
     {
-        $subject = 'Ваша заявка отклонена:(';
+        $subject = 'Вашу заявку на реєстрацію в кабінеті агента відхилено';
 
         return $this->from('agent.bestleasing@gmail.com')
         ->view('emails.reject_agent')->subject($subject);

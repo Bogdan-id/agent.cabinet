@@ -153,14 +153,14 @@
               </div>
             </v-row>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" class="pb-0">
                 <v-checkbox 
                   v-model="showPassportEditField" label="Паспортнi данi" color="#d24a43">
                 </v-checkbox>
               </v-col>
             </v-row>
             <div class="row" v-if="showPassportEditField">
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pt-0">
                 <v-select
                   append-icon=""
                   label="Тип паспорту"
@@ -215,7 +215,7 @@
             </div>
             <!--  -->
             <div class="row">
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pb-0">
                 <v-text-field
                   :error-messages="innErr"
                   @blur="$v.user.inn.$touch()"
@@ -225,11 +225,12 @@
                   outlined dense>
                 </v-text-field>
               </div>
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pb-0">
                 <v-text-field
                   :error-messages="card_numberErr"
                   @blur="$v.user.card_number.$touch()"
                   v-model="user.card_number"
+                  id="user-profile-card-number"
                   v-mask="'#### #### #### ####'"
                   label="Реквiзити картки"
                   outlined dense>
@@ -351,7 +352,6 @@ export default {
 
     showPassportEditField: false,
     pasteEvent: false,
-    
 
     /* item v-model */
     passportType: null,
@@ -375,6 +375,20 @@ export default {
     }
   },
   methods: {
+    cc_format(value) {
+      let v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
+      let matches = v.match(/\d{4,16}/g);
+      let match = matches && matches[0] || ''
+      let parts = []
+      for (let i=0, len=match.length; i<len; i+=4) {
+        parts.push(match.substring(i, i+4))
+      }
+      if (parts.length) {
+        return parts.join(' ')
+      } else {
+        return value
+      }
+    },
     assignObject() {
       let user = {
         last_name: this.$store.state.user.agent.last_name,
@@ -392,12 +406,11 @@ export default {
         ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.passport_number && {passport_number: this.$store.state.user.agent.document.passport_number},
         inn: this.$store.state.user.agent.inn,
         birth: this.$store.state.user.agent.birth,
-        card_number: this.$store.state.user.agent.card_number,
+        card_number: this.$store.state.user.agent && this.$store.state.user.agent.card_number ? this.cc_format(this.$store.state.user.agent.card_number) : null,
         purpose_of_payment: this.$store.state.user.agent.purpose_of_payment,
         iban: this.$store.state.user.agent.iban,
         _token: this.getCsrf()
       }
-
       Object.assign(this.user, user)
       for (let value in this.user) {
         if(!this.user[value]) {
@@ -552,7 +565,7 @@ export default {
   },
   computed: {
     profileHasNoChanges() {
-      return JSON.stringify(this.userBackUp) === JSON.stringify(this.user)
+      return JSON.stringify(this.user) === JSON.stringify(this.userBackUp)
     },
     last_nameErr() {
       const errors = []
@@ -811,8 +824,9 @@ export default {
   },
   watch: {
     showPassportEditField() {
-      if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = null
-      if(this.$v.user.passport_number.$invalid) this.user.passport_number = null
+      if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = ''
+      if(this.$v.user.passport_number.$invalid) this.user.passport_number = ''
+      this.user.passport_type
       
     },
     modal(val) {

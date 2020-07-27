@@ -42,7 +42,7 @@
   <!-- Dashboard container -->
   <div class="dashboard-container">
     <v-card elevation="9" height="400">
-      <div v-if="!carouselVisibility && slidesLoader" style="position: relative; width: 100%; height: 100%;">
+      <div v-if="!carouselVisibility && sliderHasNoSlides" style="position: relative; width: 100%; height: 100%;">
         <v-skeleton-loader
           style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
           height="800"
@@ -55,6 +55,7 @@
         <span style="font-size: 1.3rem; color: #727170;">(Пропозиції вiдсутнi)</span>
       </div>
       <v-carousel
+        transition="fade-transition"
         cycle
         height="400"
         name="dashboard-carousel"
@@ -65,7 +66,6 @@
         show-arrows-on-hover>
         <v-carousel-item
           v-for="(item, key) in slides"
-          @load="imageLoaded()"
           :src="item.slide_image"
           :key="key"
           reverse-transition="fade-transition"
@@ -323,6 +323,7 @@ export default {
       { text: 'Статус', value: 'status', align: 'center', sortable: false, width: 120 },
     ],
     carouselVisibility: false,
+    sliderHasNoSlides: true,
     slides: null,
     tabledata: [],
     requestRecieved: false,
@@ -376,12 +377,6 @@ export default {
     // test() {
     //   console.log(this.$store.state.user.agent.manager_id)
     // },
-    imageLoaded() {
-      console.log('onload event')
-      setTimeout(() => {
-        this.carouselVisibility = true
-      }, 300)
-    },
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
       this.tabledata = []
@@ -392,10 +387,6 @@ export default {
           this.$store.commit('toggleSpinner', false)
           if(response.data.length > 0)  {
             this.tabledata = response.data
-            // this.createTableData(response.data)
-            console.log('table-data')
-            console.log(this.tabledata)
-            console.log('table-data')
             this.$store.commit('addGraph', response.data)
           } else {
             this.tabledata = []
@@ -440,6 +431,19 @@ export default {
     }
   },
   watch: {
+    slides(val) {
+      if(val === null || val.length === 0) {
+        setTimeout(() => {
+          this.carouselVisibility = false
+          this.sliderHasNoSlides = false
+        }, 2000)
+      } else {
+        setTimeout(() => {
+          this.carouselVisibility = true
+          this.sliderHasNoSlides = false
+        }, 2000)
+      }
+    },
     hasUser() {
       this.getUserCalculcations()
     },

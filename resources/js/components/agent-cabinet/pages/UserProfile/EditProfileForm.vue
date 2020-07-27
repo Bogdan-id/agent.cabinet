@@ -295,7 +295,7 @@
             color="red darken-1"
             style="color: white;"
             :loading="loading"
-            :disabled="profileHasNoChanges"
+            :disabled="JSON.stringify(this.user) === JSON.stringify(this.userBackUp)"
             @click="updateProfile()">
             Оновити профіль
           </v-btn>
@@ -432,6 +432,9 @@ export default {
       this.user.passport_number = null
     },
     updateProfile() {
+      console.log(JSON.stringify(this.user))
+      console.log(JSON.stringify(this.userBackUp))
+      console.log(JSON.stringify(this.user) === JSON.stringify(this.userBackUp))
       !this.$v.$invalid
         ? this.sendRequest()
         : this.highlightErrors()
@@ -564,9 +567,6 @@ export default {
     }
   },
   computed: {
-    profileHasNoChanges() {
-      return JSON.stringify(this.user) === JSON.stringify(this.userBackUp)
-    },
     last_nameErr() {
       const errors = []
 			if (!this.$v.user.last_name.$error) return errors

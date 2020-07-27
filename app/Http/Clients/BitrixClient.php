@@ -384,11 +384,22 @@ class BitrixClient
                 ->get("/rest/3/{$this->token}/crm.contact.add", [
                     'query' => [
                         'fields' => [
+                            "TYPE_ID" => "4",
                             "NAME" => $attributes['name'],
                             "SECOND_NAME" => $attributes['second_name'],
                             "LAST_NAME" => $attributes['last_name'],
+                            "BIRTHDATE" => $attributes['birth'],
+                            "PHONE" => [[
+                                "VALUE" => $attributes['phone'],
+                                "VALUE_TYPE" => "WORK"
+                            ]],
+                            "EMAIL" => [[
+                                "VALUE" => $attributes['email'],
+                                "VALUE_TYPE" => "WORK"
+                            ]],
                             "OPENED" => 'Y',
-                            "STATUS_ID" => "NEW"
+                            "STATUS_ID" => "NEW",
+                            "ASSIGNED_BY_ID" => 926, 
                             ]
                     ]
                 ])
@@ -431,6 +442,55 @@ class BitrixClient
                 ])
                 ->getBody()
                 ->getContents();
+
+        $result = json_decode($response, true);
+
+        return $result['result'];
+    }
+
+    public function setContactRequisite($contactId, $requisite)
+    {
+        $response = $this->client
+                ->get("/rest/3/{$this->token}/crm.requisite.bankdetail.add", [
+                    'query' => [
+                        'fields' => [
+                            "ENTITY_TYPE_ID" => "3",
+                            "ENTITY_ID" => $contactId,
+                            "PRESET_ID" => "1",
+                            "RQ_NAME" => $requisite['fio'],
+                            "RQ_FIRST_NAME" => $requisite['first_name'],
+                            "RQ_LAST_NAME" => $requisite['last_name'],
+                            "RQ_EMAIL" => $requisite['email'],
+                            "RQ_PHONE" => $requisite['phone'],
+                            // "RQ_IDENT_DOC" => $requisite['doc_type'],
+                            // "RQ_IDENT_DOC_SER" => $requisite['doc_serie'],
+                            // "RQ_IDENT_DOC_NUM" => $requisite['doc_number'],
+                            "RQ_INN" => $requisite['inn'],
+                            "RQ_IBAN" => $requisite['iban']
+                            ]
+                    ]
+                ])
+                ->getBody()
+                ->getContents();
+
+        $result = json_decode($response, true);
+
+        return $result['result'];
+    }
+
+    public function setContactPosition($contactId, $position)
+    {
+        $response = $this->client
+        ->get("/rest/3/{$this->token}/crm.contact.update", [
+            'query' => [
+                "ID" => $contactId,
+                'fields' => [
+                    "POST" => $position,
+                    ]
+            ]
+        ])
+        ->getBody()
+        ->getContents();
 
         $result = json_decode($response, true);
 

@@ -32,7 +32,7 @@
         </tr>
         <tr>
           <td align="center">
-            <a target="_blank" style="border: none; outline: none; background: #d34a44; color: white; padding: 13px 25px; font-size: 1rem; font-weight: bold; border-radius: 5px; letter-spacing: 0.06rem; cursor: pointer; text-decoration: none;" href="https://bestleasing.com.ua/ua/">Доступ до кабiнету</a>
+            <a target="_blank" style="border: none; outline: none; background: #d34a44; color: white; padding: 13px 25px; font-size: 1rem; font-weight: bold; border-radius: 5px; letter-spacing: 0.06rem; cursor: pointer; text-decoration: none;" href="agent.bestleasing.com.ua">Доступ до кабiнету</a>
           </td>
         </tr>
         <tr>

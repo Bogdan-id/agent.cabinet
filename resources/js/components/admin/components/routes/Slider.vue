@@ -578,6 +578,7 @@ export default {
         })
     },
     activateEditMode(slideData, key, deleteMode, id) {
+      this.$v.$reset()
       if(deleteMode) {
         this.deleteKey = id
         this.dialogToDelete = true

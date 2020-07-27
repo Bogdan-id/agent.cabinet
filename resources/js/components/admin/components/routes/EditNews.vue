@@ -219,6 +219,7 @@
       },
       submit() {
         console.log(this.finalObj())
+        console.log(this.$v)
         !this.$v.$invalid
           ? this.sendRequest()
           : this.highlightErrors()
@@ -324,9 +325,7 @@
 
         let index = material['news_title_image'].lastIndexOf("/") + 1
         this.imageToDelete = material['news_title_image'].substr(index)
-        console.log(this.imageToDelete)
-
-        this.materialImg = material.newsTitleImage
+        this.materialImg = material['news_title_image'].substr(index)
       }
     }
   }

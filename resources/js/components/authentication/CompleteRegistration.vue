@@ -11,7 +11,7 @@
 <v-container class="fill-height pa-11" fluid style="overflow-x: scroll;">
   <v-row align="center" justify="center">
     <v-col cols="12" sm="11" md="8" lg="6" xl="4">
-      <v-card class="elevation-9 form-card" flat min-width="620">
+      <v-card class="elevation-9 form-card" flat>
         <div class="complete-reg-form__title title">
           <div class="complete-reg-form__title-logo"></div>
           <span class="d-block headline">Заповніть особові дані:</span>

@@ -551,32 +551,35 @@ export default {
     submit() {
       let object = {}
       for (let val in this.finalObj()) {
-        if(this.finalObj()[val]) {
+        if(val === 'patronymic' || val === 'birth') {
+          object[val] = this.finalObj()[val]
+        } else if (this.finalObj()[val]) {
           object[val] = this.finalObj()[val]
         }
       }
-      if(this.dataValid) {
-        this.request = true
-        axios.post(`/agent/create`, object)
-          .then((response) => {
-            if(response.status === 200) {
-              const message = 'Зараз вас буде перенаправлено до остобистого кабiнету'
-              this.simpleNotify('Успiшно', message, 'success')
-              setTimeout(() => { this.$router.go() }, 5000)
-              this.request = false
-            } else {
-              const message = `Не вдалося зареєструвати. Оновiть сторінку і 
-                спробуйте знову, або повторiть - завершення реєстрації через кілька хвилин`
-              this.simpleNotify('Помилка', message, 'warning')
-              this.request = false
-            }
-          })
-          .catch(error => {
-            console.log(error.response)
-            this.simpleNotify('Помилка', error.response.statusText, 'warning')
-            this.request = false
-          })
-      }
+      console.log(object)
+      // if(this.dataValid) {
+      //   this.request = true
+      //   axios.post(`/agent/create`, object)
+      //     .then((response) => {
+      //       if(response.status === 200) {
+      //         const message = 'Зараз вас буде перенаправлено до остобистого кабiнету'
+      //         this.simpleNotify('Успiшно', message, 'success')
+      //         setTimeout(() => { this.$router.go() }, 5000)
+      //         this.request = false
+      //       } else {
+      //         const message = `Не вдалося зареєструвати. Оновiть сторінку і 
+      //           спробуйте знову, або повторiть - завершення реєстрації через кілька хвилин`
+      //         this.simpleNotify('Помилка', message, 'warning')
+      //         this.request = false
+      //       }
+      //     })
+      //     .catch(error => {
+      //       console.log(error.response)
+      //       this.simpleNotify('Помилка', error.response.statusText, 'warning')
+      //       this.request = false
+      //     })
+      // }
     },
     finalObj() {
       return {

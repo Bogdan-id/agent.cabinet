@@ -692,6 +692,7 @@ export default {
     selectedGraph: null,
 
     docs: [],
+    resultDataGraphs: null,
 
     listItem: null,
 
@@ -1084,6 +1085,7 @@ export default {
       this.docs = []
       // this.creditPayment = null,
       this.selectedGraph = null,
+      this.resultDataGraphs = null,
       this.documentUrls = {},
       this.lastName = null,
       this.firstName = null,
@@ -1173,6 +1175,15 @@ export default {
     },
     openForm(id) {
       this.graphType = this.getGraphById(id)[0]
+      this.resultDataGraphs = Object.keys(this.graphType.result_data)
+        .filter(val => {
+          if(val !== 'requestId') {
+            return this.graphType.result_data[val]
+          }
+        })
+      if(this.resultDataGraphs && this.resultDataGraphs.length === 1) {
+          this.selectedGraph = this.resultDataGraphs[0]
+      }
       this.getDefaultProperties()
       this.leasingApplicationForm = true
     },

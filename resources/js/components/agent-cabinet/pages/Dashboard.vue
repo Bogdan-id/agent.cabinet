@@ -63,6 +63,8 @@
         id="dashboard-carousel"
         hide-delimiter-background
         :interval="7000"
+        :show-arrows="slides && slides.length > 1"
+        :hide-delimiters="slides && slides.length === 1"
         show-arrows-on-hover>
         <v-carousel-item
           v-for="(item, key) in slides"
@@ -595,7 +597,7 @@ export default {
     justify-content: space-around;
     .news-card {
       width: 320px!important; 
-      margin: 0 25px 15px 0
+      margin: 10px 0;
     }
   }
 }

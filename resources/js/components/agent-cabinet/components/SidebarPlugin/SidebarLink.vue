@@ -1,17 +1,32 @@
 <template>
   <!-- @click addRouteToLocalStorage() -->
-  <component :is="tag"
-             @click.native="hideSidebar"
-             class="nav-item"
-             v-bind="$attrs"
-             tag="li">
-    <a class="nav-link">
+  <component 
+    :is="tag"
+    @click.native="hideSidebar"
+    class="nav-item"
+    v-bind="$attrs"
+    tag="li">
+    <a v-if="!$vuetify.breakpoint.smAndDown" class="nav-link">
       <slot>
         <component :is="icon"></component>
-        <!-- <i v-if="icon" :class="icon"></i> -->
-        <p class="nav-item-title">{{name}}</p>
+        <p class="nav-item-title">
+          {{name}}
+        </p>
       </slot>
     </a>
+    <v-tooltip v-if="$vuetify.breakpoint.smAndDown" right color="grey darken-4">
+      <template v-slot:activator="{ on }">
+        <a v-on="on" class="nav-link">
+          <slot>
+            <component :is="icon"></component>
+            <p class="nav-item-title">
+              {{name}}
+            </p>
+          </slot>
+        </a>
+      </template>
+      <span>{{ name }}</span>
+    </v-tooltip>
   </component>
 </template>
 <script>
@@ -105,4 +120,43 @@ export default {
 };
 </script>
 <style>
+.dashboard-link-tooltip {
+  /* position: relative; */
+  /* display: inline-block; */
+  overflow: auto;
+  z-index: 1000;
+}
+
+.dashboard-link-tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 300;
+  /* bottom: 125%; */
+  left: 50%;
+  margin-left: 30px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.dashboard-link-tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.dashboard-link-tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
 </style>

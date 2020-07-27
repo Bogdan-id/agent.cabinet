@@ -13,7 +13,7 @@
           </v-card-title>
           <v-card-text>
             <v-row>
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pt-0 pb-1">
                 <v-text-field
                   v-model="user.last_name"
                   :error-messages="last_nameErr"
@@ -23,7 +23,7 @@
                   dense>
                 </v-text-field>
               </div>
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pt-0 pb-1">
                 <v-text-field
                   v-model="user.first_name"
                   :error-messages="first_nameErr"
@@ -32,7 +32,7 @@
                   dense>
                 </v-text-field>
               </div>
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pt-0 pb-1">
                 <!-- @input="$v.user.patronymic.$touch()"
                   @blur="$v.user.patronymic.$touch()"
                   :error-messages="patronymicErr" -->
@@ -259,7 +259,7 @@
           </v-card-title>
           <v-card-text>
             <div class="row">
-              <div class="col-md-3 pt-0 pb-0">
+              <div class="col-md-3 pt-0 pb-1">
                 <v-text-field
                   v-model="ab_size"
                   label="Розмiр АВ"
@@ -268,7 +268,7 @@
                   dense readonly>
                 </v-text-field>
               </div>
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pt-0 pb-1">
                 <!-- :error-messages="purpose_of_paymentErr"
                   @input="$v.user.purpose_of_payment.$touch()"
                   @blur="$v.user.purpose_of_payment.$touch()" -->
@@ -278,7 +278,7 @@
                   dense>
                 </v-text-field>
               </div>
-              <div class="col-md-4 pt-0 pb-0">
+              <div class="col-md-4 pt-0 pb-1">
                 <v-text-field
                   v-if="manager !== null"
                   v-model="manager.name"
@@ -295,7 +295,7 @@
             color="red darken-1"
             style="color: white;"
             :loading="loading"
-            :disabled="profileHasNoChanges"
+            :disabled="JSON.stringify(this.user) === JSON.stringify(this.userBackUp)"
             @click="updateProfile()">
             Оновити профіль
           </v-btn>
@@ -432,6 +432,9 @@ export default {
       this.user.passport_number = null
     },
     updateProfile() {
+      console.log(JSON.stringify(this.user))
+      console.log(JSON.stringify(this.userBackUp))
+      console.log(JSON.stringify(this.user) === JSON.stringify(this.userBackUp))
       !this.$v.$invalid
         ? this.sendRequest()
         : this.highlightErrors()
@@ -564,9 +567,6 @@ export default {
     }
   },
   computed: {
-    profileHasNoChanges() {
-      return JSON.stringify(this.user) === JSON.stringify(this.userBackUp)
-    },
     last_nameErr() {
       const errors = []
 			if (!this.$v.user.last_name.$error) return errors

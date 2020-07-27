@@ -302,7 +302,9 @@
         axios
           .post('/admin/image/upload', formData, {
               headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'X-CSRF-TOKEN': 'CSFR-Token',
+                Authorization: this.getCsrf()
               }
           })
           .then(response => {
@@ -329,10 +331,11 @@
       }
     },
     mounted() {
+      this.assignTokenToCkEditorConfig()
       this.categories = this.$route.params.categories
-      console.log(this.$route.params.material)
     },
     created() {
+      this.editorConfig
       let material = this.$route.params.material
       if(this.$route.params.edit === true) {
         this.editorData = material.content,

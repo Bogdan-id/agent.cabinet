@@ -20,7 +20,7 @@ class AgentsController extends Controller
 {
     public function __construct(BitrixClient $bitrixClient)
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
         $this->bitrixClient = $bitrixClient;
     }
 
@@ -52,6 +52,9 @@ class AgentsController extends Controller
                 'name' => $agent->first_name,
                 'last_name' => $agent->last_name,
                 'second_name' => $agent->patronymic,
+                'phone' => $agent->user->phone,
+                'birth' => $agent->birth,
+                'email' => $agent->user->email,
             ]);
             
             if($agent->company_type == 'dealer')
@@ -60,11 +63,28 @@ class AgentsController extends Controller
                     'company_name' => $agent->company_name
                 ]);
                 $this->bitrixClient->setContactCompany($contact, $company);
+                $this->bitrixClient->setContactPosition($contact, $agent->position);
             }
         }
        $agent->bitrix_id = $contact;
        $agent->save();
-       
+    //    if($agent->card_number && $agent->iban)
+    //    {
+    //        $dd = $this->bitrixClient->setContactRequisite($contact, [
+    //            'fio' => $agent->name,
+    //            'first_name' => $agent->first_name,
+    //            'last_name' => $agent->last_name,
+    //            'email' =>  $agent->user->email,
+    //            'phone' => $agent->user->phone,
+    //         //    'doc_type' => $agent->name,
+    //         //    'doc_serie' => $agent->name,
+    //         //    'doc_number' => $agent->name,
+    //            'inn' => $agent->inn,
+    //            'iban' => $agent->iban,
+    //        ]);
+    //    }
+    //    dd($dd);
+
         return response()->json([
             'status' => 200
         ]);

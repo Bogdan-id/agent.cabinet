@@ -107,6 +107,7 @@ class AgentsController extends Controller
             {
                 $passportExists = Passport::where('agent_id', '=', $agent->id)->first();
                 if(!$passportExists){
+                    $passport = new Passport;
                     $passport->agent_id = $agent->id;
                     $passport->serie = $data['passport_serie'];
                     $passport->passport_number = $data['passport_number'];
@@ -120,7 +121,8 @@ class AgentsController extends Controller
             }else{
                 $idCardExists = IdCard::where('agent_id', '=', $agent->id)->first();
                 if(!$idCardExists){
-                $idCard->agent_id = $agent ->id;
+                $idCard = new IdCard;
+                $idCard->agent_id = $agent->id;
                 $idCard->unzr_number = $data['passport_serie'];
                 $idCard->id_card_number = $data['passport_number'];
                 $idCard->save();

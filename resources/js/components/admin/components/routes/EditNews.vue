@@ -31,7 +31,7 @@
               v-model="materialImg"
               :error-messages="materialImgErr"
               :rules="rules"
-              accept="image/png, image/jpeg, image/bmp"
+              accept="image/x-png, image/gif, image/jpeg, image/jpg, image/svg+xml"
               prepend-inner-icon="mdi-camera"
               label="Зображення до матерiалу"
               outlined show-size dense>
@@ -146,7 +146,7 @@
         },
         image: {
           upload: {
-            types: ['jpeg', 'png', 'gif', 'bmp', 'webp', 'tiff']
+            types: ['jpeg', 'png', 'gif', 'jpg', 'svg']
           },
           toolbar: [ 'imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight' ],
           styles: [
@@ -171,7 +171,7 @@
       ],
       loading: false,
 
-      editorData: '',
+      editorData: 'Контент',
       materialName: null,
 
       materialImg: null,
@@ -268,13 +268,23 @@
       },
       previewImage(event) { 
         if(event) {
-          console.log(event)
-          const reader = new FileReader()
-          reader.readAsDataURL(event)
-          reader.onload = (data) => {
-            this.materialImgPreview = data.currentTarget.result
+          if(event.size > 2000000) {
+            this.materialImg = null
+            this.$notify({
+              group: 'error',
+              title: 'Помилка',
+              text: `Розмiр зображення не повинен перевищувати 2 mb`,
+            })
+            return
+          } else {
+            this.imageName = event.name
+            const reader = new FileReader()
+            reader.readAsDataURL(event)
+            reader.onload = (data) => {
+              this.materialImgPreview = data.currentTarget.result
+            }
+            this.uploadTitleImage(event)
           }
-          this.uploadTitleImage(event)
         } else {
           this.materialImgPreview = null
         }

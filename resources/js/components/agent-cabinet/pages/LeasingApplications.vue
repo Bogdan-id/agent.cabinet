@@ -326,7 +326,7 @@
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn 
-                  v-if="item.status_id == 5"
+                  v-if="item.status_id == 5 && $store.state.userHasNeccessaryFields || item.status_id == 5 && !$store.state.userHasNeccessaryFields"
                   @click="showDialogToAgentReward(item)"
                   v-on="on"
                   icon>
@@ -343,8 +343,9 @@
                   mdi-sack-percent
                 </v-icon>
               </template>
-              <span v-if="item.status_id == 5">Подати заявку на виплату АВ</span>
+              <span v-if="item.status_id == 5 && $store.state.userHasNeccessaryFields">Подати заявку на виплату АВ</span>
               <span v-if="item.status_id != 5">Ви не можете подати заявку на винагороду з даним статусом заявки на лізинг</span>
+              <span v-if="item.status_id == 5 && !$store.state.userHasNeccessaryFields">Для отримання АВ необхiдно заповнити всi данi профiлю</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
@@ -494,9 +495,11 @@ export default {
     //   return url.substr(index)
     // },
     showDialogToAgentReward(item) {
-      this.requestIdToReward = item.id
-      this.agentIdToReward = item.agent_id
-      this.dialogToAgentReward = true
+      if(this.$store.state.userHasNeccessaryFields) {
+        this.requestIdToReward = item.id
+        this.agentIdToReward = item.agent_id
+        this.dialogToAgentReward = true
+      } else return
     },
     customSort(items) {
       console.log(items)

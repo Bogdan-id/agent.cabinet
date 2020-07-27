@@ -206,11 +206,11 @@
             <v-col cols="12" md="6" class="pt-0 pb-0">
               <v-text-field
                 v-model="phone"
-                @blur="isLegalPerson ? false : $v.phone.$touch()"
-                @input="isLegalPerson ? false : $v.phone.$touch();
+                @blur="$v.phone.$touch()"
+                @input="$v.phone.$touch();
                   applyMask()" 
                 id="number"
-                :error-messages="isLegalPerson ? legalPhone : phoneErr"
+                :error-messages="phoneErr"
                 label="Телефон"
                 dense outlined>
               </v-text-field>
@@ -218,9 +218,9 @@
             <v-col cols="12" md="6" class="pt-0 pb-0">
               <v-text-field
                 v-model="email"
-                @blur="isLegalPerson ? false : $v.email.$touch()"
-                @input="isLegalPerson ? false : $v.email.$touch()" 
-                :error-messages="isLegalPerson ? legalEmail : emailErr"
+                @blur="$v.email.$touch()"
+                @input="$v.email.$touch()" 
+                :error-messages="emailErr"
                 label="email"
                 dense outlined>
               </v-text-field>
@@ -748,10 +748,10 @@ export default {
       return !this.$v.$invalid
     },
     validationRules() {
-      let validateObj = null
-      this.formatToSave == 'email'
+      let validateObj = {}
+      this.formatToSave === 'email'
         ? validateObj = {emailToSend: { email, required }}
-        : validateObj = {}
+        : false
       this.clientTypeId === 1 && this.leasingApplicationForm
         ? validateObj = Object.assign({},
           this.commonRules,
@@ -762,7 +762,7 @@ export default {
             this.commonRules,
             this.legalPerson
           )
-          : validateObj = {}
+          : false
       return validateObj 
     },
     commonRules() {
@@ -771,19 +771,20 @@ export default {
         lastName: { required },
         firstName: { required },
         patronymic: { required },
+        phone: { 
+          minLength: value => {
+            if(value == null) return false
+            return value.replace(/[^\d]/g, '').length === 12
+          },
+          required
+        },
+        email: { email, required },
         // region: { required },
         // creditPayment: { required },
       }
     },
     individualPerson() {
       return {
-        phone: { 
-          minLength: value => {
-            if(value == null) return false
-            return value.replace(/[^\d]/g, '').length === 12
-          }
-        },
-        email: { email, required },
         legalInfo: {
           inn: { 
             minLength: value => {

@@ -551,11 +551,10 @@ export default {
     submit() {
       let object = {}
       for (let val in this.finalObj()) {
-        if(this.finalObj()[val] !== null) {
+        if(this.finalObj()[val]) {
           object[val] = this.finalObj()[val]
         }
       }
-      console.log(object)
       if(this.dataValid) {
         this.request = true
         axios.post(`/agent/create`, object)
@@ -638,14 +637,14 @@ export default {
       }
     },
     getCurrentUser() {
-      axios.get('/getCurrentUser').then(({data}) => {
-        console.log({data})
-        Object.assign(this.knownUserData, data)
+      axios.get('/getCurrentUser').then(response => {
+        this.knownUserData.first_name = response.data.name
+        Object.assign(this.knownUserData, response.data)
         this.searchContact()
       })
-      .catch(e => {
-        console.log(e.response)
-        if(e.response.status == 401) {
+      .catch(error => {
+        console.log(error.response)
+        if(error.response.status == 401) {
           this.$router.push({ name: 'authorization', params: { reload: true }})
         }
       })
@@ -666,7 +665,6 @@ export default {
       axios
         .post(`/agent/searchContact`, obj)
         .then(response => {
-          console.log(response)
           if(Object.keys(response.data > 0)) {
             if(response.data.company && response.data.company.company_type) {
               if(response.data.company.company_type == 1) {
@@ -682,9 +680,6 @@ export default {
             this.patronymic = response.data.contact && response.data.contact.patronymic ? response.data.contact.patronymic : null
             this.position = response.data.contact && response.data.contact.post ? response.data.contact.post : null
             this.companyName = response.data.company && response.data.company.company_name ? response.data.company.company_name : null
-            console.log('*************')
-            console.log(this.knownUserData)
-            console.log('*************')
           }
         })
         .catch(error => {

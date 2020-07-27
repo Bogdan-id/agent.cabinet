@@ -1,6 +1,6 @@
 <template>
     <div class="row user-profile">
-      <div class="col-12" v-if="hasUser">
+      <div class="col-12 pt-0" v-if="hasUser">
         <edit-profile-form />
       </div>
     </div>

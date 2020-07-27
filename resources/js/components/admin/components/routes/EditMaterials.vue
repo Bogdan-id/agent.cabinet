@@ -182,7 +182,7 @@
       categories: [],
       loading: false,
 
-      editorData: '',
+      editorData: 'Контент',
       materialName: null,
 
       materialImg: null,
@@ -234,8 +234,7 @@
       },
       submit() {
         console.log(this.finalObj())
-        this.$v.$dirty
-        && !this.$v.$invalid
+        !this.$v.$invalid
           ? this.sendRequest()
           : this.highlightErrors()
       },

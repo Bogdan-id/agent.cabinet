@@ -62,7 +62,7 @@
         <v-card-text 
           v-if="agentCommisions.length === 0 && !$store.state.adminLoader"
           class="d-flex justify-center"
-          style="font-size: 1.3rem; padding-top: 85px;">
+          style="font-size: 1.3rem; padding-top: 85px; text-align: center;">
           (Iсторiя заявок на винагороду порожня)
         </v-card-text>
       </v-card-text>

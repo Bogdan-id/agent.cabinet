@@ -63,6 +63,8 @@
         id="dashboard-carousel"
         hide-delimiter-background
         :interval="7000"
+        :show-arrows="slides && slides.length > 1"
+        :hide-delimiters="slides && slides.length === 1"
         show-arrows-on-hover>
         <v-carousel-item
           v-for="(item, key) in slides"

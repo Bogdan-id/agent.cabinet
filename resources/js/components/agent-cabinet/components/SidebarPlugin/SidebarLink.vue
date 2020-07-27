@@ -6,7 +6,7 @@
     class="nav-item"
     v-bind="$attrs"
     tag="li">
-    <a v-if="!$vuetify.breakpoint.smAndDown" v-on="on" class="nav-link">
+    <a v-if="!$vuetify.breakpoint.smAndDown" class="nav-link">
       <slot>
         <component :is="icon"></component>
         <p class="nav-item-title">

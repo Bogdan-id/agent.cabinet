@@ -462,7 +462,7 @@
       Калькулятор лiзингу
     </v-card-text>
     <v-card-title
-      class="calculator-custom-title pb-0 pt-7"
+      :class="`calculator-custom-title pb-0 pt-7 ${$vuetify.breakpoint.xs ? 'd-flex justify-center' : ''}`"
       :style="`transition: all 0.5s; opacity: ${!loading ? '1' : '0'}`">
         <v-btn
           to="/calculator/new"
@@ -470,8 +470,9 @@
           dark>
           Новий розрахунок
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-spacer v-if="!$vuetify.breakpoint.xs"></v-spacer>
         <v-text-field
+          v-if="!$vuetify.breakpoint.xs"
           v-show="tableDataPresent"
           color="black"
           v-model="search"

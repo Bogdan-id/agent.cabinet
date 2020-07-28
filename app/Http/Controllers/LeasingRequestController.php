@@ -28,6 +28,9 @@ class LeasingRequestController extends Controller
     public function create(LeasingRequestRequest $request)
     {
         $data = $request->validated();
+        // $lead = $this->bitrixClient->getLeadById(50668);
+        // dd($lead);
+        //dd(env('BITRIX_SOURCE_ID'));
         $leadId = $this->bitrixClient->createLead($data);
         $data['bitrix_id'] = $leadId;
         $leasingRequest = new LeasingRequest;
@@ -56,7 +59,7 @@ class LeasingRequestController extends Controller
         $path = $request->file('doc')->store('documents', 'public');
 
         return response()->json([
-            'url' => url("/storage/{$path}")
+            'url' => "/storage/{$path}"
         ]);
     }
 

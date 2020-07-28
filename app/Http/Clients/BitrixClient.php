@@ -558,4 +558,34 @@ class BitrixClient
 
         return $result['result'];
     }
+
+    public function updateContact($contactId, $attributes)
+    {
+        $response = $this->client
+        ->get("/rest/3/{$this->token}/crm.contact.update", [
+            'query' => [
+                'ID' => $contactId, 
+                'fields' => [
+                    "NAME" => $attributes['name'],
+                    "SECOND_NAME" => $attributes['second_name'],
+                    "LAST_NAME" => $attributes['last_name'],
+                    "BIRTHDATE" => $attributes['birth'],
+                    "PHONE" => [[
+                        "VALUE" => $attributes['phone'],
+                        "VALUE_TYPE" => "WORK"
+                    ]],
+                    "EMAIL" => [[
+                        "VALUE" => $attributes['email'],
+                        "VALUE_TYPE" => "WORK"
+                    ]]
+                ]
+            ]
+        ])
+        ->getBody()
+        ->getContents();
+
+        $result = json_decode($response, true);
+
+        return $result['result'];
+    }
 }

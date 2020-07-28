@@ -575,7 +575,7 @@
                 </span>
               </v-col>
             </v-row>
-            <v-col cols="12" v-if="calcObj.customGraphicType === 3" class="pt-0">
+            <v-col cols="12" v-show="calcObj.customGraphicType === 3" class="pt-0">
               <v-row style="display: flex; justify-content: space-around">
                 <v-col cols="12" md="6" sm="6"  class="pt-0 pb-0">
                   <span style="font-size: 1rem; color: #787878;">Параметри ступеневого графiку</span>
@@ -645,7 +645,7 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col cols="12" v-if="calcObj.customGraphicType === 5" class="pt-0">
+            <v-col cols="12" v-show="calcObj.customGraphicType === 5" class="pt-0">
               <v-row style="justify-content: center;">
                 <v-col cols="12" md="6" sm="6" class="pt-0 pb-0">
                   <span style="font-size: 1rem; color: #787878">Параметри унiверсального посилення</span>
@@ -892,6 +892,9 @@ export default {
     }
   },
   computed: {
+    customGraphicType() {
+      return this.calcObj.customGraphicType
+    },
     middleOfAdvanceRange() {
       return this.$vuetify.breakpoint.xs ? 4 : 7
     },
@@ -1207,8 +1210,9 @@ export default {
         leasingAmount: null,
         graphType: [],
         advance: 15,
-        leasingTerm: null,
+        leasingTerm: 12,
         customUniversalOption: null,
+        customGraphicType: 3,
 
         // new fields
         leasingRest: null,
@@ -1345,7 +1349,7 @@ export default {
       }
     },
     changeCustomGraph(id) {
-      this.calcObj.customGraphicType = id
+      this.$set(this.calcObj, 'customGraphicType', id)
     },
     closeSelect() {
       this.$refs.graphType.blur()
@@ -1466,11 +1470,10 @@ export default {
     },
     checkIfHasIrregular() {
       if(!this.hasIrregular) {
-        delete this.calcObj.customGraphicType
-        delete this.calcObj.customUniversalOption
-
-        delete this.calcObj.customStepOptionFirst
-        delete this.calcObj.customStepOptionMiddle
+        this.$delete(this.calcObj, 'customGraphicType')
+        this.$delete(this.calcObj, 'customUniversalOption')
+        this.$delete(this.calcObj, 'customStepOptionFirst')
+        this.$delete(this.calcObj, 'customStepOptionMiddle')
       }
     },
     sendRequest() {
@@ -1656,11 +1659,6 @@ export default {
         this.calcObj.customStepOptionMiddle = 33,
         this.calcObj.threeThirds = 34
         this.calcObj.customGraphicType = 3
-      } else {
-        delete this.calcObj.customUniversalOption
-        delete this.calcObj.customStepOptionFirst
-        delete this.calcObj.customStepOptionMiddle
-        delete this.calcObj.customGraphicType
       }
     },
     insuranceFranchise(value) {

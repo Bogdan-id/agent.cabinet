@@ -15,7 +15,7 @@
   <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'" style="position: relative">
     <span 
       :style="$vuetify.breakpoint.xs ? 'font-size: 0.86rem; width: 60%;' : ''" 
-      class="mobile-manager-title">
+      class="mobile-manager-title text-center">
       {{ 'Ваш менеджер' }}
     </span>
     <div v-if="loading" class="d-flex justify-center align-center">

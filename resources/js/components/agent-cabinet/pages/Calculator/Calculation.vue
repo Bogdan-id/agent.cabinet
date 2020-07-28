@@ -418,15 +418,15 @@
                 :disabled="advanceDisabled">
               <div class="advance-range-scale pt-6">
                 <div
-                  v-for="v in 14"
+                  v-for="v in advanceDevision"
                   :key="v"
-                  class="advance-range-wrapper">
+                  :class="`advance-range-wrapper ${$vuetify.breakpoint.xs ? 'small' : ''}`">
                   <span
                     class="advance-range-cell"
-                    :style="`color: ${calcObj.advance == ((v - 1) * 5) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.45rem' : '0.725rem'}`">
-                      {{ (v - 1) * 5 + '%' }}
+                    :style="`color: ${calcObj.advance == ((v - 1) * advanceRangeCell) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.87rem' : '0.725rem'}`">
+                      {{ (v - 1) * advanceRangeCell + '%' }}
                   </span>
-                  <div v-if="v === 7" style="position: absolute; top: -34px;">
+                  <div v-if="v === middleOfAdvanceRange" style="position: absolute; top: -34px;">
                     <div class="range-black-dot">
                       <advance-hint style="position: absolute; right: -61px; margin-right: 1px; color: black; transform: translateX(-50%)"></advance-hint>
                       <div class="arrow-directions-wrapper">
@@ -453,7 +453,7 @@
                   </div>
                 </div>
                 <div
-                  :style="`position: absolute; right: -9px; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.45rem' : '0.725rem'}`">
+                  :style="`position: absolute; right:${xs ? '-20px;' : '-19px;'} ; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.87rem' : '0.725rem'}`">
                   {{ `70%` }}
                 </div>
               </div>
@@ -514,9 +514,9 @@
                   color="red darken-4"
                   v-model="calcObj.leasingCurrency"
                   dense>
-                  <v-row class="pl-2" >
-                    <div style="display: flex;">
-                      <v-radio value="UAH" color="red darken-3" dense>
+                  <v-row class="pl-2" :style="`display: flex; ${$vuetify.breakpoint.width < 450 ? 'flex-direction: column;' : 'flex-direction: row;'}`">
+                    <div>
+                      <v-radio value="UAH" color="red darken-3" class="ml-3">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -575,7 +575,7 @@
                 </span>
               </v-col>
             </v-row>
-            <v-col cols="12" v-if="calcObj.customGraphicType === 3" class="pt-0">
+            <v-col cols="12" v-show="calcObj.customGraphicType === 3" class="pt-0">
               <v-row style="display: flex; justify-content: space-around">
                 <v-col cols="12" md="6" sm="6"  class="pt-0 pb-0">
                   <span style="font-size: 1rem; color: #787878;">Параметри ступеневого графiку</span>
@@ -645,7 +645,7 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col cols="12" v-if="calcObj.customGraphicType === 5" class="pt-0">
+            <v-col cols="12" v-show="calcObj.customGraphicType === 5" class="pt-0">
               <v-row style="justify-content: center;">
                 <v-col cols="12" md="6" sm="6" class="pt-0 pb-0">
                   <span style="font-size: 1rem; color: #787878">Параметри унiверсального посилення</span>
@@ -892,6 +892,18 @@ export default {
     }
   },
   computed: {
+    customGraphicType() {
+      return this.calcObj.customGraphicType
+    },
+    middleOfAdvanceRange() {
+      return this.$vuetify.breakpoint.xs ? 4 : 7
+    },
+    advanceDevision() {
+      return this.$vuetify.breakpoint.xs ? 7 : 14
+    },
+    advanceRangeCell() {
+      return this.$vuetify.breakpoint.xs ? 10 : 5
+    },
     leasingRestItems() {
       let arr = []
       let test = this.maxResidualValue / 10
@@ -1198,8 +1210,9 @@ export default {
         leasingAmount: null,
         graphType: [],
         advance: 15,
-        leasingTerm: null,
+        leasingTerm: 12,
         customUniversalOption: null,
+        customGraphicType: 3,
 
         // new fields
         leasingRest: null,
@@ -1215,7 +1228,6 @@ export default {
       this.initFranchiseInput()
     },
     changeActiveClass() {
-      console.log('ChangeActive triggered')
       let el = document.querySelectorAll('.leasing-type-block')
       el.forEach(val => {
         val.classList.remove('active')
@@ -1322,7 +1334,6 @@ export default {
         currentEl.dispatchEvent(inputEvent)
       }
       if(selector == 'stepGain-oneThird') {
-        console.log('OneThird')
         if(parseInt(currentEl.value) + parseInt(twoThirds.value) > 100) {
           twoThirds.value = 100 - currentEl.value
           twoThirds.dispatchEvent(inputEvent)
@@ -1330,7 +1341,6 @@ export default {
         return
       } 
       else if(selector == 'stepGain-twoThirds') {
-        console.log('TwoThird')
         if(parseInt(currentEl.value) + parseInt(oneThird.value) > 100) {
           oneThird.value = 100 - currentEl.value
           oneThird.dispatchEvent(inputEvent)
@@ -1339,7 +1349,7 @@ export default {
       }
     },
     changeCustomGraph(id) {
-      this.calcObj.customGraphicType = id
+      this.$set(this.calcObj, 'customGraphicType', id)
     },
     closeSelect() {
       this.$refs.graphType.blur()
@@ -1354,13 +1364,12 @@ export default {
     getMarksByType(event) {
       if(event) {
         this.resetForm()
-        this.calcObj.leasingObjectType = parseInt(event.target.value)
+        this.calcObj.leasingObjectType = parseInt(event.value)
       }
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.calcObj.leasingObjectType}`)
         .then(response => {
-          console.log(response)
           this.brandItems = response.data
           this.$store.commit('toggleSpinner', false)
         })
@@ -1382,7 +1391,6 @@ export default {
       }
       axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
-          console.log(response)
           this.modelItems = response.data
           this.modelLoader = false
           this.$store.commit('toggleSpinner', false)
@@ -1438,11 +1446,8 @@ export default {
         ? delete this.calcObj.leasingAmountDkp : false
       this.calcObj.stock === null 
         ? delete this.calcObj.stock : false
-        console.log(this.calcObj.customGraphicType)
-        console.log('this.hasIrregular && this.customGraphicType === 3', this.hasIrregular && this.calcObj.customGraphicType === 3)
       this.hasIrregular && this.calcObj.customGraphicType === 3
         ? delete this.calcObj.customUniversalOption : false
-        console.log('this.hasIrregular && this.customGraphicType === 5', this.hasIrregular && this.calcObj.customGraphicType === 5)
       this.hasIrregular && this.calcObj.customGraphicType === 5
         ? delete this.deleteStepData() : false
     },
@@ -1450,8 +1455,6 @@ export default {
       this.checkIfHasIrregular()
       this.checkIfHasCurrency()
       this.deleteUnneccessaryFields()
-      console.log(this.calcObj)
-      console.log(this.$v)
       this.highlightErrors()
       !this.$v.$invalid
       && this.$v.$dirty
@@ -1467,11 +1470,10 @@ export default {
     },
     checkIfHasIrregular() {
       if(!this.hasIrregular) {
-        delete this.calcObj.customGraphicType
-        delete this.calcObj.customUniversalOption
-
-        delete this.calcObj.customStepOptionFirst
-        delete this.calcObj.customStepOptionMiddle
+        this.$delete(this.calcObj, 'customGraphicType')
+        this.$delete(this.calcObj, 'customUniversalOption')
+        this.$delete(this.calcObj, 'customStepOptionFirst')
+        this.$delete(this.calcObj, 'customStepOptionMiddle')
       }
     },
     sendRequest() {
@@ -1479,14 +1481,12 @@ export default {
       axios
         .post('/calculate', this.calcObj)
           .then(response => {
-            console.log(response)
             this.$store.commit('toggleSpinner', false)
             // this.$router.push('/calculator/chart')
             let data = response.data
             this.$router.push({name: 'Графiки', params: {data: data}})
           })
           .catch(error => {
-            console.log(error.response)
             const message = error.response.statusText
             this.notify('Помилка', message, 'error')
             this.$store.commit('toggleSpinner', false)
@@ -1602,9 +1602,6 @@ export default {
 			this.updateElRange(elRange, elRange.value, dataSelector)
 		},
     setIndentation(value) {
-      console.log('*****')
-      console.log(value)
-      console.log('*****')
       if(value) {
         return parseInt(value.replace(/\s/g, '' ))
           .toLocaleString()
@@ -1613,17 +1610,12 @@ export default {
     },
     displayWindowSize() {
       this.windowInnerWidth = window.innerWidth
-      console.log(this.windowInnerWidth)
     },
     getUserCalculations() {
       axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
         this.calcObj.calculation_id = response.data.id
-        console.log('**********')
-        console.log(response.data)
-        console.log(this.calcObj.calculation_id, this.$router.currentRoute.params.id)
-        console.log('**********')
         let data = response.data.request_data
         let advance = response.data.request_data.advance
         let franchise = response.data.request_data.insuranceFranchise
@@ -1646,12 +1638,8 @@ export default {
         this.getMarksByType()
         this.getModelByMark()
         this.changeActiveClass()
-        console.log('****')
-        console.log(this.calcObj.customUniversalOption)
-        console.log('****')
       })
       .catch(error => {
-        console.log(error.response)
         this.$notify({
           group: 'error',
           title: 'Виникла помилка',
@@ -1665,22 +1653,15 @@ export default {
       this.calcObj.insuranceProgram = val.value
     },
     hasIrregular(val) {
-      console.log('hasIrregular triggered')
       if(val === true) {
         // this.calcObj.customUniversalOption = null
         this.calcObj.customStepOptionFirst = 33,
         this.calcObj.customStepOptionMiddle = 33,
         this.calcObj.threeThirds = 34
         this.calcObj.customGraphicType = 3
-      } else {
-        delete this.calcObj.customUniversalOption
-        delete this.calcObj.customStepOptionFirst
-        delete this.calcObj.customStepOptionMiddle
-        delete this.calcObj.customGraphicType
       }
     },
     insuranceFranchise(value) {
-      console.log('insuranceFranchise')
       switch(value) {
         case '0': return this.calcObj.insuranceFranchise = 1
         case '0.5': return this.calcObj.insuranceFranchise = 2
@@ -1695,8 +1676,6 @@ export default {
       }
     },
     'customStepOptionFirst': function(value) {
-      console.log('watch')
-      console.log(isNaN(parseInt(value)))
       if(isNaN(parseInt(value))) {
         this.calcObj.customStepOptionFirst = null
       } else { 
@@ -1711,13 +1690,10 @@ export default {
       }
     },
     'calcObj.customUniversalOption': function(value) {
-      console.log('customUniversalOption watcher', value)
       if(!value) return
       this.calcObj.customUniversalOption = parseInt(value)
     },
     computedThreeThirds(val) {
-      console.log('watcher-computed three thirds')
-      console.log(val)
       this.threeThirds = val
     },
     'calcObj.leasingTerm': function (value) {
@@ -1752,13 +1728,11 @@ export default {
       } else return
     },
     smallerThenMedium(state) {
-      console.log('smaller than medium triggered')
       if(state === false)  {
         this.changeActiveClass()
       } else return
     },
     mediumAndDown() {
-      console.log('medium and down triggerd')
       this.changeActiveClass()
     },
     user() {
@@ -1837,6 +1811,9 @@ export default {
     .advance-range-wrapper {
       // width: 7%;
       width: 7.1%;
+      &.small {
+        width: 14.2%
+      }
       height: 10px;
       color: #969599;
       position: relative;
@@ -1990,7 +1967,7 @@ export default {
         font-size: 1.28rem!important;
         font-weight: bold;
         &.v-label--active {
-          top: -3px!important;
+          top: 0!important;
           color: white!important;
         }
       }
@@ -2016,7 +1993,7 @@ export default {
       }
       .v-select__slot, .v-text-field__slot {
         label {
-          font-size: 1.05rem!important;
+          font-size: 0.95rem!important;
         }
       }
     }

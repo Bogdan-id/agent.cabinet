@@ -455,10 +455,10 @@
     </v-card>
   </v-dialog>
   <v-card class="pb-4" min-height="300" elevation="12">
-    <v-card-title class="d-block grey darken-3 white--text">
+    <v-card-text class="d-block grey darken-3 white--text" style="font-size: 1.25rem">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-calculator-variant'"></v-icon>
       Калькулятор лiзингу
-    </v-card-title>
+    </v-card-text>
     <v-card-title
       class="calculator-custom-title pb-0 pt-7"
       :style="`transition: all 0.5s; opacity: ${!loading ? '1' : '0'}`">
@@ -490,16 +490,16 @@
     <v-card-text
       v-if="!loading && !tableDataPresent"
       absolute
-      style="font-size: 1.3rem; padding-top: 25px;"
-      class="d-block text-center">
+      style="font-size: 1.25rem; padding-top: 25px;"
+      class="text-center">
       (Iсторiя розрахункiв порожня)
     </v-card-text>
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">
-      <v-card-title class="headline black--text d-block text-center mb-8 mt-3 ">
+      <v-card-text style="font-size: 1.25rem" class="headline black--text d-block text-center mb-8 mt-3 ">
         Iсторiя розрахункiв
-      </v-card-title>
+      </v-card-text>
       <v-data-table
         :search="search"
         color="black"
@@ -507,7 +507,7 @@
         :items="tabledata"
         :items-per-page="10"
         :custom-sort="customSort"
-        class="elevation-1">
+        :class="`elevation-1 ${$vuetify.breakpoint.xs ? 'leasing-calculator-data small' : 'leasing-calculator-data'}`">
         <template v-slot:item.sendGraph>
           <span style="white-space: nowrap">{{ $store.state.user.agent.ab_size }}</span>
         </template>
@@ -1434,6 +1434,19 @@ export default {
 </script>
 
 <style lang="scss">
+  .leasing-calculator-data {
+    &.small {
+      td {
+        min-height: 23px;
+      }
+      td:last-child {
+        margin-bottom: 20px!important;
+      }
+      .v-data-footer__select {
+        font-size: 0.67rem!important;
+      }
+    }
+  }
   .email-to-send {
     .v-text-field__details {
       margin-bottom: 0!important;

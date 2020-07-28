@@ -1224,7 +1224,6 @@ export default {
       this.initFranchiseInput()
     },
     changeActiveClass() {
-      console.log('ChangeActive triggered')
       let el = document.querySelectorAll('.leasing-type-block')
       el.forEach(val => {
         val.classList.remove('active')
@@ -1331,7 +1330,6 @@ export default {
         currentEl.dispatchEvent(inputEvent)
       }
       if(selector == 'stepGain-oneThird') {
-        console.log('OneThird')
         if(parseInt(currentEl.value) + parseInt(twoThirds.value) > 100) {
           twoThirds.value = 100 - currentEl.value
           twoThirds.dispatchEvent(inputEvent)
@@ -1339,7 +1337,6 @@ export default {
         return
       } 
       else if(selector == 'stepGain-twoThirds') {
-        console.log('TwoThird')
         if(parseInt(currentEl.value) + parseInt(oneThird.value) > 100) {
           oneThird.value = 100 - currentEl.value
           oneThird.dispatchEvent(inputEvent)
@@ -1363,13 +1360,12 @@ export default {
     getMarksByType(event) {
       if(event) {
         this.resetForm()
-        this.calcObj.leasingObjectType = parseInt(event.target.value)
+        this.calcObj.leasingObjectType = parseInt(event.value)
       }
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.calcObj.leasingObjectType}`)
         .then(response => {
-          console.log(response)
           this.brandItems = response.data
           this.$store.commit('toggleSpinner', false)
         })
@@ -1391,7 +1387,6 @@ export default {
       }
       axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
-          console.log(response)
           this.modelItems = response.data
           this.modelLoader = false
           this.$store.commit('toggleSpinner', false)
@@ -1447,11 +1442,8 @@ export default {
         ? delete this.calcObj.leasingAmountDkp : false
       this.calcObj.stock === null 
         ? delete this.calcObj.stock : false
-        console.log(this.calcObj.customGraphicType)
-        console.log('this.hasIrregular && this.customGraphicType === 3', this.hasIrregular && this.calcObj.customGraphicType === 3)
       this.hasIrregular && this.calcObj.customGraphicType === 3
         ? delete this.calcObj.customUniversalOption : false
-        console.log('this.hasIrregular && this.customGraphicType === 5', this.hasIrregular && this.calcObj.customGraphicType === 5)
       this.hasIrregular && this.calcObj.customGraphicType === 5
         ? delete this.deleteStepData() : false
     },
@@ -1459,8 +1451,6 @@ export default {
       this.checkIfHasIrregular()
       this.checkIfHasCurrency()
       this.deleteUnneccessaryFields()
-      console.log(this.calcObj)
-      console.log(this.$v)
       this.highlightErrors()
       !this.$v.$invalid
       && this.$v.$dirty
@@ -1488,14 +1478,12 @@ export default {
       axios
         .post('/calculate', this.calcObj)
           .then(response => {
-            console.log(response)
             this.$store.commit('toggleSpinner', false)
             // this.$router.push('/calculator/chart')
             let data = response.data
             this.$router.push({name: 'Графiки', params: {data: data}})
           })
           .catch(error => {
-            console.log(error.response)
             const message = error.response.statusText
             this.notify('Помилка', message, 'error')
             this.$store.commit('toggleSpinner', false)
@@ -1611,9 +1599,6 @@ export default {
 			this.updateElRange(elRange, elRange.value, dataSelector)
 		},
     setIndentation(value) {
-      console.log('*****')
-      console.log(value)
-      console.log('*****')
       if(value) {
         return parseInt(value.replace(/\s/g, '' ))
           .toLocaleString()
@@ -1622,17 +1607,12 @@ export default {
     },
     displayWindowSize() {
       this.windowInnerWidth = window.innerWidth
-      console.log(this.windowInnerWidth)
     },
     getUserCalculations() {
       axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
         this.calcObj.calculation_id = response.data.id
-        console.log('**********')
-        console.log(response.data)
-        console.log(this.calcObj.calculation_id, this.$router.currentRoute.params.id)
-        console.log('**********')
         let data = response.data.request_data
         let advance = response.data.request_data.advance
         let franchise = response.data.request_data.insuranceFranchise
@@ -1655,12 +1635,8 @@ export default {
         this.getMarksByType()
         this.getModelByMark()
         this.changeActiveClass()
-        console.log('****')
-        console.log(this.calcObj.customUniversalOption)
-        console.log('****')
       })
       .catch(error => {
-        console.log(error.response)
         this.$notify({
           group: 'error',
           title: 'Виникла помилка',
@@ -1674,7 +1650,6 @@ export default {
       this.calcObj.insuranceProgram = val.value
     },
     hasIrregular(val) {
-      console.log('hasIrregular triggered')
       if(val === true) {
         // this.calcObj.customUniversalOption = null
         this.calcObj.customStepOptionFirst = 33,
@@ -1689,7 +1664,6 @@ export default {
       }
     },
     insuranceFranchise(value) {
-      console.log('insuranceFranchise')
       switch(value) {
         case '0': return this.calcObj.insuranceFranchise = 1
         case '0.5': return this.calcObj.insuranceFranchise = 2
@@ -1704,8 +1678,6 @@ export default {
       }
     },
     'customStepOptionFirst': function(value) {
-      console.log('watch')
-      console.log(isNaN(parseInt(value)))
       if(isNaN(parseInt(value))) {
         this.calcObj.customStepOptionFirst = null
       } else { 
@@ -1720,13 +1692,10 @@ export default {
       }
     },
     'calcObj.customUniversalOption': function(value) {
-      console.log('customUniversalOption watcher', value)
       if(!value) return
       this.calcObj.customUniversalOption = parseInt(value)
     },
     computedThreeThirds(val) {
-      console.log('watcher-computed three thirds')
-      console.log(val)
       this.threeThirds = val
     },
     'calcObj.leasingTerm': function (value) {
@@ -1761,13 +1730,11 @@ export default {
       } else return
     },
     smallerThenMedium(state) {
-      console.log('smaller than medium triggered')
       if(state === false)  {
         this.changeActiveClass()
       } else return
     },
     mediumAndDown() {
-      console.log('medium and down triggerd')
       this.changeActiveClass()
     },
     user() {
@@ -1782,9 +1749,6 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
-    console.log('Breakpoint')
-    console.log(this.$vuetify.breakpoint.width)
-    console.log('Breakpoint')
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
     } else {

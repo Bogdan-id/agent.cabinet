@@ -59,7 +59,7 @@ class LeasingRequestController extends Controller
         $path = $request->file('doc')->store('documents', 'public');
 
         return response()->json([
-            'url' => "/storage/{$path}"
+            'url' => "storage/{$path}"
         ]);
     }
 

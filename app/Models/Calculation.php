@@ -16,6 +16,7 @@ class Calculation extends Model
         'request_id', 
         'result_data', 
         'request_data',
+        'full_request_data',
     ];
 
 
@@ -31,6 +32,7 @@ class Calculation extends Model
     protected $casts = [
         'request_data' => 'array',
         'result_data' => 'array',
+        'full_request_data' => 'array',
     ];
 
     public function leasingRequest()

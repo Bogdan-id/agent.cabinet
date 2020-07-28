@@ -219,7 +219,7 @@ class BitrixClient
                 $fields['UF_CRM_5DA81503ED89A'] = '14625'; //Физ.лицо
                 $fields['UF_CRM_1556029098'] = $leasingRequest['legal_info']['inn'];
 
-                if($leasingRequest['documents'] && array_key_exists('passport', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest) && array_key_exists('passport', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935183'] = [
                         'fileData' => [
                             $leasingRequest['documents']['passport']['text'],
@@ -227,7 +227,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('relatives_passport', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('relatives_passport', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935252'] = [
                         'fileData' => [
                             $leasingRequest['documents']['relatives_passport']['text'],
@@ -235,7 +235,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('salary_certificate', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('salary_certificate', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935225'] = [
                         'fileData' => [
                             $leasingRequest['documents']['salary_certificate']['text'],
@@ -243,7 +243,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('taxNumber', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('taxNumber', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935204'] = [
                         'fileData' => [
                             $leasingRequest['documents']['taxNumber']['text'],
@@ -257,7 +257,7 @@ class BitrixClient
                 $fields['UF_CRM_5DA81503ED89A'] = '14627'; // Юр.лицо
                 $fields['UF_CRM_1556029073'] = $leasingRequest['legal_info']['edrpou'];
                 $fields['COMPANY_TITLE'] = $leasingRequest['legal_info']['company_name'];
-                if($leasingRequest['documents'] && array_key_exists('state_registration_certificate', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('state_registration_certificate', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595934958'] = [
                         'fileData' => [
                             $leasingRequest['documents']['state_registration_certificate']['text'],
@@ -265,7 +265,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('regulations', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('regulations', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935019'] = [
                         'fileData' => [
                             $leasingRequest['documents']['regulations']['text'],
@@ -273,7 +273,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('balance', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('balance', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935041'] = [
                         'fileData' => [
                             $leasingRequest['documents']['balance']['text'],
@@ -281,7 +281,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('protocol', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('protocol', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935067'] = [
                         'fileData' => [
                             $leasingRequest['documents']['protocol']['text'],
@@ -289,7 +289,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('order', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('order', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935092'] = [
                         'fileData' => [
                             $leasingRequest['documents']['order']['text'],
@@ -297,7 +297,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('passport', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('passport', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935137'] = [
                         'fileData' => [
                             $leasingRequest['documents']['passport']['text'],
@@ -305,7 +305,7 @@ class BitrixClient
                         ]
                     ];
                 }
-                if($leasingRequest['documents'] && array_key_exists('taxNumber', $leasingRequest['documents'])){
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('taxNumber', $leasingRequest['documents'])){
                     $fields['UF_CRM_1595935156'] = [
                         'fileData' => [
                             $leasingRequest['documents']['taxNumber']['text'],

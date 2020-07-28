@@ -47,7 +47,7 @@ class CalculateController extends Controller
             $data = $calculateRequest->validated();
         
             $requestData = $calculatorDataService->getRequestData();
-
+    
             $resultData = $calculateClient->runCalculate($requestData);
            
             $resultData = $this->getCleanData($resultData);
@@ -58,8 +58,11 @@ class CalculateController extends Controller
             ],
             [
                 'request_data' => $data
+            ],
+            [
+                'full_request_data' => $requestData
             ]);
-
+            
             if($calculateRequest->calculation_id)
             {
                 $calculation = $calculationRepository->update($calculateRequest->calculation_id, $params);

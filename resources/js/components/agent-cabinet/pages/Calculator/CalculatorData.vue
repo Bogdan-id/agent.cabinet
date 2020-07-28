@@ -8,9 +8,11 @@
         <v-btn @click="dialogToSwitchBetweenTypesOfSave = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
         Оберiть тип збереження
       </v-card-title>
-      <v-card-text class="calculator-data__custom-btn-wrapper" style="display: flex; justify-content: space-around; margin-top: 25px;">
-        <span><v-btn @click="openDialogToSave('email')" dark color="#e94949">Вiдправити на email</v-btn></span>
-        <span><v-btn @click="openDialogToSave('pdf')" dark color="#e94949">Зберегти у форматi .pdf</v-btn></span>
+      <v-card-text 
+        class="calculator-data__custom-btn-wrapper" 
+        :style="`display: flex; ${$vuetify.breakpoint.xs ? 'flex-direction: column; align-items: center;' : 'justify-content: space-around;'} margin-top: 25px;`">
+        <span style="display: inline-block; padding: 10px 0;"><v-btn @click="openDialogToSave('email')" dark color="#e94949">Вiдправити на email</v-btn></span>
+        <span style="display: inline-block; padding: 10px 0;"><v-btn @click="openDialogToSave('pdf')" dark color="#e94949">Зберегти у форматi .pdf</v-btn></span>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -96,10 +98,10 @@
             <v-radio-group 
               v-model="selectedGraph" 
               :error-messages="selectedGraphErr"
-              row>
-              <v-radio v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('even')" label="Класичний" value="even"></v-radio>
-              <v-radio v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('annuity')"  label="Ануїтет" value="annuity"></v-radio>
-              <v-radio v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('irregular')"  label="Індивідуальний" value="irregular"></v-radio>
+              :column="$vuetify.breakpoint.xs" :dense="$vuetify.breakpoint.xs">
+              <v-radio class="pl-2" v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('even')" label="Класичний" value="even"></v-radio>
+              <v-radio class="pl-2" v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('annuity')"  label="Ануїтет" value="annuity"></v-radio>
+              <v-radio class="pl-2" v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('irregular')"  label="Індивідуальний" value="irregular"></v-radio>
             </v-radio-group>
           </v-col>
           <v-row>

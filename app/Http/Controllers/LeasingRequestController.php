@@ -13,22 +13,26 @@ use App\Models\{
     Agent
 };
 use App\Http\Clients\OpenDataBotClient;
+use App\Http\Clients\BitrixClient;
 use GuzzleHttp\Exception\ClientException;
 
 class LeasingRequestController extends Controller
 {
-    public function __construct(OpenDataBotClient $openDataBotClient)
+    public function __construct(OpenDataBotClient $openDataBotClient, BitrixClient $bitrixClient)
     {
         $this->middleware('auth');
         $this->openDataBotClient = $openDataBotClient;
+        $this->bitrixClient = $bitrixClient;
     }
 
     public function create(LeasingRequestRequest $request)
     {
         $data = $request->validated();
+        $leadId = $this->bitrixClient->createLead($data);
+        $data['bitrix_id'] = $leadId;
         $leasingRequest = new LeasingRequest;
         $leasingRequest = $leasingRequest->create($data);
-
+       
         return response()->json($leasingRequest);
     }
 

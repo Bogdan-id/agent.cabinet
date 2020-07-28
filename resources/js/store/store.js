@@ -14,6 +14,7 @@ export default new Vuex.Store({
       email: null
     },
     graphs: [],
+    userHasNeccessaryFields: false,
     loader: false,
     adminLoader: false,
     // userCalculations: [],
@@ -40,6 +41,13 @@ export default new Vuex.Store({
     },
     deleteGraph(state) {
       state.graphs = []
+    },
+    checkIfUserHasAllNeccessaryFields(state) {
+      let emptyFields = Object.keys(state.user.agent)
+        .filter(value => {
+          return !state.user.agent[value] && value !== 'status' && value !== 'bitrix_id'
+        })
+      state.userHasNeccessaryFields = emptyFields.length === 0
     }
   },
   actions: {
@@ -51,6 +59,7 @@ export default new Vuex.Store({
         commit('addUserData', response.data)
         commit('addAgentData', response.data.agent.manager)
         commit('toggleSpinner', false)
+        commit('checkIfUserHasAllNeccessaryFields')
       })
       .catch(error => {
         console.log(error.response)

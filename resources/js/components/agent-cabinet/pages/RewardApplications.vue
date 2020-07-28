@@ -35,7 +35,7 @@
   </v-dialog>
   <div class="col-md-12 pt-0">
     <v-card style="min-height: 350px;">
-      <v-card-title class="d-block grey darken-3 white--text">
+      <v-card-text class="d-block grey darken-3 white--text" style="font-size: 1.25rem">
         <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-clipboard-check'"></v-icon>
           Заявки на вынагороду
         <v-progress-linear
@@ -46,19 +46,20 @@
           top
           color="red lighten-1">
         </v-progress-linear>
-      </v-card-title>
-      <v-card-text class="mt-9">
+      </v-card-text>
+      <v-card-text :class="$vuetify.breakpoint.xs ? 'pb-0' : ''">
         <!-- <v-btn 
           dark class="red lighten-1"
           @click.stop="commissionRequestsDialog = !commissionRequestsDialog">
           Подати нову заявку&nbsp;
           <v-icon v-text="'mdi-plus'"></v-icon>
         </v-btn> -->
-        <v-card-title
+        <v-card-text
           v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
-          class="d-flex justify-center headline black--text mt-3 mb-6">
+          class="d-flex justify-center black--text pb-0 text-center"
+          :style="`${$vuetify.breakpoint.xs ? 'font-size: 1.1rem' : 'font-size: 1.25rem'}`">
           Iсторiя заявок на винагороду
-        </v-card-title>
+        </v-card-text>
         <v-card-text 
           v-if="agentCommisions.length === 0 && !$store.state.adminLoader"
           class="d-flex justify-center"
@@ -73,7 +74,7 @@
         :custom-sort="customSort"
         :items="agentCommisions"
         :hide-default-footer="true"
-        class="elevation-1 mr-3 ml-3 mt-4 reward-aplication-table">
+        :class="`elevation-1 mr-3 ml-3 mt-4 reward-aplication-table ${$vuetify.breakpoint.xs ? 'small' : ''}`">
         <template v-slot:item.leasing_request.created_at="{ item }">
           <div class="text-center">
             {{ item.created_at.substr(0, 10) }}
@@ -233,6 +234,16 @@ export default {
   min-width: 95px;
   span {
     margin: 0 auto;
+  }
+}
+.reward-aplication-table {
+  &.small {
+    td {
+      min-height: 28px;
+    }
+    td:last-child {
+      margin-bottom: 23px;
+    }
   }
 }
 </style>

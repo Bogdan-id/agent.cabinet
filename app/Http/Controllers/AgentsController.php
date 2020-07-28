@@ -134,6 +134,14 @@ class AgentsController extends Controller
                 }
             }
         }
+        $this->bitrixClient->updateContact($agent->bitrix_id, [
+            'name' => $agent->first_name,
+            'last_name' => $agent->last_name,
+            'second_name' => $agent->patronymic,
+            'phone' => $agent->user->phone,
+            'birth' => $agent->birth,
+            'email' => $agent->user->email,
+        ]);
 
         return response()->json([
             'status' => 200

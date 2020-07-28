@@ -418,15 +418,15 @@
                 :disabled="advanceDisabled">
               <div class="advance-range-scale pt-6">
                 <div
-                  v-for="v in 14"
+                  v-for="v in advanceDevision"
                   :key="v"
-                  class="advance-range-wrapper">
+                  :class="`advance-range-wrapper ${$vuetify.breakpoint.xs ? 'small' : ''}`">
                   <span
                     class="advance-range-cell"
-                    :style="`color: ${calcObj.advance == ((v - 1) * 5) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.45rem' : '0.725rem'}`">
-                      {{ (v - 1) * 5 + '%' }}
+                    :style="`color: ${calcObj.advance == ((v - 1) * advanceRangeCell) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.87rem' : '0.725rem'}`">
+                      {{ (v - 1) * advanceRangeCell + '%' }}
                   </span>
-                  <div v-if="v === 7" style="position: absolute; top: -34px;">
+                  <div v-if="v === middleOfAdvanceRange" style="position: absolute; top: -34px;">
                     <div class="range-black-dot">
                       <advance-hint style="position: absolute; right: -61px; margin-right: 1px; color: black; transform: translateX(-50%)"></advance-hint>
                       <div class="arrow-directions-wrapper">
@@ -453,7 +453,7 @@
                   </div>
                 </div>
                 <div
-                  :style="`position: absolute; right: -9px; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.45rem' : '0.725rem'}`">
+                  :style="`position: absolute; right:${xs ? '-20px;' : '-19px;'} ; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.87rem' : '0.725rem'}`">
                   {{ `70%` }}
                 </div>
               </div>
@@ -514,9 +514,9 @@
                   color="red darken-4"
                   v-model="calcObj.leasingCurrency"
                   dense>
-                  <v-row class="pl-2" >
-                    <div style="display: flex;">
-                      <v-radio value="UAH" color="red darken-3" dense>
+                  <v-row class="pl-2" :style="`display: flex; ${$vuetify.breakpoint.width < 450 ? 'flex-direction: column;' : 'flex-direction: row;'}`">
+                    <div>
+                      <v-radio value="UAH" color="red darken-3" class="ml-3">
                         <template #label>
                           <span
                             class="current-currency-label"
@@ -892,6 +892,15 @@ export default {
     }
   },
   computed: {
+    middleOfAdvanceRange() {
+      return this.$vuetify.breakpoint.xs ? 4 : 7
+    },
+    advanceDevision() {
+      return this.$vuetify.breakpoint.xs ? 7 : 14
+    },
+    advanceRangeCell() {
+      return this.$vuetify.breakpoint.xs ? 10 : 5
+    },
     leasingRestItems() {
       let arr = []
       let test = this.maxResidualValue / 10
@@ -1773,6 +1782,9 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
+    console.log('Breakpoint')
+    console.log(this.$vuetify.breakpoint.width)
+    console.log('Breakpoint')
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
     } else {
@@ -1837,6 +1849,9 @@ export default {
     .advance-range-wrapper {
       // width: 7%;
       width: 7.1%;
+      &.small {
+        width: 14.2%
+      }
       height: 10px;
       color: #969599;
       position: relative;
@@ -1990,7 +2005,7 @@ export default {
         font-size: 1.28rem!important;
         font-weight: bold;
         &.v-label--active {
-          top: -3px!important;
+          top: 0!important;
           color: white!important;
         }
       }
@@ -2016,7 +2031,7 @@ export default {
       }
       .v-select__slot, .v-text-field__slot {
         label {
-          font-size: 1.05rem!important;
+          font-size: 0.95rem!important;
         }
       }
     }

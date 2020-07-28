@@ -497,7 +497,9 @@
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">
-      <v-card-text style="font-size: 1.25rem" class="headline black--text d-block text-center mb-8 mt-3 ">
+      <v-card-text 
+        :style="`${$vuetify.breakpoint.xs ? 'font-size: 1.1rem; padding-bottom: 0;' : 'font-size: 1.25rem'}`" 
+        :class="`black--text d-block text-center ${$vuetify.breakpoint.xs ? '' :'mb-8 mt-3'} `">
         Iсторiя розрахункiв
       </v-card-text>
       <v-data-table

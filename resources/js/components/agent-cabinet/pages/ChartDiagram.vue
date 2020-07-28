@@ -18,7 +18,7 @@
           :background-color="graphData.result_data.hasOwnProperty(switchGraphByNumber(currentTab)) ? '#d24a43' : '#808080'"
           dark 
           outlined
-          hide-details>
+          hide-details dense>
         </v-select>
       </div>
       <div class="tabs" v-if="graphData && graphData.result_data">

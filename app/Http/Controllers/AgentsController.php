@@ -57,18 +57,18 @@ class AgentsController extends Controller
                 'email' => $agent->user->email,
             ]);
             
-            if($agent->company_type == 'dealer')
-            {
-                $company = $this->bitrixClient->createCompany([
-                    'company_name' => $agent->company_name
-                ]);
-                $this->bitrixClient->setContactCompany($contact, $company);
-                $this->bitrixClient->setContactPosition($contact, $agent->position);
-            }
+            // if($agent->company_type == 'dealer') //TODO:
+            // {
+            //     $company = $this->bitrixClient->createCompany([
+            //         'company_name' => $agent->company_name
+            //     ]);
+            //     $this->bitrixClient->setContactCompany($contact, $company);
+            //     $this->bitrixClient->setContactPosition($contact, $agent->position);
+            // }
         }
        $agent->bitrix_id = $contact;
        $agent->save();
-    //    if($agent->card_number && $agent->iban)
+    //    if($agent->card_number && $agent->iban) TODO:
     //    {
     //        $dd = $this->bitrixClient->setContactRequisite($contact, [
     //            'fio' => $agent->name,

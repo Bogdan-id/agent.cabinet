@@ -18,6 +18,7 @@
           :background-color="graphData.result_data.hasOwnProperty(switchGraphByNumber(currentTab)) ? '#d24a43' : '#808080'"
           dark 
           outlined
+          item-color="grey darken-4"
           hide-details dense>
         </v-select>
       </div>

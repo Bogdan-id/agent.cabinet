@@ -13,7 +13,9 @@
     </div>
   </div>
   <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'" style="position: relative">
-    <span class="mobile-manager-title">
+    <span 
+      :style="$vuetify.breakpoint.xs ? 'font-size: 0.86rem; width: 60%;' : ''" 
+      class="mobile-manager-title">
       {{ 'Ваш менеджер' }}
     </span>
     <div v-if="loading" class="d-flex justify-center align-center">
@@ -25,16 +27,16 @@
     </div>
     <div style="width: 100%; min-height: 65px;">
       <div v-if="hasUserManager && !loading && requestRecieved" class="mobile-manager-content">
-        <div style="display: inline-block; width: 70px; position: relaitve;">
-          <div v-if="agentData.photo == null" class="empty-logo-mobile"><span class="logo-letter">{{ agentData.name }}</span></div>
+        <div v-if="!$vuetify.breakpoint.xs" style="display: inline-block; width: 70px; position: relaitve;">
+          <div v-if="!agentData.photo" class="empty-logo-mobile"><span class="logo-letter">{{ agentData.name }}</span></div>
           <div style="display: inline-flex; justify-content: center; align-items: center; position: absolute; top: 3px; left: 4px; width: 60px; height: 60px;">
             <img style="max-width: 100%; border-radius: 100%;" :src="agentData.photo" />
           </div>
         </div>
-        <div class="manager-data-wrapper">
+        <div :style="`${$vuetify.breakpoint.xs ? 'width: 100%;' : ''}`" class="manager-data-wrapper">
           <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; padding-right: 0.8rem;">{{ agentData.name }}</span>
           <span style="font-weight: bold; white-space: nowrap; font-size: 0.76rem; display: inline-block; padding-right: 0.8rem;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</span>
-          <span style="color: #bb433c; white-space: nowrap; display: inline-block;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</span>
+          <span :style="`color: #bb433c; white-space: nowrap; display: inline-block; ${$vuetify.breakpoint.xs ? 'font-size: 10px;' : ''}`"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</span>
         </div>
       </div>
     </div>
@@ -91,14 +93,14 @@
     <v-card 
       v-if="tabledata.length > 0"
       class="mt-10 mb-6 dashboard-table" elevation="9">
-      <v-card-title class="headline pb-3 pt-3 mb-7" style="border-left: 5px solid #e75d57;">
+      <v-card-title :class="`headline pb-3 pt-3 ${!$vuetify.breakpoint.xs ? 'mb-7' : ''}`" style="border-left: 5px solid #e75d57;">
         Заявки на лiзинг
       </v-card-title>
       <v-data-table
         color="black"
         :headers="tableHeader"
         :items="tabledata"
-        class="elevation-1 pb-3"
+        :class="`dashboard-leasing-request-table ${$vuetify.breakpoint.xs ? 'small' : ''} elevation-1 pb-3`"
         :hide-default-footer="true"
         :items-per-page="5">
         <template v-slot:item.agent_reward="{ item }">
@@ -276,8 +278,10 @@
         v-slot:default="{ hover }">
         <v-card 
           v-if="key < 2"
-          class="news-card" 
-          :elevation="hover ? 5 : 2">
+          class="news-card"
+          :style="$vuetify.breakpoint.xs ? 'width: 92%;' : 'width: 47%;'" 
+          :elevation="hover ? 5 : 2"
+          >
           <v-img
             class="white--text align-end"
             style="width: 100%; height: 200px;"
@@ -514,6 +518,16 @@ export default {
     }
   }
 }
+.dashboard-leasing-request-table {
+  &.small {
+    td {
+      min-height: 28px;
+    }
+    td:last-child {
+      margin-bottom: 18px;
+    }
+  }
+}
 .logo-letter {
   font-size: 0;
 }
@@ -596,7 +610,6 @@ export default {
     flex-wrap: wrap; 
     justify-content: space-around;
     .news-card {
-      width: 320px!important; 
       margin: 10px 0;
     }
   }

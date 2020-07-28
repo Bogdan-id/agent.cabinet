@@ -22,7 +22,9 @@
     max-width="520">
     <v-card style="position: relative;">
       <v-card-title style="background: #424242; position: relative" class="white--text">
-        <span class="d-block title">Заявка вiд розрахунку на 
+        <span 
+          :style="`${$vuetify.breakpoint.xs ? 'font-size: 1rem;' : ''}`"
+          :class="`d-block ${$vuetify.breakpoint.xs? '' : 'title'}`">Заявка вiд розрахунку на 
           <span class="font-weight-bold">{{ reqObj.leasing_object }}</span>
         </span>
         <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
@@ -39,10 +41,11 @@
               <v-radio-group 
                 v-model="reqObj.graph_type" 
                 readonly
-                :column="$vuetify.breakpoint.xs">
-                <v-radio  label="Класичний" value="even"></v-radio>
-                <v-radio label="Ануїтет" value="annuity"></v-radio>
-                <v-radio label="Індивідуальний" value="irregular"></v-radio>
+                :column="$vuetify.breakpoint.xs"
+                :dense="$vuetify.breakpoint.xs">
+                <v-radio class="pl-2" label="Класичний" value="even"></v-radio>
+                <v-radio class="pl-2" label="Ануїтет" value="annuity"></v-radio>
+                <v-radio class="pl-2" label="Індивідуальний" value="irregular"></v-radio>
               </v-radio-group>
             </v-col>
           </v-row>

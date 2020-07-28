@@ -1,9 +1,30 @@
 <template>
   <v-card elevation="9">
     <section class="chart-diagram" id="chart-diagram">
+      <div>
+        <v-select
+          v-if="graphData && graphData.result_data"
+          v-show="$vuetify.breakpoint.xs"
+          v-model="currentTab"
+          :items="[
+            {text: 'Класичний', value: '2'},
+            {text: 'Ануїтет', value: '1'},
+            {text: 'Iндивiдуальний', value: '3'}
+          ]"
+          :class="`calculator-graph-select ${graphData.result_data.hasOwnProperty(switchGraphByNumber(currentTab)) ? 'active' : ''}`"
+          item-text="text"
+          item-value="value"
+          @change="changeActive()"
+          :background-color="graphData.result_data.hasOwnProperty(switchGraphByNumber(currentTab)) ? '#d24a43' : '#808080'"
+          dark 
+          outlined
+          hide-details>
+        </v-select>
+      </div>
       <div class="tabs" v-if="graphData && graphData.result_data">
         <div class="tabs-input active">
           <label 
+            v-show="!$vuetify.breakpoint.xs"
             @click.stop="changeActive($event)" 
             for="tab-2"
             :style="`${!graphData.result_data.hasOwnProperty('even') ? 'background: grey' : ''}`"
@@ -11,6 +32,7 @@
             КЛАСИЧНИЙ
           </label>
           <input
+            v-show="!$vuetify.breakpoint.xs"
             @click.stop="changeActive($event)"
             id="tab-2" 
             name="tab" 
@@ -22,8 +44,9 @@
             <div style="position: relative;">
               <div v-if="!graphData.result_data.hasOwnProperty('even')" class="empty-chart">
               </div>
-              <div class="router-link-to-no-calc">
-                <p style="font-size: 1rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+              <div class="router-link-to-no-calc" :style="$vuetify.breakpoint.xs ? 'width: 90%;' : '60%;'">
+                <p style="font-size: 1rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>
+                  Даний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
                   <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
                 </p>
               </div>
@@ -32,7 +55,7 @@
               <v-row>
                 <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0 pr-0">
                   <v-data-table
-                    class="leasing-object-table"
+                    :class="$vuetify.breakpoint.smAndDown ? 'leasing-object-table small' : 'leasing-object-table'"
                     v-if="graphData"
                     color="black"
                     :headers="leasingObjectDataHeader"
@@ -96,21 +119,29 @@
                     </template>
                   </v-data-table>
                 </v-col>
-                <v-col cols="12" md="4" sm="3" lg="6" class="pl-0" v-if="graphData.result_data.hasOwnProperty('even')">
+                <v-col 
+                  cols="12" md="4" sm="3" lg="6" 
+                  v-if="graphData.result_data.hasOwnProperty('even')"
+                  :style="`${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                      <v-btn class="mt-5" v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" width="45" height="45" fab dark color="#d24a43"><v-icon color="white" size="30">mdi-file-find-outline</v-icon></v-btn>
+                      <v-btn 
+                        :class="`${$vuetify.breakpoint.xs ? '' : 'mt-5'}`" 
+                        v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" 
+                        width="45" height="45" fab dark color="#d24a43">
+                        <v-icon color="white" size="30">mdi-file-find-outline</v-icon>
+                      </v-btn>
                     </template>
                     <span>Переглянути графiк в режимi редагування</span>
                   </v-tooltip>
                 </v-col>
               </v-row>
-            <div class="payout-schedule"  v-if="graphData.result_data.hasOwnProperty('even')">
+            <div class="payout-schedule">
               Графiк виплат
             </div>
             <v-data-table
               v-if="graphData && graphData.result_data && graphData.result_data.even"
-              :search="search"
+              :class="$vuetify.breakpoint.xs ? 'payment-schedule-table small' : 'payment-schedule-table'"
               color="black"
               :headers="tableHeader"
               :items="even"
@@ -121,7 +152,45 @@
                 <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
               </template>
               <template v-slot:body.append>
-                <tr style="color: black; border-left: 8px solid black;" >
+                <div v-show="$vuetify.breakpoint.xs" style="border-left: 4px solid #d24a43;">
+                  <div class="total-payment-schedule-header">Всього</div>
+                  <tr
+                    class="total-payment-schedule">
+                    <td class="total-payment-schedule-text">Оплата за авто, грн</td>
+                    <td class="total-payment-schedule-value">
+                      {{ 
+                        parseInt(graphData.result_data.even['total-payment-principal'].toFixed())
+                          .toLocaleString()
+                          .replace(/,/g, ' ')
+                      }}
+                    </td>
+                  </tr>
+                  <tr
+                    class="total-payment-schedule">
+                    <td class="total-payment-schedule-text">Винагорода лiзингодавця, грн</td>
+                    <td class="total-payment-schedule-value">
+                      {{ 
+                        parseInt(graphData.result_data.even['total-interest'].toFixed()) 
+                          .toLocaleString()
+                          .replace(/,/g, ' ')
+                      }}
+                    </td>
+                  </tr>
+                  <tr
+                    class="total-payment-schedule">
+                    <td class="total-payment-schedule-text">Сума платежу, грн</td>
+                    <td class="total-payment-schedule-value">
+                      {{ 
+                        parseInt(graphData.result_data.even['total-payment'].toFixed())
+                          .toLocaleString()
+                          .replace(/,/g, ' ') 
+                      }}
+                    </td>
+                  </tr>
+                </div>
+                <tr 
+                  v-show="!$vuetify.breakpoint.xs"
+                  style="color: black; border-left: 8px solid black;" >
                   <td style="text-align: center;">Всього</td>
                   <td></td>
                   <td style="text-align: center;">
@@ -187,6 +256,7 @@
         </div>
         <div class="tabs-input">
           <label
+            v-show="!$vuetify.breakpoint.xs"
             @click.stop="changeActive($event)" 
             for="tab-1" 
             :style="`${!graphData.result_data.hasOwnProperty('annuity') ? 'background: grey' : ''}`"
@@ -194,6 +264,7 @@
             АНУЇТЕТ
           </label>
           <input 
+            v-show="!$vuetify.breakpoint.xs"
             @click.stop="changeActive($event)"
             id="tab-1" 
             name="tab" 
@@ -204,12 +275,12 @@
             <div style="position: relative;">
               <div v-if="!graphData.result_data.hasOwnProperty('annuity')" class="empty-chart">
               </div>
-              <div class="router-link-to-no-calc">
+              <div class="router-link-to-no-calc" :style="$vuetify.breakpoint.xs ? 'width: 90%;' : '60%;'">
                 <p style="font-size: 1rem">
                   <span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;">
                     <v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon>
                   </span>
-                  Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+                  Даний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
                   <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
                 </p>
               </div>
@@ -218,7 +289,7 @@
               <v-row>
                 <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
                   <v-data-table
-                    class="leasing-object-table"
+                    :class="$vuetify.breakpoint.smAndDown ? 'leasing-object-table small' : 'leasing-object-table'"
                     v-if="graphData"
                     color="black"
                     :headers="leasingObjectDataHeader"
@@ -283,10 +354,18 @@
                     </template>
                   </v-data-table>
                 </v-col>
-                <v-col cols="12" md="4" sm="3" lg="6" class="pl-0" v-if="graphData.result_data.hasOwnProperty('annuity')">
+                <v-col 
+                  cols="12" md="4" sm="3" lg="6" 
+                  v-if="graphData.result_data.hasOwnProperty('annuity')"
+                  :style="`${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                      <v-btn class="mt-5" v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" width="45" height="45" fab dark color="#d24a43"><v-icon color="white" size="30">mdi-file-find-outline</v-icon></v-btn>
+                      <v-btn 
+                        :class="`${$vuetify.breakpoint.xs ? '' : 'mt-5'}`" 
+                        v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" 
+                        width="45" height="45" fab dark color="#d24a43">
+                        <v-icon color="white" size="30">mdi-file-find-outline</v-icon>
+                      </v-btn>
                     </template>
                     <span>Переглянути графiк в режимi редагування</span>
                   </v-tooltip>
@@ -297,7 +376,7 @@
               </div>
               <v-data-table
                 v-if="graphData && graphData.result_data && graphData.result_data.annuity"
-                :search="search"
+                :class="$vuetify.breakpoint.xs ? 'payment-schedule-table small' : 'payment-schedule-table'"
                 color="black"
                 :headers="tableHeader"
                 :items="annuity"
@@ -308,7 +387,45 @@
                   <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
                 </template>
                 <template v-slot:body.append>
-                  <tr style="color: black; border-left: 8px solid black;">
+                  <div v-show="$vuetify.breakpoint.xs" style="border-left: 4px solid #d24a43;">
+                    <div class="total-payment-schedule-header">Всього</div>
+                    <tr
+                      class="total-payment-schedule">
+                      <td class="total-payment-schedule-text">Оплата за авто, грн</td>
+                      <td class="total-payment-schedule-value">
+                        {{ 
+                          parseInt(graphData.result_data.annuity['total-payment-principal'].toFixed())
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </td>
+                    </tr>
+                    <tr
+                      class="total-payment-schedule">
+                      <td class="total-payment-schedule-text">Винагорода лiзингодавця, грн</td>
+                      <td class="total-payment-schedule-value">
+                        {{ 
+                          parseInt(graphData.result_data.annuity['total-interest'].toFixed()) 
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </td>
+                    </tr>
+                    <tr
+                      class="total-payment-schedule">
+                      <td class="total-payment-schedule-text">Сума платежу, грн</td>
+                      <td class="total-payment-schedule-value">
+                        {{ 
+                          parseInt(graphData.result_data.annuity['total-payment'].toFixed())
+                            .toLocaleString()
+                            .replace(/,/g, ' ') 
+                        }}
+                      </td>
+                    </tr>
+                  </div>
+                  <tr 
+                    v-show="!$vuetify.breakpoint.xs" 
+                    style="color: black; border-left: 8px solid black;">
                     <td style="text-align: center;">Всього</td>
                     <td></td>
                     <td style="text-align: center;">
@@ -374,6 +491,7 @@
         </div>
         <div class="tabs-input">
           <label 
+            v-show="!$vuetify.breakpoint.xs"
             @click.stop="changeActive($event)" 
             for="tab-3" 
             :style="`${!graphData.result_data.hasOwnProperty('irregular') ? 'background: grey' : ''}`"
@@ -381,6 +499,7 @@
             IНДИВIДУАЛЬНИЙ
           </label>
           <input
+            v-show="!$vuetify.breakpoint.xs"
             @click.stop="changeActive($event)"
             id="tab-3" 
             name="tab" 
@@ -391,8 +510,8 @@
             <div style="position: relative;">
               <div v-if="!graphData.result_data.hasOwnProperty('irregular')" class="empty-chart">
               </div>
-              <div class="router-link-to-no-calc">
-                <p style="font-size: 1rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Данний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+              <div class="router-link-to-no-calc" :style="$vuetify.breakpoint.xs ? 'width: 90%;' : '60%;'">
+                <p style="font-size: 1rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>Даний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
                   <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
                 </p>
               </div>
@@ -401,7 +520,7 @@
               <v-row>
                 <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
                   <v-data-table
-                    class="leasing-object-table"
+                    :class="$vuetify.breakpoint.smAndDown ? 'leasing-object-table small' : 'leasing-object-table'"
                     v-if="graphData"
                     color="black"
                     :headers="leasingObjectDataHeader"
@@ -466,10 +585,18 @@
                     </template>
                   </v-data-table>
                 </v-col>
-                <v-col cols="12" md="4" sm="3" lg="6" class="pl-0" v-if="graphData.result_data.hasOwnProperty('irregular')">
+                <v-col 
+                  cols="12" md="4" sm="3" lg="6" 
+                  v-if="graphData.result_data.hasOwnProperty('irregular')"
+                  :style="`${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                      <v-btn class="mt-5" v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" width="45" height="45" fab dark color="#d24a43"><v-icon color="white" size="30">mdi-file-find-outline</v-icon></v-btn>
+                      <v-btn 
+                        :class="`${$vuetify.breakpoint.xs ? '' : 'mt-5'}`" 
+                        v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" 
+                        width="45" height="45" fab dark color="#d24a43">
+                        <v-icon color="white" size="30">mdi-file-find-outline</v-icon>
+                      </v-btn>
                     </template>
                     <span>Переглянути графiк в режимi редагування</span>
                   </v-tooltip>
@@ -480,7 +607,7 @@
               </div>
               <v-data-table
                 v-if="graphData && graphData.result_data && graphData.result_data.irregular"
-                :search="search"
+                :class="$vuetify.breakpoint.xs ? 'payment-schedule-table small' : 'payment-schedule-table'"
                 color="black"
                 :headers="tableHeader"
                 :items="irregular"
@@ -491,7 +618,45 @@
                   <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
                 </template>
                 <template v-slot:body.append>
-                  <tr style="color: black; border-left: 8px solid black;" >
+                  <div v-show="$vuetify.breakpoint.xs" style="border-left: 4px solid #d24a43;">
+                    <div class="total-payment-schedule-header">Всього</div>
+                    <tr
+                      class="total-payment-schedule">
+                      <td class="total-payment-schedule-text">Оплата за авто, грн</td>
+                      <td class="total-payment-schedule-value">
+                        {{ 
+                          parseInt(graphData.result_data.irregular['total-payment-principal'].toFixed())
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </td>
+                    </tr>
+                    <tr
+                      class="total-payment-schedule">
+                      <td class="total-payment-schedule-text">Винагорода лiзингодавця, грн</td>
+                      <td class="total-payment-schedule-value">
+                        {{ 
+                          parseInt(graphData.result_data.irregular['total-interest'].toFixed()) 
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </td>
+                    </tr>
+                    <tr
+                      class="total-payment-schedule">
+                      <td class="total-payment-schedule-text">Сума платежу, грн</td>
+                      <td class="total-payment-schedule-value">
+                        {{ 
+                          parseInt(graphData.result_data.irregular['total-payment'].toFixed())
+                            .toLocaleString()
+                            .replace(/,/g, ' ') 
+                        }}
+                      </td>
+                    </tr>
+                  </div>
+                  <tr 
+                    v-show="!$vuetify.breakpoint.xs" 
+                    style="color: black; border-left: 8px solid black;" >
                     <td style="text-align: center;">Всього</td>
                     <td></td>
                     <td style="text-align: center;">
@@ -619,6 +784,11 @@ export default {
       if(graph === 'even' || graph ===  'Класичний') {return '2'}
       if(graph === 'irregular' || graph === 'Індивідуальний') {return '3'}
     },
+    switchGraphByNumber(number) {
+      if(number === '1') {return 'annuity'}
+      if(number === '2') {return 'even'}
+      if(number === '3') {return 'irregular'}
+    }
   },
   computed: {
     hasAnnuity() {
@@ -651,16 +821,79 @@ export default {
 </script>
 
 <style lang="scss">
+.total-payment-schedule-header {
+  font-size: 1rem; 
+  padding: 13px 0 0 10px; 
+  color: #d24a43; 
+  font-weight: bold;
+}
+.tabs-input{
+  .v-data-table__mobile-row__cell {
+    min-width: 80px;
+  }
+}
+.total-payment-schedule {
+  width: 100%; 
+  display: flex; 
+  justify-content: space-between; 
+  font-size: 1rem;
+  .total-payment-schedule-text {
+    font-weight:bold; 
+    border-bottom: none!important; 
+    display: flex; 
+    align-items: center; 
+    min-height: 48px;
+  }
+  .total-payment-schedule-value {
+    border-bottom: none!important; 
+    display: flex; 
+    align-items: center; 
+    min-height: 48px; 
+    font-weight: bold;
+  }
+}
+.payment-schedule-table {
+  &.small {
+    tbody {
+      display: flex;
+      flex-direction: column;
+    }
+    tr {
+      margin: 10px 0;
+    }
+    td {
+      min-height: 23px;
+    }
+    thead {
+      display: none;
+    }
+  }
+}
+.calculator-graph-select {
+  fieldset {
+    border: 3px solid #808080!important;
+  }
+  &.active {
+    fieldset {
+      border: 3px solid #d24a43!important;
+    }
+  }
+}
 .payout-schedule {
   border-bottom: 1px solid #e0e0e0;
   font-size: 1.1rem;
   font-weight: bold;
   color: #424242;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
 }
 
 .v-data-table {
   &.leasing-object-table{
+    &.small {
+      .v-data-table__mobile-row {
+        height: auto;
+      }
+    }
     margin-bottom: 0.7rem;
     tr {
       &:hover {
@@ -675,7 +908,7 @@ export default {
       min-height: 10px!important;
       height: 20px;
       border-bottom: 1px solid #eeedeb;
-      margin: 0 25px 0 25px;
+      margin: 0 13px 0 13px;
       padding: 0;
       display: flex;
       justify-content: space-between;
@@ -759,13 +992,13 @@ export default {
     text-align: center;
     line-height: 2rem;
     color: white;
-    padding: 0.33rem 0 0.33rem 0;
+    padding: 0.33rem 10px;
     margin: 0;
     background: #424242;
   }
   .tabs .tabs-input.active .label {
     color: white;
-    background: #e94949;
+    background: #d24a43;
     // border-top: 2px solid #424242;
     // box-shadow: 0px -5px 8px 4px rgba(0,0,0,1);
   }

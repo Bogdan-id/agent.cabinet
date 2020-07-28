@@ -12,6 +12,7 @@ class LeasingRequest extends Model
      * @var array
      */
     protected $fillable = [
+        'bitrix_id',
         'agent_id',
         'calculation_id',
         'client_type_id',

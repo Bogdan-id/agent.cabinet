@@ -1,6 +1,6 @@
 <template>
 <v-card style="min-height: 350px;" elevation="8">
-  <v-card-title class="d-block grey darken-3 white--text">
+  <v-card-text class="d-block grey darken-3 white--text" style="font-size: 1.25rem">
     <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>
     Кориснi матерiали
   <v-progress-linear
@@ -11,7 +11,7 @@
     top
     color="red lighten-1">
   </v-progress-linear>
-  </v-card-title>
+  </v-card-text>
   <v-card-text style="padding-top: 100px;" v-if="sections === null && !$store.state.loader || sections && sections.length === 0 && !$store.state.loader">
     <div style="text-align: center; font-size: 1.3rem;">(Категорії для вiдображення вiдсутнi)</div>
   </v-card-text>
@@ -27,7 +27,9 @@
         :style="hover ? 'border-left: 7px solid #e64833;' : 'border-left: 7px solid white'"
         :to="{path: `/useful-materials-categories/${item.slug}`, name: 'Матерiали категорiї', params: {category: item.slug}}"
         >
-        <v-card-title class="custom-title" style="justify-content: center; font-size: 27px;">
+        <v-card-title 
+          class="custom-title" 
+          :style="`justify-content: center; font-size: ${$vuetify.breakpoint.xs ? '1.45rem' : '1.7rem;'}`">
           <a>{{ item.name }}</a>
         </v-card-title>
       </v-card>

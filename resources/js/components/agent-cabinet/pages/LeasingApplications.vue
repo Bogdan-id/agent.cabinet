@@ -39,7 +39,7 @@
               <v-radio-group 
                 v-model="reqObj.graph_type" 
                 readonly
-                row>
+                :column="$vuetify.breakpoint.xs">
                 <v-radio  label="Класичний" value="even"></v-radio>
                 <v-radio label="Ануїтет" value="annuity"></v-radio>
                 <v-radio label="Індивідуальний" value="irregular"></v-radio>
@@ -266,7 +266,7 @@
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">
-      <v-card-title class="headline mb-7">
+      <v-card-title v-if="!$vuetify.breakpoint.xs" class="headline mb-7">
         <v-spacer></v-spacer>
         <v-text-field
           v-show="tableDataPresent"
@@ -285,7 +285,7 @@
         :items="tabledata"
         :custom-sort="customSort"
         :items-per-page="10"
-        class="elevation-1">
+        :class="`elevation-1 leasing-application-table ${$vuetify.breakpoint.xs ? 'small' : ''}`">
         <template v-slot:item.graph="{ item }">
           <span>{{ item.graph_type }}</span>
         </template>
@@ -588,3 +588,16 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+  .leasing-application-table {
+    &.small {
+      td {
+        min-height: 28px;
+      }
+      td:last-child {
+        margin-bottom: 23px;
+      }
+    }
+  }
+</style>

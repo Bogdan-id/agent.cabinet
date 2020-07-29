@@ -46,7 +46,7 @@
               v-model="verificationCode"
               @blur="$v.verificationCode.$touch()"/>
             <div v-if="secondTimer" class="wrap">
-              <span style="font-size: 0.8rem; color: #808080;">Повторно вiдправити код через&nbsp;</span>
+              <span style="font-size: 0.8rem; color: #808080; display: inline-flex; max-width: 60%; align-self: flex-end; padding-bottom: 2px;">Повторно вiдправити код через</span>
               <div style="display: inline-block;">
                 <div class="bounceball"></div>
                 <div class="bounceball-text" id="bounceball-text"></div>
@@ -69,7 +69,7 @@
                 {{ verificationCodeErrors[0] }}
             </span>
           </div>
-          <div style="height: 32px;"></div>
+          <div style="height: 40px;"></div>
           <div class="app__input-text-wrapper">
             <input 
               class="app__input-text"
@@ -394,11 +394,10 @@ body {
   height: 100vh;
   font-family: Montserrat;
 }
-// .wrap {
-//   position: absolute;
-//   top: 20px;
-//   right: 10px;
-// }
+.wrap {
+  display: flex; 
+  justify-content: space-around;
+}
 .bounceball-text {
   color: black;
   display: inline-block;

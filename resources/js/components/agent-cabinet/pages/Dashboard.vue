@@ -286,7 +286,9 @@
             class="white--text align-end"
             style="width: 100%; height: 200px;"
             :src="item['news_title_image']">
-            <v-card-title class="subtitle-1">{{ item.title }}</v-card-title>
+            <v-card-text 
+              class="subtitle-1" 
+              style="font-size: 1rem">{{ item.title }}</v-card-text>
           </v-img>
           <v-card-text class="pb-0">{{ item.description }}</v-card-text>
           <v-card-actions>

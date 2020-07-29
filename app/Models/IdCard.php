@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class IdCard extends Model
 {
+    protected $connection = 'default';
+    
     public $timestamps = false;
 
     /**

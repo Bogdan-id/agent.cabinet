@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
+
+    protected $connection = 'default';
+    
     /**
      * The attributes that are mass assignable.
      *

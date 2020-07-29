@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AcquisitionTarget extends Model
 {
+    protected $connection = 'default';
+    
     public $timestamps = false;
 
      /**

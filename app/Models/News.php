@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
+    protected $connection = 'default';
+    
     /**
     * The attributes that are mass assignable.
     *

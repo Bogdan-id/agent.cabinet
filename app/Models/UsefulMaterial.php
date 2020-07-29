@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsefulMaterial extends Model
 {
+    protected $connection = 'default';
+    
     /**
     * The attributes that are mass assignable.
     *

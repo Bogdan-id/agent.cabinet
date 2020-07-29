@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeasingRequestStatus extends Model
 {
+    protected $connection = 'default';
+    
     public $timestamps = false;
 
      /**

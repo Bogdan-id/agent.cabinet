@@ -7,7 +7,7 @@
       <div class="contact-wrapper">
         <div class="footer__contacts">
           <ul class="footer__contacts-wrapper">
-            <li class="contact-title body-1" style="font-family: Montserrat,sans-serif,Arial;">
+            <li class="contact-title">
               <v-icon class="icon-position" small v-text="'mdi-cellphone-iphone'"></v-icon>
               +38 (044) 359-03-99
             </li>
@@ -17,14 +17,14 @@
             </li>
             <li class="contact-title">
               <v-icon class="icon-position" small v-text="'mdi-email'"></v-icon>
-              <a style="color: #70706e;" href="#">office@bestleasing.com.ua</a>
+              <a style="color: #2f2f2f; font-family: Montserrat,sans-serif,Arial;" href="#">office@bestleasing.com.ua</a>
             </li>
           </ul>
         </div>
         <div class="footer__feedback">
           <div class="d-flex flex-column pa-1 feedback__text">
-            <span>Перейти на сайт</span>
-            <a style="color: #70706e;" href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
+            <span style="font-size: 0.78rem; font-family: Montserrat,sans-serif,Arial;">Перейти на сайт</span>
+            <a style="color: #2f2f2f; font-family: Montserrat,sans-serif,Arial;" href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
           </div>
           <a class="footer__custom-btn" style="background: #e65048;">Зворотнiй зв`язок</a>
         </div>

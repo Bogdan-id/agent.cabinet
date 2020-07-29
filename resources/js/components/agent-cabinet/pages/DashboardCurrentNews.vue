@@ -29,6 +29,9 @@ export default {
   created() {
     console.log(this.$route.params)
     this.currentNews = this.$route.params
+  },
+  mounted() {
+    document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 }
 </script>

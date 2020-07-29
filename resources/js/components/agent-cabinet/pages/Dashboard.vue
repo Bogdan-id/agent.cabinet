@@ -416,12 +416,10 @@ export default {
         .get('/json/slides')
         .then(response => {
           console.log(response)
-          this.slidesLoader = false
           this.slides = response.data
         })
         .catch(error => {
           error.response
-          this.slidesLoader = false
         })
     },
     getNews() {
@@ -442,11 +440,13 @@ export default {
         setTimeout(() => {
           this.carouselVisibility = false
           this.sliderHasNoSlides = false
+          this.slidesLoader = false
         }, 2000)
       } else {
         setTimeout(() => {
           this.carouselVisibility = true
           this.sliderHasNoSlides = false
+          this.slidesLoader = false
         }, 2000)
       }
     },

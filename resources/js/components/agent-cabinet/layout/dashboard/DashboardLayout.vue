@@ -39,9 +39,38 @@
         <li class="divider"></li>
       </mobile-menu>
     </side-bar>
-    <div class="main-panel" id="main-panel">
+    
+    <v-navigation-drawer
+      style="z-index: 3000; background: repeating-linear-gradient(60deg, #e2746f, #eb443d 35%, #f31d13 50%);"
+      v-show="$vuetify.breakpoint.xs"
+      v-model="drawer"
+      app>
+      <div class="mobile-sidebar__logo-wrapper">
+        <div class="mobile__header-logo"></div>
+      </div>
+      <div style="padding: 10px 15px; position: relative;">
+        <v-btn style="position: absolute; right: 5px;" dark small icon @click="drawer = !drawer">
+          <v-icon v-text="'mdi-close'"></v-icon>
+        </v-btn>
+        <div
+          v-for="(item, key) in mobileLinks"
+          :key="key"
+          class="mobile-nav-block"
+          style="padding: 10px 0; display: flex;">
+          <router-link
+            class="mobile-nav-link"
+            :to="item.path">
+            <span style="display: inline-block; min-width: 40px;">
+              <component class="mobile-nav-icon" :is="item.icon"></component>
+            </span>{{ item.text.toUpperCase() }}
+          </router-link>
+        </div>
+      </div>
+    </v-navigation-drawer>
+
+    <div class="main-panel" :style="$vuetify.breakpoint.xs ? 'width: 100%' : ''" id="main-panel">
       <!-- <v-btn @click="test()">test</v-btn> -->
-      <top-navbar></top-navbar>
+      <top-navbar @listenDrawer="drawer = $event" :drawer="drawerState"></top-navbar>
       <dashboard-content @click.native="toggleSidebar">
       </dashboard-content>
       <content-footer></content-footer>
@@ -57,13 +86,39 @@ import MobileMenu from "./MobileMenu"
 
 import 'es6-promise/auto'
 
+import homeSvg from '../../assets/svg-icons/home'
+import calculatorSvg from '../../assets/svg-icons/calculator'
+import leasingRequestSvg from '../../assets/svg-icons/leasing-requests'
+import rewardRequestsSvg from '../../assets/svg-icons/rewardRequests'
+import usefulMaterialsSvg from '../../assets/svg-icons/useful-materials'
+import ChartSvg from '../../assets/svg-icons/chart'
+
+
 export default {
   components: {
     TopNavbar,
     ContentFooter,
     DashboardContent,
     MobileMenu,
+    homeSvg,
+    calculatorSvg,
+    leasingRequestSvg,
+    rewardRequestsSvg,
+    usefulMaterialsSvg,
+    ChartSvg
   },
+  data: () => ({
+    drawer: false,
+    drawerState: null,
+    mobileLinks: [
+    {path: "/dashboard", text: "Головна", icon: "homeSvg", iconPresent: true},
+    {path: "/calculator", text: "Калькулятор лізингу", icon: "calculatorSvg", iconPresent: true},
+    {path: "/leasing-requests", text: "Заявки на лiзинг", icon: "leasingRequestSvg", iconPresent: true},
+    {path: "/commission-requests", text: "Заявки на винагороду", icon: "rewardRequestsSvg", iconPresent: true},
+    {path: "/useful-materials-categories", text: "Кориснi матерiали", icon: "usefulMaterialsSvg", iconPresent: true},
+    {path: "/reporting", text: "Звiтнiсть", icon: 'ChartSvg'}
+  ],
+  }),
   methods: {
     // test() {
     //   this.showAgreement = true
@@ -74,8 +129,52 @@ export default {
       }
     },
   },
+  watch: {
+    drawer(val) {
+      this.drawerState = val
+    },
+  },
   created() {
     this.$store.dispatch('getCurrentUser')
   }
 }
 </script>
+
+<style lang="scss">
+  .mobile-sidebar__logo-wrapper {
+    background: #f4f3ef; 
+    width: 100%;
+    z-index: 1; 
+    display: flex;
+    align-items: center;
+    height: 64px;
+  }
+  .mobile__header-logo {
+    transition: background 0.3s width 0.3s height 0.3s;
+    margin: 0 0 0 20px;
+    background: url('../../../../assets/images/best-leasing-logo.png');
+    background-size: 143px 40px;
+    width: 143px;
+    height: 40px;
+    z-index: 3;
+  }
+  .mobile-nav-block {
+    .mobile-nav-link {
+      // font-family: 'Montserrat', sans-serif; 
+      color: black; 
+      font-size: 0.8rem;
+      transition: color 0.2s ease-in;
+      &:hover {
+        color: #424242;
+      }
+      &.active {
+        color: white;
+      }
+      .mobile-nav-icon {
+        color: black;
+        width: 18px; 
+        height: 18px;
+      }
+    }
+  }
+</style>

@@ -1,6 +1,6 @@
 <template>
   <v-card elevation="8">
-    <v-card-title class="d-block grey darken-3 white--text">
+    <v-card-text  class="d-block grey darken-3 white--text" style="font-size: 1.25rem">
       <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-bookmark'"></v-icon>
       Повiдомлення
     <v-progress-linear
@@ -11,15 +11,15 @@
       top
       color="red lighten-1">
     </v-progress-linear>
-    </v-card-title>
+    </v-card-text>
     <v-card-text 
-      v-if="!notifications || notifications.length === 0"
+      v-if="notifications.length === 0"
       style="font-size: 1.3rem; padding-top: 90px; padding-bottom: 90px;">
       <div style="text-align: center;">
         <span>(Повiдомлення вiдсутнi)</span>
       </div>
     </v-card-text>
-    <v-card-text class="user-notification-page" style="min-height: 100vh" v-if="notifications && notifications.length > 0">
+    <v-card-text class="user-notification-page" style="min-height: 100vh" v-if="notifications.length > 0">
       <v-timeline dense>
         <v-timeline-item
           v-for="(item, key) in notifications"
@@ -27,18 +27,27 @@
           :color="item.status === 'checked' ? 'grey lighten-1' : 'red lighten-2' "
           small
           right>
-          <div class="time-line-content">
-            <div style="font-size: 1rem; color: black; display: inline-block;">{{ item.title}}</div>
+          <div 
+            class="time-line-content" 
+            :style="$vuetify.breakpoint.xs ? 'flex-direction: column; width: 88%; display: inline-block; float: left;' : 'flex-direction: row;'">
+            <div style="font-size: 1rem; color: black; display: inline-block;">
+              {{ item.title}}&nbsp;
+            </div>
             <div style="display: inline-block; min-width: 150px;">
               <span style="font-size: 0.85rem; color: #808080">{{ item.updated_at.substr(0, 10) + ' ' + item.updated_at.substr(11, 8) }}</span>
               <div style="display: inline-block; position: relative; min-width: 20px;">
                 <span class="notification-delete-btn">
-                  <v-btn small :loading="btnLoading && item.id === itemId" @click="deleteNotification(item.id)" icon>
+                  <v-btn v-show="!$vuetify.breakpoint.xs" small :loading="btnLoading && item.id === itemId" @click="deleteNotification(item.id)" icon>
                     <v-icon small color="grey">mdi-close</v-icon>
                   </v-btn>
                 </span>
               </div>
             </div>
+          </div>
+          <div v-show="$vuetify.breakpoint.xs" style="display: inline-block; width: 7%; float: right">
+            <v-btn small :loading="btnLoading && item.id === itemId" @click="deleteNotification(item.id)" icon>
+              <v-icon small color="grey">mdi-close</v-icon>
+            </v-btn>
           </div>
         </v-timeline-item>
       </v-timeline>
@@ -54,7 +63,7 @@ export default {
     loading: false,
     btnLoading: false,
     currentTab: '1',
-    notifications: null,
+    notifications: [],
     tableHeader: [
       { text: 'Дата', value: 'created_at', align: 'start'},
       { text: 'Контент', value: 'title', align: 'center'},
@@ -113,20 +122,51 @@ export default {
         .catch(error => {
           console.log(error)
         })
-    }
+    },
+    getAgentNotifications() {
+      axios
+        .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
+        .then(response => {
+          console.log(response)
+          this.notifications = response.data.sort((a, b) => {
+            return new Date(b.updated_at) - new Date(a.updated_at)
+          })
+          let notificationsArrIds = this.notifications.map(val => {
+            return val.id
+          })
+          this.changeNotificationsStatus({notifications :notificationsArrIds})
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+    },
   },
   mounted() {
-    this.notifications = this.$route.params.notifications
-    console.log(this.notifications.length)
-    let notificationsArrIds = this.notifications.map(val => {
-      return val.id
-    })
-    this.changeNotificationsStatus({notifications :notificationsArrIds})
+    console.log(this.$route.params.notifications)
+    this.notifications = this.$route.params.notifications 
+      ? this.$route.params.notifications.sort((a, b) => {
+          return new Date(b.updated_at) - new Date(a.updated_at)
+        })
+      : []
+    if(!this.notifications || this.notifications.length === 0) {
+      this.getAgentNotifications()
+    } else {
+      let notificationsArrIds = this.notifications.map(val => {
+        return val.id
+      })
+      this.changeNotificationsStatus({notifications :notificationsArrIds})
+    }
   }
 }
 </script>
 <style lang="scss">
   .user-notification-page {
+    .v-timeline-item {
+      justify-content: flex-end;
+    }
+    .v-timeline-item__divider {
+      min-width: 56px;
+    }
     .v-timeline-item__dot {
       position: absolute!important;
       left: 14px!important;
@@ -147,6 +187,11 @@ export default {
     }
     .v-timeline-item__dot {
       left: 17px !important;
+    }
+    .v-timeline {
+      &:before {
+        display: none;
+      }
     }
   }
   .notification-delete-btn {

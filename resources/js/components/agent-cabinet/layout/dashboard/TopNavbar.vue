@@ -267,8 +267,8 @@ export default {
   min-width: 290px; 
   right: -42px;
   &.small {
-    right: -105px;
-    width: 210px;
+    right: -120px;
+    width: 190px;
   }
   top: 80px!important;
   transition: opacity ease-out 0.15s, 

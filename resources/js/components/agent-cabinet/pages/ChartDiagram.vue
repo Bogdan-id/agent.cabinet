@@ -830,7 +830,7 @@ export default {
 }
 .tabs-input{
   .v-data-table__mobile-row__cell {
-    min-width: 80px;
+    min-width: 90px;
   }
 }
 .total-payment-schedule {

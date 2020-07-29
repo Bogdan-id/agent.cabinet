@@ -423,7 +423,7 @@
                   :class="`advance-range-wrapper ${$vuetify.breakpoint.xs ? 'small' : ''}`">
                   <span
                     class="advance-range-cell"
-                    :style="`color: ${calcObj.advance == ((v - 1) * advanceRangeCell) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.87rem' : '0.725rem'}`">
+                    :style="`color: ${calcObj.advance == ((v - 1) * advanceRangeCell) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.78rem' : '0.725rem'}`">
                       {{ (v - 1) * advanceRangeCell + '%' }}
                   </span>
                   <div v-if="v === middleOfAdvanceRange" style="position: absolute; top: -34px;">
@@ -453,7 +453,7 @@
                   </div>
                 </div>
                 <div
-                  :style="`position: absolute; right:${xs ? '-20px;' : '-19px;'} ; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.87rem' : '0.725rem'}`">
+                  :style="`position: absolute; right:${xs ? '-20px;' : '-19px;'} ; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.78rem' : '0.725rem'}`">
                   {{ `70%` }}
                 </div>
               </div>

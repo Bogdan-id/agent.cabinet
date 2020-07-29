@@ -22,7 +22,9 @@
     max-width="520">
     <v-card style="position: relative;">
       <v-card-title style="background: #424242; position: relative" class="white--text">
-        <span class="d-block title">Заявка вiд розрахунку на 
+        <span 
+          :style="`${$vuetify.breakpoint.xs ? 'font-size: 1rem;' : ''}`"
+          :class="`d-block ${$vuetify.breakpoint.xs? '' : 'title'}`">Заявка вiд розрахунку на 
           <span class="font-weight-bold">{{ reqObj.leasing_object }}</span>
         </span>
         <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
@@ -39,10 +41,11 @@
               <v-radio-group 
                 v-model="reqObj.graph_type" 
                 readonly
-                row>
-                <v-radio  label="Класичний" value="even"></v-radio>
-                <v-radio label="Ануїтет" value="annuity"></v-radio>
-                <v-radio label="Індивідуальний" value="irregular"></v-radio>
+                :column="$vuetify.breakpoint.xs"
+                :dense="$vuetify.breakpoint.xs">
+                <v-radio class="pl-2" label="Класичний" value="even"></v-radio>
+                <v-radio class="pl-2" label="Ануїтет" value="annuity"></v-radio>
+                <v-radio class="pl-2" label="Індивідуальний" value="irregular"></v-radio>
               </v-radio-group>
             </v-col>
           </v-row>
@@ -244,10 +247,10 @@
     </v-card>
   </v-dialog>
   <v-card class="pb-4" min-height="300" elevation="12">
-  <v-card-title class="d-block grey darken-3 white--text">
+  <v-card-text class="d-block grey darken-3 white--text" style="font-size: 1.25rem">
     <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-clipboard-list-outline'"></v-icon>
     Заявки на лiзинг
-  </v-card-title>
+  </v-card-text>
     <v-progress-linear
       :height="3"
       :active="loading"
@@ -266,7 +269,7 @@
     <v-card-text 
       v-show="tableDataPresent" 
       class="calculations-table">
-      <v-card-title class="headline mb-7">
+      <v-card-title v-if="!$vuetify.breakpoint.xs" class="headline mb-7">
         <v-spacer></v-spacer>
         <v-text-field
           v-show="tableDataPresent"
@@ -285,7 +288,7 @@
         :items="tabledata"
         :custom-sort="customSort"
         :items-per-page="10"
-        class="elevation-1">
+        :class="`elevation-1 leasing-application-table ${$vuetify.breakpoint.xs ? 'small' : ''}`">
         <template v-slot:item.graph="{ item }">
           <span>{{ item.graph_type }}</span>
         </template>
@@ -588,3 +591,16 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+  .leasing-application-table {
+    &.small {
+      td {
+        min-height: 28px;
+      }
+      td:last-child {
+        margin-bottom: 23px;
+      }
+    }
+  }
+</style>

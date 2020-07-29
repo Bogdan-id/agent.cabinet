@@ -18,7 +18,7 @@
                 <v-icon large v-text="'mdi-bell-outline'" id="notify-btn"></v-icon>
               </v-btn>
               <span style="position: relative;">
-              <v-card id="cadr-notification" elevation="8">
+              <v-card id="cadr-notification" :class="`${$vuetify.breakpoint.xs ? 'small' : ''}`" elevation="8">
                 <v-card-title style="border-left: 4px solid #e57373" class="subtitle-1">
                   Повiдомлення
                   <!-- <v-btn @click="test()">test</v-btn> -->
@@ -264,7 +264,11 @@ export default {
 #cadr-notification {
   position: absolute; 
   min-width: 290px; 
-  right: 0;
+  right: -42px;
+  &.small {
+    right: -105px;
+    width: 210px;
+  }
   top: 80px!important;
   transition: opacity ease-out 0.15s, 
     top ease-out 0.15s, 

@@ -1776,7 +1776,7 @@ export default {
     position: relative;
     border-radius: 8px 8px 0 0;
     overflow: hidden;
-    margin-right: 15px;
+    // margin-right: 15px;
     box-shadow: 0 5px 6px -3px rgba(0,0,0,.2),
       0 9px 12px 1px rgba(0,0,0,.14),
       0 3px 16px 2px rgba(0,0,0,.12)!important;

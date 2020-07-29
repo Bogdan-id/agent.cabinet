@@ -1,5 +1,5 @@
 <template>
-<div class="col-12">
+<div class="col-12 pl-0 pr-0 pt-0">
   <v-dialog
     v-model="dialogToAgentReward"
     max-width="390">

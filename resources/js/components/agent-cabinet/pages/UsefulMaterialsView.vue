@@ -1,7 +1,7 @@
 <template>
     <div>
       <bread-scrumb />  
-      <div class="col-md-12 useful-materials pt-0">
+      <div class="col-md-12 useful-materials pt-0 pl-0 pr-0">
         <keep-alive>
           <useful-material-categories v-show="$route.name === 'Кориснi матерiали'">
           </useful-material-categories>

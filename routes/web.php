@@ -82,3 +82,6 @@ Route::get('json/useful-materials-categories/{categorySlug}/{slug}', 'UsefulMate
 Route::post('/calculate', 'CalculateController@create');
 Route::get('/models', 'ModelController@index');
 Route::get('/mark', 'MarkController@index');
+Route::get('bitrix/updatedLead', 'BitrixController@getUpdatedLeadId');
+
+

@@ -849,7 +849,9 @@ export default {
     border-bottom: none!important; 
     display: flex; 
     align-items: center; 
-    min-height: 48px; 
+    min-height: 48px;
+    min-width: 80px;
+    justify-content: flex-end;
     font-weight: bold;
   }
 }

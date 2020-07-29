@@ -753,10 +753,11 @@ export default {
     background-color: rgba(252, 252, 252, 0.7); 
     max-width: 48%;
     color: black!important;
-    margin: 25px 0 5px 25px; 
+    margin: 25px 0 25px 25px; 
     display: inline-block;
     &.small-screen {
       max-width: 90%;
+      margin: 25px; 
     }
   }
   .main-card {

@@ -30,8 +30,7 @@ export default {
     article: null,
   }),
   mounted() {
-    console.log(this.$router.currentRoute.path)
-    // let material = this.$router.currentRoute.params.material 
+    document.body.scrollTop = document.documentElement.scrollTop = 0
     axios
       .get(`/json${this.$router.currentRoute.path}`)
       .then(response => {

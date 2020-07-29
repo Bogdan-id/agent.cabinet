@@ -76,8 +76,7 @@ export default {
       this.btnLoading = true
       axios
         .delete(`/agent/notifications/delete/${id}`)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.getUserNotifications()
           this.$notify({
             group: 'success',
@@ -100,8 +99,8 @@ export default {
     changeNotificationsStatus(object) {
       axios
         .post(`/agent/notifications/checking`, object)
-        .then(response => {
-          console.log(response)
+        .then(() => {
+          /* */
         })
         .catch(error => {
           console.log(error.response)
@@ -116,7 +115,6 @@ export default {
       axios
         .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
         .then(response => {
-          console.log(response.data)
           this.notifications = response.data
         })
         .catch(error => {
@@ -127,7 +125,6 @@ export default {
       axios
         .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
         .then(response => {
-          console.log(response)
           this.notifications = response.data.sort((a, b) => {
             return new Date(b.updated_at) - new Date(a.updated_at)
           })
@@ -142,7 +139,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$route.params.notifications)
     this.notifications = this.$route.params.notifications 
       ? this.$route.params.notifications.sort((a, b) => {
           return new Date(b.updated_at) - new Date(a.updated_at)

@@ -160,7 +160,7 @@ export default {
   }
   .mobile-nav-block {
     .mobile-nav-link {
-      // font-family: 'Montserrat', sans-serif; 
+      font-family: 'Montserrat', sans-serif; 
       color: black; 
       font-size: 0.8rem;
       transition: color 0.2s ease-in;

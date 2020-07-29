@@ -1,5 +1,5 @@
 <template>
-<div class="col-12">
+<div class="col-12 pl-0 pr-0 pt-0">
   <v-dialog
     v-model="dialogToAgentReward"
     max-width="390">
@@ -23,7 +23,7 @@
     <v-card style="position: relative;">
       <v-card-title style="background: #424242; position: relative" class="white--text">
         <span 
-          :style="`${$vuetify.breakpoint.xs ? 'font-size: 1rem;' : ''}`"
+          :style="`max-width: 90%;${$vuetify.breakpoint.xs ? 'font-size: 1rem;' : ''}`"
           :class="`d-block ${$vuetify.breakpoint.xs? '' : 'title'}`">Заявка вiд розрахунку на 
           <span class="font-weight-bold">{{ reqObj.leasing_object }}</span>
         </span>

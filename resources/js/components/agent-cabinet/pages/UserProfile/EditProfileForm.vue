@@ -47,9 +47,9 @@
         </v-card>
         <!--  -->
         <v-card class="mb-6 custom-border">
-          <v-card-title>
+          <v-card-text style="color: #727170 !important; font-size: 1.15rem !important;">
             Контактна iнформацiя
-          </v-card-title>
+          </v-card-text>
           <v-card-text>
             <v-row>
               <div class="col-md-5 pt-0 pb-0">
@@ -76,9 +76,9 @@
           </v-card-text>
         </v-card>
         <v-card class="mb-6 custom-border">
-          <v-card-title>
+          <v-card-text style="color: #727170 !important; font-size: 1.15rem !important;">
             Посадовi данi
-          </v-card-title>
+          </v-card-text>
           <v-card-text>
             <v-row>
               <div class="col-md-5 pt-0 pb-0">

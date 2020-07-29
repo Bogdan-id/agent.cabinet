@@ -6,7 +6,13 @@
         @click.native="toggleCustomSidebar()"
         :class="showSidebar ? 'sidebar__toggle-icon' : 'sidebar__toggle-icon --toggle-icon-active'">
       </toggleIcon>
-      <div style="display: inline-flex"></div>
+      <div v-show="$vuetify.breakpoint.xs" style="display: inline-flex">
+        <v-btn 
+          @click="$emit('listenDrawer', !drawer)"
+          icon large class="pa-2 ma-2">
+          <v-icon size="36" v-text="'mdi-menu'"></v-icon>
+        </v-btn>
+      </div>
       <div class="notification-wrapper">
         <v-tooltip bottom>
           <template #activator="{ on }">
@@ -21,7 +27,6 @@
               <v-card id="cadr-notification" :class="`${$vuetify.breakpoint.xs ? 'small' : ''}`" elevation="8">
                 <v-card-title style="border-left: 4px solid #e57373" class="subtitle-1">
                   Повiдомлення
-                  <!-- <v-btn @click="test()">test</v-btn> -->
                 </v-card-title>
                 <v-card-text v-if="notificationCount == 0">
                   <div><span>(Повiдомлення вiдсутнi)</span></div>
@@ -77,6 +82,7 @@ import toggleIcon from "../../assets/svg-icons/arrow.vue"
 import axios from 'axios'
 
 export default {
+  props: ['drawer'],
   components: {
     toggleIcon,
   },
@@ -112,14 +118,10 @@ export default {
     },
   },
   methods: {
-    test() {
-      console.log(this.notificationCount)
-    },
     changeNotificationsStatus(object) {
       axios
         .post(`/agent/notifications/checking`, object)
-        .then(response => {
-          console.log(response)
+        .then(() => {
         })
         .catch(error => {
           console.log(error.response)
@@ -151,7 +153,6 @@ export default {
             ? this.notificationKeys.push(this.notifications[i].id)
             : false
         }
-        console.log(this.notificationKeys)
       } else {
         card.classList.remove('show-card')
         if(this.notificationKeys.length === 0) return
@@ -198,7 +199,6 @@ export default {
       axios
         .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
         .then(response => {
-          console.log(response)
           this.notifications = response.data.sort((a, b) => {
             return ('' + b.status).localeCompare(a.status)
           })

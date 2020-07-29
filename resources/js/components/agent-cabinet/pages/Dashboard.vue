@@ -25,7 +25,7 @@
         color="red">
       </v-progress-circular>
     </div>
-    <div style="width: 100%; min-height: 65px;">
+    <div style="width: 100%; height: 65px;">
       <div v-if="hasUserManager && !loading && requestRecieved" class="mobile-manager-content">
         <div v-if="!$vuetify.breakpoint.xs" style="display: inline-block; width: 70px; position: relaitve;">
           <div v-if="!agentData.photo" class="empty-logo-mobile"><span class="logo-letter">{{ agentData.name }}</span></div>

@@ -4,7 +4,7 @@
   <!-- Mobyle agent info -->
   <div v-if="!hasUserManager && !loading && requestRecieved" class="mobile-agent-not-manager">
     <div class="pa-3 d-flex headline align-center">
-      <div style="height: 100%; width: auto; display: flex;">
+      <div style="width: auto; display: flex;">
         <v-icon v-text="'mdi-information'" class="pr-3" size="50" color="red lighten-1"></v-icon>
       </div>
       <div style="display: flex; align-items: center;">
@@ -753,10 +753,11 @@ export default {
     background-color: rgba(252, 252, 252, 0.7); 
     max-width: 48%;
     color: black!important;
-    margin: 25px 0 5px 25px; 
+    margin: 25px 0 25px 25px; 
     display: inline-block;
     &.small-screen {
       max-width: 90%;
+      margin: 25px; 
     }
   }
   .main-card {

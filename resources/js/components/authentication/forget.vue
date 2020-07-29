@@ -1,6 +1,6 @@
 <template>
 	<div class="app__form-block">
-		<div class="app__login-form" style="position: relative;">
+    <div :class="`app__login-form ${$vuetify.breakpoint.xs ? 'pl-2 pr-2' : ''}`" style="position: relative;">
       <v-progress-linear
         :active="loading"
         :indeterminate="loading"

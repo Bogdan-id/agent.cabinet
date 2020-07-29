@@ -8,7 +8,7 @@
   background: #f5f9ff;
 }
 .app__login-form {
-  margin: 10px 35px;
+  margin: 25px 20px;
   text-align: left;
   width: 400px;
   padding: 30px 50px;
@@ -56,14 +56,15 @@ p.app__login-form-subtitle {
   position: absolute;
   bottom: 0;
   left: 2px;
+  font-size: 0.58rem;
   color: $danger;
   font-size: 10px;
   margin: 3px 0 0 5px;
   display: block;
-  font-weight: bold;
 }
 .input-error--active {
   transition: opacity 0.7s;
+  font-size: 0.58rem;
   opacity: 1;
 }
 .app__input-text:focus {
@@ -90,7 +91,7 @@ p.app__login-form-subtitle {
 }
 .app__sign-navigate-link {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 .app__login-footer {
   font-size: 12px;

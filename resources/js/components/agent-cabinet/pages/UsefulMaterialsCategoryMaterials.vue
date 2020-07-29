@@ -1,5 +1,5 @@
 <template>
-<div class="row">
+<div>
   <v-card class="usefull-material__detail" elevation="7" v-if="articles !== null " v-show="$route.name === 'Матерiали категорiї'" style="min-height: 160px; padding-top: 20px;">
     <!-- <v-card-title class="d-block pt-3 pb-1" style="border-left: 4px solid #e75d57;">
        {{currentCategory }}

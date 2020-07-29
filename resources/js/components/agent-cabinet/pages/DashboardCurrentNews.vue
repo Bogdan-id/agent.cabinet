@@ -2,9 +2,9 @@
   <v-row>
     <v-col cols="12" class="pt-0">
       <v-card class="usefull-material__detail " elevation="7" v-if="currentNews">
-        <v-card-title style="text-align: center!important">
+        <v-card-text style="text-align: center!important; font-size: 1.25rem;">
           <div style="color: black;">{{ currentNews.title }}</div>
-        </v-card-title>
+        </v-card-text>
         <v-divider class="ml-4 mr-4 mb-1 mt-1"></v-divider>
         <div style="padding: 0 25px; text-align: left;">
           <span style="letter-spacing: 0.05rem; font-size: 0.79rem; display: inline-block;">

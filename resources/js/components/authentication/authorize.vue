@@ -1,6 +1,6 @@
 <template>
 	<div class="app__form-block">
-		<div class="app__login-form">
+		<div :class="`app__login-form ${$vuetify.breakpoint.xs ? 'pl-2 pr-2' : ''}`">
 			<div class="app__form-logo-wrapper">
 				<div class="app__header-logo-card"></div>
 			</div>

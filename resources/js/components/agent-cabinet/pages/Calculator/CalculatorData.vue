@@ -1,5 +1,5 @@
 <template>
-<div class="col-12">
+<div class="col-12 pt-0 pl-0 pr-0">
   <v-dialog
     v-model="dialogToSwitchBetweenTypesOfSave"
     max-width="530">

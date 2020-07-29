@@ -830,7 +830,7 @@ export default {
 }
 .tabs-input{
   .v-data-table__mobile-row__cell {
-    min-width: 90px;
+    min-width: 80px;
   }
 }
 .total-payment-schedule {
@@ -850,7 +850,7 @@ export default {
     display: flex; 
     align-items: center; 
     min-height: 48px;
-    min-width: 80px;
+    min-width: 90px;
     justify-content: flex-end;
     font-weight: bold;
   }

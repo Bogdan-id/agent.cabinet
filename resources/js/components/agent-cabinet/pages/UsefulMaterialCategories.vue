@@ -27,11 +27,11 @@
         :style="hover ? 'border-left: 7px solid #e64833;' : 'border-left: 7px solid white'"
         :to="{path: `/useful-materials-categories/${item.slug}`, name: 'Матерiали категорiї', params: {category: item.slug}}"
         >
-        <v-card-title 
+        <v-card-text 
           class="custom-title" 
-          :style="`justify-content: center; font-size: ${$vuetify.breakpoint.xs ? '1.45rem' : '1.7rem;'}`">
+          :style="`justify-content: center; font-size: ${$vuetify.breakpoint.xs ? '1.25rem' : '1.7rem;'}`">
           <a>{{ item.name }}</a>
-        </v-card-title>
+        </v-card-text>
       </v-card>
     </v-hover>
   </v-card-text>

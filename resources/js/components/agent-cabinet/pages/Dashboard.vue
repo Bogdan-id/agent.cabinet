@@ -4,7 +4,7 @@
   <!-- Mobyle agent info -->
   <div v-if="!hasUserManager && !loading && requestRecieved" class="mobile-agent-not-manager">
     <div class="pa-3 d-flex headline align-center">
-      <div style="height: 100%; width: auto; display: flex;">
+      <div style="width: auto; display: flex;">
         <v-icon v-text="'mdi-information'" class="pr-3" size="50" color="red lighten-1"></v-icon>
       </div>
       <div style="display: flex; align-items: center;">
@@ -25,7 +25,7 @@
         color="red">
       </v-progress-circular>
     </div>
-    <div style="width: 100%; height: 65px;">
+    <div style="width: 100%; min-height: 65px;">
       <div v-if="hasUserManager && !loading && requestRecieved" class="mobile-manager-content">
         <div v-if="!$vuetify.breakpoint.xs" style="display: inline-block; width: 70px; position: relaitve;">
           <div v-if="!agentData.photo" class="empty-logo-mobile"><span class="logo-letter">{{ agentData.name }}</span></div>

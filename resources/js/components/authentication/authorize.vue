@@ -265,13 +265,13 @@ export default {
 		passwordErrors() {
 			const errors = []
 			if (!this.$v.password.$error) return errors
-			!this.$v.password.required && errors.push('Поле пароль обов\'язкове для заповнення')
+			!this.$v.password.required && errors.push('Обов\'язкове поле')
 			return errors
     },
     numberErrors() {
       const errors = []
 			if (!this.$v.number.$error) return errors
-			!this.$v.number.required && errors.push('Поле номер телефону обов\'язкове для заповнення')
+			!this.$v.number.required && errors.push('Обов\'язкове поле')
 			return errors
     }
 	},

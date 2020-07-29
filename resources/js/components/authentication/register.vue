@@ -36,7 +36,14 @@
 						v-model="number"
 						@paste="pasteEvent = true"
 						@input="applyMask()"
+            @blur="$v.number.$touch()"
 						/>
+            <span 
+							:class="numberError
+								? 'app__input-error input-error--active' 
+								: 'app__input-error'"> 
+							{{ numberErrors[0] }}
+						</span>
 				</div>
 				<div class="app__input-text-wrapper">
 					<input 
@@ -148,11 +155,14 @@ export default {
 	validations: {
 		firstName: {
 			required,
-		},
+    },
 		email: {
 			required,
 			email
-		},
+    },
+    number: {
+      minLength: minLength(23)
+    },
 		password: {
 			required,
 			minLength: minLength(minPassLength()),
@@ -312,26 +322,32 @@ export default {
 		},
 	},
 	computed: {
-		phoneErrors() {
-			return this.errors.phone.length > 0
-		},
+		numberError() {
+			return this.numberErrors.length > 0
+    },
+    numberErrors() {
+      const errors = []
+			if (!this.$v.number.$error) return errors
+			!this.$v.number.minLenght && errors.push('Невірний номер')
+			return errors
+    },
 		emailErrors() {
 			const errors = []
 			if (!this.$v.email.$error) return errors
 			!this.$v.email.email && errors.push('Невірний імейл')
-			!this.$v.email.required && errors.push('Поле імейл обов\'язкове для заповнення')
+			!this.$v.email.required && errors.push('Обов\'язкове поле')
 			return errors
 		},
 		firstNameErrors() {
 			const errors = []
 			if (!this.$v.firstName.$error) return errors
-			!this.$v.firstName.required && errors.push('Поле "Ім\'я" - обов\'язкове для заповнення')
+			!this.$v.firstName.required && errors.push('Обов\'язкове поле')
 			return errors
 		},
 		passwordErrors() {
 			const errors = []
 			if (!this.$v.password.$error) return errors
-			!this.$v.password.required && errors.push('Поле "Пароль" - обов\'язкове для заповнення')
+			!this.$v.password.required && errors.push('Обов\'язкове поле')
 			!this.$v.password.minLength && errors.push(`Мінімальна кількість знаків ${this.minPassLength()}`)
 			!this.$v.password.maxLength && errors.push(`Максимальна кількість знаків ${this.maxPassLength()}`)
 			return errors

@@ -42,7 +42,7 @@
     
     <v-navigation-drawer
       style="z-index: 3000; background: repeating-linear-gradient(60deg, #e2746f, #eb443d 35%, #f31d13 50%);"
-      v-show="$vuetify.breakpoint.xs"
+      v-show="$vuetify.breakpoint.smAndDown"
       v-model="drawer"
       app>
       <div class="mobile-sidebar__logo-wrapper">
@@ -68,7 +68,7 @@
       </div>
     </v-navigation-drawer>
 
-    <div class="main-panel" :style="$vuetify.breakpoint.xs ? 'width: 100%' : ''" id="main-panel">
+    <div class="main-panel" :style="$vuetify.breakpoint.smAndDown ? 'width: 100%' : ''" id="main-panel">
       <!-- <v-btn @click="test()">test</v-btn> -->
       <top-navbar @listenDrawer="drawer = $event" :drawer="drawerState"></top-navbar>
       <dashboard-content @click.native="toggleSidebar">

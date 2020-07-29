@@ -6,13 +6,14 @@
         @click.native="toggleCustomSidebar()"
         :class="showSidebar ? 'sidebar__toggle-icon' : 'sidebar__toggle-icon --toggle-icon-active'">
       </toggleIcon>
-      <div v-show="$vuetify.breakpoint.xs" style="display: inline-flex">
+      <div v-show="$vuetify.breakpoint.smAndDown" style="display: inline-flex">
         <v-btn 
           @click="$emit('listenDrawer', !drawer)"
           icon large class="pa-2 ma-2">
           <v-icon size="36" v-text="'mdi-menu'"></v-icon>
         </v-btn>
       </div>
+      <div style="display: inline-blockl"></div>
       <div class="notification-wrapper">
         <v-tooltip bottom>
           <template #activator="{ on }">

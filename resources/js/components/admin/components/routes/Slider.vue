@@ -456,7 +456,6 @@ export default {
     addSlider() {
       this.$v.$reset()
       if(this.sliders.length === this.maxSliderValue) {
-        console.log('max value')
         this.$notify({
           group: 'error',
           title: 'Помилка',
@@ -470,9 +469,8 @@ export default {
       this.deleteLoading = true
       axios
         .delete(`/admin/slide/delete/${this.deleteKey}`)
-        .then(response => {
+        .then(() => {
           this.deleteLoading = false
-          console.log(response)
           this.$notify({
             group: 'success',
             title: 'Слайдер видалено',
@@ -485,7 +483,6 @@ export default {
           }, 1200)
         })
         .catch(error => {
-          console.log(error.response)
           this.deleteLoading = false
           this.$notify({
             group: 'error',
@@ -509,7 +506,6 @@ export default {
         this.deleteImage(this.getImageNameFromUrl(key, this.editKey))
         this.sliders[key].slide_image = null
       } else {
-        console.log(this.sliderImageName)
         this.deleteImage()
       }
     },
@@ -523,7 +519,6 @@ export default {
             }
         })
         .then(response => {
-          console.log(response)
           let index = response.data.url.lastIndexOf("/") + 1
           this.sliderImageName = response.data.url.substr(index)
           this.sliderImageUrl = response.data.url
@@ -542,7 +537,6 @@ export default {
     },
     createSlider(id) {
       if(this.sliders.length === this.maxSliderValue && !id) {
-        console.log('max value')
         this.$notify({
           group: 'error',
           title: 'Помилка',
@@ -558,12 +552,10 @@ export default {
     createSliderRequest(id) {
       let query = '/admin/slide/create'
       if(id) { query = `/admin/slide/update/${id}`}
-      console.log(query)
       this.saveLoading = true
       axios
         .post(query, this.finalObj())
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.saveLoading = false
           this.editMode = false
           this.formToAddSlider = false 
@@ -592,9 +584,7 @@ export default {
       if(deleteMode) {
         this.deleteKey = id
         this.dialogToDelete = true
-        console.log('deleteMode')
       } else {
-        console.log('not delete mode')
         this.editKey = key
         this.editMode = true
         this.sliderImage = this.sliders[key].slide_image
@@ -628,8 +618,7 @@ export default {
     deleteImage(imageFromArray) {
       axios
         .post('/admin/image/delete', {image: imageFromArray || this.sliderImageName})
-        .then(response => {
-          console.log(response.data)
+        .then(() => {
           this.sliderImage = null
           this.sliderImageUrl = null
           this.sliderImageName = null
@@ -643,7 +632,6 @@ export default {
         })
     },
     async listenImageInput() {
-      console.log('listenImageInput()')
       let file = document.querySelector('.slider-image-input').files[0]
       let reader = new FileReader()
       this.sliderImageName = file.name
@@ -680,7 +668,6 @@ export default {
       axios
       .get('/admin/slide/all')
       .then(response => {
-        console.log(response)
         this.sliders = response.data
         this.$store.commit('toggleAdminSpinner', false)
       })

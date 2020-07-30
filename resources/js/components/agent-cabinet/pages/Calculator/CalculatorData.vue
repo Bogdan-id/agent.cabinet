@@ -929,7 +929,6 @@ export default {
         axios
           .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
           .then(response => {
-            console.log(response)
             this.edrpouLoading = false
             if(response.status === 200 && response.data.companyShortName) {
               this.legalInfo.companyName = response.data.companyShortName
@@ -980,7 +979,6 @@ export default {
             }
         })
         .then(response => {
-          console.log(response)
           this.documentUrls = Object.assign({}, this.documentUrls, {[selector]: {url: response.data.url, text: document.name, size: document.size}})
         })
         .catch(error => {
@@ -994,7 +992,6 @@ export default {
     async listenFileInput(selector) {
       let file = document.querySelector(`.${selector}`).files[0]
       if(file.size <= 5242880) {
-        console.log(file)
         this.uploadDoc(file, selector)
       } else {
         this.$notify({
@@ -1023,8 +1020,7 @@ export default {
       this.btnLoading = true
       axios
         .delete(`/calculation/delete/${this.calculationToDelete}`)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.$notify({
             group: 'success',
             title: 'Розрахунок видалено',
@@ -1193,8 +1189,6 @@ export default {
       this.leasingApplicationForm = true
     },
     submit() {
-      console.log(!this.$v.$invalid)
-      console.log(this.object())
       !this.$v.$invalid
         ? this.sendRequest()
         : this.highlightErrors()
@@ -1204,8 +1198,7 @@ export default {
       let object = this.object()
       axios.
         post('/leasing-reqeust/create', this.requestObj(object))
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.$notify({
             group: 'success',
             title: 'Заявку успiшно вiдправленно',
@@ -1283,7 +1276,6 @@ export default {
       axios
         .get('/getAcquisitionTargets')
         .then(response => {
-          console.log(response)
           this.listItem = response.data
         })
         .catch(error => {
@@ -1302,9 +1294,6 @@ export default {
         axios
           .get(`calculations/agent/${agentId}`)
           .then(response => {
-            console.log('*************')
-            console.log(response)
-            console.log('*************')
             this.loading = false
             if(response.data.length > 0)  {
               this.tabledata = response.data
@@ -1366,7 +1355,6 @@ export default {
       axios
         .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
         .then(response => {
-          console.log(response)
           if(this.formatToSave === 'pdf') {
             let index = response.headers['content-disposition'].indexOf('"') + 1
             saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
@@ -1426,10 +1414,6 @@ export default {
     }
   },
   mounted() {
-    // this.legalDocs.forEach(val => {
-    //   this.documentUrls[val.prop] = {}
-    // })
-    // console.log(this.documenUrls)
     this.getListItem()
     this.$store.state.user.agent 
       ? this.getUserCalculations()

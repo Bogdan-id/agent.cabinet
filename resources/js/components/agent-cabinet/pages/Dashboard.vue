@@ -382,9 +382,6 @@ export default {
         case 'irregular': return 'Індивідуальний'
       }
     },
-    // test() {
-    //   console.log(this.$store.state.user.agent.manager_id)
-    // },
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
       this.tabledata = []
@@ -417,18 +414,16 @@ export default {
       axios
         .get('/json/slides')
         .then(response => {
-          console.log(response)
           this.slides = response.data
         })
         .catch(error => {
-          error.response
+          console.log(error.response)
         })
     },
     getNews() {
       axios
         .get('/json/news')
         .then(response => {
-          console.log(response)
           this.news = response.data
         })
         .catch(error => {
@@ -470,11 +465,6 @@ export default {
     this.getSlides()
     this.getNews()
   },
-  mounted() {
-    setTimeout(() => {
-      console.log(this.agentData)
-    }, 2000)
-  }
 }
 </script>
 

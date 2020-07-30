@@ -68,7 +68,6 @@
             class="error">
               {{ $route.params.edit ? 'Зберегти' : 'Додати новину'}}
             </v-btn>
-            <v-btn @click="test()">test</v-btn>
           </span>
         </v-card-text>
       </v-card-text>
@@ -201,19 +200,14 @@
       }
     },
     methods: {
-      test() {
-        console.log(this.editorConfig.simpleUpload.headers.Authorization)
-      },
       clearImage() {
-        console.log('clear image')
         this.imageName = null 
         this.materialImg = null
         this.materialImgPreview = null
         if(this.$route.params.edit === true) {
           axios
             .post('/admin/image/delete', {image: this.imageToDelete})
-            .then(response => {
-              console.log(response.data)
+            .then(() => {
             })
             .catch(error => {
               console.log(error.response)
@@ -221,8 +215,6 @@
         }
       },
       submit() {
-        console.log(this.finalObj())
-        console.log(this.$v)
         !this.$v.$invalid
           ? this.sendRequest()
           : this.highlightErrors()
@@ -237,8 +229,7 @@
         }
         axios
           .post(url, this.finalObj())
-          .then(response => {
-            console.log(response)
+          .then(() => {
             this.loading = false
             this.$notify({
               group: 'success',
@@ -302,7 +293,6 @@
               }
           })
           .then(response => {
-            console.log(response)
             this.imageName = response.data.url
           })
           .catch(error => {

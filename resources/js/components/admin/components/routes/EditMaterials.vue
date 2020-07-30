@@ -217,15 +217,13 @@
     },
     methods: {
       clearImage() {
-        console.log('clear image')
         this.imageName = null 
         this.materialImg = null
         this.materialImgPreview = null
         if(this.$route.params.edit === true) {
           axios
             .post('/admin/image/delete', {image: this.imageToDelete})
-            .then(response => {
-              console.log(response.data)
+            .then(() => {
             })
             .catch(error => {
               console.log(error.response)
@@ -233,7 +231,6 @@
         }
       },
       submit() {
-        console.log(this.finalObj())
         !this.$v.$invalid
           ? this.sendRequest()
           : this.highlightErrors()
@@ -248,8 +245,7 @@
         }
         axios
           .post(url, this.finalObj())
-          .then(response => {
-            console.log(response)
+          .then(() => {
             this.loading = false
             this.$notify({
               group: 'success',
@@ -312,7 +308,6 @@
               }
           })
           .then(response => {
-            console.log(response)
             this.imageName = response.data.url
           })
           .catch(error => {
@@ -348,7 +343,6 @@
 
         let index = material.title_image.lastIndexOf("/") + 1
         this.imageToDelete = material.title_image.substr(index)
-        console.log(this.imageToDelete)
 
         this.materialImg = material.title_image
         this.newCategorie = this.$route.params.category[0].id

@@ -73,7 +73,6 @@ export default {
       axios
         .get('/json/news')
         .then(response => {
-          console.log(response)
           this.news = response.data
         })
         .catch(error => {
@@ -82,13 +81,9 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.params)
     if(this.$route.params.redirectFromDashboard === true) {
-      console.log('redirect from dashboard')
-      console.log(Object.values(this.$route.params.news))
       this.news = this.$route.params.news
     } else {
-      console.log('not redirected')
       this.getNews()
     }
     

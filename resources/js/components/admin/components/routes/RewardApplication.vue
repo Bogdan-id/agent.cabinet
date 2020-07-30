@@ -136,7 +136,6 @@ export default {
     },
     sendToPay() {
       if(this.status != 'paid') {
-        console.log('input')
         this.loading = true
         this.sendRequest()
       }
@@ -144,8 +143,7 @@ export default {
     sendRequest() {
       axios
         .get(`/admin/agent-commission/paid/${this.id}`)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.$notify({
             group: 'success',
             title: 'Заявку оплачено!',
@@ -182,7 +180,6 @@ export default {
       this.cardNumber = itemObject.agent.card_number
       this.iban = itemObject.agent.iban
       this.amount = (parseInt(itemObject.leasing_request.leasing_amount.replace(/[^\d]/g, ''))  / 100) * parseInt(itemObject.agent.ab_size)
-      console.log(this.amount)
       this.id = itemObject.id
       this.status = itemObject.status
     },
@@ -190,7 +187,6 @@ export default {
       axios
         .get('/admin/agent-commission/all')
         .then(response => {
-          console.log(response)
           this.agentComissions = response.data
           this.filteredAgentComissions = response.data
         })

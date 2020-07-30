@@ -33,16 +33,11 @@ export default {
     loading: false
   }),
   mounted() {
-    console.log(this.$router.currentRoute)
-    // let params = this.$router.currentRoute.params
-    // this.currentCategory = params.name
-    // let category = params.category
     this.loading = true
     axios
       .get(`/json${this.$router.currentRoute.path}`)
       .then(response => {
         this.loading = false
-        console.log(response)
         if(response.status == 500) {
           // Помилка серверу
           this.$notify({

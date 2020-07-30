@@ -653,7 +653,6 @@ export default {
         axios
           .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
           .then(response => {
-            console.log(response)
             this.edrpouLoading = false
             if(response.status === 200 && response.data.companyShortName) {
               this.legalInfo.companyName = response.data.companyShortName
@@ -704,7 +703,6 @@ export default {
             }
         })
         .then(response => {
-          console.log(response)
           this.documentUrls = Object.assign({}, this.documentUrls, {[selector]: {url: response.data.url, text: document.name, size: document.size}})
         })
         .catch(error => {
@@ -718,7 +716,6 @@ export default {
     async listenFileInput(selector) {
       let file = document.querySelector(`.${selector}`).files[0]
       if(file.size <= 5242880) {
-        console.log(file)
         this.uploadDoc(file, selector)
       } else {
         this.$notify({
@@ -773,7 +770,6 @@ export default {
       axios
         .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
         .then(response => {
-          console.log(response)
           if(this.formatToSave === 'pdf') {
             let index = response.headers['content-disposition'].indexOf('"') + 1
             saveAs(response.data, response.headers['content-disposition'].substr(index).split('"')[0])
@@ -804,7 +800,6 @@ export default {
       this.formatToSave = format
       this.dialogToSend = true
       this.currentGraphToDownload = this.data
-      console.log(this.currentGraphToDownload)
     },
     hasOnlyOneGraph() {
       let count = 0
@@ -822,7 +817,6 @@ export default {
       graph.agg['payment-principal'] = graph['total-payment-principal']
       graph.agg['interest'] = graph['total-interest']
       graph.agg['payment'] = graph['total-payment']
-      console.log(graph)
       let calcData = this.data.request_data
       let rootCalcData = this.data
 
@@ -845,7 +839,6 @@ export default {
 
       dataToSave[this.switchGraphName(this.graph)] = graph
 
-      console.log(dataToSave)
       if(this.formatToSave === 'email') {
         dataToSave.email = this.emailToSend
       }
@@ -861,7 +854,6 @@ export default {
       this.dialogToSend = true
     },
     submit() {
-      console.log(this.$v)
       !this.$v.$invalid
         ? this.sendRequest()
         : this.highlightErrors()
@@ -914,8 +906,7 @@ export default {
       let object = this.object()
       axios
         .post('/leasing-reqeust/create', this.requestObj(object))
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.$notify({
             group: 'success',
             title: 'Заявку успiшно вiдправленно',
@@ -956,7 +947,6 @@ export default {
     },
     openForm() {
       this.selectedGraph = this.switchGraphName(this.graph)
-      console.log(this.selectedGraph)
       this.leasingApplicationForm = true
     },
     getDefaultProperties() {
@@ -1095,19 +1085,14 @@ export default {
     // },
     graph(val) {
       if(!Number.isNaN(parseInt(val))) {
-        console.log('value not string')
         this.graphType = this.switchGraphName(val)
       }
-      console.log(this.graphType)
     }
   },
   created() {
     this.getDefaultProperties()
   },
   mounted() {
-    console.log('DATA')
-    console.log(this.data)
-    console.log('DATA')
     this.graphType = this.switchGraphName(this.graph)
   }
 }

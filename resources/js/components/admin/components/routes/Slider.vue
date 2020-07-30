@@ -45,7 +45,7 @@
         ref="sliderImageInput"
         class="slider-image-input"
         @change="listenImageInput()">
-      <div v-if="formToAddSlider" class="mb-8">
+      <div v-show="formToAddSlider" class="mb-8">
         <v-card
           :style="`margin: 0 auto; position: relative; background: url('${sliderImage}'); background-size: cover;`"
           class="slider-card"
@@ -132,6 +132,7 @@
               outlined>
             </v-textarea>
             <ckeditor
+              v-if="formToAddSlider"
               :editor="editor" v-model="editorData" :config="editorConfig">
             </ckeditor>
             <div class="d-flex justify-space-between mt-5">
@@ -275,6 +276,7 @@
               outlined>
             </v-textarea>
             <ckeditor
+              v-if="!formToAddSlider && editMode && editKey === key"
               :editor="editor" v-model="editorData" :config="editorConfig">
             </ckeditor>
             <div class="d-flex justify-space-between mt-5">
@@ -387,8 +389,7 @@ export default {
       simpleUpload: {
         uploadUrl: '/admin/image/upload',
         headers: {
-          'X-CSRF-TOKEN': 'CSFR-Token',
-          Authorization: `Bearer this.getCsrf`
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }
       }
     },
@@ -453,6 +454,7 @@ export default {
   },
   methods: {
     addSlider() {
+      this.$v.$reset()
       if(this.sliders.length === this.maxSliderValue) {
         console.log('max value')
         this.$notify({
@@ -600,7 +602,7 @@ export default {
         this.sliderImageName = this.getImageNameFromUrl(key, this.editKey)
         this.sliderTitle = this.sliders[key].title
         this.sliderDescription = this.sliders[key].description
-        this.editorData = this.sliders[key].content
+        this.editorData = this.sliders[key].content || '<p></p>'
       }
     },
     stopEditMode() {

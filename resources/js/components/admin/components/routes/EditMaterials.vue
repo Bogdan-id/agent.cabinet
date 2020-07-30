@@ -172,8 +172,7 @@
         simpleUpload: {
           uploadUrl: '/admin/image/upload',
           headers: {
-            'X-CSRF-TOKEN': 'CSFR-Token',
-            Authorization: `Bearer this.getCsrf`
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
           }
         }
       },
@@ -183,7 +182,7 @@
       categories: [],
       loading: false,
 
-      editorData: 'Контент',
+      editorData: '<p>Контент</p>',
       materialName: null,
 
       materialImg: null,

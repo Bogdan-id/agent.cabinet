@@ -68,6 +68,7 @@
             class="error">
               {{ $route.params.edit ? 'Зберегти' : 'Додати новину'}}
             </v-btn>
+            <v-btn @click="test()">test</v-btn>
           </span>
         </v-card-text>
       </v-card-text>
@@ -161,8 +162,7 @@
         simpleUpload: {
           uploadUrl: '/admin/image/upload',
           headers: {
-            'X-CSRF-TOKEN': 'CSFR-Token',
-            Authorization: `Bearer this.getCsrf`
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
           }
         }
       },
@@ -171,7 +171,7 @@
       ],
       loading: false,
 
-      editorData: 'Контент',
+      editorData: '<p>Контент</p>',
       materialName: null,
 
       materialImg: null,
@@ -201,6 +201,9 @@
       }
     },
     methods: {
+      test() {
+        console.log(this.editorConfig.simpleUpload.headers.Authorization)
+      },
       clearImage() {
         console.log('clear image')
         this.imageName = null 
@@ -317,16 +320,12 @@
         this.$v.$anyError
         this.$v.$touch()
       },
-      assignTokenToCkEditorConfig() {
-        this.editorConfig.simpleUpload.headers.Authorization = `Bearer ${this.getCsrf()}`
-      }
     },
     mounted() {
       this.categories = this.$route.params.categories
     },
     created() {
       let material = this.$route.params.material
-      console.log(material)
       if(this.$route.params.edit === true) {
         this.editorData = material.content,
         this.materialName = material.title,

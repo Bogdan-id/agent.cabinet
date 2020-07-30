@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import BreadsCrumb from '../components/breadScrumb.vue'
-import CalculatorData from './Calculator/CalculatorData'
+import BreadsCrumb from '../../components/breadScrumb.vue'
+import CalculatorData from './CalculatorData'
 
 export default {
   components: {

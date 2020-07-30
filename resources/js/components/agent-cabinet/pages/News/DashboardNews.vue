@@ -55,7 +55,7 @@
 
 <script>
 import axios from 'axios'
-import breadScrumb from '../components/breadScrumb'
+import breadScrumb from '../../components/breadScrumb'
 
 export default {
   components: {

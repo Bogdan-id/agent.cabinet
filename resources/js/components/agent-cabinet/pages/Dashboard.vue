@@ -5,14 +5,20 @@
   <div v-if="!hasUserManager && !loading && requestRecieved" class="mobile-agent-not-manager">
     <div class="pa-3 d-flex headline align-center">
       <div style="width: auto; display: flex;">
-        <v-icon v-text="'mdi-information'" class="pr-3" size="37" color="red lighten-1"></v-icon>
+        <v-icon 
+          v-text="'mdi-information'" 
+          class="pr-3" 
+          size="37" 
+          color="red lighten-1"></v-icon>
       </div>
-      <div style="display: flex; align-items: center; font-size: 1rem;">
+      <div class="agent-has-no-manager">
         За Вами не закрiплений жоден з менеджерів!
       </div>
     </div>
   </div>
-  <div v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'" style="position: relative">
+  <div 
+    v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'" 
+    style="position: relative">
     <span 
       :style="$vuetify.breakpoint.xs ? 'font-size: 0.86rem; width: 60%;' : ''" 
       class="mobile-manager-title text-center">
@@ -25,18 +31,29 @@
         color="red">
       </v-progress-circular>
     </div>
-    <div style="width: 100%; min-height: 65px;">
+    <div class="mobile-manager-wrapper">
       <div v-if="hasUserManager && !loading && requestRecieved" class="mobile-manager-content">
-        <div v-if="!$vuetify.breakpoint.xs" style="display: inline-block; width: 70px; position: relaitve;">
-          <div v-if="!agentData.photo" class="empty-logo-mobile"><span class="logo-letter">{{ agentData.name }}</span></div>
-          <div style="display: inline-flex; justify-content: center; align-items: center; position: absolute; top: 3px; left: 4px; width: 60px; height: 60px;">
+        <div 
+          v-if="!$vuetify.breakpoint.xs" 
+          style="display: inline-block; width: 70px; position: relaitve;">
+          <div v-if="!agentData.photo" class="empty-logo-mobile">
+            <span class="logo-letter">{{ agentData.name }}</span>
+          </div>
+          <div class="agent-photo">
             <img style="max-width: 100%; border-radius: 100%;" :src="agentData.photo" />
           </div>
         </div>
         <div :style="`${$vuetify.breakpoint.xs ? 'width: 100%;' : ''}`" class="manager-data-wrapper">
-          <span style="font-size: 0.8rem; font-family: Montserrat,sans-serif,Arial; font-weight: bold; white-space: nowrap; padding-right: 0.8rem;">{{ agentData.name }}</span>
-          <span style="font-family: Montserrat,sans-serif,Arial; font-weight: bold; white-space: nowrap; font-size: 0.76rem; display: inline-block; padding-right: 0.8rem;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</span>
-          <span :style="`color: #bb433c; white-space: nowrap; display: inline-block; ${$vuetify.breakpoint.xs ? 'font-size: 10px;' : ''}`"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</span>
+          <span class="manager-data-name">{{ agentData.name }}</span>
+          <span style="manager-data-phone">
+            <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>
+            {{ agentData.phone }}
+          </span>
+          <span 
+            :style="`color: #bb433c; white-space: nowrap; display: inline-block; ${$vuetify.breakpoint.xs ? 'font-size: 10px;' : ''}`">
+            <v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>
+            {{ agentData.email }}
+          </span>
         </div>
       </div>
     </div>
@@ -53,7 +70,7 @@
         </v-skeleton-loader>
       </div>
       <div v-if="!carouselVisibility && !slidesLoader" 
-        style="position: relative; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+        class="absent-slide">
         <span style="font-size: 1.3rem; color: #727170;">(Пропозиції вiдсутнi)</span>
       </div>
       <v-carousel
@@ -81,9 +98,13 @@
                 <p style="font-size: 0.88rem"> {{ item.description }} </p>
               </div>
             </div>
-            <div style="height: 240px; display: flex; width: 100%; justify-content: flex-end; align-items: flex-end;">
+            <div class="to-detail-news">
               <span style="display: inline-block; margin-right: 40px; margin-bottom: 15px">
-                <v-btn class="vuetify_custom-btn white--text ml-1 mt-7" :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">Ознайомитись</v-btn>
+                <v-btn 
+                  class="vuetify_custom-btn white--text ml-1 mt-7" 
+                  :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">
+                  Ознайомитись
+                </v-btn>
               </span>
             </div>
           </div>
@@ -93,7 +114,9 @@
     <v-card 
       v-if="tabledata.length > 0"
       class="mt-10 mb-6 dashboard-table" elevation="9">
-      <v-card-title :class="`headline pb-3 pt-3 ${!$vuetify.breakpoint.xs ? 'mb-7' : ''}`" style="border-left: 5px solid #e75d57;">
+      <v-card-title 
+        :class="`headline pb-3 pt-3 ${!$vuetify.breakpoint.xs ? 'mb-7' : ''}`" 
+        style="border-left: 5px solid #e75d57;">
         Заявки на лiзинг
       </v-card-title>
       <v-data-table
@@ -196,18 +219,28 @@
         </div>
         <div v-if="hasUserManager && !loading && requestRecieved" class="manager-content d-flex flex-column">
           <div style="display: flex; justify-content: center;">
-            <div v-if="agentData.photo == null" style="display: flex; align-items: center; justify-content: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
+            <div 
+              v-if="agentData.photo == null" 
+              class="manager-has-no-photo">
               <span class="logo-letter">{{ agentData.name }}</span>
             </div>
-            <div v-if="agentData.photo != null" style="display: flex; align-text: center; justify-content: center; width: 74px; height: 74px; border-radius: 100%; background-color: #dadada;">
+            <div 
+              v-if="agentData.photo != null" 
+              class="manager-has-photo">
               <img style="max-width: 100%; border-radius: 100%;" :src="agentData.photo" />
             </div>
           </div>
           <div class="manager-list-wrapper">
             <ul>
-              <li style="font-size: 1.06rem; font-family: Montserrat,sans-serif,Arial; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
-              <li style="font-weight: bold; font-family: Montserrat,sans-serif,Arial; font-size: 0.76rem"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</li>
-              <li style="color: #bb433c; "><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</li>
+              <li class="desktop-manager-name">{{ agentData.name }}</li>
+              <li style="font-weight: bold; font-family: Montserrat,sans-serif,Arial; font-size: 0.76rem">
+                <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>
+                {{ agentData.phone }}
+              </li>
+              <li style="color: #bb433c; ">
+                <v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>
+                {{ agentData.email }}
+              </li>
             </ul>
           </div>
         </div>
@@ -268,7 +301,9 @@
     <v-card-title class="headline" style="border-left: 5px solid #e75d57">
       Новини
     </v-card-title>
-    <v-card-text v-if="news === null || news === 'undefined' || news.length === 0" class="pt-5 pb-5 text-center">
+    <v-card-text 
+      v-if="news === null || news === 'undefined' || news.length === 0" 
+      class="pt-5 pb-5 text-center">
       <span style="font-size: 1.3rem;">Новини вiдсутнi</span>
     </v-card-text>
     <v-card-text class="dashboard-news__wrapper">
@@ -307,7 +342,8 @@
     <v-card-text class="pt-0" v-if="news !== null && news !== 'undefined' && news.length > 0">
       <div style="text-align: center">
         <v-btn color="#e75d57" outlined 
-          :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" tag="span">
+          :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" 
+          tag="span">
           всi новини
         </v-btn>
       </div>
@@ -489,6 +525,13 @@ export default {
   visibility: hidden;
   transition: opacity 1.5s;
   opacity: 0;
+  .to-detail-news {
+    height: 240px; 
+    display: flex; 
+    width: 100%; 
+    justify-content: flex-end; 
+    align-items: flex-end;
+  }
   &.active {
     visibility: visible;
     opacity: 1;
@@ -527,6 +570,31 @@ export default {
   font-size: 1.4rem;
   font-weight: bold;
 }
+.manager-content {
+  .desktop-manager-name {
+    font-size: 1.06rem; 
+    font-family: Montserrat,sans-serif,Arial; 
+    margin-bottom: 0.2rem;
+  }
+  .manager-has-no-photo {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 74px; 
+    height: 74px; 
+    border-radius: 100%; 
+    background-color: #dadada;
+  }
+  .manager-has-photo {
+    display: flex; 
+    text-align: center; 
+    justify-content: center; 
+    width: 74px; 
+    height: 74px; 
+    border-radius: 100%; 
+    background-color: #dadada;
+  }
+}
 .mobile-manager-content {
   padding: 1.6rem 1rem 0.3rem 1rem; 
   display: flex;
@@ -541,6 +609,21 @@ export default {
     width: 90%; 
     padding-top: 10; 
     align-items: center;
+    .manager-data-name {
+      font-size: 0.8rem; 
+      font-family: Montserrat,sans-serif,Arial; 
+      font-weight: bold; 
+      white-space: nowrap; 
+      padding-right: 0.8rem;
+    }
+    .manager-data-phone {
+      font-family: Montserrat,sans-serif,Arial; 
+      font-weight: bold; 
+      white-space: nowrap; 
+      font-size: 0.76rem; 
+      display: inline-block; 
+      padding-right: 0.8rem;
+    }
   }
   .empty-logo {
     margin-right: 0.5rem; 
@@ -615,6 +698,11 @@ export default {
   display: none;
   border: 2px solid #ef5350;
   transition: max-width 0.5s ease-in;
+  .agent-has-no-manager {
+    display: flex; 
+    align-items: center; 
+    font-size: 1rem;
+  }
 }
 .mobile-agent-info {
   position: relative;
@@ -624,7 +712,20 @@ export default {
   overflow: hidden;
   transition: max-width 0.5s ease-in;
   width: 100%;
-  
+  .mobile-manager-wrapper {
+    width: 100%; 
+    min-height: 65px;
+    .agent-photo {
+      display: inline-flex; 
+      justify-content: center; 
+      align-items: center; 
+      position: absolute; 
+      top: 3px; 
+      left: 4px; 
+      width: 60px; 
+      height: 60px;
+    }
+  }
   .mobile-manager-title {
     font-family: Montserrat,sans-serif,Arial;
     top: 0.8rem; 
@@ -725,6 +826,14 @@ export default {
   width: 74%;
   .v-window {
   position: relative!important;
+  .absent-slide {
+    position: relative; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    height: 100%;
+  }
   .v-window-item  {
     transition: opacity .45s ease-in!important;
     position: absolute!important;

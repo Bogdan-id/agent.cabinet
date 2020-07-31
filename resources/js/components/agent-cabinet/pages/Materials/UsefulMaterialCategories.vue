@@ -46,9 +46,6 @@ export default {
     loading: false,
   }),
   methods: {
-    test() {
-      // console.log(this.$route)
-    },
     toRoute(id, name) {
       this.$router.push({name: 'Матерiали категорiї', params: {id: id, name: name}})
     }
@@ -59,7 +56,6 @@ export default {
     axios
       .get('/useful-materials-categories/all/')
       .then(response => {
-        console.log(response)
         this.sections = response.data
         this.$store.commit('toggleSpinner', false)
         this.loading = false

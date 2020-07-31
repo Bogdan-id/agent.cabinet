@@ -11,7 +11,7 @@
     </div>
 </template>
 <script>
-import BreadScrumb from '../components/breadScrumb'
+import BreadScrumb from '../../components/breadScrumb'
 import UsefulMaterialCategories from './UsefulMaterialCategories'
 
 export default {

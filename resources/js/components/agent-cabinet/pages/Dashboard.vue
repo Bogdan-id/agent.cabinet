@@ -34,8 +34,8 @@
           </div>
         </div>
         <div :style="`${$vuetify.breakpoint.xs ? 'width: 100%;' : ''}`" class="manager-data-wrapper">
-          <span style="font-size: 0.8rem; font-weight: bold; white-space: nowrap; padding-right: 0.8rem;">{{ agentData.name }}</span>
-          <span style="font-weight: bold; white-space: nowrap; font-size: 0.76rem; display: inline-block; padding-right: 0.8rem;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</span>
+          <span style="font-size: 0.8rem; font-family: Montserrat,sans-serif,Arial; font-weight: bold; white-space: nowrap; padding-right: 0.8rem;">{{ agentData.name }}</span>
+          <span style="font-family: Montserrat,sans-serif,Arial; font-weight: bold; white-space: nowrap; font-size: 0.76rem; display: inline-block; padding-right: 0.8rem;"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</span>
           <span :style="`color: #bb433c; white-space: nowrap; display: inline-block; ${$vuetify.breakpoint.xs ? 'font-size: 10px;' : ''}`"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</span>
         </div>
       </div>
@@ -205,8 +205,8 @@
           </div>
           <div class="manager-list-wrapper">
             <ul>
-              <li style="font-size: 1.06rem; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
-              <li style="font-weight: bold; font-size: 0.76rem"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</li>
+              <li style="font-size: 1.06rem; font-family: Montserrat,sans-serif,Arial; margin-bottom: 0.2rem;">{{ agentData.name }}</li>
+              <li style="font-weight: bold; font-family: Montserrat,sans-serif,Arial; font-size: 0.76rem"><v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ agentData.phone }}</li>
               <li style="color: #bb433c; "><v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ agentData.email }}</li>
             </ul>
           </div>
@@ -286,7 +286,9 @@
             class="white--text align-end"
             style="width: 100%; height: 200px;"
             :src="item['news_title_image']">
-            <v-card-title class="subtitle-1">{{ item.title }}</v-card-title>
+            <v-card-text 
+              class="subtitle-1" 
+              style="font-size: 1rem">{{ item.title }}</v-card-text>
           </v-img>
           <v-card-text class="pb-0">{{ item.description }}</v-card-text>
           <v-card-actions>
@@ -380,9 +382,6 @@ export default {
         case 'irregular': return 'Індивідуальний'
       }
     },
-    // test() {
-    //   console.log(this.$store.state.user.agent.manager_id)
-    // },
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
       this.tabledata = []
@@ -415,18 +414,16 @@ export default {
       axios
         .get('/json/slides')
         .then(response => {
-          console.log(response)
           this.slides = response.data
         })
         .catch(error => {
-          error.response
+          console.log(error.response)
         })
     },
     getNews() {
       axios
         .get('/json/news')
         .then(response => {
-          console.log(response)
           this.news = response.data
         })
         .catch(error => {
@@ -468,11 +465,6 @@ export default {
     this.getSlides()
     this.getNews()
   },
-  mounted() {
-    setTimeout(() => {
-      console.log(this.agentData)
-    }, 2000)
-  }
 }
 </script>
 
@@ -575,6 +567,7 @@ export default {
 }
 
 .manager-title {
+  font-family: Montserrat,sans-serif,Arial;
   border-left: 4px solid #e75d57; 
   border-radius: 0!important; 
   font-weight: bold; 
@@ -633,6 +626,7 @@ export default {
   width: 100%;
   
   .mobile-manager-title {
+    font-family: Montserrat,sans-serif,Arial;
     top: 0.8rem; 
     font-size: 1rem;
     position: absolute; 

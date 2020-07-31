@@ -147,11 +147,9 @@ export default {
       axios
         .post('/password/reset/sendSms', {phone: this.number, _token: this.getCsrf()})
         .then(response => {
-          console.log(response)
           this.loading = false
           this.userId = response.data.userId
           this.timer(120)
-          console.log('response')
         })
         .catch(error => {
           console.log(error.response)
@@ -176,7 +174,6 @@ export default {
       axios
         .post('/password/reset/resetPassword', object)
         .then(response => {
-          console.log(response)
           if(response.data.status === true) {
             this.$notify({
               group: 'success',
@@ -214,7 +211,6 @@ export default {
       this.$v.$touch()
     },
 		submit() {
-      console.log(this.$v)
       if(!this.$v.$invalid) {
         this.userId !== null 
           ? this.resetPassword()
@@ -316,21 +312,21 @@ export default {
 		passwordErrors() {
 			const errors = []
 			if (!this.$v.password.$error) return errors
-      !this.$v.password.required && errors.push('Поле пароль обов\'язкове для заповнення')
-      !this.$v.password.minLength && errors.push('Поле пароль має мiстити мінімум 8 знаків')
+      !this.$v.password.required && errors.push('Обов\'язкове поле')
+      !this.$v.password.minLength && errors.push('Має мiстити мінімум 8 знаків')
 			return errors
     },
     numberErrors() {
       const errors = []
 			if (!this.$v.number.$error) return errors
-      !this.$v.number.required && errors.push('Поле номер телефону обов\'язкове для заповнення')
+      !this.$v.number.required && errors.push('Обов\'язкове поле')
       !this.$v.number.minLength && errors.push('Невiрный номер')
 			return errors
     },
     verificationCodeErrors() {
       const errors = []
 			if (!this.$v.verificationCode.$error) return errors
-			!this.$v.verificationCode.required && errors.push('Поле код верифікації обов\'язкове для заповнення')
+			!this.$v.verificationCode.required && errors.push('Обов\'язкове поле')
 			return errors
     },
     repeatedPasswordErrors() {
@@ -373,7 +369,6 @@ export default {
   },
   mounted() {
     this.signInByEnter()
-    console.log(this.$v)
   },
   beforeDestroy() {
     window.removeEventListener('keypress', (event) => {

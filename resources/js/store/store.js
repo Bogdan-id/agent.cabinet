@@ -55,7 +55,6 @@ export default new Vuex.Store({
       commit('toggleSpinner', true)
       axios.get('/getUserAgent')
       .then(response => {
-        console.log(response)
         commit('addUserData', response.data)
         commit('addAgentData', response.data.agent.manager)
         commit('toggleSpinner', false)

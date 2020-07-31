@@ -1481,9 +1481,7 @@ export default {
       axios
         .post('/calculate', this.calcObj)
           .then(response => {
-            console.log(response.data)
             this.$store.commit('toggleSpinner', false)
-            console.log('YES')
             // this.$router.push('/calculator/chart')
             let data = response.data
             this.$router.push({name: 'Графiки', params: {data: data}})

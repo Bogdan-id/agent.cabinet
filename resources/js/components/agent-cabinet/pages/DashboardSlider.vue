@@ -28,6 +28,9 @@ export default {
   }),
   created() {
     this.offer = this.$route.params
+  },
+  mounted() {
+    document.body.scrollTop = document.documentElement.scrollTop = 0
   }
 }
 </script>

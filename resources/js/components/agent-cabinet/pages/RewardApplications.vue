@@ -137,10 +137,8 @@ export default {
       if(status === 'paid') return 'Оплачено'
     },
     customSort(items) {
-      console.log(items)
       items
         .sort((a, b) => {
-          console.log(a.created_at, b.created_at)
           return new Date(b.updated_at) - new Date(a.updated_at)
       })
       return items
@@ -158,10 +156,6 @@ export default {
             this.object.agentId = id
             this.object._token = this.getCsrf()
             this.$store.commit('toggleAdminSpinner', false)
-            // this.agentCommisions = response.data
-            console.log('commision request')
-            console.log(response)
-            console.log('commision request')
           })
           .catch(error => {
             this.$store.commit('toggleAdminSpinner', false)
@@ -189,12 +183,10 @@ export default {
     },
     sendRequest() {
       this.clearOptionalField()
-      console.log(this.object)
       this.loading = true
       axios
         .post('/agent-commission/create', this.object)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.$notify({
             group: 'success',
             title: 'Успiшно',

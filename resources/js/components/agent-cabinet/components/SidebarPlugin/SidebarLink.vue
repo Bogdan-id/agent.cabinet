@@ -74,7 +74,6 @@ export default {
   methods: {
     addLinkToSideBar() {
       if (this.addLink) {
-        // console.log(this.addLink(this))
         this.addLink(this)
       }
     },

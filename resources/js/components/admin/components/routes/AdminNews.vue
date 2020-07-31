@@ -172,7 +172,6 @@ export default {
       axios
         .delete(`/admin/news/delete/${this.newsToDelete.id}`)
         .then(response => {
-          console.log(response)
           this.loading = false
           this.$notify({
             group: 'success',
@@ -200,7 +199,6 @@ export default {
       return categorieObj
     },
     changeActive(event) {
-      console.log(event)
       let tabs = document.querySelectorAll('#section .tabs-input')
       tabs.forEach(element => element.classList.remove('active'))
       event.target.parentNode.classList.add('active')
@@ -210,7 +208,6 @@ export default {
       axios
         .get('/admin/news/all')
         .then(response => {
-          console.log(response)
           this.materials = response.data
           this.$store.commit('toggleAdminSpinner', false)
         })

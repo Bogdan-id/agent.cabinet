@@ -14,6 +14,7 @@
     list-style: none;
     margin-bottom: 0;
     .contact-title {
+      font-family: Montserrat,sans-serif,Arial;
       position: relative;
       padding: 1px 0;
       color: black;
@@ -135,17 +136,23 @@
     }
     .contact-wrapper {
       align-items: center;
+      width: 100%;
       .footer__feedback {
         width: 100%;
+        padding: 20px 0;
       }
     }
+    .logo-wrapper {
+      padding: 15px 0;
+    }
     .footer__contacts-wrapper {
-      margin-left: 10px;
+      width: 80%;
       .footer__contacts-wrapper {
         padding: 35px 0!important;
         .contact-title {
           display: block;
           padding: 12px 0!important;
+          font-size: 0.8rem;
         }
       }
     }

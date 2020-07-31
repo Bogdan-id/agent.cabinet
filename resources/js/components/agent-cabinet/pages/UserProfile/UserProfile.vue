@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import EditProfileForm from "./UserProfile/EditProfileForm.vue"
+import EditProfileForm from "./EditProfileForm.vue"
 
 export default {
   components: {

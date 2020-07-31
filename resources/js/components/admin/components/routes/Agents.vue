@@ -163,7 +163,6 @@ export default {
       axios
         .get('/admin/agent/all')
         .then(response => {
-          console.log(response)
           this.createTableData(response.data)
           this.$store.commit('toggleAdminSpinner', false)
         })
@@ -178,7 +177,6 @@ export default {
         })
     },
     async createTableData(object) {
-      console.log(object)
       let arr = []
       await object.map(val => {
         let dataObj = {
@@ -194,21 +192,15 @@ export default {
         arr.push(dataObj)
       })
       this.tabledata = arr
-        // .sort(this.sortData)
-        // .reverse()
     },
     findAgent(id) {
-      console.log(id)
       let data = this.tabledata
         .find(value => {
           return value.id === id
-          // console.log(value.id, id)
         })
       if(Object.keys(data).length > 0) {
         Object.assign(this.currentUser, data)
         Object.assign(this.userSettings, data)
-        // console.log(data)
-        // console.log(this.userSettings)
       }
     },
     deactivateUser(userId) {
@@ -219,7 +211,6 @@ export default {
       axios
         .get('/getManagers')
         .then(response => {
-          console.log(response)
           this.managers = response.data
         })
         .catch(error => {
@@ -230,8 +221,7 @@ export default {
       this.loading = true
       axios
         .get(`/admin/user/deactivate/${id}`)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.loading = false
           this.$notify({
             group: 'success',
@@ -253,12 +243,10 @@ export default {
           })
         })
     },
-    getAgentOperations(id) {
-      console.log(id)
+    getAgentOperations() {
       this.agentOperationsDialog = true
     },
     parseToInt(id) {
-      console.log('parseToInt')
       let input = new Event('input', {bubbles: true})
       let el = document.getElementById(id)
       let value = el.value
@@ -288,8 +276,7 @@ export default {
       // this.checkObject(this.userSettings)
       axios
         .post(`/admin/agent/update/${this.currentUser.id}`, this.userSettings)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.loading = false
           this.$notify({
             group: 'success',

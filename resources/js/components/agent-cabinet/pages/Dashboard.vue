@@ -5,9 +5,9 @@
   <div v-if="!hasUserManager && !loading && requestRecieved" class="mobile-agent-not-manager">
     <div class="pa-3 d-flex headline align-center">
       <div style="width: auto; display: flex;">
-        <v-icon v-text="'mdi-information'" class="pr-3" size="50" color="red lighten-1"></v-icon>
+        <v-icon v-text="'mdi-information'" class="pr-3" size="37" color="red lighten-1"></v-icon>
       </div>
-      <div style="display: flex; align-items: center;">
+      <div style="display: flex; align-items: center; font-size: 1rem;">
         За Вами не закрiплений жоден з менеджерів!
       </div>
     </div>

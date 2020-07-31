@@ -35,7 +35,6 @@
           <v-btn 
             @click="signIn()"
             id="admin-sign-in-btn"
-            @keydown.esc="$emit('test')"
             class="error white--text" 
             :loading="loading">
             Увiйти
@@ -82,13 +81,7 @@ export default {
     },
   },
   methods: {
-    test() {
-      console.log('OK')
-    },
     signIn() {
-      console.log('sign-in')
-      console.log(this.$v.$dirty)
-      console.log(!this.$v.$invalid)
       this.$v.$dirty
       && !this.$v.$invalid
         ? this.sendRequest()
@@ -101,8 +94,7 @@ export default {
       this.loading = true
       axios.
         post('/admin/auth/login', this.userObj)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           // this.$notify({
           //   group: 'success',
           //   title: 'Успiшно',

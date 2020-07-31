@@ -99,7 +99,6 @@ export default {
       this.$v.$touch()
     },
 		submit() {
-      console.log(this.numberErrors.length > 0)
       this.highlightErrors()
 			if(!this.$v.$invalid && this.$v.$dirty ){
 				this.signIn(this.getRegObject())
@@ -121,7 +120,6 @@ export default {
 		checkUser() {
 			axios.get(`/getCurrentUser`)
 				.then(response => {
-          console.log(response)
 					// user has registered account and the application is approved
 					if(response.data.is_active === 1) {
 						this.checkUserAgent()
@@ -138,7 +136,6 @@ export default {
       // user is tied to an agent. Pass to dashboard
       axios.get(`/getUserAgent`)
 				.then(response => {
-          console.log(response)
 					// user has registered account and the application is approved
 					if(response.data.agent !== null) {
             this.$router.push('/home')

@@ -1040,7 +1040,7 @@ export default {
 .empty-chart {
   width: 100%; 
   height: 100vh; 
-  background-image: url('../assets/img/empty-graph-backgound.png'); 
+  background-image: url('../../assets/img/empty-graph-backgound.png'); 
   background-size: contain; 
   filter: blur(0.15rem);
 }

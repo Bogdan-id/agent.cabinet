@@ -147,11 +147,9 @@ export default {
       axios
         .post('/password/reset/sendSms', {phone: this.number, _token: this.getCsrf()})
         .then(response => {
-          console.log(response)
           this.loading = false
           this.userId = response.data.userId
           this.timer(120)
-          console.log('response')
         })
         .catch(error => {
           console.log(error.response)
@@ -176,7 +174,6 @@ export default {
       axios
         .post('/password/reset/resetPassword', object)
         .then(response => {
-          console.log(response)
           if(response.data.status === true) {
             this.$notify({
               group: 'success',
@@ -214,7 +211,6 @@ export default {
       this.$v.$touch()
     },
 		submit() {
-      console.log(this.$v)
       if(!this.$v.$invalid) {
         this.userId !== null 
           ? this.resetPassword()
@@ -373,7 +369,6 @@ export default {
   },
   mounted() {
     this.signInByEnter()
-    console.log(this.$v)
   },
   beforeDestroy() {
     window.removeEventListener('keypress', (event) => {

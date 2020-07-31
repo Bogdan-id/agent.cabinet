@@ -18,9 +18,6 @@ export default {
         || this.$route.name === 'Редагувати'
     }
   },
-  mounted() {
-    console.log(this.$route.name)
-  }
 }
 </script>
 

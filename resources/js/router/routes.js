@@ -20,19 +20,19 @@ import ForgotPassword from '../components/authentication/ForgotPassword'
 
 /* Dashboard components */
 import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout"
-import DashboardNews from '../components/agent-cabinet/pages/DashboardNews'
-import DashboardCurrentNews from "../components/agent-cabinet/pages/DashboardCurrentNews"
+import DashboardNews from '../components/agent-cabinet/pages/News/DashboardNews'
+import DashboardCurrentNews from "../components/agent-cabinet/pages/News/DashboardCurrentNews"
 import Dashboard from "../components/agent-cabinet/pages/Dashboard"
-import UserProfile from "../components/agent-cabinet/pages/UserProfile"
-import UsefulMaterialsView from "../components/agent-cabinet/pages/UsefulMaterialsView"
+import UserProfile from "../components/agent-cabinet/pages/UserProfile/UserProfile"
+import UsefulMaterialsView from "../components/agent-cabinet/pages/Materials/UsefulMaterialsView"
 import RewardApplicationsDashboard from "../components/agent-cabinet/pages/RewardApplications"
-import Calculator from "../components/agent-cabinet/pages/Calculator"
-import CurrentMaterial from "../components/agent-cabinet/pages/CurrentMaterial"
+import Calculator from "../components/agent-cabinet/pages/Calculator/Calculator"
+import CurrentMaterial from "../components/agent-cabinet/pages/Materials/CurrentMaterial"
 import LeasingApplications from "../components/agent-cabinet/pages/LeasingApplications"
 import NewCalculation from '../components/agent-cabinet/pages/Calculator/NewCalculation'
 // import CalculationEdit from '../components/agent-cabinet/pages/CalculationEdit.vue'
-import UsefulMaterialsCategoryMaterials from '../components/agent-cabinet/pages/UsefulMaterialsCategoryMaterials'
-import ChartDiagram from '../components/agent-cabinet/pages/ChartDiagram'
+import UsefulMaterialsCategoryMaterials from '../components/agent-cabinet/pages/Materials/UsefulMaterialsCategoryMaterials'
+import ChartDiagram from '../components/agent-cabinet/pages/Charts/ChartDiagram'
 import UserNotifications from '../components/agent-cabinet/pages/UserNotifications'
 import DashboardSlider from '../components/agent-cabinet/pages/DashboardSlider'
 import Reporting from '../components/agent-cabinet/pages/Reporting'

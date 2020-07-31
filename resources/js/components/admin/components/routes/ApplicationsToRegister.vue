@@ -56,7 +56,6 @@ export default {
       axios
         .get('/admin/getDontActiveUsers')
         .then(response => {
-          console.log(response)
           this.createTableData(response.data)
           this.$store.commit('toggleAdminSpinner', false)
         })
@@ -94,7 +93,6 @@ export default {
       axios
         .get(`/admin/user/activate/${id}`)
         .then(response => {
-          console.log(response)
           this.getApplicationsToRegister()
           this.$store.commit('toggleAdminSpinner', false)
           if(response.status === 200) {

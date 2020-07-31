@@ -67,8 +67,7 @@ export default {
       this.managerLoading = true
       axios
         .get('/admin/managers/update')
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.managerLoading = false
           this.$notify({
             group: 'success',
@@ -90,7 +89,6 @@ export default {
       axios
         .get('/admin/managers/all')
         .then(response => {
-          console.log(response.data)
           this.managers = response.data
         })
         .catch(error => {

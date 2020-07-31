@@ -388,8 +388,6 @@ export default {
   methods: {
     editMaterial(id, material) {
       let category = this.filterCategoryToEditMaterial(material.useful_materials_category_id)
-      // console.log(id)
-      // console.log(material)
       this.$router.push({
         name: 'edit-material', 
         params: {
@@ -410,7 +408,6 @@ export default {
       axios
         .delete(`/admin/useful-material/delete/${this.materialToDelete.id}`)
         .then(response => {
-          console.log(response)
           this.loading = false
           this.$notify({
             group: 'success',
@@ -445,13 +442,10 @@ export default {
       return categorieObj
     },
     filterByCategory(id) {
-      console.log('id' + id)
       this.filteredMaterials = this.materials
         .filter(v => { return v.useful_materials_category_id === id })
-      console.log(this.filteredMaterials)
     },
     changeActive(event) {
-      console.log(event)
       let tabs = document.querySelectorAll('#section .tabs-input')
       tabs.forEach(element => element.classList.remove('active'))
       event.target.parentNode.classList.add('active')
@@ -461,7 +455,6 @@ export default {
       axios
         .get('/useful-materials-categories/all')
         .then(response => {
-          console.log(response)
           this.categories = response.data
           this.$store.commit('toggleAdminSpinner', false)
           this.getUsefulMaterials()
@@ -473,7 +466,6 @@ export default {
         })
     },
     getUsefulMaterials() {
-      console.log('emit trigered')
       this.$store.commit('toggleAdminSpinner', true)
       axios
         .get('/admin/useful-materials/all')
@@ -488,7 +480,6 @@ export default {
         })
     },
     makeActiveCategory(e, category) {
-      console.log(e)
       this.categoryToEdit.name = category
       document.querySelectorAll('#categories-list .btn-actions button')
         .forEach(button => button.disabled = true)
@@ -517,8 +508,7 @@ export default {
       this.loading = true
       axios
         .delete(`/admin/useful-materials-categories/delete/${this.categoryToDelete.id}`, {_token: this.getCsrf()})
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.loading = false
           this.getMageterialCategories()
           this.$notify({
@@ -549,8 +539,7 @@ export default {
               name: this.newCategorie,
               _token: this.getCsrf()
             }
-          ).then(response => {
-            console.log(response)
+          ).then(() => {
             this.loading = false
             this.getMageterialCategories()
             this.$notify({
@@ -583,8 +572,7 @@ export default {
               name: this.categoryToEdit.name,
               _token: this.getCsrf()
             }
-          ).then(response => {
-            console.log(response)
+          ).then(() => {
             this.loading = false
             this.getMageterialCategories()
             this.$notify({
@@ -616,7 +604,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$route)
     this.getMageterialCategories()
   },
 }

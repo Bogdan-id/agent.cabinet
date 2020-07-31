@@ -471,9 +471,8 @@ export default {
       let obj = {agentId: this.agentIdToReward, leasingRequestId: this.requestIdToReward}
       axios
         .post('/agent-commission/create', obj)
-        .then(response => {
+        .then(() => {
           this.requestToRewardLoading = false
-          console.log(response)
           this.$notify({
             group: 'success',
             title: 'Заявку успiшно вiдправлено',
@@ -505,7 +504,6 @@ export default {
       } else return
     },
     customSort(items) {
-      console.log(items)
       items
         .sort((a, b) => {
           return new Date(b.updated_at) - new Date(a.updated_at)
@@ -526,7 +524,6 @@ export default {
       this.$router.push({name: 'Редагувати', params: {id: id, edit: true}})
     },
     toDetail(id) {
-      console.log(this.getGraphById(id)[0])
       this.leasingApplicationForm = true
       Object.assign(this.reqObj, this.getGraphById(id)[0])
     },
@@ -542,7 +539,6 @@ export default {
         axios
           .get(`/leasing-reqeust/agent/${agentId}`)
           .then(response => {
-            console.log(response)
             this.loading = false
             if(response.data.length > 0)  {
               this.tabledata = response.data
@@ -552,6 +548,7 @@ export default {
             }
           })
           .catch(error => {
+            console.log(error.response)
             this.loading = false
             this.$notify({
               group: 'error',
@@ -560,9 +557,6 @@ export default {
             })
           })
         }
-    },
-    test(item) {
-      console.log(item)
     },
     sortData(a, b) {
       return new Date(b.created_at) - new Date(a.created_at)

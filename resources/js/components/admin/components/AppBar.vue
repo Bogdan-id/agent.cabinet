@@ -34,8 +34,7 @@ export default {
             }
           }
         )
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.$router.push({name: 'admin-authorization', params: {reload: true}})
           this.$store.commit('toggleAdminSpinner', false)
           this.loading = false

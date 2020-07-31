@@ -34,7 +34,6 @@ export default {
     axios
       .get(`/json${this.$router.currentRoute.path}`)
       .then(response => {
-        console.log(response)
         if(response.status == 500) {
           this.$notify({
             group: 'error',
@@ -54,8 +53,6 @@ export default {
       .catch(error => {
         console.log(error.response)
       })
-    // this.item = this.$router.currentRoute.params
-    // console.log(this.item)
   },
 }
 </script>

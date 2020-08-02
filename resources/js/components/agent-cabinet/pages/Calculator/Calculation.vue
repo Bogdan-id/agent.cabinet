@@ -1199,7 +1199,7 @@ export default {
         leasedAssertMark: null,
         leasedAssertModel: null,
         isNew: true,
-        leasingObjectType: null,
+        leasingObjectType: {label: "Легкові та комерційні авто", value: 1},
         leasingQuantity: null,
         leasingObjectYear: null,
         leasedAssertEngine: null,
@@ -1364,7 +1364,9 @@ export default {
     getMarksByType(event) {
       if(event) {
         this.resetForm()
-        this.calcObj.leasingObjectType = parseInt(event.value)
+        this.calcObj.leasingObjectType = parseInt(event.target.value)
+      } else if(this.calcObj.leasingObjectType && this.calcObj.leasingObjectType.value) {
+        this.calcObj.leasingObjectType = this.calcObj.leasingObjectType.value
       }
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
@@ -1461,7 +1463,7 @@ export default {
         && !this.$v.$invalid
         && this.$v.$dirty
           ? this.sendRequest()
-          : this.notify('', 'Заповнiть даннi', 'error')
+          : this.notify('', 'Заповнiть данi', 'error')
 
     },
     checkIfHasCurrency() {
@@ -1749,6 +1751,11 @@ export default {
   mounted() {
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
+      this.changeActiveClass()
+      this.initFranchiseInput()
+      this.displayWindowSize()
+      this.initAdvanceInputValue()
+      return
     } else {
       this.calcObj.leasingObjectType = {label: "Легкові та комерційні авто", value: 1}
     }

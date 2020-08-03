@@ -1323,7 +1323,7 @@ export default {
     },
     sendGraph() {
       let graphs = this.currentGraphToDownload.result_data
-      let graph = graphs[Object.keys(graphs)[0]]
+      let graph = graphs[Object.keys(graphs)[0] !== 'requestId' ? Object.keys(graphs)[0] : Object.keys(graphs)[1]]
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
 

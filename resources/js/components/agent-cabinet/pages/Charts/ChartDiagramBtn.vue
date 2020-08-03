@@ -474,7 +474,6 @@ export default {
     advance: null,
     leasingTerm: null,
     leasingAmount: null,
-    graphType: null,
     legalInfo: {
       // creditPayment: null,
       inn: null,
@@ -729,7 +728,8 @@ export default {
     },
     sendGraph() {
       let graphs = this.currentGraphToDownload.result_data
-      let graph = graphs[Object.keys(graphs)[0]]
+      let graph = graphs[Object.keys(graphs)[0] !== 'requestId' ? Object.keys(graphs)[0] : Object.keys(graphs)[1]]
+      // console.log(Object.keys(graphs)[0])
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
 
@@ -801,57 +801,9 @@ export default {
       this.dialogToSend = true
       this.currentGraphToDownload = this.data
     },
-    hasOnlyOneGraph() {
-      let count = 0
-      let graph
-      if(this.data.result_data.hasOwnProperty('even')) {count ++, graph = 'even'}
-      if(this.data.result_data.hasOwnProperty('annuity')) {count ++, graph = 'annuity'}
-      if(this.data.result_data.hasOwnProperty('irregular')) {count ++, graph = 'irregular'}
-      if(count === 1) return {state: true, graph}
-      return {state: false}
-    },
-    sendDataToUser() {
-      let graph = this.data.result_data[this.switchGraphName(this.graph)]
-      graph.agg = {}
-      graph.agg['avg'] = graph['offer-month-payment']
-      graph.agg['payment-principal'] = graph['total-payment-principal']
-      graph.agg['interest'] = graph['total-interest']
-      graph.agg['payment'] = graph['total-payment']
-      let calcData = this.data.request_data
-      let rootCalcData = this.data
-
-      let dataToSave = {
-        agentId: this.$store.state.user.agent.id,
-        mark: calcData.leasedAssertMark.name,
-        model: calcData.leasedAssertModel.name,
-        price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
-        term: calcData.leasingTerm,
-        advance: calcData.advance,
-        prepaid: graph['offer-advance'],
-        offerBrutto: graph['offer-price-brutto'],
-        oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
-        currency: calcData.currency,
-        leasingRest: graph['offer-rest'],
-        requestId: rootCalcData.request_id,
-        date: rootCalcData.updated_at.substring(0, 10),
-        _token: this.getCsrf()
-      }
-
-      dataToSave[this.switchGraphName(this.graph)] = graph
-
-      if(this.formatToSave === 'email') {
-        dataToSave.email = this.emailToSend
-      }
-      !this.$v.$invalid
-        ? this.sendData(dataToSave)
-        : this.highlightErrors()
-    },
     highlightErrors() {
       this.$v.$anyError
       this.$v.$touch()
-    },
-    openDialogToSend() {
-      this.dialogToSend = true
     },
     submit() {
       !this.$v.$invalid
@@ -1041,7 +993,7 @@ export default {
     },
     clearObject() {
       // this.creditPayment = null,
-      this.selectedGraph = null,
+      // this.selectedGraph = null,
       this.lastName = null,
       this.firstName = null,
       this.patronymic = null,
@@ -1071,7 +1023,7 @@ export default {
     dialogToSend(value) {
       if(value === false) {
         this.formatToSave = null
-        this.currentGraphToDownload = null
+        // this.currentGraphToDownload = null
         this.emailField = false
       }
     },
@@ -1089,7 +1041,7 @@ export default {
     // },
     graph(val) {
       if(!Number.isNaN(parseInt(val))) {
-        this.graphType = this.switchGraphName(val)
+        this.selectedGraph = this.switchGraphName(val)
       }
     }
   },
@@ -1097,7 +1049,7 @@ export default {
     this.getDefaultProperties()
   },
   mounted() {
-    this.graphType = this.switchGraphName(this.graph)
+    this.selectedGraph = this.switchGraphName(this.graph)
   }
 }
 </script>

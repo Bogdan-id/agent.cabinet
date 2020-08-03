@@ -991,9 +991,13 @@ export default {
 				val === sign ? indexes.push(i) : false
 			})
 			let fillMask = (val) => {
-				val.split('').forEach((val, i) => {
-						indexes[i] ? splitMask[indexes[i]] = val : false
-				})
+        val.split('').forEach((val, i) => {
+          if(this.phone[6] == 0) {
+            this.phone = this.phone.substr(0, 6) + this.phone.substr(6) 
+          } else {
+            indexes[i] ? splitMask[indexes[i]] = val : false
+          }
+        })
 			}
 			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
 				fillMask(

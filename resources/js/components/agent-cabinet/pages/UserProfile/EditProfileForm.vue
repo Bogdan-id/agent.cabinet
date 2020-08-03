@@ -263,7 +263,6 @@
                 <v-text-field
                   v-model="ab_size"
                   label="Розмiр АВ"
-                  placeholder="Розмiр АВ"
                   append-icon="mdi-percent-outline"
                   dense readonly>
                 </v-text-field>

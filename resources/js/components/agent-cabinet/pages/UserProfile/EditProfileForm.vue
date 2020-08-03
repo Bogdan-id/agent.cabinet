@@ -186,7 +186,8 @@
                     <v-text-field v-if="bioPassport  && user.passport_type_id"
                       label="Номер УНЗР"
                       :error-messages="passport_serieErr"
-                      @input="trimExceededLength('profile-unzr', 13, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
+                      @input="trimExceededLength('profile-unzr', 14)"
+                      v-mask="'########-#####'"
                       id="profile-unzr"
                       @blur="$v.user.passport_serie.$touch()"
                       v-model="user.passport_serie"
@@ -436,9 +437,6 @@ export default {
       this.user.passport_number = null
     },
     updateProfile() {
-      console.log(JSON.stringify(this.user))
-      console.log(JSON.stringify(this.userBackUp))
-      console.log(JSON.stringify(this.user) === JSON.stringify(this.userBackUp))
       !this.$v.$invalid
         ? this.sendRequest()
         : this.highlightErrors()
@@ -454,12 +452,10 @@ export default {
           object[val] = this.user[val]
         }
       }
-      console.log(object)
       this.loading = true
       axios 
         .post(`/agent/update/${this.$store.state.user.agent.id}`, object)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.$notify({
             group: 'success',
             title: 'Профiль успiшно оновлено',
@@ -489,17 +485,19 @@ export default {
     },
     trimExceededLength(elId, maxLength, callback) {
       let el = document.getElementById(elId)
-      let event = new Event('input', {bubbles: true})
-      if(el.value && typeof callback === "function") {
-        if(el.value !== callback(el.value)) {
-          el.value = callback(el.value)
+      setTimeout(() => {
+        let event = new Event('input', {bubbles: true})
+        if(el.value && typeof callback === "function") {
+          if(el.value !== callback(el.value)) {
+            el.value = callback(el.value)
+            el.dispatchEvent(event)
+          }
+        }
+        if(el.value && el.value.length > maxLength) {
+          el.value = el.value.substr(0, maxLength)
           el.dispatchEvent(event)
         }
-      }
-      if(el.value && el.value.length > maxLength) {
-        el.value = el.value.substr(0, maxLength)
-        el.dispatchEvent(event)
-      }
+      }, 150)
     },
     applyMask() {
 			const el = document.getElementById('number')
@@ -702,7 +700,7 @@ export default {
             // id картка
             return {
               required,
-              minLength: minLength(13),
+              minLength: minLength(14),
             }
           } else return true
         })(),
@@ -833,11 +831,11 @@ export default {
     },
   },
   watch: {
-    showPassportEditField() {
-      if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = ''
-      if(this.$v.user.passport_number.$invalid) this.user.passport_number = ''
-      this.user.passport_type
-      
+    showPassportEditField(val) {
+      if(!val) {
+        if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = ''
+        if(this.$v.user.passport_number.$invalid) this.user.passport_number = ''
+      }
     },
     modal(val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))

@@ -186,7 +186,8 @@
                     <v-text-field v-if="bioPassport  && user.passport_type_id"
                       label="Номер УНЗР"
                       :error-messages="passport_serieErr"
-                      @input="trimExceededLength('profile-unzr', 13, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
+                      @input="trimExceededLength('profile-unzr', 14)"
+                      v-mask="'########-#####'"
                       id="profile-unzr"
                       @blur="$v.user.passport_serie.$touch()"
                       v-model="user.passport_serie"
@@ -303,6 +304,7 @@
               @click="updateProfile()">
               Оновити профіль
             </v-btn>
+            <v-btn @click="test()">test</v-btn>
           </div>
           <div class="clearfix"></div>
         </form>
@@ -379,6 +381,9 @@ export default {
     }
   },
   methods: {
+    test() {
+      console.log(this.user.passport_serie)
+    },
     cc_format(value) {
       let v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
       let matches = v.match(/\d{4,16}/g);
@@ -415,12 +420,14 @@ export default {
         iban: this.$store.state.user.agent.iban,
         _token: this.getCsrf()
       }
+      console.log(user)
       Object.assign(this.user, user)
       for (let value in this.user) {
         if(!this.user[value]) {
           this.user[value] = ''
         }
       }
+      console.log(this.user)
       Object.assign(this.userBackUp, this.user)
 
       this.manager = this.$store.state.user.agent.manager
@@ -489,17 +496,19 @@ export default {
     },
     trimExceededLength(elId, maxLength, callback) {
       let el = document.getElementById(elId)
-      let event = new Event('input', {bubbles: true})
-      if(el.value && typeof callback === "function") {
-        if(el.value !== callback(el.value)) {
-          el.value = callback(el.value)
+      setTimeout(() => {
+        let event = new Event('input', {bubbles: true})
+        if(el.value && typeof callback === "function") {
+          if(el.value !== callback(el.value)) {
+            el.value = callback(el.value)
+            el.dispatchEvent(event)
+          }
+        }
+        if(el.value && el.value.length > maxLength) {
+          el.value = el.value.substr(0, maxLength)
           el.dispatchEvent(event)
         }
-      }
-      if(el.value && el.value.length > maxLength) {
-        el.value = el.value.substr(0, maxLength)
-        el.dispatchEvent(event)
-      }
+      }, 150)
     },
     applyMask() {
 			const el = document.getElementById('number')
@@ -702,7 +711,7 @@ export default {
             // id картка
             return {
               required,
-              minLength: minLength(13),
+              minLength: minLength(14),
             }
           } else return true
         })(),
@@ -833,11 +842,11 @@ export default {
     },
   },
   watch: {
-    showPassportEditField() {
-      if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = ''
-      if(this.$v.user.passport_number.$invalid) this.user.passport_number = ''
-      this.user.passport_type
-      
+    showPassportEditField(val) {
+      if(!val) {
+        if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = ''
+        if(this.$v.user.passport_number.$invalid) this.user.passport_number = ''
+      }
     },
     modal(val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))

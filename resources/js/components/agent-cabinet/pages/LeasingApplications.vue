@@ -357,7 +357,7 @@
                   v-on="on"
                   icon>
                   <v-icon
-                    color="red lighten-1">
+                    color="grey darken-2">
                     mdi-file-find-outline
                   </v-icon>
                 </v-btn>

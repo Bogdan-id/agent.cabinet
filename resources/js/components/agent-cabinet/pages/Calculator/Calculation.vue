@@ -1215,7 +1215,7 @@ export default {
         customGraphicType: 3,
 
         // new fields
-        leasingRest: null,
+        leasingRest: 0,
         stock: null,
         holidays: 2,
         insuranceProgram: 2,

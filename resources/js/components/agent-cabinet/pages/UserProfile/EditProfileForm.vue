@@ -304,7 +304,6 @@
               @click="updateProfile()">
               Оновити профіль
             </v-btn>
-            <v-btn @click="test()">test</v-btn>
           </div>
           <div class="clearfix"></div>
         </form>
@@ -381,9 +380,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log(this.user.passport_serie)
-    },
     cc_format(value) {
       let v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
       let matches = v.match(/\d{4,16}/g);
@@ -420,14 +416,12 @@ export default {
         iban: this.$store.state.user.agent.iban,
         _token: this.getCsrf()
       }
-      console.log(user)
       Object.assign(this.user, user)
       for (let value in this.user) {
         if(!this.user[value]) {
           this.user[value] = ''
         }
       }
-      console.log(this.user)
       Object.assign(this.userBackUp, this.user)
 
       this.manager = this.$store.state.user.agent.manager
@@ -443,9 +437,6 @@ export default {
       this.user.passport_number = null
     },
     updateProfile() {
-      console.log(JSON.stringify(this.user))
-      console.log(JSON.stringify(this.userBackUp))
-      console.log(JSON.stringify(this.user) === JSON.stringify(this.userBackUp))
       !this.$v.$invalid
         ? this.sendRequest()
         : this.highlightErrors()
@@ -461,12 +452,10 @@ export default {
           object[val] = this.user[val]
         }
       }
-      console.log(object)
       this.loading = true
       axios 
         .post(`/agent/update/${this.$store.state.user.agent.id}`, object)
-        .then(response => {
-          console.log(response)
+        .then(() => {
           this.$notify({
             group: 'success',
             title: 'Профiль успiшно оновлено',

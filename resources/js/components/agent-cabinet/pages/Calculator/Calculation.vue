@@ -708,9 +708,9 @@
                       v-for="v in ['0', '0.5', '1', '1.5']"
                       :key="v"
                       style="position: relative; width: 37.8%;'">
-                      <span :style="`color: #969599; transition: color 0.2s ease-in; color: ${calcObj.insuranceFranchise === v ? 'black; font-weight: bold;' : '#969599;' }`">{{ v }}</span>
+                      <span :style="`color: #969599; transition: color 0.2s ease-in; color: ${insuranceFranchise == v ? 'black; font-weight: bold;' : '#969599;' }`">{{ v }}</span>
                     </div>
-                    <div :style="`position: absolute; transition: color 0.2s ease-in; right: -15px; color: ${calcObj.insuranceFranchise == '2' ? 'black; font-weight: bold;' : '#969599;'} `">
+                    <div :style="`position: absolute; transition: color 0.2s ease-in; right: -15px; color: ${insuranceFranchise == '2' ? 'black; font-weight: bold;' : '#969599;'} `">
                       {{ `2` }}
                     </div>
                   </div>
@@ -1199,7 +1199,7 @@ export default {
         leasedAssertMark: null,
         leasedAssertModel: null,
         isNew: true,
-        leasingObjectType: null,
+        leasingObjectType: {label: "Легкові та комерційні авто", value: 1},
         leasingQuantity: null,
         leasingObjectYear: null,
         leasedAssertEngine: null,
@@ -1215,11 +1215,11 @@ export default {
         customGraphicType: 3,
 
         // new fields
-        leasingRest: null,
+        leasingRest: 0,
         stock: null,
         holidays: 2,
         insuranceProgram: 2,
-        insuranceFranchise: 1,
+        insuranceFranchise: null,
         leasingAmountDkp: null,
         agentId: this.$store.state.user.agent.id,
         _token: this.getCsrf()
@@ -1364,7 +1364,9 @@ export default {
     getMarksByType(event) {
       if(event) {
         this.resetForm()
-        this.calcObj.leasingObjectType = parseInt(event.value)
+        this.calcObj.leasingObjectType = parseInt(event.target.value)
+      } else if(this.calcObj.leasingObjectType && this.calcObj.leasingObjectType.value) {
+        this.calcObj.leasingObjectType = this.calcObj.leasingObjectType.value
       }
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
@@ -1461,7 +1463,7 @@ export default {
         && !this.$v.$invalid
         && this.$v.$dirty
           ? this.sendRequest()
-          : this.notify('', 'Заповнiть даннi', 'error')
+          : this.notify('', 'Заповнiть данi', 'error')
 
     },
     checkIfHasCurrency() {
@@ -1618,11 +1620,15 @@ export default {
         this.calcObj.calculation_id = response.data.id
         let data = response.data.request_data
         let advance = response.data.request_data.advance
-        let franchise = response.data.request_data.insuranceFranchise
-
+        if(response.data.request_data.insuranceFranchise){
+          this.insuranceFranchise = this.switchFranchiseFromRequest(
+              response.data.request_data.insuranceFranchise
+          )
+        }
         this.initAdvanceInputValue(advance)
-        this.initFranchiseInput(franchise)
-
+        this.initFranchiseInput(
+            this.insuranceFranchise
+          )
         this.brandItems.push(data.leasedAssertMark)
         this.modelItems.push(data.leasedAssertModel)
 
@@ -1646,6 +1652,15 @@ export default {
           text: error.response.data.message,
         })
       })
+    },
+    switchFranchiseFromRequest(value) {
+      switch(value) {
+        case 1: return '0'
+        case 2: return '0.5'
+        case 3: return '1'
+        case 4: return '1.5'
+        case 5: return '2'
+      }
     }
   },
   watch: {
@@ -1749,6 +1764,11 @@ export default {
   mounted() {
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
+      this.changeActiveClass()
+      this.initFranchiseInput()
+      this.displayWindowSize()
+      this.initAdvanceInputValue()
+      return
     } else {
       this.calcObj.leasingObjectType = {label: "Легкові та комерційні авто", value: 1}
     }

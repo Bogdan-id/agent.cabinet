@@ -17,14 +17,14 @@
             </li>
             <li class="contact-title">
               <v-icon class="icon-position" small v-text="'mdi-email'"></v-icon>
-              <a style="color: #2f2f2f; font-family: Montserrat,sans-serif,Arial;" href="#">office@bestleasing.com.ua</a>
+              <a style="font-size: 0.78rem; font-family: Montserrat,sans-serif,Arial; color: #2f2f2f" href="#">office@bestleasing.com.ua</a>
             </li>
           </ul>
         </div>
         <div class="footer__feedback">
           <div class="d-flex flex-column pa-1 feedback__text">
             <span style="font-size: 0.78rem; font-family: Montserrat,sans-serif,Arial;">Перейти на сайт</span>
-            <a style="color: #2f2f2f; font-family: Montserrat,sans-serif,Arial;" href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
+            <a class="footer__best-leasing-link" href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
           </div>
           <a class="footer__custom-btn" style="background: #e65048;">Зворотнiй зв`язок</a>
         </div>
@@ -51,3 +51,15 @@ export default {
   },
 }
 </script>
+<style lang="scss">
+.feedback__text {
+  .footer__best-leasing-link {
+    color: #2f2f2f; 
+    font-family: Montserrat,sans-serif,Arial;
+    transition: color 0.3s;
+    &:hover {
+      color: #e65048;
+    }
+  }
+}
+</style>

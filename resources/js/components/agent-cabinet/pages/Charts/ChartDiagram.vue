@@ -769,16 +769,15 @@ export default {
     },
     changeActive() {
       let tabs = document.querySelectorAll('#chart-diagram .tabs-input')
-      tabs.forEach(element => element.classList.remove('active'))
-
       setTimeout(() => {
+        tabs.forEach(element => element.classList.remove('active'))
         let getValue = document.querySelectorAll('#chart-diagram .tabs-input input')
         getValue.forEach(val => {
           if(val.value == this.currentTab) {
             val.parentNode.classList.add('active')
           }
         })
-      }, 50)
+      }, 150)
     },
     switchGraphName(graph) {
       if(graph === 'annuity' || graph === 'Ануїтет') {return '1'}
@@ -818,6 +817,11 @@ export default {
     }
     document.body.scrollTop = 0
   },
+  watch: {
+    currentTab(val) {
+      console.log(val)
+    }
+  }
 }
 </script>
 

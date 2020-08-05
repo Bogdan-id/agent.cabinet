@@ -650,6 +650,21 @@ export default {
       if(!this.$v.legalInfo.edrpou.$invalid && !this.edrpouLoading){
         this.edrpouLoading = true
         axios
+          // .get(`https://open-data-332145.herokuapp.com/get-company-name/${this.legalInfo.edrpou}`)
+          // .then(response => {
+          //   console.log(response)
+          //   this.edrpouLoading = false
+          //   this.legalInfo.companyName = response.data.companyName
+          // })
+          // .catch(error => {
+          //   console.log(error.response)
+          //   this.edrpouLoading = false
+          //   this.$notify({
+          //     group: 'error',
+          //     title: `Помилка - ${error.response.status}`,
+          //     text: `${error.response.data.message || error.response.data.errors[0].msg}`,
+          //   })
+          // })
           .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
           .then(response => {
             this.edrpouLoading = false

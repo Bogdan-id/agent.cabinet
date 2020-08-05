@@ -425,9 +425,10 @@ export default {
       axios
         .get(`/leasing-reqeust/agent/${agentId}`)
         .then(response => {
+          console.log(response.data)
           this.$store.commit('toggleSpinner', false)
           if(response.data.length > 0)  {
-            this.tabledata = response.data
+            this.tabledata = this.sortData(response.data)
             this.$store.commit('addGraph', response.data)
           } else {
             this.tabledata = []
@@ -442,8 +443,12 @@ export default {
           })
         })
     },
-    sortData(a, b) {
-      return new Date(b.created_at) - new Date(a.created_at)
+    sortData(items) {
+      items
+        .sort((a, b) => {
+          return new Date(b.updated_at) - new Date(a.updated_at)
+      })
+      return items
     },
     getSlides() {
       this.slidesLoader = true

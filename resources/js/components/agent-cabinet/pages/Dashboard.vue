@@ -90,7 +90,8 @@
           :src="item.slide_image"
           :key="key"
           reverse-transition="fade-transition"
-          transition="fade-transition">
+          transition="fade-transition"
+          style="bacground-size: 100% 100%;">
           <div>
             <div style="height: 120px;">
               <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
@@ -861,7 +862,7 @@ export default {
     background-color: rgba(252, 252, 252, 0.7); 
     max-width: 48%;
     color: black!important;
-    margin: 25px 0 25px 25px; 
+    margin: 75px 0 25px 25px; 
     display: inline-block;
     &.small-screen {
       max-width: 90%;

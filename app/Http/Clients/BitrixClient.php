@@ -205,7 +205,7 @@ class BitrixClient
                 "UF_CRM_1571249490" => $agent->bitrix_id, //TODO: agent bitrix id
                 "ASSIGNED_BY_ID" => 926,
                 "SOURCE_ID" => '55',
-                "STATUS_ID" => "NEW",
+                "STATUS_ID" => "4",
                 "OPENED" => "Y",
                 // "UF_CRM_5DA814FAD1B0C" => [
                 //     'fileData' => [

@@ -9,7 +9,7 @@
           <v-btn @click="dialogToDelete = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
         </v-card-title>
         <div style="padding: 25px; font-size: 1.23rem; text-align: center;">
-          <span>Слайдер буде видалено назавжди. Продавжити?</span>
+          <span>Слайдер буде видалено назавжди. Продовжити?</span>
         </div>
         <v-card-text>
           <div style="display: flex; justify-content: space-between;">
@@ -47,7 +47,7 @@
         @change="listenImageInput()">
       <div v-show="formToAddSlider" class="mb-8">
         <v-card
-          :style="`margin: 0 auto; position: relative; background: url('${sliderImage}'); background-size: cover;`"
+          :style="`margin: 0 auto; position: relative; background: url('${sliderImage}'); bacground-size: 100% 100%;`"
           class="slider-card"
           max-width="900"
           height="400" 
@@ -158,7 +158,6 @@
           </v-card-text>
         </v-card>
       </div>
-
       <div
         v-for="(item, key) in sliders"
         class="mb-12"
@@ -691,7 +690,7 @@ export default {
     color: black!important;
     background-color: rgba(252, 252, 252, 0.7); 
     max-width: 48%;
-    margin: 25px 0 5px 25px; 
+    margin: 75px 0 5px 25px; 
     display: inline-block;
     &.small-screen {
       max-width: 90%;

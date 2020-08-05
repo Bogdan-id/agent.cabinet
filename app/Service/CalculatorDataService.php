@@ -57,6 +57,7 @@ class CalculatorDataService
             'leasing-currency' => $this->getLeasingCurrency(),
             'leasing-rest' => (int) $this->calculateRequest->leasingRest / 100,
             'leasing-currency-course' => $this->calculateRequest->leasingCurrencyCourse,
+            'payment-PF' => $this->getPaymentPf($this->calculateRequest->leasingObjectType['value'], $this->calculateRequest->isNew),
             'request-source' => 2,
             'gps-tracker-quantity' => 1,
             'assist-service' => 1,
@@ -491,5 +492,16 @@ class CalculatorDataService
             default:
                 return 1.0;
         }
+    }
+
+    private function getPaymentPf($leasingObjectType, $isNew)
+    {
+        $paymentPf = 2;
+        if($leasingObjectType === 1 && $isNew)
+        {
+            $paymentPf = 1;
+        }
+
+        return $paymentPf;
     }
 }

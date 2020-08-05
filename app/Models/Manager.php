@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Manager extends Model
 {
-    protected $connection = 'default';
-    
     public $timestamps = false;
 
     /**

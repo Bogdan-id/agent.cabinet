@@ -512,7 +512,7 @@ export default {
     },
     applyChanges(status, index) {
       switch(status) {
-        case '1': return {text: 'в обробцi', color: `${index <= 1 ? 'orange' : 'grey'}`};
+        case '1': return {text: 'заявка в роботі', color: `${index <= 1 ? 'orange' : 'grey'}`};
         case '2': return {text: 'скасовано клієнтом', color: `${index <= 5 ? 'red' : 'grey'}`};
         case '3': return {text: 'вiдхилено', color: `${index <= 5 ? 'red' : 'grey'}`};
         case '4': return {text: 'iнший статус', color: `${index <= 2 ? 'purple' : 'grey'}` };

@@ -99,8 +99,18 @@
             </span>
           </div>
         </div>
-				<div class="app__button-wrapper">
-					<button @click="submit()" id="sign-in-btn" class="app__btn-primary">
+        <vue-recaptcha
+          @verify="verify($event)"
+          @onExpired="expired($event)"
+          ref="recaptcha"
+          sitekey="6LcYM7sZAAAAAD1lQSj3jHiJRaez3aRXXEjNua7L" 
+          :loadRecaptchaScript="true">
+        </vue-recaptcha>
+				<div v-if="captchaVerified" class="app__button-wrapper">
+					<button 
+            @click="submit()"
+            id="sign-in-btn" 
+            class="app__btn-primary">
 						<span v-if="!request">{{ userId ? 'Змiнити пароль' : 'Надiслати код'}}</span>
 						<div v-if="request" class="lds-dual-ring"></div>
 					</button>
@@ -118,10 +128,14 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { required, sameAs, minLength } from 'vuelidate/lib/validators'
+import VueRecaptcha from 'vue-recaptcha';
 
 import axios from 'axios'
 
 export default {
+  components: {
+    VueRecaptcha
+  },
 	mixins: [validationMixin],
 	data: () => ({
 		pasteEvent: false,
@@ -137,13 +151,24 @@ export default {
     userId: null, 
     password: null,
     verificationCode: null,
+
+    captchaVerified: false,
   }),
   validations() {
     return this.validationRules
   },
 	methods: {
+    verify() {
+      console.log('Success')
+    },
+    expired() {
+      this.$refs.recaptcha.reset()
+      this.captchaVerified = false
+      console.log('Expired')
+    },
     sendSms() {
       this.loading = true
+      this.captchaVerified = false
       axios
         .post('/password/reset/sendSms', {phone: this.number, _token: this.getCsrf()})
         .then(response => {
@@ -164,6 +189,7 @@ export default {
         })
     },
     resetPassword() {
+      this.captchaVerified = false
       this.loading = true
       let object = {
         userId: this.userId,
@@ -369,6 +395,13 @@ export default {
   },
   mounted() {
     this.signInByEnter()
+    let reCaptchaScript = document.createElement('script')
+    reCaptchaScript.src = "https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
+    reCaptchaScript.defer = true
+    reCaptchaScript.async = true
+    document.head.appendChild(reCaptchaScript)
+    // let el = document.querySelector('head')
+    // console.log(el)
   },
   beforeDestroy() {
     window.removeEventListener('keypress', (event) => {
@@ -381,7 +414,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import  url(https://fonts.googleapis.com/css?family=Montserrat);
+// @import  url(https://fonts.googleapis.com/css?family=Montserrat);
 
 body {
   position: relative; 

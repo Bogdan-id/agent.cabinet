@@ -159,12 +159,11 @@ export default {
   },
 	methods: {
     verify() {
-      console.log('Success')
+      this.captchaVerified = true
     },
     expired() {
       this.$refs.recaptcha.reset()
       this.captchaVerified = false
-      console.log('Expired')
     },
     sendSms() {
       this.loading = true
@@ -400,8 +399,6 @@ export default {
     reCaptchaScript.defer = true
     reCaptchaScript.async = true
     document.head.appendChild(reCaptchaScript)
-    // let el = document.querySelector('head')
-    // console.log(el)
   },
   beforeDestroy() {
     window.removeEventListener('keypress', (event) => {

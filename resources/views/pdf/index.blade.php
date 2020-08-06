@@ -86,7 +86,7 @@
 @elseif($mark == 'Toyota')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Toyota.png') }}')">
 @elseif($mark == 'Ravon')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Ravon.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @elseif($mark == 'Peugeot')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Peugeot.png') }}')">
 @elseif($mark == 'Lexus')
@@ -94,13 +94,13 @@
 @elseif($mark == 'Mercedes-Benz')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Mercedes-Benz.png') }}')">
 @elseif($mark == 'Fiat ')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Fiat.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @elseif($mark == 'Alfa Romeo')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Alfa-Romeo.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @elseif($mark == 'Mitsubishi')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Mitsubishi.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @elseif($mark == 'Opel')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Opel.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @else
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @endif

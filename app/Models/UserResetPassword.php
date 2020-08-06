@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class UserResetPassword extends Model
-{
-    protected $connection = 'default';
-    
+{   
      /**
      * The attributes that are mass assignable.
      *

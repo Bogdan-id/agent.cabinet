@@ -39,6 +39,8 @@ class LeasingRequestController extends Controller
         $leasingRequest = $leasingRequest->create($data);
         $calculation = $leasingRequest->calculation;
         $requestData = $this->getRequestData($calculation->request_data,  array_merge($calculation->request_data, $calculation->full_request_data), $leadId, $leasingRequest->graph_type);
+        $calculation->is_send_request = true;
+        $calculation->save();
         $calculationResult = new CalculationResult;
         $calculationResult->request_id = $calculation->request_id;
         $calculationResult->type =  $leasingRequest->graph_type;

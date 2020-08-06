@@ -63,13 +63,13 @@ class CalculateController extends Controller
                 'full_request_data' => $requestData
             ]);
             
-            if($calculateRequest->calculation_id)
-            {
-                $calculation = $calculationRepository->update($calculateRequest->calculation_id, $params);
-            }else{
+            // if($calculateRequest->calculation_id)
+            // {
+            //     $calculation = $calculationRepository->update($calculateRequest->calculation_id, $params);
+            // }else{
 
                 $calculation = $calculationRepository->create($params);
-            }
+            //}
           
            // $bitrixClient->addQuoteFromCalculator($calculatorDataService, $params); //Пока нет надобности отправлять предложения
         } catch (RequestException $e) {

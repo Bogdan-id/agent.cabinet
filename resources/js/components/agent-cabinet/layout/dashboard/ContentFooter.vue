@@ -17,14 +17,14 @@
             </li>
             <li class="contact-title">
               <v-icon class="icon-position" small v-text="'mdi-email'"></v-icon>
-              <a style="font-size: 0.78rem; font-family: Montserrat,sans-serif,Arial; color: #2f2f2f" href="#">office@bestleasing.com.ua</a>
+              <a style="font-size: 0.78rem; font-family: Montserrat,sans-serif,Arial; color: #2f2f2f" href="mailto:office@bestleasing.com.ua">office@bestleasing.com.ua</a>
             </li>
           </ul>
         </div>
         <div class="footer__feedback">
           <div class="d-flex flex-column pa-1 feedback__text">
             <span style="font-size: 0.78rem; font-family: Montserrat,sans-serif,Arial;">Перейти на сайт</span>
-            <a class="footer__best-leasing-link" href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
+            <a class="footer__best-leasing-link" target="_blank" href="https://bestleasing.com.ua/">bestleasing.com.ua</a>
           </div>
           <a class="footer__custom-btn" style="background: #e65048;">Зворотнiй зв`язок</a>
         </div>
@@ -49,6 +49,11 @@ export default {
       return this.$vuetify.breakpoint.xs
     }
   },
+  methods: {
+    mailTo() {
+      window.location.href = "mailto:address@dmail.com";
+    }
+  }
 }
 </script>
 <style lang="scss">

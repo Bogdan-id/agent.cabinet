@@ -1030,6 +1030,7 @@ export default {
       this.formatToSave = format
       this.dialogToSend = true
       this.currentGraphToDownload = this.graphObj
+      console.log(this.currentGraphToDownload)
     },
     openDeleteCalculationDialog(id) {
       this.deleteCalculationDialog = true
@@ -1343,9 +1344,11 @@ export default {
       let rootCalcData = this.currentGraphToDownload
 
       let dataToSave = {
+        request_id: this.currentGraphToDownload.request_id,
         agentId: this.$store.state.user.agent.id,
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
+        lesingObjType: calcData.leasingObjectType.label,
         price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,
         advance: calcData.advance,

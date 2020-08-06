@@ -110,7 +110,6 @@
           </div>
         </div>
         <!-- 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI -->
-        <!-- <v-btn @click="test()">timer</v-btn> -->
         <vue-recaptcha
           v-show="!$v.number.$error && number && !secondTimer && showCaptcha"
           @verify="verify($event)"
@@ -127,12 +126,20 @@
 						<span v-if="!request">{{ userId ? 'Змiнити пароль' : 'Надiслати код'}}</span>
 						<div v-if="request" class="lds-dual-ring"></div>
 					</button>
-          
 					<div class="app__sign-navigate">
 						<a class="app__sign-navigate-link --link" href="/login">Авторизацiя</a>
 						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
 					</div>
 				</div>
+        <div v-show="showCaptcha" >
+          <span>
+            <a style="display: inline-block;" class="app__sign-navigate-link --link" href="/login">Авторизацiя</a>
+          </span>
+          <span>&nbsp;|&nbsp;</span>
+          <span>
+            <a style="display: inline-block;" class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
+          </span>
+        </div>
 			</div>
 		</div>
 	</div>

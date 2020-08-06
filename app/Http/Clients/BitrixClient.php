@@ -203,7 +203,7 @@ class BitrixClient
                 // "OPPORTUNITY" => $leasingRequest['leasing_amount'],
                 "UF_CRM_1556027797" => '11275', //Потреби клiента
                 "UF_CRM_1571249490" => $agent->bitrix_id, //TODO: agent bitrix id
-                "ASSIGNED_BY_ID" => 926,
+                "ASSIGNED_BY_ID" => $agent->manager->bitrix_id ?? env('BITRIX_DEFAULT_MANAGER_ID'),
                 "SOURCE_ID" => '55',
                 "STATUS_ID" => "4",
                 "OPENED" => "Y",

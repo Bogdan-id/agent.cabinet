@@ -179,7 +179,7 @@ class LeasingRequestController extends Controller
                     return $value->type_id == 76;
                     });
                 $formOption = $formOptionsByType->filter(function ($value, $key) use($requestData) {
-                    return $value->calculator_value === '1';
+                    return $value->calculator_value == $requestData['leasingClientType'];
                     });  
 
                 $option = $formOption->first();

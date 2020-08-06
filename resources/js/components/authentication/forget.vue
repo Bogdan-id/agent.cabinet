@@ -20,7 +20,7 @@
       <!--  -->
 			<div class="app__form">
 				<div 
-          v-if="this.userId === null" 
+          v-if="this.userId === null"
           class="app__input-text-wrapper" >
 					<input 
 						class="app__input-text"
@@ -37,7 +37,7 @@
               {{ numberErrors[0] }}
           </span>
 				</div>
-        <div v-if="userId !== null && captchaVerified" class="recovery-code-section">
+        <div v-if="userId && !showCaptcha" class="recovery-code-section">
           <div class="app__input-text-wrapper">
             <input 
               class="app__input-text"
@@ -45,8 +45,18 @@
               placeholder="Код з SMS"
               v-model="verificationCode"
               @blur="$v.verificationCode.$touch()"/>
-            <div v-if="secondTimer" class="wrap">
-              <span style="font-size: 0.8rem; color: #808080; display: inline-flex; max-width: 60%; align-self: flex-end; padding-bottom: 2px;">Повторно вiдправити код через</span>
+            <div v-show="secondTimer" class="wrap">
+              <span style="
+                font-size: 0.73rem; 
+                color: #808080; 
+                padding-top: 15px; 
+                display: inline-flex; 
+                max-width: 60%; 
+                align-self: flex-end; 
+                -webkit-align-self: flex-end;
+                -ms-flex-item-align: end;  padding-bottom: 2px;">
+                Повторно вiдправити код через
+              </span>
               <div style="display: inline-block;">
                 <div class="bounceball"></div>
                 <div class="bounceball-text" id="bounceball-text"></div>
@@ -99,15 +109,17 @@
             </span>
           </div>
         </div>
+        <!-- 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI -->
+        <!-- <v-btn @click="test()">timer</v-btn> -->
         <vue-recaptcha
           v-show="!$v.number.$error && number && !secondTimer && showCaptcha"
           @verify="verify($event)"
-          @onExpired="expired($event)"
+          @expired="expired($event)"
           ref="recaptcha"
           sitekey="6LcYM7sZAAAAAD1lQSj3jHiJRaez3aRXXEjNua7L" 
           :loadRecaptchaScript="true">
         </vue-recaptcha>
-				<div v-if="captchaVerified" class="app__button-wrapper">
+				<div v-if="!showCaptcha" class="app__button-wrapper">
 					<button 
             @click="submit()"
             id="sign-in-btn" 
@@ -115,7 +127,7 @@
 						<span v-if="!request">{{ userId ? 'Змiнити пароль' : 'Надiслати код'}}</span>
 						<div v-if="request" class="lds-dual-ring"></div>
 					</button>
-          <!-- <v-btn @click="test()">timer</v-btn> -->
+          
 					<div class="app__sign-navigate">
 						<a class="app__sign-navigate-link --link" href="/login">Авторизацiя</a>
 						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
@@ -162,12 +174,13 @@ export default {
 	methods: {
     verify() {
       this.captchaVerified = true
+      this.showCaptcha = false
+      console.log('Verified')
     },
     expired() {
-      setTimeout(() => {
-        this.$refs.recaptcha.reset()
-        this.captchaVerified = false
-      }, 100000)
+      this.$refs.recaptcha.reset()
+      this.captchaVerified = false
+      console.log('Expired')
     },
     reError() {
       this.$notify({
@@ -188,8 +201,7 @@ export default {
         .then(response => {
           this.loading = false
           this.userId = response.data.userId
-          this.timer(120)
-          this.showCaptcha = false
+          this.timer(80) // set to 120 then
         })
         .catch(error => {
           console.log(error.response)
@@ -332,22 +344,19 @@ export default {
     timer(seconds) {
       this.repeatSendSms = false
       this.secondTimer = true
+      this.showCaptcha = false
       let timer = setInterval(() => {
         if(seconds <= 0){
           clearInterval(timer)
           document.getElementById("bounceball-text").innerHTML = ""
           this.secondTimer = false
           this.repeatSendSms = true
-          if(!this.captchaVerified) this.showCaptcha = true
         } else {
           document.getElementById("bounceball-text").innerHTML = seconds + " с."
         }
         seconds -= 1
       }, 1000)
     },
-    // test() {
-    //   this.timer(10)
-    // }
 	},
 	computed: {
 		passwordErrors() {
@@ -404,7 +413,7 @@ export default {
   watch: {
     userId(val) {
       if(val !== null) {
-        this.timer(120)
+        this.timer(80) // set then to 120
       }
     } 
   },

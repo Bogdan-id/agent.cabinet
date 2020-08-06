@@ -201,7 +201,7 @@ export default {
         .then(response => {
           this.loading = false
           this.userId = response.data.userId
-          this.timer(80) // set to 120 then
+          this.timer(120)
         })
         .catch(error => {
           console.log(error.response)
@@ -413,7 +413,7 @@ export default {
   watch: {
     userId(val) {
       if(val !== null) {
-        this.timer(80) // set then to 120
+        this.timer(120) 
       }
     } 
   },

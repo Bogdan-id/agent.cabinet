@@ -37,7 +37,7 @@
     <v-card style="min-height: 350px;">
       <v-card-text class="d-block grey darken-3 white--text" style="font-size: 1.25rem">
         <v-icon class="mb-2 mr-3" color="grey lighten-2" v-text="'mdi-clipboard-check'"></v-icon>
-          Заявки на вынагороду
+          Заявки на винагороду
         <v-progress-linear
           :height="3"
           :active="loading"

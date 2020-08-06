@@ -102,6 +102,7 @@
         <vue-recaptcha
           @verify="verify($event)"
           @onExpired="expired($event)"
+          @error="reError()"
           ref="recaptcha"
           sitekey="6LcYM7sZAAAAAD1lQSj3jHiJRaez3aRXXEjNua7L" 
           :loadRecaptchaScript="true">
@@ -159,12 +160,18 @@ export default {
   },
 	methods: {
     verify() {
-      console.log('Success')
+      this.captchaVerified = true
     },
     expired() {
       this.$refs.recaptcha.reset()
       this.captchaVerified = false
-      console.log('Expired')
+    },
+    reError() {
+      this.$notify({
+        group: 'error',
+        title: 'Помилка',
+        text: `Помилка. Спробуйте пiзнiше`,
+      })
     },
     sendSms() {
       this.loading = true
@@ -400,8 +407,6 @@ export default {
     reCaptchaScript.defer = true
     reCaptchaScript.async = true
     document.head.appendChild(reCaptchaScript)
-    // let el = document.querySelector('head')
-    // console.log(el)
   },
   beforeDestroy() {
     window.removeEventListener('keypress', (event) => {

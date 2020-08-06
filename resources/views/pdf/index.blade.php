@@ -63,8 +63,18 @@
   </style>
 </head>
 <body>
-@if($mark == 'ГАЗ')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/ГАЗ.png') }}')">
+@if($lesingObjType == 'СПЕЦІАЛЬНІ ТЗ' && $mark != 'ГАЗ')
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Specials.png') }}')">
+@elseif($lesingObjType == 'Вантажні авто')
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Truck.png') }}')">
+@elseif($lesingObjType == 'Обладнання')
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Equipment.png') }}')">
+@elseif($lesingObjType == 'Причепи та Напівпричепи')
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Trailers.png') }}')">
+@elseif($lesingObjType == 'Сільгосптехніка')
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Agricultural.png') }}')">
+@elseif($mark == 'ГАЗ')
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Gaz.png') }}')">
 @elseif($mark == 'Renault')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Renault.png') }}')">
 @elseif($mark == 'Citroen')
@@ -84,15 +94,15 @@
 @elseif($mark == 'Mercedes-Benz')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Mercedes-Benz.png') }}')">
 @elseif($mark == 'Fiat ')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Fiat .png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Fiat.png') }}')">
 @elseif($mark == 'Alfa Romeo')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Alfa Romeo.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Alfa-Romeo.png') }}')">
 @elseif($mark == 'Mitsubishi')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Mitsubishi.png') }}')">
 @elseif($mark == 'Opel')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Opel.png') }}')">
 @else
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Шаблонная.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @endif
     <div style="height: 90px; font-size: 23px; padding: 40px 15px;">
       <span style="display: inline-block; width: 100%; color: white;">{{ $request_id }}<span>

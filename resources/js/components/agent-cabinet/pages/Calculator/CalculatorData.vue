@@ -516,9 +516,6 @@
         <template v-slot:item.sendGraph>
           <span style="white-space: nowrap">{{ $store.state.user.agent.ab_size }}</span>
         </template>
-        <template v-slot:item.request_data.leasedAssertModel.name="{ item }">
-          <span style="white-space: nowrap">{{ item.request_data.leasedAssertModel.name }}</span>
-        </template>
         <template v-slot:item.request_data="{ item }">
           <span style="white-space: nowrap">
             {{ 
@@ -528,14 +525,14 @@
             }}
           </span>
         </template>
-        <template v-slot:item.created_at="{ item }">
+        <template v-slot:item.updated_at="{ item }">
           <span style="white-space: nowrap">
-            {{ item.created_at.substring(0, 10) }}
+            {{ item.updated_at.substring(0, 10) }}
           </span>
         </template>
-        <template v-slot:item.leasingObjectType="{ item }">
+        <!-- <template v-slot:item.leasingObjectType.label="{ item }">
           <span>{{ item.request_data.leasingObjectType.label}}</span>
-        </template>
+        </template> -->
         <template v-slot:item.actions="{ item }">
           <div style="display: flex; justify-content: center">
             <v-tooltip bottom>
@@ -736,8 +733,8 @@ export default {
 
     tableHeader: [
       { text: 'Код розрахунку', value: 'request_id', align: 'start'},
-      { text: 'Дата', value: 'created_at', align: 'center' },
-      { text: 'Тип ПЛ', value: 'leasingObjectType', align: 'center' },
+      { text: 'Дата', value: 'updated_at', align: 'center' },
+      { text: 'Тип ПЛ', value: 'request_data.leasingObjectType.label', align: 'center' },
       { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
       { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
       { text: 'Цiна, грн', value: 'request_data', align: 'center' },
@@ -1409,7 +1406,7 @@ export default {
         })
     },
     sortData(a, b) {
-      return new Date(b.created_at) - new Date(a.created_at)
+      return new Date(b.updated_at) - new Date(a.updated_at)
     },
   },
   watch: {

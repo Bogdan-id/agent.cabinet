@@ -13,6 +13,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title
   if(from.name === 'Редагувати' && to.name === 'Графiки ') next({name: 'Калькулятор лізингу'})
+  if(from.name === 'Відновлення паролю' && to.name === 'authorization') next(router.go())
   else next()
 })
 

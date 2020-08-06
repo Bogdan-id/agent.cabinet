@@ -29,7 +29,7 @@
 						placeholder="Вкажiть номер телефону"
 						v-model="number"
 						@paste="pasteEvent = true"
-						@input="applyMask()"/>
+						@input="applyMask(); $v.number.$touch()"/>
           <span 
 						:class="numberErrors.length > 0 
 							? 'app__input-error input-error--active' 
@@ -37,7 +37,7 @@
               {{ numberErrors[0] }}
           </span>
 				</div>
-        <div v-if="userId !== null" class="recovery-code-section">
+        <div v-if="userId !== null && captchaVerified" class="recovery-code-section">
           <div class="app__input-text-wrapper">
             <input 
               class="app__input-text"
@@ -100,9 +100,9 @@
           </div>
         </div>
         <vue-recaptcha
+          v-show="!$v.number.$error && number && !secondTimer && showCaptcha"
           @verify="verify($event)"
           @onExpired="expired($event)"
-          @error="reError()"
           ref="recaptcha"
           sitekey="6LcYM7sZAAAAAD1lQSj3jHiJRaez3aRXXEjNua7L" 
           :loadRecaptchaScript="true">
@@ -154,6 +154,7 @@ export default {
     verificationCode: null,
 
     captchaVerified: false,
+    showCaptcha: true,
   }),
   validations() {
     return this.validationRules
@@ -163,8 +164,10 @@ export default {
       this.captchaVerified = true
     },
     expired() {
-      this.$refs.recaptcha.reset()
-      this.captchaVerified = false
+      setTimeout(() => {
+        this.$refs.recaptcha.reset()
+        this.captchaVerified = false
+      }, 100000)
     },
     reError() {
       this.$notify({
@@ -175,13 +178,18 @@ export default {
     },
     sendSms() {
       this.loading = true
-      this.captchaVerified = false
+      if(!this.captchaVerified) { 
+        this.loading = false; 
+        this.showCaptcha = true; 
+        return 
+      }
       axios
-        .post('/password/reset/sendSms', {phone: this.number, _token: this.getCsrf()})
+        .post('/password/reset/sendSms', { phone: this.number, _token: this.getCsrf() })
         .then(response => {
           this.loading = false
           this.userId = response.data.userId
           this.timer(120)
+          this.showCaptcha = false
         })
         .catch(error => {
           console.log(error.response)
@@ -196,7 +204,6 @@ export default {
         })
     },
     resetPassword() {
-      this.captchaVerified = false
       this.loading = true
       let object = {
         userId: this.userId,
@@ -331,6 +338,7 @@ export default {
           document.getElementById("bounceball-text").innerHTML = ""
           this.secondTimer = false
           this.repeatSendSms = true
+          if(!this.captchaVerified) this.showCaptcha = true
         } else {
           document.getElementById("bounceball-text").innerHTML = seconds + " с."
         }

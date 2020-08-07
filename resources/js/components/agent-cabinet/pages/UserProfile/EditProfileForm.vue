@@ -470,6 +470,7 @@ export default {
             })
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           this.$notify({
             group: 'error',
             title: 'Помилка',

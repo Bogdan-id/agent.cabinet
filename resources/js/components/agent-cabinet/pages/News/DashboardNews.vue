@@ -76,6 +76,7 @@ export default {
           this.news = response.data
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error)
         })
     }

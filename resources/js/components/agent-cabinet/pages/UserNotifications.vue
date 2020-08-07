@@ -86,6 +86,7 @@ export default {
           this.btnLoading = false
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.getUserNotifications()
           this.$notify({
@@ -103,6 +104,7 @@ export default {
           /* */
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },
@@ -118,6 +120,7 @@ export default {
           this.notifications = response.data
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },
@@ -134,6 +137,7 @@ export default {
           this.changeNotificationsStatus({notifications :notificationsArrIds})
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },

@@ -125,6 +125,7 @@ export default {
         .then(() => {
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },
@@ -187,9 +188,10 @@ export default {
         this.$router.go()
         this.$store.commit('toggleSpinner', false)
 			})
-			.catch(e => {
+			.catch(error => {
+        this.$catchStatus(error.response.status)
         this.$notify({
-          message: e.response.data.message,
+          message: error.response.data.message,
           type: 'warning',
           horizontalAlign: 'center'
         })
@@ -205,6 +207,7 @@ export default {
           })
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },

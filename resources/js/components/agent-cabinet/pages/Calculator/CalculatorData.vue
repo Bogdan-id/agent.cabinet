@@ -953,6 +953,7 @@ export default {
             }
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             console.log(error.response)
             this.getEdrpouErrorHandler(error.response.status)
             this.edrpouLoading = false
@@ -998,6 +999,7 @@ export default {
           this.documentUrls = Object.assign({}, this.documentUrls, {[selector]: {url: response.data.url, text: document.name, size: document.size}})
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.$notify({
             message: 'Помилка',
@@ -1050,6 +1052,7 @@ export default {
           }, 800)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           this.$notify({
             group: 'error',
             title: `Помилка - ${error.response.status}`,
@@ -1233,6 +1236,7 @@ export default {
           }, 5000);
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.loading = false
           this.$notify({
@@ -1300,6 +1304,7 @@ export default {
           this.listItem = response.data
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },
@@ -1325,6 +1330,7 @@ export default {
             }
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             this.loading = false
             this.$notify({
               group: 'error',
@@ -1396,6 +1402,7 @@ export default {
           }, 1200)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.loading = false
           this.$notify({

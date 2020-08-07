@@ -51,6 +51,7 @@ export default {
         }
       })
       .catch(error => {
+        this.$catchStatus(error.response.status)
         console.log(error.response)
       })
   },

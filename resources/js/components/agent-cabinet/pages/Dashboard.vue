@@ -437,6 +437,7 @@ export default {
           }
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           this.$store.commit('toggleSpinner', false)
           this.$notify({
             group: 'error',
@@ -460,6 +461,7 @@ export default {
           this.slides = response.data
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },
@@ -470,6 +472,7 @@ export default {
           this.news = response.data
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error)
         })
     }

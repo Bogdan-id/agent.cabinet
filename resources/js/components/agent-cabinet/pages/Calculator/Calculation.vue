@@ -1364,7 +1364,12 @@ export default {
     getMarksByType(event) {
       if(event) {
         this.resetForm()
-        this.calcObj.leasingObjectType = parseInt(event.target.value)
+        if(this.smallerThenMedium) {
+          this.calcObj.leasingObjectType = parseInt(event.value)
+        } else {
+          this.calcObj.leasingObjectType = parseInt(event.target.value)
+        }
+        
       } else if(this.calcObj.leasingObjectType && this.calcObj.leasingObjectType.value) {
         this.calcObj.leasingObjectType = this.calcObj.leasingObjectType.value
       }
@@ -1376,6 +1381,8 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
+          console.log(error.response)
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
           this.$store.commit('toggleSpinner', false)
@@ -1398,6 +1405,8 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
+          console.log(error.response)
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
           this.$store.commit('toggleSpinner', false)
@@ -1489,6 +1498,7 @@ export default {
             this.$router.push({name: 'Графiки', params: {data: data}})
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             const message = error.response.statusText
             this.notify('Помилка', message, 'error')
             this.$store.commit('toggleSpinner', false)
@@ -1646,6 +1656,7 @@ export default {
         this.changeActiveClass()
       })
       .catch(error => {
+        this.$catchStatus(error.response.status)
         this.$notify({
           group: 'error',
           title: 'Виникла помилка',

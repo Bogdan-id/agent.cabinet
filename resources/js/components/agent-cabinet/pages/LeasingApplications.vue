@@ -486,6 +486,7 @@ export default {
           }, 700)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           this.requestToRewardLoading = false
           console.log(error.response)
           this.$notify({
@@ -551,6 +552,7 @@ export default {
             }
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             console.log(error.response)
             this.loading = false
             this.$notify({

@@ -49,7 +49,8 @@ class OfferPdfMail extends Mailable
                         'email'=> $user->email,
                         'mark' => $this->data['mark'],
                         'model' => $this->data['model'],
-                        'price' => $this->data['price']
+                        'price' => $this->data['price'],
+                        'leasingObjectType' => $this->data['leasingObjType']
                     ]);
     }
 }

@@ -6,10 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Calculation extends Model
 {
-
-    protected $connection = 'default';
-    
-    /**
+   /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -20,6 +17,7 @@ class Calculation extends Model
         'result_data', 
         'request_data',
         'full_request_data',
+        'is_send_request'
     ];
 
 

@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClientType extends Model
 {
-
-    protected $connection = 'default';
-    
     public $timestamps = false;
 
      /**

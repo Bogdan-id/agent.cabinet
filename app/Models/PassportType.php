@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class PassportType extends Model
-{
-    protected $connection = 'default';
-    
+{   
     public $timestamps = false;
 
     /**

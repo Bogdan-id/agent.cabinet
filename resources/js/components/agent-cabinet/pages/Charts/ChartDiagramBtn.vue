@@ -650,36 +650,36 @@ export default {
       if(!this.$v.legalInfo.edrpou.$invalid && !this.edrpouLoading){
         this.edrpouLoading = true
         axios
-          // .get(`https://open-data-332145.herokuapp.com/get-company-name/${this.legalInfo.edrpou}`)
-          // .then(response => {
-          //   console.log(response)
-          //   this.edrpouLoading = false
-          //   this.legalInfo.companyName = response.data.companyName
-          // })
-          // .catch(error => {
-          //   console.log(error.response)
-          //   this.edrpouLoading = false
-          //   this.$notify({
-          //     group: 'error',
-          //     title: `Помилка - ${error.response.status}`,
-          //     text: `${error.response.data.message || error.response.data.errors[0].msg}`,
-          //   })
-          // })
-          .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
+          .get(`https://open-data-332145.herokuapp.com/get-company-name/${this.legalInfo.edrpou}`)
           .then(response => {
+            console.log(response)
             this.edrpouLoading = false
-            if(response.status === 200 && response.data.companyShortName) {
-              this.legalInfo.companyName = response.data.companyShortName
-            } else if (response.data.status !== 200) {
-              this.getEdrpouErrorHandler(response.data.status)
-            }
+            this.legalInfo.companyName = response.data.companyName
           })
           .catch(error => {
-            this.$catchStatus(error.response.status)
             console.log(error.response)
-            this.getEdrpouErrorHandler(error.response.status)
             this.edrpouLoading = false
+            this.$notify({
+              group: 'error',
+              title: `Помилка - ${error.response.status}`,
+              text: `${error.response.data.message || error.response.data.errors[0].msg}`,
+            })
           })
+          // .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
+          // .then(response => {
+          //   this.edrpouLoading = false
+          //   if(response.status === 200 && response.data.companyShortName) {
+          //     this.legalInfo.companyName = response.data.companyShortName
+          //   } else if (response.data.status !== 200) {
+          //     this.getEdrpouErrorHandler(response.data.status)
+          //   }
+          // })
+          // .catch(error => {
+          //   this.$catchStatus(error.response.status)
+          //   console.log(error.response)
+          //   this.getEdrpouErrorHandler(error.response.status)
+          //   this.edrpouLoading = false
+          // })
       } else return
     },
     getEdrpouErrorHandler(status) {
@@ -919,6 +919,14 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
+      if(this.data.is_send_request === 1) {
+        this.$notify({
+            group: 'warning',
+            title: '',
+            text: 'Заявку на лізинг з цього розрахунку вже подано',
+          })
+        return
+      }
       this.selectedGraph = this.switchGraphName(this.graph)
       this.leasingApplicationForm = true
     },

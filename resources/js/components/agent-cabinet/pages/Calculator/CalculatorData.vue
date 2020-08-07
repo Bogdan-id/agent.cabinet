@@ -1351,7 +1351,7 @@ export default {
         agentId: this.$store.state.user.agent.id,
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
-        lesingObjType: calcData.leasingObjectType.label,
+        leasingObjType: calcData.leasingObjectType.label,
         price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,
         advance: calcData.advance,

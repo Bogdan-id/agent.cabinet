@@ -63,15 +63,15 @@
   </style>
 </head>
 <body>
-@if($lesingObjType == 'СПЕЦІАЛЬНІ ТЗ' && $mark != 'ГАЗ')
+@if($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' && $mark != 'ГАЗ')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Specials.png') }}')">
-@elseif($lesingObjType == 'Вантажні авто')
+@elseif($leasingObjType == 'Вантажні авто')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Truck.png') }}')">
-@elseif($lesingObjType == 'Обладнання')
+@elseif($leasingObjType == 'Обладнання')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Equipment.png') }}')">
-@elseif($lesingObjType == 'Причепи та Напівпричепи')
+@elseif($leasingObjType == 'Причепи та Напівпричепи')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Trailers.png') }}')">
-@elseif($lesingObjType == 'Сільгосптехніка')
+@elseif($leasingObjType == 'Сільгосптехніка')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Agricultural.png') }}')">
 @elseif($mark == 'ГАЗ')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Gaz.png') }}')">
@@ -137,17 +137,17 @@
                     <tbody>
                       <tr>
                         <td align="right" style="border-right: 5px solid #da0303;">
-                          @if($lesingObjType == 'Легкові та комерційні авто')
+                          @if($leasingObjType == 'Легкові та комерційні авто')
                             АВТОМОБІЛЬ
-                          @elseif($lesingObjType == 'СПЕЦІАЛЬНІ ТЗ')
+                          @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ')
                             ТЕХНIКА
-                          @elseif($lesingObjType == 'Вантажні авто')
+                          @elseif($leasingObjType == 'Вантажні авто')
                             ВАНТАЖНИЙ АВТОМОБIЛЬ
-                          @elseif($lesingObjType == 'Обладнання')
+                          @elseif($leasingObjType == 'Обладнання')
                             ОБЛАДНАННЯ
-                          @elseif($lesingObjType == 'Причепи та Напівпричепи')
+                          @elseif($leasingObjType == 'Причепи та Напівпричепи')
                             ПРИЧЕП
-                          @elseif($lesingObjType == 'Сільгосптехніка')
+                          @elseif($leasingObjType == 'Сільгосптехніка')
                             С.Г. ТЕХНIКА
                           @endif
                         </td>
@@ -155,17 +155,17 @@
                       </tr>
                       <tr>
                         <td align="right" style="border-right: 5px solid #da0303;">
-                          @if($lesingObjType == 'Легкові та комерційні авто')
+                          @if($leasingObjType == 'Легкові та комерційні авто')
                             ВАРТІСТЬ АВТОМОБІЛЯ
-                          @elseif($lesingObjType == 'СПЕЦІАЛЬНІ ТЗ')
+                          @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ')
                             ВАРТІСТЬ ТЕХНIКИ
-                          @elseif($lesingObjType == 'Вантажні авто')
+                          @elseif($leasingObjType == 'Вантажні авто')
                             ВАРТІСТЬ ВАНТАЖНОГО АВТОМОБIЛЯ
-                          @elseif($lesingObjType == 'Обладнання')
+                          @elseif($leasingObjType == 'Обладнання')
                             ВАРТІСТЬ ОБЛАДНАННЯ
-                          @elseif($lesingObjType == 'Причепи та Напівпричепи')
+                          @elseif($leasingObjType == 'Причепи та Напівпричепи')
                             ВАРТІСТЬ ПРИЧЕПА
-                          @elseif($lesingObjType == 'Сільгосптехніка')
+                          @elseif($leasingObjType == 'Сільгосптехніка')
                             ВАРТІСТЬ С.Г. ТЕХНIКИ
                           @endif
                         </td>

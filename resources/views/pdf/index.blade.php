@@ -23,7 +23,6 @@
     .graphs {
       padding: 0 25px;
     }
-
     h4 {
       margin-bottom: 7px!important;
     }
@@ -40,7 +39,7 @@
       padding: 2px 0;
     }
     body {
-      /* font-family: Verdana , Tahoma , sans-serif; */
+      font-family: Verdana, Tahoma , sans-serif;
     }
     .leasing-object td {
       font-size: 22px;
@@ -63,9 +62,9 @@
   </style>
 </head>
 <body>
-@if($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' && $mark != 'ГАЗ')
+@if($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Specials.png') }}')">
-@elseif($leasingObjType == 'Вантажні авто')
+@elseif($leasingObjType == 'Вантажні авто' && $mark != 'ГАЗ')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Truck.png') }}')">
 @elseif($leasingObjType == 'Обладнання')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Equipment.png') }}')">
@@ -118,7 +117,7 @@
     <table class="leasing-object">
       <tbody>
         <tr>
-          <td style="width: 16%;">
+          <td style="width: 13%;">
             <table style="width: 100%">
               <tbody>
                 <tr>
@@ -129,137 +128,141 @@
               </tbody>
             </table>
           </td>
-          <td style="width: 84%">
-            <table style="width: 100%">
-              <tbody><tr>
-                <td>
-                  <table class="leasing-object-red-devision-table" style="width: 100%; border-collapse: collapse;">
-                    <tbody>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303;">
-                          @if($leasingObjType == 'Легкові та комерційні авто')
-                            АВТОМОБІЛЬ
-                          @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ')
-                            ТЕХНIКА
-                          @elseif($leasingObjType == 'Вантажні авто')
-                            ВАНТАЖНИЙ АВТОМОБIЛЬ
-                          @elseif($leasingObjType == 'Обладнання')
-                            ОБЛАДНАННЯ
-                          @elseif($leasingObjType == 'Причепи та Напівпричепи')
-                            ПРИЧЕП
-                          @elseif($leasingObjType == 'Сільгосптехніка')
-                            С.Г. ТЕХНIКА
+          <td style="width: 87%">
+            <table style="width: 100%;">
+              <tbody>
+                <tr>
+                  <td>
+                    <table class="leasing-object-red-devision-table" style="width: 100%; border-collapse: collapse;">
+                      <tbody>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">
+                            @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
+                              АВТОМОБІЛЬ
+                            @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
+                              ТЕХНIКА
+                            @elseif($leasingObjType == 'Обладнання')
+                              ОБЛАДНАННЯ
+                            @elseif($leasingObjType == 'Причепи та Напівпричепи')
+                              ПРИЧIП
+                            @endif
+                          </td>
+                          <td align="left" style="font-size: 23px;">{{ $car }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">
+                            @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
+                              ВАРТІСТЬ АВТОМОБІЛЯ, ГРН
+                            @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
+                              ВАРТІСТЬ ТЕХНIКИ, ГРН
+                            @elseif($leasingObjType == 'Обладнання')
+                              ВАРТІСТЬ ОБЛАДНАННЯ, ГРН
+                            @elseif($leasingObjType == 'Причепи та Напівпричепи')
+                              ВАРТІСТЬ ПРИЧIПY, ГРН
+                            @endif
+                          </td>
+                          <td align="left" style="font-size: 23px;">{{ number_format($price, 0, '.', ' ') }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">
+                            @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
+                              ВАРТІСТЬ АВТО З РЕЄСТРАЦІЄЮ, ГРН
+                            @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
+                              ВАРТІСТЬ ТЕХНIКИ З РЕЄСТРАЦІЄЮ, ГРН
+                            @elseif($leasingObjType == 'Обладнання')
+                              ВАРТІСТЬ ОБЛАДНАННЯ З РЕЄСТРАЦІЄЮ, ГРН
+                            @elseif($leasingObjType == 'Причепи та Напівпричепи')
+                              ВАРТІСТЬ ПРИЧIПУ З РЕЄСТРАЦІЄЮ, ГРН
+                            @endif
+                          </td>
+                          <td align="left" style="font-size: 23px;">{{ number_format($offerBrutto, 0, '.', ' ') }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">ТЕРМІН ЛІЗИНГУ, МІС</td>
+                          <td align="left" style="font-size: 23px;">{{ $term }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">АВАНСОВИЙ ПЛАТІЖ, ГРН</td>
+                          <td align="left" style="font-size: 23px;">{{ number_format($prepaid, 0, '.', ' ') }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">ОДНОРАЗОВА КОМІСІЯ, %</td>
+                          <td align="left" style="font-size: 23px;">{{ $oneTimeComission }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">ГРАФІК ПЛАТЕЖІВ</td>
+                          @if(@isset($even))
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 23px;">Класичний</td>
                           @endif
-                        </td>
-                        <td align="left">{{ $car }}</td>
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303;">
-                          @if($leasingObjType == 'Легкові та комерційні авто')
-                            ВАРТІСТЬ АВТОМОБІЛЯ
-                          @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ')
-                            ВАРТІСТЬ ТЕХНIКИ
-                          @elseif($leasingObjType == 'Вантажні авто')
-                            ВАРТІСТЬ ВАНТАЖНОГО АВТОМОБIЛЯ
-                          @elseif($leasingObjType == 'Обладнання')
-                            ВАРТІСТЬ ОБЛАДНАННЯ
-                          @elseif($leasingObjType == 'Причепи та Напівпричепи')
-                            ВАРТІСТЬ ПРИЧЕПА
-                          @elseif($leasingObjType == 'Сільгосптехніка')
-                            ВАРТІСТЬ С.Г. ТЕХНIКИ
+                          @if(@isset($annuity))
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 23px;">Ануїтет</td>
                           @endif
-                        </td>
-                        <td align="left">{{ number_format($price, 0, '.', ' ') }}</td>
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303;">ВАРТІСТЬ З РЕЄСТРАЦІЄЮ</td>
-                        <td align="left">{{ number_format($offerBrutto, 0, '.', ' ') }}</td>
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303;">ТЕРМІН ЛІЗИНГУ, МІС</td>
-                        <td align="left">{{ $term }}</td>
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303;">АВАНСОВИЙ ПЛАТІЖ, ГРН</td>
-                        <td align="left">{{ number_format($prepaid, 0, '.', ' ') }}</td>
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303;">ОДНОРАЗОВА КОМІСІЯ, %</td>
-                        <td align="left">{{ $oneTimeComission }}</td>
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303;">ГРАФІК ПЛАТЕЖІВ</td>
-                        @if(@isset($even))
-                          <td align="center" style="border-right: 5px solid #da0303; width: 20%;">Класичний</td>
-                        @endif
-                        @if(@isset($annuity))
-                          <td align="center" style="border-right: 5px solid #da0303; width: 20%;">Ануїтет</td>
-                        @endif
-                        @if(@isset($irregular))
-                          <td align="center" style="border-right: 5px solid #da0303; width: 20%;">Iндивiдуальний</td>
-                        @endif
-                        @if(@isset($even))
-                        @else
-                          <td align="center" style="width: 20%;">&nbsp;</td>
-                        @endif
-                        @if(@isset($annuity))
-                        @else
-                          <td align="center" style="width: 20%;">&nbsp;</td>
-                        @endif
-                        @if(@isset($irregular))
-                        @else
-                          <td align="center" style="width: 20%;">&nbsp;</td>
-                        @endif
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303; ">СЕРЕДНЬОМІСЯЧНИЙ ПЛАТІЖ</td>
-                        @if(@isset($even))
-                          <td align="center" style="border-right: 5px solid #da0303;">
-                            <span>{{ number_format($even['offer-month-payment'], 0, '.', ' ') }}</span>
-                          </td>
-                        @endif
-                        @if(@isset($annuity))
-                          <td align="center" style="border-right: 5px solid #da0303;">
-                            <span>{{ number_format($annuity['offer-month-payment'], 0, '.', ' ') }}</span>
-                          </td>
-                        @endif
-                        @if(@isset($irregular))
-                          <td align="center" style="border-right: 5px solid #da0303;">
-                            <span>{{ number_format($irregular['offer-month-payment'], 0, '.', ' ') }}</span>
-                          </td>
-                        @endif
-                        @if(@isset($even))
-                        @else
-                          <td align="center">
-                            <span>&nbsp;</span>
-                          </td>
-                        @endif
-                        @if(@isset($annuity))
-                        @else
-                          <td align="center">
-                            <span>&nbsp;</span>
-                          </td>
-                        @endif
-                        @if(@isset($irregular))
-                        @else
-                          <td align="center">
-                            <span>&nbsp;</span>
-                          </td>
-                        @endif
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303; vertical-align: top;">ЗАЛИШКОВА ВАРТІСТЬ</td>
-                        <td align="left">{{ isset($rest) ? number_format($rest, 0, '.', ' ') : 0 }}</td>
-                      </tr>
-                      <tr>
-                        <td align="right" style="border-right: 5px solid #da0303; vertical-align: top;">ВАЛЮТА ФІНАНСУВАННЯ</td>
-                        <td align="left">{{ $currency }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-            </tbody></table>
+                          @if(@isset($irregular))
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 23px;">Iндивiдуальний</td>
+                          @endif
+                          @if(@isset($even))
+                          @else
+                            <td align="center" style="width: 20%;">&nbsp;</td>
+                          @endif
+                          @if(@isset($annuity))
+                          @else
+                            <td align="center" style="width: 20%;">&nbsp;</td>
+                          @endif
+                          @if(@isset($irregular))
+                          @else
+                            <td align="center" style="width: 20%;">&nbsp;</td>
+                          @endif
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">СЕРЕДНЬОМІСЯЧНИЙ ПЛАТІЖ, ГРН</td>
+                          @if(@isset($even))
+                            <td align="center" style="border-right: 5px solid #da0303; font-size: 23px;">
+                              <span>{{ number_format($even['offer-month-payment'], 0, '.', ' ') }}</span>
+                            </td>
+                          @endif
+                          @if(@isset($annuity))
+                            <td align="center" style="border-right: 5px solid #da0303; font-size: 23px;">
+                              <span>{{ number_format($annuity['offer-month-payment'], 0, '.', ' ') }}</span>
+                            </td>
+                          @endif
+                          @if(@isset($irregular))
+                            <td align="center" style="border-right: 5px solid #da0303; font-size: 23px;">
+                              <span>{{ number_format($irregular['offer-month-payment'], 0, '.', ' ') }}</span>
+                            </td>
+                          @endif
+                          @if(@isset($even))
+                          @else
+                            <td align="center" >
+                              <span>&nbsp;</span>
+                            </td>
+                          @endif
+                          @if(@isset($annuity))
+                          @else
+                            <td align="center">
+                              <span>&nbsp;</span>
+                            </td>
+                          @endif
+                          @if(@isset($irregular))
+                          @else
+                            <td align="center">
+                              <span>&nbsp;</span>
+                            </td>
+                          @endif
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; vertical-align: top; font-size: 23px;">ЗАЛИШКОВА ВАРТІСТЬ, ГРН</td>
+                          <td align="left" style="font-size: 23px;">{{ isset($rest) ? number_format($rest, 0, '.', ' ') : 0 }}</td>
+                        </tr>
+                        <tr>
+                          <td align="right" style="border-right: 5px solid #da0303; vertical-align: top; font-size: 23px;">ВАЛЮТА ФІНАНСУВАННЯ</td>
+                          <td align="left" style="font-size: 23px;">{{ $currency }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </td>
         </tr>
       </tbody>
@@ -267,6 +270,9 @@
   </section>
   <section class="profitable-terms">
     <h4><img width="30" style="padding: 0 9px 3px 0" src="{{storage_path('pdf/red-line.png')}}" />ЛІЗИНГОВИЙ ПЛАТІЖ ВЖЕ ВКЛЮЧАЄ:</h4>
+    
+    <!-- Легковi та Грузовi -->
+    @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
     <div class="list" style="width: 100%;">
       <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
         <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
@@ -285,6 +291,69 @@
         </ul>
       </div>
     </div>
+
+    <!-- Технiка -->
+    @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
+    <div class="list" style="width: 100%;">
+      <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
+        <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
+          <li>Вартість нової техніки та фінансування</li>
+          <li>Додаткове обладнання</li>
+          <li>Адміністрування страхових випадків</li>
+          <li>Сервісний пакет VAB Сервіс та опції сервісної
+            програми VAB Лізинг</li>
+        </ul>
+      </div>
+      <div style="width: 49%; display: inline-block; float: right">
+        <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
+          <li>Аварійний набір в подарунок!</li>
+          <li>Страхування КАСКО та ОСЦВП</li>
+          <li>Всі витрати на реєстрацію</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Обладнання -->
+    @elseif($leasingObjType == 'Обладнання')
+    <div class="list" style="width: 100%;">
+      <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
+        <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
+          <li>Вартість нового обладнання та фінансування</li>
+          <li>Додаткове обладнання</li>
+          <li>Адміністрування страхових випадків</li>
+        </ul>
+      </div>
+      <div style="width: 49%; display: inline-block; float: right">
+        <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
+          <li>Страхування КАСКО та ОСЦВП</li>
+          <li>Всі витрати на реєстрацію</li>
+          <li>Сервісний пакет VAB Сервіс та опції сервісної
+            програми VAB Лізинг</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Причепы -->
+    @elseif($leasingObjType == 'Причепи та Напівпричепи')
+    <div class="list" style="width: 100%;">
+      <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
+        <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
+          <li>Вартість нового причіпу та фінансування</li>
+          <li>Додаткове обладнання</li>
+          <li>Адміністрування страхових випадків</li>
+          <li>Сервісний пакет VAB Сервіс та опції сервісної
+            програми VAB Лізинг</li>
+        </ul>
+      </div>
+      <div style="width: 49%; display: inline-block; float: right">
+        <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
+          <li>Автомобільний набір в подарунок!</li>
+          <li>Страхування КАСКО та ОСЦВП</li>
+          <li>Всі витрати на реєстрацію</li>
+        </ul>
+      </div>
+    </div>
+    @endif
   </section>
   <section class="profitable-leasing">
     <h4><img width="30" style="padding: 0 9px 3px 0" src="{{storage_path('pdf/red-line.png')}}" />ЛІЗИНГ- ЦЕ ВИГІДНО</h4>

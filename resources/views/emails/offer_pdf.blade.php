@@ -1,17 +1,19 @@
+<div style="color: black;">
 <p>Добрий день!</p>
 <p>У додатку Ви знайдете:</p>
-<div style="padding-left: 15px;">- комерційну пропозицію з лізингу 
-  {{ $leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто' 
-    ? 'автомобiля'
-    : $leasingObjectType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjectType == 'Сільгосптехніка'
-      ? 'технiки'
-      : $leasingObjectType == 'Обладнання'
-        ? 'обладнання'
-        : $leasingObjectType == 'Причепи та Напівпричепи'
-          ? 'причiпа'
-          : ''
-  }}
-  {{ $model }} {{ $mark }}!</div>
+@if($leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто')
+<div style="padding-left: 15px;"> - комерційну пропозицію з лізингу автомобiля {{ $model }} {{ $mark }}!</div>
+@endif
+@if($leasingObjectType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjectType == 'Сільгосптехніка')
+<div style="padding-left: 15px;"> - комерційну пропозицію з лізингу технiки {{ $model }} {{ $mark }}!</div>
+@endif
+@if($leasingObjectType == 'Обладнання')
+<div style="padding-left: 15px;"> - комерційну пропозицію з лізингу обладнання {{ $model }} {{ $mark }}!</div>
+@endif
+@if($leasingObjectType == 'Причепи та Напівпричепи')
+<div style="padding-left: 15px;"> - комерційну пропозицію з лізингу причiпа {{ $model }} {{ $mark }}!</div>
+@endif
+
 <p>Прошу звернути увагу на:</p>
 @if($currency == 'UAH')
   <div style="padding-left: 15px;">- комерційна пропозиція підготовлена у грн (Можливо і USD/EURO).</div>
@@ -62,3 +64,4 @@
 <p>{{ $phone }}</p>
 <p>{{ $email }}</p>
 <br />
+</div>

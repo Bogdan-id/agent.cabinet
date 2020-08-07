@@ -1,13 +1,13 @@
 <p>Добрий день!</p>
 <p>У додатку Ви знайдете:</p>
 <div style="padding-left: 15px;">- комерційну пропозицію з лізингу 
-  {{ $leasingObjectType => label == 'Легкові та комерційні авто' || $leasingObjectType => label == 'Вантажні авто' 
+  {{ $lesingObjType == 'Легкові та комерційні авто' || $lesingObjType == 'Вантажні авто' 
     ? 'автомобiля'
-    : $leasingObjectType => label == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjectType => label == 'Сільгосптехніка'
+    : $lesingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $lesingObjType == 'Сільгосптехніка'
       ? 'технiки'
-      : $leasingObjectType => label == 'Обладнання'
+      : $lesingObjType == 'Обладнання'
         ? 'обладнання'
-        : $leasingObjectType => label == 'Причепи та Напівпричепи'
+        : $lesingObjType == 'Причепи та Напівпричепи'
           ? 'причiпа'
           : ''
   }}
@@ -24,7 +24,7 @@
 @endif
 <p>Лізингові платежі включають:</p>
 
-@if($leasingObjectType => label == 'Легкові та комерційні авто' || $leasingObjectType => label == 'Вантажні авто')
+@if($lesingObjType == 'Легкові та комерційні авто' || $lesingObjType == 'Вантажні авто')
   <div style="padding-left: 15px;">- всі витрати з реєстрації авто у Сервісному Центрі</div>
   <div style="padding-left: 15px;">- всі витрати пов’язані зі страхуванням (КАСКО та ЦВ) на весь строк лізингу</div>
   <div style="padding-left: 15px;">- ассистанс (заміна пробитого колеса, запуск двигуна, доставка палива, евакуатор, телефон гарячої лінії…)</div>
@@ -32,7 +32,7 @@
   <div style="padding-left: 15px;">- вартість фінансування</div>
 @endif
 
-@if($leasingObjectType => label == 'Причепи та Напівпричепи')
+@if($lesingObjType == 'Причепи та Напівпричепи')
   <div style="padding-left: 15px;">- всі витрати з реєстрації причіпа у Сервісному Центрі</div>
   <div style="padding-left: 15px;">- всі витрати пов’язані зі страхуванням (КАСКО та ЦВ) на весь строк лізингу</div>
   <div style="padding-left: 15px;">- ассистанс (заміна пробитого колеса, евакуатор, телефон горячої лінії…)</div>
@@ -40,7 +40,7 @@
   <div style="padding-left: 15px;">- вартість фінансування</div>
 @endif
 
-@if($leasingObjectType => label == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjectType => label == 'Сільгосптехніка')
+@if($lesingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $lesingObjType == 'Сільгосптехніка')
   <div style="padding-left: 15px;">- витрати з реєстрації техніки</div>
   <div style="padding-left: 15px;">- всі витрати пов’язані зі страхуванням на весь строк лізингу</div>
   <div style="padding-left: 15px;">- ассистанс (заміна пробитого колеса, евакуатор, запуск двигуна, телефон горячої лінії…)</div>
@@ -48,7 +48,7 @@
   <div style="padding-left: 15px;">- вартість фінансування</div>
 @endif
 
-@if($leasingObjectType => label == 'Обладнання')
+@if($lesingObjType == 'Обладнання')
   <div style="padding-left: 15px;">- всі витрати пов’язані зі страхуванням на весь строк лізингу</div>
   <div style="padding-left: 15px;">- ассистанс</div>
   <div style="padding-left: 15px;">- вартість обладнання</div>

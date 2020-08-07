@@ -40,7 +40,7 @@
       padding: 2px 0;
     }
     body {
-      font-family: Verdana /*, Tahoma , sans-serif */;
+      /* font-family: Verdana , Tahoma , sans-serif; */
     }
     .leasing-object td {
       font-size: 22px;

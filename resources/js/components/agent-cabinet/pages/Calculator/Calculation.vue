@@ -1200,12 +1200,12 @@ export default {
         leasedAssertModel: null,
         isNew: true,
         leasingObjectType: {label: "Легкові та комерційні авто", value: 1},
-        leasingQuantity: null,
-        leasingObjectYear: null,
-        leasedAssertEngine: null,
+        leasingQuantity: 1,
+        leasingObjectYear: 2020,
+        leasedAssertEngine: '2 000',
         leasingClientType: 2,
-        currency: null,
-        leasingCurrency: null,
+        currency: 'UAH',
+        leasingCurrency: 'UAH',
         leasingCurrencyCourse: null,
         leasingAmount: null,
         graphType: [],
@@ -1219,7 +1219,7 @@ export default {
         stock: null,
         holidays: 2,
         insuranceProgram: 2,
-        insuranceFranchise: null,
+        insuranceFranchise: 1,
         leasingAmountDkp: null,
         agentId: this.$store.state.user.agent.id,
         _token: this.getCsrf()
@@ -1364,7 +1364,12 @@ export default {
     getMarksByType(event) {
       if(event) {
         this.resetForm()
-        this.calcObj.leasingObjectType = parseInt(event.target.value)
+        if(this.smallerThenMedium) {
+          this.calcObj.leasingObjectType = parseInt(event.value)
+        } else {
+          this.calcObj.leasingObjectType = parseInt(event.target.value)
+        }
+        
       } else if(this.calcObj.leasingObjectType && this.calcObj.leasingObjectType.value) {
         this.calcObj.leasingObjectType = this.calcObj.leasingObjectType.value
       }
@@ -1376,6 +1381,8 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
+          console.log(error.response)
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
           this.$store.commit('toggleSpinner', false)
@@ -1398,6 +1405,8 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
+          console.log(error.response)
           let message = error.response.statusText
           this.notify('Помилка', message, 'error')
           this.$store.commit('toggleSpinner', false)
@@ -1489,6 +1498,7 @@ export default {
             this.$router.push({name: 'Графiки', params: {data: data}})
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             const message = error.response.statusText
             this.notify('Помилка', message, 'error')
             this.$store.commit('toggleSpinner', false)
@@ -1646,6 +1656,7 @@ export default {
         this.changeActiveClass()
       })
       .catch(error => {
+        this.$catchStatus(error.response.status)
         this.$notify({
           group: 'error',
           title: 'Виникла помилка',

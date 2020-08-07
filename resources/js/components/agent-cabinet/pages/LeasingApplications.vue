@@ -294,7 +294,10 @@
         </template>
         <template v-slot:item.initials="{ item }">
           <span style="white-space: nowrap;">
-            {{ item.client_type_id == 2 ? item.legal_info.company_name : item.last_name + '. ' + item.first_name[0] + '. ' + item.patronymic[0]  }}
+            {{ item.client_type_id == 2 
+                ? item.legal_info.company_name 
+                : item.last_name + '. ' + item.first_name[0] + '. ' + item.patronymic[0]  
+            }}
           </span>
         </template>
         <template v-slot:item.leasing_object="{ item }">
@@ -483,6 +486,7 @@ export default {
           }, 700)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           this.requestToRewardLoading = false
           console.log(error.response)
           this.$notify({
@@ -512,12 +516,12 @@ export default {
     },
     applyChanges(status, index) {
       switch(status) {
-        case '1': return {text: 'заявка в роботі', color: `${index <= 1 ? 'orange' : 'grey'}`};
-        case '2': return {text: 'скасовано клієнтом', color: `${index <= 5 ? 'red' : 'grey'}`};
-        case '3': return {text: 'вiдхилено', color: `${index <= 5 ? 'red' : 'grey'}`};
-        case '4': return {text: 'iнший статус', color: `${index <= 2 ? 'purple' : 'grey'}` };
-        case '5': return {text: 'схвалено', color: `${index <= 5 ? 'green' : 'grey'}`};
-        
+        case '0': return {text: 'Відхилена', color: `${index <= 5 ? 'red' : 'grey'}`};
+        case '1': return {text: 'В роботі', color: `${index <= 2 ? 'orange' : 'grey'}`};
+        case '2': return {text: 'Погоджено', color: `${index <= 3 ? 'orange' : 'grey'}`};
+        case '3': return {text: 'Договір підписано', color: `${index <= 3 ? 'green' : 'grey'}`};
+        case '4': return {text: 'Отримано аванс', color: `${index <= 4 ? 'green' : 'grey'}` };
+        case '5': return {text: 'Відвантажено', color: `${index <= 5 ? 'green' : 'grey'}`};
       }
     },
     toEdit(id) {
@@ -548,6 +552,7 @@ export default {
             }
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             console.log(error.response)
             this.loading = false
             this.$notify({

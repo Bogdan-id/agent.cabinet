@@ -77,23 +77,6 @@ export default {
         this.addLink(this)
       }
     },
-    // addRouteToLocalStorage() {
-    //   const route = this.$router.currentRoute.name
-    //   const routeStorage = window.localStorage
-    //   routeStorage.setItem('route', route)
-    // },
-    readRootFromStorage() {
-      const routeStorage = window.localStorage
-      const route = routeStorage.getItem('route')
-      if(route !== 'home' || route !== 'dashboard') {
-        this.$router.push({ name: route})
-        // eslint-disable-next-line
-          .catch(err => {
-            // catch needed because routs rewrites each other
-          })
-        routeStorage.removeItem('route')
-      }
-    },
     hideSidebar() {
       if (this.autoClose) {
         this.$sidebar.displaySidebar(false);
@@ -104,7 +87,6 @@ export default {
     }
   },
   created() {
-    this.readRootFromStorage()
     this.addLinkToSideBar()
   },
   mounted() {
@@ -120,8 +102,6 @@ export default {
 </script>
 <style>
 .dashboard-link-tooltip {
-  /* position: relative; */
-  /* display: inline-block; */
   overflow: auto;
   z-index: 1000;
 }

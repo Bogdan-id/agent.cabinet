@@ -61,6 +61,7 @@ export default {
         this.loading = false
       })
       .catch(error => {
+        this.$catchStatus(error.response.status)
         console.log(error.reponse)
         this.$notify({
           group: 'error',

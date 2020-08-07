@@ -35,7 +35,7 @@ class OfferPdfMail extends Mailable
         $subject = "Комерційна пропозиція {$this->data['mark']} {$this->data['model']} {$this->data['advance']}% {$this->data['term']}міс {$this->data['currency']}";
         $agent = Agent::find($this->data['agentId']);
         $user = User::find($agent->user_id);
-       
+       //dd($this->data['leasingObjType']);
         return $this->from('agent.bestleasing@gmail.com')
                     ->view('emails.offer_pdf')
                     ->subject($subject)

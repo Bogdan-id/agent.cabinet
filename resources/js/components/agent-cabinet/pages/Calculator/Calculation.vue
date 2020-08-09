@@ -1285,11 +1285,12 @@ export default {
         .replace(/,/g, ' ')
       let tempWithoutSpaces = parseInt(temp.replace(/[^\d]/g, ''))
       if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
-        if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
+        if(id === 'discount-price' && this.calcObj.leasingAmount) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
           }
-        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp !== null) {
+        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
+          // if(!this.calcObj.leasingAmountDkp) return
           if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
             this.calcObj.leasingAmountDkp = temp
           }
@@ -1300,12 +1301,13 @@ export default {
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
       } else {
-        if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
+        if(id === 'discount-price' && this.calcObj.leasingAmount) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
           } 
-        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp !== null) {
+        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
+          // if(!this.calcObj.leasingAmountDkp) return
           if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)

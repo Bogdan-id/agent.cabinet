@@ -80,6 +80,11 @@
             {{ item.created_at.substr(0, 10) }}
           </div>
         </template>
+        <template v-slot:item.initials="{ item }">
+          <span style="white-space: nowrap">
+            {{ item.leasing_request.client_type_id == 2 ? item.leasing_request.legal_info.company_name : item.leasing_request.last_name + '. ' + item.leasing_request.first_name[0] + '. ' + item.leasing_request.patronymic[0]  }}
+          </span>
+        </template>
         <template v-slot:item.status="{ item }">
           <v-chip style=" text-align: center;" small :color="item.status === 'paid'? 'success' : 'error'" dark>{{ switchStatus(item.status) }}</v-chip>
         </template>
@@ -108,9 +113,10 @@ export default {
     },
     tableHeader: [
       { text: 'Код заявки', value: 'id'},
+      { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
       // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
-      { text: 'Авто', value: 'leasing_request.leasing_object', align: 'center' },
+      { text: 'Предмет лiзингу', value: 'leasing_request.leasing_object', align: 'center' },
       // { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },
       { text: 'Дата заявки', value: 'leasing_request.created_at', align: 'center', sortable: true },
       { text: 'Статус', value: 'status', align: 'center' },
@@ -152,6 +158,7 @@ export default {
         axios
           .get(`/agent-commission/agent/${id}`)
           .then(response => {
+            console.log(response)
             this.agentCommisions = response.data
             this.object.agentId = id
             this.object._token = this.getCsrf()

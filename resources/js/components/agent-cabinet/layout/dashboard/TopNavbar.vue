@@ -37,7 +37,7 @@
                     v-for="(item, key) in notifications"
                     v-if="key <= maxNotificationsToShow -1"
                     :key="key"
-                    color="red lighten-2"
+                    :color="item.status === 'checked' ? 'grey lighten-2' : 'red lighten-2'"
                     small
                     right>
                     <div class="time-line-content">
@@ -205,6 +205,7 @@ export default {
           this.notifications = response.data.sort((a, b) => {
             return ('' + b.status).localeCompare(a.status)
           })
+          console.log(this.notifications)
         })
         .catch(error => {
           this.$catchStatus(error.response.status)

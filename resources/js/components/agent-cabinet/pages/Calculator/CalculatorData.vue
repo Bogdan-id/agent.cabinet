@@ -1161,6 +1161,7 @@ export default {
             text: '',
           })
           this.loading = false
+          this.getUserCalculations()
           setTimeout(() => {
             this.clearObject()
             this.$v.$reset()
@@ -1228,17 +1229,6 @@ export default {
       this.leasingTerm = this.graphType.request_data.leasingTerm
       this.leasingAmount = this.graphType.request_data.leasingAmount
       this._token = this.getCsrf()
-    },
-    getListItem() {
-      axios
-        .get('/getAcquisitionTargets')
-        .then(response => {
-          this.listItem = response.data
-        })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-        })
     },
 
     getCsrf() {
@@ -1377,7 +1367,6 @@ export default {
     }
   },
   mounted() {
-    this.getListItem()
     this.$store.state.user.agent 
       ? this.getUserCalculations()
       : false

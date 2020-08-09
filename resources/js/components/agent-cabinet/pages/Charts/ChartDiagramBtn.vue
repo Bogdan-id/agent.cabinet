@@ -887,7 +887,8 @@ export default {
           this.loading = false
           setTimeout(() => {
             this.leasingApplicationForm = false
-          }, 5000);
+            this.$router.push({name: 'Заявки на лiзинг'})
+          }, 2000);
         })
         .catch(error => {
           this.$catchStatus(error.response.status)

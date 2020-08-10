@@ -39,7 +39,7 @@
       padding: 2px 0;
     }
     body {
-      font-family: Verdana, Tahoma , sans-serif;
+      font-family: Helvetica, Verdana, Arial;
     }
     .leasing-object td {
       font-size: 22px;
@@ -103,12 +103,12 @@
 @else
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @endif
-    <div style="height: 90px; font-size: 23px; padding: 40px 15px;">
-      <span style="display: inline-block; width: 100%; color: white;">{{ $request_id }}<span>
+    <div style="height: 50px; font-size: 15px; font-weight: bold; padding: 20px 35px;">
+      <span style="display: inline-block; width: 100%; color: black;">{{ $request_id }}<span>
     </div>
-    <div style="height: 115px; color: white; font-size: 28px; padding: 0 15px 10px 15px;">
+    <div style="height: 100px; color: white; font-size: 42px; font-weight: bold; padding: 7px 15px 28px 20px;">
       <div>БIЛЬШЕ</div>
-      <div>НIЖ <img width="35" style="padding: 0 9px 10px 9px" src="{{storage_path('pdf/red-line.png')}}" /></div>
+      <div>НIЖ <img width="35" style="padding: 0 9px 13px 9px" src="{{storage_path('pdf/red-line.png')}}" /></div>
       <div>ЛIЗИНГ</div>
     </div>
   </div>
@@ -136,7 +136,7 @@
                     <table class="leasing-object-red-devision-table" style="width: 100%; border-collapse: collapse;">
                       <tbody>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px; font-family: Helvetica">
                             @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
                               АВТОМОБІЛЬ
                             @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
@@ -147,7 +147,13 @@
                               ПРИЧIП
                             @endif
                           </td>
-                          <td align="left" style="font-size: 23px;">{{ $car }}</td>
+                          <td>
+                            <table style="width: 200%;">
+                              <tr>
+                                <td style="padding: 0">{{ $car }}</td>
+                              </tr>
+                            </table>
+                          </td>
                         </tr>
                         <tr>
                           <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">

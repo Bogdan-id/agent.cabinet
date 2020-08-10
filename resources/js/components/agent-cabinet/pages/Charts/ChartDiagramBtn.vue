@@ -46,7 +46,7 @@
           @blur="$v.emailToSend.$touch()"
           :error-messages="emailToSendErr"
           v-model="emailToSend"
-          label="email"
+          label="Email"
           outlined dense>
         </v-text-field>
         <v-divider class="mt-0"></v-divider>
@@ -150,7 +150,7 @@
                 v-mask="'##########'"
                 id="inn"
                 max="10"
-                label="Iдентифiкацiйний код"
+                label="ІПН"
                 dense outlined>
               </v-text-field>
             </v-col>
@@ -172,7 +172,7 @@
                 @blur="$v.firstName.$touch()"
                 @input="$v.firstName.$touch()" 
                 :error-messages="firstNameErr"
-                label="Им`я"
+                label="Ім'я"
                 dense outlined>
               </v-text-field>
             </v-col>
@@ -184,7 +184,7 @@
                 @blur="$v.patronymic.$touch()"
                 @input="$v.patronymic.$touch()" 
                 :error-messages="patronymicErr"
-                label="Побатьковi"
+                label="По батькові"
                 dense outlined>
               </v-text-field>
             </v-col>
@@ -208,7 +208,7 @@
                 @blur="$v.email.$touch()"
                 @input="$v.email.$touch()" 
                 :error-messages="emailErr"
-                label="email"
+                label="Email"
                 dense outlined>
               </v-text-field>
             </v-col>
@@ -624,7 +624,7 @@ export default {
     // },
     edrpouErr() {
       if (!this.$v.legalInfo.edrpou.$error) return
-      return ['Повинно бути 8 цифр']
+      return ['Має містити 8 цифр']
     },
     companyNameErr() {
       if (!this.$v.legalInfo.companyName.$error) return

@@ -224,7 +224,7 @@
                       @blur="$v.user.inn.$touch()"
                       v-model="user.inn"
                       v-mask="'##########'"
-                      label="Ідентифікаційний код"
+                      label="ІПН"
                       outlined dense>
                     </v-text-field>
                   </div>

@@ -341,86 +341,10 @@
                         :class="item.prop"
                         @change="listenFileInput(item.prop)">
                     </div>
-                    <!-- <v-file-input
-                      @change="uploadDoc()"
-                      v-model="docs"
-                      :rules="rules"
-                      accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*"
-                      label="Натиснiть"
-                      multiple
-                      outlined show-size dense chips>
-                    </v-file-input> -->
                   </div>
                 </div>
             </v-col>
           </v-row>
-          <!-- <v-select
-            v-model="region"
-            @blur="$v.region.$touch()"
-            @change="$v.region.$touch()" 
-            :error-messages="regionErr"
-            :items="select.regions"
-            label="Область"
-            dense outlined>
-          </v-select> -->
-          <!-- <v-text-field
-            v-model="creditPayment"
-            :error-messages="creditPaymentErr"
-            @blur="$v.creditPayment.$touch()"
-            @input="parseToInt('creditPayment');
-              $v.creditPayment.$touch()"
-            id="creditPayment"
-            label="Щомісячний платіж (за міс. грн) по кредитам та ін."
-            dense outlined>
-          </v-text-field>
-          <v-text-field
-            v-if="clientTypeId === 1"
-            @input="parseToInt('monthlyIncome');
-              $v.legalInfo.monthlyIncome.$touch()"
-            @blur="$v.legalInfo.monthlyIncome.$touch()"
-            v-model="legalInfo.monthlyIncome"
-            :error-messages="monthlyIncomeErr"
-            id="monthlyIncome"
-            label="Середньомісячний дохід (грн)"
-            dense outlined>
-          </v-text-field>
-          <v-select
-            v-if="clientTypeId === 1"
-            v-model="legalInfo.acquisitionTargetId"
-            :items="listItem"
-            item-text="target"
-            item-value="id"
-            @blur="$v.legalInfo.acquisitionTargetId.$touch()"
-            @change="$v.legalInfo.acquisitionTargetId.$touch()" 
-            :error-messages="acquisitionTargetIdErr"
-            label="Мета придбання авто"
-            dense outlined>
-          </v-select> -->
-          <!-- <v-text-field
-            v-if="clientTypeId === 2"
-            @input="parseToInt('currencyBalance');
-              $v.legalInfo.currencyBalance.$touch()"
-            v-model="legalInfo.currencyBalance"
-            @blur="$v.legalInfo.currencyBalance.$touch()"
-            :error-messages="currencyBalanceErr"
-            id="currencyBalance"
-            label="Валютний баланс"
-            dense outlined>
-          </v-text-field>
-          <v-text-field
-            v-if="clientTypeId === 2"
-            v-model="legalInfo.equity"
-            @blur="$v.legalInfo.equity.$touch()"
-            @input="$v.legalInfo.equity.$touch()" 
-            :error-messages="equityErr"
-            label="Власный капiтал"
-            dense outlined>
-          </v-text-field> -->
-          <!-- <v-text-field
-            v-model="legalInfo.balances"
-            label="Мета придбання авто"
-            dense outlined>
-          </v-text-field> -->
         </v-row>
         <v-row>
           <v-col class="d-flex justify-center pb-6">
@@ -573,7 +497,7 @@
               <template #activator="{ on }">
                 <span>
                   <v-btn 
-                    @click="openForm(item.id)"
+                    @click="openForm(item)"
                     v-on="on"
                     icon>
                     <v-icon
@@ -928,36 +852,36 @@ export default {
       if(!this.$v.legalInfo.edrpou.$invalid && !this.edrpouLoading){
         this.edrpouLoading = true
         axios
-          // .get(`https://open-data-332145.herokuapp.com/get-company-name/${this.legalInfo.edrpou}`)
-          // .then(response => {
-          //   console.log(response)
-          //   this.edrpouLoading = false
-          //   this.legalInfo.companyName = response.data.companyName
-          // })
-          // .catch(error => {
-          //   console.log(error.response)
-          //   this.edrpouLoading = false
-          //   this.$notify({
-          //     group: 'error',
-          //     title: `Помилка - ${error.response.status}`,
-          //     text: `${error.response.data.message || error.response.data.errors[0].msg}`,
-          //   })
-          // })
-          .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
+          .get(`https://open-data-332145.herokuapp.com/get-company-name/${this.legalInfo.edrpou}`)
           .then(response => {
+            console.log(response)
             this.edrpouLoading = false
-            if(response.status === 200 && response.data.companyShortName) {
-              this.legalInfo.companyName = response.data.companyShortName
-            } else if (response.data.status !== 200) {
-              this.getEdrpouErrorHandler(response.data.status)
-            }
+            this.legalInfo.companyName = response.data.companyName
           })
           .catch(error => {
-            this.$catchStatus(error.response.status)
             console.log(error.response)
-            this.getEdrpouErrorHandler(error.response.status)
             this.edrpouLoading = false
+            this.$notify({
+              group: 'error',
+              title: `Помилка - ${error.response.status}`,
+              text: `${error.response.data.message || error.response.data.errors[0].msg}`,
+            })
           })
+          // .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
+          // .then(response => {
+          //   this.edrpouLoading = false
+          //   if(response.status === 200 && response.data.companyShortName) {
+          //     this.legalInfo.companyName = response.data.companyShortName
+          //   } else if (response.data.status !== 200) {
+          //     this.getEdrpouErrorHandler(response.data.status)
+          //   }
+          // })
+          // .catch(error => {
+          //   this.$catchStatus(error.response.status)
+          //   console.log(error.response)
+          //   this.getEdrpouErrorHandler(error.response.status)
+          //   this.edrpouLoading = false
+          // })
       } else return
     },
     getEdrpouErrorHandler(status) {
@@ -1198,8 +1122,16 @@ export default {
         el.dispatchEvent(input)
       }
     },
-    openForm(id) {
-      this.graphType = this.getGraphById(id)[0]
+    openForm(item) {
+      if(item.is_send_request === 1) {
+        this.$notify({
+            group: 'warning',
+            title: '',
+            text: 'Заявку на лізинг з цього розрахунку вже подано',
+          })
+        return
+      }
+      this.graphType = this.getGraphById(item.id)[0]
       this.resultDataGraphs = Object.keys(this.graphType.result_data)
         .filter(val => {
           if(val !== 'requestId') {
@@ -1229,6 +1161,7 @@ export default {
             text: '',
           })
           this.loading = false
+          this.getUserCalculations()
           setTimeout(() => {
             this.clearObject()
             this.$v.$reset()
@@ -1297,17 +1230,6 @@ export default {
       this.leasingAmount = this.graphType.request_data.leasingAmount
       this._token = this.getCsrf()
     },
-    getListItem() {
-      axios
-        .get('/getAcquisitionTargets')
-        .then(response => {
-          this.listItem = response.data
-        })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-        })
-    },
 
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -1351,7 +1273,7 @@ export default {
         agentId: this.$store.state.user.agent.id,
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
-        lesingObjType: calcData.leasingObjectType.label,
+        leasingObjType: calcData.leasingObjectType.label,
         price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,
         advance: calcData.advance,
@@ -1445,7 +1367,6 @@ export default {
     }
   },
   mounted() {
-    this.getListItem()
     this.$store.state.user.agent 
       ? this.getUserCalculations()
       : false

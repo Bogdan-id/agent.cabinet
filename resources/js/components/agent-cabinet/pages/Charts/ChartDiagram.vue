@@ -769,7 +769,7 @@ export default {
     },
     changeActive() {
       let tabs = document.querySelectorAll('#chart-diagram .tabs-input')
-      this.$nextTick(() => {
+      setTimeout(() => {
         tabs.forEach(element => element.classList.remove('active'))
         let getValue = document.querySelectorAll('#chart-diagram .tabs-input input')
         getValue.forEach(val => {
@@ -777,7 +777,7 @@ export default {
             val.parentNode.classList.add('active')
           }
         })
-      })
+      }, 100)
     },
     switchGraphName(graph) {
       if(graph === 'annuity' || graph === 'Ануїтет') {return '1'}

@@ -10,13 +10,12 @@
             @change="
               getMarksByType($event);
               addActiveClass($event);"
-            v-model="calcObj.leasingObjectType"
             type="radio"
             class="radio-objectType"
             id="car"
             name="leasing-type"
-            :value="1"
-            checked>
+            checked
+            value="Легкові та комерційні авто">
           <label for="car" id="Легкові та комерційні авто" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <car :width="mediumAndDown ? '40' : '47'" :heiht="mediumAndDown ? '18' : '21'" class="leasing-type-icon"></car>
             <span class="leasing-type-label" style="white-space: nowrap">ЛЕГКОВI АВТО</span>
@@ -27,12 +26,11 @@
             @change="
               getMarksByType($event);
               addActiveClass($event)"
-            v-model="calcObj.leasingObjectType"
             type="radio"
             class="radio-objectType"
             id="cargo"
             name="leasing-type"
-            :value="6">
+            value="Вантажні авто">
           <label for="cargo" id="Вантажні авто" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <cargo :width="mediumAndDown ? '44' : '65'" :heiht="mediumAndDown ? '23' : '31'" class="leasing-type-icon"></cargo>
             <span class="leasing-type-label">ВАНТАЖIВКИ</span>
@@ -43,12 +41,11 @@
             @change="
               getMarksByType($event);
               addActiveClass($event);"
-            v-model="calcObj.leasingObjectType"
             class="radio-objectType"
             type="radio"
             id="special"
             name="leasing-type"
-            :value="4">
+            value="СПЕЦІАЛЬНІ ТЗ">
           <label for="special" id="СПЕЦІАЛЬНІ ТЗ" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <special :width="mediumAndDown ? '39' : '50'" :heiht="mediumAndDown ? '39' : '50'" class="leasing-type-icon"></special>
             <span class="leasing-type-label">СПЕЦТЕХНIКА</span>
@@ -59,12 +56,11 @@
             @change="
               getMarksByType($event);
               addActiveClass($event);"
-            v-model="calcObj.leasingObjectType"
             type="radio"
             class="radio-objectType"
             id="agricultural"
             name="leasing-type"
-            :value="6">
+            value="Сільгосптехніка">
           <label for="agricultural" id="Сільгосптехніка" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <agricultural :width="mediumAndDown ? '35' : '45'" :heiht="mediumAndDown ? '35' : '39'" class="leasing-type-icon"></agricultural>
             <span class="leasing-type-label" style="white-space: nowrap">С/Г ТЕХНIКА</span>
@@ -75,12 +71,11 @@
             @change="
               getMarksByType($event);
               addActiveClass($event);"
-            v-model="calcObj.leasingObjectType"
             type="radio"
             class="radio-objectType"
             id="equipment"
             name="leasing-type"
-            :value="6">
+            value="Обладнання">
           <label for="equipment" id="Обладнання" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <equipment :width="mediumAndDown ? '34' : '40'" :heiht="mediumAndDown ? '34' : '40'" class="leasing-type-icon"></equipment>
             <span class="leasing-type-label">ОБЛАДНАННЯ</span>
@@ -91,12 +86,11 @@
             @change="
               getMarksByType($event);
               addActiveClass($event);"
-            v-model="calcObj.leasingObjectType"
             type="radio"
             class="radio-objectType"
             id="trailer"
             name="leasing-type"
-            :value="6">
+            value="Причепи та Напівпричепи">
           <label for="trailer" id="Причепи та Напівпричепи" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <trailer :style=" mediumAndDown ? 'width: 34px; height: 50px; margin-left: 8px' : 'width: 47px; height: 50px; margin-left: 8px'"></trailer>
             <span class="leasing-type-label">ПРИЧЕПИ</span>
@@ -827,6 +821,8 @@ export default {
     discountPrice: false,
     modelLoader: false,
 
+    category: null,
+
     brandItems: [],
     modelItems: [],
 
@@ -1236,8 +1232,9 @@ export default {
         let elements = document.querySelectorAll('.radio-objectType')
         elements
         .forEach(val => {
-          if(val.value == this.calcObj.leasingObjectType.value) {
+          if(val.value == this.calcObj.leasingObjectType.label) {
             if(val.nextSibling.nextSibling.id == this.calcObj.leasingObjectType.label) {
+              console.log(val.nextSibling.nextSibling.id, this.calcObj.leasingObjectType.label)
               val.nextSibling.nextSibling.classList.add('active')
             }
           }
@@ -1288,11 +1285,12 @@ export default {
         .replace(/,/g, ' ')
       let tempWithoutSpaces = parseInt(temp.replace(/[^\d]/g, ''))
       if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
-        if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
+        if(id === 'discount-price' && this.calcObj.leasingAmount) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
           }
-        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp !== null) {
+        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
+          // if(!this.calcObj.leasingAmountDkp) return
           if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
             this.calcObj.leasingAmountDkp = temp
           }
@@ -1303,12 +1301,13 @@ export default {
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
       } else {
-        if(id === 'discount-price' && this.calcObj.leasingAmount !== null) {
+        if(id === 'discount-price' && this.calcObj.leasingAmount) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
           } 
-        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp !== null) {
+        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
+          // if(!this.calcObj.leasingAmountDkp) return
           if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
@@ -1365,17 +1364,22 @@ export default {
       if(event) {
         this.resetForm()
         if(this.smallerThenMedium) {
-          this.calcObj.leasingObjectType = parseInt(event.value)
+          this.category = parseInt(event.value)
+          this.calcObj.leasingObjectType = event
         } else {
-          this.calcObj.leasingObjectType = parseInt(event.target.value)
+          this.calcObj.leasingObjectType = this.selects.itemTypes
+            .filter(val => {
+              return val.label === event.target.value
+            })[0]
+          this.category = this.calcObj.leasingObjectType.value
         }
-        
       } else if(this.calcObj.leasingObjectType && this.calcObj.leasingObjectType.value) {
-        this.calcObj.leasingObjectType = this.calcObj.leasingObjectType.value
+        this.category = this.calcObj.leasingObjectType.value
       }
+      console.log(this.category)
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
-      axios.get(`/mark?category=${this.calcObj.leasingObjectType}`)
+      axios.get(`/mark?category=${this.category}`)
         .then(response => {
           this.brandItems = response.data
           this.$store.commit('toggleSpinner', false)
@@ -1392,13 +1396,7 @@ export default {
       this.modelItems = []
       this.$store.commit('toggleSpinner', true)
       this.modelLoader = true
-      let categorieId
-      if(typeof this.calcObj.leasingObjectType === 'object') {
-        categorieId = this.calcObj.leasingObjectType.value
-      } else {
-        categorieId = this.calcObj.leasingObjectType
-      }
-      axios.get(`/models?category=${categorieId}&mark=${this.calcObj.leasedAssertMark.value}`)
+      axios.get(`/models?category=${this.category}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
           this.modelItems = response.data
           this.modelLoader = false
@@ -1744,15 +1742,15 @@ export default {
       if(!value) return value
       this.calcObj.advance = parseInt(value)
     },
-    'calcObj.leasingObjectType': function(value) {
-      if(Number.isInteger(value)) {
-        let leasingObjType = this.selects.itemTypes
-          .filter(val => {
-            return val.value === this.calcObj.leasingObjectType
-          })
-        this.calcObj.leasingObjectType = leasingObjType[0]
-      } else return
-    },
+    // 'calcObj.leasingObjectType': function(value) {
+    //   if(Number.isInteger(value)) {
+    //     let leasingObjType = this.selects.itemTypes
+    //       .filter(val => {
+    //         return val.value === this.calcObj.leasingObjectType
+    //       })
+    //     this.calcObj.leasingObjectType = leasingObjType[0]
+    //   } else return
+    // },
     smallerThenMedium(state) {
       if(state === false)  {
         this.changeActiveClass()

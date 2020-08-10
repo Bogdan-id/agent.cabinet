@@ -40,12 +40,26 @@
               <div style="font-size: 1.1rem; font-weight: bold; letter-spacing: 0.03rem">Тип графiку платежiв</div>
               <v-radio-group 
                 v-model="reqObj.graph_type" 
-                readonly
                 :column="$vuetify.breakpoint.xs"
                 :dense="$vuetify.breakpoint.xs">
-                <v-radio class="pl-2" label="Класичний" value="even"></v-radio>
-                <v-radio class="pl-2" label="Ануїтет" value="annuity"></v-radio>
-                <v-radio class="pl-2" label="Індивідуальний" value="irregular"></v-radio>
+                <v-radio 
+                  class="pl-2" 
+                  label="Класичний" 
+                  value="even" 
+                  :disabled="reqObj.graph_type !== 'even'">
+                </v-radio>
+                <v-radio 
+                  class="pl-2" 
+                  label="Ануїтет" 
+                  value="annuity" 
+                  :disabled="reqObj.graph_type !== 'annuity'">
+                </v-radio>
+                <v-radio 
+                  class="pl-2" 
+                  label="Індивідуальний" 
+                  value="irregular" 
+                  :disabled="reqObj.graph_type !== 'irreular'">
+                </v-radio>
               </v-radio-group>
             </v-col>
           </v-row>

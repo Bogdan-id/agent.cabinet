@@ -114,7 +114,7 @@ export default {
     tableHeader: [
       { text: 'Код заявки', value: 'id'},
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
-      { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
+      // { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
       // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
       { text: 'Предмет лiзингу', value: 'leasing_request.leasing_object', align: 'center' },
       // { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },

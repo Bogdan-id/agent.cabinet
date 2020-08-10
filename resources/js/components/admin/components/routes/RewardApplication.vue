@@ -77,10 +77,10 @@
       :headers="tableHeader"
       :items="filteredAgentComissions">
       <template v-slot:item.leasing_request="{ item }">
-        <span>{{ item.leasing_request.client_type_id == 2 ? item.leasing_request.legal_info.company_name : item.leasing_request.last_name + '. ' + item.leasing_request.first_name[0] + '. ' + item.leasing_request.patronymic[0] }}</span>
+        <span>{{ item.leasing_request.client_type_id == 2 ? item.leasing_request.legal_info.company_name : item.leasing_request.last_name + ' ' + item.leasing_request.first_name[0] + '. ' + item.leasing_request.patronymic[0] + '.' }}</span>
       </template>
       <template v-slot:item.agent="{ item }">
-        <span>{{ item.agent.last_name + ' ' + item.agent.first_name[0] + ' ' + item.agent.patronymic[0] }}</span>
+        <span>{{ item.agent.last_name + ' ' + item.agent.first_name[0] + '. ' + item.agent.patronymic[0] + '.'}}</span>
       </template>
       <template v-slot:item.amountSum="{ item }">
         <span>{{ (parseInt(item.leasing_request.leasing_amount.replace(/[^\d]/g, ''))  / 100) * parseInt(item.agent.ab_size) }}</span>

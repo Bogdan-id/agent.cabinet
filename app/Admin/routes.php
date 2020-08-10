@@ -55,4 +55,4 @@ Route::group([
 
 Route::get('admin/login', 'App\Admin\Controllers\AuthController@showLoginForm');
 Route::post('admin/login', 'App\Admin\Controllers\AuthController@login')->middleware('isadmin');
-Route::post('admin/logout', 'App\Admin\Controllers\AuthController@logout');
+Route::get('admin/logout', 'App\Admin\Controllers\AuthController@logout');

@@ -142,7 +142,7 @@ const routes = [
     ]
   }, 
   { 
-    path: '/admin/auth/login', 
+    path: '/admin/login', 
     component: AdminAuth,
     name: 'admin-authorization',
     meta: {

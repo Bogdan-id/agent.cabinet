@@ -2,12 +2,12 @@
 
 use Illuminate\Routing\Router;
 
-Admin::routes();
+// Admin::routes();
 
 Route::group([
     'prefix'        => config('admin.route.prefix'),
     'namespace'     => config('admin.route.namespace'),
-    'middleware'    => config('admin.route.middleware'),
+    'middleware'    => 'isadmin',
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('admin.home');
@@ -52,3 +52,5 @@ Route::group([
     $router->get('agent-commission/paid/{id}', 'AgentCommisionController@paidAgentCommision')
                 ->where('id', '[0-9]+');
 });
+
+Route::get('admin/login', 'App\Admin\Controllers\AuthController@showLoginForm');

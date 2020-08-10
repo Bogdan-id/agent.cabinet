@@ -310,7 +310,7 @@
           <span style="white-space: nowrap;">
             {{ item.client_type_id == 2 
                 ? item.legal_info.company_name 
-                : item.last_name + '. ' + item.first_name[0] + '. ' + item.patronymic[0]  
+                : item.last_name + ' ' + item.first_name[0] + '. ' + item.patronymic[0] + '.'  
             }}
           </span>
         </template>

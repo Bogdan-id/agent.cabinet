@@ -76,6 +76,12 @@
       v-if="agentComissions !== null && agentComissions.length > 0"
       :headers="tableHeader"
       :items="filteredAgentComissions">
+      <template v-slot:item.leasing_request="{ item }">
+        <span>{{ item.leasing_request.client_type_id == 2 ? item.leasing_request.legal_info.company_name : item.leasing_request.last_name + ' ' + item.leasing_request.first_name[0] + '. ' + item.leasing_request.patronymic[0] + '.' }}</span>
+      </template>
+      <template v-slot:item.agent="{ item }">
+        <span>{{ item.agent.last_name + ' ' + item.agent.first_name[0] + '. ' + item.agent.patronymic[0] + '.'}}</span>
+      </template>
       <template v-slot:item.amountSum="{ item }">
         <span>{{ (parseInt(item.leasing_request.leasing_amount.replace(/[^\d]/g, ''))  / 100) * parseInt(item.agent.ab_size) }}</span>
       </template>
@@ -106,7 +112,8 @@ export default {
     search: '',
 
     tableHeader: [
-      { text: 'Прiзвище', value: 'agent.last_name', align: 'start', sortable: false},
+      { text: 'Агент', value: 'agent', align: 'start', sortable: false},
+      { text: 'Клієнт', value: 'leasing_request', align: 'start', sortable: false},
       { text: 'Сума, грн', value: 'amountSum', align: 'center', sortable: false},
       { text: 'Дата', value: 'created_at', align: 'center' },
       { text: 'Статус', value: 'status', align: 'center', sortable: false },

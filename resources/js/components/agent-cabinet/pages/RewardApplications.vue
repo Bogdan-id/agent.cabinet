@@ -82,7 +82,7 @@
         </template>
         <template v-slot:item.initials="{ item }">
           <span style="white-space: nowrap">
-            {{ item.leasing_request.client_type_id == 2 ? item.leasing_request.legal_info.company_name : item.leasing_request.last_name + '. ' + item.leasing_request.first_name[0] + '. ' + item.leasing_request.patronymic[0]  }}
+            {{ item.leasing_request.client_type_id == 2 ? item.leasing_request.legal_info.company_name : item.leasing_request.last_name + ' ' + item.leasing_request.first_name[0] + '. ' + item.leasing_request.patronymic[0] + '.' }}
           </span>
         </template>
         <template v-slot:item.status="{ item }">

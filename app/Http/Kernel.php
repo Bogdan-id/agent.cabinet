@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'dont_user_active' => \App\Http\Middleware\DontActiveUser::class,
         'user_agent' => \App\Http\Middleware\UserAgent::class,
         'dont_user_agent' => \App\Http\Middleware\DontUserAgent::class,
+        'isadmin' => \App\Http\Middleware\IsAdmin::class,
     ];
 }

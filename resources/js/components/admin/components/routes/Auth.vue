@@ -5,10 +5,10 @@
       <v-card-text class="pb-0">
         <v-form>
           <v-text-field
-            @blur="$v.userObj.username.$touch()"
-            @input="$v.userObj.username.$touch()"
+            @blur="$v.userObj.email.$touch()"
+            @input="$v.userObj.email.$touch()"
             :error-messages="usernameErr"
-            v-model="userObj.username"
+            v-model="userObj.email"
             placeholder="Iм`я користувача"
             prepend-icon="mdi-account-circle"/>
           <v-text-field
@@ -58,21 +58,20 @@ export default {
     commonErr: ['Обов`язкове поле'],
 
     userObj: {
-      username: null,
+      email: null,
       password: null,
-      remember: 2,
       _token: null,
     },
   }),
   validations: {
     userObj: {
-      username: { required },
+      email: { required },
       password: { required },
     },
   },
   computed: {
     usernameErr() {
-      if (!this.$v.userObj.username.$error) return
+      if (!this.$v.userObj.email.$error) return
       return this.commonErr
     },
     passwordErr() {
@@ -88,25 +87,26 @@ export default {
         : this.highlightErrors()
     },
     getCsrf() {
-			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+			return document.querySelector('meta[name="csrf-token"]').content
     },
     sendRequest() {
       this.loading = true
+      this.userObj._token = this.getCsrf()
       axios.
-        post('/admin/auth/login', this.userObj)
+        post('/admin/login', this.userObj)
         .then(() => {
           // this.$notify({
           //   group: 'success',
           //   title: 'Успiшно',
           //   text: '',
           // })
-          this.$router.go()
+          // this.$router.go()
           this.loading = false
         })
         .catch(error => {
           console.log(error.response)
           this.loading = false
-          this.$router.go()
+          // this.$router.go()
           // this.$notify({
           //   group: 'error',
           //   title: 'Помилка',

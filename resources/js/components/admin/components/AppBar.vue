@@ -25,17 +25,17 @@ export default {
       this.loading = true
       this.$store.commit('toggleAdminSpinner', true)
       axios
-        .get('/admin/auth/logout?_pjax=%23pjax-container', 
-          {
-            headers: {
-              'X-PJAX': true,
-              'X-PJAX-Container': '#pjax-container',
-              'X-Requested-Width': 'XMLHttpRequest'
-            }
-          }
+        .get('/admin/logout', 
+          // {
+          //   headers: {
+          //     'X-PJAX': true,
+          //     'X-PJAX-Container': '#pjax-container',
+          //     'X-Requested-Width': 'XMLHttpRequest'
+          //   }
+          // }
         )
         .then(() => {
-          this.$router.push({name: 'admin-authorization', params: {reload: true}})
+          // this.$router.push({name: 'admin-authorization', params: {reload: true}})
           this.$store.commit('toggleAdminSpinner', false)
           this.loading = false
         })

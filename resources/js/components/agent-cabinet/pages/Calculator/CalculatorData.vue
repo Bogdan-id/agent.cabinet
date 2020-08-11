@@ -1280,7 +1280,7 @@ export default {
         prepaid: graph['offer-advance'],
         offerBrutto: graph['offer-price-brutto'],
         oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
-        currency: calcData.currency,
+        currency: calcData.leasingCurrency,
         leasingRest: graph['offer-rest'],
         requestId: rootCalcData.request_id,
         date: this.currentGraphToDownload.updated_at.substring(0, 10),

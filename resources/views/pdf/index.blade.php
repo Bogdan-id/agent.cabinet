@@ -198,13 +198,13 @@
                         <tr>
                           <td align="right" style="border-right: 5px solid #da0303; font-size: 22px;">ГРАФІК ПЛАТЕЖІВ</td>
                           @if(@isset($even))
-                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 22px;">Класичний</td>
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 22px;">КЛАСИЧНИЙ</td>
                           @endif
                           @if(@isset($annuity))
-                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 22px;">Ануїтет</td>
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 22px;">АНУЇТЕТ</td>
                           @endif
                           @if(@isset($irregular))
-                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 22px;">Iндивiдуальний</td>
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 22px;">IНДИВIДУАЛЬНИЙ</td>
                           @endif
                           @if(@isset($even))
                           @else

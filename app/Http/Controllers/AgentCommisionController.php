@@ -10,6 +10,7 @@ use App\Models\{
 use App\Http\Requests\AgentCommisionRequest;
 use Mail;
 use App\Mail\NewAgentCommisionMail;
+use App\Http\Clients\TelegramClient;
 
 class AgentCommisionController extends Controller
 {
@@ -18,7 +19,7 @@ class AgentCommisionController extends Controller
         $this->middleware('auth');
     }
 
-    public function create(AgentCommisionRequest $request)
+    public function create(AgentCommisionRequest $request, TelegramClient $telegramClient)
     {
         $data = $request->validated();
         $agentCommission = new AgentCommission;
@@ -27,7 +28,7 @@ class AgentCommisionController extends Controller
         $agentCommission->save();
 
         Mail::to(env('NVE_EMAIL'))->send(new NewAgentCommisionMail($agentCommission->leasingRequest, $agentCommission->agent));
-
+        $telegramClient->sendMessage($agentCommission);
         return response()->json([
             'status' => 200
         ]);

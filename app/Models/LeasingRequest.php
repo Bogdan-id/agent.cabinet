@@ -47,6 +47,11 @@ class LeasingRequest extends Model
         'legal_info' => 'array',
         'documents' => 'array',
     ];
+    
+    public function getNameAttribute()
+    {
+        return "{$this->last_name} {$this->first_name} {$this->patronymic}";  
+    }
 
     public function calculation()
     {

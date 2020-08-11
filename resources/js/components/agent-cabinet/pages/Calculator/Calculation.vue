@@ -776,7 +776,7 @@
     </v-row>
     <v-card-actions class="d-flex justify-center ">
       <span>
-        <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :dense="xs" :loading="$store.state.loader">
+        <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :dense="xs" :loading="calculationLoader">
         {{'Розрахувати'}}
         </v-btn>
       </span>
@@ -820,6 +820,7 @@ export default {
     windowInnerWidth: null,
     discountPrice: false,
     modelLoader: false,
+    calculationLoader: false,
 
     category: null,
 
@@ -1486,20 +1487,21 @@ export default {
       }
     },
     sendRequest() {
-      this.$store.commit('toggleSpinner', true)
+      this.calcObj._token = this.getCsrf()
+      this.calculationLoader = true
       axios
         .post('/calculate', this.calcObj)
           .then(response => {
-            this.$store.commit('toggleSpinner', false)
+            this.calculationLoader = false
             // this.$router.push('/calculator/chart')
             let data = response.data
             this.$router.push({name: 'Графiки', params: {data: data}})
           })
           .catch(error => {
+            this.calculationLoader = false
             this.$catchStatus(error.response.status)
             const message = error.response.statusText
             this.notify('Помилка', message, 'error')
-            this.$store.commit('toggleSpinner', false)
           })
     },
     valueTotal(value, min, max) {

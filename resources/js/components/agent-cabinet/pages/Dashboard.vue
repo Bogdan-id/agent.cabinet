@@ -131,7 +131,7 @@
           <span style="white-space: nowrap">
             {{ 
               (parseInt(item.leasing_amount.replace(/\s/g, '' )) / 100)
-                .toLocaleString()
+                .toLocaleString("en-GB")
                 .replace(/,/g, ' ')
             }}
           </span>
@@ -140,7 +140,7 @@
           <span style="white-space: nowrap">
             {{ 
               parseInt(item.leasing_amount.replace(/\s/g, '' ))
-                .toLocaleString()
+                .toLocaleString("en-GB")
                 .replace(/,/g, ' ')
             }}
           </span>

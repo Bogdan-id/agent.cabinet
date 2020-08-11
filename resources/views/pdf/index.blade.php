@@ -136,7 +136,7 @@
                     <table class="leasing-object-red-devision-table" style="width: 100%; border-collapse: collapse;">
                       <tbody>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px; font-family: Helvetica">
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 21px; font-family: Helvetica">
                             @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
                               АВТОМОБІЛЬ
                             @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
@@ -156,7 +156,7 @@
                           </td>
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 21px;">
                             @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
                               ВАРТІСТЬ АВТОМОБІЛЯ, ГРН
                             @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
@@ -167,10 +167,10 @@
                               ВАРТІСТЬ ПРИЧIПY, ГРН
                             @endif
                           </td>
-                          <td align="left" style="font-size: 23px;">{{ number_format($price, 0, '.', ' ') }}</td>
+                          <td align="left" style="font-size: 21px;">{{ number_format($price, 0, '.', ' ') }}</td>
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 21px;">
                             @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
                               ВАРТІСТЬ АВТО З РЕЄСТРАЦІЄЮ, ГРН
                             @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
@@ -181,30 +181,30 @@
                               ВАРТІСТЬ ПРИЧIПУ З РЕЄСТРАЦІЄЮ, ГРН
                             @endif
                           </td>
-                          <td align="left" style="font-size: 23px;">{{ number_format($offerBrutto, 0, '.', ' ') }}</td>
+                          <td align="left" style="font-size: 21px;">{{ number_format($offerBrutto, 0, '.', ' ') }}</td>
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">ТЕРМІН ЛІЗИНГУ, МІС</td>
-                          <td align="left" style="font-size: 23px;">{{ $term }}</td>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 21px;">ТЕРМІН ЛІЗИНГУ, МІС</td>
+                          <td align="left" style="font-size: 21px;">{{ $term }}</td>
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">АВАНСОВИЙ ПЛАТІЖ, ГРН</td>
-                          <td align="left" style="font-size: 23px;">{{ number_format($prepaid, 0, '.', ' ') }}</td>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 21px;">АВАНСОВИЙ ПЛАТІЖ, ГРН</td>
+                          <td align="left" style="font-size: 21px;">{{ number_format($prepaid, 0, '.', ' ') }}</td>
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">ОДНОРАЗОВА КОМІСІЯ, %</td>
-                          <td align="left" style="font-size: 23px;">{{ $oneTimeComission }}</td>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 21px;">ОДНОРАЗОВА КОМІСІЯ, %</td>
+                          <td align="left" style="font-size: 21px;">{{ $oneTimeComission }}</td>
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">ГРАФІК ПЛАТЕЖІВ</td>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 21px;">ГРАФІК ПЛАТЕЖІВ</td>
                           @if(@isset($even))
-                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 23px;">Класичний</td>
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 21px;">Класичний</td>
                           @endif
                           @if(@isset($annuity))
-                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 23px;">Ануїтет</td>
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 21px;">Ануїтет</td>
                           @endif
                           @if(@isset($irregular))
-                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 23px;">Iндивiдуальний</td>
+                            <td align="center" style="border-right: 5px solid #da0303; width: 20%; font-size: 21px;">Iндивiдуальний</td>
                           @endif
                           @if(@isset($even))
                           @else
@@ -220,19 +220,19 @@
                           @endif
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 23px;">СЕРЕДНЬОМІСЯЧНИЙ ПЛАТІЖ, ГРН</td>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 21px;">СЕРЕДНЬОМІСЯЧНИЙ ПЛАТІЖ, ГРН</td>
                           @if(@isset($even))
-                            <td align="center" style="border-right: 5px solid #da0303; font-size: 23px;">
+                            <td align="center" style="border-right: 5px solid #da0303; font-size: 21px;">
                               <span>{{ number_format($even['offer-month-payment'], 0, '.', ' ') }}</span>
                             </td>
                           @endif
                           @if(@isset($annuity))
-                            <td align="center" style="border-right: 5px solid #da0303; font-size: 23px;">
+                            <td align="center" style="border-right: 5px solid #da0303; font-size: 21px;">
                               <span>{{ number_format($annuity['offer-month-payment'], 0, '.', ' ') }}</span>
                             </td>
                           @endif
                           @if(@isset($irregular))
-                            <td align="center" style="border-right: 5px solid #da0303; font-size: 23px;">
+                            <td align="center" style="border-right: 5px solid #da0303; font-size: 21px;">
                               <span>{{ number_format($irregular['offer-month-payment'], 0, '.', ' ') }}</span>
                             </td>
                           @endif
@@ -256,12 +256,12 @@
                           @endif
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; vertical-align: top; font-size: 23px;">ЗАЛИШКОВА ВАРТІСТЬ, ГРН</td>
-                          <td align="left" style="font-size: 23px;">{{ isset($rest) ? number_format($rest, 0, '.', ' ') : 0 }}</td>
+                          <td align="right" style="border-right: 5px solid #da0303; vertical-align: top; font-size: 21px;">ЗАЛИШКОВА ВАРТІСТЬ, ГРН</td>
+                          <td align="left" style="font-size: 21px;">{{ isset($rest) ? number_format($rest, 0, '.', ' ') : 0 }}</td>
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; vertical-align: top; font-size: 23px;">ВАЛЮТА ФІНАНСУВАННЯ</td>
-                          <td align="left" style="font-size: 23px;">{{ $currency }}</td>
+                          <td align="right" style="border-right: 5px solid #da0303; vertical-align: top; font-size: 21px;">ВАЛЮТА ФІНАНСУВАННЯ</td>
+                          <td align="left" style="font-size: 21px;">{{ $currency }}</td>
                         </tr>
                       </tbody>
                     </table>

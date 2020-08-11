@@ -8,6 +8,8 @@ use App\Models\{
     Agent
 };
 use App\Http\Requests\AgentCommisionRequest;
+use Mail;
+use App\Mail\NewAgentCommisionMail;
 
 class AgentCommisionController extends Controller
 {
@@ -23,6 +25,8 @@ class AgentCommisionController extends Controller
         $agentCommission->agent_id = $data['agentId'];
         $agentCommission->leasing_requests_id = $data['leasingRequestId'];
         $agentCommission->save();
+
+        Mail::to(env('NVE_EMAIL'))->send(new NewAgentCommisionMail($agentCommission->leasingRequest, $agentCommission->agent));
 
         return response()->json([
             'status' => 200

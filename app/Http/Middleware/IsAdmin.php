@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
-
+use App\User;
 class IsAdmin
 {
     /**
@@ -16,11 +16,15 @@ class IsAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::guard('admin')->check()) {
-            return $next($request);
+        if (Auth::user()) {
+
+            $user = User::find(Auth::user()->id);
+      
+           if($user->is_admin === 1){
+                return $next($request);
+           }
         }
 
-        return redirect('/admin/login');
-        
+        abort(404);
     }
 }

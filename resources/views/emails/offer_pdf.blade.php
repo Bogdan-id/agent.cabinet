@@ -16,13 +16,13 @@
 
 <p>Прошу звернути увагу на:</p>
 @if($currency == 'UAH')
-  <div style="padding-left: 15px;">- комерційна пропозиція підготовлена у грн (Можливо і USD/EURO).</div>
+  <div style="padding-left: 15px;">- комерційна пропозиція підготовлена у ГРН (Можливо і USD/EURO).</div>
 @endif
 @if($currency == 'USD')
-  <div style="padding-left: 15px;">- комерційна пропозиція підготовлена у USD (Можливо і UAH/EURO).</div>
+  <div style="padding-left: 15px;">- комерційна пропозиція підготовлена у USD (Можливо і ГРН/EURO).</div>
 @endif
 @if($currency == 'EURO')
-  <div style="padding-left: 15px;">- комерційна пропозиція підготовлена у EURO (Можливо і UAH/USD).</div>
+  <div style="padding-left: 15px;">- комерційна пропозиція підготовлена у EURO (Можливо і ГРН/USD).</div>
 @endif
 <p>Лізингові платежі включають:</p>
 

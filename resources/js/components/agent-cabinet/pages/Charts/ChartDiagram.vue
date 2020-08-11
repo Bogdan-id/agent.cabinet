@@ -23,7 +23,7 @@
         </v-select>
       </div>
       <div class="tabs" v-if="graphData && graphData.result_data">
-        <div class="tabs-input active">
+        <div class="tabs-input">
           <label 
             v-show="!$vuetify.breakpoint.xs"
             @click.stop="changeActive($event)" 
@@ -770,10 +770,10 @@ export default {
     changeActive() {
       let tabs = document.querySelectorAll('#chart-diagram .tabs-input')
       setTimeout(() => {
-        tabs.forEach(element => element.classList.remove('active'))
+        tabs.forEach(element => {element.classList.remove('active')})
         let getValue = document.querySelectorAll('#chart-diagram .tabs-input input')
         getValue.forEach(val => {
-          if(val.value == this.currentTab) {
+          if(val.value === this.currentTab) {
             val.parentNode.classList.add('active')
           }
         })
@@ -804,12 +804,15 @@ export default {
   mounted() {
     this.graphData = this.$route.params.data
     let firstGraphFromArray = Object.keys(this.graphData.result_data).filter(val => {
-      if(val !== 'requestId') {
-        return this.graphData.result_data[val]
-      }
-    })
+        if(val !== 'requestId') {
+          return val
+        }
+      })
+      .map(val => {
+        return this.switchGraphName(val)
+      })
     this.addObjects(this.graphData)
-    this.currentTab = this.switchGraphName(firstGraphFromArray[0])
+    this.currentTab = firstGraphFromArray[0]
     this.changeActive()
     if(this.$route.params.preview === true) {
       this.currentTab = this.switchGraphName(this.$route.params.graph)
@@ -817,11 +820,6 @@ export default {
     }
     document.body.scrollTop = 0
   },
-  watch: {
-    currentTab(val) {
-      console.log(val)
-    }
-  }
 }
 </script>
 

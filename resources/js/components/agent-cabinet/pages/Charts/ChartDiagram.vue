@@ -24,238 +24,6 @@
       </div>
       <div class="tabs" v-if="graphData && graphData.result_data">
         <div class="tabs-input">
-          <label 
-            v-show="!$vuetify.breakpoint.xs"
-            @click.stop="changeActive($event)" 
-            for="tab-2"
-            :style="`${!graphData.result_data.hasOwnProperty('even') ? 'background: grey' : ''}`"
-            class="label">
-            КЛАСИЧНИЙ
-          </label>
-          <input
-            v-show="!$vuetify.breakpoint.xs"
-            @click.stop="changeActive($event)"
-            id="tab-2" 
-            name="tab" 
-            type="radio" 
-            value="2"
-            checked  
-            v-model="currentTab">
-          <div class="content">
-            <div style="position: relative;">
-              <div v-if="!graphData.result_data.hasOwnProperty('even')" class="empty-chart">
-              </div>
-              <div class="router-link-to-no-calc" :style="$vuetify.breakpoint.xs ? 'width: 90%;' : '60%;'">
-                <p style="font-size: 1rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>
-                  Даний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
-                  <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
-                </p>
-              </div>
-            </div>
-            <v-card  class="view-charts" v-if="graphData.result_data.hasOwnProperty('even')">
-              <v-row>
-                <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0 pr-0">
-                  <v-data-table
-                    :class="$vuetify.breakpoint.smAndDown ? 'leasing-object-table small' : 'leasing-object-table'"
-                    v-if="graphData"
-                    color="black"
-                    :headers="leasingObjectDataHeader"
-                    :items="[graphData]"
-                    :items-per-page="180"
-                    :hide-default-footer="true"
-                    :must-sort="false"
-                    dense
-                    :mobile-breakpoint="6500">
-                    <template v-slot:item.offer_price_brutto="{ item }">
-                      <span v-if="item.result_data.even">
-                        {{
-                          item.result_data.even['offer-price-brutto']
-                            .toLocaleString()
-                            .replace(/,/g, ' ')
-                        }}
-                      </span>
-                    </template>
-                    <template v-slot:item.offer_advance="{ item }">
-                      <span v-if="item.result_data.even">
-                        {{ 
-                          item.result_data.even['offer-advance']
-                            .toLocaleString()
-                            .replace(/,/g, ' ')
-                        }}
-                      </span>
-                    </template>
-                    <template v-slot:item.offer_month_payment="{ item }">
-                      <span v-if="item.result_data.even">
-                        {{ item.result_data.even['offer-month-payment']
-                          .toLocaleString()
-                          .replace(/,/g, ' ')  
-                        }}
-                      </span>
-                    </template>
-                    <template v-slot:item.one_time_commission="{ item }">
-                      <span v-if="item.result_data.even">
-                        {{ (item.result_data.even['offer-administrative-payment-per'] * 100).toFixed(2) }}
-                      </span>
-                    </template>
-                    <template v-slot:item.offer_rest="{ item }">
-                      <span v-if="item.result_data.even">
-                        {{ 
-                          item.result_data.even['offer-rest']
-                            .toLocaleString()
-                            .replace(/,/g, ' ') 
-                        }}
-                      </span>
-                    </template>
-                    <template v-slot:item.actions="{ item }">
-                      {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
-                    </template>
-                    <template v-slot:item.request_data.leasingAmount="{ item }">
-                      <span>
-                        {{ 
-                          parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
-                            .toLocaleString()
-                            .replace(/,/g, ' ')
-                        }}
-                      </span>
-                    </template>
-                  </v-data-table>
-                </v-col>
-                <v-col 
-                  cols="12" md="4" sm="3" lg="6" 
-                  v-if="graphData.result_data.hasOwnProperty('even')"
-                  :style="`${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-btn 
-                        :class="`${$vuetify.breakpoint.xs ? '' : 'mt-5'}`" 
-                        v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" 
-                        width="45" height="45" fab dark color="#d24a43">
-                        <v-icon color="white" size="30">mdi-file-find-outline</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Переглянути графiк в режимi редагування</span>
-                  </v-tooltip>
-                </v-col>
-              </v-row>
-            <div class="payout-schedule">
-              Графiк виплат
-            </div>
-            <v-data-table
-              v-if="graphData && graphData.result_data && graphData.result_data.even"
-              :class="$vuetify.breakpoint.xs ? 'payment-schedule-table small' : 'payment-schedule-table'"
-              color="black"
-              :headers="tableHeader"
-              :items="even"
-              :items-per-page="180"
-              :hide-default-footer="true"
-              dense>
-              <template v-slot:item.n="{ item }">
-                <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
-              </template>
-              <template v-slot:body.append>
-                <div v-show="$vuetify.breakpoint.xs" style="border-left: 4px solid #d24a43;">
-                  <div class="total-payment-schedule-header">Всього</div>
-                  <tr
-                    class="total-payment-schedule">
-                    <td class="total-payment-schedule-text">Оплата за авто, грн</td>
-                    <td class="total-payment-schedule-value">
-                      {{ 
-                        parseInt(graphData.result_data.even['total-payment-principal'].toFixed())
-                          .toLocaleString()
-                          .replace(/,/g, ' ')
-                      }}
-                    </td>
-                  </tr>
-                  <tr
-                    class="total-payment-schedule">
-                    <td class="total-payment-schedule-text">Винагорода лiзингодавця, грн</td>
-                    <td class="total-payment-schedule-value">
-                      {{ 
-                        parseInt(graphData.result_data.even['total-interest'].toFixed()) 
-                          .toLocaleString()
-                          .replace(/,/g, ' ')
-                      }}
-                    </td>
-                  </tr>
-                  <tr
-                    class="total-payment-schedule">
-                    <td class="total-payment-schedule-text">Сума платежу, грн</td>
-                    <td class="total-payment-schedule-value">
-                      {{ 
-                        parseInt(graphData.result_data.even['total-payment'].toFixed())
-                          .toLocaleString()
-                          .replace(/,/g, ' ') 
-                      }}
-                    </td>
-                  </tr>
-                </div>
-                <tr 
-                  v-show="!$vuetify.breakpoint.xs"
-                  style="color: black; border-left: 8px solid black;" >
-                  <td style="text-align: center;">Всього</td>
-                  <td></td>
-                  <td style="text-align: center;">
-                    {{ 
-                      parseInt(graphData.result_data.even['total-payment-principal'].toFixed())
-                        .toLocaleString()
-                        .replace(/,/g, ' ')
-                    }}
-                  </td>
-                  <td style="text-align: center;">
-                    {{ 
-                      parseInt(graphData.result_data.even['total-interest'].toFixed()) 
-                        .toLocaleString()
-                        .replace(/,/g, ' ')
-                    }}
-                  </td>
-                  <td style="text-align: center;">
-                    {{ 
-                      parseInt(graphData.result_data.even['total-payment'].toFixed())
-                        .toLocaleString()
-                        .replace(/,/g, ' ') 
-                    }}
-                  </td>
-                </tr>
-                <span></span>
-              </template>
-              <template v-slot:footer>
-                <chart-buttons 
-                  v-if="graphData !== null"
-                  :graph="currentTab" 
-                  :data="graphData"/>
-              </template>
-              <template v-slot:item.interest="{ item }">
-                <span v-if="item.interest !== null">
-                  {{  
-                    parseInt(item.interest.toFixed())
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
-              <template v-slot:item.payment="{ item }">
-                <span v-if="item.payment !== null">
-                  {{  
-                    parseInt(item.payment.toFixed())
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
-              <template v-slot:item.payment_principal="{ item }">
-                <span v-if="item['payment-principal'] !== null">
-                  {{
-                    parseInt(item['payment-principal'].toFixed())
-                      .toLocaleString()
-                      .replace(/,/g, ' ')
-                  }}
-                </span>
-              </template>
-            </v-data-table>
-          </v-card>
-          </div>
-        </div>
-        <div class="tabs-input">
           <label
             v-show="!$vuetify.breakpoint.xs"
             @click.stop="changeActive($event)" 
@@ -488,6 +256,238 @@
                 </template>
               </v-data-table>
             </v-card>
+          </div>
+        </div>
+        <div class="tabs-input">
+          <label 
+            v-show="!$vuetify.breakpoint.xs"
+            @click.stop="changeActive($event)" 
+            for="tab-2"
+            :style="`${!graphData.result_data.hasOwnProperty('even') ? 'background: grey' : ''}`"
+            class="label">
+            КЛАСИЧНИЙ
+          </label>
+          <input
+            v-show="!$vuetify.breakpoint.xs"
+            @click.stop="changeActive($event)"
+            id="tab-2" 
+            name="tab" 
+            type="radio" 
+            value="2"
+            checked  
+            v-model="currentTab">
+          <div class="content">
+            <div style="position: relative;">
+              <div v-if="!graphData.result_data.hasOwnProperty('even')" class="empty-chart">
+              </div>
+              <div class="router-link-to-no-calc" :style="$vuetify.breakpoint.xs ? 'width: 90%;' : '60%;'">
+                <p style="font-size: 1rem"><span style="position: relative; width: 40px; display: inline-block; left: 0; top: -25px;"><v-icon style="padding: 0 10px 5px 0; position: absolute; left: 0" size="34" color="#d24a43" >mdi-information-outline</v-icon></span>
+                  Даний графiк не було додано при калькуляцii, але ви можете додати його до розрахунку за 
+                  <router-link style="color: #d24a43; text-decoration: underline" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}"> посиланням</router-link> в роздiлi - графiк платежiв
+                </p>
+              </div>
+            </div>
+            <v-card  class="view-charts" v-if="graphData.result_data.hasOwnProperty('even')">
+              <v-row>
+                <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0 pr-0">
+                  <v-data-table
+                    :class="$vuetify.breakpoint.smAndDown ? 'leasing-object-table small' : 'leasing-object-table'"
+                    v-if="graphData"
+                    color="black"
+                    :headers="leasingObjectDataHeader"
+                    :items="[graphData]"
+                    :items-per-page="180"
+                    :hide-default-footer="true"
+                    :must-sort="false"
+                    dense
+                    :mobile-breakpoint="6500">
+                    <template v-slot:item.offer_price_brutto="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{
+                          item.result_data.even['offer-price-brutto']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_advance="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{ 
+                          item.result_data.even['offer-advance']
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_month_payment="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{ item.result_data.even['offer-month-payment']
+                          .toLocaleString()
+                          .replace(/,/g, ' ')  
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.one_time_commission="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{ (item.result_data.even['offer-administrative-payment-per'] * 100).toFixed(2) }}
+                      </span>
+                    </template>
+                    <template v-slot:item.offer_rest="{ item }">
+                      <span v-if="item.result_data.even">
+                        {{ 
+                          item.result_data.even['offer-rest']
+                            .toLocaleString()
+                            .replace(/,/g, ' ') 
+                        }}
+                      </span>
+                    </template>
+                    <template v-slot:item.actions="{ item }">
+                      {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
+                    </template>
+                    <template v-slot:item.request_data.leasingAmount="{ item }">
+                      <span>
+                        {{ 
+                          parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
+                            .toLocaleString()
+                            .replace(/,/g, ' ')
+                        }}
+                      </span>
+                    </template>
+                  </v-data-table>
+                </v-col>
+                <v-col 
+                  cols="12" md="4" sm="3" lg="6" 
+                  v-if="graphData.result_data.hasOwnProperty('even')"
+                  :style="`${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn 
+                        :class="`${$vuetify.breakpoint.xs ? '' : 'mt-5'}`" 
+                        v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" 
+                        width="45" height="45" fab dark color="#d24a43">
+                        <v-icon color="white" size="30">mdi-file-find-outline</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Переглянути графiк в режимi редагування</span>
+                  </v-tooltip>
+                </v-col>
+              </v-row>
+            <div class="payout-schedule">
+              Графiк виплат
+            </div>
+            <v-data-table
+              v-if="graphData && graphData.result_data && graphData.result_data.even"
+              :class="$vuetify.breakpoint.xs ? 'payment-schedule-table small' : 'payment-schedule-table'"
+              color="black"
+              :headers="tableHeader"
+              :items="even"
+              :items-per-page="180"
+              :hide-default-footer="true"
+              dense>
+              <template v-slot:item.n="{ item }">
+                <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
+              </template>
+              <template v-slot:body.append>
+                <div v-show="$vuetify.breakpoint.xs" style="border-left: 4px solid #d24a43;">
+                  <div class="total-payment-schedule-header">Всього</div>
+                  <tr
+                    class="total-payment-schedule">
+                    <td class="total-payment-schedule-text">Оплата за авто, грн</td>
+                    <td class="total-payment-schedule-value">
+                      {{ 
+                        parseInt(graphData.result_data.even['total-payment-principal'].toFixed())
+                          .toLocaleString()
+                          .replace(/,/g, ' ')
+                      }}
+                    </td>
+                  </tr>
+                  <tr
+                    class="total-payment-schedule">
+                    <td class="total-payment-schedule-text">Винагорода лiзингодавця, грн</td>
+                    <td class="total-payment-schedule-value">
+                      {{ 
+                        parseInt(graphData.result_data.even['total-interest'].toFixed()) 
+                          .toLocaleString()
+                          .replace(/,/g, ' ')
+                      }}
+                    </td>
+                  </tr>
+                  <tr
+                    class="total-payment-schedule">
+                    <td class="total-payment-schedule-text">Сума платежу, грн</td>
+                    <td class="total-payment-schedule-value">
+                      {{ 
+                        parseInt(graphData.result_data.even['total-payment'].toFixed())
+                          .toLocaleString()
+                          .replace(/,/g, ' ') 
+                      }}
+                    </td>
+                  </tr>
+                </div>
+                <tr 
+                  v-show="!$vuetify.breakpoint.xs"
+                  style="color: black; border-left: 8px solid black;" >
+                  <td style="text-align: center;">Всього</td>
+                  <td></td>
+                  <td style="text-align: center;">
+                    {{ 
+                      parseInt(graphData.result_data.even['total-payment-principal'].toFixed())
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </td>
+                  <td style="text-align: center;">
+                    {{ 
+                      parseInt(graphData.result_data.even['total-interest'].toFixed()) 
+                        .toLocaleString()
+                        .replace(/,/g, ' ')
+                    }}
+                  </td>
+                  <td style="text-align: center;">
+                    {{ 
+                      parseInt(graphData.result_data.even['total-payment'].toFixed())
+                        .toLocaleString()
+                        .replace(/,/g, ' ') 
+                    }}
+                  </td>
+                </tr>
+                <span></span>
+              </template>
+              <template v-slot:footer>
+                <chart-buttons 
+                  v-if="graphData !== null"
+                  :graph="currentTab" 
+                  :data="graphData"/>
+              </template>
+              <template v-slot:item.interest="{ item }">
+                <span v-if="item.interest !== null">
+                  {{  
+                    parseInt(item.interest.toFixed())
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
+              <template v-slot:item.payment="{ item }">
+                <span v-if="item.payment !== null">
+                  {{  
+                    parseInt(item.payment.toFixed())
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
+              <template v-slot:item.payment_principal="{ item }">
+                <span v-if="item['payment-principal'] !== null">
+                  {{
+                    parseInt(item['payment-principal'].toFixed())
+                      .toLocaleString()
+                      .replace(/,/g, ' ')
+                  }}
+                </span>
+              </template>
+            </v-data-table>
+          </v-card>
           </div>
         </div>
         <div class="tabs-input">
@@ -768,16 +768,19 @@ export default {
       if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
     },
     changeActive() {
-      let tabs = document.querySelectorAll('#chart-diagram .tabs-input')
+     
       setTimeout(() => {
+        let tabs = document.querySelectorAll('#chart-diagram .tabs-input')
         tabs.forEach(element => {element.classList.remove('active')})
+        console.log(tabs)
         let getValue = document.querySelectorAll('#chart-diagram .tabs-input input')
         getValue.forEach(val => {
           if(val.value === this.currentTab) {
+            console.log(val.value + ' ' + this.currentTab)
             val.parentNode.classList.add('active')
           }
         })
-      }, 100)
+      }, 150)
     },
     switchGraphName(graph) {
       if(graph === 'annuity' || graph === 'Ануїтет') {return '1'}
@@ -811,6 +814,11 @@ export default {
       .map(val => {
         return this.switchGraphName(val)
       })
+      .sort((a, b) => {
+        return parseInt(a) - parseInt(b)
+      })
+    console.log(firstGraphFromArray)
+    console.log(firstGraphFromArray[0])
     this.addObjects(this.graphData)
     this.currentTab = firstGraphFromArray[0]
     this.changeActive()

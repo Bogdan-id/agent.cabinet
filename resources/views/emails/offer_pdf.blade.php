@@ -2,16 +2,16 @@
   <p>Добрий день!</p>
   <p>У додатку Ви знайдете:</p>
   @if($leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто')
-  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу автомобiля {{ $model }} {{ $mark }}!</div>
+  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу автомобiля {{ $mark }} {{ $model }}!</div>
   @endif
   @if($leasingObjectType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjectType == 'Сільгосптехніка')
-  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу технiки {{ $model }} {{ $mark }}!</div>
+  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу технiки {{ $mark }} {{ $model }}!</div>
   @endif
   @if($leasingObjectType == 'Обладнання')
-  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу обладнання {{ $model }} {{ $mark }}!</div>
+  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу обладнання {{ $mark }} {{ $model }}!</div>
   @endif
   @if($leasingObjectType == 'Причепи та Напівпричепи')
-  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу причiпа {{ $model }} {{ $mark }}!</div>
+  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу причiпа {{ $mark }} {{ $model }}!</div>
   @endif
 
   <p>Прошу звернути увагу на:</p>

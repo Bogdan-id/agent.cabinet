@@ -139,7 +139,7 @@
         <template v-slot:item.leasing_amount="{ item }">
           <span style="white-space: nowrap">
             {{ 
-              parseInt(item.leasing_amount.replace(/ /g, '' ))
+              parseInt(item.leasing_amount.replace(/\s/g, '' ))
                 .toLocaleString()
                 .replace(/,/g, ' ')
             }}

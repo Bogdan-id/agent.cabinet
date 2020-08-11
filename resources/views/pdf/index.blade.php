@@ -261,7 +261,13 @@
                         </tr>
                         <tr>
                           <td align="right" style="border-right: 5px solid #da0303; vertical-align: top; font-size: 22px;">ВАЛЮТА ФІНАНСУВАННЯ</td>
-                          <td align="left" style="font-size: 22px;">{{ $currency }}</td>
+                          <td align="left" style="font-size: 22px;">
+                            @if($currency == 'UAH')
+                              ГРН
+                            @else
+                             {{ $currency }}
+                            @endif
+                        </td>
                         </tr>
                       </tbody>
                     </table>

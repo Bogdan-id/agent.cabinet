@@ -42,7 +42,7 @@
                     right>
                     <div class="time-line-content">
                       <div style="font-size: 1rem" color="red">{{ item.title }}</div>
-                      <span style="font-size: 0.85rem; color: #808080">{{ item.updated_at.substr(0, 10) }}</span>
+                      <span style="font-size: 0.85rem; color: #808080">{{ $formatDate(item.updated_at) }}</span>
                     </div>
                   </v-timeline-item>
                 </v-timeline>

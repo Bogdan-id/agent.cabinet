@@ -451,7 +451,7 @@
         </template>
         <template v-slot:item.updated_at="{ item }">
           <span style="white-space: nowrap">
-            {{ item.updated_at.substring(0, 10) }}
+            {{ $formatDate(item.updated_at) }}
           </span>
         </template>
         <!-- <template v-slot:item.leasingObjectType.label="{ item }">

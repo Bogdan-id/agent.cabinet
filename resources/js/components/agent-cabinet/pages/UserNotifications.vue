@@ -34,7 +34,7 @@
               {{ item.title}}&nbsp;
             </div>
             <div style="display: inline-block; min-width: 150px;">
-              <span style="font-size: 0.85rem; color: #808080">{{ item.updated_at.substr(0, 10) + ' ' + item.updated_at.substr(11, 8) }}</span>
+              <span style="font-size: 0.85rem; color: #808080">{{ $formatDate(item.updated_at) + ' ' + item.updated_at.substr(11, 8) }}</span>
               <div style="display: inline-block; position: relative; min-width: 20px;">
                 <span class="notification-delete-btn">
                   <v-btn v-show="!$vuetify.breakpoint.xs" small :loading="btnLoading && item.id === itemId" @click="deleteNotification(item.id)" icon>

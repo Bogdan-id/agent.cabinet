@@ -8,7 +8,7 @@
       <v-divider class="ml-4 mr-4 mb-1 mt-0"></v-divider>
       <div style="padding: 0 25px; text-align: left;">
         <span style="letter-spacing: 0.05rem; font-size: 0.79rem; display: inline-block;">
-          {{`${article.updated_at.substring(0,10).replace(/-/g, '/')}`}}&nbsp; {{`${article.updated_at.substring(12,19)}`}}
+          {{`${$formatDate(article.updated_at)}`}}&nbsp; {{`${article.updated_at.substring(11,19)}`}}
         </span>
       </div>
       <div style="display: flex; justify-content: center; padding: 15px 22px 25px 22px;">

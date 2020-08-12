@@ -155,6 +155,9 @@
                 <template v-slot:item.n="{ item }">
                   <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
                 </template>
+                <template v-slot:item.date="{ item }">
+                  {{ $formatDate(item.date) }}
+                </template>
                 <template v-slot:body.append>
                   <div v-show="$vuetify.breakpoint.xs" style="border-left: 4px solid #d24a43;">
                     <div class="total-payment-schedule-header">Всього</div>
@@ -384,6 +387,9 @@
               :items-per-page="180"
               :hide-default-footer="true"
               dense>
+              <template v-slot:item.date="{ item }">
+                {{ $formatDate(item.date) }}
+              </template>
               <template v-slot:item.n="{ item }">
                 <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
               </template>
@@ -615,6 +621,9 @@
                 :items-per-page="180"
                 :hide-default-footer="true"
                 dense>
+                <template v-slot:item.date="{ item }">
+                  {{ $formatDate(item.date) }}
+                </template>
                 <template v-slot:item.n="{ item }">
                   <span>{{ item.n === 0 ? 'Аванс' : item.n }}</span>
                 </template>

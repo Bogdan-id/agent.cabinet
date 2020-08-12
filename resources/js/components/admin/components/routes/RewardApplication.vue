@@ -86,7 +86,7 @@
         <span>{{ (parseInt(item.leasing_request.leasing_amount.replace(/[^\d]/g, ''))  / 100) * parseInt(item.agent.ab_size) }}</span>
       </template>
       <template v-slot:item.created_at="{ item }">
-        <span>{{ item.created_at.substr(0, 10) }}</span>
+        <span>{{ $formatDate(item.created_at) }}</span>
       </template>
       <template v-slot:item.status="{ item }">
         <v-chip :color="item.status === 'paid' ? 'success' : 'error'" small>{{ switchStatus(item.status) }}</v-chip>

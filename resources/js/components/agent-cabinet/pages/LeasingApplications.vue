@@ -318,7 +318,7 @@
           <span style="white-space: nowrap">{{ item.leasing_object}}</span><!-- <router-link tag="a" style="white-space: nowrap; text-transform: lowercase;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</router-link> -->
         </template>
         <template v-slot:item.data="{ item }">
-          <span style="white-space: nowrap;"> {{ item.updated_at.substr(0, 10) }}</span>
+          <span style="white-space: nowrap;"> {{ $formatDate(item.updated_at) }}</span>
         </template>
         <template v-slot:item.leasing_amount="{ item }">
           <span style="white-space: nowrap">

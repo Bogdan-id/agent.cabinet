@@ -24,7 +24,7 @@
               <div class="text" v-html="item.content" style="position: relaitve">
               </div>
               <span style="letter-spacing: 0.065rem; font-size: 0.78rem; color: black; line-height: 2rem;">
-                {{`${item.updated_at.substring(0,10)}  ${item.updated_at.substring(12,19)}`}}
+                {{`${item.updated_at.substring(0,10)}  ${item.updated_at.substring(11,19)}`}}
               </span>
             </div>
           </v-col>
@@ -46,7 +46,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$vuetify.breakpoint.xs)
+    console.log(this.item)
   }
 }
 </script>

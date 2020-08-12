@@ -1,6 +1,5 @@
 /* Admin */
 import Admin from '../components/admin/main'
-import AdminAuth from '../components/admin/components/routes/Auth'
 import EditCategory from '../components/admin/components/routes/UsefulMaterialsEdit'
 import RewardApplications from '../components/admin/components/routes/RewardApplication'
 import Agents from '../components/admin/components/routes/Agents'
@@ -141,14 +140,6 @@ const routes = [
       }
     ]
   }, 
-  { 
-    path: '/admin/login', 
-    component: AdminAuth,
-    name: 'admin-authorization',
-    meta: {
-      title: 'Увiйти'
-    }
-  },
   //Authentication (dashboard)
   { 
     path: '/', 

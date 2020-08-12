@@ -405,8 +405,8 @@ export default {
     applyChanges(status, index) {
       switch(status) {
         case '0': return {text: 'Відхилена', color: `${index <= 5 ? 'red' : 'grey'}`};
-        case '1': return {text: 'В роботі', color: `${index <= 2 ? 'orange' : 'grey'}`};
-        case '2': return {text: 'Погоджено', color: `${index <= 3 ? 'orange' : 'grey'}`};
+        case '1': return {text: 'В роботі', color: `${index <= 1 ? 'orange' : 'grey'}`};
+        case '2': return {text: 'Погоджено', color: `${index <= 2 ? 'orange' : 'grey'}`};
         case '3': return {text: 'Договір підписано', color: `${index <= 3 ? 'green' : 'grey'}`};
         case '4': return {text: 'Отримано аванс', color: `${index <= 4 ? 'green' : 'grey'}` };
         case '5': return {text: 'Відвантажено', color: `${index <= 5 ? 'green' : 'grey'}`};

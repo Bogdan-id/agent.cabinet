@@ -47,7 +47,7 @@
         @change="listenImageInput()">
       <div v-show="formToAddSlider" class="mb-8">
         <v-card
-          :style="`margin: 0 auto; position: relative; background: url('${sliderImage}'); bacground-size: 100% 100%;`"
+          :style="`margin: 0 auto; position: relative; background: url('${sliderImage}'); background-size: 100% 100%;`"
           class="slider-card"
           max-width="900"
           height="400" 
@@ -164,7 +164,7 @@
         :key="key">
         <v-hover v-slot:default="{ hover }">
           <v-card
-            :style="`margin: 0 auto; position: relative; background: url('${item.slide_image || sliderImage}'); background-size: cover;`"
+            :style="`margin: 0 auto; position: relative; background: url('${item.slide_image || sliderImage}'); background-size: 100% 100%;`"
             class="slider-card"
             max-width="900"
             height="400" 

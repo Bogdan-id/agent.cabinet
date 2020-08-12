@@ -90,8 +90,9 @@
           :src="item.slide_image"
           :key="key"
           reverse-transition="fade-transition"
+          class="OOOOOOOOOOOOOOOOOOOOOOO"
           transition="fade-transition"
-          style="bacground-size: 100% 100%;">
+          style="bacground-size: 100% 100%!important;">
           <div>
             <div style="height: 120px;">
               <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
@@ -529,6 +530,12 @@ export default {
 }
 .theme--light.v-skeleton-loader .v-skeleton-loader__bone:after {
   background: linear-gradient(90deg,transparent,hsla(187, 0%, 81%, 0.82),transparent)!important;
+}
+
+.v-carousel__item {
+  .v-image__image {
+    background-size: 100% 100%!important;
+  }
 }
 
 .dashboard-carousel {

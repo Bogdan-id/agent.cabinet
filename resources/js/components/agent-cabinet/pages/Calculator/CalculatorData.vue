@@ -440,20 +440,6 @@
         <template v-slot:item.sendGraph>
           <span style="white-space: nowrap">{{ $store.state.user.agent.ab_size }}</span>
         </template>
-        <template v-slot:item.request_data="{ item }">
-          <span style="white-space: nowrap">
-            {{ 
-              parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
-                .toLocaleString()
-                .replace(/,/g, ' ')
-            }}
-          </span>
-        </template>
-        <template v-slot:item.updated_at="{ item }">
-          <span style="white-space: nowrap">
-            {{ $formatDate(item.updated_at) }}
-          </span>
-        </template>
         <!-- <template v-slot:item.leasingObjectType.label="{ item }">
           <span>{{ item.request_data.leasingObjectType.label}}</span>
         </template> -->
@@ -617,6 +603,18 @@ export default {
       {text: 'Довідка про заробітну плату', prop: 'salary_certificate'},
       {text: 'Паспорт дружини (чоловіка) позичальника', prop: 'relatives_passport'},
     ],
+
+    tableHeader: [
+      { text: 'Код розрахунку', value: 'request_id', align: 'start'},
+      { text: 'Дата', value: 'created_at', align: 'center' },
+      { text: 'Тип ПЛ', value: 'request_data.leasingObjectType.label', align: 'center' },
+      { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
+      { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
+      { text: 'Цiна, грн', value: 'request_data.leasingAmount', align: 'center' },
+      // { text: 'АВ, %', value: 'sendGraph', align: 'center' },
+      { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
+    ],
+    tabledata: [],
     // creditPayment: null,
     selectedGraph: null,
 
@@ -655,17 +653,6 @@ export default {
     edrpouLoading: false,
     _token: null,
 
-    tableHeader: [
-      { text: 'Код розрахунку', value: 'request_id', align: 'start'},
-      { text: 'Дата', value: 'updated_at', align: 'center' },
-      { text: 'Тип ПЛ', value: 'request_data.leasingObjectType.label', align: 'center' },
-      { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
-      { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
-      { text: 'Цiна, грн', value: 'request_data', align: 'center' },
-      // { text: 'АВ, %', value: 'sendGraph', align: 'center' },
-      { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
-    ],
-    tabledata: [],
     search: '',
     attachedFiles: null,
     btnLoading: false,
@@ -1244,8 +1231,17 @@ export default {
           .then(response => {
             this.loading = false
             if(response.data.length > 0)  {
-              this.tabledata = response.data
-              console.log(this.tabledata)
+              
+              this.tabledata = Object.keys(response.data)
+                .map(val => {
+                  response.data[val].created_at = this.$formatDate(response.data[val].created_at)
+                  response.data[val].request_data.leasingAmount = parseInt(response.data[val].request_data.leasingAmount
+                    .replace(/\s/g, '' ))
+                    .toLocaleString("en-GB")
+                    .replace(/,/g, ' ')
+                  return response.data[val]
+                })
+
               this.$store.commit('addGraph', response.data)
             } else {
               this.tabledata = []

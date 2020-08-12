@@ -611,7 +611,6 @@ export default {
       { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
       { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
       { text: 'Цiна, грн', value: 'request_data.leasingAmount', align: 'center' },
-      // { text: 'АВ, %', value: 'sendGraph', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],

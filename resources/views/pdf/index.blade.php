@@ -59,6 +59,12 @@
       min-height: 250px; 
       background-repeat: no-repeat;
     }
+    .table-wrapper {
+      page-break-after: always;
+    }
+    .table-wrapper:last-child {
+      page-break-after: avoid;
+    }
   </style>
 </head>
 <body>
@@ -418,41 +424,43 @@
 
     @isset($even)
       @if(count($even) > 0)
-        <h4 style="padding-top: 23px">ГРАФІК ЛІЗИНГОВИХ ПЛАТЕЖІВ - Класичний</h4>
-        <table class="graph-table" style="border: 1px solid #e0e0e0; width: 882px; border-collapse: collapse;" cellspacing="10">
-          <thead>
-            <tr style="background-color: #d32f2f">
-              <th style="border: 1px solid #e0e0e0; color: white;">П/П</th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Погашення основної
-                суми заборгованості,
-                грн., в т.ч. ПДВ
-              </th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Винагорода
-                лізингодавця по
-                Договору, грн.
-              </th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Сума платежу, ГРН</th>
-            </tr>
-          </thead>
-          <tbody>
-          @foreach($even['graph'] as $item)
-            <tr>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['n'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['payment-principal'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['interest'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['payment'], 0, '.', ' ')}}</td>
-            </tr>
-          @endforeach
-          </tbody>
-          <tfoot>
-            <tr>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">Всього:</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($even['agg']['payment-principal'], 0, '.', ' ')}}</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($even['agg']['interest'], 0, '.', ' ')}}</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($even['agg']['payment'], 0, '.', ' ')}}</th>
-            </tr>
-          </tfoot>
-        </table>
+        <div class="table-wrapper">
+          <h5 style="margin-bottom: 5px; margin-top: 0;">ГРАФІК ЛІЗИНГОВИХ ПЛАТЕЖІВ - Класичний</h5>
+          <table class="graph-table" style="border: 1px solid #e0e0e0; width: 882px; border-collapse: collapse; font-size: 0.9rem;" cellspacing="10">
+            <thead>
+              <tr style="background-color: #d32f2f">
+                <th style="border: 1px solid #e0e0e0; color: white;">П/П</th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Погашення основної
+                  суми заборгованості,
+                  грн., в т.ч. ПДВ
+                </th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Винагорода
+                  лізингодавця по
+                  Договору, грн.
+                </th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Сума платежу, ГРН</th>
+              </tr>
+            </thead>
+            <tbody>
+            @foreach($even['graph'] as $item)
+              <tr>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['n'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['payment-principal'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['interest'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['payment'], 0, '.', ' ')}}</td>
+              </tr>
+            @endforeach
+            </tbody>
+            <tfoot>
+              <tr>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">Всього:</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($even['agg']['payment-principal'], 0, '.', ' ')}}</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($even['agg']['interest'], 0, '.', ' ')}}</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($even['agg']['payment'], 0, '.', ' ')}}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       @endif
     @endisset
 
@@ -460,41 +468,43 @@
 
     @isset($annuity)
       @if(count($annuity) > 0)
-        <h4 style="padding-top: 23px">ГРАФІК ЛІЗИНГОВИХ ПЛАТЕЖІВ - Ануїтет</h4>
-        <table class="graph-table" style="border: 1px solid #e0e0e0; width: 882px; border-collapse: collapse;" cellspacing="10">
-          <thead>
-            <tr style="background-color: #d32f2f">
-              <th style="border: 1px solid #e0e0e0; color: white;">П/П</th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Погашення основної
-                суми заборгованості,
-                грн., в т.ч. ПДВ
-              </th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Винагорода
-                лізингодавця по
-                Договору, грн.
-              </th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Сума платежу, ГРН</th>
-            </tr>
-          </thead>
-          <tbody>
-          @foreach($annuity['graph'] as $item)
-            <tr>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['n'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['payment-principal'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['interest'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['payment'], 0, '.', ' ')}}</td>
-            </tr>
-          @endforeach
-          </tbody>
-          <tfoot>
-            <tr>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">Всього:</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($annuity['agg']['payment-principal'], 0, '.', ' ')}}</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($annuity['agg']['interest'], 0, '.', ' ')}}</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($annuity['agg']['payment'], 0, '.', ' ')}}</th>
-            </tr>
-          </tfoot>
-        </table>
+        <div class="table-wrapper">
+          <h5 style="margin-bottom: 5px; margin-top: 0;">ГРАФІК ЛІЗИНГОВИХ ПЛАТЕЖІВ - Ануїтет</h5>
+          <table class="graph-table" style="border: 1px solid #e0e0e0; width: 882px; border-collapse: collapse; font-size: 0.9rem;" cellspacing="10">
+            <thead>
+              <tr style="background-color: #d32f2f">
+                <th style="border: 1px solid #e0e0e0; color: white;">П/П</th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Погашення основної
+                  суми заборгованості,
+                  грн., в т.ч. ПДВ
+                </th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Винагорода
+                  лізингодавця по
+                  Договору, грн.
+                </th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Сума платежу, ГРН</th>
+              </tr>
+            </thead>
+            <tbody>
+            @foreach($annuity['graph'] as $item)
+              <tr>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['n'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['payment-principal'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['interest'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['payment'], 0, '.', ' ')}}</td>
+              </tr>
+            @endforeach
+            </tbody>
+            <tfoot>
+              <tr>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">Всього:</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($annuity['agg']['payment-principal'], 0, '.', ' ')}}</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($annuity['agg']['interest'], 0, '.', ' ')}}</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($annuity['agg']['payment'], 0, '.', ' ')}}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       @endif
     @endisset
 
@@ -502,41 +512,43 @@
 
     @isset($irregular)
       @if(count($irregular) > 0)
-        <h4 style="padding-top: 23px">ГРАФІК ЛІЗИНГОВИХ ПЛАТЕЖІВ - Iндивiдуальний</h4>
-        <table class="graph-table" style="border: 1px solid #e0e0e0; width: 882px; border-collapse: collapse;" cellspacing="10">
-          <thead>
-            <tr style="background-color: #d32f2f">
-              <th style="border: 1px solid #e0e0e0; color: white;">П/П</th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Погашення основної
-                суми заборгованості,
-                грн., в т.ч. ПДВ
-              </th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Винагорода
-                лізингодавця по
-                Договору, грн.
-              </th>
-              <th style="border: 1px solid #e0e0e0; color: white;">Сума платежу, ГРН</th>
-            </tr>
-          </thead>
-          <tbody>
-          @foreach($irregular['graph'] as $item)
-            <tr>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['n'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['payment-principal'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['interest'], 0, '.', ' ')}}</td>
-              <td style="border: 1px solid #e0e0e0;" align="center">{{number_format($item['payment'], 0, '.', ' ')}}</td>
-            </tr>
-          @endforeach
-          </tbody>
-          <tfoot>
-            <tr>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">Всього:</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($irregular['agg']['payment-principal'], 0, '.', ' ')}}</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($irregular['agg']['interest'], 0, '.', ' ')}}</th>
-              <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($irregular['agg']['payment'], 0, '.', ' ')}}</th>
-            </tr>
-          </tfoot>
-        </table>
+        <div class="table-wrapper">
+          <h5 style="margin-bottom: 5px; margin-top: 0;">ГРАФІК ЛІЗИНГОВИХ ПЛАТЕЖІВ - Iндивiдуальний</h5>
+          <table class="graph-table" style="border: 1px solid #e0e0e0; width: 882px; border-collapse: collapse; font-size: 0.9rem;" cellspacing="10">
+            <thead>
+              <tr style="background-color: #d32f2f">
+                <th style="border: 1px solid #e0e0e0; color: white;">П/П</th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Погашення основної
+                  суми заборгованості,
+                  грн., в т.ч. ПДВ
+                </th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Винагорода
+                  лізингодавця по
+                  Договору, грн.
+                </th>
+                <th style="border: 1px solid #e0e0e0; color: white;">Сума платежу, ГРН</th>
+              </tr>
+            </thead>
+            <tbody>
+            @foreach($irregular['graph'] as $item)
+              <tr>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['n'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['payment-principal'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['interest'], 0, '.', ' ')}}</td>
+                <td style="border: 1px solid #e0e0e0; font-size: 12px;" align="center">{{number_format($item['payment'], 0, '.', ' ')}}</td>
+              </tr>
+            @endforeach
+            </tbody>
+            <tfoot>
+              <tr>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">Всього:</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($irregular['agg']['payment-principal'], 0, '.', ' ')}}</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($irregular['agg']['interest'], 0, '.', ' ')}}</th>
+                <th style="border: 1px solid #e0e0e0; color: #333333" align="center">{{number_format($irregular['agg']['payment'], 0, '.', ' ')}}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       @endif
     @endisset
     

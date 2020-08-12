@@ -53,35 +53,33 @@
                 class="pb-0 pt-2"
                 style="
                   border-left: 4px solid #e75d57; 
-                  font-size: 1.2rem; 
+                  font-size: 1.1rem; 
                   color: black; 
                   font-family: montserrat;">
                 {{ currentAgent }}
               </v-card-text>
               <!-- <v-divider></v-divider> -->
               <v-card-text class="pt-3 pb-1">
-                <div>
+                <!-- <div>
                   <span>Компанiя:</span>
                   <div 
                     class="pl-3" 
                     style="font-size: 1rem; color: black; font-family: montserrat">
                     Best leasing
                   </div>
-                </div>
+                </div> -->
                 <div>
-                  <span>Телефон:</span>
                   <div 
-                    class="pl-3" 
+                    class="pt-1 pb-1"
                     style="font-size: 1rem; color: black; font-family: montserrat">
-                    +38 (095) 741 92 42
+                    <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>+38 (095) 741 92 42
                   </div>
                 </div>
                 <div>
-                  <span>Email:</span>
                   <div 
-                    class="pl-3" 
+                    class="pb-2"
                     style="font-size: 0.97rem; color: black; font-family: montserrat">
-                    user332145@gmail.com
+                    <v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>user332145@gmail.com
                   </div>
                 </div>
                 <div>
@@ -90,7 +88,7 @@
                     @click.native="$refs.briefProfileBtn.$el.click()"
                     style="color: #bb433c; font-size: 1rem; padding: 3px 5px; font-family: montserrat; display: inline-block; " 
                     to="/agent-profile">
-                    Перейти в профiль
+                    Перейти у профiль
                   </router-link>
                 </div>
               </v-card-text>

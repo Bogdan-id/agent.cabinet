@@ -90,7 +90,6 @@
           :src="item.slide_image"
           :key="key"
           reverse-transition="fade-transition"
-          class="OOOOOOOOOOOOOOOOOOOOOOO"
           transition="fade-transition"
           style="bacground-size: 100% 100%!important;">
           <div>

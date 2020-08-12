@@ -400,7 +400,7 @@
     </div>
   </section>
   <section class="contacts">
-    <table style="width: 100%; margin-top: 80px;">
+    <table style="width: 100%; margin-top: 150px;">
       <tr>
         <td style="width: 50%; padding-left: 25px;">
           <div style="display: inline-block;">

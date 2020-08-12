@@ -39,7 +39,7 @@ class OfferPdfMail extends Mailable
                     ->view('emails.offer_pdf')
                     ->subject($subject)
                     ->attach("pdf/{$this->fileName}", [
-                        'as' => "{$this->fileName}.pdf",
+                        'as' => "{$this->fileName}",
                         'mime' => 'application/pdf',
                     ])
                     ->with([

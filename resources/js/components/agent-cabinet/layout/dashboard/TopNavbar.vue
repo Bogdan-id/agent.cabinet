@@ -13,12 +13,94 @@
           <v-icon size="36" v-text="'mdi-menu'"></v-icon>
         </v-btn>
       </div>
-      <div style="display: inline-blockl"></div>
+      <div style="display: inline-block"></div>
       <div class="notification-wrapper">
         <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              v-on="on"
+              v-show="$vuetify.breakpoint.xs" 
+              to="/agent-profile" 
+              x-large icon>
+              <v-icon x-large v-text="'mdi-account-circle-outline'"></v-icon>
+            </v-btn>
+          </template>
+          <span>Профiль</span>
+        </v-tooltip>
+        <div
+          v-show="!$vuetify.breakpoint.xs"
+          class="user-brief-profile-wrapper">
+          <v-icon x-large v-text="'mdi-account-circle-outline'"></v-icon>
+          <div class="agent-name">
+            {{ currentAgent }}
+          </div>
+          <v-menu 
+            bottom 
+            :offset-y="true" 
+            :nudge-left="200" 
+            :nudge-bottom="25"
+            :close-on-content-click="false">
+            <template v-slot:activator="{ on }">
+              <v-btn 
+                ref="briefProfileBtn" 
+                v-on="on" @click="showBriefUserProfile = !showBriefUserProfile" 
+                small icon>
+                <v-icon v-text="'mdi-menu-down'"></v-icon>
+              </v-btn>
+            </template>
+            <v-card :min-width="330">
+              <v-card-text 
+                class="pb-0 pt-2"
+                style="
+                  border-left: 4px solid #e75d57; 
+                  font-size: 1.2rem; 
+                  color: black; 
+                  font-family: montserrat;">
+                {{ currentAgent }}
+              </v-card-text>
+              <!-- <v-divider></v-divider> -->
+              <v-card-text class="pt-3 pb-1">
+                <div>
+                  <span>Компанiя:</span>
+                  <div 
+                    class="pl-3" 
+                    style="font-size: 1rem; color: black; font-family: montserrat">
+                    Best leasing
+                  </div>
+                </div>
+                <div>
+                  <span>Телефон:</span>
+                  <div 
+                    class="pl-3" 
+                    style="font-size: 1rem; color: black; font-family: montserrat">
+                    +38 (095) 741 92 42
+                  </div>
+                </div>
+                <div>
+                  <span>Email:</span>
+                  <div 
+                    class="pl-3" 
+                    style="font-size: 0.97rem; color: black; font-family: montserrat">
+                    user332145@gmail.com
+                  </div>
+                </div>
+                <div>
+                  <router-link 
+                    class="profile-link"
+                    @click.native="$refs.briefProfileBtn.$el.click()"
+                    style="color: #bb433c; font-size: 1rem; padding: 3px 5px; font-family: montserrat; display: inline-block; " 
+                    to="/agent-profile">
+                    Перейти в профiль
+                  </router-link>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </div>
+        <v-tooltip bottom>
           <template #activator="{ on }">
-            <span style="display: inline-block; height: 52px; width: 52px;">
-              <v-btn style="position: relative;" v-on="on" @click="toggleNotifyCard($event)" large icon>
+            <!-- <span style="display: inline-block; height: 52px; width: 52px;"> -->
+              <v-btn style="position: relative;" v-on="on" @click="toggleNotifyCard($event)" x-large icon>
                 <div class="notification-count" v-if="notificationCount > 0">
                   {{ notificationCount > 3 ? '3+' :  notificationCount === 0 ? '' : notificationCount}}
                 </div>
@@ -56,15 +138,9 @@
                 </div>
               </v-card>
               </span>
-            </span>
+            <!-- </span> -->
           </template>
           <span>Повiдомлення</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn v-on="on" to="/agent-profile" x-large icon><v-icon large v-text="'mdi-account'"></v-icon></v-btn>
-          </template>
-          <span>Профiль</span>
         </v-tooltip>
         <v-tooltip bottom>
           <template #activator="{ on }">
@@ -88,6 +164,7 @@ export default {
     toggleIcon,
   },
   data:() => ({
+    showBriefUserProfile: false,
     activeNotifications: false,
     showSidebar: true,
     notifications: null,
@@ -117,6 +194,10 @@ export default {
     if(!this.$store.state.user.agent) return false
       return this.$store.state.user.agent.id !== null
     },
+    currentAgent() {
+      if(!this.hasUser) return
+      return `${this.$store.state.user.agent.last_name} ${this.$store.state.user.agent.first_name} ${this.$store.state.user.agent.patronymic}`
+    }
   },
   methods: {
     changeNotificationsStatus(object) {
@@ -238,28 +319,51 @@ export default {
 }
 </script>
 <style lang="scss">
+.profile-link:hover {
+  color: #e57373;
+  text-decoration: underline;
+  transition: color 0.2s ease-in; 
+}
 .v-timeline--dense:not(.v-timeline--reverse):before {
-    right: auto;
-    left: 25px!important;
-  }
-  .notification-wrapper {
-    .v-timeline {
-      .v-timeline-item {
-        .v-timeline-item__divider {
-          min-width: 45px!important;
-          margin-top: 10px;
-          position: absolute;
-          left: 3px!important;
-        }
-        .v-timeline-item__body {
-          max-width: 220px!important;
-          position: relative!important;
-          margin-right: 0.5rem!important;
-        }
+  right: auto;
+  left: 25px!important;
+}
+.agent-name {
+  font-size: 1rem;
+  display: inline-block;
+  color: #727170;
+  max-width: 160px;
+  text-transform: uppercase;
+  line-height: 1.2rem;
+  padding: 3px 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-brief-profile-wrapper {
+  display: flex; 
+  align-items: center; 
+  margin: 0 10px; 
+  font-family: montserrat;
+}
+.notification-wrapper {
+  display: flex;
+  align-items: center;
+  .v-timeline {
+    .v-timeline-item {
+      .v-timeline-item__divider {
+        min-width: 45px!important;
+        margin-top: 10px;
+        position: absolute;
+        left: 3px!important;
+      }
+      .v-timeline-item__body {
+        max-width: 220px!important;
+        position: relative!important;
+        margin-right: 0.5rem!important;
       }
     }
   }
-
+}
 .time-line-content {
   position: relative;
   &:hover {

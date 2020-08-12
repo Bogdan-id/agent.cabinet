@@ -1262,7 +1262,7 @@ export default {
       let graph = graphs[Object.keys(graphs)[0] !== 'requestId' ? Object.keys(graphs)[0] : Object.keys(graphs)[1]]
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
-      const [year, month, day] = this.currentGraphToDownload.created_at.substring(0, 10).split('-')
+      // const [year, month, day] = this.currentGraphToDownload.created_at.substring(0, 10).split('-')
 
       let dataToSave = {
         request_id: this.currentGraphToDownload.request_id,
@@ -1279,7 +1279,7 @@ export default {
         currency: calcData.leasingCurrency,
         leasingRest: graph['offer-rest'],
         requestId: rootCalcData.request_id,
-        date: `${day}.${month}.${year}`,
+        date: rootCalcData.created_at,
         _token: this.getCsrf()
       }
 

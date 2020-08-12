@@ -71,14 +71,14 @@
                 <div>
                   <div 
                     class="pt-1 pb-1"
-                    style="font-size: 1rem; color: black; font-family: montserrat">
+                    style="font-size: 0.95rem; color: black; font-family: montserrat">
                     <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>+38 (095) 741 92 42
                   </div>
                 </div>
                 <div>
                   <div 
                     class="pb-2"
-                    style="font-size: 0.97rem; color: black; font-family: montserrat">
+                    style="font-size: 0.95rem; color: black; font-family: montserrat">
                     <v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>user332145@gmail.com
                   </div>
                 </div>
@@ -86,7 +86,7 @@
                   <router-link 
                     class="profile-link"
                     @click.native="$refs.briefProfileBtn.$el.click()"
-                    style="color: #bb433c; font-size: 1rem; padding: 3px 5px; font-family: montserrat; display: inline-block; " 
+                    style="color: #bb433c; font-size: 0.9rem; font-family: montserrat; display: inline-block; " 
                     to="/agent-profile">
                     Перейти у профiль
                   </router-link>

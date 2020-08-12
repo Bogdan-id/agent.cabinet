@@ -34,7 +34,7 @@
           v-model="graphName"
           color="red darken-4">
           <template v-slot:label>
-            <span :style="graphName == 'even' ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
+            <span :style="graphName.indexOf('even') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
           </template>
         </v-checkbox>
         <v-checkbox
@@ -43,7 +43,7 @@
           value="annuity"
           color="red darken-4">
           <template v-slot:label>
-            <span :style="graphName == 'annuity'? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
+            <span :style="graphName.indexOf('annuity') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
           </template>
         </v-checkbox>
         <v-checkbox
@@ -52,7 +52,7 @@
           v-model="graphName"
           color="red darken-4">
           <template v-slot:label>
-            <span :style="graphName == 'irregular' ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
+            <span :style="graphName.indexOf('irregular') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
           </template>
         </v-checkbox>
         <v-text-field 

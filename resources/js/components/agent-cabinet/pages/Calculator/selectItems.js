@@ -9,7 +9,8 @@ export default {
     {label: "Вантажні авто", value: 6},
     {label: "Обладнання", value: 6},
     {label: "Причепи та Напівпричепи", value: 6},
-    {label: "Сільгосптехніка", value: 6}
+    {label: "Сільгосптехніка", value: 6},
+    {label: "Автобуси", value: 7}
   ],
   clientTypes: [ 
     {text: "Юридична особа", value: 2}, 

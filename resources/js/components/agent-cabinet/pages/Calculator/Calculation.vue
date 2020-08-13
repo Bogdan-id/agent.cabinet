@@ -695,23 +695,23 @@
           <div class="collapsible-content">
             <div class="content-inner">
               <v-row class="d-flex justify-space-between">
-                <v-col cols="12" md="5" sm="7" class="pb-0">
+                <v-col cols="12" md="5" sm="6" xs="12" class="pb-0">
                   <v-select
-                      v-model="calcObj.insuranceProgram"
-                      append-icon="mdi-chevron-down"
-                      :items="selects.insurancePrograms"
-                      :error-messages="insuranceProgramErr"
-                      item-text="text"
-                      item-value="value"
-                      label="Програма страхування"
-                      itemColor="red darken-4"
-                      color="red darken-4"
-                      outlined
-                      :dense="mediumAndDown">
+                    v-model="calcObj.insuranceProgram"
+                    append-icon="mdi-chevron-down"
+                    :items="selects.insurancePrograms"
+                    :error-messages="insuranceProgramErr"
+                    item-text="text"
+                    item-value="value"
+                    label="Програма страхування"
+                    itemColor="red darken-4"
+                    color="red darken-4"
+                    outlined
+                    :dense="mediumAndDown">
                   </v-select>
                 </v-col>
-                <v-col cols="12" md="6" sm="10" style="padding-top: 3px;">
-                  <div style="margin-bottom: 25px; padding-left: 15px;">
+                <v-col cols="12" md="6" sm="6" xs="12" style="padding-top: 3px;">
+                  <div style="margin-bottom: 9px; padding-left: 15px;">
                     <span style="font-size: 0.95rem; color: #757575; ">Франшиза (%)</span>
                   </div>
                   <input
@@ -724,15 +724,15 @@
                     step="0.5"
                     class="slider"
                     @input="initElRange($event)">
-                  <div style="display: flex; position: relative; margin-right: 14px;" class="pt-6">
+                  <div style="display: flex; position: relative; margin-right: 14px; font-size: 1rem" class="pt-4">
                     <div
-                      v-for="v in ['0', '0.5', '1', '1.5']"
+                      v-for="v in ['0', '0.5']"
                       :key="v"
-                      style="position: relative; width: 37.8%;'">
+                      style="position: relative; width: 50%;'">
                       <span :style="`color: #969599; transition: color 0.2s ease-in; color: ${insuranceFranchise == v ? 'black; font-weight: bold;' : '#969599;' }`">{{ v }}</span>
                     </div>
-                    <div :style="`position: absolute; transition: color 0.2s ease-in; right: -15px; color: ${insuranceFranchise == '2' ? 'black; font-weight: bold;' : '#969599;'} `">
-                      {{ `2` }}
+                    <div :style="`position: absolute; transition: color 0.2s ease-in; right: -15px; color: ${insuranceFranchise == '1' ? 'black; font-weight: bold;' : '#969599;'} `">
+                      {{ `1` }}
                     </div>
                   </div>
                 </v-col>
@@ -864,7 +864,7 @@ export default {
     },
     franchise: {
       min: 0,
-      max: 2
+      max: 1
     },
     input: {
 			currentProgress: '#d24a43',
@@ -1720,8 +1720,6 @@ export default {
         case 1: return '0'
         case 2: return '0.5'
         case 3: return '1'
-        case 4: return '1.5'
-        case 5: return '2'
       }
     }
   },
@@ -1748,8 +1746,6 @@ export default {
         case '0': return this.calcObj.insuranceFranchise = 1
         case '0.5': return this.calcObj.insuranceFranchise = 2
         case '1': return this.calcObj.insuranceFranchise = 3
-        case '1.5': return this.calcObj.insuranceFranchise = 4
-        case '2': return this.calcObj.insuranceFranchise = 5
       }
     },
     'calcObj.holidays': function(value) {
@@ -2179,6 +2175,10 @@ export default {
           font-size: 0.95rem!important;
         }
       }
+      .v-select__selection, input {
+        font-size: 1.07rem;
+        font-weight: bold!important;
+      }
     }
     label {
       display: inline-flex!important;
@@ -2217,7 +2217,7 @@ export default {
     }
   }
   .v-select__selection, input {
-    font-size: 1.28rem!important;
+    font-size: 1.28rem;
     font-weight: bold!important;
   }
   .v-select__slot, .v-text-field__slot {

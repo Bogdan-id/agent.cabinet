@@ -806,7 +806,7 @@
         <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :dense="xs" :loading="calculationLoader">
         {{'Розрахувати'}}
         </v-btn>
-        <v-btn @click="test()">test</v-btn>
+        <!-- <v-btn @click="test()">test</v-btn> -->
       </span>
     </v-card-actions>
   </div>

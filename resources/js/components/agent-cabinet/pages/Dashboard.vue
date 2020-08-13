@@ -60,12 +60,20 @@
   </div>
   <!-- Dashboard container -->
   <div class="dashboard-container">
-    <v-card elevation="9" height="400">
-      <div v-if="!carouselVisibility && sliderHasNoSlides" style="position: relative; width: 100%; height: 100%;">
+    <v-card elevation="9" 
+      :height="
+        $vuetify.breakpoint.xs 
+          ? 300 : $vuetify.breakpoint.lg 
+          ? 450 : $vuetify.breakpoint.xl 
+          ? 650 : 350">
+      <div v-if="!carouselVisibility && sliderHasNoSlides"  style="position: relative; width: 100%; height: 100%;">
         <v-skeleton-loader
           style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
-          height="800"
-          min-height="800"
+          :class="
+            $vuetify.breakpoint.xs 
+              ? 'xs' : $vuetify.breakpoint.lg 
+              ? 'lg' : $vuetify.breakpoint.xl 
+              ? 'xl' : ''"
           type="image">
         </v-skeleton-loader>
       </div>
@@ -76,7 +84,11 @@
       <v-carousel
         transition="fade-transition"
         cycle
-        height="400"
+        :height="
+          $vuetify.breakpoint.xs 
+            ? 300 : $vuetify.breakpoint.lg 
+            ? 450 : $vuetify.breakpoint.xl 
+            ? 650 : 350"
         name="dashboard-carousel"
         :class="`${carouselVisibility ? 'dashboard-carousel active' : 'dashboard-carousel'}`"
         id="dashboard-carousel"
@@ -93,16 +105,16 @@
           transition="fade-transition"
           style="bacground-size: 100% 100%!important;">
           <div>
-            <div style="height: 120px;">
+            <div style="height: 50%;">
               <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
                 <h3><b>{{ item.title}}</b></h3>
                 <p style="font-size: 0.88rem"> {{ item.description }} </p>
               </div>
             </div>
-            <div class="to-detail-news">
-              <span style="display: inline-block; margin-right: 40px; margin-bottom: 15px">
+            <div class="slider-action-btn-wrapper">
+              <span style="display: inline-block; margin: 2.8rem 3.3rem;">
                 <v-btn 
-                  class="vuetify_custom-btn white--text ml-1 mt-7" 
+                  class="vuetify_custom-btn white--text" 
                   :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">
                   Ознайомитись
                 </v-btn>
@@ -524,9 +536,34 @@ export default {
 .theme--light.v-skeleton-loader .v-skeleton-loader__text {
     background: white!important;
 }
-.v-skeleton-loader__image {
-  height: 400px!important;
+.v-skeleton-loader {
+  .v-skeleton-loader__image {
+    height: 350px!important;
+  }
+  &.xs {
+    .v-skeleton-loader__image {
+      height: 300px!important;
+    }
+  }
+  &.lg {
+    .v-skeleton-loader__image {
+      height: 450px!important;
+    }
+  }
+  &.xl {
+    .v-skeleton-loader__image {
+      height: 650px!important;
+    }
+  }
 }
+.slider-action-btn-wrapper {
+  height: 50%; 
+  display: flex; 
+  width: 100%; 
+  justify-content: flex-end; 
+  align-items: flex-end;
+}
+
 .theme--light.v-skeleton-loader .v-skeleton-loader__bone:after {
   background: linear-gradient(90deg,transparent,hsla(187, 0%, 81%, 0.82),transparent)!important;
 }
@@ -541,13 +578,6 @@ export default {
   visibility: hidden;
   transition: opacity 1.5s;
   opacity: 0;
-  .to-detail-news {
-    height: 240px; 
-    display: flex; 
-    width: 100%; 
-    justify-content: flex-end; 
-    align-items: flex-end;
-  }
   &.active {
     visibility: visible;
     opacity: 1;
@@ -872,36 +902,36 @@ export default {
     background-color: rgba(252, 252, 252, 0.7); 
     max-width: 48%;
     color: black!important;
-    margin: 75px 0 25px 25px; 
+    margin: 3rem 1.8rem;
     display: inline-block;
     &.small-screen {
       max-width: 90%;
       margin: 25px; 
     }
   }
-  .main-card {
-    width: 100%;
-    min-height: 400px;
-    .main-card-banner {
-      background-image: url('../assets/img/specoffer_detail_bg.jpg');
-      background-repeat: no-repeat;
-      background-position: 50%;
-      background-size: cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 30px;
-      min-height: 500px;
-      .content-text {
-        backdrop-filter: blur(5px);
-        padding: 40px;
-        background-color: rgba(0,46,103,.7);
-        .content-paragraph {
-          font-size: 19px;
-        }
-      }
-    }
-  }
+  // .main-card {
+  //   width: 100%;
+  //   min-height: 400px;
+  //   .main-card-banner {
+  //     background-image: url('../assets/img/specoffer_detail_bg.jpg');
+  //     background-repeat: no-repeat;
+  //     background-position: 50%;
+  //     background-size: cover;
+  //     display: flex;
+  //     flex-direction: column;
+  //     justify-content: center;
+  //     padding: 30px;
+  //     min-height: 500px;
+  //     .content-text {
+  //       backdrop-filter: blur(5px);
+  //       padding: 40px;
+  //       background-color: rgba(0,46,103,.7);
+  //       .content-paragraph {
+  //         font-size: 19px;
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 .see-all-news {

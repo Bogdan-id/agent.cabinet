@@ -74,6 +74,8 @@
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Truck.png') }}')">
 @elseif($leasingObjType == 'Обладнання')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Equipment.png') }}')">
+@elseif($leasingObjType == 'Автобуси')
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @elseif($leasingObjType == 'Причепи та Напівпричепи')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Trailers.png') }}')">
 @elseif($leasingObjType == 'Сільгосптехніка')
@@ -151,6 +153,8 @@
                               ОБЛАДНАННЯ
                             @elseif($leasingObjType == 'Причепи та Напівпричепи')
                               ПРИЧIП
+                            @elseif($leasingObjType == 'Автобуси')
+                              АВТОБУС
                             @endif
                           </td>
                           <td>
@@ -171,6 +175,8 @@
                               ВАРТІСТЬ ОБЛАДНАННЯ, ГРН
                             @elseif($leasingObjType == 'Причепи та Напівпричепи')
                               ВАРТІСТЬ ПРИЧIПY, ГРН
+                            @elseif($leasingObjType == 'Автобуси')
+                              ВАРТIСТЬ АВТОБУСУ, ГРН
                             @endif
                           </td>
                           <td align="left" style="font-size: 22px;">{{ number_format($price, 0, '.', ' ') }}</td>
@@ -185,6 +191,8 @@
                               ВАРТІСТЬ ОБЛАДНАННЯ З РЕЄСТРАЦІЄЮ, ГРН
                             @elseif($leasingObjType == 'Причепи та Напівпричепи')
                               ВАРТІСТЬ ПРИЧIПУ З РЕЄСТРАЦІЄЮ, ГРН
+                            @elseif($leasingObjType == 'Автобуси')
+                              ВАРТІСТЬ АВТОБУСУ З РЕЄСТРАЦІЄЮ, ГРН
                             @endif
                           </td>
                           <td align="left" style="font-size: 22px;">{{ number_format($offerBrutto, 0, '.', ' ') }}</td>

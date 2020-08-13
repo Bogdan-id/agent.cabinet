@@ -4,11 +4,14 @@
   @if($leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто')
   <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу автомобiля {{ $mark }} {{ $model }}!</div>
   @endif
+  @if($leasingObjectType == 'Автобуси')
+  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу автобуса {{ $mark }} {{ $model }}!</div>
+  @endif
   @if($leasingObjectType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjectType == 'Сільгосптехніка')
   <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу технiки {{ $mark }} {{ $model }}!</div>
   @endif
   @if($leasingObjectType == 'Обладнання')
-  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу обладнання {{ $mark }} {{ $model }}!</div>
+  <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу обладнання {{ $model }}!</div>
   @endif
   @if($leasingObjectType == 'Причепи та Напівпричепи')
   <div style="padding-left: 15px;"> - комерційну пропозицію з лізингу причiпа {{ $mark }} {{ $model }}!</div>
@@ -26,7 +29,7 @@
   @endif
   <p>Лізингові платежі включають:</p>
 
-  @if($leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто')
+  @if($leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто' || $leasingObjectType == 'Автобуси')
     <div style="padding-left: 15px;">- всі витрати з реєстрації авто у Сервісному Центрі</div>
     <div style="padding-left: 15px;">- всі витрати пов’язані зі страхуванням (КАСКО та ЦВ) на весь строк лізингу</div>
     <div style="padding-left: 15px;">- ассистанс (заміна пробитого колеса, запуск двигуна, доставка палива, евакуатор, телефон гарячої лінії…)</div>

@@ -304,41 +304,6 @@
         :items-per-page="10"
         :class="`elevation-1 leasing-application-table ${$vuetify.breakpoint.xs ? 'small' : ''}`">
         <template v-slot:item.graph="{ item }">
-          <span>{{ item.graph_type }}</span>
-        </template>
-        <template v-slot:item.initials="{ item }">
-          <span style="white-space: nowrap;">
-            {{ item.client_type_id == 2 
-                ? item.legal_info.company_name 
-                : item.last_name + ' ' + item.first_name[0] + '. ' + item.patronymic[0] + '.'  
-            }}
-          </span>
-        </template>
-        <template v-slot:item.leasing_object="{ item }">
-          <span style="white-space: nowrap">{{ item.leasing_object}}</span><!-- <router-link tag="a" style="white-space: nowrap; text-transform: lowercase;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ item.graph_type }}</router-link> -->
-        </template>
-        <template v-slot:item.data="{ item }">
-          <span style="white-space: nowrap;"> {{ item.updated_at.substr(0, 10) }}</span>
-        </template>
-        <template v-slot:item.leasing_amount="{ item }">
-          <span style="white-space: nowrap">
-            {{ 
-              parseInt(item.leasing_amount.replace(/\s/g, '' ))
-                .toLocaleString("en-GB")
-                .replace(/,/g, ' ')
-            }}
-          </span>
-        </template>
-        <template v-slot:item.agents_reward="{ item }">
-          <span style="white-space: nowrap">
-            {{ 
-              (parseInt(item.leasing_amount.replace(/\s/g, '' )) / 100)
-                .toLocaleString("en-GB")
-                .replace(/,/g, ' ')
-            }}
-          </span>
-        </template>
-        <template v-slot:item.graph="{ item }">
           <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ switchValue(item.graph_type) }}</v-btn>
         </template>
         <template #item.actions="{ item }">
@@ -420,12 +385,12 @@ export default {
     dialogToAgentReward: false,
     requestToRewardLoading: false,
     tableHeader: [
-      { text: 'Клієнт', value: 'initials', align: 'start'},
+      { text: 'Клієнт', value: 'client', align: 'start'},
       { text: 'Предмет лiзингу', value: 'leasing_object', align: 'center'},
       { text: 'Цiна, грн', value: 'leasing_amount', align: 'center' },
-      { text: 'АВ, грн', value: 'agents_reward', align: 'center' },
+      { text: 'АВ, грн', value: 'agent_reward', align: 'center' },
       { text: 'Тип графiку', value: 'graph', align: 'center' },
-      { text: 'Дата', value: 'data', align: 'center' },
+      { text: 'Дата', value: 'created_at', align: 'center' },
       { text: 'Статус', value: 'request_status', align: 'center', width: 120 },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
@@ -531,8 +496,8 @@ export default {
     applyChanges(status, index) {
       switch(status) {
         case '0': return {text: 'Відхилена', color: `${index <= 5 ? 'red' : 'grey'}`};
-        case '1': return {text: 'В роботі', color: `${index <= 2 ? 'orange' : 'grey'}`};
-        case '2': return {text: 'Погоджено', color: `${index <= 3 ? 'orange' : 'grey'}`};
+        case '1': return {text: 'В роботі', color: `${index <= 1 ? 'orange' : 'grey'}`};
+        case '2': return {text: 'Погоджено', color: `${index <= 2 ? 'orange' : 'grey'}`};
         case '3': return {text: 'Договір підписано', color: `${index <= 3 ? 'green' : 'grey'}`};
         case '4': return {text: 'Отримано аванс', color: `${index <= 4 ? 'green' : 'grey'}` };
         case '5': return {text: 'Відвантажено', color: `${index <= 5 ? 'green' : 'grey'}`};
@@ -559,7 +524,22 @@ export default {
           .then(response => {
             this.loading = false
             if(response.data.length > 0)  {
-              this.tabledata = response.data
+              this.tabledata = Object.keys(response.data)
+                .map(val => {
+                  response.data[val].client = response.data[val].client_type_id == 2 
+                    ? response.data[val].legal_info.company_name 
+                    : response.data[val].last_name + ' ' + response.data[val].first_name[0] + '. ' + response.data[val].patronymic[0] + '.' 
+                  response.data[val].leasing_amount = parseInt(response.data[val].leasing_amount
+                    .replace(/\s/g, '' ))
+                    .toLocaleString("en-GB")
+                    .replace(/,/g, ' ')
+                  response.data[val].created_at = this.$formatDate(response.data[val].created_at)
+                  response.data[val].agent_reward = (parseInt(response.data[val].leasing_amount.replace(/\s/g, '' )) / 100)
+                    .toLocaleString("en-GB")
+                    .replace(/,/g, ' ')
+                  return response.data[val]
+                })
+              console.log(this.tabledata)
               this.$store.commit('addGraph', response.data)
             } else {
               this.tabledata = []

@@ -31,6 +31,10 @@ var errorHandler401 = (error) => {
 Vue.prototype.$catchStatus = (error) => {
   return errorHandler401(error)
 }
+Vue.prototype.$formatDate = (data) => {
+  const [year, month, day] = data.substring(0, 10).split('-')
+  return `${day}.${month}.${year}`
+}
 
 new Vue({
 	store,

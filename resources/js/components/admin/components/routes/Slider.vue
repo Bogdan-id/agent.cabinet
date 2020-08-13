@@ -47,7 +47,7 @@
         @change="listenImageInput()">
       <div v-show="formToAddSlider" class="mb-8">
         <v-card
-          :style="`margin: 0 auto; position: relative; background: url('${sliderImage}'); bacground-size: 100% 100%;`"
+          :style="`margin: 0 auto; position: relative; background: url('${sliderImage}'); background-size: 100% 100%;`"
           class="slider-card"
           max-width="900"
           height="400" 
@@ -56,15 +56,15 @@
           <span v-show="sliderImageErr && sliderImageErr.length > 0" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
             Додайте зображення!
           </span>
-          <div style="height: 120px;">
+          <div style="height: 50%;">
             <div v-show="sliderImage !== null" :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
               <h3><b>{{ sliderTitle || 'Заголовок матерiалу' }}</b></h3>
               <p style="font-size: 0.88rem"> {{ sliderDescription || 'Контент матерiалу' }} </p>
             </div>
           </div>
-          <div style="height: 240px; display: flex; width: 100%; justify-content: flex-end; align-items: flex-end;">
-            <span v-show="sliderImage !== null" style="display: inline-block; margin-right: 40px; margin-bottom: 15px">
-              <v-btn class="vuetify_custom-btn white--text ml-1 mt-7" @click="">Ознайомитись</v-btn>
+          <div class="slider-action-btn-wrapper">
+            <span v-show="sliderImage !== null" style="display: inline-block; margin: 2.8rem 3.3rem;">
+              <v-btn class="vuetify_custom-btn white--text" @click="">Ознайомитись</v-btn>
             </span>
           </div>
           <span v-show="sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
@@ -164,7 +164,7 @@
         :key="key">
         <v-hover v-slot:default="{ hover }">
           <v-card
-            :style="`margin: 0 auto; position: relative; background: url('${item.slide_image || sliderImage}'); background-size: cover;`"
+            :style="`margin: 0 auto; position: relative; background: url('${item.slide_image || sliderImage}'); background-size: 100% 100%;`"
             class="slider-card"
             max-width="900"
             height="400" 
@@ -198,15 +198,15 @@
             <span v-show="sliderImageErr && sliderImageErr.length > 0 && editKey === key" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
               Додайте зображення!
             </span>
-            <div style="height: 120px;">
+            <div style="height: 50%;">
               <div v-show="item.slide_image || sliderImage !== null" :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
                 <h3><b>{{ item.title || sliderTitle || 'Заголовок матерiалу' }}</b></h3>
                 <p style="font-size: 0.88rem"> {{ item.description ||  sliderDescription || 'Короткый опис матерiалу' }} </p>
               </div>
             </div>
-            <div style="height: 240px; display: flex; width: 100%; justify-content: flex-end; align-items: flex-end;">
-              <span v-show="item.slide_image || sliderImage !== null" style="display: inline-block; margin-right: 40px; margin-bottom: 15px">
-                <v-btn class="vuetify_custom-btn white--text ml-1 mt-7" @click="">Ознайомитись</v-btn>
+            <div class="slider-action-btn-wrapper">
+              <span v-show="item.slide_image || sliderImage !== null" style="display: inline-block; margin: 2.8rem 3.3rem;">
+                <v-btn class="vuetify_custom-btn white--text" @click="">Ознайомитись</v-btn>
               </span>
             </div>
             <span v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
@@ -683,6 +683,7 @@ export default {
 </script>
 
 <style lang="scss">
+.slider-card {
   .actions-block-text {
     backdrop-filter: blur(5px); 
     padding: 0 15px; 
@@ -690,12 +691,13 @@ export default {
     color: black!important;
     background-color: rgba(252, 252, 252, 0.7); 
     max-width: 48%;
-    margin: 75px 0 5px 25px; 
+    margin: 3rem 1.8rem;
     display: inline-block;
     &.small-screen {
       max-width: 90%;
     }
   }
+}
   .triangle-up {
     position: absolute;
     top:-14px;

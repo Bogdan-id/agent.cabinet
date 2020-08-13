@@ -1412,6 +1412,11 @@ export default {
         if(this.smallerThenMedium) {
           this.category = parseInt(event.value)
           this.calcObj.leasingObjectType = event
+          if(event.label === "Обладнання") {
+            needRequest = 0
+            this.brandItems.push({name: 'Iнше', value: 0});
+            this.calcObj.leasedAssertMark = {name: 'Iнше', value: 0};
+          }
         } else {
           this.calcObj.leasingObjectType = this.selects.itemTypes
             .filter(val => {

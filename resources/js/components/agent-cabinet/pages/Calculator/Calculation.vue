@@ -5,7 +5,7 @@
     </div>
     <div style="margin: 0 39px">
       <v-row v-show="!smallerThenMedium" :class="`${mediumAndDown ? 'leasing-types small' : 'leasing-types'}`">
-        <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
+        <v-col style="display: flex; justify-content: space-around;">
           <input
             @change="
               getMarksByType($event);
@@ -20,8 +20,6 @@
             <car :width="mediumAndDown ? '40' : '47'" :heiht="mediumAndDown ? '18' : '21'" class="leasing-type-icon"></car>
             <span class="leasing-type-label" style="white-space: nowrap">ЛЕГКОВI АВТО</span>
           </label>
-        </v-col>
-        <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
           <input
             @change="
               getMarksByType($event);
@@ -35,8 +33,6 @@
             <cargo :width="mediumAndDown ? '44' : '65'" :heiht="mediumAndDown ? '23' : '31'" class="leasing-type-icon"></cargo>
             <span class="leasing-type-label">ВАНТАЖIВКИ</span>
           </label>
-        </v-col>
-        <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
           <input
             @change="
               getMarksByType($event);
@@ -50,8 +46,6 @@
             <special :width="mediumAndDown ? '39' : '50'" :heiht="mediumAndDown ? '39' : '50'" class="leasing-type-icon"></special>
             <span class="leasing-type-label">СПЕЦТЕХНIКА</span>
           </label>
-        </v-col>
-        <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
           <input
             @change="
               getMarksByType($event);
@@ -65,12 +59,25 @@
             <agricultural :width="mediumAndDown ? '35' : '45'" :heiht="mediumAndDown ? '35' : '39'" class="leasing-type-icon"></agricultural>
             <span class="leasing-type-label" style="white-space: nowrap">С/Г ТЕХНIКА</span>
           </label>
-        </v-col>
-        <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
           <input
             @change="
               getMarksByType($event);
               addActiveClass($event);"
+            type="radio"
+            class="radio-objectType"
+            id="bus"
+            name="leasing-type"
+            checked
+            value="Автобуси">
+          <label for="bus" id="Автобуси" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
+            <bus :width="mediumAndDown ? '40' : '47'" :heiht="mediumAndDown ? '18' : '21'" class="leasing-type-icon"></bus>
+            <span class="leasing-type-label" style="white-space: nowrap">АВТОБУСИ</span>
+          </label>
+          <input
+            @change="
+              addActiveClass($event);
+              getMarksByType($event, 0);
+            "
             type="radio"
             class="radio-objectType"
             id="equipment"
@@ -80,8 +87,6 @@
             <equipment :width="mediumAndDown ? '34' : '40'" :heiht="mediumAndDown ? '34' : '40'" class="leasing-type-icon"></equipment>
             <span class="leasing-type-label">ОБЛАДНАННЯ</span>
           </label>
-        </v-col>
-        <v-col :cols="leasingTypeCol" :class="leasingTypeClass">
           <input
             @change="
               getMarksByType($event);
@@ -185,11 +190,16 @@
             :loading="!leasedOfAssetType && $store.state.loader
               || noBrandItems && $store.state.loader"
             :disabled="calcObj.isNew === null || calcObj.leasingClientType === null"
+            :readonly="calcObj.leasingObjectType.label === 'Обладнання'"
             color="grey darken-2"
             outlined :dense="mediumAndDown">
           </v-autocomplete>
         </v-col>
-        <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
+
+        <v-col 
+          v-if="calcObj.leasingObjectType.label !== 'Обладнання'" 
+          cols="12" md="3" sm="6" xs="12"  
+          :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-autocomplete
             v-model="calcObj.leasedAssertModel"
             :error-messages="leasedAssertModelErr"
@@ -208,6 +218,23 @@
             outlined :dense="mediumAndDown">
           </v-autocomplete>
         </v-col>
+
+        <v-col
+          v-if="calcObj.leasingObjectType.label === 'Обладнання'"
+          cols="12" md="3" sm="6" xs="12"  
+          :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
+          <v-text-field
+            v-model="falsyLeasedAssertModel"
+            :error-messages="leasedAssertModelErr"
+            itemColor="red darken-4"
+            background-color="white"
+            label="Назва обладнання"
+            loaderHeight="1"
+            color="grey darken-2"
+            outlined :dense="mediumAndDown">
+          </v-text-field>
+        </v-col>
+
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-select
             v-model="calcObj.leasingObjectYear"
@@ -223,6 +250,7 @@
         </v-col>
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-text-field
+            v-show="calcObj.leasingObjectType.label !== 'Причепи та Напівпричепи' && calcObj.leasingObjectType.label !== 'Обладнання'"
             @input="amountToLocalStr('leasedAssertEngine')"
             v-model="calcObj.leasedAssertEngine"
             :error-messages="leasedAssertEngineErr"
@@ -258,7 +286,6 @@
             label="Вартість"
             color="red darken-4"
             maxlength="20"
-            :disabled="calcObj.leasedAssertEngine === null"
             outlined :dense="mediumAndDown">
             <!-- <template v-slot:append>
               <span style="color: grey!important; display: block; margin-top: 5px;">грн</span>
@@ -779,6 +806,7 @@
         <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :dense="xs" :loading="calculationLoader">
         {{'Розрахувати'}}
         </v-btn>
+        <v-btn @click="test()">test</v-btn>
       </span>
     </v-card-actions>
   </div>
@@ -796,6 +824,7 @@ import Agricultural from '../../assets/svg-icons/agricultural.vue'
 import Equipment from '../../assets/svg-icons/equipment.vue'
 import Special from '../../assets/svg-icons/special.vue'
 import Cargo from '../../assets/svg-icons/cargo.vue'
+import Bus from '../../assets/svg-icons/bus.vue'
 import Trailer from '../../assets/svg-icons/trailer.vue'
 import Percent from '../../assets/svg-icons/percent'
 import advanceHint from '../../assets/svg-icons/avans-hint'
@@ -807,6 +836,7 @@ export default {
     Agricultural,
     Equipment,
     Special,
+    Bus,
     Cargo,
     Trailer,
     Percent,
@@ -821,6 +851,7 @@ export default {
     discountPrice: false,
     modelLoader: false,
     calculationLoader: false,
+    falsyLeasedAssertModel: null,
 
     category: null,
 
@@ -925,7 +956,11 @@ export default {
         leasingObjectType: { required },
         leasedAssertMark: { required },
         leasedAssertModel: { required },
-        leasedAssertEngine: { required },
+        leasedAssertEngine: (() => { 
+          if(this.calcObj.leasingObjectType.label !== "Причепи та Напівпричепи" && this.calcObj.leasingObjectType.label !== 'Обладнання') {
+            return { required }
+          } else return true
+        })(),
         leasingCurrency: { required },
         leasingQuantity: { required },
         leasingAmount: { required },
@@ -1163,7 +1198,7 @@ export default {
     },
 
     mediumAndDown() {
-      return this.windowInnerWidth <= 1145
+      return this.windowInnerWidth <= 1185 // 1145
     },
     smallerThenMedium() {
       return this.windowInnerWidth <= 823
@@ -1188,6 +1223,16 @@ export default {
     },
   },
   methods: {
+    test() {
+      axios
+        .get('https://developers.ria.com/auto/categories/?api_key=oFHzd0nlvshTQ2XXufmeaAyqyaEOHV4HUKJbsXbE')
+        .then(res => {
+          console.log(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     resetForm() {
       this.calcObj = {
         customStepOptionFirst: null,
@@ -1361,7 +1406,7 @@ export default {
       })
       if(event) event.target.nextSibling.nextSibling.classList.add('active')
     },
-    getMarksByType(event) {
+    getMarksByType(event, needRequest) {
       if(event) {
         this.resetForm()
         if(this.smallerThenMedium) {
@@ -1377,13 +1422,18 @@ export default {
       } else if(this.calcObj.leasingObjectType && this.calcObj.leasingObjectType.value) {
         this.category = this.calcObj.leasingObjectType.value
       }
-      console.log(this.category)
+      if(needRequest === 0) {
+        this.brandItems.push({name: 'Iнше', value: 0});
+        this.calcObj.leasedAssertMark = {name: 'Iнше', value: 0};
+        return
+      }
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
       axios.get(`/mark?category=${this.category}`)
         .then(response => {
           this.brandItems = response.data
           this.$store.commit('toggleSpinner', false)
+          console.log(this.brandItems)
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
@@ -1452,6 +1502,8 @@ export default {
     },
     deleteUnneccessaryFields() {
       delete this.calcObj.threeThirds
+      this.calcObj.leasingObjectType.label === 'Причепи та Напівпричепи' || this.calcObj.leasingObjectType.label === 'Обладнання'
+        ? delete this.calcObj.leasedAssertEngine : false
       this.calcObj.leasingAmountDkp === null 
         ? delete this.calcObj.leasingAmountDkp : false
       this.calcObj.stock === null 
@@ -1462,13 +1514,12 @@ export default {
         ? delete this.deleteStepData() : false
     },
     submit() {
+      console.log(this.$v)
       this.checkIfHasIrregular()
       this.checkIfHasCurrency()
       this.deleteUnneccessaryFields()
       this.highlightErrors()
       !this.$v.$invalid
-      && this.$v.$dirty
-        && !this.$v.$invalid
         && this.$v.$dirty
           ? this.sendRequest()
           : this.notify('', 'Заповнiть данi', 'error')
@@ -1675,6 +1726,11 @@ export default {
     }
   },
   watch: {
+    falsyLeasedAssertModel(val) {
+      this.calcObj.leasedAssertModel = {}
+      this.calcObj.leasedAssertModel.name = val
+      this.calcObj.leasedAssertModel.value = 0
+    },
     insuranceProgram(val) {
       this.calcObj.insuranceProgram = val.value
     },
@@ -1796,421 +1852,421 @@ export default {
 </script>
 
 <style lang="scss">
-  .calculate-btn {
-    .v-btn__content {
-      font-size: 1.05rem
-    }
+.calculate-btn {
+  .v-btn__content {
+    font-size: 1.05rem
   }
-  .calculator-block {
+}
+.calculator-block {
+  position: relative;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  // margin-right: 15px;
+  box-shadow: 0 5px 6px -3px rgba(0,0,0,.2),
+    0 9px 12px 1px rgba(0,0,0,.14),
+    0 3px 16px 2px rgba(0,0,0,.12)!important;
+  // ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  //   color: black!important;
+  //   opacity: 1; /* Firefox */
+  // }
+  // :-ms-input-placeholder { /* Internet Explorer 10-11 */
+  //   color: black!important;
+  // }
+  // ::-ms-input-placeholder { /* Microsoft Edge */
+  //   color: black!important;
+  // }
+  .section-title {
+    font-size: 1rem;
+    display: inline-block;
+  }
+  .advance-range-scale {
+    width: 100%;
+    display: flex;
+    position: absolute;
+    right: 6px;
+  }
+  .current-currency-label {
+    font-size: 1.1rem;
+    transition: color 0.15s ease-in;
+  }
+  .leasing-term-append-label {
+    color: grey !important;
+    display: block;
+    font-size: 1.2rem;
+    margin-top: 3px;
+  }
+  .advance-range-wrapper {
+    // width: 7%;
+    width: 7.1%;
+    &.small {
+      width: 14.2%
+    }
+    height: 10px;
+    color: #969599;
     position: relative;
-    border-radius: 8px 8px 0 0;
-    overflow: hidden;
-    // margin-right: 15px;
-    box-shadow: 0 5px 6px -3px rgba(0,0,0,.2),
-      0 9px 12px 1px rgba(0,0,0,.14),
-      0 3px 16px 2px rgba(0,0,0,.12)!important;
-    // ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    //   color: black!important;
-    //   opacity: 1; /* Firefox */
-    // }
-    // :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    //   color: black!important;
-    // }
-    // ::-ms-input-placeholder { /* Microsoft Edge */
-    //   color: black!important;
-    // }
-    .section-title {
-      font-size: 1rem;
-      display: inline-block;
-    }
-    .advance-range-scale {
-      width: 100%;
-      display: flex;
-      position: absolute;
-      right: 6px;
-    }
-    .current-currency-label {
-      font-size: 1.1rem;
-      transition: color 0.15s ease-in;
-    }
-    .leasing-term-append-label {
-      color: grey !important;
-      display: block;
-      font-size: 1.2rem;
-      margin-top: 3px;
-    }
-    .advance-range-wrapper {
-      // width: 7%;
-      width: 7.1%;
-      &.small {
-        width: 14.2%
-      }
-      height: 10px;
-      color: #969599;
+    .advance-range-cell {
+      z-index: 3;
+      transition: color 0.25s ease-in;
+      background: #ffffff;
       position: relative;
-      .advance-range-cell {
-        z-index: 3;
-        transition: color 0.25s ease-in;
-        background: #ffffff;
-        position: relative;
+    }
+    .range-black-dot {
+      width: 14px;
+      height: 14px;
+      background: #201600;
+      border-radius: 100%;
+      z-index: 1;
+      position: relative;
+      .range-dashed-line {
+        position: absolute;
+        border:none;
+        border-left: 1px dashed #201600;
+        height: 95px;
+        top: 0;
+        left: 48%;
+        right: 52%;
       }
-      .range-black-dot {
-        width: 14px;
-        height: 14px;
-        background: #201600;
-        border-radius: 100%;
-        z-index: 1;
-        position: relative;
-        .range-dashed-line {
-          position: absolute;
-          border:none;
-          border-left: 1px dashed #201600;
-          height: 95px;
-          top: 0;
-          left: 48%;
-          right: 52%;
-        }
-        .arrow-directions-wrapper {
-          position: absolute;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          top: 90px;
-          display: flex;
-          justify-content: space-between;
-          .arrow-directions-content {
-            display: inline-flex;
-            color: #969599;
-            align-items: center;
-            margin-right: 40px;
-          }
-          .range-active-label {
-            text-decoration: underline; 
-            font-weight: bold;
-            color: #d24a43; 
-            font-weight: bold;
-          }
-        }
-      }
-    }
-    .step-schedule-label {
-      display: block;
-      font-size: 1.1rem;
-      padding-top: 5px;
-    }
-  }
-
-  .v-input--checkbox {
-    label {
-      margin-bottom: 0;
-      padding-top: 3px;
-    }
-  }
-  .calculator-red-block {
-    background-color: #d24a43;
-    z-index: 0;
-    .leasing-type-radio, .auto-type-radio .leasing-type-radio-wrapper .v-radio {
-      padding: 1px 0!important;
-    }
-    .claculator-block-border {
-      position: absolute;
-      top: 19px;
-      right: 19px;
-      left: 19px;
-      bottom: 19px;
-      border:1px solid #e5e5e5;
-      border-radius: 8px;
-    }
-    .v-messages__message {
-      color: white!important;
-    }
-    .leasing-type-radio,
-    .auto-type-radio {
-      .v-messages__message {
-        text-align: center;
-      }
-      .v-input--radio-group__input {
-        justify-content: center;
-      }
-      &.xs {
-        .v-input--radio-group__input {
-          justify-content: flex-start;
-        }
-      }
-      .leasing-type-radio-wrapper,
-      .auto-type-radio-wrapper {
+      .arrow-directions-wrapper {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 90px;
         display: flex;
-        // .v-radio {
-        //   padding: 7px 0!important;
-        // }
-        .red-block-radio-label {
-          font-size: 1.2rem;
-          color: white;
-          white-space: nowrap;
+        justify-content: space-between;
+        .arrow-directions-content {
+          display: inline-flex;
+          color: #969599;
+          align-items: center;
+          margin-right: 40px;
         }
-        &.small {
-          // flex-direction: column;
-          .red-block-radio-label {
-            font-size: 0.9rem
-          }
+        .range-active-label {
+          text-decoration: underline; 
+          font-weight: bold;
+          color: #d24a43; 
+          font-weight: bold;
         }
       }
     }
-    .client-type-radio  {
+  }
+  .step-schedule-label {
+    display: block;
+    font-size: 1.1rem;
+    padding-top: 5px;
+  }
+}
+
+.v-input--checkbox {
+  label {
+    margin-bottom: 0;
+    padding-top: 3px;
+  }
+}
+.calculator-red-block {
+  background-color: #d24a43;
+  z-index: 0;
+  .leasing-type-radio, .auto-type-radio .leasing-type-radio-wrapper .v-radio {
+    padding: 1px 0!important;
+  }
+  .claculator-block-border {
+    position: absolute;
+    top: 19px;
+    right: 19px;
+    left: 19px;
+    bottom: 19px;
+    border:1px solid #e5e5e5;
+    border-radius: 8px;
+  }
+  .v-messages__message {
+    color: white!important;
+  }
+  .leasing-type-radio,
+  .auto-type-radio {
+    .v-messages__message {
+      text-align: center;
+    }
+    .v-input--radio-group__input {
+      justify-content: center;
+    }
+    &.xs {
+      .v-input--radio-group__input {
+        justify-content: flex-start;
+      }
+    }
+    .leasing-type-radio-wrapper,
+    .auto-type-radio-wrapper {
+      display: flex;
+      // .v-radio {
+      //   padding: 7px 0!important;
+      // }
+      .red-block-radio-label {
+        font-size: 1.2rem;
+        color: white;
+        white-space: nowrap;
+      }
       &.small {
-        .v-input--selection-controls {
-          margin-top: 0!important;
-        }
-        .v-messages {
-          display: none!important;
+        // flex-direction: column;
+        .red-block-radio-label {
+          font-size: 0.9rem
         }
       }
     }
-    .v-input {
-      fieldset {
-        border: none!important;
-      }
-    }
-    .discount-price {
-      .v-input__slot  {
-        margin-bottom: 0;
+  }
+  .client-type-radio  {
+    &.small {
+      .v-input--selection-controls {
+        margin-top: 0!important;
       }
       .v-messages {
         display: none!important;
       }
+    }
+  }
+  .v-input {
+    fieldset {
+      border: none!important;
+    }
+  }
+  .discount-price {
+    .v-input__slot  {
+      margin-bottom: 0;
+    }
+    .v-messages {
+      display: none!important;
+    }
+    label {
+      padding-top: 5px;
+      margin-bottom: 5px;
+      color: white!important;
+    }
+    &.small {
       label {
-        padding-top: 5px;
-        margin-bottom: 5px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+  .v-select__selection, input {
+    font-size: 1.28rem;
+    font-weight: bold;
+  }
+  
+  .v-select__slot, .v-text-field__slot {
+    label {
+      font-size: 1.28rem!important;
+      font-weight: bold;
+      &.v-label--active {
+        top: 0!important;
         color: white!important;
       }
-      &.small {
-        label {
-          font-size: 0.9rem;
-        }
-      }
     }
+  }
+  .v-input--selection-controls__ripple:before {
+    background: none!important;
+  }
+  .v-radio, label {
+    color: white;
+  }
+  .v-input .v-input__slot {
+    border-radius: 8px!important;
+  }
+  .v-input .v-input__control {
+    .v-text-field__details {
+      margin-bottom: 0;
+    }
+  }
+  &.small {
     .v-select__selection, input {
-      font-size: 1.28rem;
+      font-size: 1.1rem;
       font-weight: bold;
     }
-    
     .v-select__slot, .v-text-field__slot {
       label {
-        font-size: 1.28rem!important;
-        font-weight: bold;
-        &.v-label--active {
-          top: 0!important;
-          color: white!important;
-        }
+        font-size: 0.95rem!important;
       }
     }
-    .v-input--selection-controls__ripple:before {
-      background: none!important;
+  }
+  .leasing-types {
+    padding-top: 55px;
+    .leasing-type-icon {
+      height: 50px;
+      margin-left: 0.40rem;
     }
-    .v-radio, label {
-      color: white;
+    &.small {
+      .leasing-type-label {
+        font-size: 0.73rem;
+      }
+      padding-top: 15px;
+      .col {
+        padding-bottom: 0!important;
+      }
     }
-    .v-input .v-input__slot {
-      border-radius: 8px!important;
+    input {
+      display: none;
+      margin-bottom: 18px;
     }
-    .v-input .v-input__control {
-      .v-text-field__details {
-        margin-bottom: 0;
+  }
+  .leasing-type-block {
+    display: inline-block;
+    padding: 10px 12px 15px 12px;
+    max-width: 140px;
+    border-radius: 6px;
+    color: white;
+    padding-bottom: 0.35rem;
+    transition: border-bottom 0.25s ease-in, color 0.25s ease-in;
+    &.small {
+      padding: 10px 3px 10px 3px;
+    }
+    span {
+      display: block;
+      border-bottom: 4px solid white;
+      padding: 0.4rem;
+    }
+    &.active {
+      opacity: 1!important;
+      background: white!important;
+      color: #d24a43;
+      span {
+        border-bottom: 4px solid #d24a43;
+      }
+    }
+    &:hover {
+      transition: opacity 0.15s ease-in;
+      cursor: pointer;
+      opacity: 0.8;
+      background: rgb(255, 255, 255);
+      color: #d24a43;
+      span {
+        border-bottom: 4px solid #d24a43;
+      }
+    }
+  }
+}
+.calculator-white-block {
+  margin: 0 39px 39px 39px;
+  color: #424242;
+  &.small {
+    .v-select__selection, input {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .v-select__slot, .v-text-field__slot {
+      label {
+        font-size: 1.05rem!important;
+      }
+    }
+  }
+  .v-input__slot {
+    fieldset  {
+      border: 2px solid #efefef!important;
+    }
+  }
+  .graph-checkbox {
+    .v-input--checkbox {
+      margin-top: 8px;
+    }
+    .v-input__slot {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0!important;
+      label {
+        font-size: 1.1rem;
       }
     }
     &.small {
-      .v-select__selection, input {
-        font-size: 1.1rem;
-        font-weight: bold;
-      }
-      .v-select__slot, .v-text-field__slot {
+      .v-input__slot {
+        display: flex;
+        justify-content: flex-start;
         label {
           font-size: 0.95rem!important;
         }
       }
     }
-    .leasing-types {
-      padding-top: 55px;
-      .leasing-type-icon {
-        height: 50px;
-        margin-left: 0.40rem;
-      }
-      &.small {
-        .leasing-type-label {
-          font-size: 0.73rem;
-        }
-        padding-top: 15px;
-        .col {
-          padding-bottom: 0!important;
-        }
-      }
-      input {
-        display: none;
-        margin-bottom: 18px;
-      }
+    label {
+      display: inline-flex!important;
     }
-    .leasing-type-block {
-      display: inline-block;
-      padding: 10px 12px 15px 12px;
-      max-width: 140px;
-      border-radius: 6px;
-      color: white;
-      padding-bottom: 0.35rem;
-      transition: border-bottom 0.25s ease-in, color 0.25s ease-in;
-      &.small {
-        padding: 10px 5px 10px 5px;
-      }
-      span {
-        display: block;
-        border-bottom: 4px solid white;
-        padding: 0.4rem;
-      }
-      &.active {
-        opacity: 1!important;
-        background: white!important;
-        color: #d24a43;
-        span {
-          border-bottom: 4px solid #d24a43;
-        }
-      }
-      &:hover {
-        transition: opacity 0.15s ease-in;
-        cursor: pointer;
-        opacity: 0.8;
-        background: rgb(255, 255, 255);
-        color: #d24a43;
-        span {
-          border-bottom: 4px solid #d24a43;
-        }
-      }
+    .v-input--selection-controls .v-input__slot>.v-label, .v-input--selection-controls .v-radio>.v-label {
+      flex: 0!important;
     }
   }
-  .calculator-white-block {
-    margin: 0 39px 39px 39px;
-    color: #424242;
-    &.small {
-      .v-select__selection, input {
-        font-size: 1.1rem;
-        font-weight: bold;
-      }
-      .v-select__slot, .v-text-field__slot {
-        label {
-          font-size: 1.05rem!important;
-        }
-      }
-    }
-    .v-input__slot {
-      fieldset  {
-        border: 2px solid #efefef!important;
-      }
-    }
-    .graph-checkbox {
-      .v-input--checkbox {
-        margin-top: 8px;
-      }
-      .v-input__slot {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 0!important;
-        label {
-          font-size: 1.1rem;
-        }
-      }
-      &.small {
-        .v-input__slot {
-          display: flex;
-          justify-content: flex-start;
-          label {
-            font-size: 0.95rem!important;
-          }
-        }
-      }
-      label {
-        display: inline-flex!important;
-      }
-      .v-input--selection-controls .v-input__slot>.v-label, .v-input--selection-controls .v-radio>.v-label {
-        flex: 0!important;
-      }
-    }
-    .leasing-term-sm {
-      .v-text-field__details {
-        margin-bottom: 0!important;
-      }
-    }
-    .financing-currency {
-      .v-messages__message {
-        text-align: center;
-      }
-    }
-    .graphs {
-      label {
-        margin-bottom: 8px;
-      }
-    }
-    .v-input--selection-controls__ripple:before {
-      background: none!important;
-    }
-    .v-list-item__content {
-      .v-list-item__title {
-        font-size: 1rem!important;
-      }
-    }
-    .v-input .v-input__slot {
-      border-radius: 8px!important;
-      .v-label {
-        margin-bottom: 0!important;
-      }
-    }
-    .v-select__selection, input {
-      font-size: 1.28rem!important;
-      font-weight: bold!important;
-    }
-    .v-select__slot, .v-text-field__slot {
-      label {
-        font-size: 1.2rem!important;
-        // font-weight: bold!important;
-      }
-    }
-    .v-input {
-      fieldset {
-        border: 1px solid #f5f5f5;
-      }
+  .leasing-term-sm {
+    .v-text-field__details {
+      margin-bottom: 0!important;
     }
   }
+  .financing-currency {
+    .v-messages__message {
+      text-align: center;
+    }
+  }
+  .graphs {
+    label {
+      margin-bottom: 8px;
+    }
+  }
+  .v-input--selection-controls__ripple:before {
+    background: none!important;
+  }
+  .v-list-item__content {
+    .v-list-item__title {
+      font-size: 1rem!important;
+    }
+  }
+  .v-input .v-input__slot {
+    border-radius: 8px!important;
+    .v-label {
+      margin-bottom: 0!important;
+    }
+  }
+  .v-select__selection, input {
+    font-size: 1.28rem!important;
+    font-weight: bold!important;
+  }
+  .v-select__slot, .v-text-field__slot {
+    label {
+      font-size: 1.2rem!important;
+      // font-weight: bold!important;
+    }
+  }
+  .v-input {
+    fieldset {
+      border: 1px solid #f5f5f5;
+    }
+  }
+}
 
-  /*  Slider */
-  #tickmarks {
-    display: block;
-  }
-  .slider {
-		-webkit-appearance: none;
-		// position: absolute;
-		top: 60px;
-		// border-radius: 0 0 5px 5px;
-		left: 0px;
-		width: 100%;
-		height: 6px;
-		background: #d24a43;
-		-webkit-transition: .2s;
-		transition: opacity .2s;
-	}
-  // input[type=range]::-webkit-slider-thumb {
-  //   -webkit-appearance: none;
-  // }
-	.slider::-webkit-slider-thumb {
-		// border: 8px solid #FAFAFA;
-    position: relative;
-    z-index:5;
-		box-shadow: -1px -1px 9px -4px rgba(0,0,0,0.75);
-    appearance: none;
-    width: 6px!important;
-    padding: 0px;
-    margin: 0;
-		height: 25px!important;
-		// border-radius: 50%;
-		background: #d24a43!important;
-		cursor: pointer;
-    -webkit-appearance: none;
-	}
+/*  Slider */
+#tickmarks {
+  display: block;
+}
+.slider {
+  -webkit-appearance: none;
+  // position: absolute;
+  top: 60px;
+  // border-radius: 0 0 5px 5px;
+  left: 0px;
+  width: 100%;
+  height: 6px;
+  background: #d24a43;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+// input[type=range]::-webkit-slider-thumb {
+//   -webkit-appearance: none;
+// }
+.slider::-webkit-slider-thumb {
+  // border: 8px solid #FAFAFA;
+  position: relative;
+  z-index:5;
+  box-shadow: -1px -1px 9px -4px rgba(0,0,0,0.75);
+  appearance: none;
+  width: 6px!important;
+  padding: 0px;
+  margin: 0;
+  height: 25px!important;
+  // border-radius: 50%;
+  background: #d24a43!important;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
 
   /* Collapsible */
 .wrap-collabsible {

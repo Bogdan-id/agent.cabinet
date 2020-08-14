@@ -366,9 +366,21 @@
 </template>
 <script>
 import axios from 'axios'
-
+import Echo from "laravel-echo"
+window.io = require('socket.io-client');
+  window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001', // this is laravel-echo-server host
+    //transports: ['websocket', 'polling', 'flashsocket']
+})
 export default {
   name: 'Головна',
+   mounted() {
+     window.Echo.channel("laravel_database_test").listen("NewDataEvent", (e) => {
+      console.log("dd");
+      console.log(e);
+    });
+   },
   data: () => ({
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},

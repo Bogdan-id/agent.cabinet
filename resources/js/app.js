@@ -35,6 +35,20 @@ Vue.prototype.$formatDate = (data) => {
   const [year, month, day] = data.substring(0, 10).split('-')
   return `${day}.${month}.${year}`
 }
+Vue.prototype.$formatSum = (sum) => {
+  if(typeof sum === 'string') {
+    return parseInt(sum
+      .replace(/\s/g, '' ))
+      .toLocaleString("en-GB")
+      .replace(/,/g, ' ')
+  } else {
+    return parseInt(sum
+      .toString()
+      .replace(/\s/g, '' ))
+      .toLocaleString("en-GB")
+      .replace(/,/g, ' ')
+  }
+}
 
 new Vue({
 	store,

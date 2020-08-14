@@ -12,6 +12,7 @@ use App\Mail\{
 };
 use Mail;
 use App\User;
+use App\Events\NewDataEvent;
 
 class AgentCommisionController extends Controller
 {
@@ -29,6 +30,7 @@ class AgentCommisionController extends Controller
         $agentCommission->update([
             'status' => 'paid'
         ]);
+        event(new NewDataEvent());
         
         return response()->json([
             'status' => 200

@@ -134,6 +134,7 @@
       </v-card-title>
       <v-data-table
         color="black"
+        v-if="tabledata && $store.state.user.agent"
         :headers="tableHeader"
         :items="tabledata"
         :class="`dashboard-leasing-request-table ${$vuetify.breakpoint.xs ? 'small' : ''} elevation-1 pb-3`"
@@ -142,7 +143,7 @@
         <template v-slot:item.agent_reward="{ item }">
           <span style="white-space: nowrap">
             {{ 
-              (parseInt(item.leasing_amount.replace(/\s/g, '' )) / 100)
+              ((parseInt(item.leasing_amount.replace(/\s/g, '' )) / 100) * $store.state.user.agent.ab_size)
                 .toLocaleString("en-GB")
                 .replace(/,/g, ' ')
             }}

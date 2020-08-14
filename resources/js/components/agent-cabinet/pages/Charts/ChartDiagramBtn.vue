@@ -921,6 +921,7 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
+      console.log(this.data)
       if(this.data.is_send_request === 1) {
         this.$notify({
             group: 'warning',
@@ -930,16 +931,18 @@ export default {
         return
       }
       this.selectedGraph = this.switchGraphName(this.graph)
+      this.getDefaultProperties()
       this.leasingApplicationForm = true
     },
     getDefaultProperties() {
+      // chart diagram btn
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.data.id
       this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`
       this.clientTypeId = this.data.request_data.leasingClientType
       this.advance = this.data.request_data.advance
       this.leasingTerm = this.data.request_data.leasingTerm
-      this.leasingAmount = this.data.request_data.leasingAmount
+      this.leasingAmount = this.data.request_data.offerNetto
       this._token = this.getCsrf()
     },
     parseToInt(id) {
@@ -1076,9 +1079,6 @@ export default {
         this.selectedGraph = this.switchGraphName(val)
       }
     }
-  },
-  created() {
-    this.getDefaultProperties()
   },
   mounted() {
     this.selectedGraph = this.switchGraphName(this.graph)

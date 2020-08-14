@@ -25,7 +25,7 @@ class NewDataEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct()
     {
         $agent = Auth::user()->agent;
         $this->notifications = $agent->notifications;

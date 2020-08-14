@@ -125,18 +125,18 @@
     <table class="leasing-object">
       <tbody>
         <tr>
-          <td style="width: 13%;">
+          <td style="width: 12%;">
             <table style="width: 100%">
               <tbody>
                 <tr>
                   <td>
-                  <img style="float: left; display: inline-block;" width="155" src="{{ $image }}" />
+                  <img style="float: left; display: inline-block;" width="145" src="{{ $image }}" />
                   </td>
                 </tr>
               </tbody>
             </table>
           </td>
-          <td style="width: 87%">
+          <td style="width: 88%">
             <table style="width: 100%;">
               <tbody>
                 <tr>
@@ -179,7 +179,7 @@
                               ВАРТIСТЬ АВТОБУСУ, ГРН
                             @endif
                           </td>
-                          <td align="left" style="font-size: 22px;">{{ number_format($price, 0, '.', ' ') }}</td>
+                          <td align="left" style="font-size: 22px;">{{ number_format($offerNetto, 0, '.', ' ') }}</td>
                         </tr>
                         <tr>
                           <td align="right" style="border-right: 5px solid #da0303; font-size: 22px;">

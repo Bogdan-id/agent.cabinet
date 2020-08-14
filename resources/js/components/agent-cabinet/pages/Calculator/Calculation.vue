@@ -696,10 +696,13 @@
             <div class="content-inner">
               <v-row class="d-flex justify-space-between">
                 <v-col cols="12" md="5" sm="6" xs="12" class="pb-0">
+                  <!--  -->
                   <v-select
                     v-model="calcObj.insuranceProgram"
                     append-icon="mdi-chevron-down"
-                    :items="selects.insurancePrograms"
+                    :items="calcObj.leasingObjectType.label === 'Легкові та комерційні авто' 
+                      ? selects.insurancePrograms 
+                      : [{text: 'Стандарт', value: 1}]"
                     :error-messages="insuranceProgramErr"
                     item-text="text"
                     item-value="value"
@@ -1729,6 +1732,7 @@ export default {
     }
   },
   watch: {
+    
     falsyLeasedAssertModel(val) {
       this.calcObj.leasedAssertModel = {}
       this.calcObj.leasedAssertModel.name = val
@@ -1751,6 +1755,11 @@ export default {
         case '0': return this.calcObj.insuranceFranchise = 1
         case '0.5': return this.calcObj.insuranceFranchise = 2
         case '1': return this.calcObj.insuranceFranchise = 3
+      }
+    },
+    'calcObj.leasingObjectType': function(value) {
+      if(value.label !== 'Легкові та комерційні авто') {
+        this.calcObj.insuranceProgram = 1
       }
     },
     'calcObj.holidays': function(value) {

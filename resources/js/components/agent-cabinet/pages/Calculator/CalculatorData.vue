@@ -437,12 +437,15 @@
         :items-per-page="10"
         :custom-sort="customSort"
         :class="`elevation-1 ${$vuetify.breakpoint.xs ? 'leasing-calculator-data small' : 'leasing-calculator-data'}`">
+        <template v-slot:item.created_at="{ item }">
+          <span style="white-space: nowrap"> {{ item.created_at }} </span>
+        </template>
         <template v-slot:item.sendGraph>
           <span style="white-space: nowrap">{{ $store.state.user.agent.ab_size }}</span>
         </template>
-        <!-- <template v-slot:item.leasingObjectType.label="{ item }">
-          <span>{{ item.request_data.leasingObjectType.label}}</span>
-        </template> -->
+        <template v-slot:item.request_data.offerNetto="{ item }">
+          <span style="white-space: nowrap"> {{ item.request_data.offerNetto }} </span>
+        </template>
         <template v-slot:item.actions="{ item }">
           <div style="display: flex; justify-content: center">
             <v-tooltip bottom>
@@ -610,7 +613,7 @@ export default {
       { text: 'Тип ПЛ', value: 'request_data.leasingObjectType.label', align: 'center' },
       { text: 'Марка', value: 'request_data.leasedAssertMark.name', align: 'center'},
       { text: 'Модель', value: 'request_data.leasedAssertModel.name', align: 'center' },
-      { text: 'Цiна, грн', value: 'request_data.leasingAmount', align: 'center' },
+      { text: 'Цiна, грн', value: 'request_data.offerNetto', align: 'center' },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
@@ -1109,6 +1112,7 @@ export default {
       }
     },
     openForm(item) {
+      console.log(item)
       if(item.is_send_request === 1) {
         this.$notify({
             group: 'warning',
@@ -1207,13 +1211,14 @@ export default {
         .filter(val => val.id === id)
     },
     getDefaultProperties() {
+      // chart diagram
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.graphType.id
       this.leasingObject = `${this.graphType.request_data.leasedAssertMark.name} ${this.graphType.request_data.leasedAssertModel.name}`
       this.clientTypeId = this.graphType.request_data.leasingClientType
       this.advance = this.graphType.request_data.advance
       this.leasingTerm = this.graphType.request_data.leasingTerm
-      this.leasingAmount = this.graphType.request_data.leasingAmount
+      this.leasingAmount = this.graphType.request_data.offerNetto
       this._token = this.getCsrf()
     },
 
@@ -1238,22 +1243,29 @@ export default {
                     .replace(/\s/g, '' ))
                     .toLocaleString("en-GB")
                     .replace(/,/g, ' ')
+                  let graph = Object.keys(response.data[val].result_data).filter(key => {
+                    return key !== 'requestId'
+                  })[0]
+                  response.data[val].request_data.offerNetto = this.$formatSum(response.data[val].result_data[graph]['offer-price-netto'])
                   return response.data[val]
                 })
-
               this.$store.commit('addGraph', response.data)
             } else {
               this.tabledata = []
             }
           })
           .catch(error => {
-            this.$catchStatus(error.response.status)
+            if(error) throw error
+            console.log(error.response)
             this.loading = false
-            this.$notify({
-              group: 'error',
-              title: 'Помилка',
-              text: `${error.response.status} \n ${error.response.data.message}`,
-            })
+            if(error.response && error.response.status) {
+              this.$notify({
+                group: 'error',
+                title: 'Помилка',
+                text: `${error.response.status} \n ${error.response.data.message}`,
+              })
+              this.$catchStatus(error.response.status)
+            }
           })
         }
     },
@@ -1270,11 +1282,12 @@ export default {
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
         leasingObjType: calcData.leasingObjectType.label,
-        price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
+        // price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,
         advance: calcData.advance,
         prepaid: graph['offer-advance'],
         offerBrutto: graph['offer-price-brutto'],
+        offerNetto: graph['offer-price-netto'],
         oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
         currency: calcData.leasingCurrency,
         leasingRest: graph['offer-rest'],
@@ -1338,6 +1351,7 @@ export default {
     dialogToSend(value) {
       if(value === false) {
         this.formatToSave = null
+        this.graphName = []
         // this.currentGraphToDownload = null
       }
     },

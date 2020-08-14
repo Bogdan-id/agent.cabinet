@@ -306,6 +306,12 @@
         <template v-slot:item.graph="{ item }">
           <v-btn x-small style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" small dark color="grey darken-3" :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">{{ switchValue(item.graph_type) }}</v-btn>
         </template>
+        <template v-slot:item.leasing_amount="{ item }">
+          <span style="white-space: nowrap"> {{ item.leasing_amount }} </span>
+        </template>
+        <template v-slot:item.client="{ item }">
+          <span style="white-space: nowrap;">{{ item.client }}</span>
+        </template>
         <template #item.actions="{ item }">
           <div class="d-flex justify-center">
             <v-tooltip bottom>
@@ -534,7 +540,7 @@ export default {
                     .toLocaleString("en-GB")
                     .replace(/,/g, ' ')
                   response.data[val].created_at = this.$formatDate(response.data[val].created_at)
-                  response.data[val].agent_reward = (parseInt(response.data[val].leasing_amount.replace(/\s/g, '' )) / 100)
+                  response.data[val].agent_reward = ((parseInt(response.data[val].leasing_amount.replace(/\s/g, '' )) / 100) * this.$store.state.user.agent.ab_size)
                     .toLocaleString("en-GB")
                     .replace(/,/g, ' ')
                   return response.data[val]

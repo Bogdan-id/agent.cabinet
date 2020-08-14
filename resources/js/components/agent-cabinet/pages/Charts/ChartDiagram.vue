@@ -112,10 +112,10 @@
                     <template v-slot:item.actions="{ item }">
                       {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
                     </template>
-                    <template v-slot:item.request_data.leasingAmount="{ item }">
-                      <span v-if="item.request_data && item.request_data.leasingAmount">
+                    <template v-slot:item.offerPriceNetto="{ item }">
+                      <span>
                         {{ 
-                          parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
+                          item.result_data.annuity['offer-price-netto']
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}
@@ -347,10 +347,10 @@
                     <template v-slot:item.actions="{ item }">
                       {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
                     </template>
-                    <template v-slot:item.request_data.leasingAmount="{ item }">
+                    <template v-slot:item.offerPriceNetto="{ item }">
                       <span>
                         {{ 
-                          parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
+                          item.result_data.even['offer-price-netto']
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}
@@ -581,10 +581,10 @@
                     <template v-slot:item.actions="{ item }">
                       {{ `${item.request_data.leasedAssertMark.name}   ${item.request_data.leasedAssertModel.name}` }}
                     </template>
-                    <template v-slot:item.request_data.leasingAmount="{ item }">
-                      <span v-if="item.request_data && item.request_data.leasingAmount">
+                    <template v-slot:item.offerPriceNetto="{ item }">
+                      <span>
                         {{ 
-                          parseInt(item.request_data.leasingAmount.replace(/\s/g, '' ))
+                          item.result_data.irregular['offer-price-netto']
                             .toLocaleString()
                             .replace(/,/g, ' ')
                         }}
@@ -749,7 +749,7 @@ export default {
     search: '',
     leasingObjectDataHeader: [
       { text: 'Автомобiль', value: 'actions', align: 'center', sortable: false},
-      { text: 'Вартiсть автомобiля, грн', value: 'request_data.leasingAmount', align: 'end', sortable: false},
+      { text: 'Вартiсть автомобiля, грн', value: 'offerPriceNetto', align: 'end', sortable: false},
       { text: 'Вартість автомобіля з реєстрацією, грн', value: 'offer_price_brutto', align: 'end', sortable: false },
       { text: 'Авансовий платiж, грн', value: 'offer_advance', align: 'center', sortable: false},
       { text: 'Термiн лiзингу, мiс', value: 'request_data.leasingTerm', align: 'end', sortable: false },

@@ -70,16 +70,18 @@
                 </div> -->
                 <div>
                   <div 
+                    v-if="$store.state.user.agent"
                     class="pt-1 pb-1"
                     style="font-size: 0.95rem; color: black; font-family: montserrat">
-                    <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>+38 (095) 741 92 42
+                    <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ $store.state.user.user.phone }}
                   </div>
                 </div>
                 <div>
                   <div 
+                    v-if="$store.state.user.agent"
                     class="pb-2"
                     style="font-size: 0.95rem; color: black; font-family: montserrat">
-                    <v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>user332145@gmail.com
+                    <v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ $store.state.user.user.email }}
                   </div>
                 </div>
                 <div>

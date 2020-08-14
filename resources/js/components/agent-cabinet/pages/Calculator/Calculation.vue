@@ -791,7 +791,7 @@
                             <template v-slot:activator="{ on }">
                               <v-icon v-on="on" size="21" style="position: absolute; right: -8px; top: -5px; cursor: pointer;" color="#e04d45" v-text="'mdi-information-variant'"></v-icon>
                             </template>
-                            <span>Пояснення до термiну</span>
+                            <span>3 місяці в графіку без оплат</span>
                           </v-tooltip>
                         </span>
                       </template>

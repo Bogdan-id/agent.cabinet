@@ -756,11 +756,12 @@ export default {
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
         leasingObjType: calcData.leasingObjectType.label,
-        price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
+        // price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,
         advance: calcData.advance,
         prepaid: graph['offer-advance'],
         offerBrutto: graph['offer-price-brutto'],
+        offerNetto: graph['offer-price-netto'],
         oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
         currency: calcData.leasingCurrency,
         leasingRest: graph['offer-rest'],
@@ -920,6 +921,7 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
+      console.log(this.data)
       if(this.data.is_send_request === 1) {
         this.$notify({
             group: 'warning',
@@ -929,16 +931,18 @@ export default {
         return
       }
       this.selectedGraph = this.switchGraphName(this.graph)
+      this.getDefaultProperties()
       this.leasingApplicationForm = true
     },
     getDefaultProperties() {
+      // chart diagram btn
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.data.id
       this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`
       this.clientTypeId = this.data.request_data.leasingClientType
       this.advance = this.data.request_data.advance
       this.leasingTerm = this.data.request_data.leasingTerm
-      this.leasingAmount = this.data.request_data.leasingAmount
+      this.leasingAmount = this.data.request_data.offerNetto
       this._token = this.getCsrf()
     },
     parseToInt(id) {
@@ -1053,6 +1057,7 @@ export default {
     dialogToSend(value) {
       if(value === false) {
         this.formatToSave = null
+        this.graphName = []
         // this.currentGraphToDownload = null
         this.emailField = false
       }
@@ -1074,9 +1079,6 @@ export default {
         this.selectedGraph = this.switchGraphName(val)
       }
     }
-  },
-  created() {
-    this.getDefaultProperties()
   },
   mounted() {
     this.selectedGraph = this.switchGraphName(this.graph)

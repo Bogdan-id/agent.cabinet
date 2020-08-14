@@ -7,6 +7,7 @@ use App\Models\{
     Agent,
     Notification
 };
+use App\Events\NewDataEvent;
 
 class NotificationsController extends Controller
 {
@@ -45,7 +46,8 @@ class NotificationsController extends Controller
                 ]);
             }      
         }
-
+        event(new NewDataEvent());
+        
         return response()->json([
             'status' => 200
         ]);

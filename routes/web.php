@@ -83,7 +83,10 @@ Route::post('/calculate', 'CalculateController@create');
 Route::get('/models', 'ModelController@index');
 Route::get('/mark', 'MarkController@index');
 Route::get('bitrix/updatedLead', 'BitrixController@getUpdatedLeadId');
-
+Route::get('/fire', function () {
+        event(new \App\Events\NewDataEvent('data'));
+        return 'ok';
+    });
 Route::group([
     'prefix'        => 'admin',
     'namespace'     => '\App\\Admin\\Controllers',

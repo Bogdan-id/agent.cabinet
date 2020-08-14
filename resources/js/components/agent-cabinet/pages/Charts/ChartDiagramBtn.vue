@@ -756,11 +756,12 @@ export default {
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
         leasingObjType: calcData.leasingObjectType.label,
-        price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
+        // price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,
         advance: calcData.advance,
         prepaid: graph['offer-advance'],
         offerBrutto: graph['offer-price-brutto'],
+        offerNetto: graph['offer-price-netto'],
         oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
         currency: calcData.leasingCurrency,
         leasingRest: graph['offer-rest'],
@@ -1053,6 +1054,7 @@ export default {
     dialogToSend(value) {
       if(value === false) {
         this.formatToSave = null
+        this.graphName = []
         // this.currentGraphToDownload = null
         this.emailField = false
       }

@@ -245,7 +245,7 @@
         </div>
       </section>
     </v-card-text>
-    <v-card-text style="padding-bottom: 0px; clear: both; padding-top: 50px;">
+    <v-card-text class="agreement-footer" style="padding-bottom: 0px; clear: both; padding-top: 50px;">
       <div class="d-flex justify-center">
         <span>
           <v-btn
@@ -298,7 +298,15 @@ export default {
 </script>
 
 <style lang="scss">
-.finish-register-agreement {
+.finish-register-agreement, 
+.annex-to-agreement,
+.agreement-footer {
+  -webkit-touch-callout: none!important; 
+  -webkit-user-select: none!important; 
+  -khtml-user-select: none!important; 
+  -moz-user-select: none!important; 
+  -ms-user-select: none!important; 
+  user-select: none!important; 
   .agreement {
     h5 {
       text-align: center;

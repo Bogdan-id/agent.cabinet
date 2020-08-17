@@ -18,14 +18,34 @@ export default new Vuex.Store({
     loader: false,
     adminLoader: false,
     // userCalculations: [],
-    breadScrumb: {}
+    breadScrumb: {},
+    notifications: [],
+    leasingRequests: [],
+    agentCommissions: []
   },
   mutations: {
     addUserData(state, value) {
       state.user = Object.assign({}, value)
     },
-    addAgentData(state, value) {
-      state.agentData = Object.assign({}, value)
+    addNotifications(state, val) {
+      state.notifications.splice(0)
+      state.notifications.push(...val)
+      // Vue.prototype.$sortNotificaions(state.notifications)
+    },
+    addLeasingRequests(state, val) {
+      state.leasingRequests.splice(0)
+      state.leasingRequests.push(
+        ...Vue.prototype.$changeLeasingRequestsObj(val)
+      )
+      Vue.prototype.$sortData(state.leasingRequests)
+    },
+    addAgentCommissions(state, val) {
+      console.log(val)
+      state.agentCommissions.splice(0)
+      state.agentCommissions.push(...val)
+    },
+    addAgentData(state, val) {
+      state.agentData = Object.assign({}, val)
     },
     toggleSpinner(state, value) {
       state.loader = value
@@ -36,8 +56,9 @@ export default new Vuex.Store({
     setBreadScrumb(state, links) {
       state.breadScrumb = Object.assign({}, links)
     },
-    addGraph(state, value) {
-      state.graphs = value
+    addGraph(state, val) {
+      state.graphs.splice(0)
+      state.graphs.push(...val)
     },
     deleteGraph(state) {
       state.graphs = []
@@ -54,17 +75,24 @@ export default new Vuex.Store({
     getCurrentUser({commit/*, state*/}) {
       commit('toggleSpinner', true)
       axios.get('/getUserAgent')
-      .then(response => {
-        console.log(response.data)
-        commit('addUserData', response.data)
-        commit('addAgentData', response.data.agent.manager)
-        commit('toggleSpinner', false)
-        commit('checkIfUserHasAllNeccessaryFields')
-      })
-      .catch(error => {
-        console.log(error.response)
-        commit('toggleSpinner', false)
-      })
+        .then(response => {
+          console.log(response.data)
+          commit('addUserData', response.data)
+          commit('addAgentData', response.data.agent.manager)
+          commit('toggleSpinner', false)
+          commit('checkIfUserHasAllNeccessaryFields')
+        })
+        .catch(error => {
+          console.log(error.response)
+          commit('toggleSpinner', false)
+        })
     },
+    // add sorting
+    dataFromSocket({commit, state}, data) {
+      commit('addNotifications', data.notifications)
+      commit('addLeasingRequests', data.leasingRequests)
+      commit('addAgentCommissions', data.agentCommissions)
+      console.log(state)
+    }
   }
 })

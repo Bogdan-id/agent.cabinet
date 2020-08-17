@@ -13,16 +13,16 @@
     </v-progress-linear>
     </v-card-text>
     <v-card-text 
-      v-if="notifications.length === 0"
+      v-if="agentNotifications && agentNotifications.length === 0"
       style="font-size: 1.3rem; padding-top: 90px; padding-bottom: 90px;">
       <div style="text-align: center;">
         <span>(Повiдомлення вiдсутнi)</span>
       </div>
     </v-card-text>
-    <v-card-text class="user-notification-page" style="min-height: 100vh" v-if="notifications.length > 0">
+    <v-card-text class="user-notification-page" style="min-height: 100vh" v-if="agentNotifications && agentNotifications.length > 0">
       <v-timeline dense>
         <v-timeline-item
-          v-for="(item, key) in notifications"
+          v-for="(item, key) in agentNotifications"
           :key="key"
           :color="item.status === 'checked' ? 'grey lighten-1' : 'red lighten-2' "
           small
@@ -77,7 +77,7 @@ export default {
       axios
         .delete(`/agent/notifications/delete/${id}`)
         .then(() => {
-          this.getUserNotifications()
+          this.getAgentNotifications()
           this.$notify({
             group: 'success',
             title: 'Повiдомлення видалено',
@@ -88,7 +88,7 @@ export default {
         .catch(error => {
           this.$catchStatus(error.response.status)
           console.log(error.response)
-          this.getUserNotifications()
+          this.getAgentNotifications()
           this.$notify({
             group: 'error',
             title: 'Помилка',
@@ -113,27 +113,16 @@ export default {
       tabs.forEach(element => element.classList.remove('active'))
       event.target.parentNode.classList.add('active')
     },
-    getUserNotifications() {
-      axios
-        .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
-        .then(response => {
-          this.notifications = response.data
-        })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-        })
-    },
     getAgentNotifications() {
       axios
         .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
         .then(response => {
-          this.notifications = response.data.sort((a, b) => {
-            return new Date(b.updated_at) - new Date(a.updated_at)
-          })
+          this.$store.commit('addNotifications', response.data)
+
           let notificationsArrIds = this.notifications.map(val => {
             return val.id
           })
+
           this.changeNotificationsStatus({notifications :notificationsArrIds})
         })
         .catch(error => {
@@ -142,16 +131,17 @@ export default {
         })
     },
   },
+  computed: {
+    agentNotifications() {
+      return this.$sortByDate(this.$store.state.notifications)
+    }
+  },
   mounted() {
-    this.notifications = this.$route.params.notifications 
-      ? this.$route.params.notifications.sort((a, b) => {
-          return new Date(b.updated_at) - new Date(a.updated_at)
-        })
-      : []
-    if(!this.notifications || this.notifications.length === 0) {
+    this.$store.commit('addNotifications', this.$route.params.notifications) 
+    if(this.$store.state.notifications.length === 0) {
       this.getAgentNotifications()
     } else {
-      let notificationsArrIds = this.notifications.map(val => {
+      let notificationsArrIds = this.agentNotifications.map(val => {
         return val.id
       })
       this.changeNotificationsStatus({notifications :notificationsArrIds})

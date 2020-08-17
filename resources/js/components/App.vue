@@ -15,8 +15,32 @@
 </v-app>
 </template>
 <script>
+import Echo from "laravel-echo"
+
+window.io = require('socket.io-client');
+  window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001', // this is laravel-echo-server host
+    //transports: ['websocket', 'polling', 'flashsocket']
+})
+
+if (typeof window.io !== 'undefined'){
+  window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001'
+  })
+}
+
 export default {
-  name: 'Головна'
+  name: 'Головна',
+  mounted() {
+    console.log('MOUNTED')
+    window.Echo.channel("laravel_database_test").listen("NewDataEvent", (e) => {
+      console.log(e)
+      this.$store.dispatch('dataFromSocket', e)
+    })
+  },
+  
 }
 </script>
 
@@ -97,11 +121,3 @@ export default {
     }
   }
 </style>
-
-<script>
-  export default {
-    mounted() {
-      console.log(this.$route)
-    }
-  }
-</script>

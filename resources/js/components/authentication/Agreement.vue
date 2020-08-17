@@ -190,7 +190,7 @@
             Надано Лізингоодержувачів для збільшення обсягу продажів, надано консультативно-інформаційних
             послуги клієнтам, підписано Договорів фінансового лізингу (сплачено авансові платіжі) та Акти прийому-
             передачі Предметів лізингу з наступними Лізингоодержувачами: </p>
-          <div style="padding-bottom: 1rem;">
+          <div style="padding-bottom: 1rem; overflow-y: scroll;">
             <table>
               <tbody>
                 <tr>
@@ -317,8 +317,8 @@ export default {
   .accept-agreement-rule {
     font-size: 0.821rem;
     padding-top: 10px;
-    padding-left: 4rem;
-    padding-right: 4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     text-align: center;
     color: rgba(0, 0, 0, 0.473)
   }
@@ -345,7 +345,7 @@ export default {
     }
     h5 {
       font-weight: bold; 
-      padding: 0 5rem; 
+      padding: 0 2rem; 
       text-align: center;
     }
   }

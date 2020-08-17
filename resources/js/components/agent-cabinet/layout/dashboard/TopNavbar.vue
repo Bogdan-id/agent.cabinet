@@ -30,7 +30,7 @@
         <div
           v-show="!$vuetify.breakpoint.xs"
           class="user-brief-profile-wrapper">
-          <v-icon x-large v-text="'mdi-account-circle-outline'"></v-icon>
+          <v-icon x-large v-text="'mdi-account-circle'"></v-icon>
           <div class="agent-name">
             {{ currentAgent }}
           </div>
@@ -48,47 +48,36 @@
                 <v-icon v-text="'mdi-menu-down'"></v-icon>
               </v-btn>
             </template>
-            <v-card :min-width="330">
+            <v-card :min-width="300">
               <v-card-text 
                 class="pb-0 pt-2"
                 style="
                   border-left: 4px solid #e75d57; 
                   font-size: 1.1rem; 
-                  color: black; 
-                  font-family: montserrat;">
+                  color: black;">
                 {{ currentAgent }}
               </v-card-text>
               <!-- <v-divider></v-divider> -->
               <v-card-text class="pt-3 pb-1">
-                <!-- <div>
-                  <span>Компанiя:</span>
-                  <div 
-                    class="pl-3" 
-                    style="font-size: 1rem; color: black; font-family: montserrat">
-                    Best leasing
-                  </div>
-                </div> -->
-                <div>
+                <!-- class="pt-1 pb-1" -->
+                <div class="profile-card-contact-wrapper">
                   <div 
                     v-if="$store.state.user.agent"
-                    class="pt-1 pb-1"
-                    style="font-size: 0.95rem; color: black; font-family: montserrat">
-                    <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ $store.state.user.user.phone }}
+                    style="font-size: 0.95rem; color: black;">
+                    <v-icon color="#333333" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>{{ $store.state.user.user.phone }}
                   </div>
-                </div>
-                <div>
+                  <!-- class="pb-2" -->
                   <div 
                     v-if="$store.state.user.agent"
-                    class="pb-2"
-                    style="font-size: 0.95rem; color: black; font-family: montserrat">
-                    <v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ $store.state.user.user.email }}
+                    style="font-size: 0.95rem; color: black;">
+                    <v-icon color="#333333" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>{{ $store.state.user.user.email }}
                   </div>
                 </div>
-                <div>
+                <v-divider style="margin: 5px 0;"></v-divider>
+                <div class="profile-link-wrapper">
                   <router-link 
                     class="profile-link"
                     @click.native="$refs.briefProfileBtn.$el.click()"
-                    style="color: #bb433c; font-size: 0.9rem; font-family: montserrat; display: inline-block; " 
                     to="/agent-profile">
                     Перейти у профiль
                   </router-link>
@@ -116,7 +105,7 @@
                 </v-card-text>
                 <v-timeline dense v-if="notificationCount > 0">
                   <v-timeline-item
-                    v-for="(item, key) in notifications"
+                    v-for="(item, key) in $store.state.notifications"
                     v-if="key <= maxNotificationsToShow -1"
                     :key="key"
                     :color="item.status === 'checked' ? 'grey lighten-2' : 'red lighten-2'"
@@ -132,7 +121,7 @@
                   <router-link 
                     @click.native.stop="toggleNotifyCard()" 
                     class="notification-card-link" 
-                    :to="{name: 'Повiдомлення', path: '/notifications', params: {notifications: notifications}}">
+                    :to="{name: 'Повiдомлення', path: '/notifications', params: {notifications: $store.state.notifications}}">
                     Дивитись всi 
                   </router-link>
                 </div>
@@ -167,14 +156,14 @@ export default {
     showBriefUserProfile: false,
     activeNotifications: false,
     showSidebar: true,
-    notifications: null,
+    // notifications: null,
     notificationKeys: [],
     maxNotificationsToShow: 3,
   }),
   computed: {
     notificationCount() {
-      if(!this.notifications) return 0
-      let index = this.notifications
+      if(!this.$store.state.notifications.length === 0) return 0
+      let index = this.$store.state.notifications
         .filter(val => {
           return val.status === 'not_checked'
         })
@@ -227,13 +216,13 @@ export default {
       let card = document.getElementById('cadr-notification')
       if(!card.classList.contains('show-card')) {
         card.classList.add('show-card')
-        if(this.notifications.length === 0) return
-        this.notifications.length < this.maxNotificationsToShow
-          ? this.maxNotificationsToShow = this.notifications.length
+        if(this.$store.state.notifications.length === 0) return
+        this.$store.state.notifications.length < this.maxNotificationsToShow
+          ? this.maxNotificationsToShow = this.$store.state.notifications.length
           : false
         for(let i = 0; i <= this.maxNotificationsToShow -1; i ++) {
-          this.notifications[i].status === 'not_checked'
-            ? this.notificationKeys.push(this.notifications[i].id)
+          this.$store.state.notifications[i].status === 'not_checked'
+            ? this.notificationKeys.push(this.$store.state.notifications[i].id)
             : false
         }
       } else {
@@ -283,13 +272,13 @@ export default {
       axios
         .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
         .then(response => {
-          this.notifications = response.data.sort((a, b) => {
-            return ('' + b.status).localeCompare(a.status)
-          })
-          console.log(this.notifications)
+
+          this.$store.commit('addNotifications', response.data)
+          
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
+
           console.log(error.response)
         })
     },
@@ -319,22 +308,34 @@ export default {
 }
 </script>
 <style lang="scss">
-.profile-link:hover {
-  color: #e57373;
-  text-decoration: underline;
-  transition: color 0.2s ease-in; 
+.profile-link-wrapper {
+  .profile-link {
+    color: #bb433c; 
+    font-size: 0.9rem; 
+    display: inline-block;
+    transition: color 0.1s ease-in; 
+    &:hover {
+      color: #e57373;
+    }
+  }
+}
+.profile-card-contact-wrapper {
+  padding: 0px 14px 3px;
+  div {
+    padding: 3px 0;
+  }
 }
 .v-timeline--dense:not(.v-timeline--reverse):before {
   right: auto;
   left: 25px!important;
 }
 .agent-name {
-  font-size: 1rem;
+  font-size: 0.93rem;
   display: inline-block;
   color: #727170;
-  max-width: 160px;
+  max-width: 155px;
   text-transform: uppercase;
-  line-height: 1.2rem;
+  line-height: 1.09rem;
   padding: 3px 5px;
   overflow: hidden;
   text-overflow: ellipsis;

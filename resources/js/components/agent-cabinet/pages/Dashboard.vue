@@ -125,7 +125,7 @@
       </v-carousel>
     </v-card>
     <v-card 
-      v-if="tabledata.length > 0"
+      v-if="$store.state.leasingRequests.length > 0"
       class="mt-10 mb-6 dashboard-table" elevation="9">
       <v-card-title 
         :class="`headline pb-3 pt-3 ${!$vuetify.breakpoint.xs ? 'mb-7' : ''}`" 
@@ -134,9 +134,9 @@
       </v-card-title>
       <v-data-table
         color="black"
-        v-if="tabledata && $store.state.user.agent"
+        v-if="$store.state.leasingRequests.length > 0 && $store.state.user.agent"
         :headers="tableHeader"
-        :items="tabledata"
+        :items="$store.state.leasingRequests"
         :class="`dashboard-leasing-request-table ${$vuetify.breakpoint.xs ? 'small' : ''} elevation-1 pb-3`"
         :hide-default-footer="true"
         :items-per-page="5">
@@ -160,7 +160,7 @@
         </template>
         <template v-slot:item.data="{item}">
           <span style="white-space: nowrap">
-            {{ $formatDate(item.created_at) }}
+            {{ item.created_at }}
           </span>
         </template>
         <template v-slot:item.leasing_object="{ item }">
@@ -365,23 +365,11 @@
   </v-card>
 </div>
 </template>
+
 <script>
 import axios from 'axios'
-import Echo from "laravel-echo"
-window.io = require('socket.io-client');
-  window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001', // this is laravel-echo-server host
-    //transports: ['websocket', 'polling', 'flashsocket']
-})
 export default {
   name: 'Головна',
-   mounted() {
-     window.Echo.channel("laravel_database_test").listen("NewDataEvent", (e) => {
-      console.log("dd");
-      console.log(e);
-    });
-   },
   data: () => ({
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
@@ -447,7 +435,6 @@ export default {
     },
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
-      this.tabledata = []
       const agentId = this.$store.state.user.agent.id
       axios
         .get(`/leasing-reqeust/agent/${agentId}`)
@@ -455,8 +442,11 @@ export default {
           console.log(response.data)
           this.$store.commit('toggleSpinner', false)
           if(response.data.length > 0)  {
-            this.tabledata = this.sortData(response.data)
+            // let temp = this.$changeLeasingRequestsObj(response.data)
+            this.$store.commit('addLeasingRequests', response.data)
+              
             this.$store.commit('addGraph', response.data)
+
           } else {
             this.tabledata = []
           }
@@ -474,7 +464,7 @@ export default {
     sortData(items) {
       items
         .sort((a, b) => {
-          return new Date(b.updated_at) - new Date(a.updated_at)
+          return new Date(b.created_at) - new Date(a.created_at)
       })
       return items
     },

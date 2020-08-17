@@ -299,7 +299,7 @@
         :search="search"
         color="black"
         :headers="tableHeader"
-        :items="tabledata"
+        :items="$store.state.leasingRequests"
         :custom-sort="customSort"
         :items-per-page="10"
         :class="`elevation-1 leasing-application-table ${$vuetify.breakpoint.xs ? 'small' : ''}`">
@@ -400,7 +400,7 @@ export default {
       { text: 'Статус', value: 'request_status', align: 'center', width: 120 },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
-    tabledata: [],
+    // tabledata: [],
     legalDocs: [
       {text: 'Копія свідоцтва про державну реєстрацію та / або виписка з ЄДР', prop: 'state_registration_certificate'},
       {text: 'Статут', prop: 'regulations'},
@@ -450,7 +450,7 @@ export default {
       return Object.keys(this.$store.state.user.agent).length > 0
     },
     tableDataPresent() {
-      return this.tabledata.length > 0
+      return this.$store.state.leasingRequests.length > 0
     },
   },
   methods: {
@@ -481,10 +481,6 @@ export default {
           })
         })
     },
-    // returnDocumentName(url) {
-    //   let index = url.lastIndexOf('/') + 1
-    //   return url.substr(index)
-    // },
     showDialogToAgentReward(item) {
       if(this.$store.state.userHasNeccessaryFields) {
         this.requestIdToReward = item.id
@@ -522,7 +518,6 @@ export default {
     },
     getUserCalculations() {
       this.loading = true
-      this.tabledata = []
       if(this.userData){
         const agentId = this.$store.state.user.agent.id
         axios
@@ -530,22 +525,7 @@ export default {
           .then(response => {
             this.loading = false
             if(response.data.length > 0)  {
-              this.tabledata = Object.keys(response.data)
-                .map(val => {
-                  response.data[val].client = response.data[val].client_type_id == 2 
-                    ? response.data[val].legal_info.company_name 
-                    : response.data[val].last_name + ' ' + response.data[val].first_name[0] + '. ' + response.data[val].patronymic[0] + '.' 
-                  response.data[val].leasing_amount = parseInt(response.data[val].leasing_amount
-                    .replace(/\s/g, '' ))
-                    .toLocaleString("en-GB")
-                    .replace(/,/g, ' ')
-                  response.data[val].created_at = this.$formatDate(response.data[val].created_at)
-                  response.data[val].agent_reward = ((parseInt(response.data[val].leasing_amount.replace(/\s/g, '' )) / 100) * this.$store.state.user.agent.ab_size)
-                    .toLocaleString("en-GB")
-                    .replace(/,/g, ' ')
-                  return response.data[val]
-                })
-              console.log(this.tabledata)
+              this.$store.commit('addLeasingRequests', response.data)
               this.$store.commit('addGraph', response.data)
             } else {
               this.tabledata = []

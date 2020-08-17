@@ -48,41 +48,39 @@
         </v-progress-linear>
       </v-card-text>
       <v-card-text :class="$vuetify.breakpoint.xs ? 'pb-0' : ''">
-        <!-- <v-btn 
-          dark class="red lighten-1"
-          @click.stop="commissionRequestsDialog = !commissionRequestsDialog">
-          Подати нову заявку&nbsp;
-          <v-icon v-text="'mdi-plus'"></v-icon>
-        </v-btn> -->
         <v-card-text
-          v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
+          v-if="$store.state.agentCommissions.length > 0 && !$store.state.adminLoader"
           class="d-flex justify-center black--text pb-0 text-center"
           :style="`${$vuetify.breakpoint.xs ? 'font-size: 1.1rem' : 'font-size: 1.25rem'}`">
           Iсторiя заявок на винагороду
         </v-card-text>
         <v-card-text 
-          v-if="agentCommisions.length === 0 && !$store.state.adminLoader"
+          v-if="$store.state.agentCommissions.length === 0 && !$store.state.adminLoader"
           class="d-flex justify-center"
           style="font-size: 1.3rem; padding-top: 85px; text-align: center;">
           (Iсторiя заявок на винагороду порожня)
         </v-card-text>
       </v-card-text>
       <v-data-table
-        v-if="agentCommisions.length > 0 && !$store.state.adminLoader"
+        v-if="$store.state.agentCommissions.length > 0 && !$store.state.adminLoader"
         color="black"
         :headers="tableHeader"
         :custom-sort="customSort"
-        :items="agentCommisions"
+        :items="$store.state.agentCommissions"
         :hide-default-footer="true"
         :class="`elevation-1 mr-3 ml-3 mt-4 reward-aplication-table ${$vuetify.breakpoint.xs ? 'small' : ''}`">
         <template v-slot:item.leasing_request.created_at="{ item }">
           <div class="text-center">
-            {{ item.created_at.substr(0, 10) }}
+            {{ $formatDate(item.created_at) }}
           </div>
         </template>
         <template v-slot:item.initials="{ item }">
-          <span style="white-space: nowrap">
-            {{ item.leasing_request.client_type_id == 2 ? item.leasing_request.legal_info.company_name : item.leasing_request.last_name + ' ' + item.leasing_request.first_name[0] + '. ' + item.leasing_request.patronymic[0] + '.' }}
+          <span v-if="item.leasing_request" style="white-space: nowrap">
+            {{ 
+              item.leasing_request.client_type_id === 2 
+                ? item.leasing_request.legal_info.company_name 
+                : item.leasing_request.last_name + ' ' + item.leasing_request.first_name[0] + '. ' + item.leasing_request.patronymic[0] + '.' 
+            }}
           </span>
         </template>
         <template v-slot:item.status="{ item }">
@@ -104,7 +102,6 @@ export default {
   data: () => ({
     loading: false,
     commissionRequestsDialog: false,
-    agentCommisions: [],
     object: {
       leasingRequestId: null,
       purposeOfPayment: null,
@@ -114,10 +111,7 @@ export default {
     tableHeader: [
       { text: 'Код заявки', value: 'id'},
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
-      // { text: 'Им`я', value: 'leasing_request.first_name', align: 'start'},
-      // { text: 'Марка', value: 'leasing_request.leasing_object', align: 'center'},
       { text: 'Предмет лiзингу', value: 'leasing_request.leasing_object', align: 'center' },
-      // { text: 'Призначення платежу', value: 'purpose_of_payment', align: 'center' },
       { text: 'Дата заявки', value: 'leasing_request.created_at', align: 'center', sortable: true },
       { text: 'Статус', value: 'status', align: 'center' },
     ],
@@ -158,10 +152,10 @@ export default {
         axios
           .get(`/agent-commission/agent/${id}`)
           .then(response => {
-            console.log(response)
-            this.agentCommisions = response.data
+            console.log(response.data)
             this.object.agentId = id
             this.object._token = this.getCsrf()
+            this.$store.commit('addAgentCommissions', response.data)
             this.$store.commit('toggleAdminSpinner', false)
           })
           .catch(error => {
@@ -219,7 +213,7 @@ export default {
   },
   watch: {
     hasAgent(val) {
-      if(val && this.agentCommisions.length === 0) {
+      if(val && this.$store.state.agentCommissions.length === 0) {
         this.getCommisionRequests()
       }
     }

@@ -241,6 +241,19 @@
                       </div>
                     </div>
                   </div>
+                  <v-row>
+                    <v-col>
+                      <v-file-input
+                        v-model="certificateOfFinancials"
+                        label="Довідка про фінансові документи"
+                        small-chips
+                        multiple
+                        dense
+                        outlined
+                        show-size>
+                      </v-file-input>
+                    </v-col>
+                  </v-row>
                 </div>
               </div>
             </v-col>
@@ -423,6 +436,7 @@ export default {
     agentIdToReward: null,
 
     // request detail data
+    certificateOfFinancials: null,
     reqObj: {
       calculation_id: null,
       email: null,

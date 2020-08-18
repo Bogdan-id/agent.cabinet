@@ -175,6 +175,7 @@
       <v-row>
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-autocomplete
+            @click.stop
             @change="getModelByMark()"
             v-model="calcObj.leasedAssertMark"
             :items="brandItems"
@@ -186,6 +187,7 @@
             item-value="value"
             return-object
             label="Марка"
+            ref="markAutocomplete"
             loaderHeight="1"
             :loading="!leasedOfAssetType && $store.state.loader
               || noBrandItems && $store.state.loader"
@@ -201,6 +203,7 @@
           cols="12" md="3" sm="6" xs="12"  
           :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-autocomplete
+            @click.stop
             v-model="calcObj.leasedAssertModel"
             :error-messages="leasedAssertModelErr"
             :items="modelItems"
@@ -211,6 +214,7 @@
             append-icon="mdi-chevron-down"
             return-object
             label="Модель"
+            ref="modelAutocomplete"
             loaderHeight="1"
             :loading="modelLoader && modelOfItem"
             :disabled="calcObj.leasedAssertMark === null"
@@ -1839,6 +1843,12 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
+    window.addEventListener("click",() => {
+      console.log('click')
+      this.$refs.markAutocomplete.blur();
+      this.$refs.modelAutocomplete.blur();
+      //  this.$refs.carAutocomplete.blur();
+    });
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
       this.changeActiveClass()

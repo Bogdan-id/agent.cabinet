@@ -3,7 +3,7 @@
     v-model="openDialog" 
     persistent
     max-width="900">
-    <v-card style="min-width: 900px;">
+    <v-card style="min-width: 885px;">
     <v-card-text class="pt-9 finish-register-agreement">
       <section class="agreement">
         <h5>ДОГОВІР – ОФЕРТА<br />ПРО НАДАННЯ АГЕНТСЬКИЙ ПОСЛУГ</h5>

@@ -326,6 +326,29 @@
                         :class="item.prop"
                         @change="listenFileInput(item.prop)">
                     </div>
+                    <div v-if="clientTypeId === 1">
+                      <v-row>
+                        <v-col class="pb-0">
+                          <span style="color: black; padding: 0 15px;">
+                            Довідка про фінансові документи
+                          </span>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col class="pt-2">
+                          <v-file-input
+                            v-model="certificateOfFinancials"
+                            label="додати файли"
+                            color="black"
+                            small-chips
+                            multiple
+                            dense
+                            regular
+                            show-size>
+                          </v-file-input>
+                        </v-col>
+                      </v-row>
+                    </div>
                     <!-- <v-file-input
                       @change="uploadDoc()"
                       v-model="docs"
@@ -441,7 +464,7 @@ export default {
         return 'Розмiр документу не повинен перевищувати 5 MB!'
       }
     ],
-
+    certificateOfFinancials: [],
     graphName: [],
     currentGraphToDownload: null,
 

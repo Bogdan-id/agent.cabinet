@@ -380,6 +380,17 @@ export default {
     }
   },
   methods: {
+    checkIfUserHasRequisiteData() {
+      if(
+        this.user.passport_serie ||
+        this.user.passport_number ||
+        this.user.passport_type_id ||
+        this.user.inn ||
+        this.user.card_number ||
+        this.user.iban
+      ) this.showPassportEditField = true
+      else return
+    },
     cc_format(value) {
       let v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
       let matches = v.match(/\d{4,16}/g);
@@ -404,7 +415,7 @@ export default {
         company_type: this.$store.state.user.agent.company_type,
         company_name: this.$store.state.user.agent.company_name,
         position: this.$store.state.user.agent.position,
-        passport_type_id: this.$store.state.user.agent.passport_type_id,
+        passport_type_id: this.$store.state.user.agent.passport_type_id, 
         ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.unzr_number && {passport_serie: this.$store.state.user.agent.document.unzr_number},
         ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.serie && {passport_serie: this.$store.state.user.agent.document.serie},
         ...this.$store.state.user.agent.document && this.$store.state.user.agent.document.id_card_number && {passport_number: this.$store.state.user.agent.document.id_card_number},
@@ -466,6 +477,7 @@ export default {
             .then(() => {
               setTimeout(() => {
                 this.assignObject()
+                this.checkIfUserHasRequisiteData()
               }, 1000)
             })
         })
@@ -477,6 +489,7 @@ export default {
             text: `${error.response.status} \n ${error.response.data.message}`,
           })
           this.assignObject()
+          this.checkIfUserHasRequisiteData()
           this.loading = false
           console.log(error.response)
         })
@@ -848,6 +861,7 @@ export default {
   },
   mounted() {
     this.assignObject()
+    this.checkIfUserHasRequisiteData()
     delete this.user.agent
   },
 }

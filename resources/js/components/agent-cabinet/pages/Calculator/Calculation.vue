@@ -1230,15 +1230,10 @@ export default {
     },
   },
   methods: {
-    test() {
-      axios
-        .get('https://developers.ria.com/auto/categories/?api_key=oFHzd0nlvshTQ2XXufmeaAyqyaEOHV4HUKJbsXbE')
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    closeAutocompletes() {
+      console.log('click')
+      this.$refs.markAutocomplete.blur();
+      this.$refs.modelAutocomplete.blur();
     },
     resetForm() {
       this.calcObj = {
@@ -1843,12 +1838,7 @@ export default {
     window.addEventListener("resize", this.displayWindowSize)
   },
   mounted() {
-    window.addEventListener("click",() => {
-      console.log('click')
-      this.$refs.markAutocomplete.blur();
-      this.$refs.modelAutocomplete.blur();
-      //  this.$refs.carAutocomplete.blur();
-    });
+    window.addEventListener("click", this.closeAutocompletes)
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
       this.changeActiveClass()
@@ -1867,7 +1857,10 @@ export default {
     
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
-  }
+  },
+  beforeDestroy() {
+    window.removeEventListener('click', this.closeAutocompletes)
+  },
 }
 </script>
 

@@ -156,7 +156,8 @@
         <p>8.4. Всі Додатки до Договору є невід&#39;ємною частиною Договору.</p>
       </section>
     </v-card-text>
-    <v-card-text class="annex-to-agreement">
+    <v-card-text class="annex-to-agreement" style="width: 95%; margin: 0 auto; position: relative; padding-bottom: 55px; padding-top: 20px;">
+      <div class="sample">Зразок</div>
       <section class="header">
         <p style="white-space: pre; text-align: right;">
           <b>
@@ -243,6 +244,7 @@
             </div>
           </div>
         </div>
+        <div style="clear: both;"></div>
       </section>
     </v-card-text>
     <v-card-text class="agreement-footer" style="padding-bottom: 0px; clear: both; padding-top: 50px;">
@@ -254,12 +256,19 @@
             :loading="loading"
             dark small>
             Ознайомлений
+            <span style="display: inline-block; min-width: 7px; position: relative;">
+              <v-icon style="position: absolute; top: -9px; right: -5px;" size="8" v-text="'mdi-asterisk'"></v-icon>
+            </span>
           </v-btn>
         </span>
       </div>
       <div>
         <v-card-text class="accept-wrapper">
-          <p class="accept-agreement-rule">Здійснюючи акцепт цієї Оферти, Замовник погоджується з усіма умовами Договору в 
+          <p class="accept-agreement-rule">
+            <span style="position: relative; display: inline-block; min-width: 10px;">
+              <v-icon style="position: absolute; top: -16px; right: 5px;" size="9" v-text="'mdi-asterisk'">
+              </v-icon>
+            </span>Здійснюючи акцепт цієї Оферти, Замовник погоджується з усіма умовами Договору в 
           тому вигляді, в якому вони викладені в тексті цієї Оферти. Цей Договір має юридичну силу і є 
           рівнозначним (рівносильним) договору, підписаному Сторонами.</p>
         </v-card-text>
@@ -328,11 +337,24 @@ export default {
     padding-left: 2rem;
     padding-right: 2rem;
     text-align: center;
+    position: relative;
     color: rgba(0, 0, 0, 0.473)
   }
 }
 
 .annex-to-agreement {
+  padding-top: 20px;
+  .sample {
+    position: absolute;
+    color: #f44336;
+    opacity: 0.2;
+    font-size: 17rem;
+    letter-spacing: 1rem;
+    top: 39rem;
+    transform: rotate(305deg);
+    left: -5rem;
+  }
+  box-shadow: 0px 0px 4px 1px rgba(191,181,191,1);
   .header {
     display: inline-block; 
     float: right; 

@@ -56,7 +56,7 @@ class CalculateRequest extends JsonRequest
             'leasedAssertModel.value' => 'required|integer',
 
             'leasingObjectYear' => 'required|integer',
-            'leasedAssertEngine' => 'required|string', //Обьем двигателя
+            'leasedAssertEngine' => 'string', //Обьем двигателя
             'leasingClientType' => 'required|integer', //Тип клиента
             'currency' => 'required|string',
             'leasingCurrency' => 'required|string',

@@ -105,7 +105,7 @@
                 </v-card-text>
                 <v-timeline dense v-if="notificationCount > 0">
                   <v-timeline-item
-                    v-for="(item, key) in $store.state.notifications"
+                    v-for="(item, key) in agentNotifications"
                     v-if="key <= maxNotificationsToShow -1"
                     :key="key"
                     :color="item.status === 'checked' ? 'grey lighten-2' : 'red lighten-2'"
@@ -121,7 +121,7 @@
                   <router-link 
                     @click.native.stop="toggleNotifyCard()" 
                     class="notification-card-link" 
-                    :to="{name: 'Повiдомлення', path: '/notifications', params: {notifications: $store.state.notifications}}">
+                    :to="{name: 'Повiдомлення', path: '/notifications'}">
                     Дивитись всi 
                   </router-link>
                 </div>
@@ -168,6 +168,10 @@ export default {
           return val.status === 'not_checked'
         })
       return index.length
+    },
+    agentNotifications() {
+      if(this.$store.state.notifications.length === 0) return []
+      return this.$sortByStatus(this.$store.state.notifications)
     },
     routeName() {
       const { name } = this.$route;
@@ -304,6 +308,8 @@ export default {
   mounted() {
     this.smAndDown ? this.toggleCustomSidebar() : false
     this.listenCardState()
+    console.log(this.$store.state.notifications)
+    console.log(this.agentNotifications)
   }
 }
 </script>

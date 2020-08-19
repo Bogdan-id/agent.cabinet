@@ -63,7 +63,7 @@ export default {
     loading: false,
     btnLoading: false,
     currentTab: '1',
-    notifications: [],
+    // notifications: [],
     tableHeader: [
       { text: 'Дата', value: 'created_at', align: 'start'},
       { text: 'Контент', value: 'title', align: 'center'},
@@ -119,7 +119,7 @@ export default {
         .then(response => {
           this.$store.commit('addNotifications', response.data)
 
-          let notificationsArrIds = this.notifications.map(val => {
+          let notificationsArrIds = this.$store.state.notifications.map(val => {
             return val.id
           })
 
@@ -137,7 +137,6 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('addNotifications', this.$route.params.notifications) 
     if(this.$store.state.notifications.length === 0) {
       this.getAgentNotifications()
     } else {

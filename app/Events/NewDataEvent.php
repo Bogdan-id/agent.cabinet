@@ -30,7 +30,7 @@ class NewDataEvent implements ShouldBroadcast
         $agent = Auth::user()->agent;
         $this->notifications = $agent->notifications;
         $this->leasingRequests = $agent->leasingRequests;
-        $this->agentCommissions = $agent->commissions;
+        $this->agentCommissions = json_decode($agent->commissions->toJson());
     }
 
     /**

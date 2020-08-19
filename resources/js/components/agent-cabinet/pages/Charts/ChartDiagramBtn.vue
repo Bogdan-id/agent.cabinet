@@ -958,6 +958,7 @@ export default {
     },
     getDefaultProperties() {
       // chart diagram btn
+      console.log(this.data)
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.data.id
       this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`

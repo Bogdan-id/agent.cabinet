@@ -13,8 +13,7 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 composer.lock
-
 package-lock.json
-composer.lock
-composer.lock
 composer.phar
+dump.rdb
+laravel-echo-server.lock

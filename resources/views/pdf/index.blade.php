@@ -112,7 +112,7 @@
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
 @endif
     <div style="height: 50px; font-size: 15px; font-weight: bold; padding: 20px 35px;">
-      <span style="display: inline-block; width: 100%; color: black;">{{ $request_id }}<span>
+      <span style="display: inline-block; width: 100%; color: black;">{{ $requestId }}<span>
     </div>
     <div style="height: 100px; color: white; font-size: 42px; font-weight: bold; padding: 7px 15px 28px 20px;">
       <div>БIЛЬШЕ</div>

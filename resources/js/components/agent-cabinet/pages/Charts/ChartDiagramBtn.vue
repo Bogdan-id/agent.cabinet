@@ -964,7 +964,7 @@ export default {
       this.clientTypeId = this.data.request_data.leasingClientType
       this.advance = this.data.request_data.advance
       this.leasingTerm = this.data.request_data.leasingTerm
-      this.leasingAmount = this.data.request_data.offerNetto
+      this.leasingAmount = this.data.request_data.leasingAmount
       this._token = this.getCsrf()
     },
     parseToInt(id) {

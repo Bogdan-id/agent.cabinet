@@ -64,11 +64,25 @@ export default new Vuex.Store({
       state.graphs = []
     },
     checkIfUserHasAllNeccessaryFields(state) {
-      let emptyFields = Object.keys(state.user.agent)
-        .filter(value => {
-          return !state.user.agent[value] && value !== 'status' && value !== 'bitrix_id'
-        })
-      state.userHasNeccessaryFields = emptyFields.length === 0
+      let emptyFields
+      let neccessaryFields
+      let checkFields = () => {
+        emptyFields = Object.keys(state.user.agent)
+          .filter(value => {
+            return !state.user.agent[value] && neccessaryFields.indexOf(value) !== -1
+          })
+        console.log({emptyARNeccessaryFields: emptyFields})
+        console.log(state.user.agent.company_type)
+        state.userHasNeccessaryFields = emptyFields.length === 0
+        return
+      }
+      if(state.user.agent.company_type === 'freelance') {
+        neccessaryFields = ['bitrix_id', 'status']
+        checkFields()
+      } else {
+        neccessaryFields = ['bitrix_id', 'status', 'company_name', 'position']
+        checkFields()
+      }
     }
   },
   actions: {

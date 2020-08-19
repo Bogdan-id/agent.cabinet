@@ -8,8 +8,8 @@ export default {
     {label: "СПЕЦІАЛЬНІ ТЗ", value: 4},
     {label: "Вантажні авто", value: 6},
     {label: "Обладнання", value: 6},
-    {label: "Причепи та Напівпричепи", value: 6},
-    {label: "Сільгосптехніка", value: 6},
+    {label: "Причепи та Напівпричепи", value: 5},
+    {label: "Сільгосптехніка", value: 10},
     {label: "Автобуси", value: 7}
   ],
   clientTypes: [ 

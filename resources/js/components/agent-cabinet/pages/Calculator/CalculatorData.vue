@@ -1236,6 +1236,7 @@ export default {
         .filter(val => val.id === id)
     },
     getDefaultProperties() {
+      console.log(this.graphType)
       // chart diagram
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.graphType.id
@@ -1243,7 +1244,7 @@ export default {
       this.clientTypeId = this.graphType.request_data.leasingClientType
       this.advance = this.graphType.request_data.advance
       this.leasingTerm = this.graphType.request_data.leasingTerm
-      this.leasingAmount = this.graphType.request_data.offerNetto
+      this.leasingAmount = this.graphType.request_data.leasingAmount
       this._token = this.getCsrf()
     },
 

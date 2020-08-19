@@ -958,13 +958,14 @@ export default {
     },
     getDefaultProperties() {
       // chart diagram btn
+      console.log(this.data)
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.data.id
       this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`
       this.clientTypeId = this.data.request_data.leasingClientType
       this.advance = this.data.request_data.advance
       this.leasingTerm = this.data.request_data.leasingTerm
-      this.leasingAmount = this.data.request_data.offerNetto
+      this.leasingAmount = this.data.request_data.leasingAmount
       this._token = this.getCsrf()
     },
     parseToInt(id) {

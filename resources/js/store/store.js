@@ -30,7 +30,7 @@ export default new Vuex.Store({
     addNotifications(state, val) {
       state.notifications.splice(0)
       state.notifications.push(...val)
-      // Vue.prototype.$sortNotificaions(state.notifications)
+      // Vue.prototype.$sortByDate(state.notifications)
     },
     addLeasingRequests(state, val) {
       state.leasingRequests.splice(0)
@@ -102,11 +102,10 @@ export default new Vuex.Store({
         })
     },
     // add sorting
-    dataFromSocket({commit, state}, data) {
+    dataFromSocket({commit}, data) {
       commit('addNotifications', data.notifications)
       commit('addLeasingRequests', data.leasingRequests)
       commit('addAgentCommissions', data.agentCommissions)
-      console.log(state)
     }
   }
 })

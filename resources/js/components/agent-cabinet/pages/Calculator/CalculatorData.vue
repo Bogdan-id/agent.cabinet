@@ -1302,7 +1302,6 @@ export default {
       // const [year, month, day] = this.currentGraphToDownload.created_at.substring(0, 10).split('-')
 
       let dataToSave = {
-        request_id: this.currentGraphToDownload.request_id,
         agentId: this.$store.state.user.agent.id,
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,

@@ -48,7 +48,7 @@ class CalculateRequest extends JsonRequest
             'leasingObjectType.label' => 'required|string',
 
             'leasedAssertMark' => 'required|array',
-            'leasedAssertMark.name' => 'required|string',
+            'leasedAssertMark.name' => 'string',
             'leasedAssertMark.value' => 'required|integer',
 
             'leasedAssertModel' => 'required|array',

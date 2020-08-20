@@ -26,6 +26,7 @@ export default new Vuex.Store({
   mutations: {
     addUserData(state, value) {
       state.user = Object.assign({}, value)
+      console.log(state.user)
     },
     addNotifications(state, val) {
       state.notifications.splice(0)
@@ -35,7 +36,7 @@ export default new Vuex.Store({
     addLeasingRequests(state, val) {
       state.leasingRequests.splice(0)
       state.leasingRequests.push(
-        ...Vue.prototype.$changeLeasingRequestsObj(val)
+        ...Vue.prototype.$changeLeasingRequestsObj(val, state)
       )
       Vue.prototype.$sortData(state.leasingRequests)
     },

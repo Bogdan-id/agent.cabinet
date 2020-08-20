@@ -207,12 +207,6 @@ class BitrixClient
                 "SOURCE_ID" => '55',
                 "STATUS_ID" => "4",
                 "OPENED" => "Y",
-                // "UF_CRM_5DA814FAD1B0C" => [
-                //     'fileData' => [
-                //         'name.jpeg',
-                //         base64_encode(file_get_contents('storage/documents/vr9USnEPleMnUgtKhE3BhTOkYqXiyrOJIgdzAkzi.jpeg'))
-                //     ]
-                // ]
             ];
             if($leasingRequest['client_type_id'] == 1)
             {
@@ -347,7 +341,7 @@ class BitrixClient
                     }
                 }
             }
-            //dd($fields);
+
             $response = $this->client
             ->post("/rest/3/{$this->token}/crm.lead.add", [
             'json' => [

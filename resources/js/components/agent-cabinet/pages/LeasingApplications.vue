@@ -321,6 +321,9 @@
             </div>
           </div>
         </template>
+        <template v-slot:item.agent_reward="{ item }">
+          <span style="white-space: nowrap;"> {{ item.agent_reward }} </span>
+        </template>
       </v-data-table>
     </v-card-text>
   </v-card>

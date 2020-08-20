@@ -14,7 +14,6 @@
             class="radio-objectType"
             id="car"
             name="leasing-type"
-            checked
             value="Легкові та комерційні авто">
           <label for="car" id="Легкові та комерційні авто" :class="mediumAndDown ? 'leasing-type-block small' : 'leasing-type-block'">
             <car :width="mediumAndDown ? '40' : '47'" :heiht="mediumAndDown ? '18' : '21'" class="leasing-type-icon"></car>
@@ -1408,6 +1407,7 @@ export default {
       if(event) event.target.nextSibling.nextSibling.classList.add('active')
     },
     getMarksByType(event, needRequest) {
+      console.log(event)
       if(event) {
         this.resetForm()
         if(this.smallerThenMedium) {
@@ -1417,7 +1417,7 @@ export default {
             needRequest = 0
             this.brandItems = []
             this.brandItems.push({name: 'Iнше', value: 4});
-            this.calcObj.leasedAssertMark = {name: ' ', value: 4};
+            this.calcObj.leasedAssertMark = {name: 'Інше', value: 4};
           }
         } else {
           this.calcObj.leasingObjectType = this.selects.itemTypes
@@ -1432,7 +1432,7 @@ export default {
       if(needRequest === 0) {
         this.brandItems = []
         this.brandItems.push({name: 'Iнше', value: 4});
-        this.calcObj.leasedAssertMark = {name: ' ', value: 4};
+        this.calcObj.leasedAssertMark = {name: 'Інше', value: 4};
         return
       }
       this.brandItems = []
@@ -1554,6 +1554,7 @@ export default {
             this.calculationLoader = false
             // this.$router.push('/calculator/chart')
             let data = response.data
+            console.log(response.data)
             this.$router.push({name: 'Графiки', params: {data: data}})
           })
           .catch(error => {
@@ -1710,8 +1711,13 @@ export default {
         this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
         
-        this.getMarksByType()
-        this.getModelByMark()
+        console.log(this.calcObj)
+        
+        if(this.calcObj.leasedAssertMark.name !== 'Інше') {
+          this.getMarksByType()
+          this.getModelByMark()
+        } else this.falsyLeasedAssertModel = this.calcObj.leasedAssertModel.name
+
         this.changeActiveClass()
       })
       .catch(error => {

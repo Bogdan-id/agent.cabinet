@@ -207,111 +207,138 @@ class BitrixClient
                 "SOURCE_ID" => '55',
                 "STATUS_ID" => "4",
                 "OPENED" => "Y",
-                // "UF_CRM_5DA814FAD1B0C" => [
-                //     'fileData' => [
-                //         'name.jpeg',
-                //         base64_encode(file_get_contents('storage/documents/vr9USnEPleMnUgtKhE3BhTOkYqXiyrOJIgdzAkzi.jpeg'))
-                //     ]
-                // ]
             ];
             if($leasingRequest['client_type_id'] == 1)
             {
                 $fields['UF_CRM_5DA81503ED89A'] = '14625'; //Физ.лицо
                 $fields['UF_CRM_1556029098'] = $leasingRequest['legal_info']['inn'];
 
-                if(array_key_exists('documents', $leasingRequest) && array_key_exists('passport', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935183'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['passport']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['passport']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest) && array_key_exists('passports', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['passports'] as $passport){
+                            $fields['UF_CRM_1596033031'][] = [
+                            'fileData' => [
+                                $passport['text'],
+                                base64_encode(file_get_contents($passport['url']))
+                            ]
+                        ];
+                    }
+                   
                 }
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('relatives_passport', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935252'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['relatives_passport']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['relatives_passport']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('relatives_passports', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['relatives_passports'] as $relatives_passport){
+                        $fields['UF_CRM_1596033276'][] = [
+                            'fileData' => [
+                                $relatives_passport['text'],
+                                base64_encode(file_get_contents($relatives_passport['url']))
+                            ]
+                        ];
+                    }
                 }
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('salary_certificate', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935225'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['salary_certificate']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['salary_certificate']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('salary_certificates', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['salary_certificates'] as $salary_certificate){
+                        $fields['UF_CRM_1596033225'][] = [
+                            'fileData' => [
+                                $salary_certificate['text'],
+                                base64_encode(file_get_contents($salary_certificate['url']))
+                            ]
+                        ];
+                    }
+                    
                 }
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('taxNumber', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935204'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['taxNumber']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['taxNumber']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('taxNumbers', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['taxNumbers'] as $taxNumber){
+                        $fields['UF_CRM_1596033199'][] = [
+                            'fileData' => [
+                                $taxNumber['text'],
+                                base64_encode(file_get_contents($taxNumber['url']))
+                            ]
+                        ];
+                    }
                 }
-
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('referenceOfFinancialDocuments', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['referenceOfFinancialDocuments'] as $referenceOfFinancialDocument){
+                        $fields['UF_CRM_1597390207'][] = [
+                            'fileData' => [
+                                $referenceOfFinancialDocument['text'],
+                                base64_encode(file_get_contents($referenceOfFinancialDocument['url']))
+                            ]
+                        ];
+                    }
+                }
             }elseif($leasingRequest['client_type_id'] == 2)
             {
                 $fields['UF_CRM_5DA81503ED89A'] = '14627'; // Юр.лицо
                 $fields['UF_CRM_1556029073'] = $leasingRequest['legal_info']['edrpou'];
                 $fields['COMPANY_TITLE'] = $leasingRequest['legal_info']['company_name'];
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('state_registration_certificate', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595934958'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['state_registration_certificate']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['state_registration_certificate']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('state_registration_certificates', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['state_registration_certificates'] as $state_registration_certificate){
+                        $fields['UF_CRM_1596033070'][] = [
+                            'fileData' => [
+                                $state_registration_certificate['text'],
+                                base64_encode(file_get_contents($state_registration_certificate['url']))
+                            ]
+                        ];
+                    }
                 }
                 if(array_key_exists('documents', $leasingRequest)  && array_key_exists('regulations', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935019'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['regulations']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['regulations']['url']))
-                        ]
-                    ];
+                    foreach($leasingRequest['documents']['regulations'] as $regulation){
+                        $fields['UF_CRM_1596032793'][] = [
+                            'fileData' => [
+                                $regulation['text'],
+                                base64_encode(file_get_contents($regulation['url']))
+                            ]
+                        ];
+                    }
                 }
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('balance', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935041'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['balance']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['balance']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('balances', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['balances'] as $balance){
+                        $fields['UF_CRM_1596032822'][] = [
+                            'fileData' => [
+                                $balance['text'],
+                                base64_encode(file_get_contents($balance['url']))
+                            ]
+                        ];
+                    }
                 }
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('protocol', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935067'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['protocol']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['protocol']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('protocols', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['protocols'] as $protocol){
+                        $fields['UF_CRM_1596032875'][] = [
+                            'fileData' => [
+                                $protocol['text'],
+                                base64_encode(file_get_contents($protocol['url']))
+                            ]
+                        ];
+                    }
                 }
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('order', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935092'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['order']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['order']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('orders', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['orders'] as $order){
+                        $fields['UF_CRM_1596032904'][] = [
+                            'fileData' => [
+                                $order['text'],
+                                base64_encode(file_get_contents($order['url']))
+                            ]
+                        ];
+                    }
                 }
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('passport', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935137'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['passport']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['passport']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('passports', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['passports'] as $passport){
+                        $fields['UF_CRM_1596032958'][] = [
+                            'fileData' => [
+                                $passport['text'],
+                                base64_encode(file_get_contents($passport['url']))
+                            ]
+                        ];
+                    }
                 }
-                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('taxNumber', $leasingRequest['documents'])){
-                    $fields['UF_CRM_1595935156'] = [
-                        'fileData' => [
-                            $leasingRequest['documents']['taxNumber']['text'],
-                            base64_encode(file_get_contents($leasingRequest['documents']['taxNumber']['url']))
-                        ]
-                    ];
+                if(array_key_exists('documents', $leasingRequest)  && array_key_exists('taxNumbers', $leasingRequest['documents'])){
+                    foreach($leasingRequest['documents']['taxNumbers'] as $taxNumber){
+                        $fields['UF_CRM_1596032999'][] = [
+                            'fileData' => [
+                                $taxNumber['text'],
+                                base64_encode(file_get_contents($taxNumber['url']))
+                            ]
+                        ];
+                    }
                 }
             }
 

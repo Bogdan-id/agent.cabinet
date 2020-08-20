@@ -167,6 +167,7 @@ export default {
           this.$store.commit('toggleAdminSpinner', false)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.$store.commit('toggleAdminSpinner', false)
           this.$notify({
@@ -214,6 +215,7 @@ export default {
           this.managers = response.data
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },
@@ -234,6 +236,7 @@ export default {
           this.getAgents()
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.loading = false
           this.$notify({
@@ -289,6 +292,7 @@ export default {
           this.getAgents()
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.loading = false
           this.$notify({

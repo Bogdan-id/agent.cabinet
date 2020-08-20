@@ -63,6 +63,7 @@ export default {
           this.$store.commit('toggleAdminSpinner', false)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.reponse)
           this.$store.commit('toggleAdminSpinner', false)
           this.$notify({
@@ -107,6 +108,7 @@ export default {
           }
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.$store.commit('toggleAdminSpinner', false)
           this.$notify({

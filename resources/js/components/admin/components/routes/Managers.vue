@@ -76,6 +76,7 @@ export default {
           })
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.managerLoading = false
           this.$notify({
@@ -92,6 +93,7 @@ export default {
           this.managers = response.data
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error)
         })
     }

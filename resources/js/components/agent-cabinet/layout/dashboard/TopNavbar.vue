@@ -425,7 +425,7 @@ export default {
   min-width: 20px;
   position: absolute; 
   font-size: 0.68rem;
-  right: -10px;
+  right: -4px;
   top: -10px;
 }
 </style>

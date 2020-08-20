@@ -86,10 +86,14 @@
             </v-card>
           </v-menu>
         </div>
+
         <v-tooltip bottom>
           <template #activator="{ on }">
-            <!-- <span style="display: inline-block; height: 52px; width: 52px;"> -->
-              <v-btn style="position: relative;" v-on="on" @click="toggleNotifyCard($event)" x-large icon>
+              <v-btn 
+                v-on="on" 
+                @click="toggleNotifyCard($event)"
+                style="position: relative;" 
+                x-large icon>
                 <div class="notification-count" v-if="notificationCount > 0">
                   {{ notificationCount > 3 ? '3+' :  notificationCount === 0 ? '' : notificationCount}}
                 </div>
@@ -105,7 +109,7 @@
                 </v-card-text>
                 <v-timeline dense v-if="notificationCount > 0">
                   <v-timeline-item
-                    v-for="(item, key) in agentNotifications"
+                    v-for="(item, key) in sortedNotificaions"
                     v-if="key <= maxNotificationsToShow -1"
                     :key="key"
                     :color="item.status === 'checked' ? 'grey lighten-2' : 'red lighten-2'"
@@ -131,6 +135,7 @@
           </template>
           <span>Повiдомлення</span>
         </v-tooltip>
+
         <v-tooltip bottom>
           <template #activator="{ on }">
             <v-btn @click="signOut()" v-on="on" icon x-large>
@@ -171,7 +176,10 @@ export default {
     },
     agentNotifications() {
       if(this.$store.state.notifications.length === 0) return []
-      return this.$sortByStatus(this.$store.state.notifications)
+      return this.$store.state.notifications
+    },
+    sortedNotificaions() {
+      return this.$sortByStatus(this.agentNotifications)
     },
     routeName() {
       const { name } = this.$route;
@@ -194,10 +202,9 @@ export default {
   },
   methods: {
     changeNotificationsStatus(object) {
+      console.log('Change notifcation status')
       axios
         .post(`/agent/notifications/checking`, object)
-        .then(() => {
-        })
         .catch(error => {
           this.$catchStatus(error.response.status)
           console.log(error.response)
@@ -232,6 +239,7 @@ export default {
       } else {
         card.classList.remove('show-card')
         if(this.notificationKeys.length === 0) return
+        console.log(this.notificationKeys)
         this.changeNotificationsStatus({notifications: this.notificationKeys})
         this.notificationKeys = []
         this.getAgentNotifications()

@@ -33,6 +33,9 @@ if (typeof window.io !== 'undefined'){
 
 export default {
   name: 'Головна',
+  created() {
+    this.$store.dispatch('getCurrentUser')
+  },
   mounted() {
     console.log('MOUNTED')
     window.Echo.channel("laravel_database_test").listen("NewDataEvent", (e) => {

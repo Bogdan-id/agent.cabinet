@@ -1416,7 +1416,7 @@ export default {
           if(event.label === "Обладнання") {
             needRequest = 0
             this.brandItems.push({name: 'Iнше', value: 0});
-            this.calcObj.leasedAssertMark = {name: 'Iнше', value: 0};
+            this.calcObj.leasedAssertMark = {name: ' ', value: 0};
           }
         } else {
           this.calcObj.leasingObjectType = this.selects.itemTypes
@@ -1430,7 +1430,7 @@ export default {
       }
       if(needRequest === 0) {
         this.brandItems.push({name: 'Iнше', value: 0});
-        this.calcObj.leasedAssertMark = {name: 'Iнше', value: 0};
+        this.calcObj.leasedAssertMark = {name: ' ', value: 0};
         return
       }
       this.brandItems = []

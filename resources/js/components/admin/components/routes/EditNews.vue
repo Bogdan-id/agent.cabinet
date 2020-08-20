@@ -210,6 +210,7 @@
             .then(() => {
             })
             .catch(error => {
+              this.$catchStatus(error.response.status)
               console.log(error.response)
             })
         }
@@ -241,6 +242,7 @@
             }, 200);
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             console.log(error.response)
             this.loading = false
             this.$notify({
@@ -296,6 +298,7 @@
             this.imageName = response.data.url
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             console.log(error.response)
             this.$notify({
               message: 'Помилка',

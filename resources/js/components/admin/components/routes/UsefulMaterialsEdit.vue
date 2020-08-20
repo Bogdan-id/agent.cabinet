@@ -427,6 +427,7 @@ export default {
             text: `${error.response.status} \n ${error.response.data.message}`,
           })
           this.loading = false
+          this.$catchStatus(error.response.status)
         })
     },
     showMaterialCategorie() {
@@ -460,6 +461,7 @@ export default {
           this.getUsefulMaterials()
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.$store.commit('toggleAdminSpinner', false)
           this.getUsefulMaterials()
@@ -475,6 +477,7 @@ export default {
           this.$store.commit('toggleAdminSpinner', false)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.reponse)
           this.$store.commit('toggleAdminSpinner', false)
         })
@@ -521,6 +524,7 @@ export default {
           }, 800)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.loading = false
           this.$notify({
@@ -553,6 +557,7 @@ export default {
             }, 800)
           })
           .catch(error => {
+            this.$catchStatus(error.response.status)
             console.log(error.response)
             this.loading = false
             this.$notify({
@@ -586,6 +591,7 @@ export default {
           })
           .catch(error => {
             console.log(error.response)
+            this.$catchStatus(error.response.status)
             this.loading = false
             this.$notify({
               group: 'error',

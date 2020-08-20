@@ -482,6 +482,7 @@ export default {
           }, 1200)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           this.deleteLoading = false
           this.$notify({
             group: 'error',
@@ -526,6 +527,7 @@ export default {
           }
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.$notify({
             group: 'error',
@@ -567,6 +569,7 @@ export default {
           this.stopEditMode()
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error)
           this.saveLoading = false
           this.$notify({
@@ -627,6 +630,7 @@ export default {
           sliderImageInput.value = null
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
         })
     },
@@ -671,6 +675,7 @@ export default {
         this.$store.commit('toggleAdminSpinner', false)
       })
       .catch(error => {
+        this.$catchStatus(error.response.status)
         console.log(error)
         this.$store.commit('toggleAdminSpinner', false)
       })

@@ -29,7 +29,7 @@
         >
         <v-card-text 
           class="custom-title" 
-          :style="`justify-content: center; font-size: ${$vuetify.breakpoint.xs ? '1.25rem' : '1.7rem;'}`">
+          :style="`justify-content: center; font-size: ${$vuetify.breakpoint.xs ? '1.25rem' : '1.6rem;'}`">
           <a>{{ item.name }}</a>
         </v-card-text>
       </v-card>

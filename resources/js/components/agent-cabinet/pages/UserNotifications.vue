@@ -22,7 +22,7 @@
     <v-card-text class="user-notification-page" style="min-height: 100vh" v-if="agentNotifications && agentNotifications.length > 0">
       <v-timeline dense>
         <v-timeline-item
-          v-for="(item, key) in agentNotifications"
+          v-for="(item, key) in sortNotifications"
           :key="key"
           :color="item.status === 'checked' ? 'grey lighten-1' : 'red lighten-2' "
           small
@@ -63,7 +63,7 @@ export default {
     loading: false,
     btnLoading: false,
     currentTab: '1',
-    // notifications: [],
+    notifications: [],
     tableHeader: [
       { text: 'Дата', value: 'created_at', align: 'start'},
       { text: 'Контент', value: 'title', align: 'center'},
@@ -97,6 +97,7 @@ export default {
           this.btnLoading = false
         })
     },
+
     changeNotificationsStatus(object) {
       axios
         .post(`/agent/notifications/checking`, object)
@@ -108,11 +109,13 @@ export default {
           console.log(error.response)
         })
     },
+
     changeActive(event) {
       let tabs = document.querySelectorAll('#section .notification-tabs-input')
       tabs.forEach(element => element.classList.remove('active'))
       event.target.parentNode.classList.add('active')
     },
+
     getAgentNotifications() {
       axios
         .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
@@ -130,21 +133,30 @@ export default {
           console.log(error.response)
         })
     },
+
+    checkNotificationStatus() {
+      let notificationsArrIds = this.agentNotifications
+        .filter(val => val.status !== 'checked')
+        .map(val => {
+          return val.id
+        })
+      if(notificationsArrIds.length > 0) {
+        this.changeNotificationsStatus({notifications :notificationsArrIds})
+      } else return
+    }
   },
+
   computed: {
     agentNotifications() {
-      return this.$sortByDate(this.$store.state.notifications)
+      return this.$store.state.notifications
+    },
+    sortNotifications() {
+      return this.agentNotifications
     }
   },
+
   mounted() {
-    if(this.$store.state.notifications.length === 0) {
-      this.getAgentNotifications()
-    } else {
-      let notificationsArrIds = this.agentNotifications.map(val => {
-        return val.id
-      })
-      this.changeNotificationsStatus({notifications :notificationsArrIds})
-    }
+    this.checkNotificationStatus()
   }
 }
 </script>

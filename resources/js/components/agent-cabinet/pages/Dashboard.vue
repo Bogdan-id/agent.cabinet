@@ -873,31 +873,27 @@ export default {
   flex-direction: column;
   display: flex;
   width: 74%;
-  .v-window {
-  position: relative!important;
   .absent-slide {
-    position: relative; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    width: 100%; 
-    height: 100%;
-  }
-  .v-window-item  {
-    transition: opacity .45s ease-in!important;
-    position: absolute!important;
-    top: 0!important;
-    left: 0!important;
-    right: 0!important;
-    bottom: 0!important;
-    &.fade-transition-leave, .fade-transition-leave-active {
-      opacity: 0!important;
+      text-align: center;
+      padding: 15px 10px;
     }
-    &.fade-transition-enter, .fade-transition-enter-active {
-      opacity: 0!important;
+  .v-window {
+    position: relative!important;
+    .v-window-item  {
+      transition: opacity .45s ease-in!important;
+      position: absolute!important;
+      top: 0!important;
+      left: 0!important;
+      right: 0!important;
+      bottom: 0!important;
+      &.fade-transition-leave, .fade-transition-leave-active {
+        opacity: 0!important;
+      }
+      &.fade-transition-enter, .fade-transition-enter-active {
+        opacity: 0!important;
+      }
     }
   }
-}
   .actions-block-text {
     backdrop-filter: blur(5px); 
     padding: 0 15px; 

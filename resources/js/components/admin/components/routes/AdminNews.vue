@@ -184,6 +184,7 @@ export default {
           }, 800)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.$notify({
             group: 'error',
@@ -212,6 +213,7 @@ export default {
           this.$store.commit('toggleAdminSpinner', false)
         })
         .catch(error => {
+          this.$catchStatus(error.response.status)
           console.log(error.reponse)
           this.$store.commit('toggleAdminSpinner', false)
         })

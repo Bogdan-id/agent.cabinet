@@ -53,7 +53,8 @@ Vue.prototype.$formatDate = (data) => {
   } else return 
 }
 
-Vue.prototype.$changeLeasingRequestsObj = (obj) => {
+Vue.prototype.$changeLeasingRequestsObj = (obj, state) => {
+  console.log(state)
   return Object.keys(obj)
     .map(val => {
       obj[val].client = obj[val].client_type_id == 2 
@@ -64,7 +65,7 @@ Vue.prototype.$changeLeasingRequestsObj = (obj) => {
         .toLocaleString("en-GB")
         .replace(/,/g, ' ')
       obj[val].created_at = Vue.prototype.$formatDate(obj[val].created_at)
-      obj[val].agent_reward = ((parseInt(obj[val].leasing_amount.replace(/\s/g, '' )) / 100) * store.state.user.agent.ab_size)
+      obj[val].agent_reward = ((parseInt(obj[val].leasing_amount.replace(/\s/g, '' )) / 100) * state.user.agent.ab_size)
         .toLocaleString("en-GB")
         .replace(/,/g, ' ')
       return obj[val]

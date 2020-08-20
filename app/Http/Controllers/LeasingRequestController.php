@@ -222,7 +222,7 @@ class LeasingRequestController extends Controller
             '348' =>  $requestData['leasedAssertMark']['name'],
             '349' =>  $requestData['leasedAssertModel']['name'],
             '350' =>  $requestData['leasingObjectYear'],
-            '351' =>  $requestData['leasedAssertEngine'],
+            '351' =>  $requestData['leasedAssertEngine'] ?? null,
             '352' =>  $requestData['leasingAmount'],
             '353' =>  $params['leasing-amount-dkp'] ?? $requestData['leasingAmount'],
             '356' =>  $params['leasing-currency-course'],

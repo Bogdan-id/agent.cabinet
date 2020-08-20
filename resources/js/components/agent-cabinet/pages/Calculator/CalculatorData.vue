@@ -501,26 +501,10 @@
               <span>Видалити</span>
             </v-tooltip>
             <v-tooltip bottom>
-              <!-- <template #activator="{ on }">
-                <span>
-                  <v-btn 
-                    @click="openDialogToSave(item, 'email')"
-                    v-on="on"
-                    icon>
-                    <v-icon
-                      color="grey darken-2"
-                      >
-                      mdi-email-send-outline
-                    </v-icon>
-                  </v-btn>
-                </span>
-              </template>
-              <span>Вiдправити на пошту</span>  -->
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <span>
-                  <!-- @click="openDialogToSave(item, 'pdf')" -->
                   <v-btn 
                     @click="openDialogToSwitchBetweenTypesOfSave(item)"
                     v-on="on"
@@ -550,6 +534,8 @@ import { required, email } from 'vuelidate/lib/validators'
 import axios from 'axios'
 import { saveAs } from 'file-saver'
 
+import { legalDocs, personDocs } from '../utils/doc-props.js'
+
 export default {
   mixins: [validationMixin],
   data:() => ({
@@ -561,6 +547,9 @@ export default {
         return 'Розмiр документу не повинен перевищувати 5 MB!'
       }
     ],
+    legalDocs: legalDocs,
+    personDocs: personDocs,
+
     dialogWidth: 530,
     dialogToSend: false,
     graphName: [],
@@ -579,23 +568,6 @@ export default {
 
     certificateOfFinancials: [],
 
-    legalDocs: [
-      {text: 'Копія свідоцтва про державну реєстрацію та / або виписка з ЄДР', prop: 'state_registration_certificates'},
-      {text: 'Статут', prop: 'regulations'},
-      {text: 'Баланс та звіт про фінансові результати (Ф1 та Ф2)', prop: 'balances'},
-      {text: 'Протокол засновників про обрання керівника (підписанта)', prop: 'protocols'},
-      {text: 'Наказ про призначення керівника (підписанта)', prop: 'orders'},
-      {text: 'Паспорт / ID-карта керівника (підписанта)', prop: 'passports'},
-      {text: 'Довідка про присвоєння ІПН керівника (підписанта)', prop: 'taxNumbers'},
-    ],
-    personDocs: [
-      {text: 'Паспорт громадянина України / ID-карта', prop: 'passports'},
-      {text: 'Довідка про присвоєння ІПН', prop: 'taxNumbers'},
-      {text: 'Довідка про заробітну плату', prop: 'salary_certificates'},
-      {text: 'Паспорт дружини (чоловіка) позичальника', prop: 'relatives_passports'},
-      {text: 'Довідка про фінансові документи', prop: 'referenceOfFinancialDocuments'},
-    ],
-
     tableHeader: [
       { text: 'Код розрахунку', value: 'request_id', align: 'start'},
       { text: 'Дата', value: 'created_at', align: 'center' },
@@ -606,7 +578,6 @@ export default {
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
     tabledata: [],
-    // creditPayment: null,
     selectedGraph: null,
 
     docs: [],
@@ -620,7 +591,6 @@ export default {
     lastName: null,
     firstName: null,
     patronymic: null,
-    // region: null,
     phone: null,
     email: null,
     leasingObject: null,
@@ -629,15 +599,9 @@ export default {
     leasingAmount: null,
     graphType: null,
     legalInfo: {
-      // creditPayment: null,
       inn: null,
-      // monthlyIncome: null,
-      // acquisitionTargetId: null,
       edrpou: null,
       companyName: null,
-      // currencyBalance: null,
-      // equity: null,
-      // balances: null, // - waiting... (пока не отправляй)
     },
     documentUrls: {},
     deleteCalculationDialog: false,
@@ -688,8 +652,6 @@ export default {
           required
         },
         email: { email, required },
-        // region: { required },
-        // creditPayment: { required },
       }
     },
     individualPerson() {
@@ -700,9 +662,7 @@ export default {
               if(value == null) return false
               return value.length === 10
             }
-           }, 
-          // monthlyIncome: { required },
-          // acquisitionTargetId: { required },
+          }, 
         }
       }
     },
@@ -717,8 +677,6 @@ export default {
             }
           },
           companyName: { required },
-          // currencyBalance: { required },
-          // equity: { required },
         }
       }
     },
@@ -753,11 +711,6 @@ export default {
       !this.$v.emailToSend.email && errors.push('Невiрний email')
       return errors
     },
-    // regionErr() {
-    //   if (!this.$v.region) return
-    //   if (!this.$v.region.$error) return
-    //   return this.commonErr
-    // },
     phoneErr() {
       if (!this.$v.phone) return
       if (!this.$v.phone.$error) return
@@ -768,26 +721,11 @@ export default {
       if (!this.$v.email.$error) return
       return ['Невiрний email']
     },
-    // creditPaymentErr() {
-    //   if (!this.$v.creditPayment) return
-    //   if (!this.$v.creditPayment.$error) return
-    //   return this.commonErr
-    // },
     innErr() {
       if (!this.$v.legalInfo.inn) return
       if (!this.$v.legalInfo.inn.$error) return
       return ['Повинно бути 10 цифр']
     },
-    // monthlyIncomeErr() {
-    //   if (!this.$v.legalInfo.monthlyIncome) return
-    //   if (!this.$v.legalInfo.monthlyIncome.$error) return
-    //   return this.commonErr
-    // },
-    // acquisitionTargetIdErr() {
-    //   if (!this.$v.legalInfo.acquisitionTargetId) return
-    //   if (!this.$v.legalInfo.acquisitionTargetId.$error) return
-    //   return this.commonErr
-    // },
     edrpouErr() {
       if (!this.$v.legalInfo.edrpou) return
       if (!this.$v.legalInfo.edrpou.$error) return
@@ -798,16 +736,6 @@ export default {
       if (!this.$v.legalInfo.companyName.$error) return
       return this.commonErr
     },
-    // currencyBalanceErr() {
-    //   if (!this.$v.legalInfo.currencyBalance) return
-    //   if (!this.$v.legalInfo.currencyBalance.$error) return
-    //   return this.commonErr
-    // },
-    // equityErr() {
-    //   if (!this.$v.legalInfo.equity) return
-    //   if (!this.$v.legalInfo.equity.$error) return
-    //   return this.commonErr
-    // },
     legalEmail() {
       return ''
     },

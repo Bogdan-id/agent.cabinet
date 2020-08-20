@@ -134,9 +134,6 @@ export default {
       this.drawerState = val
     },
   },
-  created() {
-    this.$store.dispatch('getCurrentUser')
-  }
 }
 </script>
 

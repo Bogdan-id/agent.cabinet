@@ -310,29 +310,6 @@
                         @change="listenFileInput(item.prop)"
                         multiple>
                     </div>
-                    <div v-if="clientTypeId === 1">
-                      <v-row>
-                        <v-col class="pb-0">
-                          <span style="color: black; padding: 0 15px;">
-                            Довідка про фінансові документи
-                          </span>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col class="pt-2">
-                          <v-file-input
-                            v-model="certificateOfFinancials"
-                            label="додати файли"
-                            color="black"
-                            small-chips
-                            multiple
-                            dense
-                            regular
-                            show-size>
-                          </v-file-input>
-                        </v-col>
-                      </v-row>
-                    </div>
                   </div>
                 </div>
             </v-col>
@@ -411,28 +388,16 @@ import { required, email } from 'vuelidate/lib/validators'
 import axios from 'axios'
 import { saveAs } from 'file-saver'
 
+import { legalDocs, personDocs } from '../utils/doc-props.js'
+
 export default {
   props: ['graph', 'data'],
   mixins: [validationMixin],
   data: () => ({
+    legalDocs: legalDocs,
+    personDocs: personDocs,
     selectedGraph: null,
     documentUrls: {},
-    legalDocs: [
-      {text: 'Копія свідоцтва про державну реєстрацію та / або виписка з ЄДР', prop: 'state_registration_certificates'},
-      {text: 'Статут', prop: 'regulations'},
-      {text: 'Баланс та звіт про фінансові результати (Ф1 та Ф2)', prop: 'balances'},
-      {text: 'Протокол засновників про обрання керівника (підписанта)', prop: 'protocols'},
-      {text: 'Наказ про призначення керівника (підписанта)', prop: 'orders'},
-      {text: 'Паспорт / ID-карта керівника (підписанта)', prop: 'passports'},
-      {text: 'Довідка про присвоєння ІПН керівника (підписанта)', prop: 'taxNumbers'},
-    ],
-    personDocs: [
-      {text: 'Паспорт громадянина України / ID-карта', prop: 'passports'},
-      {text: 'Довідка про присвоєння ІПН', prop: 'taxNumbers'},
-      {text: 'Довідка про заробітну плату', prop: 'salary_certificates'},
-      {text: 'Паспорт дружини (чоловіка) позичальника', prop: 'relatives_passports'},
-      {text: 'Довідка про фінансові документи', prop: 'referenceOfFinancialDocuments'},
-    ],
     rules: [
       value => {
         if(value.length === 0) return true

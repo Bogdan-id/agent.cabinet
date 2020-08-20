@@ -2,7 +2,7 @@
 <div class="col-12 pt-0 pl-0 pr-0">
   <v-dialog
     v-model="dialogToSwitchBetweenTypesOfSave"
-    max-width="530">
+    :max-width="dialogWidth">
     <v-card>
       <v-card-title style="background: #424242; position: relative" class="white--text">
         <v-btn @click="dialogToSwitchBetweenTypesOfSave = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
@@ -229,7 +229,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12" class="pt-0 pb-0">
+            <v-col cols="12" class="pt-0 pb-0 pl-0 pr-0" :style="`max-width: ${dialogWidth}px; margin: 0 auto;`">
               <input id="insurance" class="toggle" type="checkbox">
               <label for="insurance" class="lbl-toggle" style="background: white; color: #5f6368; padding-top: 0rem; margin-bottom: 0;">Документи</label>
                 <div class="collapsible-content">
@@ -238,87 +238,70 @@
                       <div 
                         v-for="(item, key) in legalDocs"
                         :key="key">
-                        <span :style="documentUrls[item.prop] ? 'color: black;' : ''">{{ 
-                          documentUrls[item.prop] && documentUrls[item.prop].text 
-                            ? documentUrls[item.prop].text + ' ' + `(${(documentUrls[item.prop].size / 1000).toFixed(2)} - kb)` 
-                            : item.text 
-                          }}
-                        </span>&nbsp;
+                        <span :style="documentUrls[item.prop] ? 'color: black;' : ''">
+                          {{ item.text }}
+                        </span>
                         <v-btn
-                          v-show="!documentUrls[item.prop]"
                           @click="$refs[item.prop][0].click()" 
                           icon small>
                           <v-icon small v-text="'mdi-plus-thick'"></v-icon>
                         </v-btn>
-                        <div 
-                          v-if="documentUrls[item.prop]"
-                          style="display: inline-block; min-width: 15px; position: relative;">
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on }">
-                              <v-icon 
-                                style="position: absolute; left: -10px; top: -15px;" 
-                                v-text="'mdi-information-variant'" 
-                                color="#d24a43"
-                                v-on="on"
-                                small>
-                              </v-icon>
-                            </template>
-                            <span>{{ item.text }}</span>
-                          </v-tooltip>
+                        <div v-if="documentUrls[item.prop] && documentUrls[item.prop].length > 0">
+                          <div 
+                            class="document-line-wrapper"
+                            style="padding: 0 10px; font-size: 0.72rem;"
+                            v-for="(v, key) in documentUrls[item.prop]"
+                            :key="key">
+                            <span>
+                              {{ v.text }}
+                            </span>
+                            <span style="color: black;">{{ `(${(v.size / 1000).toFixed(2)} - kb)` }}</span>
+                            <v-btn
+                              @click="deleteDoc(item.prop, v)" 
+                              color="#d24a43"
+                              class="document-delete-icon"
+                              icon x-small>
+                              <v-icon small v-text="'mdi-close'"></v-icon>
+                            </v-btn>
+                          </div>
                         </div>
-                        <v-btn
-                          v-show="documentUrls[item.prop]"
-                          @click="deleteDoc(item.prop)" 
-                          color="#d24a43"
-                          class="document-delete-icon"
-                          icon small>
-                          <v-icon small v-text="'mdi-close'"></v-icon>
-                        </v-btn>
                       </div>
-                      <!-- <v-btn @click="test()">test</v-btn> -->
                     </div>
+
                     <div class="document-list" v-if="clientTypeId === 1">
                       <div 
                         v-for="(item, key) in personDocs"
                         :key="key">
-                        <span :style="documentUrls[item.prop] ? 'color: black;' : ''">{{ 
-                          documentUrls[item.prop] && documentUrls[item.prop].text 
-                            ? documentUrls[item.prop].text + ' ' + `(${(documentUrls[item.prop].size / 1000).toFixed(2)} - kb)` 
-                            : item.text 
-                          }}
-                        </span>&nbsp;
+                        <span :style="documentUrls[item.prop] ? 'color: black;' : ''">
+                          {{ item.text }}
+                        </span>
                         <v-btn
-                          v-show="!documentUrls[item.prop]"
                           @click="$refs[item.prop][0].click()" 
                           icon small>
                           <v-icon small v-text="'mdi-plus-thick'"></v-icon>
                         </v-btn>
-                        <div 
-                          v-if="documentUrls[item.prop]"
-                          style="display: inline-block; min-width: 15px; position: relative;">
-                          <v-tooltip top>
-                            <template v-slot:activator="{ on }">
-                              <v-icon 
-                                style="position: absolute; left: -10px; top: -15px;" 
-                                v-text="'mdi-information-variant'" 
-                                color="#d24a43"
-                                v-on="on"
-                                small>
-                              </v-icon>
-                            </template>
-                            <span>{{ item.text }}</span>
-                          </v-tooltip>
+                        <div v-if="documentUrls[item.prop] && documentUrls[item.prop].length > 0">
+                          <div 
+                            class="document-line-wrapper"
+                            style="padding: 0 10px; font-size: 0.72rem;"
+                            v-for="(v, key) in documentUrls[item.prop]"
+                            :key="key">
+                            <span>
+                              {{ v.text }}
+                            </span>
+                            <span style="color: black;">{{ `(${(v.size / 1000).toFixed(2)} - kb)` }}</span>
+                            <v-btn
+                              @click="deleteDoc(item.prop, v)" 
+                              color="#d24a43"
+                              class="document-delete-icon"
+                              icon x-small>
+                              <v-icon small v-text="'mdi-close'"></v-icon>
+                            </v-btn>
+                          </div>
                         </div>
-                        <v-btn
-                          v-show="documentUrls[item.prop]"
-                          @click="deleteDoc(item.prop)" 
-                          color="#d24a43"
-                          class="document-delete-icon"
-                          icon small>
-                          <v-icon small v-text="'mdi-close'"></v-icon>
-                        </v-btn>
                       </div>
                     </div>
+
                     <div v-if="clientTypeId === 2">
                       <input
                         v-for="(item, key) in legalDocs"
@@ -328,7 +311,8 @@
                         accept="image/x-png,image/gif,image/jpeg,image/jpg,image/svg+xml,application/msword,application/vnd.ms-excel,application/pdf"
                         :ref="item.prop"
                         :class="item.prop"
-                        @change="listenFileInput(item.prop)">
+                        @change="listenFileInput(item.prop)"
+                        multiple>
                     </div>
                     <div v-if="clientTypeId === 1">
                       <input
@@ -339,30 +323,8 @@
                         accept="image/x-png,image/gif,image/jpeg,image/jpg,image/svg+xml,application/msword,application/vnd.ms-excel,application/pdf"
                         :ref="item.prop"
                         :class="item.prop"
-                        @change="listenFileInput(item.prop)">
-                    </div>
-                    <div v-if="clientTypeId === 1">
-                      <v-row>
-                        <v-col class="pb-0">
-                          <span style="color: black; padding: 0 15px;">
-                            Довідка про фінансові документи
-                          </span>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col class="pt-2">
-                          <v-file-input
-                            v-model="certificateOfFinancials"
-                            label="додати файли"
-                            color="black"
-                            small-chips
-                            multiple
-                            dense
-                            regular
-                            show-size>
-                          </v-file-input>
-                        </v-col>
-                      </v-row>
+                        @change="listenFileInput(item.prop)"
+                        multiple>
                     </div>
                   </div>
                 </div>
@@ -599,6 +561,7 @@ export default {
         return 'Розмiр документу не повинен перевищувати 5 MB!'
       }
     ],
+    dialogWidth: 530,
     dialogToSend: false,
     graphName: [],
     currentGraphToDownload: null,
@@ -617,19 +580,20 @@ export default {
     certificateOfFinancials: [],
 
     legalDocs: [
-      {text: 'Копія свідоцтва про державну реєстрацію та / або виписка з ЄДР', prop: 'state_registration_certificate'},
+      {text: 'Копія свідоцтва про державну реєстрацію та / або виписка з ЄДР', prop: 'state_registration_certificates'},
       {text: 'Статут', prop: 'regulations'},
-      {text: 'Баланс та звіт про фінансові результати (Ф1 та Ф2)', prop: 'balance'},
-      {text: 'Протокол засновників про обрання керівника (підписанта)', prop: 'protocol'},
-      {text: 'Наказ про призначення керівника (підписанта)', prop: 'order'},
-      {text: 'Паспорт / ID-карта керівника (підписанта)', prop: 'passport'},
-      {text: 'Довідка про присвоєння ІПН керівника (підписанта)', prop: 'taxNumber'},
+      {text: 'Баланс та звіт про фінансові результати (Ф1 та Ф2)', prop: 'balances'},
+      {text: 'Протокол засновників про обрання керівника (підписанта)', prop: 'protocols'},
+      {text: 'Наказ про призначення керівника (підписанта)', prop: 'orders'},
+      {text: 'Паспорт / ID-карта керівника (підписанта)', prop: 'passports'},
+      {text: 'Довідка про присвоєння ІПН керівника (підписанта)', prop: 'taxNumbers'},
     ],
     personDocs: [
-      {text: 'Паспорт громадянина України / ID-карта', prop: 'passport'},
-      {text: 'Довідка про присвоєння ІПН', prop: 'taxNumber'},
-      {text: 'Довідка про заробітну плату', prop: 'salary_certificate'},
-      {text: 'Паспорт дружини (чоловіка) позичальника', prop: 'relatives_passport'},
+      {text: 'Паспорт громадянина України / ID-карта', prop: 'passports'},
+      {text: 'Довідка про присвоєння ІПН', prop: 'taxNumbers'},
+      {text: 'Довідка про заробітну плату', prop: 'salary_certificates'},
+      {text: 'Паспорт дружини (чоловіка) позичальника', prop: 'relatives_passports'},
+      {text: 'Довідка про фінансові документи', prop: 'referenceOfFinancialDocuments'},
     ],
 
     tableHeader: [
@@ -919,12 +883,14 @@ export default {
         })
       }
     },
-    deleteDoc(property) {
-      this.$delete(this.documentUrls, property)
-      let el = document.querySelector(`.${property}`)
-      el.value = null
+    deleteDoc(property, key) {
+      let index = this.documentUrls[property]
+        .map( item => { return item.text; })
+        .indexOf(key.text)
+      this.documentUrls[property].splice(index, 1)
+      console.log(this.documentUrls)
     },
-    async uploadDoc(document, selector) {
+    uploadDoc(document, selector) {
       let formData = new FormData()
       formData.append('doc', document)
       axios
@@ -934,30 +900,39 @@ export default {
             }
         })
         .then(response => {
-          this.documentUrls = Object.assign({}, this.documentUrls, {[selector]: {url: response.data.url, text: document.name, size: document.size}})
+          if(!this.documentUrls[selector]) this.documentUrls[selector] = []
+
+          this.documentUrls[selector].push({url: response.data.url, text: document.name, size: document.size})
+
+          this.documentUrls = Object.assign({}, this.documentUrls)
+          console.log(this.documentUrls)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
           console.log(error.response)
           this.$notify({
             message: 'Помилка',
             type: 'error',
           })
+          this.$catchStatus(error.response.status)
         })
     },
     async listenFileInput(selector) {
-      let file = document.querySelector(`.${selector}`).files[0]
-      if(file.size <= 5242880) {
-        this.uploadDoc(file, selector)
-      } else {
-        this.$notify({
+      let files = document.querySelector(`.${selector}`).files
+      console.log(files)
+      for await (let v of files) {
+        if(v.size <= 5242880) {
+          await this.uploadDoc(v, selector)
+        } else {
+          this.$notify({
             group: 'error',
             title: 'Помилка розiр файлу не повинен перевищувати 5 mb',
             text: ``,
           })
-        document.querySelector(`.${selector}`).value = null
-        return
+          document.querySelector(`.${selector}`).value = null
+          return
+        }
       }
+      // console.log('and upload')
     },
     openDialogToSwitchBetweenTypesOfSave(item) {
       this.graphObj = item
@@ -1444,16 +1419,20 @@ export default {
     font-size: 14px;
     color: rgba(0,0,0,.6);
     transition: color 0.3s ease;
+  }
+  .document-line-wrapper {
     .document-delete-icon {
       opacity: 0;
       transition: opacity 0.2s ease-in;
     }
+    &:hover {
+      .document-delete-icon {
+        opacity: 1;
+      }
+    }
   }
   .document-list div:hover {
     color: #4d4c4c;
-    .document-delete-icon {
-      opacity: 1;
-    }
   }
   .send-graph-btn {
     transition: box-shadow 0.5s;

@@ -32,7 +32,6 @@
       <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
       </div>
-
       <v-card-text class="pb-0">
         <v-row>
           <v-row>
@@ -108,51 +107,16 @@
           </v-row>
           <v-row style="width: 100%;">
             <v-col cols="12" md="6" class="pt-0 pb-0">
-              <!-- <v-text-field
-                :value="reqObj.legal_info.creditPayment"
-                label="Щомісячний платіж (за міс. грн) по кредитам та ін."
+              <v-text-field
+                v-if="reqObj.client_type_id === 1"
+                :value="reqObj.legal_info.inn"
+                label="IПН"
                 dense outlined readonly>
-              </v-text-field> -->
-                <v-text-field
-                  v-if="reqObj.client_type_id === 1"
-                  :value="reqObj.legal_info.inn"
-                  label="IПН"
-                  dense outlined readonly>
-                </v-text-field>
-                <!-- <v-text-field
-                  :value="reqObj.legal_info.monthlyIncome"
-                  label="Середньомісячний дохід (грн)"
-                  dense outlined readonly>
-                </v-text-field> -->
-                <!-- <v-text-field
-                  :value="reqObj.legal_info.acquisitionTargetId"
-                  label="Мета придбання авто"
-                  dense outlined readonly>
-                </v-text-field> -->
-                <!-- <v-text-field
-                  :value="reqObj.legal_info.currencyBalance"
-                  label="Валютний баланс"
-                  dense outlined readonly>
-                </v-text-field> -->
-                <!-- <v-text-field
-                  :value="reqObj.legal_info.equity"
-                  label="Власный капiтал"
-                  dense outlined readonly>
-                </v-text-field> -->
-                <!-- <v-text-field
-                  v-model="legalInfo.balances"
-                  label="Мета придбання авто"
-                  dense outlined>
-                </v-text-field> -->
+              </v-text-field>
             </v-col>
           </v-row>
           <v-row style="width: 100%;">
             <v-col cols="12" md="6" class="pt-0 pb-0">
-              <!-- <v-text-field
-                :value="reqObj.region"
-                label="Область"
-                dense outlined readonly>
-              </v-text-field> -->
               <v-text-field
                 v-if="reqObj.phone"
                 :value="reqObj.phone"
@@ -169,7 +133,6 @@
               </v-text-field>
             </v-col>
           </v-row>
-          
           <v-row 
             v-if="reqObj.documents && reqObj.documents.constructor === Object"
             style="width: 100%;">
@@ -359,7 +322,6 @@
           </div>
         </template>
       </v-data-table>
-      <!-- <v-btn @click="test()">test</v-btn> -->
     </v-card-text>
   </v-card>
 </div>
@@ -394,7 +356,6 @@ export default {
     requestIdToReward: null,
     agentIdToReward: null,
 
-    // request detail data
     reqObj: {
       calculation_id: null,
       email: null,

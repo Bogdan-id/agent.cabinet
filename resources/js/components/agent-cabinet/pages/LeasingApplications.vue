@@ -180,64 +180,47 @@
               </label>
                 <div class="collapsible-content">
                   <div class="content-inner">
-                  <div class="document-list" v-if="reqObj.client_type_id == 2">
+
+                  <div class="document-list" v-if="reqObj.client_type_id === 2">
                     <div 
                       v-for="(item, key) in legalDocs"
-                      v-if="reqObj.documents && reqObj.documents[item.prop]"
-                      :key="key"
-                      :style="reqObj.documents && reqObj.documents[item.prop] ? '' : 'display: none;'">
-                      <span style="color: black">{{ 
-                        reqObj.documents[item.prop] && reqObj.documents[item.prop].text 
-                          ? reqObj.documents[item.prop].text + ' ' + `(${(reqObj.documents[item.prop].size / 1000).toFixed(2)} - kb)` 
-                          : ''
-                        }}
-                      </span>&nbsp;
-                      <div 
-                        v-if="reqObj.documents[item.prop]"
-                        style="display: inline-block; min-width: 15px; position: relative;">
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon 
-                              style="position: absolute; left: -10px; top: -15px;" 
-                              v-text="'mdi-information-variant'" 
-                              color="#d24a43"
-                              v-on="on"
-                              small>
-                            </v-icon>
-                          </template>
-                          <span>{{ item.text }}</span>
-                        </v-tooltip>
+                      :key="key">
+                      <span v-if="reqObj.documents[item.prop]" :style="reqObj.documents[item.prop] ? 'color: black;' : ''">
+                        {{ item.text }}
+                      </span>
+                      <div v-if="reqObj.documents[item.prop] && reqObj.documents[item.prop].length > 0">
+                        <div 
+                          class="document-line-wrapper"
+                          style="padding: 0 10px; font-size: 0.72rem;"
+                          v-for="(v, key) in reqObj.documents[item.prop]"
+                          :key="key">
+                          <span>
+                            {{ v.text }}
+                          </span>
+                          <span style="color: black;">{{ `(${(v.size / 1000).toFixed(2)} - kb)` }}</span>
+                        </div>
                       </div>
                     </div>
-                    <!-- <v-btn @click="test()">test</v-btn> -->
                   </div>
-                  <div class="document-list" v-if="reqObj.client_type_id == 1">
+
+                  <div class="document-list" v-if="reqObj.client_type_id === 1">
                     <div 
                       v-for="(item, key) in personDocs"
-                      v-if="reqObj.documents && reqObj.documents[item.prop]"
-                      :key="key"
-                      :style="reqObj.documents && reqObj.documents[item.prop] ? '' : 'display: none;'">
-                      <span style="color: black;">{{ 
-                        reqObj.documents[item.prop] && reqObj.documents[item.prop].text 
-                          ? reqObj.documents[item.prop].text + ' ' + `(${(reqObj.documents[item.prop].size / 1000).toFixed(2)} - kb)` 
-                          : ''
-                        }}
-                      </span>&nbsp;
-                      <div 
-                        v-if="reqObj.documents[item.prop]"
-                        style="display: inline-block; min-width: 15px; position: relative;">
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on }">
-                            <v-icon 
-                              style="position: absolute; left: -10px; top: -15px;" 
-                              v-text="'mdi-information-variant'" 
-                              color="#d24a43"
-                              v-on="on"
-                              small>
-                            </v-icon>
-                          </template>
-                          <span>{{ item.text }}</span>
-                        </v-tooltip>
+                      :key="key">
+                      <span v-if="reqObj.documents[item.prop]" :style="reqObj.documents[item.prop] ? 'color: black;' : ''">
+                        {{ item.text }}
+                      </span>
+                      <div v-if="reqObj.documents[item.prop] && reqObj.documents[item.prop].length > 0">
+                        <div 
+                          class="document-line-wrapper"
+                          style="padding: 0 10px; font-size: 0.72rem;"
+                          v-for="(v, key) in reqObj.documents[item.prop]"
+                          :key="key">
+                          <span>
+                            {{ v.text }}
+                          </span>
+                          <span style="color: black;">{{ `(${(v.size / 1000).toFixed(2)} - kb)` }}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -300,6 +283,7 @@
         color="black"
         :headers="tableHeader"
         :items="$store.state.leasingRequests"
+        item-key="updated_at"
         :custom-sort="customSort"
         :items-per-page="10"
         :class="`elevation-1 leasing-application-table ${$vuetify.breakpoint.xs ? 'small' : ''}`">
@@ -316,8 +300,8 @@
           <div class="d-flex justify-center">
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-btn 
-                  v-if="item.status_id == 5 && $store.state.userHasNeccessaryFields || item.status_id == 5 && !$store.state.userHasNeccessaryFields"
+                <v-btn
+                  v-show="parseInt(item.status_id) === 5 && $store.state.userHasNeccessaryFields || parseInt(item.status_id) === 5 && !$store.state.userHasNeccessaryFields"
                   @click="showDialogToAgentReward(item)"
                   v-on="on"
                   icon>
@@ -327,16 +311,16 @@
                   </v-icon>
                 </v-btn>
                 <v-icon
-                  v-if="item.status_id != 5"
+                  v-show="item.status_id != 5"
                   v-on="on"
                   style="padding: 6px"
                   >
                   mdi-sack-percent
                 </v-icon>
               </template>
-              <span v-if="item.status_id == 5 && $store.state.userHasNeccessaryFields">Подати заявку на виплату АВ</span>
-              <span v-if="item.status_id != 5">Ви не можете подати заявку на винагороду з даним статусом заявки на лізинг</span>
-              <span v-if="item.status_id == 5 && !$store.state.userHasNeccessaryFields">Для отримання АВ необхiдно заповнити всi данi профiлю</span>
+              <span v-show="parseInt(item.status_id) === 5 && $store.state.userHasNeccessaryFields">Подати заявку на виплату АВ</span>
+              <span v-show="parseInt(item.status_id) !== 5">Ви не можете подати заявку на винагороду з даним статусом заявки на лізинг</span>
+              <span v-show="parseInt(item.status_id) === 5 && !$store.state.userHasNeccessaryFields">Для отримання АВ необхiдно заповнити всi данi профiлю</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
@@ -383,6 +367,7 @@
 
 <script>
 import axios from 'axios'
+import { legalDocs, personDocs } from './utils/doc-props.js'
 
 export default {
   data:() => ({
@@ -400,22 +385,9 @@ export default {
       { text: 'Статус', value: 'request_status', align: 'center', width: 120 },
       { text: 'Дiї', value: 'actions', align: 'center', sortable: false },
     ],
-    // tabledata: [],
-    legalDocs: [
-      {text: 'Копія свідоцтва про державну реєстрацію та / або виписка з ЄДР', prop: 'state_registration_certificate'},
-      {text: 'Статут', prop: 'regulations'},
-      {text: 'Баланс Ф1 та Ф2', prop: 'balance'},
-      {text: 'Протокол засновників про обрання керівника (підписувача)', prop: 'protocol'},
-      {text: 'Наказ про призначення керівника (підписувача)', prop: 'order'},
-      {text: 'Паспорт / ID-карта керівника (підписувача)', prop: 'passport'},
-      {text: 'Довідка про присвоєння ІПН керівника (підписувача)', prop: 'taxNumber'},
-    ],
-    personDocs: [
-      {text: 'Паспорт громадянина України / ID-карта', prop: 'passport'},
-      {text: 'Довідка про присвоєння ІПН', prop: 'taxNumber'},
-      {text: 'Довідка про заробітну плату', prop: 'salary_certificate'},
-      {text: 'Паспорт дружини (чоловіка) позичальника', prop: 'relatives_passport'},
-    ],
+    
+    legalDocs: legalDocs,
+    personDocs: personDocs,
     loading: false,
     progressDivision: 5,
 
@@ -510,7 +482,10 @@ export default {
     },
     toDetail(id) {
       this.leasingApplicationForm = true
-      Object.assign(this.reqObj, this.getGraphById(id)[0])
+      let object = this.getGraphById(id)[0]
+      console.log(object)
+      this.reqObj = Object.assign({}, this.reqObj, object)
+      console.log(this.reqObj)
     },
     getGraphById(id) {
       return this.$store.state.graphs

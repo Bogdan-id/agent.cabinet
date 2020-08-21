@@ -598,6 +598,9 @@ export default {
     leasingTerm: null,
     leasingAmount: null,
     graphType: null,
+
+    price_brutto: null,
+
     legalInfo: {
       inn: null,
       edrpou: null,
@@ -927,6 +930,7 @@ export default {
         leasing_amount: this.leasingAmount,
         graph_type: this.selectedGraph,
         documents: this.documentUrls,
+        price_brutto: this.price_brutto,
         legal_info: {
           // creditPayment: this.creditPayment,
 
@@ -1139,8 +1143,8 @@ export default {
         .filter(val => val.id === id)
     },
     getDefaultProperties() {
-      console.log(this.graphType)
-      // chart diagram
+      let firstGraph = Object.keys(this.graphType.result_data)
+        .filter(v => v !== 'requestId')[0]
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.graphType.id
       this.leasingObject = `${this.graphType.request_data.leasedAssertMark.name} ${this.graphType.request_data.leasedAssertModel.name}`
@@ -1148,7 +1152,9 @@ export default {
       this.advance = this.graphType.request_data.advance
       this.leasingTerm = this.graphType.request_data.leasingTerm
       this.leasingAmount = this.graphType.request_data.leasingAmount
+      this.price_brutto = this.graphType.result_data[firstGraph]['offer-price-brutto'].toString(),
       this._token = this.getCsrf()
+      console.log(this.object())
     },
 
     getCsrf() {

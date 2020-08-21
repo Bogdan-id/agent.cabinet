@@ -415,6 +415,7 @@ export default {
 }
 .notification-count {
   color: white; 
+  z-index: 40;
   background: #ff5252; 
   display: inline-flex; 
   align-items: center; 
@@ -425,7 +426,7 @@ export default {
   min-width: 20px;
   position: absolute; 
   font-size: 0.68rem;
-  right: -4px;
-  top: -10px;
+  right: 5px;
+  top: -7px;
 }
 </style>

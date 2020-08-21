@@ -65,6 +65,7 @@ Route::get('leasing-reqeust/company/{edrpou}', 'LeasingRequestController@getComp
 Route::get('/getAcquisitionTargets', 'AcquisitionTargetController@getAcquisitionTargets');
 
 Route::get('useful-materials-categories/all', 'UsefulMaterialsController@getCategories');
+Route::post('feedback/send', 'FeedbackController@sendFeedBack');
 
 Route::post('agent-commission/create', 'AgentCommisionController@create');
 Route::get('agent-commission/agent/{id}', 'AgentCommisionController@getAgentCommissions');

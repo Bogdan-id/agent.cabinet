@@ -1632,7 +1632,7 @@ export default {
 			el.dispatchEvent(event)
 		},
     initFranchiseInput(val) {
-      console.log({insur})
+      console.log({FRANCHISE: val})
       let el = document.querySelector('#franchise')
       let event = new Event('input', {bubbles: true})
       if(val) {
@@ -1733,8 +1733,8 @@ export default {
     switchFranchiseFromRequest(value) {
       switch(value) {
         case 1: return '0'
-        case 2: return '0.5'
-        case 3: return '1'
+        case 3: return '0.5'
+        case 4: return '1'
       }
     }
   },

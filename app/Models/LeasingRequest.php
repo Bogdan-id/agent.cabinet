@@ -30,7 +30,8 @@ class LeasingRequest extends Model
         'documents',
         'email',
         'phone',
-        'region'
+        'region',
+        'price_brutto'
     ];
 
 

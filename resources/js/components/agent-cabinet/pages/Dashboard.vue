@@ -444,6 +444,8 @@ export default {
           if(response.data.length > 0)  {
             // let temp = this.$changeLeasingRequestsObj(response.data)
             this.$store.commit('addLeasingRequests', response.data)
+
+            console.log({leasingRequests: this.$store.state.leasingRequests})
               
             this.$store.commit('addGraph', response.data)
 

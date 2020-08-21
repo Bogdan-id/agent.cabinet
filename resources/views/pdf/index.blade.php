@@ -125,7 +125,7 @@
     <table class="leasing-object">
       <tbody>
         <tr>
-          <td style="width: 12%;">
+          <td style="width: 11%;">
             <table style="width: 100%">
               <tbody>
                 <tr>
@@ -136,7 +136,7 @@
               </tbody>
             </table>
           </td>
-          <td style="width: 88%">
+          <td style="width: 89%">
             <table style="width: 100%;">
               <tbody>
                 <tr>

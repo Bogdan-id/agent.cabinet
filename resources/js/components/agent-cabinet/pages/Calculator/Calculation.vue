@@ -1416,7 +1416,7 @@ export default {
           if(event.label === "Обладнання") {
             needRequest = 0
             this.brandItems = []
-            this.brandItems.push({name: 'Iнше', value: 4});
+            this.brandItems.push({name: 'Інше', value: 4});
             this.calcObj.leasedAssertMark = {name: 'Інше', value: 4};
           }
         } else {
@@ -1431,7 +1431,7 @@ export default {
       }
       if(needRequest === 0) {
         this.brandItems = []
-        this.brandItems.push({name: 'Iнше', value: 4});
+        this.brandItems.push({name: 'Інше', value: 4});
         this.calcObj.leasedAssertMark = {name: 'Інше', value: 4};
         return
       }
@@ -1713,7 +1713,7 @@ export default {
         
         console.log(this.calcObj)
         
-        if(this.calcObj.leasedAssertMark.name !== 'Інше') {
+        if(this.calcObj.leasingObjectType.value === 4) {
           this.getMarksByType()
           this.getModelByMark()
         } else this.falsyLeasedAssertModel = this.calcObj.leasedAssertModel.name

@@ -39,6 +39,7 @@ class LeasingRequestRequest extends JsonRequest
             'advance' => 'required|integer',
             'leasing_term' => 'required|integer',
             'leasing_amount' => 'required|string',
+            'price_brutto' => 'required|string',
             'graph_type' => 'required|string',
             'legal_info' => 'required|array',
             'documents' => 'array',

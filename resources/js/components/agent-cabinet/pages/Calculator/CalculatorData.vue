@@ -823,9 +823,9 @@ export default {
       formData.append('doc', document)
       axios
         .post('/leasing-reqeust/document/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         })
         .then(response => {
           if(!this.documentUrls[selector]) this.documentUrls[selector] = []

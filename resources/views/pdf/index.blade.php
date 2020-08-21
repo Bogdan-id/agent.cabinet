@@ -160,7 +160,11 @@
                           <td>
                             <table style="width: 200%;">
                               <tr>
+                              @if($leasingObjType == 'Обладнання')
+                                <td style="padding: 0">{{ $model }}</td>
+                              @else
                                 <td style="padding: 0">{{ $car }}</td>
+                              @endif
                               </tr>
                             </table>
                           </td>

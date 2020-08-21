@@ -1632,6 +1632,7 @@ export default {
 			el.dispatchEvent(event)
 		},
     initFranchiseInput(val) {
+      console.log({FRANCHISE: val})
       let el = document.querySelector('#franchise')
       let event = new Event('input', {bubbles: true})
       if(val) {
@@ -1732,8 +1733,8 @@ export default {
     switchFranchiseFromRequest(value) {
       switch(value) {
         case 1: return '0'
-        case 2: return '0.5'
-        case 3: return '1'
+        case 3: return '0.5'
+        case 4: return '1'
       }
     }
   },
@@ -1759,8 +1760,8 @@ export default {
     insuranceFranchise(value) {
       switch(value) {
         case '0': return this.calcObj.insuranceFranchise = 1
-        case '0.5': return this.calcObj.insuranceFranchise = 2
-        case '1': return this.calcObj.insuranceFranchise = 3
+        case '0.5': return this.calcObj.insuranceFranchise = 3
+        case '1': return this.calcObj.insuranceFranchise = 4
       }
     },
     'calcObj.leasingObjectType': function(value) {
@@ -1849,7 +1850,7 @@ export default {
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
       this.changeActiveClass()
-      this.initFranchiseInput()
+      this.initFranchiseInput(this.insuranceFranchise)
       this.displayWindowSize()
       this.initAdvanceInputValue()
       return

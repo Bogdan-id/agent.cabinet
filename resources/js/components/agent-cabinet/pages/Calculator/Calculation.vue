@@ -1713,7 +1713,7 @@ export default {
         
         console.log(this.calcObj)
         
-        if(this.calcObj.leasingObjectType.value === 4) {
+        if(this.calcObj.leasingObjectType.value !== 4) {
           this.getMarksByType()
           this.getModelByMark()
         } else this.falsyLeasedAssertModel = this.calcObj.leasedAssertModel.name

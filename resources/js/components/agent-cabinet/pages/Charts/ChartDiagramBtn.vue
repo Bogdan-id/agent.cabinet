@@ -914,6 +914,7 @@ export default {
       console.log({DATA: this.data})
       let firstGraph = Object.keys(this.data.result_data)
         .filter(v => v !== 'requestId')[0]
+
       this.agentId = this.$store.state.user.agent.id
       this.calculationId = this.data.id
       this.leasingObject = `${this.data.request_data.leasedAssertMark.name} ${this.data.request_data.leasedAssertModel.name}`
@@ -923,6 +924,7 @@ export default {
       this.leasingAmount = this.data.request_data.leasingAmount
       this.price_brutto = this.data.result_data[firstGraph]['offer-price-brutto'].toString(),
       this._token = this.getCsrf()
+      
       console.log(this.object())
     },
     parseToInt(id) {

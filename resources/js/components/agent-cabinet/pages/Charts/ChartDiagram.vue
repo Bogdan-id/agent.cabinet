@@ -748,9 +748,9 @@ export default {
     currentTab: '2',
     search: '',
     leasingObjectDataHeader: [
-      { text: 'Автомобiль', value: 'actions', align: 'center', sortable: false},
-      { text: 'Вартiсть автомобiля, грн', value: 'offerPriceNetto', align: 'end', sortable: false},
-      { text: 'Вартість автомобіля з реєстрацією, грн', value: 'offer_price_brutto', align: 'end', sortable: false },
+      { text: 'Предмет лiзингу', value: 'actions', align: 'center', sortable: false},
+      { text: 'Вартiсть предмета лiзингу, грн', value: 'offerPriceNetto', align: 'end', sortable: false},
+      { text: 'Вартість предмета лiзингу з реєстрацією, грн', value: 'offer_price_brutto', align: 'end', sortable: false },
       { text: 'Авансовий платiж, грн', value: 'offer_advance', align: 'center', sortable: false},
       { text: 'Термiн лiзингу, мiс', value: 'request_data.leasingTerm', align: 'end', sortable: false },
       { text: 'Валюта фiнансування', value: 'request_data.leasingCurrency', align: 'end', sortable: false },
@@ -956,11 +956,11 @@ export default {
     thead {
       tr {
         th {
-          .v-data-table-header-mobile__wrapper:before {
-            font-size: 1.1rem;
-            color: #424242;
-            content: "Об'єкт лізингу"
-          }
+          // .v-data-table-header-mobile__wrapper:before {
+          //   font-size: 1.1rem;
+          //   color: #424242;
+          //   content: "Об'єкт лізингу"
+          // }
         }
       }
     }

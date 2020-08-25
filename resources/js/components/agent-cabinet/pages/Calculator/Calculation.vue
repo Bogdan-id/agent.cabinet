@@ -1691,20 +1691,22 @@ export default {
         this.calcObj.calculation_id = response.data.id
         let data = response.data.request_data
         let advance = response.data.request_data.advance
+
         if(response.data.request_data.insuranceFranchise){
           this.insuranceFranchise = this.switchFranchiseFromRequest(
               response.data.request_data.insuranceFranchise
           )
         }
+
         this.initAdvanceInputValue(advance)
-        this.initFranchiseInput(
-            this.insuranceFranchise
-          )
+        this.initFranchiseInput(this.insuranceFranchise)
+
         this.brandItems.push(data.leasedAssertMark)
         this.modelItems.push(data.leasedAssertModel)
 
         this.insuranceProgram = this.selects.insurancePrograms
           .find(obj => obj.value === data.insuranceProgram)
+
         Object.assign(this.calcObj, data)
         
 
@@ -1712,9 +1714,9 @@ export default {
         this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
         
-        console.log(this.calcObj)
+        console.log({calcObj: this.calcObj})
         
-        if(this.calcObj.leasingObjectType.value !== 4) {
+        if(this.calcObj.leasingObjectType.value !== 6) {
           this.getMarksByType()
           this.getModelByMark()
         } else this.falsyLeasedAssertModel = this.calcObj.leasedAssertModel.name

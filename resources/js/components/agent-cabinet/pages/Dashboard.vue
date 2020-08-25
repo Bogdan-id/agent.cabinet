@@ -143,9 +143,7 @@
         <template v-slot:item.agent_reward="{ item }">
           <span style="white-space: nowrap">
             {{ 
-              ((parseInt(item.leasing_amount.replace(/\s/g, '' )) / 100) * $store.state.user.agent.ab_size)
-                .toLocaleString("en-GB")
-                .replace(/,/g, ' ')
+              $formatSum(item.price_brutto)
             }}
           </span>
         </template>

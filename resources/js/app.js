@@ -50,7 +50,7 @@ Vue.prototype.$formatDate = (data) => {
 
     return `${day}.${month}.${year}`
 
-  } else return 
+  } else return data
 }
 
 Vue.prototype.$changeLeasingRequestsObj = (obj, state) => {

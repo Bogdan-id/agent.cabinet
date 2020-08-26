@@ -740,9 +740,12 @@ export default {
         currency: calcData.leasingCurrency,
         leasingRest: graph['offer-rest'],
         requestId: rootCalcData.request_id,
-        date: this.currentGraphToDownload.created_at,
+        date: this.$formatDate(this.currentGraphToDownload.created_at),
         _token: this.getCsrf()
       }
+
+      console.log(dataToSave)
+
       this.graphName
         .forEach(val => {
           dataToSave[val] = graphs[val]
@@ -896,7 +899,7 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
-      console.log(this.data)
+      // console.log(this.data)
       if(this.data.is_send_request === 1) {
         this.$notify({
             group: 'warning',
@@ -906,6 +909,7 @@ export default {
         return
       }
       this.selectedGraph = this.switchGraphName(this.graph)
+      console.log(this.selectedGraph)
       this.getDefaultProperties()
       this.leasingApplicationForm = true
     },
@@ -924,8 +928,6 @@ export default {
       this.leasingAmount = this.data.request_data.leasingAmount
       this.price_brutto = this.data.result_data[firstGraph]['offer-price-brutto'].toString(),
       this._token = this.getCsrf()
-      
-      console.log(this.object())
     },
     parseToInt(id) {
       let input = new Event('input', {bubbles: true})

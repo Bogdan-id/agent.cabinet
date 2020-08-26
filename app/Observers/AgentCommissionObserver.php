@@ -21,6 +21,9 @@ class AgentCommissionObserver
         $notification->agent_id = $agentCommission->agent_id;
         $notification->title = "Створена заявка на виплату АВ №{$agentCommission->id}";
         $notification->save();
+
+        $agentCommission->leasingRequest->status_id = 6;
+        $agentCommission->leasingRequest->save();
     }
 
     /**
@@ -35,6 +38,9 @@ class AgentCommissionObserver
         $notification->agent_id = $agentCommission->agent_id;
         $notification->title = "Заявку на виплату АВ №{$agentCommission->id}, выплачено";
         $notification->save();
+
+        $agentCommission->leasingRequest->status_id = 7;
+        $agentCommission->leasingRequest->save();
     }
 
     /**

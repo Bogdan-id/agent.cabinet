@@ -19,7 +19,7 @@ class ReportsController extends Controller
         }, 'status_id']);
         $result  = $leasingRequests->mapWithKeys(function ($group, $key) {
             return [$key => $group->mapWithKeys(function ($item, $key) {
-                return [$key => $item->sum('bitrix_id')];
+                return [$key => $item->sum('price_brutto')];
             })];
         });
         $inWork  = $result->map(function ($group) {

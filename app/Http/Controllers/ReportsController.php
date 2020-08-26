@@ -57,7 +57,11 @@ class ReportsController extends Controller
                     'price_brutto_sum' => $group->sum('price_brutto'),
                 ]];
             });
-
+        $result->put('max_price_brutto_sum', $result->max('price_brutto_sum'));
+        $result->put('max_sum', $result->max('ac_sum'));
+        $result->put('min_sum', $result->min('ac_sum'));
+        $result->put('min_price_brutto_sum', $result->min('price_brutto_sum'));
+       
         return response()->json($result);
     }
 }

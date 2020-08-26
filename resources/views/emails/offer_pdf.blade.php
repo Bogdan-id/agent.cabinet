@@ -1,4 +1,4 @@
-<div style="color: black;">
+<div style="color: black!important;">
   <p>Добрий день!</p>
   <p>У додатку Ви знайдете:</p>
   @if($leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто')
@@ -29,7 +29,7 @@
   @endif
   <p>Лізингові платежі включають:</p>
 
-  @if($leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто' || $leasingObjectType == 'Автобуси')
+  @if($leasingObjectType == 'Легкові та комерційні авто' || $leasingObjectType == 'Вантажні авто')
     <div style="padding-left: 15px;">- всі витрати з реєстрації авто у Сервісному Центрі</div>
     <div style="padding-left: 15px;">- всі витрати пов’язані зі страхуванням (КАСКО та ЦВ) на весь строк лізингу</div>
     <div style="padding-left: 15px;">- ассистанс (заміна пробитого колеса, запуск двигуна, доставка палива, евакуатор, телефон гарячої лінії…)</div>

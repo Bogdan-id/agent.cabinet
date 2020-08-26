@@ -75,7 +75,7 @@
 @elseif($leasingObjType == 'Обладнання')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Equipment.png') }}')">
 @elseif($leasingObjType == 'Автобуси')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Bus.png') }}')">
 @elseif($leasingObjType == 'Причепи та Напівпричепи')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Trailers.png') }}')">
 @elseif($leasingObjType == 'Сільгосптехніка')

@@ -1044,7 +1044,7 @@ export default {
       }
     },
     openForm(item) {
-      console.log(item)
+      // console.log(item)
       if(item.is_send_request === 1) {
         this.$notify({
             group: 'warning',
@@ -1054,6 +1054,7 @@ export default {
         return
       }
       this.graphType = this.getGraphById(item.id)[0]
+      console.log(this.graphType)
       this.resultDataGraphs = Object.keys(this.graphType.result_data)
         .filter(val => {
           if(val !== 'requestId') {
@@ -1154,7 +1155,6 @@ export default {
       this.leasingAmount = this.graphType.request_data.leasingAmount
       this.price_brutto = this.graphType.result_data[firstGraph]['offer-price-brutto'].toString(),
       this._token = this.getCsrf()
-      console.log(this.object())
     },
 
     getCsrf() {
@@ -1226,9 +1226,11 @@ export default {
         currency: calcData.leasingCurrency,
         leasingRest: graph['offer-rest'],
         requestId: rootCalcData.request_id,
-        date: rootCalcData.created_at,
+        date: this.$formatDate(rootCalcData.created_at),
         _token: this.getCsrf()
       }
+
+      console.log(dataToSave)
 
       if(this.formatToSave === 'email') dataToSave.email = this.emailToSend
       

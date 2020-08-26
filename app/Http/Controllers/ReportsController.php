@@ -64,4 +64,33 @@ class ReportsController extends Controller
        
         return response()->json($result);
     }
+
+    public function getAgentCommissionsReportYears($agentId)
+    {
+        $years = ['2020'];
+        $agent = Agent::find($agentId);
+        $agentCommissions = $agent->commissions()->orderBy('created_at', 'DESC')->first();
+        if($agentCommissions)
+        {
+            $startYear = '2020';
+            $years = range($startYear, $agentCommissions->created_at->format('Y'));
+        }
+        
+        return response()->json($years);                 
+    }
+
+    public function getLeasingRequestsReportYears($agentId)
+    {
+        $years = ['2020'];
+        $agent = Agent::find($agentId);
+        $leasingRequest = $agent->leasingRequests()->orderBy('created_at', 'DESC')->first();
+        if($leasingRequest)
+        {
+            $startYear = '2020';
+            $years = range($startYear, $leasingRequest->created_at->format('Y'));
+            
+        }
+        
+        return response()->json($years);                 
+    }
 }

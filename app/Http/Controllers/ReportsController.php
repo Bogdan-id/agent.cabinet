@@ -41,4 +41,27 @@ class ReportsController extends Controller
        
         return  response()->json($result);
     }
+
+    public function agentCommissionsReport($agentId, $year)
+    {
+        $agent = Agent::find($agentId);
+        $agentCommissions = $agent->commissions()->where('created_at', '>', "$year-01-01 00:00:00")
+                            ->where('created_at', '<', "{$year}-12-21 23:59:59")
+                            ->get()
+                            ->groupBy([function($d) {
+            return Carbon::parse($d->created_at)->format('m');
+        }]);
+        $result  = $agentCommissions->mapWithKeys(function ($group, $key) {
+            return [$key => [
+                    'ac_sum' => $group->sum('sum'),
+                    'price_brutto_sum' => $group->sum('price_brutto'),
+                ]];
+            });
+        $result->put('max_price_brutto_sum', $result->max('price_brutto_sum'));
+        $result->put('max_sum', $result->max('ac_sum'));
+        $result->put('min_sum', $result->min('ac_sum'));
+        $result->put('min_price_brutto_sum', $result->min('price_brutto_sum'));
+       
+        return response()->json($result);
+    }
 }

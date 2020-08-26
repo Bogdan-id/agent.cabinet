@@ -37,6 +37,14 @@
     <div style="padding-left: 15px;">- вартість фінансування</div>
   @endif
 
+  @if($leasingObjectType == 'Автобуси')
+    <div style="padding-left: 15px;">- всі витрати з реєстрації автобусу у Сервісному Центрі</div>
+    <div style="padding-left: 15px;">- всі витрати пов’язані зі страхуванням (КАСКО та ЦВ) на весь строк лізингу</div>
+    <div style="padding-left: 15px;">- ассистанс (заміна пробитого колеса, запуск двигуна, доставка палива, евакуатор, телефон гарячої лінії…)</div>
+    <div style="padding-left: 15px;">- вартість автобусу</div>
+    <div style="padding-left: 15px;">- вартість фінансування</div>
+  @endif
+
   @if($leasingObjectType == 'Причепи та Напівпричепи')
     <div style="padding-left: 15px;">- всі витрати з реєстрації причіпа у Сервісному Центрі</div>
     <div style="padding-left: 15px;">- всі витрати пов’язані зі страхуванням (КАСКО та ЦВ) на весь строк лізингу</div>

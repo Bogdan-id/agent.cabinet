@@ -30,6 +30,14 @@ class ReportsController extends Controller
             $group->forget(4);
             $group->put('inWork', $inWork);
         });
+
+        $done  = $result->map(function ($group) {
+            $done = $group->get(5) + $group->get(6) + $group->get(7);
+            $group->forget(5);
+            $group->forget(6);
+            $group->forget(7);
+            $group->put(5, $done);
+        });
        
         return  response()->json($result);
     }

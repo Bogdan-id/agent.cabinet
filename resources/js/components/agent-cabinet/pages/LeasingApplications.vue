@@ -277,7 +277,7 @@
                   v-on="on"
                   v-show="parseInt(item.status_id) === 6"
                   style="padding: 6px"
-                  color="green lighten-1">
+                  color="green darken-2">
                   mdi-sack-percent
                 </v-icon>
                 <v-icon

@@ -330,17 +330,28 @@
       </v-card-text>
     </v-card>
   </v-dialog>
-  <v-card-text style="display: flex; justify-content: flex-end;">
-    <div style="width: 165px; display: flex; justify-content: center;">
+  <v-card-text style="display: flex; justify-content: flex-start; padding: 7px 0;">
+    <div style="width: 165px; display: flex; justify-content: space-between;">
+      <span>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              v-on="on" :to="{name: 'Редагувати', params: {id: data.id, edit: true}}" 
+              width="35" height="35" fab dark color="#d24a43">
+              <v-icon color="white" size="20">mdi-file-find-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>Переглянути графiк в режимi редагування</span>
+        </v-tooltip>
+      </span>
       <span>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn
               v-on="on"
               @click="openForm()"
-              color="grey darken-2" 
-              icon large dark>
-              <v-icon size="22" dark>mdi-file-document-edit-outline</v-icon>
+              width="35" height="35" fab dark color="#d24a43">
+              <v-icon size="20" dark>mdi-file-document-edit-outline</v-icon>
             </v-btn>
           </template>
           <span>Подати заявку на лізинг</span>
@@ -352,9 +363,8 @@
             <v-btn 
               @click="openDialogToSave(); formatToSave = 'pdf'" 
               v-on="on"
-              color="grey darken-2" 
-              icon large dark>
-              <v-icon size="22" dark v-text="'mdi-download'"></v-icon>
+              width="35" height="35" fab dark color="#d24a43">
+              <v-icon size="20" dark v-text="'mdi-download'"></v-icon>
             </v-btn>
           </template>
           <span>Зберегти результат розрахунку</span>
@@ -367,10 +377,9 @@
               @click="openDialogToSave();
                 formatToSave = 'email'; emailField = true"
               v-on="on"
-              color="grey darken-2"
-              :disabled="pdfDownloadLoading"
-              icon large dark>
-              <v-icon size="22" dark v-text="'mdi-email-send'"></v-icon>
+              width="35" height="35" fab dark color="#d24a43"
+              :disabled="pdfDownloadLoading">
+              <v-icon size="20" dark v-text="'mdi-email-send'"></v-icon>
             </v-btn>
           </template>
           <span>Вiдправити результат розрахунку на email</span>

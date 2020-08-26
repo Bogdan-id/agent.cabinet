@@ -73,6 +73,7 @@ Route::get('agent-commission/agent/{id}', 'AgentCommisionController@getAgentComm
 Route::get('/getManagers', 'ManagerController@getManagers');
 Route::get('/updateManagers', 'ManagerController@updateManagers');
 Route::get('/reports/leasing-requests/{agentId}/{year}', 'ReportsController@leasingrequestsReport');
+Route::get('/reports/agent-commissions/{agentId}/{year}', 'ReportsController@agentCommissionsReport');
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
 Route::get('json/slides', 'SliderController@getSlides');

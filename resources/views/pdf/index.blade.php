@@ -75,7 +75,7 @@
 @elseif($leasingObjType == 'Обладнання')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Equipment.png') }}')">
 @elseif($leasingObjType == 'Автобуси')
-  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Default.png') }}')">
+  <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Bus.png') }}')">
 @elseif($leasingObjType == 'Причепи та Напівпричепи')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Trailers.png') }}')">
 @elseif($leasingObjType == 'Сільгосптехніка')
@@ -301,7 +301,6 @@
   <section class="profitable-terms">
     <h4><img width="30" style="padding: 0 9px 3px 0" src="{{storage_path('pdf/red-line.png')}}" />ЛІЗИНГОВИЙ ПЛАТІЖ ВЖЕ ВКЛЮЧАЄ:</h4>
     
-    <!-- Легковi та Грузовi -->
     @if($leasingObjType == 'Легкові та комерційні авто' || $leasingObjType == 'Вантажні авто')
     <div class="list" style="width: 100%;">
       <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
@@ -309,7 +308,7 @@
           <li>Вартість нового авто та фінансування</li>
           <li>Додаткове обладнання</li>
           <li>Адміністрування страхових випадків</li>
-          <li>Сервісний пакет BEST сервiс та опції сервісної
+          <li>Сервісний пакет BEST Сервiс та опції сервісної
             програми BEST Лiзинг</li>
         </ul>
       </div>
@@ -322,7 +321,6 @@
       </div>
     </div>
 
-    <!-- Технiка -->
     @elseif($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ' || $leasingObjType == 'Сільгосптехніка')
     <div class="list" style="width: 100%;">
       <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
@@ -330,7 +328,7 @@
           <li>Вартість нової техніки та фінансування</li>
           <li>Додаткове обладнання</li>
           <li>Адміністрування страхових випадків</li>
-          <li>Сервісний пакет BEST сервiс та опції сервісної
+          <li>Сервісний пакет BEST Сервiс та опції сервісної
             програми BEST Лiзинг</li>
         </ul>
       </div>
@@ -343,7 +341,6 @@
       </div>
     </div>
 
-    <!-- Обладнання -->
     @elseif($leasingObjType == 'Обладнання')
     <div class="list" style="width: 100%;">
       <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
@@ -357,13 +354,12 @@
         <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
           <li>Страхування КАСКО та ОСЦВП</li>
           <li>Всі витрати на реєстрацію</li>
-          <li>Сервісний пакет BEST сервiс та опції сервісної
+          <li>Сервісний пакет BEST Сервiс та опції сервісної
             програми BEST Лiзинг</li>
         </ul>
       </div>
     </div>
 
-    <!-- Причепы -->
     @elseif($leasingObjType == 'Причепи та Напівпричепи')
     <div class="list" style="width: 100%;">
       <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
@@ -371,7 +367,26 @@
           <li>Вартість нового причіпу та фінансування</li>
           <li>Додаткове обладнання</li>
           <li>Адміністрування страхових випадків</li>
-          <li>Сервісний пакет BEST сервiс та опції сервісної
+          <li>Сервісний пакет BEST Сервiс та опції сервісної
+            програми BEST Лiзинг</li>
+        </ul>
+      </div>
+      <div style="width: 49%; display: inline-block; float: right">
+        <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
+          <li>Автомобільний набір в подарунок!</li>
+          <li>Страхування КАСКО та ОСЦВП</li>
+          <li>Всі витрати на реєстрацію</li>
+        </ul>
+      </div>
+    </div>
+    @elseif($leasingObjType == 'Автобуси')
+    <div class="list" style="width: 100%;">
+      <div class="profitable-list" style="width: 49%; display: inline-block; float: left">
+        <ul style="list-style-image: url('{{ storage_path('pdf/check.svg') }}')">
+          <li>Вартість нового автобусу та фінансування</li>
+          <li>Додаткове обладнання</li>
+          <li>Адміністрування страхових випадків</li>
+          <li>Сервісний пакет BEST Сервiс та опції сервісної
             програми BEST Лiзинг</li>
         </ul>
       </div>

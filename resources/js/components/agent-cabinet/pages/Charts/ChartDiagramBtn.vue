@@ -330,17 +330,28 @@
       </v-card-text>
     </v-card>
   </v-dialog>
-  <v-card-text style="display: flex; justify-content: flex-end;">
-    <div style="width: 165px; display: flex; justify-content: center;">
+  <v-card-text style="display: flex; justify-content: flex-start; padding: 7px 0;">
+    <div style="width: 165px; display: flex; justify-content: space-between;">
+      <span>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn 
+              v-on="on" :to="{name: 'Редагувати', params: {id: data.id, edit: true}}" 
+              width="35" height="35" fab dark color="#d24a43">
+              <v-icon color="white" size="20">mdi-file-find-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>Переглянути графiк в режимi редагування</span>
+        </v-tooltip>
+      </span>
       <span>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn
               v-on="on"
               @click="openForm()"
-              color="grey darken-2" 
-              icon large dark>
-              <v-icon size="22" dark>mdi-file-document-edit-outline</v-icon>
+              width="35" height="35" fab dark color="#d24a43">
+              <v-icon size="20" dark>mdi-file-document-edit-outline</v-icon>
             </v-btn>
           </template>
           <span>Подати заявку на лізинг</span>
@@ -352,9 +363,8 @@
             <v-btn 
               @click="openDialogToSave(); formatToSave = 'pdf'" 
               v-on="on"
-              color="grey darken-2" 
-              icon large dark>
-              <v-icon size="22" dark v-text="'mdi-download'"></v-icon>
+              width="35" height="35" fab dark color="#d24a43">
+              <v-icon size="20" dark v-text="'mdi-download'"></v-icon>
             </v-btn>
           </template>
           <span>Зберегти результат розрахунку</span>
@@ -367,10 +377,9 @@
               @click="openDialogToSave();
                 formatToSave = 'email'; emailField = true"
               v-on="on"
-              color="grey darken-2"
-              :disabled="pdfDownloadLoading"
-              icon large dark>
-              <v-icon size="22" dark v-text="'mdi-email-send'"></v-icon>
+              width="35" height="35" fab dark color="#d24a43"
+              :disabled="pdfDownloadLoading">
+              <v-icon size="20" dark v-text="'mdi-email-send'"></v-icon>
             </v-btn>
           </template>
           <span>Вiдправити результат розрахунку на email</span>
@@ -740,9 +749,12 @@ export default {
         currency: calcData.leasingCurrency,
         leasingRest: graph['offer-rest'],
         requestId: rootCalcData.request_id,
-        date: this.currentGraphToDownload.created_at,
+        date: this.$formatDate(this.currentGraphToDownload.created_at),
         _token: this.getCsrf()
       }
+
+      console.log(dataToSave)
+
       this.graphName
         .forEach(val => {
           dataToSave[val] = graphs[val]
@@ -896,7 +908,7 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
-      console.log(this.data)
+      // console.log(this.data)
       if(this.data.is_send_request === 1) {
         this.$notify({
             group: 'warning',
@@ -906,6 +918,7 @@ export default {
         return
       }
       this.selectedGraph = this.switchGraphName(this.graph)
+      console.log(this.selectedGraph)
       this.getDefaultProperties()
       this.leasingApplicationForm = true
     },
@@ -924,8 +937,6 @@ export default {
       this.leasingAmount = this.data.request_data.leasingAmount
       this.price_brutto = this.data.result_data[firstGraph]['offer-price-brutto'].toString(),
       this._token = this.getCsrf()
-      
-      console.log(this.object())
     },
     parseToInt(id) {
       let input = new Event('input', {bubbles: true})

@@ -15,34 +15,34 @@
 </v-app>
 </template>
 <script>
-import Echo from "laravel-echo"
+// import Echo from "laravel-echo"
 
-window.io = require('socket.io-client');
-  window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001', // this is laravel-echo-server host
-    //transports: ['websocket', 'polling', 'flashsocket']
-})
+// window.io = require('socket.io-client');
+//   window.Echo = new Echo({
+//     broadcaster: 'socket.io',
+//     host: window.location.hostname + ':6001', // this is laravel-echo-server host
+//     //transports: ['websocket', 'polling', 'flashsocket']
+// })
 
-if (typeof window.io !== 'undefined'){
-  window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001'
-  })
-}
+// if (typeof window.io !== 'undefined'){
+//   window.Echo = new Echo({
+//     broadcaster: 'socket.io',
+//     host: window.location.hostname + ':6001'
+//   })
+// }
 
 export default {
   name: 'Головна',
   created() {
     this.$store.dispatch('getCurrentUser')
   },
-  mounted() {
-    console.log('MOUNTED')
-    window.Echo.channel("laravel_database_test").listen("NewDataEvent", (e) => {
-      console.log(e)
-      this.$store.dispatch('dataFromSocket', e)
-    })
-  },
+  // mounted() {
+  //   console.log('MOUNTED')
+  //   window.Echo.channel("laravel_database_test").listen("NewDataEvent", (e) => {
+  //     console.log(e)
+  //     this.$store.dispatch('dataFromSocket', e)
+  //   })
+  // },
   
 }
 </script>

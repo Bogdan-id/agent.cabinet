@@ -421,7 +421,7 @@ export default {
         case '3': return {text: 'Договір підписано', color: `${index <= 3 ? 'green' : 'grey'}`};
         case '4': return {text: 'Отримано аванс', color: `${index <= 4 ? 'green' : 'grey'}` };
         case '5': return {text: 'Відвантажено', color: `${index <= 5 ? 'green' : 'grey'}`};
-        
+        case '6': return {text: 'Виплачено', color: `${index <= 5 ? 'green' : 'grey'}`};
       }
     },
     switchValue(val) {

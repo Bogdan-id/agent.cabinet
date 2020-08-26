@@ -273,8 +273,19 @@
                     mdi-sack-percent
                   </v-icon>
                 </v-btn>
+
+                <v-btn
+                  v-show="parseInt(item.status_id) === 6"
+                  v-on="on"
+                  icon>
+                  <v-icon
+                    color="green lighten-1">
+                    mdi-sack-percent
+                  </v-icon>
+                </v-btn>
+
                 <v-icon
-                  v-show="item.status_id != 5"
+                  v-show="item.status_id != 5 && item.status_id != 6"
                   v-on="on"
                   style="padding: 6px"
                   >
@@ -282,8 +293,9 @@
                 </v-icon>
               </template>
               <span v-show="parseInt(item.status_id) === 5 && $store.state.userHasNeccessaryFields">Подати заявку на виплату АВ</span>
-              <span v-show="parseInt(item.status_id) !== 5">Ви не можете подати заявку на винагороду з даним статусом заявки на лізинг</span>
+              <span v-show="parseInt(item.status_id) !== 5 && parseInt(item.status_id) !== 6">Ви не можете подати заявку на винагороду з даним статусом заявки на лізинг</span>
               <span v-show="parseInt(item.status_id) === 5 && !$store.state.userHasNeccessaryFields">Для отримання АВ необхiдно заповнити всi данi профiлю</span>
+              <span v-show="parseInt(item.status_id) === 6">АВ вже виплачено</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
@@ -402,6 +414,7 @@ export default {
             title: 'Заявку успiшно вiдправлено',
             text: '',
           })
+          this.getUserCalculations()
           setTimeout(() => {
             this.dialogToAgentReward = false
           }, 700)
@@ -439,6 +452,7 @@ export default {
         case '3': return {text: 'Договір підписано', color: `${index <= 3 ? 'green' : 'grey'}`};
         case '4': return {text: 'Отримано аванс', color: `${index <= 4 ? 'green' : 'grey'}` };
         case '5': return {text: 'Відвантажено', color: `${index <= 5 ? 'green' : 'grey'}`};
+        case '6': return {text: 'Виплачено', color: `${index <= 5 ? 'green' : 'grey'}`};
       }
     },
     toEdit(id) {
@@ -462,6 +476,7 @@ export default {
         axios
           .get(`/leasing-reqeust/agent/${agentId}`)
           .then(response => {
+            console.log({leasingRequests: response.data})
             this.loading = false
             if(response.data.length > 0)  {
               this.$store.commit('addLeasingRequests', response.data)

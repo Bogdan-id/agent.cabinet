@@ -273,17 +273,13 @@
                     mdi-sack-percent
                   </v-icon>
                 </v-btn>
-
-                <v-btn
-                  v-show="parseInt(item.status_id) === 6"
+                <v-icon
                   v-on="on"
-                  icon>
-                  <v-icon
-                    color="green lighten-1">
-                    mdi-sack-percent
-                  </v-icon>
-                </v-btn>
-
+                  v-show="parseInt(item.status_id) === 6"
+                  style="padding: 6px"
+                  color="green lighten-1">
+                  mdi-sack-percent
+                </v-icon>
                 <v-icon
                   v-show="item.status_id != 5 && item.status_id != 6"
                   v-on="on"

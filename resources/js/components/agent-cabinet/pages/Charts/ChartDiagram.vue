@@ -56,7 +56,7 @@
             </div>
             <v-card class="view-charts"  v-if="graphData.result_data.hasOwnProperty('annuity')">
               <v-row>
-                <v-col cols="12" md="8" sm="9" lg="6" class="pt-0 pb-0">
+                <v-col cols="12" md="8" sm="8" lg="6" class="pt-0 pb-0">
                   <v-data-table
                     :class="$vuetify.breakpoint.smAndDown ? 'leasing-object-table small' : 'leasing-object-table'"
                     v-if="graphData"
@@ -124,20 +124,13 @@
                   </v-data-table>
                 </v-col>
                 <v-col 
-                  cols="12" md="4" sm="3" lg="6" 
+                  cols="12" md="4" sm="4" lg="6" 
                   v-if="graphData.result_data.hasOwnProperty('annuity')"
-                  :style="`${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-btn 
-                        :class="`${$vuetify.breakpoint.xs ? '' : 'mt-5'}`" 
-                        v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" 
-                        width="45" height="45" fab dark color="#d24a43">
-                        <v-icon color="white" size="30">mdi-file-find-outline</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Переглянути графiк в режимi редагування</span>
-                  </v-tooltip>
+                  :style="`padding: 0; ${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
+                  <chart-buttons 
+                    v-if="graphData"
+                    :graph="currentTab" 
+                    :data="graphData"/>
                 </v-col>
               </v-row>
               <div class="payout-schedule">
@@ -223,12 +216,6 @@
                     </td>
                   </tr>
                   <span></span>
-                </template>
-                <template v-slot:footer>
-                  <chart-buttons 
-                    v-if="graphData"
-                    :graph="currentTab" 
-                    :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
                   <span v-if="item.interest !== null">
@@ -362,17 +349,10 @@
                   cols="12" md="4" sm="3" lg="6" 
                   v-if="graphData.result_data.hasOwnProperty('even')"
                   :style="`${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-btn 
-                        :class="`${$vuetify.breakpoint.xs ? '' : 'mt-5'}`" 
-                        v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" 
-                        width="45" height="45" fab dark color="#d24a43">
-                        <v-icon color="white" size="30">mdi-file-find-outline</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Переглянути графiк в режимi редагування</span>
-                  </v-tooltip>
+                  <chart-buttons 
+                    v-if="graphData"
+                    :graph="currentTab" 
+                    :data="graphData"/>
                 </v-col>
               </v-row>
             <div class="payout-schedule">
@@ -458,12 +438,6 @@
                   </td>
                 </tr>
                 <span></span>
-              </template>
-              <template v-slot:footer>
-                <chart-buttons 
-                  v-if="graphData !== null"
-                  :graph="currentTab" 
-                  :data="graphData"/>
               </template>
               <template v-slot:item.interest="{ item }">
                 <span v-if="item.interest !== null">
@@ -596,17 +570,10 @@
                   cols="12" md="4" sm="3" lg="6" 
                   v-if="graphData.result_data.hasOwnProperty('irregular')"
                   :style="`${$vuetify.breakpoint.xs ? 'display: flex; justify-content: center;' : ''}`">
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-btn 
-                        :class="`${$vuetify.breakpoint.xs ? '' : 'mt-5'}`" 
-                        v-on="on" :to="{name: 'Редагувати', params: {id: graphData.id, edit: true}}" 
-                        width="45" height="45" fab dark color="#d24a43">
-                        <v-icon color="white" size="30">mdi-file-find-outline</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Переглянути графiк в режимi редагування</span>
-                  </v-tooltip>
+                  <chart-buttons 
+                    v-if="graphData"
+                    :graph="currentTab" 
+                    :data="graphData"/>
                 </v-col>
               </v-row>
               <div class="payout-schedule">
@@ -701,12 +668,6 @@
                         .replace(/,/g, ' ')
                     }}
                   </span>
-                </template>
-                <template v-slot:footer>
-                  <chart-buttons 
-                    v-if="graphData !== null"
-                    :graph="currentTab" 
-                    :data="graphData"/>
                 </template>
                 <template v-slot:item.interest="{ item }">
                 <span v-if="item.interest !== null">
@@ -911,6 +872,9 @@ export default {
 
 .v-data-table {
   &.leasing-object-table{
+    .v-data-table-header {
+      display: none!important;
+    }
     &.small {
       .v-data-table__mobile-row {
         height: auto;

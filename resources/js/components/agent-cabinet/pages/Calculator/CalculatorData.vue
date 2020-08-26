@@ -231,7 +231,12 @@
           <v-row>
             <v-col cols="12" class="pt-0 pb-0 pl-0 pr-0" :style="`max-width: ${dialogWidth}px; margin: 0 auto;`">
               <input id="insurance" class="toggle" type="checkbox">
-              <label for="insurance" class="lbl-toggle" style="background: white; color: #5f6368; padding-top: 0rem; margin-bottom: 0;">Документи</label>
+              <label 
+                for="insurance" 
+                class="lbl-toggle" 
+                style="background: white; color: #5f6368; padding-top: 0rem; margin-bottom: 0;">
+                Документи
+              </label>
                 <div class="collapsible-content">
                   <div class="content-inner">
                     <div class="document-list" v-if="clientTypeId === 2">
@@ -1044,7 +1049,7 @@ export default {
       }
     },
     openForm(item) {
-      // console.log(item)
+      console.log(item)
       if(item.is_send_request === 1) {
         this.$notify({
             group: 'warning',

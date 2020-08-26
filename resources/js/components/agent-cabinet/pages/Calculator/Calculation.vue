@@ -296,7 +296,7 @@
         </v-col>
         <v-col cols="12" md="3" sm="6" xs="12" :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-select
-            v-model="calcObj.currency"
+            v-model="calcObj.leasingCurrency"
             :items="selects.currencys"
             background-color="white"
             append-icon="mdi-chevron-down"
@@ -319,7 +319,7 @@
             label="Курс"
             color="red darken-4"
             outlined :dense="mediumAndDown"
-            :disabled="calcObj.currency === null">
+            :disabled="calcObj.leasingCurrency === null">
           </v-text-field>
         </v-col>
         <v-col cols="12" md="3" sm="6" xs="12" :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
@@ -535,7 +535,7 @@
                   :class="`financing-currency d-inline-block mt-0 ${xs ? ' pt-2' : ''}`"
                   :error-messages="leasingCurrencyErr"
                   color="red darken-4"
-                  v-model="calcObj.leasingCurrency"
+                  v-model="calcObj.currency"
                   dense>
                   <v-row class="pl-2" :style="`display: flex; ${$vuetify.breakpoint.width < 450 ? 'flex-direction: column;' : 'flex-direction: row;'}`">
                     <div>
@@ -543,7 +543,7 @@
                         <template #label>
                           <span
                             class="current-currency-label"
-                            :style="`color: ${calcObj.leasingCurrency === 'UAH' ? 'black' : ''}`">
+                            :style="`color: ${calcObj.currency === 'UAH' ? 'black' : ''}`">
                             UAH
                           </span>
                         </template>
@@ -554,7 +554,7 @@
                         <template #label>
                           <span
                             class="current-currency-label"
-                            :style="`color: ${calcObj.leasingCurrency === 'USD' ? 'black' : ''}`">
+                            :style="`color: ${calcObj.currency === 'USD' ? 'black' : ''}`">
                             USD
                           </span>
                         </template>
@@ -565,7 +565,7 @@
                         <template #label>
                           <span
                             class="current-currency-label"
-                            :style="`color: ${calcObj.leasingCurrency === 'EURO' ? 'black' : ''}`">
+                            :style="`color: ${calcObj.currency === 'EURO' ? 'black' : ''}`">
                             EURO
                           </span>
                         </template>
@@ -1092,7 +1092,7 @@ export default {
       return this.commonErr
     },
     currencyErr() {
-      if (!this.$v.calcObj.currency.$error) return
+      if (!this.$v.calcObj.leasingCurrency.$error) return
       return this.commonErr
     },
     leasingObjectTypeErr() {
@@ -1116,7 +1116,7 @@ export default {
       return this.commonErr
     },
     leasingCurrencyErr() {
-      if (!this.$v.calcObj.leasingCurrency.$error) return
+      if (!this.$v.calcObj.currency.$error) return
       return this.commonErr
     },
     leasingCurrencyCourseErr() {
@@ -2352,6 +2352,7 @@ input[type='checkbox'] {
 
 .toggle:checked + .lbl-toggle + .collapsible-content {
   max-height: 100vh;
+  overflow-y: scroll;
 }
 
 .toggle:checked + .lbl-toggle {

@@ -420,9 +420,9 @@ export default {
         case '2': return {text: 'Погоджено', color: `${index <= 2 ? 'orange' : 'grey'}`};
         case '3': return {text: 'Договір підписано', color: `${index <= 3 ? 'green' : 'grey'}`};
         case '4': return {text: 'Отримано аванс', color: `${index <= 4 ? 'green' : 'grey'}` };
-        case '5': return {text: 'Відвантажено', color: `${index <= 5 ? 'green lighten-1' : 'grey'}`};
-        case '6': return {text: 'Подано заявку на АВ', color: `${index <= 3 ? 'green darken-2' : 'green lighten-1'}`};
-        case '7': return {text: 'Заявку на АВ виплачено', color: `${index <= 5 ? 'green darken-2' : 'grey'}`};
+        case '5': return {text: 'Відвантажено', color: `${index <= 5 ? 'green darken-2' : 'grey'}`};
+        case '6': return {text: 'Відвантажено', color: `${index <= 5 ? 'green darken-2' : 'grey'}`};
+        case '7': return {text: 'Відвантажено', color: `${index <= 5 ? 'green darken-2' : 'grey'}`};
       }
     },
     switchValue(val) {

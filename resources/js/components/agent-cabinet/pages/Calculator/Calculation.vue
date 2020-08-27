@@ -1065,8 +1065,8 @@ export default {
     },
     hasForeignCurrency() {
       if(this.calcObj.currency === null) return false
-      return this.calcObj.currency.indexOf('EUR') > -1
-        || this.calcObj.currency.indexOf('USD') > - 1
+      return this.calcObj.leasingCurrency.indexOf('EUR') > -1
+        || this.calcObj.leasingCurrency.indexOf('USD') > - 1
     },
     isClientType() {
       return this.calcObj.leasingClientType !== null
@@ -1522,7 +1522,7 @@ export default {
         ? delete this.deleteStepData() : false
     },
     submit() {
-      console.log(this.$v)
+      console.log(this.calcObj)
       this.checkIfHasIrregular()
       this.checkIfHasCurrency()
       this.deleteUnneccessaryFields()

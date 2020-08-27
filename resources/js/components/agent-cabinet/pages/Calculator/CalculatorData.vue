@@ -1228,7 +1228,7 @@ export default {
         offerBrutto: graph['offer-price-brutto'],
         offerNetto: graph['offer-price-netto'],
         oneTimeComission: (graph['offer-administrative-payment-per'] * 100).toFixed(2),
-        currency: calcData.leasingCurrency,
+        currency: calcData.currency,
         leasingRest: graph['offer-rest'],
         requestId: rootCalcData.request_id,
         date: this.$formatDate(rootCalcData.created_at),

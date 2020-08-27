@@ -714,7 +714,7 @@ export default {
       { text: 'Вартість предмета лiзингу з реєстрацією, грн', value: 'offer_price_brutto', align: 'end', sortable: false },
       { text: 'Авансовий платiж, грн', value: 'offer_advance', align: 'center', sortable: false},
       { text: 'Термiн лiзингу, мiс', value: 'request_data.leasingTerm', align: 'end', sortable: false },
-      { text: 'Валюта фiнансування', value: 'request_data.leasingCurrency', align: 'end', sortable: false },
+      { text: 'Валюта фiнансування', value: 'request_data.currency', align: 'end', sortable: false },
       { text: 'Єдиноразова комiсiя, %', value: 'one_time_commission', align: 'end', sortable: false},
       { text: 'Залишкова вартiсть, грн', value: 'offer_rest', align: 'end', sortable: false },
       { text: 'Середньомiсячний платiж, грн', value: 'offer_month_payment', align: 'end', sortable: false },

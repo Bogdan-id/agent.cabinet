@@ -240,7 +240,7 @@ export default {
     },
 
     setIndentToLeasingReport() {
-      return this.xs ? 15 : this.leasingReportXSmall ? 55 : this.leasingReportSmall ? 45 : 25
+      return this.xs ? 15 : this.leasingReportXSmall ? 75 : this.leasingReportSmall ? 35 : 25
     },
 
     xs() {
@@ -311,13 +311,13 @@ export default {
   }
   &.x-small {
     .ct-series-a .ct-bar {
-      stroke-width: 45px;
+      stroke-width: 55px;
     }
     .ct-series-b .ct-bar {
-      stroke-width: 45px;
+      stroke-width: 55px;
     }
     .ct-series-c .ct-bar {
-      stroke-width: 45px;
+      stroke-width: 55px;
     }
   }
   &.xs {

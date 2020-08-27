@@ -86,7 +86,12 @@ export default {
     options: {
       seriesBarDistance: 15,
       plugins: [
-        Chartist.plugins.tooltip()
+        Chartist.plugins.tooltip({
+          valueTransform: function(v) {
+            return (parseInt(v)).toLocaleString('ru') + ' грн'
+          },
+          appendToBody: true
+        })
       ],
       axisY: {
         offset: 60
@@ -99,7 +104,7 @@ export default {
         axisY: {
           offset: 60,
           labelInterpolationFnc: function (value) {
-            return (parseInt(value)).toLocaleString('ru');
+            return (parseInt(value)).toLocaleString('ru')
           }
         },
         axisX: {

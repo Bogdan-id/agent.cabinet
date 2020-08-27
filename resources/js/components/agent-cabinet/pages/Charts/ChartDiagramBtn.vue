@@ -908,7 +908,7 @@ export default {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
     openForm() {
-      // console.log(this.data)
+      console.log(this.data)
       if(this.data.is_send_request === 1) {
         this.$notify({
             group: 'warning',

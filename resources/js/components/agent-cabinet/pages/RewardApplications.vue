@@ -75,6 +75,10 @@
           </div>
         </template>
 
+        <template v-slot:item.price_brutto="{ item }">
+          <span style="white-space: nowrap;"> {{ item.price_brutto ? (parseInt(item.price_brutto)).toLocaleString('ru') : '' }} </span>
+        </template>
+
         <template v-slot:item.initials="{ item }">
           <span v-if="item.leasing_request" style="white-space: nowrap">
             {{ 
@@ -120,6 +124,7 @@ export default {
       { text: 'Код заявки', value: 'id'},
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Предмет лiзингу', value: 'leasing_request.leasing_object', align: 'center' },
+      { text: 'Цiна, грн', value: 'price_brutto', align: 'center' },
       { text: 'АВ, грн', value: 'sum', align: 'center' },
       { text: 'Дата заявки', value: 'leasing_request.created_at', align: 'center', sortable: true },
       { text: 'Статус', value: 'status', align: 'center' },

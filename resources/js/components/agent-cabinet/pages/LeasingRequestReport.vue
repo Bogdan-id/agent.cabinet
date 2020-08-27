@@ -1,6 +1,11 @@
 <template>
 <v-row>
-  <v-col class="ml-6 mr-4">
+  <v-col class="ml-6 mr-4" style="position: relative;">
+    <div 
+      v-show="isObjEmpty"
+      style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
+      За даний рiк звiтнiсть за заявками на лiзинг вiдсутня 
+    </div>
     <div :class="`ct-chart ct-octave ${xs ? 'xs' : leasingReportXSmall ? 'x-small' : leasingReportSmall ? 'small' : ''}`"></div>
     <section class="chart-navigation">
       <div style="display: inline-block;">
@@ -8,8 +13,8 @@
           v-for="(item, key) in data.series"
           :key="key"
           class="label-hint">
-          <span 
-            class="hint-square" 
+          <span
+            class="hint-square"
             :style="`background: ${item.color};`">
           </span>
           <span>{{ item.name }}</span>
@@ -42,6 +47,7 @@ export default {
   data: () => ({
     years: [],
     currentYear: null,
+    isObjEmpty: false,
     chartData: {},
     objShouldContain: ['0', '5', 'inWork'],
     months: [
@@ -135,8 +141,15 @@ export default {
       switch (v) {
         case '0': return 'Відмовлено';
         case '5': return 'Відвантажено';
-        case 'inWork': return 'В роботi'; 
+        case 'inWork': return 'В роботi';
       }
+    },
+
+    clearGraphs() {
+      this.data.labels.splice(0)
+
+      this.data.series
+        .forEach(v => v.data.splice(0))
     },
 
     addPropertyIfEmpty(v) {
@@ -161,8 +174,11 @@ export default {
     },
 
     getProperties() {
+      this.clearGraphs()
+
       this.months
         .forEach(v => {
+          console.log(this.chartData[v.id])
           if(this.chartData[v.id]) {
             this.addPropertyIfEmpty(v)
 
@@ -174,6 +190,10 @@ export default {
     },
 
     initChartistGraph() {
+      if (this.checkEmptyObj()) return this.isObjEmpty = true
+
+      this.isObjEmpty = false
+
       try {
         new Chartist.Bar('.ct-chart', this.data, this.options, this.responsiveOptions)
 
@@ -183,6 +203,8 @@ export default {
     },
 
     buildGraph(response) {
+      this.chartData = {}
+
       this.chartData = Object.assign(this.chartData, response.data)
 
       this.getProperties()
@@ -190,6 +212,10 @@ export default {
       this.masterSchedule()
 
       this.initChartistGraph()
+    },
+
+    checkEmptyObj() {
+      return Object.keys(this.chartData).length === 0 && this.chartData.constructor === Object
     },
 
     getLeasingRequests() {
@@ -212,7 +238,7 @@ export default {
       this.years = res.data.sort((a, b) => a - b)
 
       console.log({years: this.years})
-      
+
       this.currentYear = this.years[0]
     },
 
@@ -256,6 +282,14 @@ export default {
   watch: {
     setIndentToLeasingReport() {
       this.masterSchedule()
+    },
+
+    isObjEmpty(val) {
+      if(val) {
+        document.querySelector('.ct-chart').style = "opacity: 0;"
+      } else {
+        document.querySelector('.ct-chart').style = "opacity: 1"
+      }
     }
   },
 
@@ -278,10 +312,10 @@ export default {
     flex-wrap: nowrap;
     margin: 0 8px;
     .hint-square {
-      display: inline-block; 
+      display: inline-block;
       align-self: center;
-      width: 10px; 
-      height: 10px; 
+      width: 10px;
+      height: 10px;
       margin: 0 4px;
     }
   }

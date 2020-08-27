@@ -24,17 +24,6 @@
       :currentYear="currentYear"
       :is="currentReport">
     </component>
-    <!-- <div style="display: inline-block; max-width: 170px;">
-      <v-select
-        @change="getLeasingRequests()"
-        v-model="currentYear"
-        :items="years"
-        label="Рiк"
-        color="#e65048"
-        item-color="#e65048"
-        dense>
-      </v-select>
-    </div> -->
   </v-card>
 </template>
 

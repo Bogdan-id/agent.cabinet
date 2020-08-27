@@ -124,7 +124,7 @@ export default {
       { text: 'Код заявки', value: 'id'},
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
       { text: 'Предмет лiзингу', value: 'leasing_request.leasing_object', align: 'center' },
-      { text: 'Цiна, грн', value: 'price_brutto', align: 'center' },
+      { text: 'Цiна, грн', value: 'leasing_request.leasing_amount', align: 'center' },
       { text: 'АВ, грн', value: 'sum', align: 'center' },
       { text: 'Дата заявки', value: 'leasing_request.created_at', align: 'center', sortable: true },
       { text: 'Статус', value: 'status', align: 'center' },

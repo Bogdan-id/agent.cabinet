@@ -85,7 +85,6 @@
               v-model="materialImg"
               accept="image/x-png, image/gif, image/jpeg, image/jpg, image/svg+xml"
               :rules="rules"
-              :error-messages="materialImgErr"
               prepend-inner-icon="mdi-camera"
               label="Зображення до матерiалу"
               outlined show-size dense>
@@ -274,7 +273,7 @@
     validations: {
       newCategorie: { required },
       materialName: { required },
-      materialImg: {required}
+      // materialImg: {required}
     },
     computed: {
       categoriesPresent() {
@@ -342,6 +341,7 @@
 
             this.$nextTick(() => {
               this.documentLink = response.data.url
+              document.getElementById('link-input').readOnly = true
             })
             
           })
@@ -484,6 +484,11 @@
       }
     },
     mounted() {
+      setTimeout(() => {
+        let element = document.querySelectorAll('.ck-button')
+        console.log(element)
+      }, 1000)
+
       this.assignTokenToCkEditorConfig()
       this.embedDwnldBtnToCkPnl()
       this.categories = this.$route.params.categories
@@ -496,8 +501,10 @@
         this.materialName = material.title,
         this.imageName = material.title_image
 
-        let index = material.title_image.lastIndexOf("/") + 1
-        this.imageToDelete = material.title_image.substr(index)
+        if(material.title_image) {
+          let index = material.title_image.lastIndexOf("/") + 1
+          this.imageToDelete = material.title_image.substr(index)
+        }
 
         this.materialImg = material.title_image
         this.newCategorie = this.$route.params.category[0].id

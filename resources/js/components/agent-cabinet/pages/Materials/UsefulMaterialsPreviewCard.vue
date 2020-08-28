@@ -9,8 +9,8 @@
         <v-row class="ml-1 mr-1">
           <v-col cols="12" xs="12" sm="4" md="3" xl="2" class="d-flex align-items-center justify-center">
             <div class="d-flex justify-center" :style="`border-radius: 5px; overflow: hidden; ${$vuetify.breakpoint.xs ? 'width: 100%;' : ''}`">
-              <div v-if="item.title_image" :style="`${$vuetify.breakpoint.xs ? 'width: 90%;' : ''}`">
-                <img :style="`width: 100%; max-width: ${$vuetify.breakpoint.xs ? '100%;' : '250px;'}`" :src="item.title_image" />
+              <div :style="`${$vuetify.breakpoint.xs ? 'width: 90%;' : ''}`">
+                <img :style="`width: 80%; max-width: ${$vuetify.breakpoint.xs ? '80%;' : '250px;'}`" :src="item.title_image || emptyTitleImg" />
               </div>
             </div>
           </v-col>
@@ -39,6 +39,7 @@ export default {
   props: ['item'],
   data: () => ({
     routeItem: null,
+    emptyTitleImg: require('../../../../assets/images/empty-title-img.jpeg')
   }),
   methods: {
     toMaterial() {
@@ -47,6 +48,7 @@ export default {
   },
   mounted() {
     console.log(this.item)
+    console.log(this.emptyTitleImg)
   }
 }
 </script>

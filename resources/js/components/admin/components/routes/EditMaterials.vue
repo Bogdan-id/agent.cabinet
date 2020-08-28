@@ -1,7 +1,7 @@
 <template>
-    <v-card min-height="500">
+    <v-card class="admin-edit-materials" min-height="500">
       <v-dialog
-        style="overflow: hidden!important;"
+        class="copy-file-dialog"
         v-model="copyFileDialog"
         :max-width="320">
         <v-card>
@@ -510,6 +510,12 @@
   .ck {
     &.ck-content {
       min-height: 200px!important;
+    }
+  }
+
+  .admin-edit-materials {
+    .v-dialog__content .v-dialog, .v-dialog__content--active .v-dialog {
+        overflow-x: scroll !important;
     }
   }
 </style>

@@ -331,12 +331,11 @@ export default {
     }
   }
 }
-.agreement-wrapper {
-  .v-dialog__content,
-  .v-dialog__content--active {
-    .v-dialog {
-      overflow-x: scroll !important;
-    }
+
+.v-dialog__content,
+.v-dialog__content--active {
+  .v-dialog {
+    overflow-x: auto !important;
   }
 }
 

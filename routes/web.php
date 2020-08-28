@@ -118,6 +118,7 @@ Route::group([
             ->where('id', '[0-9]+');
     $router->post('image/upload', 'ImagesController@uploadImage');
     $router->post('image/delete', 'ImagesController@deleteImage');
+    $router->post('document/upload', 'UsefulMaterialsController@uploadDoc');
     $router->get('managers/update', 'ManagersController@updateManagers');
     $router->get('managers/all', 'ManagersController@getManagers');
     $router->get('useful-materials/all', 'UsefulMaterialsController@getMaterials');

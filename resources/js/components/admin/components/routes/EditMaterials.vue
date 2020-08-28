@@ -1,5 +1,48 @@
 <template>
     <v-card min-height="500">
+      <v-dialog
+        style="overflow: hidden!important;"
+        v-model="copyFileDialog"
+        :max-width="320">
+        <v-card>
+          <v-card-text style="position: relative; font-size: 0.8rem; color: #993b3b;" class="pt-4 pb-0">
+            <v-btn 
+              @click="copyFileDialog = false" 
+              style="position: absolute; right: 4px; top: 6px;" 
+              icon small>
+              <v-icon small v-text="'mdi-close'"></v-icon>
+            </v-btn>
+            Посилання на завантажений файл
+          </v-card-text>
+          <v-card-text class="pb-0">
+            <v-text-field
+              color="#424242"
+              id="link-input"
+              style="font-size: 0.8rem!important; font-style: italic;"
+              v-model="documentLink"
+              dense>
+              <template v-slot:append>
+                <v-tooltip 
+                  top
+                  color="black">
+                  <template v-slot:activator="{ on }">
+                    <v-btn 
+                      v-on="on"
+                      @click="copyLinkToClipBoard()"
+                      small icon>
+                      <v-icon 
+                        size="18" 
+                        color="black" 
+                        v-text="'mdi-content-copy'"></v-icon>
+                    </v-btn>
+                  </template>
+                  <span style="font-size: 0.8rem!important;">копiювати посилання</span>
+                </v-tooltip>
+              </template>
+            </v-text-field>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
       <v-card-title class="headline">
         Новий матерiал
       </v-card-title>
@@ -67,6 +110,26 @@
           style="text-decoration: underline;">
           Контент
         </v-card-title>
+
+        <!-- hidden input for files -->
+        <input 
+          ref="ckDwnlInput"
+          id="ck-dwnl-input"
+          @change="handleFile()"
+          type="file" 
+          style="visibility: hidden; position: absolute; top: 0; right: 0;">
+          
+        <!-- btn for ck-edito panel -->
+        <v-icon
+          @click="toggleFileDialog($event)"
+          id="ck-dwnl-btn"
+          style="cursor: pointer;"
+          color="grey darken-3"
+          v-text="'mdi-download'"
+          :size="20" 
+          icon >
+        </v-icon>
+
         <ckeditor
           :editor="editor" v-model="editorData" :config="editorConfig">
         </ckeditor>
@@ -116,6 +179,10 @@
   export default {
     mixins: [validationMixin],
     data: () => ({
+      copyFileDialog: false,
+
+      documentLink: null,
+
       commonErr: ['Обов`язкове поле'],
       editor: ClassicEditor,
       editorConfig: {
@@ -153,6 +220,18 @@
             'blockQuote',
             'undo',
             'redo',
+          ]
+        },
+        link: {
+          addTargetToExternalLinks: true,
+          decorators: [
+            {
+              mode: 'manual',
+              label: 'Downloadable',
+              attributes: {
+                download: 'download'
+              }
+            }
           ]
         },
         image: {
@@ -216,6 +295,67 @@
       }
     },
     methods: {
+      copyLinkToClipBoard() {
+        let input = document.getElementById('link-input')
+
+        input.select()
+        input.setSelectionRange(0, 99999)
+
+        document.execCommand("copy")
+
+        this.$notify({
+          group: 'success',
+          title: ``,
+          text: 'Посилання скопійоване в буфер обміну'
+        })
+      },
+      toggleFileDialog(event) {
+        if (event) {
+          event.preventDefault()
+        }
+
+        this.$refs.ckDwnlInput.click();
+      },
+      handleFile() {
+        let el = document.getElementById('ck-dwnl-input')
+        let file = el.files[0]
+
+        console.log({document: file})
+
+        this.uploadFile(file)
+      },
+
+      uploadFile(file) {
+        let formData = new FormData()
+        formData.append('upload', file)
+        
+        axios
+          .post('/admin/document/upload', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              }
+          })
+          .then(response => {
+            console.log(response)
+
+            this.copyFileDialog = !this.copyFileDialog
+
+            this.$nextTick(() => {
+              this.documentLink = response.data.url
+            })
+            
+          })
+          .catch(error => {
+            console.log(error.response)
+
+            this.$notify({
+              message: 'Помилка',
+              type: 'error',
+            })
+            this.$catchStatus(error.response.status)
+          })
+      },
+            
       clearImage() {
         this.imageName = null 
         this.materialImg = null
@@ -330,10 +470,22 @@
       },
       assignTokenToCkEditorConfig() {
         this.editorConfig.simpleUpload.headers.Authorization = `Bearer ${this.getCsrf()}`
+      },
+      embedDwnldBtnToCkPnl() {
+        setTimeout(() => {
+          let btn = document.getElementById('ck-dwnl-btn')
+          let panel = document.querySelector('.ck-toolbar__items')
+
+          let event = new Event('click', {bubbles: true})
+          panel.dispatchEvent(event)
+
+          panel.appendChild(btn)
+        }, 100)
       }
     },
     mounted() {
       this.assignTokenToCkEditorConfig()
+      this.embedDwnldBtnToCkPnl()
       this.categories = this.$route.params.categories
     },
     created() {

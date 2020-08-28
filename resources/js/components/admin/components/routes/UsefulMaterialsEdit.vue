@@ -272,8 +272,8 @@
                               <!-- <v-icon v-if="!item.title_image" size="90" style="width: 100%;">
                                 mdi-image
                               </v-icon> -->
-                              <div v-if="item.title_image" style="max-width: 180px;">
-                                <img :style="`width: 100%; max-width: ${$vuetify.breakpoint.xs ? '100%;' : '250px;'}`" :src="item.title_image" />
+                              <div style="max-width: 180px;">
+                                <img :style="`width: 100%; max-width: ${$vuetify.breakpoint.xs ? '100%;' : '250px;'}`" :src="item.title_image || emptyTitleImg" />
                               </div>
                             </div>
                           </v-col>
@@ -332,6 +332,8 @@ export default {
     // EditMaterials
   },
   data: () => ({
+    emptyTitleImg: require('../../../../assets/images/empty-title-img.jpeg'),
+
     commonErr: ['Обов`язкове поле'],
     categories: [],
     materials: [],

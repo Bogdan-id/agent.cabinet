@@ -60,7 +60,7 @@ class UsefulMaterialsController extends Controller
        
         $usefulMaterial = new UsefulMaterial;
         $usefulMaterial->useful_materials_category_id = $data['usefulMaterialsCategoryId'];
-        $usefulMaterial->title_image = $data['titleImage'];
+        $usefulMaterial->title_image = $data['titleImage'] ?? null;
         $usefulMaterial->title = $data['title'];
         $usefulMaterial->content = $data['content'];
         $usefulMaterial->slug = Str::slug($data['title'], '-');
@@ -75,7 +75,7 @@ class UsefulMaterialsController extends Controller
         $usefulMaterial = UsefulMaterial::find($id);
         $usefulMaterial->update([
             'useful_materials_category_id' => $data['usefulMaterialsCategoryId'],
-            'title_image' =>$data['titleImage'],
+            'title_image' => $data['titleImage'] ?? null,
             'title' => $data['title'],
             'content' =>$data['content'],
             'slug' =>  Str::slug($data['title'], '-')

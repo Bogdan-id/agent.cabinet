@@ -108,4 +108,13 @@ class UsefulMaterialsController extends Controller
 
         return response()->json($materials);
     }
+
+    public function uploadDoc(Request $request)
+    {
+        $path = $request->file('upload')->store('uploads', 'public');
+
+        return response()->json([
+            'url' => url("/storage/{$path}")
+        ]);
+    }
 }

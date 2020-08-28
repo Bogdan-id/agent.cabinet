@@ -1,4 +1,5 @@
 <template>
+<div class="agreement-wrapper">
   <v-dialog 
     v-model="openDialog" 
     persistent
@@ -276,6 +277,7 @@
     </v-card-text>
     </v-card>
   </v-dialog>
+</div>
 </template>
 
 <script>
@@ -329,11 +331,12 @@ export default {
     }
   }
 }
-
-.v-dialog__content,
-.v-dialog__content--active {
-  .v-dialog {
-    overflow-x: scroll !important;
+.agreement-wrapper {
+  .v-dialog__content,
+  .v-dialog__content--active {
+    .v-dialog {
+      overflow-x: scroll !important;
+    }
   }
 }
 

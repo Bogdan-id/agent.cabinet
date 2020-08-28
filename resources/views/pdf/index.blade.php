@@ -59,7 +59,7 @@
       min-height: 250px; 
       background-repeat: no-repeat;
     }
-    .table-wrapper {
+    .line-break {
       page-break-after: always;
     }
     .table-wrapper:last-child {
@@ -448,7 +448,7 @@
   </section>
   <section class="graphs">
     <div style="width: 100%; height: 1px; padding-top: 15px;"></div>
-
+    
     @isset($even)
       @if(count($even) > 0)
         <div class="table-wrapper">
@@ -496,6 +496,9 @@
             </tfoot>
           </table>
         </div>
+        @if(isset($annuity))
+          <div class="line-break"></div>
+        @endif
       @endif
     @endisset
 
@@ -548,6 +551,9 @@
             </tfoot>
           </table>
         </div>
+        @if(isset($irregular))
+          <div class="line-break"></div>
+        @endif
       @endif
     @endisset
 

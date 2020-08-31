@@ -38,11 +38,12 @@ export default {
         {
           yAxisID: 'A',
           label: 'Сума фiнансування',
+          lineTension: 0, 
           data: [150000, 250000, 220000],
-          backgroundColor: '#2fba80b7',
+          backgroundColor: '#fdfdfd00',
           borderColor: '#2fba80',
           borderWidth: 2,
-          type: 'line'
+          type: 'line',
         },
         {
           yAxisID: 'B',
@@ -70,6 +71,9 @@ export default {
               stepSize: 100000,
               min: null,
             },
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+            },
             afterTickToLabelConversion : function(v){
               for(var tick in v.ticks){
                 v.ticks[tick] = parseInt(v.ticks[tick])
@@ -87,6 +91,9 @@ export default {
               max: null,
               min: null,
               stepSize: 1000,
+            },
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
             },
             afterTickToLabelConversion : function(v){
               for(var tick in v.ticks){
@@ -163,12 +170,12 @@ export default {
 
     setMaxMinA(v, res) {
       this.options.scales.yAxes[v].ticks.max = res.max_price_brutto_sum * 1.2
-      this.options.scales.yAxes[v].ticks.min = res.max_price_brutto_sum / 2
+      this.options.scales.yAxes[v].ticks.min = res.min_price_brutto_sum / 1.35
     },
 
     setMaxMinB(v, res) {
       this.options.scales.yAxes[v].ticks.max = res.max_sum * 1.8
-      this.options.scales.yAxes[v].ticks.min = res.max_sum / 2
+      this.options.scales.yAxes[v].ticks.min = res.min_sum / 1.35
     },
 
     getLeasingRequests() {

@@ -130,7 +130,7 @@
         </v-icon>
 
         <ckeditor
-          :editor="editor" v-model="editorData" :config="editorConfig">
+          :editor="editor" v-model="editorData" @ready="onEditorReady" :config="editorConfig">
         </ckeditor>
         <v-card-text class="d-flex justify-center">
           <span>
@@ -179,11 +179,14 @@
     mixins: [validationMixin],
     data: () => ({
       copyFileDialog: false,
-
       documentLink: null,
+      fileName: null,
+
+      tempHref: null,
 
       commonErr: ['Обов`язкове поле'],
       editor: ClassicEditor,
+      ckEditor: null,
       editorConfig: {
         plugins: [ 
           SimpleUploadAdapter,
@@ -205,6 +208,7 @@
           ImageResize,
           // LinkImage
         ],
+
         toolbar: {
           items: [
             'heading',
@@ -221,23 +225,27 @@
             'redo',
           ]
         },
-        link: {
-          addTargetToExternalLinks: true,
-          decorators: [
-            {
-              mode: 'manual',
-              label: 'Downloadable',
-              attributes: {
-                download: 'download'
-              }
-            }
-          ]
-        },
+
+        // link: {
+        //     addTargetToExternalLinks: true,
+
+        //     decorators: [
+        //       {
+        //         mode: 'manual',
+        //         label: 'Downloadable',
+        //         attributes: {
+        //             download: 'download'
+        //         }
+        //       }
+        //     ]
+        // },
         image: {
           upload: {
             types: ['jpeg', 'png', 'gif', 'jpg', 'svg']
           },
+
           toolbar: [ 'imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight' ],
+          
           styles: [
                 'full',
                 'side',
@@ -246,7 +254,9 @@
                 'alignCenter'
             ]
         },
+
         language: 'uk',
+        
         simpleUpload: {
           uploadUrl: '/admin/image/upload',
           headers: {
@@ -254,9 +264,11 @@
           }
         }
       },
+
       rules: [
         value => !value || value.size < 2000000 || 'Розмiр зображення повинен бути меньше 2 MB!',
       ],
+
       categories: [],
       loading: false,
 
@@ -280,27 +292,37 @@
         if(!this.categories) return false
         return this.categories.length > 0
       },
+
       newCategorieErr() {
         if (!this.$v.newCategorie.$error) return
         return this.commonErr
       },
+
       materialNameErr() {
         if (!this.$v.materialName.$error) return
         return this.commonErr
       },
+
       materialImgErr() {
         if (!this.$v.materialImg.$error) return
         return this.commonErr
       }
     },
     methods: {
+      onEditorReady(editor) {
+
+        let inst = {editor}
+        console.log(inst.editor)
+        this.ckEditor = inst.editor
+      },
+
       copyLinkToClipBoard() {
         let input = document.getElementById('link-input')
 
         input.select()
         input.setSelectionRange(0, 99999)
 
-        document.execCommand("copy")
+        this.tempHref = document.execCommand("copy")
 
         this.$notify({
           group: 'success',
@@ -319,7 +341,7 @@
         let el = document.getElementById('ck-dwnl-input')
         let file = el.files[0]
 
-        console.log({document: file})
+        this.fileName = file.name
 
         this.uploadFile(file)
       },
@@ -371,11 +393,13 @@
             })
         }
       },
+
       submit() {
         !this.$v.$invalid
           ? this.sendRequest()
           : this.highlightErrors()
       },
+
       sendRequest() {
         this.loading = true
         let url
@@ -408,6 +432,7 @@
             })
           })
       },
+
       finalObj() {
         return {
           usefulMaterialsCategoryId: this.newCategorie,
@@ -417,6 +442,7 @@
           _token: this.getCsrf()
         }
       },
+
       previewImage(event) { 
         if(event) {
           if(event.size > 2000000) {
@@ -440,6 +466,7 @@
           this.materialImgPreview = null
         }
       },
+
       uploadTitleImage(event) {
         let formData = new FormData()
         formData.append('upload', event)
@@ -461,16 +488,20 @@
             })
           })
       },
+
       getCsrf() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
       },
+
       highlightErrors() {
         this.$v.$anyError
         this.$v.$touch()
       },
+
       assignTokenToCkEditorConfig() {
         this.editorConfig.simpleUpload.headers.Authorization = `Bearer ${this.getCsrf()}`
       },
+
       embedDwnldBtnToCkPnl() {
         setTimeout(() => {
           let btn = document.getElementById('ck-dwnl-btn')
@@ -481,27 +512,88 @@
 
           panel.appendChild(btn)
         }, 100)
-      }
+      },
+
+      getLinkBtn(element) {
+        let temp = null
+        for(let i = 0; i < element.length; i++ ) {
+          if(element[i].querySelector('span span').textContent === 'Посилання (Ctrl+K)') {
+            temp = element[i]
+          }
+        }
+        return temp
+      },
+
+      setLstLinkBtnClick() {
+        this.$nextTick(() => {
+
+          let el = document.querySelector('.ck-button-save')
+          el.addEventListener('click', this.formatLink)
+
+          let input = document.querySelector('.ck-input-text')
+          let pasteEvent = new Event('input', {bubbles: true})
+
+          input.addEventListener('input', this.getValueFromInput)
+          input.dispatchEvent(pasteEvent)
+
+        })
+      },
+
+      getValueFromInput(e) {
+        if(e) {
+          this.documentLink = e.target.value
+        }
+      },
+
+      writeLinkToEditor() {
+        this.ckEditor.model.change( writer => {
+
+          let linkedText = writer
+            .createText( this.fileName, { linkHref: this.documentLink} )
+
+            console.log(linkedText)
+
+          this.ckEditor.model
+            .insertContent( linkedText, this.ckEditor.model.document.selection )
+
+        })
+      },
+
+      formatLink() {
+        setTimeout(() => {
+          this.writeLinkToEditor()
+        }, 0)
+      },
     },
+
     mounted() {
       setTimeout(() => {
-        let element = document.querySelectorAll('.ck-button')
-        console.log(element)
+        let ckBtnLink = document.querySelectorAll('.ck-button')
+        let getLinkBtn = this.getLinkBtn(ckBtnLink)
+
+        console.log(getLinkBtn)
+
+        getLinkBtn.addEventListener('click', this.setLstLinkBtnClick)
       }, 1000)
 
       this.assignTokenToCkEditorConfig()
+
       this.embedDwnldBtnToCkPnl()
+
       this.categories = this.$route.params.categories
     },
+
     created() {
-      this.editorConfig
       let material = this.$route.params.material
+
       if(this.$route.params.edit === true) {
+
         this.editorData = material.content,
         this.materialName = material.title,
         this.imageName = material.title_image
 
         if(material.title_image) {
+
           let index = material.title_image.lastIndexOf("/") + 1
           this.imageToDelete = material.title_image.substr(index)
         }

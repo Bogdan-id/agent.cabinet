@@ -16,6 +16,18 @@
         :hide-details="true"
         dense>
       </v-select>
+      <v-spacer></v-spacer>
+      <v-select
+        @change="callGetLReq()"
+        style="max-width: 170px;"
+        v-model="currentYear"
+        :items="years"
+        label="Рiк"
+        color="#e65048"
+        item-color="#e65048"
+        :hide-details="true"
+        dense>
+      </v-select>
     </v-card-title>
     <component 
       v-if="currentYear"
@@ -27,17 +39,7 @@
       :is="currentReport">
     </component>
     <section class="chart-navigation">
-      <div style="display: inline-block; max-width: 170px;">
-        <v-select
-          @change="callGetLReq()"
-          v-model="currentYear"
-          :items="years"
-          label="Рiк"
-          color="#e65048"
-          item-color="#e65048"
-          dense>
-        </v-select>
-      </div>
+      
     </section>
   </v-card>
 </template>

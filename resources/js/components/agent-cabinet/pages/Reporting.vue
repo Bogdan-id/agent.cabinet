@@ -8,7 +8,7 @@
       <v-select
         :items="[
           {text: 'Звіт заявок на лізинг', value: 'leasingRequestReport'},
-          {text: 'Звiт заявок та виплат', value: 'выва'},
+          {text: 'Звiт заявок та виплат', value: 'RequestsAndPaymentsReports'},
         ]"
         item-text="text"
         item-value="value"
@@ -29,14 +29,17 @@
 
 <script>
 import leasingRequestReport from './LeasingRequestReport'
+import RequestsAndPaymentsReports from './RequestsAndPaymentsReports'
 
 export default {
   data: () => ({
     currentReport: 'leasingRequestReport',
     currentYear: null,
   }),
+
   components: {
-    leasingRequestReport,
+    RequestsAndPaymentsReports,
+    leasingRequestReport
   }
 }
 

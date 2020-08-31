@@ -28,7 +28,33 @@ export default {
   data: () => ({
     item: null,
     article: null,
+
+    ext: ['php', 'html']
   }),
+
+  methods: {
+    setAttribute() {
+      try {
+        let links = document.querySelectorAll('.current-material a')
+
+        this.setLinkAttribute(links)
+
+      } catch(err) {
+        console.log(err)
+      }
+    },
+
+    setLinkAttribute(item) {
+      for (let key = 0; key < item.length; key++) {
+        let arr = item[key].textContent.split('.')
+
+        if (arr.length > 0 && this.ext.indexOf(arr[1]) > -1) return
+
+        item[key].setAttribute('download', 'download')
+      }
+    }
+  },
+
   mounted() {
     document.body.scrollTop = document.documentElement.scrollTop = 0
     axios
@@ -48,11 +74,15 @@ export default {
           })
         } else {
           this.article = response.data
+
+          this.$nextTick(() => {
+            this.setAttribute()
+          })
         }
       })
       .catch(error => {
-        this.$catchStatus(error.response.status)
         console.log(error.response)
+        this.$catchStatus(error.response.status)
       })
   },
 }

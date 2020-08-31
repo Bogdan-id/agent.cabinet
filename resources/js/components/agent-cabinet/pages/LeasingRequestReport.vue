@@ -6,134 +6,95 @@
       style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
       За даний рiк звiтнiсть за заявками на лiзинг вiдсутня 
     </div>
-    <div :class="`ct-chart ct-octave ${xs ? 'xs' : leasingReportXSmall ? 'x-small' : leasingReportSmall ? 'small' : ''}`"></div>
-    <section class="chart-navigation">
-      <div style="display: inline-block;">
-        <div
-          v-for="(item, key) in data.series"
-          :key="key"
-          class="label-hint">
-          <span
-            class="hint-square"
-            :style="`background: ${item.color};`">
-          </span>
-          <span>{{ item.name }}</span>
-        </div>
-      </div>
-      <div style="display: inline-block; max-width: 170px;">
-        <v-select
-          @change="getLeasingRequests()"
-          v-model="currentYear"
-          :items="years"
-          label="Рiк"
-          color="#e65048"
-          item-color="#e65048"
-          dense>
-        </v-select>
-      </div>
-    </section>
+    <canvas id="myChart"></canvas>
   </v-col>
 </v-row>
 </template>
 
 <script>
-import Chartist from 'chartist'
-// eslint-disable-next-line
-import * as ChartistTooltips from 'chartist-plugin-tooltip'
-
+import Chart from 'chart.js'
 import axios from 'axios'
 
 export default {
+  props: [
+    'currentYear', 
+    'months',
+    'cnvsW', 
+    'cnvsH',
+  ],
+
   data: () => ({
-    years: [],
-    currentYear: null,
     isObjEmpty: false,
     chartData: {},
+    
     objShouldContain: ['0', '5', 'inWork'],
-    months: [
-      {id: '01', name: 'Січень'},
-      {id: '02', name: 'Лютий'},
-      {id: '03', name: 'Березень'},
-      {id: '04', name: 'Квітень'},
-      {id: '05', name: 'Травень'},
-      {id: '06', name: 'Червень'},
-      {id: '07', name: 'Липень'},
-      {id: '08', name: 'Серпень'},
-      {id: '09', name: 'Вересень'},
-      {id: '10', name: 'Жовтень'},
-      {id: '11', name: 'Листопад'},
-      {id: '12', name: 'Грудень'},
-    ],
+
+    chartInst: null,
+
+    // Chart.js
+    type: 'bar',
 
     data: {
       labels: [],
-      series: [
+      datasets: [
         {
-          className: 'ct-series-a',
-          name: 'В роботi',
+          label: 'В роботi',
           data: [],
-          color: '#ff9800'
+          backgroundColor: '#ff9900bb',
+          borderColor: '#ff9900',
+          borderWidth: 2,
+          type: 'bar'
         },
         {
-          className: 'ct-series-b',
-          name: 'Відвантажено',
+          label: 'Відвантажено',
           data: [],
-          color: '#4caf50'
+          backgroundColor: '#4caf4fbb',
+          borderColor: '#4caf4f',
+          borderWidth: 2,
+          type: 'bar'
         },
         {
-          className: 'ct-series-c',
-          name: 'Відмовлено',
+          label: 'Відмовлено',
           data: [],
-          color: '#f44336'
+          backgroundColor: '#f44336b9',
+          borderColor: '#f44336',
+          borderWidth: 2,
+          type: 'bar'
         },
-      ],
+      ]
     },
 
     options: {
-      seriesBarDistance: 15,
-      plugins: [
-        Chartist.plugins.tooltip({
-          valueTransform: function(v) {
-            return (parseInt(v)).toLocaleString('ru') + ' грн'
+      aspectRatio: 1.9,
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:false
           },
-          appendToBody: true
-        })
-      ],
-      axisY: {
-        offset: 60
-      }
-    },
 
-    responsiveOptions: [
-      ['screen and (min-width: 641px) and (max-width: 1024px)', {
-        seriesBarDistance: 10,
-        axisY: {
-          offset: 60,
-          labelInterpolationFnc: function (value) {
-            return (parseInt(value)).toLocaleString('ru')
+          // scaleLabel: {
+          //   display: true,
+          //   labelString: 'Заявки на лiзинг'
+          // },
+
+          afterTickToLabelConversion : function(v){
+            for(var tick in v.ticks){
+              v.ticks[tick] = parseInt(v.ticks[tick])
+                .toLocaleString('ru') // + ' грн'
+            }
           }
-        },
-        axisX: {
-          labelInterpolationFnc: function (value) {
-            return value;
-          }
-        }
-      }],
-      ['screen and (max-width: 640px)', {
-        seriesBarDistance: 10,
-        axisY: {
-          offset: 60,
-          labelInterpolationFnc: function (value) {
-            return (parseInt(value)).toLocaleString('ru');
-          }
-        },
-        axisX: {
-          labelInterpolationFnc: function (value) {
-            return value[0];
-          }
-        }
       }]
-    ]
+      },
+
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return parseInt(tooltipItem.value)
+              .toLocaleString('ru') + ' грн'
+          }
+        }
+      }
+    }
   }),
 
   methods: {
@@ -148,7 +109,7 @@ export default {
     clearGraphs() {
       this.data.labels.splice(0)
 
-      this.data.series
+      this.data.datasets
         .forEach(v => v.data.splice(0))
     },
 
@@ -163,10 +124,10 @@ export default {
       Object.keys(this.chartData[v.id])
         .forEach(val => {
           if(this.switchGraphById(val)) {
-            Object.keys(this.data.series)
+            Object.keys(this.data.datasets)
               .forEach(value => {
-                if(this.data.series[value].name === this.switchGraphById(val)) {
-                  this.data.series[value].data.push(this.chartData[v.id][val])
+                if(this.data.datasets[value].label === this.switchGraphById(val)) {
+                  this.data.datasets[value].data.push(this.chartData[v.id][val])
                 }
               })
           }
@@ -178,7 +139,6 @@ export default {
 
       this.months
         .forEach(v => {
-          console.log(this.chartData[v.id])
           if(this.chartData[v.id]) {
             this.addPropertyIfEmpty(v)
 
@@ -189,13 +149,27 @@ export default {
         })
     },
 
-    initChartistGraph() {
+    initChart() {
       if (this.checkEmptyObj()) return this.isObjEmpty = true
 
       this.isObjEmpty = false
 
       try {
-        new Chartist.Bar('.ct-chart', this.data, this.options, this.responsiveOptions)
+        var ctx = document.getElementById('myChart').getContext('2d')
+        ctx.clearRect(0, 0, this.cnvsW, this.cnvsH)
+
+        this.chartInst 
+          ? this.chartInst.destroy() 
+          : false
+
+        this.chartInst = new Chart(
+          ctx, 
+          {
+            type: this.type, 
+            data: this.data, 
+            options: this.options
+          }
+        )
 
       } catch (err) {
         console.log(err)
@@ -209,9 +183,7 @@ export default {
 
       this.getProperties()
 
-      this.masterSchedule()
-
-      this.initChartistGraph()
+      this.initChart()
     },
 
     checkEmptyObj() {
@@ -233,49 +205,11 @@ export default {
           this.$catchStatus(err.response.status)
         })
     },
-
-    getCurrentYear(res) {
-      this.years = res.data.sort((a, b) => a - b)
-
-      console.log({years: this.years})
-
-      this.currentYear = this.years[0]
-    },
-
-    masterSchedule() {
-      this.responsiveOptions
-      .forEach(v => v[1].seriesBarDistance = this.setIndentToLeasingReport)
-      this.options.seriesBarDistance = this.setIndentToLeasingReport
-    },
-
-    getAvailableYears() {
-      axios
-        .get(`/reports/years/leasing-requests/${this.$store.state.user.agent.id}`)
-        .then(res => {
-          this.getCurrentYear(res)
-          this.getLeasingRequests()
-        })
-        .catch(err => {
-          console.log(err.response)
-        })
-    }
   },
 
   computed: {
-    leasingReportSmall() {
-      return this.data.labels.length <= 3
-    },
-
-    leasingReportXSmall() {
-      return this.data.labels.length <= 1
-    },
-
-    setIndentToLeasingReport() {
-      return this.xs ? 15 : this.leasingReportXSmall ? 75 : this.leasingReportSmall ? 35 : 25
-    },
-
-    xs() {
-      return this.$vuetify.breakpoint.xs
+    agentId() {
+      return this.$store.state.user.agent.id
     }
   },
 
@@ -286,16 +220,12 @@ export default {
 
     isObjEmpty(val) {
       if(val) {
-        document.querySelector('.ct-chart').style = "opacity: 0;"
+        document.getElementById('myChart').style = "opacity: 0;"
       } else {
-        document.querySelector('.ct-chart').style = "opacity: 1"
+        document.getElementById('myChart').style = "opacity: 1"
       }
     }
   },
-
-  mounted() {
-    this.getAvailableYears()
-  }
 }
 </script>
 
@@ -320,99 +250,5 @@ export default {
     }
   }
 }
-
-.ct-chart {
-  .ct-series-a .ct-bar {
-    stroke-width: 25px;
-    stroke: #ffa726;
-  }
-  .ct-series-b .ct-bar {
-    stroke-width: 25px;
-    stroke: #66bb6a;
-  }
-  .ct-series-c .ct-bar {
-    stroke-width: 25px;
-    stroke: #ef5350;
-  }
-  &.small {
-    .ct-label {
-      font-size: 0.8rem;
-    }
-    .ct-series-a .ct-bar {
-      stroke-width: 35px;
-    }
-    .ct-series-b .ct-bar {
-      stroke-width: 35px;
-    }
-    .ct-series-c .ct-bar {
-      stroke-width: 35px;
-    }
-  }
-  &.x-small {
-    .ct-series-a .ct-bar {
-      stroke-width: 55px;
-    }
-    .ct-series-b .ct-bar {
-      stroke-width: 55px;
-    }
-    .ct-series-c .ct-bar {
-      stroke-width: 55px;
-    }
-  }
-  &.xs {
-    .ct-series-a .ct-bar {
-      stroke-width: 15px;
-    }
-    .ct-series-b .ct-bar {
-      stroke-width: 15px;
-    }
-    .ct-series-c .ct-bar {
-      stroke-width: 15px;
-    }
-  }
-}
-
-.ct-tooltip {
-    position: absolute;
-    display: inline-block;
-    min-width: 5em;
-    padding: 8px 10px;
-    background: #383838;
-    color: #fff;
-    text-align: center;
-    pointer-events: none;
-    z-index: 100;
-    transition: opacity .2s linear;
-
-    &:before {
-        position: absolute;
-        bottom: -14px;
-        left: 50%;
-        border: solid transparent;
-        content: ' ';
-        height: 0;
-        width: 0;
-        pointer-events: none;
-        border-color: rgba(251, 249, 228, 0);
-        border-top-color: #383838;
-        border-width: 7px;
-        margin-left: -8px;
-    }
-
-    &.hide {
-        display: block;
-        opacity: 0;
-        visibility: hidden;
-    }
-}
-
-.chart-card {
-  .v-select__selection {
-    font-size: 1rem;
-    font-weight: bold;
-  }
-}
-
-@import "chartist/dist/scss/chartist.scss";
 
 </style>

@@ -7,19 +7,6 @@
       За даний рiк звiтнiсть за заявками на лiзинг вiдсутня 
     </div>
     <canvas id="myChart" :width="cnvsW" :height="cnvsH"></canvas>
-    <section class="chart-navigation">
-      <div style="display: inline-block; max-width: 170px;">
-        <v-select
-          @change="getLeasingRequests()"
-          v-model="currentYear"
-          :items="years"
-          label="Рiк"
-          color="#e65048"
-          item-color="#e65048"
-          dense>
-        </v-select>
-      </div>
-    </section>
   </v-col>
 </v-row>
 </template>
@@ -29,33 +16,22 @@ import Chart from 'chart.js'
 import axios from 'axios'
 
 export default {
-  data: () => ({
-    cnvsW: 280,
-    cnvsH: 280,
+  props: [
+    'currentYear', 
+    'months',
+    'cnvsW', 
+    'cnvsH',
+  ],
 
-    years: [],
-    currentYear: null,
+  data: () => ({
     isObjEmpty: false,
     chartData: {},
     
     objShouldContain: ['0', '5', 'inWork'],
-    months: [
-      {id: '01', name: 'Січень'},
-      {id: '02', name: 'Лютий'},
-      {id: '03', name: 'Березень'},
-      {id: '04', name: 'Квітень'},
-      {id: '05', name: 'Травень'},
-      {id: '06', name: 'Червень'},
-      {id: '07', name: 'Липень'},
-      {id: '08', name: 'Серпень'},
-      {id: '09', name: 'Вересень'},
-      {id: '10', name: 'Жовтень'},
-      {id: '11', name: 'Листопад'},
-      {id: '12', name: 'Грудень'},
-    ],
 
     chartInst: null,
 
+    // Chart.js
     type: 'bar',
 
     data: {
@@ -228,26 +204,6 @@ export default {
           this.$catchStatus(err.response.status)
         })
     },
-
-    getCurrentYear(res) {
-      this.years = res.data.sort((a, b) => a - b)
-
-      console.log({years: this.years})
-
-      this.currentYear = this.years[0]
-    },
-
-    getAvailableYears() {
-      axios
-        .get(`/reports/years/leasing-requests/${this.$store.state.user.agent.id}`)
-        .then(res => {
-          this.getCurrentYear(res)
-          this.getLeasingRequests()
-        })
-        .catch(err => {
-          console.log(err.response)
-        })
-    }
   },
 
   computed: {
@@ -269,10 +225,6 @@ export default {
       }
     }
   },
-
-  mounted() {
-    this.getAvailableYears()
-  }
 }
 </script>
 

@@ -65,7 +65,7 @@ export default {
     },
 
     options: {
-      aspectRatio: 1.8,
+      aspectRatio: 1.9,
       scales: {
         yAxes: [{
           ticks: {

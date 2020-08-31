@@ -4,7 +4,7 @@
     <div 
       v-show="isObjEmpty"
       style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
-      За даний рiк звiтнiсть за заявками на лiзинг вiдсутня 
+      За даний рiк звiтнiсть за заявками на лiзинг та виплат АВ вiдсутня 
     </div>
     <canvas id="myChart" :width="null" :height="null"></canvas>
   </v-col>
@@ -57,7 +57,7 @@ export default {
     },
 
     options: {
-      aspectRatio: 1.8,
+      aspectRatio: 1.9,
       scales: {
         yAxes: [
           {

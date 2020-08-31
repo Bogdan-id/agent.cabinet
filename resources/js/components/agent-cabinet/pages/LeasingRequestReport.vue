@@ -6,7 +6,7 @@
       style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
       За даний рiк звiтнiсть за заявками на лiзинг вiдсутня 
     </div>
-    <canvas id="myChart" :width="cnvsW" :height="cnvsH"></canvas>
+    <canvas id="myChart"></canvas>
   </v-col>
 </v-row>
 </template>
@@ -65,6 +65,7 @@ export default {
     },
 
     options: {
+      aspectRatio: 1.8,
       scales: {
         yAxes: [{
           ticks: {

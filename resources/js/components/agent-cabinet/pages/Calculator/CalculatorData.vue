@@ -122,6 +122,7 @@
                 dense outlined>
                 <template v-slot:append>
                   <v-btn 
+                    v-show="edrpouLoading"
                     :loading="edrpouLoading"
                     icon>
                   </v-btn>

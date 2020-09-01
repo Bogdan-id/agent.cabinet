@@ -46,11 +46,14 @@ export default {
 
     setLinkAttribute(item) {
       for (let key = 0; key < item.length; key++) {
+
+
         let arr = item[key].textContent.split('.')
+        let name = arr[0]
 
         if (arr.length > 0 && this.ext.indexOf(arr[1]) > -1) return
 
-        item[key].setAttribute('download', 'download')
+        item[key].setAttribute('download', name)
       }
     }
   },

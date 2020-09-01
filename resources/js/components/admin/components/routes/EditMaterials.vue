@@ -517,7 +517,8 @@
       getLinkBtn(element) {
         let temp = null
         for(let i = 0; i < element.length; i++ ) {
-          if(element[i].querySelector('span span').textContent === 'Посилання (Ctrl+K)') {
+          console.log(element[i].querySelector('span span'))
+          if(element[i].querySelector('span span').textContent.split(' ')[0] === 'Посилання') {
             temp = element[i]
           }
         }

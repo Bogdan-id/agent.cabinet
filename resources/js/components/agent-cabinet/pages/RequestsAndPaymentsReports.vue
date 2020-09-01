@@ -6,7 +6,7 @@
       style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
       За даний рiк звiтнiсть за заявками на лiзинг та виплат АВ вiдсутня 
     </div>
-    <canvas id="myChart" :width="null" :height="null"></canvas>
+    <canvas id="myChart"></canvas>
   </v-col>
 </v-row>
 </template>
@@ -125,7 +125,7 @@ export default {
     },
 
     checkEmptyObj() {
-      return Object.keys(this.chartData).length === 0 && this.chartData.constructor === Object
+      return Object.keys(this.chartData).length === 0 && this.chartData.constructor === Object || this.chartData.max_sum === null
     },
 
     initChart() {

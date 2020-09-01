@@ -1,14 +1,14 @@
 <template>
-<v-row>
-  <v-col class="ml-6 mr-4" style="position: relative;">
-    <div 
-      v-show="isObjEmpty"
-      style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
-      За даний рiк звiтнiсть за заявками на лiзинг та виплат АВ вiдсутня 
-    </div>
+<div>
+  <div 
+    v-show="isObjEmpty"
+    style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
+    За даний рiк звiтнiсть за заявками на лiзинг та виплат АВ вiдсутня 
+  </div>
+  <div class="pl-2 pr-2 canvas-wrapper" v-show="!isObjEmpty">
     <canvas id="myChart"></canvas>
-  </v-col>
-</v-row>
+  </div>
+</div>
 </template>
 
 <script>
@@ -27,7 +27,7 @@ export default {
     isObjEmpty: false,
     chartData: {},
 
-    objShouldContain: ['ac_sum', 'price_brutto_sum'],
+    objShouldContain: ['ac_sum', 'price_brutto_sum', 'not_paid_sum'],
 
     // Chart.js
     type: 'bar',
@@ -36,10 +36,19 @@ export default {
       labels: [],
       datasets: [
         {
+          yAxisID: 'B',
+          label: 'Не виплаченi АВ',
+          data: [],
+          backgroundColor: '#ff9900bb',
+          borderColor: '#ff9900',
+          borderWidth: 2,
+          type: 'bar'
+        },
+        {
           yAxisID: 'A',
           label: 'Сума фiнансування',
           lineTension: 0, 
-          data: [150000, 250000, 220000],
+          data: [],
           backgroundColor: '#fdfdfd00',
           borderColor: '#2fba80',
           borderWidth: 2,
@@ -48,7 +57,7 @@ export default {
         {
           yAxisID: 'B',
           label: 'Сума АВ',
-          data: [1500, 2500, 2200],
+          data: [],
           backgroundColor: '#4caf4fbb',
           borderColor: '#4caf4f',
           borderWidth: 2,
@@ -58,15 +67,22 @@ export default {
     },
 
     options: {
+      responsive: true,
       aspectRatio: 1.9,
       scales: {
+        xAxes: [{
+          stacked: true,
+          // gridLines: {
+          //   display: false
+          // }
+        }],
         yAxes: [
           {
             id: 'A',
             position: 'left',
             type: 'linear',
             ticks: {
-              beginAtZero: false,
+              beginAtZero: true,
               max: null,
               stepSize: 100000,
               min: null,
@@ -86,8 +102,9 @@ export default {
             id: 'B',
             position: 'right',
             type: 'linear',
+            stacked: true,
             ticks: {
-              beginAtZero: false,
+              beginAtZero: true,
               max: null,
               min: null,
               stepSize: 1000,
@@ -121,6 +138,7 @@ export default {
       switch (v) {
         case 'ac_sum': return 'Сума АВ';
         case 'price_brutto_sum': return 'Сума фiнансування';
+        case 'not_paid_sum': return 'Не виплаченi АВ';
       }
     },
 
@@ -129,8 +147,12 @@ export default {
     },
 
     initChart() {
-      if (this.checkEmptyObj()) return this.isObjEmpty = true
-
+      if (this.checkEmptyObj()) {
+        this.isObjEmpty = true
+        this.chartInst.destroy() 
+        return 
+      }
+      
       this.isObjEmpty = false
 
       try {
@@ -170,12 +192,12 @@ export default {
 
     setMaxMinA(v, res) {
       this.options.scales.yAxes[v].ticks.max = res.max_price_brutto_sum * 1.2
-      this.options.scales.yAxes[v].ticks.min = res.min_price_brutto_sum / 1.35
+      // this.options.scales.yAxes[v].ticks.min = res.min_price_brutto_sum / 1.35
     },
 
     setMaxMinB(v, res) {
-      this.options.scales.yAxes[v].ticks.max = res.max_sum * 1.8
-      this.options.scales.yAxes[v].ticks.min = res.min_sum / 1.35
+      this.options.scales.yAxes[v].ticks.max = res.max_sum * 3.2
+      // this.options.scales.yAxes[v].ticks.min = res.min_sum / 1.35
     },
 
     getLeasingRequests() {
@@ -251,16 +273,11 @@ export default {
       return this.$store.state.user.agent.id
     }
   },
-
-  watch: {
-    isObjEmpty(val) {
-      console.log(val)
-      if(val) {
-        document.getElementById('myChart').style = "opacity: 0;"
-      } else {
-        document.getElementById('myChart').style = "opacity: 1"
-      }
-    }
-  },
 }
 </script>
+
+<style>
+.chartjs-render-monitor {
+  display: block!important;
+}
+</style>

@@ -52,16 +52,18 @@ class ReportsController extends Controller
             return Carbon::parse($d->created_at)->format('m');
         }]);
         $result  = $agentCommissions->mapWithKeys(function ($group, $key) {
+            $notPaid = $group->where('status', '=', 'not_paid');
             return [$key => [
                     'ac_sum' => $group->sum('sum'),
                     'price_brutto_sum' => $group->sum('price_brutto'),
+                    'not_paid_sum' => $notPaid->sum('sum')
                 ]];
-            });
+            });    
         $result->put('max_price_brutto_sum', $result->max('price_brutto_sum'));
         $result->put('max_sum', $result->max('ac_sum'));
         $result->put('min_sum', $result->min('ac_sum'));
         $result->put('min_price_brutto_sum', $result->min('price_brutto_sum'));
-       
+
         return response()->json($result);
     }
 

@@ -13,6 +13,8 @@ use App\Http\Clients\BitrixClient;
 use App\Http\Requests\CalculateRequest;
 use Carbon\Carbon;
 use DateTime;
+use App\Models\Agent;
+use GuzzleHttp\Client;
 
 class CalculatorDataService
 {
@@ -72,29 +74,27 @@ class CalculatorDataService
             'UNPGA' => 0.1,
             'pre-financing-days' => 0,
             'leasing-currency' => 1,
-            'rate-reduction' => 0,
+            'rate-reduction' => $this->getRateReduction(),
             'pre-financing-amount' => 0,
             'insurance-term' => 1,
             'rate-manipulate' => 0,
-            'client-type' => 2,
             'insurance-casco-manipulate' => 0,
             'agent-commission' => 0,
-            'request-source' => 1,
             'leasing-quantity' => 1,
-            'insurance-vehicle-type' => 1,
+            'insurance-vehicle-type' => $this->getInsuranceVehicleType(),
             'commission-manipulate' => 0,
-            'vehicle-owner-tax' => 2,
+            'vehicle-owner-tax' => $this->getVehicleOwnerTax(),
             'insurance-lpg' => 0,
             'commission-lk' => 0,
-            'gps-tracker-model' => 2,
+            'gps-tracker-model' => $this->getGpsTrackerModel(),
             'registration' => 0,
-            'gps-tracker-quantity' => 1,
             'annual-expenses' => 0,
             'patrol-cards-support' => 2,
             'removal-registration' => 0,
             'assist-service' => 1,
             'replacement-car-support' => 2,
-            'maintenance' => 1,
+            'maintenance' => $this->getMaintenance(),
+            'commission-lk-pr' => $this->getCommissionLkPr(),
         ];
        
         $graphTypes = $this->calculateRequest->graphType;
@@ -503,5 +503,116 @@ class CalculatorDataService
         }
 
         return $paymentPf;
+    }
+
+    public function getVehicleOwnerTax()
+    {
+        $vehicleOwnerTax  = 2;
+        $leasingAmount = (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount) * $this->calculateRequest->leasingCurrencyCourse;
+        if($leasingAmount  >  1771000 && $this->calculateRequest->leasingObjectType['value'] === 1 && $this->calculateRequest->isNew || 
+        !$this->calculateRequest->isNew && $this->calculateRequest->leasingObjectYear > 2015)
+        {
+            $vehicleOwnerTax  = 1;
+        }
+
+        return $vehicleOwnerTax;
+    }
+
+    private function getMaintenance()
+    {
+        $maintenance = 2;
+        if($this->calculateRequest->leasingObjectType['value'] === 1 || $this->calculateRequest->leasingObjectType['value'] === 6)
+        {
+            $maintenance = 1;
+        }
+
+        return $maintenance;
+    }
+
+    private function getInsuranceVehicleType()
+    {
+        $switchData = [
+            'objectType' => $this->calculateRequest->leasingObjectType['value'],
+            'leasedAssertEngine' => (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasedAssertEngine)
+        ];
+        switch ($switchData) {
+            case $switchData['objectType'] === 6:
+                return 6;
+            case $switchData['objectType'] === 5:
+                return 8;
+            case $switchData['objectType'] === 7:
+                return 10;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] === 0:
+                return 7;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] <= 1600:
+                return 1;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] > 1600 && $switchData['leasedAssertEngine'] <= 2000:
+                return 2;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] > 2000 && $switchData['leasedAssertEngine'] <= 3000:
+                return 3;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] > 3000:
+                return 4;
+            default:
+                return 9;
+            }
+    }
+
+    private function getCommissionLkPr()
+    {
+        $programProducts = ['Renault', 'Nissan', 'Infiniti', 'Toyota', 'ГАЗ', 'Ravon', 'Peugeot', 'Citroen', 
+                            'Lexus', 'Mercedes-Benz', 'Fiat', 'Alfa Romeo', 'Mitsubishi', 'Opel'];
+        $agent = Agent::find($this->calculateRequest->agentId);
+        $commissionLkPr = $agent->ab_size / 100;
+        if(in_array($this->calculateRequest->leasedAssertMark['name'], $programProducts))
+        {
+            $commissionLkPr = ($agent->ab_size - 1) / 100;
+            if($agent->ab_size === 0) $commissionLkPr = 0;
+           
+        }
+
+        return $commissionLkPr;
+    }
+
+    private function getRateReduction()
+    {
+        $rateReduction = 0;
+        if($this->calculateRequest->leasingAmountDkp)
+        {
+            $dfl = (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount) * $this->calculateRequest->leasingCurrencyCourse;
+            $dkp = (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmountDkp) * $this->calculateRequest->leasingCurrencyCourse;
+
+            $rateReduction = (1 - $dkp/$dfl);
+        }
+
+        return $rateReduction;
+    }
+
+    private function getGpsTrackerModel()
+    {
+        $gpsTrackerModel = 2;
+        $objTypes = [4, 6, 7, 10];
+        if(in_array($this->calculateRequest->leasingObjectType['value'], $objTypes))
+        {
+            $price =  (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount) * $this->calculateRequest->leasingCurrencyCourse;
+            $this->client = new Client([
+                'base_uri' => 'https://bank.gov.ua'
+            ]);
+
+            $response = $this->client->get('NBUStatService/v1/statdirectory/exchange?json')->getBody()->getContents();
+            $result = json_decode($response);
+            $usdRate = array_filter($result, function($item){
+                if($item->cc === 'USD') {
+                    return $item->rate;
+                }               
+            });
+            $usdRate = reset($usdRate);
+            if($price/$usdRate->rate >= 35000)
+            {
+                $gpsTrackerModel = 3;
+            }
+        }
+
+        return $gpsTrackerModel;
+
     }
 }

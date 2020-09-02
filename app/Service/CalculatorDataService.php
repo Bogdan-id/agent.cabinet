@@ -13,6 +13,7 @@ use App\Http\Clients\BitrixClient;
 use App\Http\Requests\CalculateRequest;
 use Carbon\Carbon;
 use DateTime;
+use App\Models\Agent;
 
 class CalculatorDataService
 {
@@ -93,6 +94,7 @@ class CalculatorDataService
             'assist-service' => 1,
             'replacement-car-support' => 2,
             'maintenance' => $this->getMaintenance(),
+            'commission-lk-pr' => $this->getCommissionLkPr(),
         ];
        
         $graphTypes = $this->calculateRequest->graphType;
@@ -553,5 +555,21 @@ class CalculatorDataService
             default:
                 return 9;
             }
+    }
+
+    public function getCommissionLkPr()
+    {
+        $programProducts = ['Renault', 'Nissan', 'Infiniti', 'Toyota', 'ГАЗ', 'Ravon', 'Peugeot', 'Citroen', 
+                            'Lexus', 'Mercedes-Benz', 'Fiat', 'Alfa Romeo', 'Mitsubishi', 'Opel'];
+        $agent = Agent::find($this->calculateRequest->agentId);
+        $commissionLkPr = $agent->ab_size / 100;
+        if(in_array($this->calculateRequest->leasedAssertMark['name'], $programProducts))
+        {
+            $commissionLkPr = ($agent->ab_size - 1) / 100;
+            if($agent->ab_size === 0) $commissionLkPr = 0;
+           
+        }
+
+        return $commissionLkPr;
     }
 }

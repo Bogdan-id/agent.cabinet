@@ -73,7 +73,7 @@ class CalculatorDataService
             'UNPGA' => 0.1,
             'pre-financing-days' => 0,
             'leasing-currency' => 1,
-            'rate-reduction' => 0,
+            'rate-reduction' => $this->getRateReduction(),
             'pre-financing-amount' => 0,
             'insurance-term' => 1,
             'rate-manipulate' => 0,
@@ -571,5 +571,19 @@ class CalculatorDataService
         }
 
         return $commissionLkPr;
+    }
+
+    public function getRateReduction()
+    {
+        $rateReduction = 0;
+        if($this->calculateRequest->leasingAmountDkp)
+        {
+            $dfl = (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount) * $this->calculateRequest->leasingCurrencyCourse;
+            $dkp = (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmountDkp) * $this->calculateRequest->leasingCurrencyCourse;
+
+            $rateReduction = (1 - $dkp/$dfl);
+        }
+
+        return $rateReduction;
     }
 }

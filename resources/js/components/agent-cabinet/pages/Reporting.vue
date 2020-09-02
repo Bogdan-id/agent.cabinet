@@ -1,6 +1,6 @@
 <template>
   <v-card class="chart-card" style="min-height: 350px; position: relative" elevation="8">
-    <v-card-title>
+    <v-card-title class="pb-1">
       <v-select
         :items="[
           {text: 'Звіт заявок на лізинг', value: 'leasingRequestReport'},
@@ -13,7 +13,6 @@
         v-model="currentReport"
         color="#e65048"
         item-color="#e65048"
-        :hide-details="true"
         dense>
       </v-select>
       <v-spacer></v-spacer>
@@ -25,7 +24,6 @@
         label="Рiк"
         color="#e65048"
         item-color="#e65048"
-        :hide-details="true"
         dense>
       </v-select>
     </v-card-title>

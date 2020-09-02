@@ -68,7 +68,7 @@ class CalculatorDataService
             'commission-manipulate' => -0.5,
             'commission-lk' => (int) $this->calculateRequest->leasingAmount * 0.005,
             'insurance-franchise' => $this->calculateRequest->insuranceFranchise,
-            'insurance-program' => $this->getInsuranceProgram(),
+            'insurance-program' => $this->calculateRequest->insuranceProgram,
             'leasing-start-date' => $this->getStartDate(),
             'holidays' => $this->calculateRequest->holidays,
             'UNPGA' => 0.1,

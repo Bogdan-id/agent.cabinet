@@ -53,10 +53,12 @@ class ReportsController extends Controller
         }]);
         $result  = $agentCommissions->mapWithKeys(function ($group, $key) {
             $notPaid = $group->where('status', '=', 'not_paid');
+            $paid = $group->where('status', '=', 'paid');
             return [$key => [
                     'ac_sum' => $group->sum('sum'),
                     'price_brutto_sum' => $group->sum('price_brutto'),
-                    'not_paid_sum' => $notPaid->sum('sum')
+                    'not_paid_sum' => $notPaid->sum('sum'),
+                    'paid_sum' => $paid->sum('sum')
                 ]];
             });    
         $result->put('max_price_brutto_sum', $result->max('price_brutto_sum'));

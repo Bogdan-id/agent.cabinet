@@ -76,14 +76,12 @@ class CalculatorDataService
             'pre-financing-amount' => 0,
             'insurance-term' => 1,
             'rate-manipulate' => 0,
-            'client-type' => 2,
             'insurance-casco-manipulate' => 0,
             'agent-commission' => 0,
-            'request-source' => 1,
             'leasing-quantity' => 1,
             'insurance-vehicle-type' => 1,
             'commission-manipulate' => 0,
-            'vehicle-owner-tax' => 2,
+            'vehicle-owner-tax' => $this->getVehicleOwnerTax(),
             'insurance-lpg' => 0,
             'commission-lk' => 0,
             'gps-tracker-model' => 2,
@@ -94,7 +92,7 @@ class CalculatorDataService
             'removal-registration' => 0,
             'assist-service' => 1,
             'replacement-car-support' => 2,
-            'maintenance' => 1,
+            'maintenance' => $this->getMaintenance(),
         ];
        
         $graphTypes = $this->calculateRequest->graphType;
@@ -503,5 +501,29 @@ class CalculatorDataService
         }
 
         return $paymentPf;
+    }
+
+    public function getVehicleOwnerTax()
+    {
+        $vehicleOwnerTax  = 2;
+        $leasingAmount = (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount) * $this->calculateRequest->leasingCurrencyCourse;
+        if($leasingAmount  >  1771000 && $this->calculateRequest->leasingObjectType['value'] === 1 && $this->calculateRequest->isNew || 
+        !$this->calculateRequest->isNew && $this->calculateRequest->leasingObjectYear > 2015)
+        {
+            $vehicleOwnerTax  = 1;
+        }
+
+        return $vehicleOwnerTax;
+    }
+
+    public function getMaintenance()
+    {
+        $maintenance = 2;
+        if($this->calculateRequest->leasingObjectType['value'] === 1 || $this->calculateRequest->leasingObjectType['value'] === 6)
+        {
+            $maintenance = 1;
+        }
+
+        return $maintenance;
     }
 }

@@ -14,6 +14,7 @@ use App\Http\Requests\CalculateRequest;
 use Carbon\Carbon;
 use DateTime;
 use App\Models\Agent;
+use GuzzleHttp\Client;
 
 class CalculatorDataService
 {
@@ -85,9 +86,8 @@ class CalculatorDataService
             'vehicle-owner-tax' => $this->getVehicleOwnerTax(),
             'insurance-lpg' => 0,
             'commission-lk' => 0,
-            'gps-tracker-model' => 2,
+            'gps-tracker-model' => $this->getGpsTrackerModel(),
             'registration' => 0,
-            'gps-tracker-quantity' => 1,
             'annual-expenses' => 0,
             'patrol-cards-support' => 2,
             'removal-registration' => 0,
@@ -518,7 +518,7 @@ class CalculatorDataService
         return $vehicleOwnerTax;
     }
 
-    public function getMaintenance()
+    private function getMaintenance()
     {
         $maintenance = 2;
         if($this->calculateRequest->leasingObjectType['value'] === 1 || $this->calculateRequest->leasingObjectType['value'] === 6)
@@ -529,7 +529,7 @@ class CalculatorDataService
         return $maintenance;
     }
 
-    public function getInsuranceVehicleType()
+    private function getInsuranceVehicleType()
     {
         $switchData = [
             'objectType' => $this->calculateRequest->leasingObjectType['value'],
@@ -557,7 +557,7 @@ class CalculatorDataService
             }
     }
 
-    public function getCommissionLkPr()
+    private function getCommissionLkPr()
     {
         $programProducts = ['Renault', 'Nissan', 'Infiniti', 'Toyota', 'ГАЗ', 'Ravon', 'Peugeot', 'Citroen', 
                             'Lexus', 'Mercedes-Benz', 'Fiat', 'Alfa Romeo', 'Mitsubishi', 'Opel'];
@@ -573,7 +573,7 @@ class CalculatorDataService
         return $commissionLkPr;
     }
 
-    public function getRateReduction()
+    private function getRateReduction()
     {
         $rateReduction = 0;
         if($this->calculateRequest->leasingAmountDkp)
@@ -585,5 +585,34 @@ class CalculatorDataService
         }
 
         return $rateReduction;
+    }
+
+    private function getGpsTrackerModel()
+    {
+        $gpsTrackerModel = 2;
+        $objTypes = [4, 6, 7, 10];
+        if(in_array($this->calculateRequest->leasingObjectType['value'], $objTypes))
+        {
+            $price =  (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount) * $this->calculateRequest->leasingCurrencyCourse;
+            $this->client = new Client([
+                'base_uri' => 'https://bank.gov.ua'
+            ]);
+
+            $response = $this->client->get('NBUStatService/v1/statdirectory/exchange?json')->getBody()->getContents();
+            $result = json_decode($response);
+            $usdRate = array_filter($result, function($item){
+                if($item->cc === 'USD') {
+                    return $item->rate;
+                }               
+            });
+            $usdRate = reset($usdRate);
+            if($price/$usdRate->rate >= 35000)
+            {
+                $gpsTrackerModel = 3;
+            }
+        }
+
+        return $gpsTrackerModel;
+
     }
 }

@@ -1,14 +1,14 @@
 <template>
-<v-row>
-  <v-col class="ml-6 mr-4" style="position: relative;">
-    <div 
-      v-show="isObjEmpty"
-      style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
-      За даний рiк звiтнiсть за заявками на лiзинг вiдсутня 
-    </div>
+<div>
+  <div 
+    v-show="isObjEmpty"
+    style="position: absolute; margin: 60px auto; width: 100%; text-align: center; color: grey; font-size: 1rem;">
+    За даний рiк звiтнiсть за заявками на лiзинг вiдсутня 
+  </div>
+  <div class="pl-2 pr-2 canvas-wrapper" v-show="!isObjEmpty">
     <canvas id="myChart"></canvas>
-  </v-col>
-</v-row>
+  </div>
+</div>
 </template>
 
 <script>
@@ -217,14 +217,6 @@ export default {
     setIndentToLeasingReport() {
       this.masterSchedule()
     },
-
-    isObjEmpty(val) {
-      if(val) {
-        document.getElementById('myChart').style = "opacity: 0;"
-      } else {
-        document.getElementById('myChart').style = "opacity: 1"
-      }
-    }
   },
 }
 </script>

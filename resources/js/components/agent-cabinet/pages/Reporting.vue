@@ -1,5 +1,5 @@
 <template>
-  <v-card class="chart-card" style="min-height: 200px; position: relative" elevation="8">
+  <v-card class="chart-card" style="min-height: 350px; position: relative" elevation="8">
     <v-card-title>
       <v-select
         :items="[

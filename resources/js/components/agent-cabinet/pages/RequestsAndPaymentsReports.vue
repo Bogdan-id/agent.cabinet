@@ -84,7 +84,7 @@ export default {
             ticks: {
               beginAtZero: true,
               max: null,
-              stepSize: 100000,
+              stepSize: 200000,
               min: null,
             },
             gridLines: {
@@ -107,7 +107,7 @@ export default {
               beginAtZero: true,
               max: null,
               min: null,
-              stepSize: 1000,
+              stepSize: 3000,
             },
             gridLines: {
                 color: "rgba(0, 0, 0, 0)",

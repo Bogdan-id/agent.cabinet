@@ -79,7 +79,7 @@ class CalculatorDataService
             'insurance-casco-manipulate' => 0,
             'agent-commission' => 0,
             'leasing-quantity' => 1,
-            'insurance-vehicle-type' => 1,
+            'insurance-vehicle-type' => $this->getInsuranceVehicleType(),
             'commission-manipulate' => 0,
             'vehicle-owner-tax' => $this->getVehicleOwnerTax(),
             'insurance-lpg' => 0,
@@ -525,5 +525,33 @@ class CalculatorDataService
         }
 
         return $maintenance;
+    }
+
+    public function getInsuranceVehicleType()
+    {
+        $switchData = [
+            'objectType' => $this->calculateRequest->leasingObjectType['value'],
+            'leasedAssertEngine' => (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasedAssertEngine)
+        ];
+        switch ($switchData) {
+            case $switchData['objectType'] === 6:
+                return 6;
+            case $switchData['objectType'] === 5:
+                return 8;
+            case $switchData['objectType'] === 7:
+                return 10;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] === 0:
+                return 7;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] <= 1600:
+                return 1;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] > 1600 && $switchData['leasedAssertEngine'] <= 2000:
+                return 2;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] > 2000 && $switchData['leasedAssertEngine'] <= 3000:
+                return 3;
+            case $switchData['objectType'] === 1 && $switchData['leasedAssertEngine'] > 3000:
+                return 4;
+            default:
+                return 9;
+            }
     }
 }

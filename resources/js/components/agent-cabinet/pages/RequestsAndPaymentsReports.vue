@@ -27,7 +27,7 @@ export default {
     isObjEmpty: false,
     chartData: {},
 
-    objShouldContain: ['ac_sum', 'price_brutto_sum', 'not_paid_sum'],
+    objShouldContain: ['ac_sum', 'paid_sum', 'not_paid_sum'],
 
     // Chart.js
     type: 'bar',
@@ -45,23 +45,23 @@ export default {
           type: 'bar'
         },
         {
-          yAxisID: 'A',
-          label: 'Сума фiнансування',
-          lineTension: 0, 
-          data: [],
-          backgroundColor: '#fdfdfd00',
-          borderColor: '#2fba80',
-          borderWidth: 2,
-          type: 'line',
-        },
-        {
           yAxisID: 'B',
-          label: 'Сума АВ',
+          label: 'Виплаченi АВ',
           data: [],
           backgroundColor: '#4caf4fbb',
           borderColor: '#4caf4f',
           borderWidth: 2,
           type: 'bar'
+        },
+        {
+          yAxisID: 'A',
+          label: 'Сума фiнансування',
+          lineTension: 0, 
+          data: [],
+          backgroundColor: '#fdfdfd00',
+          borderColor: '#e53935',
+          borderWidth: 2,
+          type: 'line',
         },
       ]
     },
@@ -136,7 +136,7 @@ export default {
   methods: {
     switchGraphById(v) {
       switch (v) {
-        case 'ac_sum': return 'Сума АВ';
+        case 'paid_sum': return 'Виплаченi АВ';
         case 'price_brutto_sum': return 'Сума фiнансування';
         case 'not_paid_sum': return 'Не виплаченi АВ';
       }

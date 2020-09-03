@@ -427,6 +427,7 @@ export default {
 }
 
 [class$="-legend"] {
+  margin-bottom: 0.5rem;
   list-style: none;
   padding-left: 0;
   display: flex;

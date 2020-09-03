@@ -148,7 +148,7 @@ export default {
                 let posY = meta.data[index]._model.y
 
                 ctx.fillStyle = "black"
-                ctx.fillText(total, posX + 4, posY -7)
+                ctx.fillText(parseInt(total).toLocaleString('ru'), posX + 4, posY -7)
               }, this)
           }
 

@@ -731,13 +731,22 @@
                     @input="initElRange($event)">
                   <div style="display: flex; position: relative; margin-right: 14px; font-size: 1rem" class="pt-4">
                     <div
-                      v-for="v in ['0', '0.5']"
+                      v-for="v in franchiseItems"
                       :key="v"
                       style="position: relative; width: 50%;'">
                       <span :style="`color: #969599; transition: color 0.2s ease-in; color: ${insuranceFranchise == v ? 'black; font-weight: bold;' : '#969599;' }`">{{ v }}</span>
                     </div>
-                    <div :style="`position: absolute; transition: color 0.2s ease-in; right: -15px; color: ${insuranceFranchise == '1' ? 'black; font-weight: bold;' : '#969599;'} `">
-                      {{ `1` }}
+                    <div 
+                      :style="`
+                        position: absolute; 
+                        transition: color 0.2s ease-in; 
+                        right: -15px; 
+                        color: ${!separateFranchise && insuranceFranchise == '1' 
+                          ? 'black; font-weight: bold;' 
+                          : separateFranchise && insuranceFranchise == '1.5' 
+                            ? 'black; font-weight: bold;' : '#969599;'} `
+                      ">
+                      {{ separateFranchise ? '10' : '1' }}
                     </div>
                   </div>
                 </v-col>
@@ -869,7 +878,7 @@ export default {
     },
     franchise: {
       min: 0,
-      max: 1
+      max: 1.5
     },
     input: {
 			currentProgress: '#d24a43',
@@ -925,6 +934,23 @@ export default {
     }
   },
   computed: {
+    separateFranchise() {
+      let arr = [
+        "Легкові та комерційні авто", 
+        "Вантажні авто", 
+        "Причепи та Напівпричепи", 
+        "Автобуси"
+      ]
+
+      if (arr.includes(this.calcObj.leasingObjectType.label)) return true
+
+      return false
+    },
+    franchiseItems() {
+      if (this.separateFranchise) return ['0', '0.5', '1']
+
+      return ['0', '0.5']
+    },
     customGraphicType() {
       return this.calcObj.customGraphicType
     },
@@ -1737,19 +1763,27 @@ export default {
         case 1: return '0'
         case 3: return '0.5'
         case 4: return '1'
+        case 9: return '10'
       }
     }
   },
   watch: {
-    
+    separateFranchise(val) {
+      if(val) {
+        this.franchise.max = 1.5
+      } else this.franchise.max = 1
+    },
+
     falsyLeasedAssertModel(val) {
       this.calcObj.leasedAssertModel = {}
       this.calcObj.leasedAssertModel.name = val
       this.calcObj.leasedAssertModel.value = 4
     },
+
     insuranceProgram(val) {
       this.calcObj.insuranceProgram = val.value
     },
+
     hasIrregular(val) {
       if(val === true) {
         // this.calcObj.customUniversalOption = null
@@ -1759,23 +1793,30 @@ export default {
         this.calcObj.customGraphicType = 3
       }
     },
+
     insuranceFranchise(value) {
+      console.log(value)
+
       switch(value) {
         case '0': return this.calcObj.insuranceFranchise = 1
         case '0.5': return this.calcObj.insuranceFranchise = 3
         case '1': return this.calcObj.insuranceFranchise = 4
+        case '1.5': return this.calcObj.insuranceFranchise = 9
       }
     },
+
     'calcObj.leasingObjectType': function(value) {
       if(value.label !== 'Легкові та комерційні авто') {
         this.calcObj.insuranceProgram = 1
       }
     },
+
     'calcObj.holidays': function(value) {
       if(value != 1) {
         this.calcObj.holidays = 2
       }
     },
+
     'customStepOptionFirst': function(value) {
       if(isNaN(parseInt(value))) {
         this.calcObj.customStepOptionFirst = null
@@ -1783,6 +1824,7 @@ export default {
         this.calcObj.customStepOptionFirst = parseInt(value) 
       }
     },
+
     'customStepOptionMiddle': function(value) {
       if(isNaN(parseInt(value))) { 
         this.calcObj.customStepOptionMiddle = null 
@@ -1790,17 +1832,21 @@ export default {
         this.calcObj.customStepOptionMiddle = parseInt(value)
       }
     },
+
     'calcObj.customUniversalOption': function(value) {
       if(!value) return
       this.calcObj.customUniversalOption = parseInt(value)
     },
+
     computedThreeThirds(val) {
       this.threeThirds = val
     },
+
     'calcObj.leasingTerm': function (value) {
       if(!value) return
       this.calcObj.leasingTerm = parseInt(value)
     },
+
     'calcObj.leasingCurrencyCourse': function (course) {
       if(course == null){
         !this.hasForeignCurrency
@@ -1811,14 +1857,17 @@ export default {
         this.calcObj.leasingCurrencyCourse = parseFloat(course)
       }
     },
+
     'calcObj.leasingQuantity': function(value) {
       if(!value) return value
       this.calcObj.leasingQuantity = parseInt(value)
     },
+
     'calcObj.advance': function(value) {
       if(!value) return value
       this.calcObj.advance = parseInt(value)
     },
+
     // 'calcObj.leasingObjectType': function(value) {
     //   if(Number.isInteger(value)) {
     //     let leasingObjType = this.selects.itemTypes
@@ -1828,14 +1877,17 @@ export default {
     //     this.calcObj.leasingObjectType = leasingObjType[0]
     //   } else return
     // },
+
     smallerThenMedium(state) {
       if(state === false)  {
         this.changeActiveClass()
       } else return
     },
+
     mediumAndDown() {
       this.changeActiveClass()
     },
+
     user() {
       if(this.user) {
         this.calcObj.agentId = this.$store.state.user.agent.id
@@ -1844,9 +1896,11 @@ export default {
       }
     },
   },
+
   created() {
     window.addEventListener("resize", this.displayWindowSize)
   },
+
   mounted() {
     window.addEventListener("click", this.closeAutocompletes)
     if(this.$router.currentRoute.params.edit === true) {
@@ -1856,9 +1910,11 @@ export default {
       this.displayWindowSize()
       this.initAdvanceInputValue()
       return
+
     } else {
       this.calcObj.leasingObjectType = {label: "Легкові та комерційні авто", value: 1}
     }
+
     this.changeActiveClass()
     this.initFranchiseInput()
     this.getMarksByType()
@@ -1872,6 +1928,7 @@ export default {
     window.removeEventListener('click', this.closeAutocompletes)
   },
 }
+
 </script>
 
 <style lang="scss">

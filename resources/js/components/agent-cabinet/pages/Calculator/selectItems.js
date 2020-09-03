@@ -43,6 +43,7 @@ export default {
   insurancePrograms: [
     {text: 'Стандарт', value: 1},
     {text: 'Обережний', value: 2},
+    {text: 'Таксі', value: 3},
   ],
   stock: [
     {text: 'Зниження страхової вартостi', value: 1},

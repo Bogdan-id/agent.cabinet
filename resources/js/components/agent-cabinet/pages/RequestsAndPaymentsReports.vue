@@ -28,12 +28,18 @@ export default {
     isObjEmpty: false,
     chartData: {},
 
+    xs: false,
+    sm: false,
+    mdAndUp: false,
+
+
     objShouldContain: ['ac_sum', 'paid_sum', 'not_paid_sum'],
 
     // Chart.js
     type: 'bar',
 
     data: {
+      // __proto__: this.data,
       labels: [],
       datasets: [
         {
@@ -102,17 +108,17 @@ export default {
 
         let lineChart = (ds, i) => {
           return `
-            <svg style="vertical-align: sub;" width="2.5rem" height="1rem" viewBox="0 0 64 25" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <g id="#ffffffff">
-            </g>
-            <g id="#ed1c24ff">
-            <path fill="${ds[i].backgroundColor}" opacity="1.00" d=" M 22.63 9.95 C 23.98 4.73 29.56 1.26 34.81 2.05 C 38.50 3.37 42.96 5.54 43.34 9.97 C 48.85 10.11 54.36 9.86 59.87 10.05 C 62.79 9.91 62.80 15.09 59.87 14.95 C 54.67 15.15 49.46 14.88 44.26 15.04 C 41.99 19.56 37.34 23.38 32.08 23.04 C 27.74 22.36 23.76 19.45 22.63 15.05 C 16.47 14.86 10.30 15.16 4.14 14.95 C 1.20 15.10 1.20 9.91 4.13 10.05 C 10.30 9.84 16.47 10.14 22.63 9.95 Z" />
-            </g>
+            <svg style="vertical-align: sub;" width="2.5rem" height="1rem" viewBox="0 0 78 25" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <g id="#ffffffff">
+              </g>
+              <g id="#ed1c24ff">
+              <path fill="${ds[i].backgroundColor}" opacity="1.00" d=" M 30.61 9.95 C 31.56 5.95 35.19 3.52 39.07 2.96 C 43.57 2.65 48.31 5.39 49.39 9.95 C 57.54 10.13 65.71 9.85 73.86 10.05 C 76.80 9.91 76.80 15.09 73.87 14.95 C 65.71 15.15 57.54 14.87 49.39 15.05 C 48.44 19.05 44.81 21.48 40.92 22.04 C 36.43 22.35 31.69 19.61 30.61 15.04 C 21.79 14.87 12.96 15.14 4.14 14.95 C 1.20 15.09 1.20 9.91 4.14 10.06 C 12.96 9.85 21.79 10.13 30.61 9.95 Z" />
+              </g>
             </svg>`
         }
 
         for (let i = 0; i < ds.length; i++) {
-          text.push('<li style="font-size: 0.75rem; color: #70706e; display: inline-block;">')
+          text.push(`<li style="font-size: 0.75rem; color: #70706e; display: inline-block;">`)
 
           text.push(`
             ${ds[i].label === 'Сума фiнансування' ? lineChart(ds, i) : legendSquare(ds, i)}
@@ -134,7 +140,18 @@ export default {
           let ctx = chartInstance.ctx
 
           ctx.textAlign = "center"
-          ctx.font = "10px Roboto, sans-serif"
+
+          let xPos = (x) => {
+            if(this.breakpoint.mdAndUp) {
+              return x
+            } else if(this.breakpoint.sm) {
+              return x
+            } else if(this.breakpoint.xs) {
+              return x
+            }
+          }
+          
+          ctx.font = `${this.breakpoint.mdAndUp ? '0.7rem' : this.breakpoint.sm ? '0.55rem' : this.breakpoint.xs ? '0.35rem' : ''} Roboto, sans-serif`
           ctx.fillStyle = "#fff"
 
           let sumHandler = (dataSetIndex, dataSetMetaIndex, allSum) => {
@@ -148,7 +165,7 @@ export default {
                 let posY = meta.data[index]._model.y
 
                 ctx.fillStyle = "black"
-                ctx.fillText(parseInt(total).toLocaleString('ru'), posX + 4, posY -7)
+                ctx.fillText(parseInt(total).toLocaleString('ru'), xPos(posX), posY -7)
               }, this)
           }
 
@@ -216,7 +233,9 @@ export default {
       },
 
       tooltips: {
+        yAlign: 'bottom',
         callbacks: {
+          
           // label: function(tooltipItem, data) {
           //   let corporation = data.datasets[tooltipItem.datasetIndex].label;
           //   let valor = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
@@ -237,7 +256,7 @@ export default {
           label: function (tooltipItem) {
             return parseInt(tooltipItem.value)
               .toLocaleString('ru') + ' грн'
-          }
+          },
         },
       }
     }
@@ -411,6 +430,16 @@ export default {
           if(!this.chartData[v.id][key]) this.chartData[v.id][key] = 0
         })
     },
+
+    setChartBreakPoint() {
+      let {sm, xs, mdAndUp} = this.$vuetify.breakpoint
+    
+      Object.defineProperty(this.data.__proto__, 'breakpoint', 
+        {
+          value: {sm, xs, mdAndUp},
+          writable: false
+        })
+    }
   },
 
   computed: {
@@ -418,6 +447,11 @@ export default {
       return this.$store.state.user.agent.id
     }
   },
+
+  mounted() {
+    this.setChartBreakPoint()
+  }
+  
 }
 </script>
 

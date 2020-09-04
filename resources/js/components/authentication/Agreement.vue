@@ -256,7 +256,7 @@
             color="grey darken-4"
             :loading="loading"
             dark small>
-            Ознайомлений
+            Ознайомлений та погоджуюсь
             <span style="display: inline-block; min-width: 7px; position: relative;">
               <v-icon style="position: absolute; top: -9px; right: -5px;" size="8" v-text="'mdi-asterisk'"></v-icon>
             </span>

@@ -28,11 +28,6 @@ export default {
     isObjEmpty: false,
     chartData: {},
 
-    xs: false,
-    sm: false,
-    mdAndUp: false,
-
-
     objShouldContain: ['ac_sum', 'paid_sum', 'not_paid_sum'],
 
     // Chart.js

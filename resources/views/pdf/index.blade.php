@@ -65,9 +65,20 @@
     .table-wrapper:last-child {
       page-break-after: avoid;
     }
+
+    @page {
+      header: page-header;
+      footer: page-footer;
+      margin-footer: 4mm;
+    }
   </style>
 </head>
 <body>
+<htmlpagefooter name="page-footer">
+  <div style="text-align: center; font-size: 0.95rem; color: #5f6368">
+    <span style="color: #800000;">(044) 359 0 399</span>
+  </div>
+</htmlpagefooter>
 @if($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Specials.png') }}')">
 @elseif($leasingObjType == 'Вантажні авто' && $mark != 'ГАЗ')

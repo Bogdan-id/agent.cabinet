@@ -41,6 +41,7 @@ export default {
     data: {
       // __proto__: this.data,
       labels: [],
+
       datasets: [
         {
           yAxisID: 'B',
@@ -80,6 +81,7 @@ export default {
     options: {
       responsive: true,
       aspectRatio: 1.9,
+
       hover: {
         animationDuration: 0
       },
@@ -151,7 +153,7 @@ export default {
             }
           }
           
-          ctx.font = `${this.breakpoint.mdAndUp ? '0.7rem' : this.breakpoint.sm ? '0.55rem' : this.breakpoint.xs ? '0.35rem' : ''} Roboto, sans-serif`
+          ctx.font = `${this.breakpoint.mdAndUp ? '0.5rem' : this.breakpoint.sm ? '0.55rem' : this.breakpoint.xs ? '0.35rem' : ''} Roboto, sans-serif`
           ctx.fillStyle = "#fff"
 
           let sumHandler = (dataSetIndex, dataSetMetaIndex, allSum) => {
@@ -184,9 +186,11 @@ export default {
       },
 
       scales: {
+
         xAxes: [{
           stacked: true,
         }],
+
         yAxes: [
           {
             id: 'A',
@@ -195,12 +199,14 @@ export default {
             ticks: {
               beginAtZero: true,
               max: null,
-              stepSize: 200000,
+              stepSize: 400000,
               min: null,
             },
+
             gridLines: {
                 color: "rgba(0, 0, 0, 0)",
             },
+
             afterTickToLabelConversion : function(v){
               for(var tick in v.ticks){
                 v.ticks[tick] = parseInt(v.ticks[tick])
@@ -208,20 +214,24 @@ export default {
               }
             }
           },
+
           {
             id: 'B',
             position: 'right',
             type: 'linear',
             stacked: true,
+
             ticks: {
               beginAtZero: true,
               max: null,
               min: null,
-              stepSize: 3000,
+              stepSize: 1000,
             },
+
             gridLines: {
                 color: "rgba(0, 0, 0, 0)",
             },
+
             afterTickToLabelConversion : function(v){
               for(var tick in v.ticks){
                 v.ticks[tick] = parseInt(v.ticks[tick])
@@ -234,25 +244,8 @@ export default {
 
       tooltips: {
         yAlign: 'bottom',
+
         callbacks: {
-          
-          // label: function(tooltipItem, data) {
-          //   let corporation = data.datasets[tooltipItem.datasetIndex].label;
-          //   let valor = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-
-          //   // Loop through all datasets to get the actual total of the index
-          //   let total = 0;
-          //   console.log({DATASETS: [data.datasets, tooltipItem.index]})
-          //   for (let i = 0; i < data.datasets.length; i++)
-          //       total += data.datasets[i].data[tooltipItem.index]
-
-          //   // If it is not the last dataset, you display it as you usually do
-          //   if (tooltipItem.datasetIndex != data.datasets.length - 1) {
-          //       return corporation + " : $" + valor.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-          //   } else { // .. else, you display the dataset and the total, using an array
-          //       return [corporation + " : $" + valor.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'), "Total : $" + total];
-          //   }
-          // }
           label: function (tooltipItem) {
             return parseInt(tooltipItem.value)
               .toLocaleString('ru') + ' грн'
@@ -314,6 +307,7 @@ export default {
     initChart() {
       if (this.checkEmptyObj()) {
         this.isObjEmpty = true
+
         this.chartInst.destroy() 
         return 
       }
@@ -322,6 +316,7 @@ export default {
 
       try {
         var ctx = document.getElementById('myChart').getContext('2d')
+
         ctx.clearRect(0, 0, this.cnvsW, this.cnvsH)
 
         this.chartInst 
@@ -345,15 +340,15 @@ export default {
 
     setMaxYAxes(res) {
       console.log(res)
-       Object.keys(this.options.scales.yAxes)
+
+      Object.keys(this.options.scales.yAxes)
         .forEach(v => {
           this.options.scales.yAxes[v].id === 'A'
             ? this.setMaxMinA(v, res)
             : this.options.scales.yAxes[v].id === 'B'
               ? this.setMaxMinB(v, res)
               : false
-        })
-      console.log({Axes:this.options.scales.yAxes})
+          })
     },
 
     setMaxMinA(v, res) {

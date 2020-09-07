@@ -95,6 +95,8 @@ class CalculatorDataService
             'replacement-car-support' => 2,
             'maintenance' => $this->getMaintenance(),
             'commission-lk-pr' => $this->getCommissionLkPr(),
+            'state' =>  $this->getState(),
+            'Place_of_registration' => $this->getPlaceOfregistration(),
         ];
        
         $graphTypes = $this->calculateRequest->graphType;
@@ -600,6 +602,7 @@ class CalculatorDataService
 
             $response = $this->client->get('NBUStatService/v1/statdirectory/exchange?json')->getBody()->getContents();
             $result = json_decode($response);
+            
             $usdRate = array_filter($result, function($item){
                 if($item->cc === 'USD') {
                     return $item->rate;
@@ -615,4 +618,29 @@ class CalculatorDataService
         return $gpsTrackerModel;
 
     }
+
+    private function getState()
+    {
+        $state = 2;
+        if($this->calculateRequest->isNew)
+        {
+            $state = 1;
+        }
+
+        return $state;
+    }
+
+    private function getPlaceOfregistration()
+    {
+        $place = 1;
+        if($this->calculateRequest->leasingObjectType['value'] === 6)
+        {
+            $place = 2;
+        }elseif($this->calculateRequest->leasingObjectType['value'] === 4 || $this->calculateRequest->leasingObjectType['value'] === 10){
+            $place = 3;
+        }
+
+        return $place;
+    }
+
 }

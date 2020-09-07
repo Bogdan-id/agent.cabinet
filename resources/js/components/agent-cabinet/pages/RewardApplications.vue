@@ -96,7 +96,7 @@
         </template>
 
         <template v-slot:item.status="{ item }">
-          <v-chip style=" text-align: center;" small :color="item.status === 'paid'? 'success' : 'error'" dark>{{ switchStatus(item.status) }}</v-chip>
+          <v-chip style=" text-align: center;" small :color="item.status === 'paid'? 'success' : 'orange'" dark>{{ switchStatus(item.status) }}</v-chip>
         </template>
       </v-data-table>
     </v-card>
@@ -147,7 +147,7 @@ export default {
   },
   methods: {
     switchStatus(status) {
-      if(status === 'not_paid') return 'Не оплачено'
+      if(status === 'not_paid') return 'Оплата очікується'
       if(status === 'paid') return 'Оплачено'
     },
     customSort(items) {

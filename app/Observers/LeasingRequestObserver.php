@@ -53,7 +53,7 @@ class LeasingRequestObserver
      */
     public function updated(LeasingRequest $leasingRequest)
     {
-        dd($this->oldStatus);
+        //dd($this->oldStatus);
     }
 
     /**

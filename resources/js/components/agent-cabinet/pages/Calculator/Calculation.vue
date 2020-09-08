@@ -941,7 +941,7 @@ export default {
         "Автобуси"
       ]
 
-      let franchiseType = [1, 2]
+      let franchiseType = [3, 2]
 
       let prog = this.calcObj.insuranceProgram
       let objT = this.calcObj.leasingObjectType.label

@@ -141,8 +141,10 @@ export default {
           let xPos = (x) => {
             if(this.breakpoint.mdAndUp) {
               return x
+
             } else if(this.breakpoint.sm) {
               return x
+
             } else if(this.breakpoint.xs) {
               return x
             }
@@ -381,9 +383,10 @@ export default {
     getProperties() {
       this.clearGraphs()
 
-      this.months
-        .forEach(v => {
+      this.months.forEach(v => {
+        
           if(this.chartData[v.id]) {
+
             this.addPropertyIfEmpty(v)
 
             this.pushDataToGraph(v)

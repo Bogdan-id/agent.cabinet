@@ -820,7 +820,6 @@
         <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :dense="xs" :loading="calculationLoader">
         {{'Розрахувати'}}
         </v-btn>
-        <!-- <v-btn @click="test()">test</v-btn> -->
       </span>
     </v-card-actions>
   </div>
@@ -924,7 +923,6 @@ export default {
       insuranceFranchise: 1,
       leasingAmountDkp: null,
 
-      // token
       _token: null
     }
   }),
@@ -933,36 +931,48 @@ export default {
       calcObj: this.validationRules,
     }
   },
+
   computed: {
     separateFranchise() {
-      let arr = [
+      let objType = [
         "Легкові та комерційні авто", 
         "Вантажні авто", 
         "Причепи та Напівпричепи", 
         "Автобуси"
       ]
 
-      if (arr.includes(this.calcObj.leasingObjectType.label)) return true
+      let franchiseType = [3, 2]
+
+      let prog = this.calcObj.insuranceProgram
+      let objT = this.calcObj.leasingObjectType.label
+
+      if (objType.includes(objT) && !franchiseType.includes(prog)) return true
 
       return false
     },
+
     franchiseItems() {
       if (this.separateFranchise) return ['0', '0.5', '1']
 
       return ['0', '0.5']
     },
+
     customGraphicType() {
       return this.calcObj.customGraphicType
     },
+
     middleOfAdvanceRange() {
       return this.$vuetify.breakpoint.xs ? 4 : 7
     },
+
     advanceDevision() {
       return this.$vuetify.breakpoint.xs ? 7 : 14
     },
+
     advanceRangeCell() {
       return this.$vuetify.breakpoint.xs ? 10 : 5
     },
+
     leasingRestItems() {
       let arr = []
       let test = this.maxResidualValue / 10
@@ -971,9 +981,11 @@ export default {
       }
       return arr
     },
+
     user() {
       return Object.keys(this.$store.state.user.agent).length > 0
     },
+
     validationRules() {
       return this.validateObj
     },
@@ -1045,6 +1057,7 @@ export default {
         // UnsrMonths: { required },
       }
     },
+
     computedThreeThirds() {
       let threeThirds = 100
       if (!Number.isNaN(parseInt(this.customStepOptionFirst))) {
@@ -1064,39 +1077,50 @@ export default {
     smAndDown() {
       return this.$vuetify.breakpoint.smAndDown
     },
+
     typeOfCar() {
       return this.calcObj.isNew !== null
     },
+
     leasedOfAssetType() {
       return this.calcObj.leasingObjectType !== null
     },
+
     modelOfItem() {
       return this.calcObj.leasedAssertMark !== null
     },
+
     typeOfModel() {
       return this.calcObj.leasedAssertModel !== null
     },
+
     yearOfModel() {
       return this.calcObj.leasingObjectYear !== null
     },
+
     noBrandItems() {
       return Object.keys(this.brandItems).length === 0
     },
+
     noModelItems() {
       return Object.keys(this.modelItems).length === 0
     },
+
     hasAnnuity() {
       if(this.calcObj.graphType === null) return false
       return this.calcObj.graphType.indexOf('annuity') > -1
     },
+
     hasForeignCurrency() {
       if(this.calcObj.currency === null) return false
       return this.calcObj.leasingCurrency.indexOf('EUR') > -1
         || this.calcObj.leasingCurrency.indexOf('USD') > - 1
     },
+
     isClientType() {
       return this.calcObj.leasingClientType !== null
     },
+
     hasGraph() {
       if(this.calcObj.graphType === null || this.calcObj.graphType === 'undefined') return false
       return this.calcObj.graphType.length > 0
@@ -1109,78 +1133,96 @@ export default {
       // !this.$v.calcObj.leasingAmount.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
 			return this.commonErr
     },
+
     leasingClientTypeErr() {
       if (!this.$v.calcObj.leasingClientType.$error) return
       return this.commonErr
     },
+
     isNewErr() {
       if (!this.$v.calcObj.isNew.$error) return
       return this.commonErr
     },
+
     currencyErr() {
       if (!this.$v.calcObj.leasingCurrency.$error) return
       return this.commonErr
     },
+
     leasingObjectTypeErr() {
       if (!this.$v.calcObj.leasingObjectType.$error) return
       return this.commonErr
     },
+
     leasedAssertMarkErr() {
       if (!this.$v.calcObj.leasedAssertMark.$error) return
       return this.commonErr
     },
+
     leasedAssertModelErr() {
       if (!this.$v.calcObj.leasedAssertModel.$error) return
       return this.commonErr
     },
+
     leasingObjectYearErr() {
       if (!this.$v.calcObj.leasingObjectYear.$error) return
       return this.commonErr
     },
+
     leasedAssertEngineErr() {
       if (!this.$v.calcObj.leasedAssertEngine.$error) return
       return this.commonErr
     },
+
     leasingCurrencyErr() {
       if (!this.$v.calcObj.currency.$error) return
       return this.commonErr
     },
+
     leasingCurrencyCourseErr() {
       if (!this.hasForeignCurrency) return
       if (!this.$v.calcObj.leasingCurrencyCourse.$error) return
       return this.commonErr
     },
+
     leasingQuantityErr() {
       if (!this.$v.calcObj.leasingQuantity.$error) return
       return this.commonErr
     },
+
     graphTypeErr() {
       if (!this.$v.calcObj.graphType.$error) return
       return this.commonErr
     },
+
     gainEvenGraphicMonthsErr() {
       if(!this.hasAnnuity) return
       if (!this.$v.calcObj.gainEvenGraphicMonths.$error) return
       return this.commonErr
     },
+
     gainEvenGraphicPercentErr() {
       if(!this.hasAnnuity) return
       if (!this.$v.calcObj.gainEvenGraphicPercent.$error) return
       return this.commonErr
     },
+
     UnsrMonthsErr() {
       if(!this.hasAnnuity) return
       if (!this.$v.calcObj.UnsrMonths.$error) return
       return this.commonErr
     },
+
     advanceErr() {
       if (!this.$v.calcObj.advance.$error) return
       return this.commonErr
     },
+
     leasingTermErr() {
       if (!this.$v.calcObj.leasingTerm.$error) return
       return this.commonErr
     },
+
     // vehicleOwnerTaxErr() {
     //   if (!this.$v.calcObj.vehicleOwnerTax.$error) return
     //   return this.commonErr
@@ -1189,18 +1231,22 @@ export default {
       if (!this.$v.calcObj.leasingRest.$error ) return
       return this.commonErr
     },
+
     paymentPfErr() {
       if (!this.$v.calcObj.paymentPf.$error ) return
       return this.commonErr
     },
+
     insuranceProgramErr() {
       if (!this.$v.calcObj.insuranceProgram.$error ) return
       return this.commonErr
     },
+
     insuranceFranchiseErr() {
       if (!this.$v.calcObj.insuranceFranchise.$error ) return
       return this.commonErr
     },
+
     graphsErr() {
       if (!this.$v.calcObj.graphType.$error) return
       return this.commonErr
@@ -1209,6 +1255,7 @@ export default {
     //   if (!this.$v.calcObj.residualValue.$error) return
     //   return this.commonErr
     // },
+
     discountPriceErr() {
       if (!this.$v.calcObj.leasingAmountDkp.$error) return
       return this.commonErr
@@ -1223,6 +1270,7 @@ export default {
       if (!this.$v.calcObj.customStepOptionFirst.$error) return
       return this.commonErr
     },
+
     twoThirdsErr() {
       if (!this.$v.calcObj.customStepOptionMiddle.$error) return
       return this.commonErr
@@ -1231,24 +1279,31 @@ export default {
     mediumAndDown() {
       return this.windowInnerWidth <= 1185 // 1145
     },
+
     smallerThenMedium() {
       return this.windowInnerWidth <= 823
     },
+
     mediumAndDownCurrency() {
       return this.windowInnerWidth <= 1200
     },
+
     xs() {
       return this.$vuetify.breakpoint.name === 'xs'
     },
+
     sm() {
       return this.$vuetify.breakpoint.name === 'sm'
     },
+
     hasIrregular() {
       return this.calcObj.graphType.indexOf('irregular') !== -1
     },
+    
     leasingTypeCol() {
       return this.xs ? '6' : this.mediumAndDown && !this.xs ? '2' : '2'
     },
+
     leasingTypeClass() {
       return `d-flex justify-center ${this.xs ? 'pt-0 pb-0' : ''}`
     },
@@ -1259,6 +1314,7 @@ export default {
       this.$refs.markAutocomplete.blur();
       this.$refs.modelAutocomplete.blur();
     },
+
     resetForm() {
       this.calcObj = {
         customStepOptionFirst: null,
@@ -1295,6 +1351,7 @@ export default {
       this.initAdvanceInputValue()
       this.initFranchiseInput()
     },
+
     changeActiveClass() {
       let el = document.querySelectorAll('.leasing-type-block')
       el.forEach(val => {
@@ -1313,15 +1370,18 @@ export default {
         })
       }, 200)
     },
+
     restrictToPercentAdvance(id) {
       let el = document.getElementById(id)
       let inputEvent = new Event('input', {bubbles: true})
       let temp = parseInt(el.value.replace(/[^\d]/g, ''))
+
       if(Number.isNaN(temp) && el.value !== '') {
         el.value = ''
         el.dispatchEvent(inputEvent)
         return
       }
+
       if(parseInt(temp) > 100 - (parseInt(this.calcObj.advance) + 10)) {
         temp = Math.ceil((100 - parseInt(this.calcObj.advance) - 10) / 5) * 5
       }
@@ -1331,6 +1391,7 @@ export default {
         el.dispatchEvent(inputEvent)
        }
     },
+
     restrictToPercent(id) {
       let el = document.getElementById(id)
       let inputEvent = new Event('input', {bubbles: true})
@@ -1348,6 +1409,7 @@ export default {
         el.dispatchEvent(inputEvent)
        } 
     },
+
     amountToLocalStr(id) {
       let el = document.getElementById(id)
       let discountPriceEl = document.getElementById('discount-price')
@@ -1357,10 +1419,12 @@ export default {
         .replace(/,/g, ' ')
       let tempWithoutSpaces = parseInt(temp.replace(/[^\d]/g, ''))
       if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
+
         if(id === 'discount-price' && this.calcObj.leasingAmount) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
           }
+
         } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
           // if(!this.calcObj.leasingAmountDkp) return
           if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
@@ -1369,20 +1433,25 @@ export default {
         }
         el.value = temp
         el.dispatchEvent(inputEvent)
+
       } else if(el.value != temp.replace(/[^\d ]/g, '') && Number.isNaN(parseInt(temp))) {
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
+
       } else {
         if(id === 'discount-price' && this.calcObj.leasingAmount) {
+
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
           } 
+
         } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
           // if(!this.calcObj.leasingAmountDkp) return
           if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
+
           } else if (this.calcObj.leasingAmount === '') {
             discountPriceEl.value = ''
             discountPriceEl.dispatchEvent(inputEvent)
@@ -1390,27 +1459,34 @@ export default {
         }
       }
     },
+
     setGraphProportion(event, selector) {
       let oneThird = document.querySelector('#stepGain-oneThird')
       let twoThirds = document.querySelector('#stepGain-twoThirds')
       let currentEl = document.getElementById(selector)
       let inputEvent = new Event('input', {bubbles: true})
+
       currentEl.value = parseInt(currentEl.value.replace(/[^\d]/g, ''))
+
       if(currentEl.value > 100) {
         currentEl.value = 100
         currentEl.dispatchEvent(inputEvent)
       }
+
       if(Number.isNaN(currentEl.value)) {
         currentEl.value = 0
         currentEl.dispatchEvent(inputEvent)
       }
+
       if(selector == 'stepGain-oneThird') {
         if(parseInt(currentEl.value) + parseInt(twoThirds.value) > 100) {
+
           twoThirds.value = 100 - currentEl.value
           twoThirds.dispatchEvent(inputEvent)
         }
         return
       } 
+
       else if(selector == 'stepGain-twoThirds') {
         if(parseInt(currentEl.value) + parseInt(oneThird.value) > 100) {
           oneThird.value = 100 - currentEl.value
@@ -1419,23 +1495,30 @@ export default {
         return
       }
     },
+
     changeCustomGraph(id) {
       this.$set(this.calcObj, 'customGraphicType', id)
     },
+
     closeSelect() {
       this.$refs.graphType.blur()
     },
+
     addActiveClass(event) {
       let el = document.querySelectorAll('.leasing-type-block')
       el.forEach(val => {
         val.classList.remove('active')
       })
+
       if(event) event.target.nextSibling.nextSibling.classList.add('active')
     },
+
     getMarksByType(event, needRequest) {
       console.log(event)
       if(event) {
+
         this.resetForm()
+
         if(this.smallerThenMedium) {
           this.category = parseInt(event.value)
           this.calcObj.leasingObjectType = event
@@ -1445,35 +1528,48 @@ export default {
             this.brandItems.push({name: 'Інше', value: 4});
             this.calcObj.leasedAssertMark = {name: 'Інше', value: 4};
           }
+
         } else {
+
           this.calcObj.leasingObjectType = this.selects.itemTypes
             .filter(val => {
               return val.label === event.target.value
             })[0]
+
           this.category = this.calcObj.leasingObjectType.value
         }
+
       } else if(this.calcObj.leasingObjectType && this.calcObj.leasingObjectType.value) {
         this.category = this.calcObj.leasingObjectType.value
       }
+
       if(needRequest === 0) {
         this.brandItems = []
         this.brandItems.push({name: 'Інше', value: 4});
         this.calcObj.leasedAssertMark = {name: 'Інше', value: 4};
         return
       }
+
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
+
       axios.get(`/mark?category=${this.category}`)
         .then(response => {
+
           this.brandItems = response.data
           this.$store.commit('toggleSpinner', false)
+
           console.log(this.brandItems)
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
+
           console.log(error.response)
+
           let message = error.response.statusText
+
           this.notify('Помилка', message, 'error')
+
           this.$store.commit('toggleSpinner', false)
         })
     },
@@ -1481,6 +1577,7 @@ export default {
       this.modelItems = []
       this.$store.commit('toggleSpinner', true)
       this.modelLoader = true
+
       axios.get(`/models?category=${this.category}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
           this.modelItems = response.data
@@ -1496,6 +1593,7 @@ export default {
           this.modelLoader = false
         })
     },
+
     parseToInt(id) {
       let input = new Event('input', {bubbles: true})
       let el = document.getElementById(id)
@@ -1506,16 +1604,19 @@ export default {
         el.dispatchEvent(input)
       }
     },
+
     parseToFloat(id) {
       let input = new Event('input', {bubbles: true})
       let el = document.getElementById(id)
       let value = el.value
       let intVal = el.value.replace(/\.\d\.|\.+\d+\.+|\.{2,2}|[^\d.]/g, '')
+
       if(value !== intVal) {
         el.value = intVal
         el.dispatchEvent(input)
       }
     },
+
     notify(title, text, group) {
 			this.$notify({
 				group: group || 'standard',
@@ -1523,17 +1624,21 @@ export default {
 				text: text,
 			})
     },
+
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
+
     highlightErrors() {
       this.$v.$anyError
       this.$v.$touch()
     },
+
     deleteStepData() {
       delete this.calcObj.customStepOptionFirst
       delete this.calcObj.customStepOptionMiddle
     },
+
     deleteUnneccessaryFields() {
       delete this.calcObj.threeThirds
       this.calcObj.leasingObjectType.label === 'Причепи та Напівпричепи' || this.calcObj.leasingObjectType.label === 'Обладнання'
@@ -1547,8 +1652,10 @@ export default {
       this.hasIrregular && this.calcObj.customGraphicType === 5
         ? delete this.deleteStepData() : false
     },
+
     submit() {
       console.log(this.calcObj)
+
       this.checkIfHasIrregular()
       this.checkIfHasCurrency()
       this.deleteUnneccessaryFields()
@@ -1559,10 +1666,12 @@ export default {
           : this.notify('', 'Заповнiть данi', 'error')
 
     },
+
     checkIfHasCurrency() {
       if(this.hasForeignCurrency) return
       this.calcObj.leasingCurrencyCourse = 1
     },
+
     checkIfHasIrregular() {
       if(!this.hasIrregular) {
         this.$delete(this.calcObj, 'customGraphicType')
@@ -1571,28 +1680,34 @@ export default {
         this.$delete(this.calcObj, 'customStepOptionMiddle')
       }
     },
+
     sendRequest() {
       this.calcObj._token = this.getCsrf()
       this.calculationLoader = true
+
       axios
         .post('/calculate', this.calcObj)
           .then(response => {
             this.calculationLoader = false
-            // this.$router.push('/calculator/chart')
+
             let data = response.data
-            console.log(response.data)
+
             this.$router.push({name: 'Графiки', params: {data: data}})
           })
           .catch(error => {
             this.calculationLoader = false
+
             this.$catchStatus(error.response.status)
+
             const message = error.response.statusText
+
             this.notify('Помилка', message, 'error')
           })
     },
     valueTotal(value, min, max) {
 			return ((value - min) / (max - min))
 		},
+
 		getGradient(ratio, leftColor, rightColor) {
       this.advanceDisabled = false
 			return [
@@ -1605,6 +1720,7 @@ export default {
 				')'
 			].join('')
 		},
+
     checkValue(val, elRange, dataSelector) {
 			let check = true
 			if(this.toInt(val) > this.toInt(elRange.max)) {
@@ -1618,6 +1734,7 @@ export default {
 			}
 			return check
 		},
+
 		syncValue(val, dataSelector) {
 			switch(dataSelector) {
 				case 'advance-payment': this.calcObj.advance = val; break
@@ -1625,21 +1742,26 @@ export default {
 				// case 'termFinancing': this.termFinancing.current = val; break
 			}
 		},
+
 		updateElRange(elRange, val, dataSelector) {
       if (dataSelector === 'advance-payment' && this.calcObj.leasingRest > this.maxResidualValue) {
         this.calcObj.leasingRest = this.maxResidualValue
+
       } else if (dataSelector === 'advance-payment' && this.calcObj.leasingRest < this.maxResidualValue) {
         if(this.calcObj.leasingRest != 0) {
           this.calcObj.leasingRest = this.maxResidualValue
         }
       }
+
 			let ratio = this.valueTotal(val, elRange.min, elRange.max)
+
 			elRange.style.backgroundImage = this.getGradient(
 				ratio,
 				this.input.currentProgress,
 				this.input.remainingProgress
 			)
 		},
+
     toInt(val, dataSelector) {
       if(dataSelector === 'franchise') {
         return parseFloat(val.replace(/^\D/g, ''))
@@ -1647,6 +1769,7 @@ export default {
         return parseInt(val.replace(/^\D/g, ''))
       }
 		},
+
 		initAdvanceInputValue(val) {
 			let el = document.querySelector('#advance-payment')
 			let event = new Event('input', {bubbles: true})
@@ -1657,10 +1780,13 @@ export default {
       }
 			el.dispatchEvent(event)
 		},
+
     initFranchiseInput(val) {
       console.log({FRANCHISE: val})
+
       let el = document.querySelector('#franchise')
       let event = new Event('input', {bubbles: true})
+
       if(val) {
         el.value = val
       } else {
@@ -1668,35 +1794,47 @@ export default {
       }
       el.dispatchEvent(event)
     },
+
 		switchSelector(e) {
 			let dataSelector, elRange
+
 			if(e.target.name === 'advance-payment') {
 				elRange = document.getElementById('advance-payment')
+
         if(parseInt(elRange.value) < 15) {
           elRange.value = 15
           this.advanceDisabled = true
         }
+
 				dataSelector = 'advance-payment'
+
 			} else if(e.target.name === 'franchise') {
 				elRange = document.getElementById('franchise')
 				dataSelector = 'franchise'
 			}
+
 			return {dataSelector, elRange}
 		},
+
 		initElRange(event) {
 			let {elRange, dataSelector} = this.switchSelector(event)
+
 			if(!event) {
 				elRange.value = this.toInt(elRange.min, dataSelector)
 				this.syncValue(elRange.value, dataSelector)
 				this.updateElRange(elRange, elRange.value)
 				return
 			}
+
 			elRange.value = this.toInt(event.target.value, dataSelector)
+
 			let check = this.checkValue(elRange.value, elRange, dataSelector)
+
 			if(!check) {
 				this.updateElRange(elRange, elRange.value)
 				return
 			}
+
 			this.syncValue(elRange.value, dataSelector)
 			this.updateElRange(elRange, elRange.value, dataSelector)
 		},
@@ -1707,9 +1845,11 @@ export default {
           .replace(/,/g, ' ')
       } else return
     },
+
     displayWindowSize() {
       this.windowInnerWidth = window.innerWidth
     },
+
     getUserCalculations() {
       axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
@@ -1758,6 +1898,7 @@ export default {
         })
       })
     },
+
     switchFranchiseFromRequest(value) {
       switch(value) {
         case 1: return '0'
@@ -1767,6 +1908,7 @@ export default {
       }
     }
   },
+
   watch: {
     separateFranchise(val) {
       if(val) {

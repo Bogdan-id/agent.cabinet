@@ -29,6 +29,15 @@
           </ul>
           <p> Згоду на обробку своїх персональних даних Я надаю Виконавцю, як володільцю персональних даних, на невизначений строк</p>
         </v-card-text>
+        <v-card-text class="d-flex justify-content-center">
+          <span>
+            <v-btn 
+              @click="agreement()" 
+              small dark >
+              Погоджуюсь та приймаю
+            </v-btn>
+          </span>
+        </v-card-text>
       </v-card>
     </v-dialog>
 		<div :class="`app__login-form ${$vuetify.breakpoint.xs ? 'pl-2 pr-2' : ''}`">
@@ -206,19 +215,30 @@ export default {
 		}
 	},
 	methods: {
+    agreement() {
+      this.confidentialDialog = false
+      this.consent = true
+    },
+
 		getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-		},
-		minPassLength,
-		maxPassLength,
+    },
+    
+    minPassLength,
+    
+    maxPassLength,
+    
 		submit() {
 			if(!this.$v.$invalid && this.$v.$dirty && this.consent){
-				this.userRegister(this.getRegObject())
+        this.userRegister(this.getRegObject())
+        
 			} else {
-				let error = 'Форма заповнена не невірно'
+        let error = 'Форма заповнена не невірно'
+        
 				this.simpleNotify('Помилка', error, 'error')
 			}
-		},
+    },
+    
 		getRegObject() {
 			return {
 				'name': this.firstName,
@@ -230,35 +250,44 @@ export default {
 			}
 		},
 		userRegister(userObj) {
-			this.request = true
+      this.request = true
+      
 			axios.post(`/register`, userObj)
 			.then(() => { 
-				this.request = false
+        this.request = false
+        
 				this.$router.go()
 			})
 			.catch(e => {
-				this.request = false
-					if(e.response.status == 422) {
-						this.error422(e)
-					} else if (e.response.status == 429) {
-						this.error429(e)
-					} else {
-						this.otherErrors(e)
-					}
-				})
+        this.request = false
+        
+        if(e.response.status == 422) {
+          this.error422(e)
+
+        } else if (e.response.status == 429) {
+          this.error429(e)
+
+        } else {
+          this.otherErrors(e)
+        }
+			})
 		},
 		error422(e) {
-			this.consoleError(e)
+      this.consoleError(e)
+      
 			const checkEmail = 'The email has already been taken.'
 			const checkNumber = 'The phone has already been taken.'
 			const emailError = 'Зазначена вами електронна пошта вже зареєстрована у нашому сервісі'
-			const numberError = 'Зазначений вами номер телефону вже зареєстрований у нашому сервісі'
+      const numberError = 'Зазначений вами номер телефону вже зареєстрований у нашому сервісі'
+      
 			let errorObj = e.response.data.errors
 			if (Object.keys(errorObj).length > 0) {
+
 				if(errorObj.hasOwnProperty('email')) {
 					errorObj.email[0] == checkEmail
 						? this.simpleNotify('Помилка', emailError, 'error')
-						: this.simpleNotify('Помилка', errorObj.message, 'error')
+            : this.simpleNotify('Помилка', errorObj.message, 'error')
+            
 				} else if (errorObj.hasOwnProperty('phone')) {
 					errorObj.phone[0] == checkNumber
 						? this.simpleNotify('Помилка', numberError, 'error')
@@ -272,13 +301,17 @@ export default {
 			console.log(e.response.headers)
 		},
 		error429(e) {
-			this.consoleError(e)
-			const error = 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини'
+      this.consoleError(e)
+      
+      const error = 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини'
+      
 			this.simpleNotify('Помилка', error, 'error')
 		},
 		otherErrors(e) {
-			this.consoleError(e)
-			const error = `Код помилки: ${e.response.status} \n ${e.response.data.message}`
+      this.consoleError(e)
+      
+      const error = `Код помилки: ${e.response.status} \n ${e.response.data.message}`
+      
 			this.simpleNotify('Помилка', error, 'error')
 		},
 		simpleNotify(title, text, group) {
@@ -313,30 +346,35 @@ export default {
 				val.split('').forEach((val, i) => {
             if(this.number[6] == 0) {
               this.number = this.number.substr(0, 6) + this.number.substr(6) 
+
             } else {
               indexes[i] ? splitMask[indexes[i]] = val : false
             }
           })
-			}
+      }
+      
 			if(number.length >= numLength && cCpresent !== -1 && this.pasteEvent) {
 				fillMask(
 					this.number
 						.replace(countryCode, '')
 						.replace(numLengthRe, '')
 						.slice(number.length - numLength)
-				)
+        )
+        
 			} else if(number.length >= numLength && cCpresent === -1) {
 				fillMask(
 					this.number
 						.replace(numLengthRe, '')
 						.slice(number.length - numLength)
-				)
+        )
+        
 			} else if (this.number.length > 1){
 				fillMask(
 					this.number
 						.slice(firstIndex)
 						.replace(notDigit, '')
-				)
+        )
+        
 			} else if (this.number.length <= 1) {
 				fillMask(
 					this.number
@@ -350,7 +388,8 @@ export default {
 				el.value = joinMask
 				el.setSelectionRange(splitMask.indexOf(sign), splitMask.indexOf(sign))
 				el.dispatchEvent(event)
-			}
+      }
+      
 			this.pasteEvent = false
 		},
 	},
@@ -358,52 +397,69 @@ export default {
 		numberError() {
 			return this.numberErrors.length > 0
     },
+
     numberErrors() {
       const errors = []
 			if (!this.$v.number.$error) return errors
 			!this.$v.number.minLenght && errors.push('Невірний номер')
 			return errors
     },
+
 		emailErrors() {
 			const errors = []
 			if (!this.$v.email.$error) return errors
 			!this.$v.email.email && errors.push('Невірний імейл')
-			!this.$v.email.required && errors.push('Обов\'язкове поле')
+      !this.$v.email.required && errors.push('Обов\'язкове поле')
+      
 			return errors
-		},
+    },
+    
 		firstNameErrors() {
 			const errors = []
 			if (!this.$v.firstName.$error) return errors
-			!this.$v.firstName.required && errors.push('Обов\'язкове поле')
+      !this.$v.firstName.required && errors.push('Обов\'язкове поле')
+      
 			return errors
-		},
+    },
+    
 		passwordErrors() {
-			const errors = []
-			if (!this.$v.password.$error) return errors
+      const errors = []
+      
+      if (!this.$v.password.$error) return errors
+      
 			!this.$v.password.required && errors.push('Обов\'язкове поле')
 			!this.$v.password.minLength && errors.push(`Мінімальна кількість знаків ${this.minPassLength()}`)
-			!this.$v.password.maxLength && errors.push(`Максимальна кількість знаків ${this.maxPassLength()}`)
+      !this.$v.password.maxLength && errors.push(`Максимальна кількість знаків ${this.maxPassLength()}`)
+      
 			return errors
-		},
+    },
+    
 		repeatPasswordErrors() {
-			const errors = []
+      const errors = []
+      
 			if (!this.$v.repeatPassword.$error) return errors
-			!this.$v.repeatPassword.sameAsPassword && errors.push('Паролі не співпадають')
+      !this.$v.repeatPassword.sameAsPassword && errors.push('Паролі не співпадають')
+      
 			return errors
-		},
+    },
+    
 		emailError() {
 			return this.emailErrors.length > 0 
-		},
+    },
+    
 		firstNameError() {
 			return this.firstNameErrors.length > 0 
-		},
+    },
+    
 		passwordError() {
 			return this.passwordErrors.length > 0 
-		},
+    },
+    
 		repeatPasswordError() {
 			return this.repeatPasswordErrors.length > 0 
 		}
   },
+
   mounted() {
     window.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
@@ -411,6 +467,7 @@ export default {
       }
     })
   },
+  
   beforeDestroy() {
     window.removeEventListener('keypress', (event) => {
       if (event.key === 'Enter') {

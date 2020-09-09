@@ -345,7 +345,20 @@
             v-model="discountPrice"
             :value="true"
             :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 pt-0 white--text`"
+            style="display: inline-block;"
             label="Вартiсть зi знижкою"
+            :false-value="false"
+            dark :dense="mediumAndDown">
+          </v-checkbox>
+          &nbsp;&nbsp;
+          <v-checkbox
+            v-show="
+              calcObj.leasingObjectType.label === 'Легкові та комерційні авто' 
+              && calcObj.isNew"
+            :value="true"
+            :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 pt-0 white--text`"
+            style="display: inline-block;"
+            label="ПФ Включено"
             :false-value="false"
             dark :dense="mediumAndDown">
           </v-checkbox>
@@ -728,6 +741,7 @@
                     v-model="insuranceFranchise"
                     step="0.5"
                     class="slider"
+                    :disabled="franchiseDisabled"
                     @input="initElRange($event)">
                   <div style="display: flex; position: relative; margin-right: 14px; font-size: 1rem" class="pt-4">
                     <div
@@ -856,6 +870,8 @@ export default {
     advanceHint
   },
   data:() => ({
+    franchiseDisabled: false,
+
     selects: selectsItemAndValue,
     minCarCost: 150000,
     insuranceProgram: null,
@@ -877,7 +893,7 @@ export default {
     },
     franchise: {
       min: 0,
-      max: 1.5
+      max: 1
     },
     input: {
 			currentProgress: '#d24a43',
@@ -1772,12 +1788,15 @@ export default {
 
 		initAdvanceInputValue(val) {
 			let el = document.querySelector('#advance-payment')
-			let event = new Event('input', {bubbles: true})
+      let event = new Event('input', {bubbles: true})
+      
       if(val) {
         el.value = val
+
       } else {
         el.value = 15
       }
+
 			el.dispatchEvent(event)
 		},
 
@@ -1789,9 +1808,11 @@ export default {
 
       if(val) {
         el.value = val
+
       } else {
         el.value = el.min
       }
+      
       el.dispatchEvent(event)
     },
 
@@ -1911,9 +1932,9 @@ export default {
 
   watch: {
     separateFranchise(val) {
-      if(val) {
-        this.franchise.max = 1.5
-      } else this.franchise.max = 1
+      console.log(val)
+      if (val) this.franchise.max = 1.5 
+      else this.franchise.max = 1
     },
 
     falsyLeasedAssertModel(val) {
@@ -1940,10 +1961,31 @@ export default {
       console.log(value)
 
       switch(value) {
-        case '0': return this.calcObj.insuranceFranchise = 1
-        case '0.5': return this.calcObj.insuranceFranchise = 3
-        case '1': return this.calcObj.insuranceFranchise = 4
-        case '1.5': return this.calcObj.insuranceFranchise = 9
+        case '0': this.calcObj.insuranceFranchise = 1; break
+        case '0.5': this.calcObj.insuranceFranchise = 3; break
+        case '1': this.calcObj.insuranceFranchise = 4; break
+        case '1.5': this.calcObj.insuranceFranchise = 9; break
+      }
+    },
+
+    'calcObj.insuranceProgram': function(value) {
+      if(value === 3) {
+        this.calcObj.insuranceFranchise = 4
+
+        setTimeout(() => {
+          this.franchiseDisabled = true
+
+          this.initFranchiseInput(this.switchFranchiseFromRequest(4))
+        }, 0)
+
+      } else {
+        
+        setTimeout(() => {
+          this.franchiseDisabled = false
+
+          this.initFranchiseInput()
+        }, 0)
+        
       }
     },
 

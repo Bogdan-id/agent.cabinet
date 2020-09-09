@@ -353,8 +353,7 @@
           &nbsp;&nbsp;
           <v-checkbox
             v-show="
-              calcObj.leasingObjectType.label === 'Легкові та комерційні авто' 
-              && calcObj.isNew"
+              calcObj.leasingObjectType.label === 'Легкові та комерційні авто'"
             v-model="calcObj.paymentPf"
             :true-value="1"
             :false-value="2"
@@ -1997,11 +1996,12 @@ export default {
     'calcObj.isNew': function(value) {
       if(value && this.calcObj.leasingObjectType.label === 'Легкові та комерційні авто') {
         setTimeout(this.calcObj.paymentPf = 1)
-      } else setTimeout(this.calcObj.paymentPf =2)
+        
+      } else setTimeout(this.calcObj.paymentPf = 2)
     },
 
     'calcObj.leasingObjectType': function(value) {
-      if(value.label !== 'Легкові та комерційні авто') {
+      if(value.label !== 'Легкові та комерційні авто' || !this.calcObj.isNew) {
         this.calcObj.insuranceProgram = 1
 
         setTimeout(this.calcObj.paymentPf = 2)

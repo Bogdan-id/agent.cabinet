@@ -355,11 +355,12 @@
             v-show="
               calcObj.leasingObjectType.label === 'Легкові та комерційні авто' 
               && calcObj.isNew"
-            :value="true"
+            v-model="calcObj.paymentPf"
+            :true-value="1"
+            :false-value="2"
             :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 pt-0 white--text`"
             style="display: inline-block;"
             label="ПФ Включено"
-            :false-value="false"
             dark :dense="mediumAndDown">
           </v-checkbox>
         </v-col>
@@ -911,6 +912,7 @@ export default {
       customStepOptionFirst: null,
       customStepOptionMiddle: null,
       threeThirds: null,
+      paymentPf: 2,
 
       agentId: null,
       leasedAssertMark: null,
@@ -1336,6 +1338,7 @@ export default {
         customStepOptionFirst: null,
         customStepOptionMiddle: null,
         threeThirds: null,
+        paymentPf: 2,
         leasedAssertMark: null,
         leasedAssertModel: null,
         isNew: true,
@@ -1893,6 +1896,8 @@ export default {
 
         this.insuranceProgram = this.selects.insurancePrograms
           .find(obj => obj.value === data.insuranceProgram)
+
+        console.log({DATA: data})
 
         Object.assign(this.calcObj, data)
         

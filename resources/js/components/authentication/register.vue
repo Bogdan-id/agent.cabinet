@@ -1,5 +1,36 @@
 <template>
 	<div class="app__form-block">
+    <v-dialog
+      :max-width="480"
+      v-model="confidentialDialog">
+      <v-card>
+        <v-card-title style="background: #424242; position: relative" class="white--text pt-2 pb-2">
+          <v-btn 
+            @click="confidentialDialog = false" 
+            style="position: absolute; right: 4px; top: 6px;" 
+            icon>
+            <v-icon color="white" v-text="'mdi-close'"></v-icon>
+          </v-btn>
+          Полiтика конфіденційності
+        </v-card-title>
+        <v-card-text class="mt-4">
+          <p>Я підтверджую, що Мене повідомлено про включення моїх персональних даних до бази персональних даних Виконавця 
+          (Бази даних учасників партнерської програми
+          «Best Leasing») з метою, що вказана в цій Згоді, а також, що мені повідомлені мої
+          права як суб’єкта персональних даних, визначені Законом України «Про захист персональних даних», та мета 
+          обробки моїх персональних даних, а також те, що Я маю право:
+          </p>
+          <ul>
+            <li> отримувати чітку і зрозумілу інформацію про те, хто використовує Мої персональні дані, як і з якою метою</li>
+            <li> вимагати, щоб Мої персональні дані були видалені (право «бути забутим»)</li>
+            <li> передати персональні дані іншому провайдеру послуг</li>
+            <li> право знати, чи були персональні дані викрадені</li>
+            <li> відкликати Свою Згоду на обробку Моїх персональних даних</li>
+          </ul>
+          <p> Згоду на обробку своїх персональних даних Я надаю Виконавцю, як володільцю персональних даних, на невизначений строк</p>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 		<div :class="`app__login-form ${$vuetify.breakpoint.xs ? 'pl-2 pr-2' : ''}`">
 			<div class="app__form-logo-wrapper">
 				<div class="app__header-logo-card"></div>
@@ -100,7 +131,7 @@
 					<span class="app__custom-checkbox"></span>
 					<label for="register-checkbox" class="app__regiser-checkbox-label">
 						Даю свою згоду на обробку моїх персональних даних у відповідності з 
-						<a class="--link" href="#">політикою конфіденційності</a>
+						<a @click="confidentialDialog = !confidentialDialog" class="--link" href="#">політикою конфіденційності</a>
 					</label>
 				</div>
 				<div class="app__button-wrapper">
@@ -149,7 +180,9 @@ export default {
 		errors: {},
 
 		// boolean
-		request: false
+    request: false,
+    
+    confidentialDialog: false,
 	}),
 
 	validations: {
@@ -387,3 +420,10 @@ export default {
   }
 }
 </script>
+
+<style>
+  .confidential-list {
+    display: block;
+    padding: 0.3rem 1rem;
+  }
+</style>

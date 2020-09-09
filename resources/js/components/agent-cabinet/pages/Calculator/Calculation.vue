@@ -122,7 +122,6 @@
         <div>
           <v-row :class="`justify-space-around ${smallerThenMedium ? 'client-type-radio small' : 'client-type-radio'}`">
             <v-col cols="12" md="6" sm="4" class="pt-0 pb-0">
-              <!-- :disabled="calcObj.leasingObjectType === null" -->
               <v-radio-group
                 :class="`leasing-type-radio ${mediumAndDown && !xs ? 'small' : mediumAndDown && xs ? 'small xs' : ''}`"
                 dark
@@ -145,7 +144,6 @@
               </v-radio-group>
             </v-col>
             <v-col cols="12" md="6" sm="4" class="pt-0 pb-0">
-              <!-- :disabled="calcObj.leasingObjectType === null" -->
               <v-radio-group
                 dark
                 :class="`auto-type-radio ${mediumAndDown && !xs ? 'small' : mediumAndDown && xs ? 'small xs' : ''}`"
@@ -1240,17 +1238,8 @@ export default {
       return this.commonErr
     },
 
-    // vehicleOwnerTaxErr() {
-    //   if (!this.$v.calcObj.vehicleOwnerTax.$error) return
-    //   return this.commonErr
-    // },
     leasingRestErr() {
       if (!this.$v.calcObj.leasingRest.$error ) return
-      return this.commonErr
-    },
-
-    paymentPfErr() {
-      if (!this.$v.calcObj.paymentPf.$error ) return
       return this.commonErr
     },
 
@@ -1268,10 +1257,6 @@ export default {
       if (!this.$v.calcObj.graphType.$error) return
       return this.commonErr
     },
-    // residualValueErr() {
-    //   if (!this.$v.calcObj.residualValue.$error) return
-    //   return this.commonErr
-    // },
 
     discountPriceErr() {
       if (!this.$v.calcObj.leasingAmountDkp.$error) return
@@ -1327,7 +1312,6 @@ export default {
   },
   methods: {
     closeAutocompletes() {
-      console.log('click')
       this.$refs.markAutocomplete.blur();
       this.$refs.modelAutocomplete.blur();
     },
@@ -1366,6 +1350,7 @@ export default {
         agentId: this.$store.state.user.agent.id,
         _token: this.getCsrf()
       }
+
       this.initAdvanceInputValue()
       this.initFranchiseInput()
     },
@@ -1381,7 +1366,6 @@ export default {
         .forEach(val => {
           if(val.value == this.calcObj.leasingObjectType.label) {
             if(val.nextSibling.nextSibling.id == this.calcObj.leasingObjectType.label) {
-              console.log(val.nextSibling.nextSibling.id, this.calcObj.leasingObjectType.label)
               val.nextSibling.nextSibling.classList.add('active')
             }
           }
@@ -1532,14 +1516,14 @@ export default {
     },
 
     getMarksByType(event, needRequest) {
-      console.log(event)
       if(event) {
-
+        
         this.resetForm()
 
         if(this.smallerThenMedium) {
           this.category = parseInt(event.value)
           this.calcObj.leasingObjectType = event
+
           if(event.label === "Обладнання") {
             needRequest = 0
             this.brandItems = []
@@ -1591,6 +1575,7 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
     },
+
     getModelByMark() {
       this.modelItems = []
       this.$store.commit('toggleSpinner', true)
@@ -1692,10 +1677,10 @@ export default {
 
     checkIfHasIrregular() {
       if(!this.hasIrregular) {
-        this.$delete(this.calcObj, 'customGraphicType')
-        this.$delete(this.calcObj, 'customUniversalOption')
-        this.$delete(this.calcObj, 'customStepOptionFirst')
-        this.$delete(this.calcObj, 'customStepOptionMiddle')
+        delete this.calcObj.customGraphicType
+        delete this.calcObj.customUniversalOption
+        delete this.calcObj.customStepOptionFirst
+        delete this.calcObj.customStepOptionMiddle
       }
     },
 
@@ -1728,6 +1713,7 @@ export default {
 
 		getGradient(ratio, leftColor, rightColor) {
       this.advanceDisabled = false
+
 			return [
 				'-webkit-gradient(',
 				'linear, ',
@@ -1803,8 +1789,6 @@ export default {
 		},
 
     initFranchiseInput(val) {
-      console.log({FRANCHISE: val})
-
       let el = document.querySelector('#franchise')
       let event = new Event('input', {bubbles: true})
 
@@ -1877,9 +1861,11 @@ export default {
       axios
       .get(`/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
-        this.calcObj.calculation_id = response.data.id
         let data = response.data.request_data
         let advance = response.data.request_data.advance
+
+        this.calcObj.calculation_id = response.data.id
+        this.calcObj.paymentPf = data.paymentPf
 
         if(response.data.request_data.insuranceFranchise){
           this.insuranceFranchise = this.switchFranchiseFromRequest(
@@ -1896,20 +1882,17 @@ export default {
         this.insuranceProgram = this.selects.insurancePrograms
           .find(obj => obj.value === data.insuranceProgram)
 
-        console.log({DATA: data})
-
+        delete this.calcObj.paymentPf
         Object.assign(this.calcObj, data)
-        
 
         this.calcObj.leasingAmountDkp = this.setIndentation(this.calcObj.leasingAmountDkp)
         this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
         
-        console.log({calcObj: this.calcObj})
-        
         if(this.calcObj.leasingObjectType.value !== 6) {
           this.getMarksByType()
           this.getModelByMark()
+
         } else this.falsyLeasedAssertModel = this.calcObj.leasedAssertModel.name
 
         this.changeActiveClass()
@@ -1936,7 +1919,6 @@ export default {
 
   watch: {
     separateFranchise(val) {
-      console.log(val)
       if (val) this.franchise.max = 1.5 
       else this.franchise.max = 1
     },
@@ -1962,8 +1944,6 @@ export default {
     },
 
     insuranceFranchise(value) {
-      console.log(value)
-
       switch(value) {
         case '0': this.calcObj.insuranceFranchise = 1; break
         case '0.5': this.calcObj.insuranceFranchise = 3; break
@@ -1994,20 +1974,25 @@ export default {
     },
 
     'calcObj.isNew': function(value) {
-      if(value && this.calcObj.leasingObjectType.label === 'Легкові та комерційні авто') {
-        setTimeout(this.calcObj.paymentPf = 1)
+      const label = this.calcObj.leasingObjectType.label
+      const edit = this.$router.currentRoute.params.edit
+      if(value && label === 'Легкові та комерційні авто') {
+        this.calcObj.paymentPf = 1
         
-      } else setTimeout(this.calcObj.paymentPf = 2)
+      } else if(!value && label === 'Легкові та комерційні авто' && !edit) this.calcObj.paymentPf = 2
     },
 
     'calcObj.leasingObjectType': function(value) {
-      if(value.label !== 'Легкові та комерційні авто' || !this.calcObj.isNew) {
+      let lightCar = 'Легкові та комерційні авто'
+      let edit = this.$router.currentRoute.params.edit
+
+      if(value.label !== lightCar && !edit || !this.calcObj.isNew && !edit) {
         this.calcObj.insuranceProgram = 1
 
-        setTimeout(this.calcObj.paymentPf = 2)
+        this.calcObj.paymentPf = 2
 
-      } else if (value.label === 'Легкові та комерційні авто' && this.calcObj.isNew) {
-        setTimeout(this.calcObj.paymentPf = 1)
+      } else if (value.label === 'Легкові та комерційні авто' && this.calcObj.isNew && !edit) {
+        this.calcObj.paymentPf = 1
       }
     },
 
@@ -2067,16 +2052,6 @@ export default {
       if(!value) return value
       this.calcObj.advance = parseInt(value)
     },
-
-    // 'calcObj.leasingObjectType': function(value) {
-    //   if(Number.isInteger(value)) {
-    //     let leasingObjType = this.selects.itemTypes
-    //       .filter(val => {
-    //         return val.value === this.calcObj.leasingObjectType
-    //       })
-    //     this.calcObj.leasingObjectType = leasingObjType[0]
-    //   } else return
-    // },
 
     smallerThenMedium(state) {
       if(state === false)  {

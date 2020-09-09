@@ -76,7 +76,8 @@ class CalculateRequest extends JsonRequest
             'customStepOptionFirst' => 'integer',
             'customStepOptionMiddle' => 'integer',
             'leasingAmountDkp' => 'string',
-            'leasingRest' => 'required|integer'
+            'leasingRest' => 'required|integer',
+            'paymentPf' => 'required|integer'
         ];
     }
 }

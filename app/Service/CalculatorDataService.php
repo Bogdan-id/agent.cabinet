@@ -59,7 +59,7 @@ class CalculatorDataService
             'leasing-currency' => $this->getLeasingCurrency(),
             'leasing-rest' => (int) $this->calculateRequest->leasingRest / 100,
             'leasing-currency-course' => $this->calculateRequest->leasingCurrencyCourse,
-            'payment-PF' => $this->getPaymentPf($this->calculateRequest->leasingObjectType['value'], $this->calculateRequest->isNew),
+            'payment-PF' => $this->calculateRequest->paymentPf,
             'request-source' => 2,
             'gps-tracker-quantity' => 1,
             'assist-service' => 1,

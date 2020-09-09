@@ -912,7 +912,7 @@ export default {
       customStepOptionFirst: null,
       customStepOptionMiddle: null,
       threeThirds: null,
-      paymentPf: 2,
+      paymentPf: 1,
 
       agentId: null,
       leasedAssertMark: null,
@@ -1994,9 +1994,20 @@ export default {
       }
     },
 
+    'calcObj.isNew': function(value) {
+      if(value && this.calcObj.leasingObjectType.label === 'Легкові та комерційні авто') {
+        setTimeout(this.calcObj.paymentPf = 1)
+      } else setTimeout(this.calcObj.paymentPf =2)
+    },
+
     'calcObj.leasingObjectType': function(value) {
       if(value.label !== 'Легкові та комерційні авто') {
         this.calcObj.insuranceProgram = 1
+
+        setTimeout(this.calcObj.paymentPf = 2)
+
+      } else if (value.label === 'Легкові та комерційні авто' && this.calcObj.isNew) {
+        setTimeout(this.calcObj.paymentPf = 1)
       }
     },
 

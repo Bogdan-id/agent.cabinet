@@ -3,6 +3,7 @@ export default {
     {text: 'Новий', value: true},
     {text: 'Б/У', value: false}
   ],
+
   itemTypes: [
     {label: "Легкові та комерційні авто", value: 1},
     {label: "СПЕЦІАЛЬНІ ТЗ", value: 4},
@@ -12,26 +13,33 @@ export default {
     {label: "Сільгосптехніка", value: 10},
     {label: "Автобуси", value: 7}
   ],
+
   clientTypes: [ 
     {text: "Юридична особа", value: 2}, 
     {text: "Фізична особа", value: 1}
   ],
+
   currencys: [ 
     "UAH", 
     "USD", 
     "EURO"
   ],
+
   itemYears: [ 2019, 2020 ],
+
   oldItemYears: [ 2013, 2014, 2015, 2016, 2017, 2018, 2019 ],
+
   chartTypes: [
     {text: "Класичний", value: 'even'},
     {text: "Ануїтет", value: 'annuity'},
     {text: "Індивідуальний", value: 'irregular'}
   ],
+
   yesOrNo: [
     {text: "Так", value: 1},
     {text: "Нi", value: 2}
   ],
+  
   gpsTrackers: [
     {text: 'Antenor з блокувань', value: 1}, 
     {text: 'ні', value: 2}, 

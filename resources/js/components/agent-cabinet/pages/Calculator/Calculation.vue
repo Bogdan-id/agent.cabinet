@@ -266,17 +266,8 @@
           </v-text-field>
         </v-col>
       </v-row>
-      <!-- <v-row class="justify-center">
-        <v-col cols="11" class="pa-0">
-          <v-divider dark></v-divider>
-        </v-col>
-      </v-row> -->
       <v-row>
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
-          <!-- @input="$v.calcObj.leasingAmount.$touch();
-              parseToInt('leasingAmount')" -->
-          <!-- v-model="calcObj.leasingAmount" -->
-          <!--  -->
           <v-text-field
             @input="amountToLocalStr('leasing-amount')"
             v-model="calcObj.leasingAmount"
@@ -287,9 +278,6 @@
             color="red darken-4"
             maxlength="20"
             outlined :dense="mediumAndDown">
-            <!-- <template v-slot:append>
-              <span style="color: grey!important; display: block; margin-top: 5px;">грн</span>
-            </template> -->
           </v-text-field>
         </v-col>
         <v-col cols="12" md="3" sm="6" xs="12" :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
@@ -341,6 +329,7 @@
           <v-checkbox
             :disabled="calcObj.leasingAmount === null || calcObj.leasingAmount === ''"
             v-model="discountPrice"
+            
             :value="true"
             :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 pt-0 white--text`"
             style="display: inline-block;"
@@ -363,9 +352,12 @@
         </v-col>
         <v-col :class="`${mediumAndDown ? 'pb-0 pt-0' : ''}`" cols="12" md="4" sm="6" xs="12" v-if="discountPrice && calcObj.leasingAmount !== ''">
           <v-text-field
-            @input="amountToLocalStr('discount-price')"
             id="discount-price"
-            :error-messages="discountPriceErr"
+            :error-messages="leasingAmountDkpErr"
+            @input="
+            $v.calcObj.leasingAmountDkp.$touch();
+              amountToLocalStr('discount-price')"
+            @blur="$v.calcObj.leasingAmountDkp.$touch()"
             v-model="calcObj.leasingAmountDkp"
             background-color="white"
             color="red darken-4"
@@ -468,14 +460,8 @@
                           <div :class="calcObj.advance <= 29 ? 'range-active-label' : ''" :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
                             <span style="white-space: nowrap; transition: color 0.4s">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
                           </div>
-                          <!-- <div>
-                            <calculator-left-arrow></calculator-left-arrow>
-                          </div> -->
                         </div>
                         <div style="display: inline-flex; align-items: center;">
-                          <!-- <div style="display: inline-block;">
-                            <calculator-right-arrow></calculator-right-arrow>
-                          </div> -->
                           <div style="display: inline-block; margin-left: 1.2rem">
                             <span :class="calcObj.advance >= 30 ? 'range-active-label' : ''" :style="`font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
                               <span style="white-space: nowrap; transition: color 0.4s">БЕЗ ФIНАНСОВИХ</span> ДОКУМЕНТIВ
@@ -1023,11 +1009,6 @@ export default {
         leasingQuantity: { required },
         leasingAmount: { required },
         leasingRest: { required },
-        //   minCost: val => {
-        //     if(val == null) return false
-        //     return parseInt(val.replace(/[^\d]/g, '')) >= this.minCarCost
-        //   },
-        // },
         leasingCurrencyCourse: (() => { 
           if(this.hasForeignCurrency) {
             return { required }
@@ -1043,8 +1024,6 @@ export default {
             return { required }
           } else return true
         })(),
-        // vehicleOwnerTax: { required },
-        // paymentPf: { required },
         leasingTerm: { required },
 
         customUniversalOption: (() => { 
@@ -1066,10 +1045,6 @@ export default {
         advance: { required },
         insuranceProgram: { required },
         insuranceFranchise: { required },
-        // residualValue: { required }
-        // gainEvenGraphicMonths: { required },
-        // gainEvenGraphicPercent: { required },
-        // UnsrMonths: { required },
       }
     },
 
@@ -1087,7 +1062,6 @@ export default {
     maxResidualValue() {
       return -Math.ceil(-(100 - parseInt(this.calcObj.advance) - 10) / 10) * 10
     },
-    /* boolean */
 
     smAndDown() {
       return this.$vuetify.breakpoint.smAndDown
@@ -1143,9 +1117,7 @@ export default {
 
     /* vuelidate error handlers */
     itemCostErrors() {
-      // const errors = []
       if (!this.$v.calcObj.leasingAmount.$error) return
-      // !this.$v.calcObj.leasingAmount.minCost && errors.push(`Вартiсть має бути бильше нiж 150 000грн`)
 			return this.commonErr
     },
 
@@ -1156,6 +1128,11 @@ export default {
 
     isNewErr() {
       if (!this.$v.calcObj.isNew.$error) return
+      return this.commonErr
+    },
+
+    leasingAmountDkpErr() {
+      if (!this.$v.calcObj.leasingAmountDkp.$error) return
       return this.commonErr
     },
 
@@ -1279,7 +1256,7 @@ export default {
     },
 
     mediumAndDown() {
-      return this.windowInnerWidth <= 1185 // 1145
+      return this.windowInnerWidth <= 1185 
     },
 
     smallerThenMedium() {
@@ -1310,6 +1287,7 @@ export default {
       return `d-flex justify-center ${this.xs ? 'pt-0 pb-0' : ''}`
     },
   },
+
   methods: {
     closeAutocompletes() {
       this.$refs.markAutocomplete.blur();
@@ -1428,7 +1406,6 @@ export default {
           }
 
         } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
-          // if(!this.calcObj.leasingAmountDkp) return
           if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
             this.calcObj.leasingAmountDkp = temp
           }
@@ -1449,7 +1426,6 @@ export default {
           } 
 
         } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
-          // if(!this.calcObj.leasingAmountDkp) return
           if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
             discountPriceEl.value = this.calcObj.leasingAmount
             discountPriceEl.dispatchEvent(inputEvent)
@@ -1560,8 +1536,6 @@ export default {
 
           this.brandItems = response.data
           this.$store.commit('toggleSpinner', false)
-
-          console.log(this.brandItems)
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
@@ -1589,10 +1563,15 @@ export default {
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
+
           console.log(error.response)
+
           let message = error.response.statusText
+
           this.notify('Помилка', message, 'error')
+
           this.$store.commit('toggleSpinner', false)
+
           this.modelLoader = false
         })
     },
@@ -1646,8 +1625,8 @@ export default {
       delete this.calcObj.threeThirds
       this.calcObj.leasingObjectType.label === 'Причепи та Напівпричепи' || this.calcObj.leasingObjectType.label === 'Обладнання'
         ? delete this.calcObj.leasedAssertEngine : false
-      this.calcObj.leasingAmountDkp === null 
-        ? delete this.calcObj.leasingAmountDkp : false
+      !this.calcObj.leasingAmountDkp ? 
+        delete this.calcObj.leasingAmountDkp : false
       this.calcObj.stock === null 
         ? delete this.calcObj.stock : false
       this.hasIrregular && this.calcObj.customGraphicType === 3
@@ -1657,7 +1636,7 @@ export default {
     },
 
     submit() {
-      console.log(this.calcObj)
+      console.log({finalObj: this.calcObj, validation: this.$v})
 
       this.checkIfHasIrregular()
       this.checkIfHasCurrency()
@@ -1743,7 +1722,6 @@ export default {
 			switch(dataSelector) {
 				case 'advance-payment': this.calcObj.advance = val; break
 				case 'leasing-term': this.calcObj.leasingTerm = val; break
-				// case 'termFinancing': this.termFinancing.current = val; break
 			}
 		},
 
@@ -1798,7 +1776,6 @@ export default {
       } else {
         el.value = el.min
       }
-      
       el.dispatchEvent(event)
     },
 
@@ -1844,7 +1821,8 @@ export default {
 
 			this.syncValue(elRange.value, dataSelector)
 			this.updateElRange(elRange, elRange.value, dataSelector)
-		},
+    },
+    
     setIndentation(value) {
       if(value) {
         return parseInt(value.replace(/\s/g, '' ))
@@ -1869,12 +1847,11 @@ export default {
 
         if(response.data.request_data.insuranceFranchise){
           this.insuranceFranchise = this.switchFranchiseFromRequest(
-              response.data.request_data.insuranceFranchise
+              data.insuranceFranchise
           )
         }
 
         this.initAdvanceInputValue(advance)
-        this.initFranchiseInput(this.insuranceFranchise)
 
         this.brandItems.push(data.leasedAssertMark)
         this.modelItems.push(data.leasedAssertModel)
@@ -1908,18 +1885,24 @@ export default {
     },
 
     switchFranchiseFromRequest(value) {
+      console.log({'SWITCH-FRANCHISE': value})
       switch(value) {
         case 1: return '0'
         case 3: return '0.5'
         case 4: return '1'
-        case 9: return '10'
+        case 9: return '1.5'
       }
     }
   },
 
   watch: {
+    'calcObj.leasingAmountDkp': function (val) {
+      if(val) this.discountPrice = true
+    },
+
     separateFranchise(val) {
       if (val) this.franchise.max = 1.5 
+
       else this.franchise.max = 1
     },
 
@@ -1935,7 +1918,6 @@ export default {
 
     hasIrregular(val) {
       if(val === true) {
-        // this.calcObj.customUniversalOption = null
         this.calcObj.customStepOptionFirst = 33,
         this.calcObj.customStepOptionMiddle = 33,
         this.calcObj.threeThirds = 34
@@ -1944,6 +1926,12 @@ export default {
     },
 
     insuranceFranchise(value) {
+      console.log({insuranceFranchise: value})
+
+      setTimeout(() => {
+        this.initFranchiseInput(value)
+      }, 0)
+
       switch(value) {
         case '0': this.calcObj.insuranceFranchise = 1; break
         case '0.5': this.calcObj.insuranceFranchise = 3; break
@@ -1956,19 +1944,21 @@ export default {
       if(value === 3) {
         this.calcObj.insuranceFranchise = 4
 
-        setTimeout(() => {
-          this.franchiseDisabled = true
+        this.franchiseDisabled = true
 
-          this.initFranchiseInput(this.switchFranchiseFromRequest(4))
-        }, 0)
+        setTimeout(() => {
+          this.initFranchiseInput(
+            this.switchFranchiseFromRequest(4)
+          )
+        }, 500)
 
       } else {
         
-        setTimeout(() => {
-          this.franchiseDisabled = false
-
-          this.initFranchiseInput()
-        }, 0)
+        this.franchiseDisabled = false
+        
+        this.$router.currentRoute.params.edit 
+          ? false 
+          : this.initFranchiseInput()
         
       }
     },
@@ -2081,9 +2071,9 @@ export default {
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
       this.changeActiveClass()
-      this.initFranchiseInput(this.insuranceFranchise)
       this.displayWindowSize()
       this.initAdvanceInputValue()
+      
       return
 
     } else {
@@ -2099,6 +2089,7 @@ export default {
     this.calcObj._token = this.getCsrf()
     this.calcObj.agentId = this.$store.state.user.agent.id
   },
+  
   beforeDestroy() {
     window.removeEventListener('click', this.closeAutocompletes)
   },
@@ -2116,20 +2107,9 @@ export default {
   position: relative;
   border-radius: 8px 8px 0 0;
   overflow: hidden;
-  // margin-right: 15px;
   box-shadow: 0 5px 6px -3px rgba(0,0,0,.2),
     0 9px 12px 1px rgba(0,0,0,.14),
     0 3px 16px 2px rgba(0,0,0,.12)!important;
-  // ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  //   color: black!important;
-  //   opacity: 1; /* Firefox */
-  // }
-  // :-ms-input-placeholder { /* Internet Explorer 10-11 */
-  //   color: black!important;
-  // }
-  // ::-ms-input-placeholder { /* Microsoft Edge */
-  //   color: black!important;
-  // }
   .section-title {
     font-size: 1rem;
     display: inline-block;
@@ -2151,7 +2131,6 @@ export default {
     margin-top: 3px;
   }
   .advance-range-wrapper {
-    // width: 7%;
     width: 7.1%;
     &.small {
       width: 14.2%
@@ -2250,16 +2229,12 @@ export default {
     .leasing-type-radio-wrapper,
     .auto-type-radio-wrapper {
       display: flex;
-      // .v-radio {
-      //   padding: 7px 0!important;
-      // }
       .red-block-radio-label {
         font-size: 1.2rem;
         color: white;
         white-space: nowrap;
       }
       &.small {
-        // flex-direction: column;
         .red-block-radio-label {
           font-size: 0.9rem
         }
@@ -2482,7 +2457,6 @@ export default {
   .v-select__slot, .v-text-field__slot {
     label {
       font-size: 1.2rem!important;
-      // font-weight: bold!important;
     }
   }
   .v-input {
@@ -2498,9 +2472,7 @@ export default {
 }
 .slider {
   -webkit-appearance: none;
-  // position: absolute;
   top: 60px;
-  // border-radius: 0 0 5px 5px;
   left: 0px;
   width: 100%;
   height: 6px;
@@ -2508,11 +2480,8 @@ export default {
   -webkit-transition: .2s;
   transition: opacity .2s;
 }
-// input[type=range]::-webkit-slider-thumb {
-//   -webkit-appearance: none;
-// }
+
 .slider::-webkit-slider-thumb {
-  // border: 8px solid #FAFAFA;
   position: relative;
   z-index:5;
   box-shadow: -1px -1px 9px -4px rgba(0,0,0,0.75);
@@ -2521,7 +2490,6 @@ export default {
   padding: 0px;
   margin: 0;
   height: 25px!important;
-  // border-radius: 50%;
   background: #d24a43!important;
   cursor: pointer;
   -webkit-appearance: none;
@@ -2553,10 +2521,6 @@ input[type='checkbox'] {
   border-radius: 7px;
   transition: all 0.25s ease-out;
 }
-
-// .lbl-toggle:hover {
-//   color: #7C5A0B;
-// }
 
 .lbl-toggle::before {
   content: ' ';
@@ -2593,7 +2557,6 @@ input[type='checkbox'] {
 }
 
 .collapsible-content .content-inner {
-  // background: rgba(250, 224, 66, .2);
   border-bottom: 1px solid #efefef;
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;

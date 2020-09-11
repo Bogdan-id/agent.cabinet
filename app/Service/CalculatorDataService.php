@@ -213,16 +213,12 @@ class CalculatorDataService
                 return 5;
             case 'ГАЗ':
                 return 6;
-            case 'Ravon':
-                return 7;
-            case 'Peugeot':
-                return 8;
             case 'Citroen':
                 return 9;
             case 'Lexus':
-                return 13;
+                return 10;
             case 'Mercedes-Benz':
-                return 14;
+                return 11;
             case 'Fiat':
                 return 15;
             case 'Alfa Romeo':
@@ -230,7 +226,7 @@ class CalculatorDataService
             case 'Mitsubishi':
                 return 16;
             case 'Opel':
-                return 17;
+                return 7;
             default:
                 return 1;
         }

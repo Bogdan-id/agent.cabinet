@@ -188,7 +188,7 @@ class CalculatorDataService
             $yearCount = $this->calculateRequest->leasingObjectYear + $this->calculateRequest->leasingTerm / 12 - (new Carbon())->year;
 
             if ($yearCount <= 3) return 12;
-            if ($yearCount <= 5) return 13;
+            if ($yearCount <= 6) return 13;
             
             return 14;
         }

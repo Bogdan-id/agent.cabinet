@@ -179,15 +179,21 @@ class CalculatorDataService
      */
     protected function getProgram(): int
     {
-       
-        if ($this->calculateRequest->isNew) return $this->getProgramForNewCar();
+        if($this->calculateRequest->leasingObjectType['value'] === 6)
+        {
+            $program = $this->getProgramForTrucks();
+        }elseif($this->calculateRequest->isNew && $this->calculateRequest->leasingObjectType['value'] !== 6){
+            $program = $this->getProgramForNewCar();
+        }else{
+            $yearCount = $this->calculateRequest->leasingObjectYear + $this->calculateRequest->leasingTerm / 12 - (new Carbon())->year;
 
-        $yearCount = $this->calculateRequest->leasingObjectYear + $this->calculateRequest->leasingTerm / 12 - (new Carbon())->year;
+            if ($yearCount <= 3) return 12;
+            if ($yearCount <= 5) return 13;
+            
+            return 14;
+        }
 
-        if ($yearCount <= 3) return 12;
-        if ($yearCount <= 5) return 13;
-        
-        return 14;
+        return $program;
     }
 
     /**
@@ -207,16 +213,12 @@ class CalculatorDataService
                 return 5;
             case 'ГАЗ':
                 return 6;
-            case 'Ravon':
-                return 7;
-            case 'Peugeot':
-                return 8;
             case 'Citroen':
                 return 9;
             case 'Lexus':
-                return 13;
+                return 10;
             case 'Mercedes-Benz':
-                return 14;
+                return 11;
             case 'Fiat':
                 return 15;
             case 'Alfa Romeo':
@@ -224,7 +226,7 @@ class CalculatorDataService
             case 'Mitsubishi':
                 return 16;
             case 'Opel':
-                return 17;
+                return 7;
             default:
                 return 1;
         }
@@ -641,6 +643,48 @@ class CalculatorDataService
         }
 
         return $place;
+    }
+
+    private function getProgramForTrucks()
+    {
+        $autoData = [
+            'mark' => $this->calculateRequest->leasedAssertMark['name'],
+            'model' => $this->calculateRequest->leasedAssertModel['name']
+        ];
+        switch ($autoData) {
+            case $autoData['mark'] === 'Renault' &&  $this->isModel($autoData['model'], 'Master')||
+            $autoData['mark'] === 'Renault' &&  $this->isModel($autoData['model'], 'Trafic')||
+            $autoData['mark'] === 'Renault' &&  $this->isModel($autoData['model'], 'Dokker')||
+            $autoData['mark'] === 'Renault' &&  $this->isModel($autoData['model'], 'Kangoo'):
+                return 2;
+            case $autoData['mark'] === 'Mercedes-Benz' &&  $this->isModel($autoData['model'], 'Sprinter')||
+            $autoData['mark'] === 'Mercedes-Benz' &&  $this->isModel($autoData['model'], 'Vito')||
+            $autoData['mark'] === 'Mercedes-Benz' &&  $this->isModel($autoData['model'], 'Vario'):
+                return 11;
+            case $autoData['mark'] === 'Peugeot':
+                return 8;
+            case $autoData['mark'] === 'Citroen':
+                return 9;
+            case $autoData['mark'] === 'Fiat':
+                return 15;
+            case $autoData['mark'] === 'Opel':
+                return 7;
+            case $autoData['mark'] === 'Toyota':
+                return 5;
+            default:
+                return null;
+        }
+    }
+
+    private function isModel($model, $needleModel)
+    {
+        $result = strripos($model, $needleModel);
+        if($result !== false)
+        {
+            $result = true;
+        }
+
+        return $result;
     }
 
 }

@@ -1866,7 +1866,7 @@ export default {
         this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
         
-        if(this.calcObj.leasingObjectType.value !== 6) {
+        if(this.calcObj.leasingObjectType.value !== 11) {
           this.getMarksByType()
           this.getModelByMark()
 
@@ -1885,7 +1885,7 @@ export default {
     },
 
     switchFranchiseFromRequest(value) {
-      console.log({'SWITCH-FRANCHISE': value})
+      console.log({'switch-franchise': value})
       switch(value) {
         case 1: return '0'
         case 3: return '0.5'

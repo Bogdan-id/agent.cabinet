@@ -8,7 +8,7 @@ export default {
     {label: "Легкові та комерційні авто", value: 1},
     {label: "СПЕЦІАЛЬНІ ТЗ", value: 4},
     {label: "Вантажні авто", value: 6},
-    {label: "Обладнання", value: 6},
+    {label: "Обладнання", value: 11},
     {label: "Причепи та Напівпричепи", value: 5},
     {label: "Сільгосптехніка", value: 10},
     {label: "Автобуси", value: 7}

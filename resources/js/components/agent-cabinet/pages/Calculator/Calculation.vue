@@ -188,14 +188,14 @@
             :loading="!leasedOfAssetType && $store.state.loader
               || noBrandItems && $store.state.loader"
             :disabled="calcObj.isNew === null || calcObj.leasingClientType === null"
-            :readonly="calcObj.leasingObjectType.label === 'Обладнання'"
+            :readonly="calcObj.leasingObjectType.value === 11"
             color="grey darken-2"
             outlined :dense="mediumAndDown">
           </v-autocomplete>
         </v-col>
 
         <v-col 
-          v-if="calcObj.leasingObjectType.label !== 'Обладнання'" 
+          v-if="calcObj.leasingObjectType.value !== 11" 
           cols="12" md="3" sm="6" xs="12"  
           :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-autocomplete
@@ -220,7 +220,7 @@
         </v-col>
 
         <v-col
-          v-if="calcObj.leasingObjectType.label === 'Обладнання'"
+          v-if="calcObj.leasingObjectType.value === 11"
           cols="12" md="3" sm="6" xs="12"  
           :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-text-field
@@ -250,7 +250,7 @@
         </v-col>
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-text-field
-            v-show="calcObj.leasingObjectType.label !== 'Причепи та Напівпричепи' && calcObj.leasingObjectType.label !== 'Обладнання'"
+            v-show="calcObj.leasingObjectType.value !== 5 && calcObj.leasingObjectType.value !== 11"
             @input="amountToLocalStr('leasedAssertEngine')"
             v-model="calcObj.leasedAssertEngine"
             :error-messages="leasedAssertEngineErr"
@@ -339,8 +339,7 @@
           </v-checkbox>
           &nbsp;&nbsp;
           <v-checkbox
-            v-show="
-              calcObj.leasingObjectType.label === 'Легкові та комерційні авто'"
+            v-show="calcObj.leasingObjectType.value === 1"
             v-model="calcObj.paymentPf"
             :true-value="1"
             :false-value="2"
@@ -699,7 +698,7 @@
                   <v-select
                     v-model="calcObj.insuranceProgram"
                     append-icon="mdi-chevron-down"
-                    :items="calcObj.leasingObjectType.label === 'Легкові та комерційні авто' 
+                    :items="calcObj.leasingObjectType.value === 1 
                       ? selects.insurancePrograms 
                       : [{text: 'Стандарт', value: 1}]"
                     :error-messages="insuranceProgramErr"
@@ -935,17 +934,11 @@ export default {
 
   computed: {
     separateFranchise() {
-      let objType = [
-        "Легкові та комерційні авто", 
-        "Вантажні авто", 
-        "Причепи та Напівпричепи", 
-        "Автобуси"
-      ]
-
+      let objType = [1, 6, 5, 7]
       let franchiseType = [3, 2]
 
       let prog = this.calcObj.insuranceProgram
-      let objT = this.calcObj.leasingObjectType.label
+      let objT = this.calcObj.leasingObjectType.value
 
       if (objType.includes(objT) && !franchiseType.includes(prog)) return true
 
@@ -1001,7 +994,7 @@ export default {
         leasedAssertMark: { required },
         leasedAssertModel: { required },
         leasedAssertEngine: (() => { 
-          if(this.calcObj.leasingObjectType.label !== "Причепи та Напівпричепи" && this.calcObj.leasingObjectType.label !== 'Обладнання') {
+          if(this.calcObj.leasingObjectType.value !== 5 && this.calcObj.leasingObjectType.value !== 11) {
             return { required }
           } else return true
         })(),
@@ -1623,7 +1616,7 @@ export default {
 
     deleteUnneccessaryFields() {
       delete this.calcObj.threeThirds
-      this.calcObj.leasingObjectType.label === 'Причепи та Напівпричепи' || this.calcObj.leasingObjectType.label === 'Обладнання'
+      this.calcObj.leasingObjectType.value === 5 || this.calcObj.leasingObjectType.value === 11
         ? delete this.calcObj.leasedAssertEngine : false
       !this.calcObj.leasingAmountDkp ? 
         delete this.calcObj.leasingAmountDkp : false
@@ -1763,7 +1756,10 @@ export default {
         el.value = 15
       }
 
-			el.dispatchEvent(event)
+      el.dispatchEvent(event)
+      
+      Object.assign(this.$router.currentRoute.params, {edit: false})
+      console.log({EDIT: this.$router.currentRoute})
 		},
 
     initFranchiseInput(val) {
@@ -1950,7 +1946,7 @@ export default {
           this.initFranchiseInput(
             this.switchFranchiseFromRequest(4)
           )
-        }, 500)
+        }, 0)
 
       } else {
         
@@ -1958,18 +1954,18 @@ export default {
         
         this.$router.currentRoute.params.edit 
           ? false 
-          : this.initFranchiseInput()
+          : setTimeout(() => { this.initFranchiseInput() }, 0)
         
       }
     },
 
     'calcObj.isNew': function(value) {
-      const label = this.calcObj.leasingObjectType.label
+      const val = this.calcObj.leasingObjectType.value
       const edit = this.$router.currentRoute.params.edit
-      if(value && label === 'Легкові та комерційні авто') {
+      if(value && val === 1) {
         this.calcObj.paymentPf = 1
         
-      } else if(!value && label === 'Легкові та комерційні авто' && !edit) this.calcObj.paymentPf = 2
+      } else if(!value && val === 1 && !edit) this.calcObj.paymentPf = 2
     },
 
     'calcObj.leasingObjectType': function(value) {

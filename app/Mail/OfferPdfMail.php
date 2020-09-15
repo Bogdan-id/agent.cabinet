@@ -32,7 +32,7 @@ class OfferPdfMail extends Mailable
      */
     public function build()
     {
-        $subject = "Комерційна пропозиція {$this->data['mark']} {$this->data['model']} {$this->data['advance']}% {$this->data['term']}міс {$this->data['currency']}";
+        $subject = "Комерційна пропозиція від BEST Лізинг на {$this->data['mark']} {$this->data['model']} {$this->data['advance']}% {$this->data['term']}міс {$this->data['currency']}";
         $agent = Agent::find($this->data['agentId']);
         $user = User::find($agent->user_id);
         return $this->from('agent.bestleasing@gmail.com')

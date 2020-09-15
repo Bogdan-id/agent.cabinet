@@ -138,7 +138,22 @@ class CalculatorDataService
      */
     protected function getObjType(): int
     {
-        return (int) $this->calculateRequest->leasingObjectType['value'];
+        switch ($this->calculateRequest->leasingObjectType['value']) {
+            case 1:
+                return 1;
+            case 4:
+                return 2;
+            case 10:
+                return 2;
+            case 6:
+                return 3;
+            case 11:
+                return 5;
+            case 5:
+                return 6;
+            case 7:
+                return 7;
+        }
     }
 
     //  /**

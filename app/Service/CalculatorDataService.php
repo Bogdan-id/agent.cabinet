@@ -185,8 +185,7 @@ class CalculatorDataService
         }elseif($this->calculateRequest->isNew && $this->calculateRequest->leasingObjectType['value'] !== 6){
             $program = $this->getProgramForNewCar();
         }else{
-            $yearCount = $this->calculateRequest->leasingObjectYear + $this->calculateRequest->leasingTerm / 12 - (new Carbon())->year;
-
+            $yearCount = (new Carbon())->year - $this->calculateRequest->leasingObjectYear + $this->calculateRequest->leasingTerm / 12;
             if ($yearCount <= 3) return 12;
             if ($yearCount <= 6) return 13;
             
@@ -213,6 +212,8 @@ class CalculatorDataService
                 return 5;
             case 'ГАЗ':
                 return 6;
+            case 'Peugeot':
+                return 8;
             case 'Citroen':
                 return 9;
             case 'Lexus':
@@ -599,19 +600,20 @@ class CalculatorDataService
         {
             $price =  (int) preg_replace("/[^\d]/", "", $this->calculateRequest->leasingAmount) * $this->calculateRequest->leasingCurrencyCourse;
             $this->client = new Client([
-                'base_uri' => 'https://bank.gov.ua'
+                'base_uri' => 'https://api.privatbank.ua'
             ]);
-
-            $response = $this->client->get('NBUStatService/v1/statdirectory/exchange?json')->getBody()->getContents();
+    
+            $response = $this->client->get('/p24api/pubinfo?json&exchange&coursid=5')->getBody()->getContents();
             $result = json_decode($response);
-            
             $usdRate = array_filter($result, function($item){
-                if($item->cc === 'USD') {
-                    return $item->rate;
+                if($item->ccy === 'USD') {
+                    return $item->buy;
                 }               
-            });
+            });      
             $usdRate = reset($usdRate);
-            if($price/$usdRate->rate >= 35000)
+    
+            $rate = $usdRate->buy;
+            if($price/$rate >= 35000)
             {
                 $gpsTrackerModel = 3;
             }
@@ -635,7 +637,7 @@ class CalculatorDataService
     private function getPlaceOfregistration()
     {
         $place = 1;
-        if($this->calculateRequest->leasingObjectType['value'] === 6)
+        if($this->calculateRequest->leasingObjectType['value'] === 11)
         {
             $place = 2;
         }elseif($this->calculateRequest->leasingObjectType['value'] === 4 || $this->calculateRequest->leasingObjectType['value'] === 10){
@@ -672,7 +674,7 @@ class CalculatorDataService
             case $autoData['mark'] === 'Toyota':
                 return 5;
             default:
-                return null;
+                return 1;
         }
     }
 

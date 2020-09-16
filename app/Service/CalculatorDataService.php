@@ -672,7 +672,7 @@ class CalculatorDataService
         $place = 1;
         if($this->calculateRequest->leasingObjectType['value'] === 11)
         {
-            $place = 2;
+            $place = 4;
         }elseif($this->calculateRequest->leasingObjectType['value'] === 4 || $this->calculateRequest->leasingObjectType['value'] === 10){
             $place = 3;
         }

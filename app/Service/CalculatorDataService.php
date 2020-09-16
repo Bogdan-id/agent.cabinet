@@ -194,20 +194,38 @@ class CalculatorDataService
      */
     protected function getProgram(): int
     {
-        if($this->calculateRequest->leasingObjectType['value'] === 6)
-        {
-            $program = $this->getProgramForTrucks();
-        }elseif($this->calculateRequest->isNew && $this->calculateRequest->leasingObjectType['value'] !== 6){
-            $program = $this->getProgramForNewCar();
-        }else{
-            $yearCount = (new Carbon())->year - $this->calculateRequest->leasingObjectYear + $this->calculateRequest->leasingTerm / 12;
+        switch ($this->calculateRequest) {
+            case $this->calculateRequest->leasingObjectType['value'] === 6 && $this->calculateRequest->isNew:
+                return $this->getProgramForTrucks();
+            case $this->calculateRequest->isNew && $this->calculateRequest->leasingObjectType['value'] === 1:
+                return $this->getProgramForNewCar();
+            case $this->calculateRequest->leasingObjectType['value'] === 11 && $this->calculateRequest->isNew:
+                return 1;
+            case $this->calculateRequest->leasingObjectType['value'] === 10 && $this->calculateRequest->isNew:
+                return 1;
+            case $this->calculateRequest->leasingObjectType['value'] === 4 && $this->calculateRequest->isNew:
+                return 1;
+            case $this->calculateRequest->leasingObjectType['value'] === 7 && $this->calculateRequest->isNew:
+                return 1;
+            case $this->calculateRequest->leasingObjectType['value'] === 5 && $this->calculateRequest->isNew:
+                return 1;
+            case !$this->calculateRequest->isNew:
+                return $this->getProgramForBooCar();
+            default:
+                return 1;
+        }
+    }
+
+    /**
+     * @return int
+     */
+    protected function getProgramForBooCar(): int
+    {
+        $yearCount = (new Carbon())->year - $this->calculateRequest->leasingObjectYear + $this->calculateRequest->leasingTerm / 12;
             if ($yearCount <= 3) return 12;
             if ($yearCount <= 6) return 13;
             
             return 14;
-        }
-
-        return $program;
     }
 
     /**

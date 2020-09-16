@@ -103,10 +103,10 @@ class CalculatorDataService
 
         if(in_array('irregular', $graphTypes))
         {
-            if($this->calculateRequest->customGraphicType = 5){
+            if($this->calculateRequest->customGraphicType === 5){
                 $requestData['custom-graphic-type'] = $this->calculateRequest->customGraphicType;
                 $requestData['custom-universal-option'] = $this->calculateRequest->customUniversalOption / 100;
-            }elseif($this->calculateRequest->customGraphicType = 3){
+            }elseif($this->calculateRequest->customGraphicType === 3){
                 $requestData['custom-graphic-type'] = $this->calculateRequest->customGraphicType;
                 $requestData['custom-step-option-first'] = $this->calculateRequest->customStepOptionFirst / 100;
                 $requestData['custom-step-option-middle'] = $this->calculateRequest->customStepOptionMiddle / 100;
@@ -672,7 +672,7 @@ class CalculatorDataService
         $place = 1;
         if($this->calculateRequest->leasingObjectType['value'] === 11)
         {
-            $place = 2;
+            $place = 4;
         }elseif($this->calculateRequest->leasingObjectType['value'] === 4 || $this->calculateRequest->leasingObjectType['value'] === 10){
             $place = 3;
         }

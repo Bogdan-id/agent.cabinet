@@ -934,7 +934,7 @@ export default {
 
   computed: {
     separateFranchise() {
-      let objType = [1, 6, 5, 7]
+      let objType = [1, 6, 5]
       let franchiseType = [3, 2]
 
       let prog = this.calcObj.insuranceProgram

@@ -890,6 +890,8 @@ export default {
 
     insuranceFranchise: 0,
 
+    stopFranchisePropagetion: false,
+
     calcObj: {
       customStepOptionFirst: null,
       customStepOptionMiddle: null,
@@ -913,8 +915,6 @@ export default {
       advance: 15,
       leasingTerm: 12,
       customUniversalOption: null,
-
-      // new fields
       customGraphicType: 3,
       leasingRest: 0,
       stock: null,
@@ -934,7 +934,7 @@ export default {
 
   computed: {
     separateFranchise() {
-      let objType = [1, 6, 5, 7]
+      let objType = [1, 6, 5]
       let franchiseType = [3, 2]
 
       let prog = this.calcObj.insuranceProgram
@@ -1310,8 +1310,6 @@ export default {
         leasingTerm: 12,
         customUniversalOption: null,
         customGraphicType: 3,
-
-        // new fields
         leasingRest: 0,
         stock: null,
         holidays: 2,
@@ -1323,7 +1321,7 @@ export default {
       }
 
       this.initAdvanceInputValue()
-      this.initFranchiseInput()
+      this.initFranchiseInput(null, false)
     },
 
     changeActiveClass() {
@@ -1341,7 +1339,7 @@ export default {
             }
           }
         })
-      }, 200)
+      }, 0)
     },
 
     restrictToPercentAdvance(id) {
@@ -1757,12 +1755,11 @@ export default {
       }
 
       el.dispatchEvent(event)
-      
-      Object.assign(this.$router.currentRoute.params, {edit: false})
-      console.log({EDIT: this.$router.currentRoute})
 		},
 
-    initFranchiseInput(val) {
+    initFranchiseInput(val, propagation) {
+      this.stopFranchisePropagetion = propagation
+
       let el = document.querySelector('#franchise')
       let event = new Event('input', {bubbles: true})
 
@@ -1797,12 +1794,14 @@ export default {
 		},
 
 		initElRange(event) {
-			let {elRange, dataSelector} = this.switchSelector(event)
-
+      let {elRange, dataSelector} = this.switchSelector(event)
+      
 			if(!event) {
-				elRange.value = this.toInt(elRange.min, dataSelector)
+        elRange.value = this.toInt(elRange.min, dataSelector)
+        
 				this.syncValue(elRange.value, dataSelector)
-				this.updateElRange(elRange, elRange.value)
+        this.updateElRange(elRange, elRange.value)
+        
 				return
 			}
 
@@ -1923,10 +1922,10 @@ export default {
 
     insuranceFranchise(value) {
       console.log({insuranceFranchise: value})
-
-      setTimeout(() => {
-        this.initFranchiseInput(value)
-      }, 0)
+      if(this.stopFranchisePropagetion) {
+        this.stopFranchisePropagetion = false
+        return
+      }
 
       switch(value) {
         case '0': this.calcObj.insuranceFranchise = 1; break
@@ -1934,6 +1933,7 @@ export default {
         case '1': this.calcObj.insuranceFranchise = 4; break
         case '1.5': this.calcObj.insuranceFranchise = 9; break
       }
+      queueMicrotask(() => {this.initFranchiseInput(value)})
     },
 
     'calcObj.insuranceProgram': function(value) {
@@ -1944,7 +1944,7 @@ export default {
 
         setTimeout(() => {
           this.initFranchiseInput(
-            this.switchFranchiseFromRequest(4)
+            this.switchFranchiseFromRequest(4, true)
           )
         }, 0)
 
@@ -1954,9 +1954,10 @@ export default {
         
         this.$router.currentRoute.params.edit 
           ? false 
-          : setTimeout(() => { this.initFranchiseInput() }, 0)
-        
+          : setTimeout(() => { this.initFranchiseInput(null, true) }, 0)
       }
+
+      setTimeout(() => {Object.assign(this.$router.currentRoute.params, {edit: false})}, 0)
     },
 
     'calcObj.isNew': function(value) {
@@ -1977,7 +1978,7 @@ export default {
 
         this.calcObj.paymentPf = 2
 
-      } else if (value.label === 'Легкові та комерційні авто' && this.calcObj.isNew && !edit) {
+      } else if (value.label === lightCar && this.calcObj.isNew && !edit) {
         this.calcObj.paymentPf = 1
       }
     },
@@ -2077,7 +2078,7 @@ export default {
     }
 
     this.changeActiveClass()
-    this.initFranchiseInput()
+    this.initFranchiseInput(null, false)
     this.getMarksByType()
     this.displayWindowSize()
     this.initAdvanceInputValue()

@@ -47,7 +47,7 @@ class CalculateController extends Controller
             $data = $calculateRequest->validated();
         
             $requestData = $calculatorDataService->getRequestData();
-    
+           // dd($requestData);
             $resultData = $calculateClient->runCalculate($requestData);
            
             $resultData = $this->getCleanData($resultData);
@@ -73,6 +73,7 @@ class CalculateController extends Controller
           
            // $bitrixClient->addQuoteFromCalculator($calculatorDataService, $params); //Пока нет надобности отправлять предложения
         } catch (RequestException $e) {
+           // dd($e->getMessage());
             $message = Psr7\str($e->getRequest());
             if ($e->hasResponse()) {
                 $message = Psr7\str($e->getResponse());
@@ -130,7 +131,7 @@ class CalculateController extends Controller
                     ]
                 ]
         ]);
-
+        $data['fileName'] = "{$data['mark']}_{$data['model']}_{$data['advance']}%_{$data['term']}міс_{$data['currency']}_{$data['requestId']}.pdf";
         $mpdf->WriteHTML(
             view(
                 'pdf.index',
@@ -143,13 +144,12 @@ class CalculateController extends Controller
                 ])
             )->render()
         );
-        $fileName = "{$data['mark']}_{$data['model']}_{$data['advance']}%_{$data['term']}міс_{$data['currency']}_{$data['requestId']}.pdf";
         if(array_key_exists('email', $data)){
             $mpdf->Output("pdf/$fileName", 'F');
             Mail::to($data['email'])->send(new OfferPdfMail($data, $fileName));
             unlink(public_path("pdf/$fileName"));
         }else{
-            $mpdf->Output($fileName, 'D');
+            $mpdf->Output($data['fileName'], 'D');
         }
 
         return response()->json([

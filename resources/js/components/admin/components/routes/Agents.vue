@@ -99,7 +99,6 @@
         color="black"
         :headers="tableHeader"
         :items="tabledata"
-        :hide-default-footer="true"
         class="elevation-1 mr-3 ml-3">
         <template v-slot:item.actions="{ item }">
           <div class="d-flex justify-center">
@@ -144,12 +143,14 @@ export default {
       initials: null,
       id: null
     },
+
     userSettings: {
       abSize: null,
       status: null,
       managerId: null,
       _token: null
     },
+
     loading: false,
     deactivateDialog: false,
     agentOperationsDialog: false
@@ -157,19 +158,25 @@ export default {
   methods: {
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-		},
+    },
+    
     getAgents() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
         .get('/admin/agent/all')
         .then(response => {
           this.createTableData(response.data)
+
           this.$store.commit('toggleAdminSpinner', false)
+
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
+
           console.log(error.response)
+
           this.$store.commit('toggleAdminSpinner', false)
+
           this.$notify({
             group: 'error',
             title: 'Помилка',
@@ -177,8 +184,10 @@ export default {
           })
         })
     },
+
     async createTableData(object) {
       let arr = []
+
       await object.map(val => {
         let dataObj = {
           initials: `${val.last_name} ${val.first_name} ${val.patronymic}`,
@@ -190,24 +199,32 @@ export default {
           managerId: val.manager_id,
           status: val.status
         }
+
         arr.push(dataObj)
       })
+
       this.tabledata = arr
     },
+
     findAgent(id) {
       let data = this.tabledata
         .find(value => {
           return value.id === id
         })
+
       if(Object.keys(data).length > 0) {
+
         Object.assign(this.currentUser, data)
         Object.assign(this.userSettings, data)
       }
     },
+
     deactivateUser(userId) {
       this.deactivateDialog = true
+
       this.findAgent(userId)
     },
+
     getManagers() {
       axios
         .get('/getManagers')
@@ -215,10 +232,13 @@ export default {
           this.managers = response.data
         })
         .catch(error => {
+
           this.$catchStatus(error.response.status)
+
           console.log(error.response)
         })
     },
+
     sendRequest(id) {
       this.loading = true
       axios
@@ -230,15 +250,20 @@ export default {
             title: 'Успiшно',
             text: ''
           })
+
           setTimeout(() => {
             this.deactivateDialog = false
           }, 800)
+
           this.getAgents()
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
+
           console.log(error.response)
+
           this.loading = false
+
           this.$notify({
             group: 'error',
             title: 'Помилка',
@@ -246,37 +271,37 @@ export default {
           })
         })
     },
+
     getAgentOperations() {
       this.agentOperationsDialog = true
     },
+
     parseToInt(id) {
       let input = new Event('input', {bubbles: true})
       let el = document.getElementById(id)
       let value = el.value
       let intVal = el.value.replace(/[^\d]/g, '')
+
       if(value !== intVal || parseInt(intVal) > 100) {
+
         if(parseInt(intVal) > 100) {
           el.value = 100
           this.userSettings.abSize = 100
+
         } else {
           el.value = intVal
           this.userSettings.abSize = intVal
         }
+
         el.dispatchEvent(input)
       }
     },
-    // checkObject(object) {
-    //   Object.keys(object)
-    //     .forEach(propertie => {
-    //       if(object[propertie] === null) {
-    //         delete object[propertie]
-    //       }
-    //     })
-    // },
+
+
     sendUserSettings() {
       this.loading = true
       this.userSettings._token = this.getCsrf()
-      // this.checkObject(this.userSettings)
+
       axios
         .post(`/admin/agent/update/${this.currentUser.id}`, this.userSettings)
         .then(() => {
@@ -286,9 +311,11 @@ export default {
             title: 'Успiшно',
             text: ''
           })
+
           setTimeout(() => {
             this.agentOperationsDialog = false
           }, 800)
+
           this.getAgents()
         })
         .catch(error => {
@@ -302,15 +329,15 @@ export default {
           })
         })
     }
-    // sortData(a, b) {
-    //   return new Date(b.created_at) - new Date(a.created_at)
-    // },
   },
+
+
   watch: {
     'userSettings.managerId': function (val) {
       if(val === null || val === 'undefined') return
       else this.userSettings.managerId = parseInt(val)
     },
+
     agentOperationsDialog(val) {
       if(val === false) {
         Object.keys(this.userSettings)
@@ -320,8 +347,11 @@ export default {
       }
     },
   },
+
+
   created() {
     this.getAgents()
+
     this.getManagers()
   }
 }

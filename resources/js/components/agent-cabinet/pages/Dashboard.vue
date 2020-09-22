@@ -60,20 +60,30 @@
   </div>
   <!-- Dashboard container -->
   <div class="dashboard-container">
-    <v-card elevation="9" 
+    <v-card 
+      elevation="9" 
+      class="carousel-wrapper-card"
       :height="
-        $vuetify.breakpoint.xs 
-          ? 300 : $vuetify.breakpoint.lg 
-          ? 450 : $vuetify.breakpoint.xl 
-          ? 650 : 350">
-      <div v-if="!carouselVisibility && sliderHasNoSlides"  style="position: relative; width: 100%; height: 100%;">
+        $vuetify.breakpoint.xs
+          ? 300 
+          : $vuetify.breakpoint.lg 
+            ? (showSidebar ? 450 : 500) 
+            : $vuetify.breakpoint.xl 
+              ? (showSidebar ? 650 : 750) 
+              : (showSidebar ? 300 : 350)">
+      <div 
+        v-if="!carouselVisibility && sliderHasNoSlides"  
+        style="position: relative; width: 100%; height: 100%;">
         <v-skeleton-loader
           style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
           :class="
             $vuetify.breakpoint.xs 
-              ? 'xs' : $vuetify.breakpoint.lg 
-              ? 'lg' : $vuetify.breakpoint.xl 
-              ? 'xl' : ''"
+              ? 'xs' 
+              : $vuetify.breakpoint.lg  && showSidebar
+                ? 'lg sidebar-showed' 
+                : $vuetify.breakpoint.xl  && showSidebar
+                  ? 'xl sidebar-showed' 
+                  : (showSidebar ? 'sidebar-showed-sm' : '')"
           type="image">
         </v-skeleton-loader>
       </div>
@@ -86,9 +96,12 @@
         cycle
         :height="
           $vuetify.breakpoint.xs 
-            ? 300 : $vuetify.breakpoint.lg 
-            ? 450 : $vuetify.breakpoint.xl 
-            ? 650 : 350"
+            ? 300 
+            : $vuetify.breakpoint.lg 
+              ? (showSidebar ? 450 : 500) 
+              : $vuetify.breakpoint.xl 
+                ? (showSidebar ? 650 : 750) 
+                : (showSidebar ? 300 : 350)"
         name="dashboard-carousel"
         :class="`${carouselVisibility ? 'dashboard-carousel active' : 'dashboard-carousel'}`"
         id="dashboard-carousel"
@@ -300,6 +313,7 @@
         <v-card-text class="pt-0">
           <div style="text-align: right">
             <router-link 
+              @click="$setRoute()"
               :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" 
               class="see-all-news" style="font-size: 1rem; text-decoration: underline" tag="span">
               Всi новини
@@ -353,9 +367,12 @@
     </v-card-text>
     <v-card-text class="pt-0" v-if="news !== null && news !== 'undefined' && news.length > 0">
       <div style="text-align: center">
-        <v-btn color="#e75d57" outlined 
+        <v-btn
+          @click="$setRoute()" 
           :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" 
-          tag="span">
+          tag="span"
+          color="#e75d57"
+          outlined>
           всi новини
         </v-btn>
       </div>
@@ -410,7 +427,11 @@ export default {
     },
     xs() {
       return this.$vuetify.breakpoint.xs
+    },
+    showSidebar() {
+      return this.$store.state.showSidebar
     }
+    
   },
   methods: {
     applyChanges(status, index) {
@@ -540,26 +561,49 @@ export default {
 .theme--light.v-skeleton-loader .v-skeleton-loader__text {
     background: white!important;
 }
+
 .v-skeleton-loader {
   .v-skeleton-loader__image {
     height: 350px!important;
   }
+
+  &.sidebar-showed-sm {
+    .v-skeleton-loader__image {
+      height: 300px!important;
+    }
+  }
+
   &.xs {
     .v-skeleton-loader__image {
       height: 300px!important;
     }
   }
+
   &.lg {
+    &.sidebar-showed {
+      .v-skeleton-loader__image {
+        height: 450px!important;
+      }
+    }
+
     .v-skeleton-loader__image {
-      height: 450px!important;
+      height: 500px!important;
     }
   }
+  
   &.xl {
+    &.sidebar-showed {
+      .v-skeleton-loader__image {
+        height: 650px!important;
+      }
+    }
+
     .v-skeleton-loader__image {
-      height: 650px!important;
+      height: 750px!important;
     }
   }
 }
+
 .slider-action-btn-wrapper {
   height: 50%; 
   display: flex; 
@@ -573,29 +617,36 @@ export default {
 }
 
 .v-carousel__item {
+  transition: height 0.2s ease;
   .v-image__image {
     background-size: 100% 100%!important;
   }
 }
 
 .dashboard-carousel {
+  transition: height 0.2s ease 0s!important;
   visibility: hidden;
   transition: opacity 1.5s;
   opacity: 0;
+
   &.active {
     visibility: visible;
     opacity: 1;
   }
 }
+
 .manager-list-wrapper {
   display: inline-block; 
   width: 100%; 
   padding: 0 25px;
   margin-top: 15px;
+
   ul {
     padding-left: 0!important;
     list-style: none!important;
+
     li {padding-bottom: 0.28rem}
+
     li{
       &:hover {
         cursor: pointer;
@@ -605,27 +656,33 @@ export default {
 }
 .dashboard-leasing-request-table {
   &.small {
+
     td {
       min-height: 28px;
     }
+
     td:last-child {
       margin-bottom: 18px;
     }
   }
 }
+
 .logo-letter {
   font-size: 0;
 }
+
 .logo-letter:first-letter {
   font-size: 1.4rem;
   font-weight: bold;
 }
+
 .manager-content {
   .desktop-manager-name {
     font-size: 1.06rem; 
     font-family: Montserrat,sans-serif,Arial; 
     margin-bottom: 0.2rem;
   }
+
   .manager-has-no-photo {
     display: flex; 
     align-items: center; 
@@ -635,6 +692,7 @@ export default {
     border-radius: 100%; 
     background-color: #dadada;
   }
+
   .manager-has-photo {
     display: flex; 
     text-align: center; 
@@ -645,13 +703,16 @@ export default {
     background-color: #dadada;
   }
 }
+
 .mobile-manager-content {
   padding: 1.6rem 1rem 0.3rem 1rem; 
   display: flex;
   flex-direction: row;
+
   span, div:hover {
     cursor: pointer;
   }
+
   .manager-data-wrapper {
     display: inline-flex; 
     flex-wrap: wrap; 
@@ -659,6 +720,7 @@ export default {
     width: 90%; 
     padding-top: 10; 
     align-items: center;
+
     .manager-data-name {
       font-size: 0.8rem; 
       font-family: Montserrat,sans-serif,Arial; 
@@ -666,6 +728,7 @@ export default {
       white-space: nowrap; 
       padding-right: 0.8rem;
     }
+
     .manager-data-phone {
       font-family: Montserrat,sans-serif,Arial; 
       font-weight: bold; 
@@ -675,6 +738,7 @@ export default {
       padding-right: 0.8rem;
     }
   }
+
   .empty-logo {
     margin-right: 0.5rem; 
     display: inline-flex; 
@@ -685,6 +749,7 @@ export default {
     border-radius: 100%; 
     background-color: #dadada;
   }
+
   .empty-logo-mobile {
     display: inline-flex;
     justify-content: center;
@@ -715,26 +780,31 @@ export default {
   align-items: flex-start; 
   flex-direction: row; 
   justify-content: space-between;
-  transition: all 0.3s ease;
 }
+
 .dashboard__custom-btn {
   border-radius: 0!important;
 }
+
 .right-block-wrapper {
   width: 24%; 
   display: flex; 
   flex-direction: column;
 }
+
 .dashboard-news {
+
   display: none!important;
   width: 100%!important; 
   margin-top: 35px; 
   box-shadow: 0px 1px 23px 0px #c2c0c0!important;
   .dashboard-news__wrapper {
+
     flex-direction: row; 
     display: flex; 
     flex-wrap: wrap; 
     justify-content: space-around;
+
     .news-card {
       margin: 10px 0;
     }
@@ -748,6 +818,7 @@ export default {
   display: none;
   border: 2px solid #ef5350;
   transition: max-width 0.5s ease-in;
+
   .agent-has-no-manager {
     display: flex; 
     align-items: center; 
@@ -757,14 +828,15 @@ export default {
 .mobile-agent-info {
   position: relative;
   border-radius: 4px; 
-  // border-left: 3px solid #e75d57;
   margin-bottom: 12px; 
   overflow: hidden;
   transition: max-width 0.5s ease-in;
   width: 100%;
+
   .mobile-manager-wrapper {
     width: 100%; 
     min-height: 65px;
+
     .agent-photo {
       display: inline-flex; 
       justify-content: center; 
@@ -788,30 +860,30 @@ export default {
     border-radius: 0 0 5px 5px; 
     color: white;
   }
+
   ul {
     padding: 15px;
     list-style: none;
     margin-bottom: 0;
   }
+
   .agent-list-info {
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.2s ease-in 0.3s;
+
     &.agent-list-active {
       visibility: visible;
       opacity: 1;
     }
   }
-  // &.active {
-  //   max-width: 100%;
-  //   width: 100%;
-  // }
+
   .icon-wrapper {
     align-items: stretch;
     background: #ef5350;
     padding: 15px;
   }
-  // padding: 15px; 
+
   display: none;
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 
     0 2px 2px 0 rgba(0,0,0,.14), 
@@ -821,14 +893,17 @@ export default {
     font-size: 12px;
     padding-right: 4px;
   }
+
   .agent-data {
     transition: all 0.3s ease;
+
     &:hover {
       text-decoration: underline;
       cursor: pointer;
     }
   }
 }
+
 .agent-info {
   display: flex;
   align-items: center;
@@ -836,15 +911,18 @@ export default {
   max-height: 160px;
   width: 100%!important;
   transition: max-height 1s ease!important;
+
   .agent-info-list {
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease-in 0.3s;
+
     &.agent-info-list-active {
       visibility: visible;
       opacity: 1;
     }
   }
+
   &.agent-info-active {
     max-height: 650px;
   }
@@ -852,17 +930,21 @@ export default {
 .dashboard__rigth-block {
   margin-top: 15px;
   display: block;
+
   .v-divider {
     margin-bottom: 0!important;
   }
+
   .news {
     margin-bottom: 20px;
   }
 }
 .vuetify_custom-btn {
+
   &.capitalize {
     text-transform: capitalize!important;
   }
+
   &.--small {
     height: 28px!important;
   }
@@ -870,16 +952,24 @@ export default {
   background: #e65048!important;
   color: white!important;
 }
-.dashboard-container{
+
+.dashboard-container {
   flex-direction: column;
   display: flex;
   width: 74%;
+
+  .carousel-wrapper-card {
+    transition: height 0.2s ease;
+  }
+
   .absent-slide {
       text-align: center;
       padding: 15px 10px;
     }
+
   .v-window {
     position: relative!important;
+
     .v-window-item  {
       transition: opacity .45s ease-in!important;
       position: absolute!important;
@@ -887,14 +977,17 @@ export default {
       left: 0!important;
       right: 0!important;
       bottom: 0!important;
+
       &.fade-transition-leave, .fade-transition-leave-active {
         opacity: 0!important;
       }
+
       &.fade-transition-enter, .fade-transition-enter-active {
         opacity: 0!important;
       }
     }
   }
+
   .actions-block-text {
     backdrop-filter: blur(5px); 
     padding: 0 15px; 
@@ -904,34 +997,12 @@ export default {
     color: black!important;
     margin: 3rem 1.8rem;
     display: inline-block;
+
     &.small-screen {
       max-width: 90%;
       margin: 25px; 
     }
   }
-  // .main-card {
-  //   width: 100%;
-  //   min-height: 400px;
-  //   .main-card-banner {
-  //     background-image: url('../assets/img/specoffer_detail_bg.jpg');
-  //     background-repeat: no-repeat;
-  //     background-position: 50%;
-  //     background-size: cover;
-  //     display: flex;
-  //     flex-direction: column;
-  //     justify-content: center;
-  //     padding: 30px;
-  //     min-height: 500px;
-  //     .content-text {
-  //       backdrop-filter: blur(5px);
-  //       padding: 40px;
-  //       background-color: rgba(0,46,103,.7);
-  //       .content-paragraph {
-  //         font-size: 19px;
-  //       }
-  //     }
-  //   }
-  // }
 }
 
 .see-all-news {
@@ -939,6 +1010,7 @@ export default {
   font-size: 1.25rem;
   color: #e65048; 
   cursor: pointer;
+
   &:hover {
     font-size: 1.3rem;
     color: #e3706a;

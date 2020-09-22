@@ -8,41 +8,36 @@
 		<transition name="fade" mode="out-in">
 			<router-view></router-view>
 		</transition>
-    <!-- <keep-alive include="Головна">
-      <router-view></router-view>
-    </keep-alive> -->
 	</div>
 </v-app>
 </template>
 <script>
-// import Echo from "laravel-echo"
-
-// window.io = require('socket.io-client');
-//   window.Echo = new Echo({
-//     broadcaster: 'socket.io',
-//     host: window.location.hostname + ':6001', // this is laravel-echo-server host
-//     //transports: ['websocket', 'polling', 'flashsocket']
-// })
-
-// if (typeof window.io !== 'undefined'){
-//   window.Echo = new Echo({
-//     broadcaster: 'socket.io',
-//     host: window.location.hostname + ':6001'
-//   })
-// }
 
 export default {
   name: 'Головна',
+
+  methods: {
+    goToRoute() {
+      // setTimeout(() => {
+      //   let route = localStorage.getItem('route')
+      //   let currentRoute = this.$router.currentRoute.name
+
+      //   const check = currentRoute !== 'Aдмiн'
+
+      //   route && check
+      //     ? this.$router.push({name: route})
+      //     : false
+      // }, 0)
+    } 
+  },
+
   created() {
     this.$store.dispatch('getCurrentUser')
   },
-  // mounted() {
-  //   console.log('MOUNTED')
-  //   window.Echo.channel("laravel_database_test").listen("NewDataEvent", (e) => {
-  //     console.log(e)
-  //     this.$store.dispatch('dataFromSocket', e)
-  //   })
-  // },
+
+  mounted() {
+    this.goToRoute()
+  },
   
 }
 </script>

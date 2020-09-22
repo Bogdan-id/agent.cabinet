@@ -815,7 +815,7 @@
     <v-card-actions class="d-flex justify-center ">
       <span>
         <v-btn @click="submit()" class="mb-3" dark color="grey darken-3 calculate-btn" :dense="xs" :loading="calculationLoader">
-        {{'Розрахувати'}}
+          {{'Розрахувати'}}
         </v-btn>
       </span>
     </v-card-actions>

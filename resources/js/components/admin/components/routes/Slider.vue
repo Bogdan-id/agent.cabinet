@@ -67,7 +67,9 @@
               <v-btn class="vuetify_custom-btn white--text" @click="">Ознайомитись</v-btn>
             </span>
           </div>
-          <span v-show="sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+          <span 
+            v-show="sliderImage === null" 
+            style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -209,7 +211,9 @@
                 <v-btn class="vuetify_custom-btn white--text" @click="">Ознайомитись</v-btn>
               </span>
             </div>
-            <span v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+            <span 
+              v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" 
+              style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-btn

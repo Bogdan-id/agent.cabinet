@@ -5,7 +5,7 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>{{ $fileName }}</title>
   <style lang="css">
     .calculation {
       padding: 0 25px;
@@ -217,12 +217,24 @@
                           <td align="left" style="font-size: 22px;">{{ $term }}</td>
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 22px;">АВАНСОВИЙ ПЛАТІЖ, ГРН</td>
-                          <td align="left" style="font-size: 22px;">{{ number_format($prepaid, 0, '.', ' ') }}</td>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 22px;">АВАНСОВИЙ ПЛАТІЖ</td>
+                          @if(@isset($even))
+                          <td align="left" style="font-size: 22px;">{{$even['offer-advance-per'] * 100}}% ({{ number_format($prepaid, 0, '.', ' ') }} грн)</td>
+                          @elseif(@isset($annuity))
+                          <td align="left" style="font-size: 22px;">{{$annuity['offer-advance-per'] * 100}}% ({{ number_format($prepaid, 0, '.', ' ') }} грн)</td>
+                          @elseif(@isset($irregular))
+                          <td align="left" style="font-size: 22px;">{{$irregular['offer-advance-per'] * 100}}% ({{ number_format($prepaid, 0, '.', ' ') }} грн)</td>
+                          @endif
                         </tr>
                         <tr>
-                          <td align="right" style="border-right: 5px solid #da0303; font-size: 22px;">ОДНОРАЗОВА КОМІСІЯ, %</td>
-                          <td align="left" style="font-size: 22px;">{{ $oneTimeComission }}</td>
+                          <td align="right" style="border-right: 5px solid #da0303; font-size: 22px;">ОДНОРАЗОВА КОМІСІЯ</td>
+                          @if(@isset($even))
+                          <td align="left" style="font-size: 22px;">{{ $oneTimeComission }}% ({{ number_format($even['offer-administrative-payment'], 0, '.', ' ') }} грн)</td>   
+                          @elseif(@isset($annuity))
+                          <td align="left" style="font-size: 22px;">{{ $oneTimeComission }}% ({{ number_format($annuity['offer-administrative-payment'], 0, '.', ' ') }} грн)</td>                        
+                          @elseif(@isset($irregular))
+                          <td align="left" style="font-size: 22px;">{{ $oneTimeComission }}% ({{ number_format($irregular['offer-administrative-payment'], 0, '.', ' ') }} грн)</td>
+                          @endif
                         </tr>
                         <tr>
                           <td align="right" style="border-right: 5px solid #da0303; font-size: 22px;">ГРАФІК ПЛАТЕЖІВ</td>

@@ -130,8 +130,8 @@
                 <span 
                   :class="`slider-btn__wrapper ${xs ? 'xs' : ''}`">
                   <v-btn 
-                    :x-small="xs"
-                    :small="sm || showSidebar && $vuetify.breakpoint.mdAndDown"
+                    :x-small="xs || sm && showSidebar || md && showSidebar"
+                    :small="sm"
                     :large="$vuetify.breakpoint.lg"
                     class="vuetify_custom-btn white--text" 
                     :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">

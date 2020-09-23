@@ -1111,13 +1111,21 @@ export default {
     .v-responsive {
 
       .v-responsive__content {
+        position: relative;
 
         .dashboard-carousel {
           transition: height 0.2s ease 0s;
           visibility: hidden;
           transition: opacity 1.5s;
           opacity: 0;
-          height: 100%!important;
+          position: absolute!important;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          height: auto!important;
+          display: flex;
+          flex-direction: column;
 
           &.active {
             visibility: visible;
@@ -1126,11 +1134,19 @@ export default {
         }
 
         .v-window__container {
-          height: 100%!important;
+          display: flex;
+          flex: 1;
+          height: auto!important;
+          position: relative;
         }
 
         .v-carousel__item {
-          height: 100%!important;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          height: auto!important;
         }
       }
     }

@@ -131,8 +131,8 @@
                   :class="`slider-btn__wrapper ${xs ? 'xs' : ''}`">
                   <v-btn 
                     :x-small="xs"
-                    :small="sm || showSidebar && md"
-                    :large="$vuetify.breakpoint.lgAndUp"
+                    :small="sm || showSidebar && $vuetify.breakpoint.mdAndDown"
+                    :large="$vuetify.breakpoint.lg"
                     class="vuetify_custom-btn white--text" 
                     :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">
                     Ознайомитись
@@ -496,6 +496,9 @@ export default {
     md() {
       return this.$vuetify.breakpoint.md
     },
+    lg() {
+      return this.$vuetify.breakpoint.lgAndUp
+    },
     showSidebar() {
       return this.$store.state.showSidebar
     },
@@ -508,12 +511,14 @@ export default {
     sliderTitleSize() {
       return `font-size: ${
         this.xs 
-          ? '0.9rem' 
+          ? '0.9rem;' 
           : this.sm 
-            ? '1.2rem;' 
+            ? '1rem;' 
             : this.md && this.showSidebar 
-              ? '1.2rem;'
-              : '1.6rem;'}`
+              ? '0.9rem;'
+              : this.lg 
+                ? '1.4rem;'
+                : '1.4rem;'}`
     },
     managerTitle() {
       return !this.requestRecieved 

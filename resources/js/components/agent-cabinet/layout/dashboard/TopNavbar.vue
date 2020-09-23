@@ -157,52 +157,72 @@ export default {
   components: {
     toggleIcon,
   },
-  data:() => ({
+
+
+  data: () => ({
     showBriefUserProfile: false,
     activeNotifications: false,
-    showSidebar: true,
-    // notifications: null,
     notificationKeys: [],
     maxNotificationsToShow: 3,
   }),
+
+
   computed: {
     notificationCount() {
       if(!this.$store.state.notifications.length === 0) return 0
+      
       let index = this.$store.state.notifications
         .filter(val => {
           return val.status === 'not_checked'
         })
+
       return index.length
     },
+
     agentNotifications() {
       if(this.$store.state.notifications.length === 0) return []
+
       return this.$store.state.notifications
     },
+
     sortedNotificaions() {
       return this.$sortByStatus(this.agentNotifications)
     },
+
     routeName() {
-      const { name } = this.$route;
+      const { name } = this.$route
+
       return this.capitalizeFirstLetter(name)
     },
+
     smAndDown() {
       return this.$vuetify.breakpoint.smAndDown
     },
+    
     mdAndUp() {
       return this.$vuetify.breakpoint.mdAndUp
     },
+
     hasUser() {
     if(!this.$store.state.user.agent) return false
       return this.$store.state.user.agent.id !== null
     },
+
     currentAgent() {
       if(!this.hasUser) return
       return `${this.$store.state.user.agent.last_name} ${this.$store.state.user.agent.first_name} ${this.$store.state.user.agent.patronymic}`
+    },
+
+    showSidebar() {
+      return this.$store.state.showSidebar
     }
   },
+
+
   methods: {
     changeNotificationsStatus(object) {
       console.log('Change notifcation status')
+
       axios
         .post(`/agent/notifications/checking`, object)
         .catch(error => {
@@ -210,75 +230,97 @@ export default {
           console.log(error.response)
         })
     },
+
     toggleCustomSidebar() {
       let sidebar = document.getElementById('sidebar')
       let mainPanel = document.getElementById('main-panel')
+
       if(this.showSidebar) {
         mainPanel.classList.add('main-panel--expand')
         sidebar.classList.add('sidebar--hide')
-        this.showSidebar = false
+
+        this.$store.commit('toggleSidebar', false)
+        
       } else if(!this.showSidebar) {
         mainPanel.classList.remove('main-panel--expand')
         sidebar.classList.remove('sidebar--hide')
-        this.showSidebar = true
+
+        this.$store.commit('toggleSidebar', true)
       }
     },
     toggleNotifyCard() {
       let card = document.getElementById('cadr-notification')
+
       if(!card.classList.contains('show-card')) {
         card.classList.add('show-card')
+
         if(this.$store.state.notifications.length === 0) return
+
         this.$store.state.notifications.length < this.maxNotificationsToShow
           ? this.maxNotificationsToShow = this.$store.state.notifications.length
           : false
+
         for(let i = 0; i <= this.maxNotificationsToShow -1; i ++) {
           this.$store.state.notifications[i].status === 'not_checked'
             ? this.notificationKeys.push(this.$store.state.notifications[i].id)
             : false
         }
+
       } else {
         card.classList.remove('show-card')
+
         if(this.notificationKeys.length === 0) return
+
         console.log(this.notificationKeys)
+
         this.changeNotificationsStatus({notifications: this.notificationKeys})
+
         this.notificationKeys = []
+
         this.getAgentNotifications()
       }
     },
     listenCardState() {
       let body = document.getElementById('app')
       let notifyCard = document.getElementById('cadr-notification')
+
       body.addEventListener('click', event => {
         if(notifyCard.classList.contains('show-card') && event.target.id !== "notify-btn") {
           this.toggleNotifyCard()
         }
       })
+      
       notifyCard.addEventListener('click', event => {
         event.stopPropagation()
       })
     },
+
     signOut() {
       this.logOut(this.getCsrf())
     },
+
     getCsrf() {
 			return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     },
+
     logOut(token) {
       this.$store.commit('toggleSpinner', true)
       axios.post(`/logout`, token)
-			.then(() => {
-        this.$router.go()
-        this.$store.commit('toggleSpinner', false)
-			})
-			.catch(error => {
-        this.$catchStatus(error.response.status)
-        this.$notify({
-          message: error.response.data.message,
-          type: 'warning',
-          horizontalAlign: 'center'
+        .then(() => {
+          this.$router.go()
+          this.$store.commit('toggleSpinner', false)
         })
-        this.$store.commit('toggleSpinner', false)
-			})
+        .catch(error => {
+          this.$catchStatus(error.response.status)
+
+          this.$notify({
+            message: error.response.data.message,
+            type: 'warning',
+            horizontalAlign: 'center'
+          })
+
+          this.$store.commit('toggleSpinner', false)
+        })
     },
     getAgentNotifications() {
       axios
@@ -315,9 +357,8 @@ export default {
   },
   mounted() {
     this.smAndDown ? this.toggleCustomSidebar() : false
+
     this.listenCardState()
-    console.log(this.$store.state.notifications)
-    console.log(this.agentNotifications)
   }
 }
 </script>

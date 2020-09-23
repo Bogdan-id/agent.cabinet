@@ -1,26 +1,31 @@
 <template>
-  <!-- @click addRouteToLocalStorage() -->
   <component 
     :is="tag"
     @click.native="hideSidebar"
     class="nav-item"
     v-bind="$attrs"
     tag="li">
-    <a v-if="!$vuetify.breakpoint.smAndDown" class="nav-link">
+    <a 
+      v-if="!$vuetify.breakpoint.smAndDown" 
+      @click="$setRoute()"
+      class="nav-link">
       <slot>
         <component :is="icon"></component>
         <p class="nav-item-title">
-          {{name}}
+          {{ name }}
         </p>
       </slot>
     </a>
     <v-tooltip v-if="$vuetify.breakpoint.smAndDown" right color="grey darken-4">
       <template v-slot:activator="{ on }">
-        <a v-on="on" class="nav-link">
+        <a 
+          @click="$setRoute()"
+          v-on="on" 
+          class="nav-link">
           <slot>
             <component :is="icon"></component>
             <p class="nav-item-title">
-              {{name}}
+              {{ name }}
             </p>
           </slot>
         </a>
@@ -48,21 +53,26 @@ export default {
   },
   name: "sidebar-link",
   inheritAttrs: false,
+
+
   data: () => ({
     path: null,
   }),
-  // children component receive object from parrent SideBar.vue
+
+
   inject: {
     autoClose: {
       default: true
     },
     addLink: {
-      default: ()=>{}
+      default: () => {}
     },
     removeLink: {
-      default: ()=>{}
+      default: () => {}
     }
   },
+
+
   props: {
     name: String,
     icon: String,
@@ -77,21 +87,29 @@ export default {
         this.addLink(this)
       }
     },
+
     hideSidebar() {
       if (this.autoClose) {
         this.$sidebar.displaySidebar(false);
       }
     },
+
     isActive() {
       return this.$el.classList.contains("active");
     }
   },
+
+
   created() {
     this.addLinkToSideBar()
   },
+
+
   mounted() {
     this.addLinkToSideBar()
   },
+
+
   beforeDestroy() {
     if (this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el)

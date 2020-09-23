@@ -93,7 +93,9 @@
         </div>
         <div v-if="!carouselVisibility && !slidesLoader" 
           class="absent-slide">
-          <span class="absent-slide__text">(Пропозиції вiдсутнi)</span>
+          <span class="absent-slide__text">
+            (Пропозиції вiдсутнi)
+          </span>
         </div>
         <v-carousel
           transition="fade-transition"
@@ -104,7 +106,7 @@
           hide-delimiter-background
           :interval="7000"
           :show-arrows="slides && slides.length > 1"
-          :hide-delimiters="slides && slides.length === 1"
+          :hide-delimiters="slides && slides.length === 1 || xs"
           show-arrows-on-hover>
           <v-carousel-item
             v-for="(item, key) in slides"
@@ -116,14 +118,10 @@
               <div style="height: 50%;">
                 <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
                   <h3 
-                    :style="`font-size: ${xs || sm 
-                      ? '1.2rem;' 
-                      : md && showSidebar 
-                        ? '1.2rem;'
-                        : '1.6rem;'}`">
+                    :style="sliderTitleSize">
                     <b>{{ item.title}}</b>
                   </h3>
-                  <p style="font-size: 0.88rem"> 
+                  <p :style="`font-size: ${xs ? '0.7rem;' : '0.88rem;'}`"> 
                     {{ item.description }} 
                   </p>
                 </div>
@@ -506,6 +504,16 @@ export default {
     },
     breakpointName() {
       return this.$vuetify.breakpoint.name
+    },
+    sliderTitleSize() {
+      return `font-size: ${
+        this.xs 
+          ? '0.9rem' 
+          : this.sm 
+            ? '1.2rem;' 
+            : this.md && this.showSidebar 
+              ? '1.2rem;'
+              : '1.6rem;'}`
     },
     managerTitle() {
       return !this.requestRecieved 

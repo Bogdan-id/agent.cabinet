@@ -67,19 +67,8 @@
         <div 
           v-if="!carouselVisibility && sliderHasNoSlides"  
           style="position: relative; width: 100%; height: 100%;">
-
-          <!-- :class="
-              $vuetify.breakpoint.xs 
-                ? 'xs' 
-                : $vuetify.breakpoint.lg  && showSidebar
-                  ? 'lg sidebar-showed' 
-                  : $vuetify.breakpoint.xl  && showSidebar
-                    ? 'xl sidebar-showed' 
-                    : (showSidebar ? 'sidebar-showed-sm' : '')" -->
-
           <v-skeleton-loader
             style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
-            
             type="image">
           </v-skeleton-loader>
         </div>
@@ -108,13 +97,17 @@
             <div>
               <div style="height: 50%;">
                 <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
-                  <h3><b>{{ item.title}}</b></h3>
+                  <h3 :style="`font-size: ${xs || sm ? '1.2rem;' : md && showSidebar ? '1.2rem;': '1.6rem;'}`"><b>{{ item.title}}</b></h3>
                   <p style="font-size: 0.88rem"> {{ item.description }} </p>
                 </div>
               </div>
               <div class="slider-action-btn-wrapper">
-                <span style="display: inline-block; margin: 2.8rem 3.3rem;">
+                <span 
+                  :style="`display: inline-block; margin: ${$vuetify.breakpoint.xs ? '1rem 2rem;' : '2.8rem 3.3rem;'}`">
                   <v-btn 
+                    :x-small="$vuetify.breakpoint.xs"
+                    :small="$vuetify.breakpoint.sm || showSidebar && $vuetify.breakpoint.md"
+                    :large="$vuetify.breakpoint.lgAndUp"
                     class="vuetify_custom-btn white--text" 
                     :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">
                     Ознайомитись
@@ -380,6 +373,8 @@
 import axios from 'axios'
 export default {
   name: 'Головна',
+
+
   data: () => ({
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
@@ -400,6 +395,8 @@ export default {
 
     slidesLoader: false,
   }),
+
+
   computed: {
     loading() {
       return this.$store.state.loader === true
@@ -423,6 +420,12 @@ export default {
     xs() {
       return this.$vuetify.breakpoint.xs
     },
+    sm() {
+      return this.$vuetify.breakpoint.sm
+    },
+    md() {
+      return this.$vuetify.breakpoint.md
+    },
     showSidebar() {
       return this.$store.state.showSidebar
     },
@@ -432,20 +435,9 @@ export default {
     breakpointName() {
       return this.$vuetify.breakpoint.name
     },
-    // carouselHeight() {
-      
-    //   return this.$vuetify.breakpoint.xs 
-    //     ? 300 
-    //     : this.$vuetify.breakpoint.md
-    //       ? (this.showSidebar && this.lowerThenMedium ? 600 : 520) // lowerThenMedium
-    //       : this.$vuetify.breakpoint.lg 
-    //         ? (this.showSidebar ? 520 : 600) 
-    //         : this.$vuetify.breakpoint.xl 
-    //           ? (this.showSidebar ? 720 : 790) 
-    //           : (this.showSidebar ? 300 : 350)
-    // }
-    
   },
+
+
   methods: {
     applyChanges(status, index) {
       switch(status) {
@@ -459,6 +451,7 @@ export default {
         case '7': return {text: 'Відвантажено', color: `${index <= 5 ? 'green darken-2' : 'grey'}`};
       }
     },
+
     switchValue(val) {
       switch(val) {
         case 'even': return 'Класичний'
@@ -466,19 +459,19 @@ export default {
         case 'irregular': return 'Індивідуальний'
       }
     },
+
     getUserCalculcations() {
       this.$store.commit('toggleSpinner', true)
       const agentId = this.$store.state.user.agent.id
+
       axios
         .get(`/leasing-reqeust/agent/${agentId}`)
         .then(response => {
           console.log(response.data)
           this.$store.commit('toggleSpinner', false)
-          if(response.data.length > 0)  {
-            // let temp = this.$changeLeasingRequestsObj(response.data)
-            this.$store.commit('addLeasingRequests', response.data)
 
-            console.log({leasingRequests: this.$store.state.leasingRequests})
+          if(response.data.length > 0)  {
+            this.$store.commit('addLeasingRequests', response.data)
               
             this.$store.commit('addGraph', response.data)
 
@@ -488,7 +481,9 @@ export default {
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
+
           this.$store.commit('toggleSpinner', false)
+
           this.$notify({
             group: 'error',
             title: 'Помилка',
@@ -496,6 +491,7 @@ export default {
           })
         })
     },
+
     sortData(items) {
       items
         .sort((a, b) => {
@@ -503,8 +499,10 @@ export default {
       })
       return items
     },
+
     getSlides() {
       this.slidesLoader = true
+
       axios
         .get('/json/slides')
         .then(response => {
@@ -512,9 +510,11 @@ export default {
         })
         .catch(error => {
           this.$catchStatus(error.response.status)
+
           console.log(error.response)
         })
     },
+
     getNews() {
       axios
         .get('/json/news')
@@ -527,14 +527,18 @@ export default {
         })
     }
   },
+
+
   watch: {
     slides(val) {
       if(val === null || val.length === 0) {
+
         setTimeout(() => {
           this.carouselVisibility = false
           this.sliderHasNoSlides = false
           this.slidesLoader = false
         }, 2000)
+
       } else {
         setTimeout(() => {
           this.carouselVisibility = true
@@ -542,10 +546,6 @@ export default {
           this.slidesLoader = false
         }, 2000)
       }
-    },
-
-    breakpointName(val) {
-      console.log(val)
     },
 
     hasUser() {
@@ -566,14 +566,10 @@ export default {
     if(this.hasUser) {
       this.getUserCalculcations()
     }
+
     this.getSlides()
     this.getNews()
   },
-
-
-  mounted() {
-    console.log(this.$vuetify.breakpoint.name)
-  }
 }
 </script>
 
@@ -593,55 +589,6 @@ export default {
   .v-skeleton-loader__image {
     height: 100%!important;
   }
-
-  // &.sidebar-showed-sm {
-  //   .v-skeleton-loader__image {
-  //     height: 300px!important;
-  //   }
-  // }
-  
-
-  // &.xs {
-  //   .v-skeleton-loader__image {
-  //     height: 300px!important;
-  //   }
-  // }
-
-  // &.md {
-  //   &.sidebar-showed {
-  //     .v-skeleton-loader__image {
-  //       height: 750px!important;
-  //     }
-  //   }
-
-  //   .v-skeleton-loader__image {
-  //     height: 790px!important;
-  //   }
-  // }
-
-  // &.lg {
-  //   &.sidebar-showed {
-  //     .v-skeleton-loader__image {
-  //       height: 520px!important;
-  //     }
-  //   }
-
-  //   .v-skeleton-loader__image {
-  //     height: 600px!important;
-  //   }
-  // }
-  
-  // &.xl {
-  //   &.sidebar-showed {
-  //     .v-skeleton-loader__image {
-  //       height: 750px!important;
-  //     }
-  //   }
-
-  //   .v-skeleton-loader__image {
-  //     height: 790px!important;
-  //   }
-  // }
 }
 
 .slider-action-btn-wrapper {

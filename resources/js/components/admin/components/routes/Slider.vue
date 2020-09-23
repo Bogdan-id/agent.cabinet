@@ -45,14 +45,13 @@
         ref="sliderImageInput"
         class="slider-image-input"
         @change="listenImageInput()">
-      <div v-show="formToAddSlider" class="mb-8">
+      <div 
+        v-show="formToAddSlider" 
+        class="mb-8 slider-card-wrapper">
         <v-card
-          :style="`margin: 0 auto; position: relative; background: url('${sliderImage}'); background-size: 100% 100%;`"
+          :style="`background: url('${sliderImage}'); background-size: 100% 100%;`"
           class="slider-card"
-          max-width="900"
-          height="400" 
           elevation="8">
-          <!-- v-if="sliderImageErr.length > 0" -->
           <span v-show="sliderImageErr && sliderImageErr.length > 0" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
             Додайте зображення!
           </span>
@@ -63,13 +62,18 @@
             </div>
           </div>
           <div class="slider-action-btn-wrapper">
-            <span v-show="sliderImage !== null" style="display: inline-block; margin: 2.8rem 3.3rem;">
-              <v-btn class="vuetify_custom-btn white--text" @click="">Ознайомитись</v-btn>
+            <span 
+              v-show="sliderImage !== null" 
+              :class="`slider-btn__wrapper ${$vuetify.breakpoint.xs ? 'xs' : ''}`">
+              <v-btn 
+                :x-small="$vuetify.breakpoint.xs"
+                :small="$vuetify.breakpoint.sm"
+                :large="$vuetify.breakpoint.lg"
+                class="vuetify_custom-btn white--text" 
+                @click="">Ознайомитись</v-btn>
             </span>
           </div>
-          <span 
-            v-show="sliderImage === null" 
-            style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+          <span v-show="sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -95,7 +99,6 @@
                   height="90" 
                   x-large 
                   icon>
-                  <!-- <v-icon size="58" v-text="'mdi-image-plus'"></v-icon> -->
                   <v-icon size="58" v-text="'mdi-close-circle'"></v-icon>
                 </v-btn>
               </template>
@@ -103,156 +106,165 @@
           </v-tooltip>
           </span>
         </v-card>
-        <v-card
-          max-width="900"
-          min-height="120"
-          elevation="10"
-          class="mt-4"
-          style="margin: 0 auto; position: relative;">
-          <div class="triangle-up"></div>
-          <v-card-text>
-            <div>
-              <span>Заголовок</span>
-            </div>
-            <v-text-field
-              @input="$v.sliderTitle.$touch()"
-              @blur="$v.sliderTitle.$touch()"
-              v-model="sliderTitle"
-              :error-messages="sliderTitleErr"
-              outlined dense>
-            </v-text-field>
-            <div>
-              <span>Короткий опис</span>
-            </div>
-            <v-textarea
-              @input="$v.sliderDescription.$touch()"
-              @blur="$v.sliderDescription.$touch()"
-              v-model="sliderDescription"
-              :error-messages="sliderDescriptionErr"
-              class="slider-textarea"
-              rows="3"
-              outlined>
-            </v-textarea>
-            <ckeditor
-              v-if="formToAddSlider"
-              :editor="editor" v-model="editorData" :config="editorConfig">
-            </ckeditor>
-            <div class="d-flex justify-space-between mt-5">
-              <span>
-                <v-btn 
-                  @click="createSlider(); formToAddSlider = false" 
-                  color="#e65048"
-                  dark
-                  :loading="saveLoading">
-                  Зберегти
-                </v-btn>
-              </span>
-              <span>
-                <v-btn 
-                  @click="stopEditMode(); 
-                    formToAddSlider = false" 
-                  color="grey"
-                  dark>
-                  Вiдмiнити
-                </v-btn>
-              </span>
-            </div>
-          </v-card-text>
-        </v-card>
       </div>
+      <v-card
+        v-show="formToAddSlider"
+        max-width="900"
+        min-height="120"
+        elevation="10"
+        class="mt-4 mb-8"
+        style="margin: 0 auto; position: relative;">
+        <div class="triangle-up"></div>
+        <v-card-text>
+          <div>
+            <span>Заголовок</span>
+          </div>
+          <v-text-field
+            @input="$v.sliderTitle.$touch()"
+            @blur="$v.sliderTitle.$touch()"
+            v-model="sliderTitle"
+            :error-messages="sliderTitleErr"
+            outlined dense>
+          </v-text-field>
+          <div>
+            <span>Короткий опис</span>
+          </div>
+          <v-textarea
+            @input="$v.sliderDescription.$touch()"
+            @blur="$v.sliderDescription.$touch()"
+            v-model="sliderDescription"
+            :error-messages="sliderDescriptionErr"
+            class="slider-textarea"
+            rows="3"
+            outlined>
+          </v-textarea>
+          <ckeditor
+            v-if="formToAddSlider"
+            :editor="editor" v-model="editorData" :config="editorConfig">
+          </ckeditor>
+          <div class="d-flex justify-space-between mt-5">
+            <span>
+              <v-btn 
+                @click="createSlider(); formToAddSlider = false" 
+                color="#e65048"
+                dark
+                :loading="saveLoading">
+                Зберегти
+              </v-btn>
+            </span>
+            <span>
+              <v-btn 
+                @click="stopEditMode(); 
+                  formToAddSlider = false" 
+                color="grey"
+                dark>
+                Вiдмiнити
+              </v-btn>
+            </span>
+          </div>
+        </v-card-text>
+      </v-card>
       <div
         v-for="(item, key) in sliders"
-        class="mb-12"
         :key="key">
-        <v-hover v-slot:default="{ hover }">
-          <v-card
-            :style="`margin: 0 auto; position: relative; background: url('${item.slide_image || sliderImage}'); background-size: 100% 100%;`"
-            class="slider-card"
-            max-width="900"
-            height="400" 
-            :elevation="hover ? 12 : 4">
-            <v-btn
-              v-show="!formToAddSlider && !editMode"
-              class="slider-edit-button"
-              @click="activateEditMode(item, key)"
-              style="position: absolute; right: 0; top: 0;"
-              dark 
-              small
-              color="grey darken-2">
-              Редагувати
-            </v-btn>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  v-show="!formToAddSlider && !editMode"
-                  v-on="on"
-                  class="slider-edit-button"
-                  @click="activateEditMode(item, key, true, item.id);"
-                  fab
-                  x-small
-                  color="red lighten-1"
-                  style="position: absolute; right: 132px; top: 0px;">
-                  <v-icon v-text="'mdi-close'"></v-icon>
-                </v-btn>
-              </template>
-              <span>Видалити слайдер</span>
-            </v-tooltip>
-            <span v-show="sliderImageErr && sliderImageErr.length > 0 && editKey === key" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
-              Додайте зображення!
-            </span>
-            <div style="height: 50%;">
-              <div v-show="item.slide_image || sliderImage !== null" :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
-                <h3><b>{{ item.title || sliderTitle || 'Заголовок матерiалу' }}</b></h3>
-                <p style="font-size: 0.88rem"> {{ item.description ||  sliderDescription || 'Короткый опис матерiалу' }} </p>
-              </div>
-            </div>
-            <div class="slider-action-btn-wrapper">
-              <span v-show="item.slide_image || sliderImage !== null" style="display: inline-block; margin: 2.8rem 3.3rem;">
-                <v-btn class="vuetify_custom-btn white--text" @click="">Ознайомитись</v-btn>
+        <div class="slider-card-wrapper mb-8">
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              :style="`background: url('${item.slide_image || sliderImage}'); background-size: 100% 100%;`"
+              class="slider-card" 
+              :elevation="hover ? 12 : 4">
+              <v-btn
+                v-show="!formToAddSlider && !editMode"
+                class="slider-edit-button"
+                @click="activateEditMode(item, key)"
+                style="position: absolute; right: 0; top: 0;"
+                dark 
+                small
+                color="grey darken-2">
+                Редагувати
+              </v-btn>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-show="!formToAddSlider && !editMode"
+                    v-on="on"
+                    class="slider-edit-button"
+                    @click="activateEditMode(item, key, true, item.id);"
+                    fab
+                    x-small
+                    color="red lighten-1"
+                    style="position: absolute; right: 132px; top: 0px;">
+                    <v-icon v-text="'mdi-close'"></v-icon>
+                  </v-btn>
+                </template>
+                <span>Видалити слайдер</span>
+              </v-tooltip>
+              <span v-show="sliderImageErr && sliderImageErr.length > 0 && editKey === key" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
+                Додайте зображення!
               </span>
-            </div>
-            <span 
-              v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" 
-              style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
+              <div style="height: 50%;">
+                <div 
+                  v-show="item.slide_image || sliderImage !== null" 
+                  :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
+                  <h3 :style="sliderTitleSize"><b>{{ item.title || sliderTitle || 'Заголовок матерiалу' }}</b></h3>
+                  <p style="font-size: 0.88rem"> {{ item.description ||  sliderDescription || 'Короткый опис матерiалу' }} </p>
+                </div>
+              </div>
+              <div class="slider-action-btn-wrapper">
+                <span 
+                  v-show="item.slide_image || sliderImage !== null"
+                  :class="`slider-btn__wrapper ${$vuetify.breakpoint.xs ? 'xs' : ''}`">
                   <v-btn
-                    @click="addImageToSlider()"  
-                    v-on="on" 
-                    width="90" 
-                    height="90" 
-                    x-large 
-                    icon>
-                    <v-icon size="58" v-text="'mdi-image-plus'"></v-icon>
+                    :x-small="$vuetify.breakpoint.xs"
+                    :small="$vuetify.breakpoint.sm"
+                    :large="$vuetify.breakpoint.lg"
+                    class="vuetify_custom-btn white--text" 
+                    @click="">
+                    Ознайомитись
                   </v-btn>
-                </template>
-                <span>Додати зображення</span>
-              </v-tooltip>
-            </span>
-            <span class="slider-delete-image-icon" v-show="editMode && editKey == key && item.slide_image" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 25;">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    @click="removeImageSlider(key)"  
-                    v-on="on" 
-                    width="90" 
-                    height="90" 
-                    x-large 
-                    icon>
-                    <v-icon size="58" v-text="'mdi-close-circle'"></v-icon>
-                  </v-btn>
-                </template>
-                <span>Видалити зображення</span>
-              </v-tooltip>
-            </span>
-          </v-card>
-        </v-hover>
+                </span>
+              </div>
+              <span v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      @click="addImageToSlider()"  
+                      v-on="on" 
+                      width="90" 
+                      height="90" 
+                      x-large 
+                      icon>
+                      <v-icon size="58" v-text="'mdi-image-plus'"></v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Додати зображення</span>
+                </v-tooltip>
+              </span>
+              <span class="slider-delete-image-icon" v-show="editMode && editKey == key && item.slide_image" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 25;">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      @click="removeImageSlider(key)"  
+                      v-on="on" 
+                      width="90" 
+                      height="90" 
+                      x-large 
+                      icon>
+                      <v-icon size="58" v-text="'mdi-close-circle'"></v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Видалити зображення</span>
+                </v-tooltip>
+              </span>
+            </v-card>
+          </v-hover>
+        </div>
         <v-card
           v-show="editMode && editKey == key"
           max-width="900"
           min-height="120"
           elevation="10"
-          class="mt-4"
+          class="mt-4 mb-12"
           style="margin: 0 auto; position: relative;">
           <div class="triangle-up"></div>
           <v-card-text>
@@ -454,7 +466,21 @@ export default {
       if (!this.$v.sliderDescription.$error) return
       return this.commonErr
     },
+    sliderTitleSize() {
+      return `font-size: ${
+        this.$vuetify.breakpoint.xs 
+          ? '0.9rem;' 
+          : this.$vuetify.breakpoint.sm 
+            ? '1rem;' 
+            : this.$vuetify.breakpoint.md 
+              ? '1.2rem;'
+              : this.$vuetify.breakpoint.lg 
+                ? '1.4rem;'
+                : '1.4rem;'}`
+    },
   },
+
+
   methods: {
     addSlider() {
       this.$v.$reset()
@@ -692,21 +718,46 @@ export default {
 </script>
 
 <style lang="scss">
-.slider-card {
-  .actions-block-text {
-    backdrop-filter: blur(5px); 
-    padding: 0 15px; 
-    border-radius: 3px;
-    color: black!important;
-    background-color: rgba(252, 252, 252, 0.7); 
-    max-width: 48%;
-    margin: 3rem 1.8rem;
-    display: inline-block;
-    &.small-screen {
-      max-width: 90%;
+  .slider-card-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+
+    .slider-action-btn-wrapper {
+      .slider-btn__wrapper {
+        display: inline-block; 
+        margin: 2.8rem 3.3rem;
+
+        &.xs {
+          margin: 1rem 2rem;
+        }
+      }
+    }
+
+    .slider-card {
+      position:  absolute!important;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: 0 auto; 
+      background-size: 100% 100%;
+      .actions-block-text {
+        backdrop-filter: blur(5px); 
+        padding: 0 15px; 
+        border-radius: 3px;
+        color: black!important;
+        background-color: rgba(252, 252, 252, 0.7); 
+        max-width: 48%;
+        margin: 3rem 1.8rem;
+        display: inline-block;
+        &.small-screen {
+          max-width: 90%;
+          margin: 25px; 
+        }
+      }
     }
   }
-}
   .triangle-up {
     position: absolute;
     top:-14px;

@@ -62,80 +62,69 @@
   <div class="dashboard-container">
     <v-card 
       elevation="9" 
-      class="carousel-wrapper-card"
-      :height="
-        $vuetify.breakpoint.xs
-          ? 300 
-          : $vuetify.breakpoint.lg 
-            ? (showSidebar ? 450 : 500) 
-            : $vuetify.breakpoint.xl 
-              ? (showSidebar ? 650 : 750) 
-              : (showSidebar ? 300 : 350)">
-      <div 
-        v-if="!carouselVisibility && sliderHasNoSlides"  
-        style="position: relative; width: 100%; height: 100%;">
-        <v-skeleton-loader
-          style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
-          :class="
-            $vuetify.breakpoint.xs 
-              ? 'xs' 
-              : $vuetify.breakpoint.lg  && showSidebar
-                ? 'lg sidebar-showed' 
-                : $vuetify.breakpoint.xl  && showSidebar
-                  ? 'xl sidebar-showed' 
-                  : (showSidebar ? 'sidebar-showed-sm' : '')"
-          type="image">
-        </v-skeleton-loader>
-      </div>
-      <div v-if="!carouselVisibility && !slidesLoader" 
-        class="absent-slide">
-        <span style="font-size: 1.3rem; color: #727170;">(Пропозиції вiдсутнi)</span>
-      </div>
-      <v-carousel
-        transition="fade-transition"
-        cycle
-        :height="
-          $vuetify.breakpoint.xs 
-            ? 300 
-            : $vuetify.breakpoint.lg 
-              ? (showSidebar ? 450 : 500) 
-              : $vuetify.breakpoint.xl 
-                ? (showSidebar ? 650 : 750) 
-                : (showSidebar ? 300 : 350)"
-        name="dashboard-carousel"
-        :class="`${carouselVisibility ? 'dashboard-carousel active' : 'dashboard-carousel'}`"
-        id="dashboard-carousel"
-        hide-delimiter-background
-        :interval="7000"
-        :show-arrows="slides && slides.length > 1"
-        :hide-delimiters="slides && slides.length === 1"
-        show-arrows-on-hover>
-        <v-carousel-item
-          v-for="(item, key) in slides"
-          :src="item.slide_image"
-          :key="key"
-          reverse-transition="fade-transition"
+      class="carousel-wrapper-card">
+      <v-responsive :aspect-ratio="16/9">
+        <div 
+          v-if="!carouselVisibility && sliderHasNoSlides"  
+          style="position: relative; width: 100%; height: 100%;">
+
+          <!-- :class="
+              $vuetify.breakpoint.xs 
+                ? 'xs' 
+                : $vuetify.breakpoint.lg  && showSidebar
+                  ? 'lg sidebar-showed' 
+                  : $vuetify.breakpoint.xl  && showSidebar
+                    ? 'xl sidebar-showed' 
+                    : (showSidebar ? 'sidebar-showed-sm' : '')" -->
+
+          <v-skeleton-loader
+            style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
+            
+            type="image">
+          </v-skeleton-loader>
+        </div>
+        <div v-if="!carouselVisibility && !slidesLoader" 
+          class="absent-slide">
+          <span style="font-size: 1.3rem; color: #727170;">(Пропозиції вiдсутнi)</span>
+        </div>
+        <v-carousel
           transition="fade-transition"
-          style="bacground-size: 100% 100%!important;">
-          <div>
-            <div style="height: 50%;">
-              <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
-                <h3><b>{{ item.title}}</b></h3>
-                <p style="font-size: 0.88rem"> {{ item.description }} </p>
+          cycle
+          name="dashboard-carousel"
+          :class="`${carouselVisibility ? 'dashboard-carousel active' : 'dashboard-carousel'}`"
+          id="dashboard-carousel"
+          hide-delimiter-background
+          :interval="7000"
+          :show-arrows="slides && slides.length > 1"
+          :hide-delimiters="slides && slides.length === 1"
+          show-arrows-on-hover>
+          <v-carousel-item
+            v-for="(item, key) in slides"
+            :src="item.slide_image"
+            :key="key"
+            reverse-transition="fade-transition"
+            transition="fade-transition"
+            style="bacground-size: 100% 100%!important;">
+            <div>
+              <div style="height: 50%;">
+                <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
+                  <h3><b>{{ item.title}}</b></h3>
+                  <p style="font-size: 0.88rem"> {{ item.description }} </p>
+                </div>
+              </div>
+              <div class="slider-action-btn-wrapper">
+                <span style="display: inline-block; margin: 2.8rem 3.3rem;">
+                  <v-btn 
+                    class="vuetify_custom-btn white--text" 
+                    :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">
+                    Ознайомитись
+                  </v-btn>
+                </span>
               </div>
             </div>
-            <div class="slider-action-btn-wrapper">
-              <span style="display: inline-block; margin: 2.8rem 3.3rem;">
-                <v-btn 
-                  class="vuetify_custom-btn white--text" 
-                  :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">
-                  Ознайомитись
-                </v-btn>
-              </span>
-            </div>
-          </div>
-        </v-carousel-item>
-      </v-carousel>
+          </v-carousel-item>
+        </v-carousel>
+      </v-responsive>
     </v-card>
     <v-card 
       v-if="$store.state.leasingRequests.length > 0"
@@ -231,7 +220,10 @@
   </div>
   <div class="right-block-wrapper">
     <!-- Agent info -->
-      <v-card :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'" elevation="8">
+      <v-card 
+        v-show="!lowerThenMedium"
+        :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'" 
+        elevation="8">
         <div class="mt-4 mb-2 pl-4 mb-1 manager-title" style="position: relative; font-size: 0.95rem;">
           {{ !requestRecieved ? '' : hasUserManager && !loading ? 'Ваш менеджер' : 'За Вами не закрiплений жоден з менеджерів!'}}
         </div>
@@ -270,7 +262,10 @@
           </div>
         </div>
       </v-card>
-      <v-card class="dashboard__rigth-block" elevation="8">
+      <v-card 
+        v-show="!lowerThenMedium"
+        class="dashboard__rigth-block" 
+        elevation="8">
         <v-card-title class="title pl-4 pb-2 pt-2" style="border-left: 4px solid #e75d57">
           Новини
         </v-card-title>
@@ -430,7 +425,25 @@ export default {
     },
     showSidebar() {
       return this.$store.state.showSidebar
-    }
+    },
+    lowerThenMedium() {
+      return this.$vuetify.breakpoint.width < 1040
+    },
+    breakpointName() {
+      return this.$vuetify.breakpoint.name
+    },
+    // carouselHeight() {
+      
+    //   return this.$vuetify.breakpoint.xs 
+    //     ? 300 
+    //     : this.$vuetify.breakpoint.md
+    //       ? (this.showSidebar && this.lowerThenMedium ? 600 : 520) // lowerThenMedium
+    //       : this.$vuetify.breakpoint.lg 
+    //         ? (this.showSidebar ? 520 : 600) 
+    //         : this.$vuetify.breakpoint.xl 
+    //           ? (this.showSidebar ? 720 : 790) 
+    //           : (this.showSidebar ? 300 : 350)
+    // }
     
   },
   methods: {
@@ -530,9 +543,15 @@ export default {
         }, 2000)
       }
     },
+
+    breakpointName(val) {
+      console.log(val)
+    },
+
     hasUser() {
       this.getUserCalculcations()
     },
+
     loading(val) {
       if(val === false){
         setTimeout(() => {
@@ -541,6 +560,8 @@ export default {
       }
     }
   },
+
+
   created() {
     if(this.hasUser) {
       this.getUserCalculcations()
@@ -548,6 +569,11 @@ export default {
     this.getSlides()
     this.getNews()
   },
+
+
+  mounted() {
+    console.log(this.$vuetify.breakpoint.name)
+  }
 }
 </script>
 
@@ -563,45 +589,59 @@ export default {
 }
 
 .v-skeleton-loader {
+  height: 100%!important;
   .v-skeleton-loader__image {
-    height: 350px!important;
+    height: 100%!important;
   }
 
-  &.sidebar-showed-sm {
-    .v-skeleton-loader__image {
-      height: 300px!important;
-    }
-  }
-
-  &.xs {
-    .v-skeleton-loader__image {
-      height: 300px!important;
-    }
-  }
-
-  &.lg {
-    &.sidebar-showed {
-      .v-skeleton-loader__image {
-        height: 450px!important;
-      }
-    }
-
-    .v-skeleton-loader__image {
-      height: 500px!important;
-    }
-  }
+  // &.sidebar-showed-sm {
+  //   .v-skeleton-loader__image {
+  //     height: 300px!important;
+  //   }
+  // }
   
-  &.xl {
-    &.sidebar-showed {
-      .v-skeleton-loader__image {
-        height: 650px!important;
-      }
-    }
 
-    .v-skeleton-loader__image {
-      height: 750px!important;
-    }
-  }
+  // &.xs {
+  //   .v-skeleton-loader__image {
+  //     height: 300px!important;
+  //   }
+  // }
+
+  // &.md {
+  //   &.sidebar-showed {
+  //     .v-skeleton-loader__image {
+  //       height: 750px!important;
+  //     }
+  //   }
+
+  //   .v-skeleton-loader__image {
+  //     height: 790px!important;
+  //   }
+  // }
+
+  // &.lg {
+  //   &.sidebar-showed {
+  //     .v-skeleton-loader__image {
+  //       height: 520px!important;
+  //     }
+  //   }
+
+  //   .v-skeleton-loader__image {
+  //     height: 600px!important;
+  //   }
+  // }
+  
+  // &.xl {
+  //   &.sidebar-showed {
+  //     .v-skeleton-loader__image {
+  //       height: 750px!important;
+  //     }
+  //   }
+
+  //   .v-skeleton-loader__image {
+  //     height: 790px!important;
+  //   }
+  // }
 }
 
 .slider-action-btn-wrapper {
@@ -620,18 +660,6 @@ export default {
   transition: height 0.2s ease;
   .v-image__image {
     background-size: 100% 100%!important;
-  }
-}
-
-.dashboard-carousel {
-  transition: height 0.2s ease 0s!important;
-  visibility: hidden;
-  transition: opacity 1.5s;
-  opacity: 0;
-
-  &.active {
-    visibility: visible;
-    opacity: 1;
   }
 }
 
@@ -912,17 +940,6 @@ export default {
   width: 100%!important;
   transition: max-height 1s ease!important;
 
-  .agent-info-list {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease-in 0.3s;
-
-    &.agent-info-list-active {
-      visibility: visible;
-      opacity: 1;
-    }
-  }
-
   &.agent-info-active {
     max-height: 650px;
   }
@@ -960,6 +977,32 @@ export default {
 
   .carousel-wrapper-card {
     transition: height 0.2s ease;
+    .v-responsive {
+
+      .v-responsive__content {
+
+        .dashboard-carousel {
+          transition: height 0.2s ease 0s;
+          visibility: hidden;
+          transition: opacity 1.5s;
+          opacity: 0;
+          height: 100%!important;
+
+          &.active {
+            visibility: visible;
+            opacity: 1;
+          }
+        }
+
+        .v-window__container {
+          height: 100%!important;
+        }
+
+        .v-carousel__item {
+          height: 100%!important;
+        }
+      }
+    }
   }
 
   .absent-slide {

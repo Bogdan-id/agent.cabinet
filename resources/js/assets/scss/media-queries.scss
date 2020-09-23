@@ -29,9 +29,6 @@
   }
 }
 @media(max-width: 1040px) {
-  .dashboard__rigth-block {
-    display: none!important;
-  }
   .dashboard-wrapper {
     flex-direction: column; 
   }
@@ -41,9 +38,7 @@
   .mobile-agent-not-manager {
     display: block;
   }
-  .agent-info {
-    display: none!important;
-  }
+
   .dashboard-container {
     width: 100%;
   }
@@ -70,13 +65,10 @@
     padding-bottom: 8px;
   }
   .app__login-form {
-    // margin: 60px 45px;
     padding: 25px 30px 10px 30px;
     width: 400px;
   }
-  // .app__input-text-wrapper {
-  //   margin-bottom: 13px;
-  // }
+
   .app__input-text {
     height: 40px;
   }

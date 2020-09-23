@@ -37,7 +37,7 @@
         indeterminate>
       </v-progress-circular>
     </v-card-text>
-    <v-card-text>
+    <v-card-text :style="`max-width: ${sliderMaxWidth}px; margin: 0 auto;`">
       <input
         style="visibility: hidden; position: absolute; left: 0; top: 0;"
         type="file"
@@ -412,6 +412,7 @@ export default {
     // sliders data
     sliders: null,
     maxSliderValue: 3,
+    sliderMaxWidth: 1000, // px
 
     // image
     sliderImageUrl: null,
@@ -718,6 +719,7 @@ export default {
 </script>
 
 <style lang="scss">
+  .sliders-wrapper {}
   .slider-card-wrapper {
     position: relative;
     width: 100%;

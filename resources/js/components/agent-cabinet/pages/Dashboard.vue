@@ -1,10 +1,13 @@
 <template>
 <div ref="dashboard">
 <div class="dashboard-wrapper">
+
   <!-- Mobyle agent info -->
-  <div v-if="!hasUserManager && !loading && requestRecieved" class="mobile-agent-not-manager">
+  <div 
+    v-if="!hasUserManager && !loading && requestRecieved" 
+    class="mobile-agent-not-manager">
     <div class="pa-3 d-flex headline align-center">
-      <div style="width: auto; display: flex;">
+      <div class="d-flex">
         <v-icon 
           v-text="'mdi-information'" 
           class="pr-3" 
@@ -17,14 +20,14 @@
     </div>
   </div>
   <div 
-    v-if="!loading && hasUserManager && requestRecieved" :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'" 
-    style="position: relative">
+    v-if="!loading && hasUserManager && requestRecieved" 
+    :class="hasAgent ? 'mobile-agent-info active' : 'mobile-agent-info'">
     <span 
-      :style="$vuetify.breakpoint.xs ? 'font-size: 0.86rem; width: 60%;' : ''" 
-      class="mobile-manager-title text-center">
-      {{ 'Ваш менеджер' }}
+      :class="`mobile-manager-title text-center ${xs ? 'xs' : ''}`">
+      Ваш менеджер
     </span>
-    <div v-if="loading" class="d-flex justify-center align-center">
+    <div v-if="loading" 
+      class="d-flex justify-center align-center">
       <v-progress-circular
         class="ma-3"
         indeterminate
@@ -32,25 +35,37 @@
       </v-progress-circular>
     </div>
     <div class="mobile-manager-wrapper">
-      <div v-if="hasUserManager && !loading && requestRecieved" class="mobile-manager-content">
+      <div 
+        v-if="hasUserManager && !loading && requestRecieved" 
+        class="mobile-manager-content">
         <div 
-          v-if="!$vuetify.breakpoint.xs" 
-          style="display: inline-block; width: 70px; position: relaitve;">
-          <div v-if="!agentData.photo" class="empty-logo-mobile">
-            <span class="logo-letter">{{ agentData.name }}</span>
+          v-if="xs"
+          class="content-logo">
+          <div 
+            v-if="!agentData.photo" 
+            class="empty-logo-mobile">
+            <span class="logo-letter">
+              {{ agentData.name }}
+            </span>
           </div>
           <div class="agent-photo">
-            <img style="max-width: 100%; border-radius: 100%;" :src="agentData.photo" />
+            <img :src="agentData.photo" />
           </div>
         </div>
-        <div :style="`${$vuetify.breakpoint.xs ? 'width: 100%;' : ''}`" class="manager-data-wrapper">
-          <span class="manager-data-name">{{ agentData.name }}</span>
+        <div 
+          :class="`manager-data-wrapper ${xs ? 'xs' : ''}`">
+          <span class="manager-data-name">
+            {{ agentData.name }}
+          </span>
           <span style="manager-data-phone">
-            <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>
+            <v-icon 
+              class="pr-1" 
+              v-text="'mdi-phone'" 
+              color="black" size="19" ></v-icon>
             {{ agentData.phone }}
           </span>
           <span 
-            :style="`color: #bb433c; white-space: nowrap; display: inline-block; ${$vuetify.breakpoint.xs ? 'font-size: 10px;' : ''}`">
+            :class="`email ${xs ? 'xs' : ''}`">
             <v-icon color="black" size="19" class="pr-1" v-text="'mdi-email'"></v-icon>
             {{ agentData.email }}
           </span>
@@ -58,23 +73,27 @@
       </div>
     </div>
   </div>
+
+
   <!-- Dashboard container -->
   <div class="dashboard-container">
+
+    <!-- carousel -->
     <v-card 
       elevation="9" 
       class="carousel-wrapper-card">
       <v-responsive :aspect-ratio="16/9">
         <div 
-          v-if="!carouselVisibility && sliderHasNoSlides"  
-          style="position: relative; width: 100%; height: 100%;">
+          class="loader-wrapper"
+          v-if="!carouselVisibility && sliderHasNoSlides">
           <v-skeleton-loader
-            style="position: absolute; top:0; bottom: 0; right: 0; left: 0;"
+            class="skeleton-loader"
             type="image">
           </v-skeleton-loader>
         </div>
         <div v-if="!carouselVisibility && !slidesLoader" 
           class="absent-slide">
-          <span style="font-size: 1.3rem; color: #727170;">(Пропозиції вiдсутнi)</span>
+          <span class="absent-slide__text">(Пропозиції вiдсутнi)</span>
         </div>
         <v-carousel
           transition="fade-transition"
@@ -92,21 +111,29 @@
             :src="item.slide_image"
             :key="key"
             reverse-transition="fade-transition"
-            transition="fade-transition"
-            style="bacground-size: 100% 100%!important;">
+            transition="fade-transition">
             <div>
               <div style="height: 50%;">
                 <div :class="xs ? 'actions-block-text small-screen' : 'actions-block-text'">
-                  <h3 :style="`font-size: ${xs || sm ? '1.2rem;' : md && showSidebar ? '1.2rem;': '1.6rem;'}`"><b>{{ item.title}}</b></h3>
-                  <p style="font-size: 0.88rem"> {{ item.description }} </p>
+                  <h3 
+                    :style="`font-size: ${xs || sm 
+                      ? '1.2rem;' 
+                      : md && showSidebar 
+                        ? '1.2rem;'
+                        : '1.6rem;'}`">
+                    <b>{{ item.title}}</b>
+                  </h3>
+                  <p style="font-size: 0.88rem"> 
+                    {{ item.description }} 
+                  </p>
                 </div>
               </div>
               <div class="slider-action-btn-wrapper">
                 <span 
-                  :style="`display: inline-block; margin: ${$vuetify.breakpoint.xs ? '1rem 2rem;' : '2.8rem 3.3rem;'}`">
+                  :class="`slider-btn__wrapper ${xs ? 'xs' : ''}`">
                   <v-btn 
-                    :x-small="$vuetify.breakpoint.xs"
-                    :small="$vuetify.breakpoint.sm || showSidebar && $vuetify.breakpoint.md"
+                    :x-small="xs"
+                    :small="sm || showSidebar && md"
                     :large="$vuetify.breakpoint.lgAndUp"
                     class="vuetify_custom-btn white--text" 
                     :to="{name: 'DashboardSlider', path: `slides/${item.slug}`, params: item}">
@@ -119,12 +146,13 @@
         </v-carousel>
       </v-responsive>
     </v-card>
+
+    <!-- leasing requests -->
     <v-card 
       v-if="$store.state.leasingRequests.length > 0"
       class="mt-10 mb-6 dashboard-table" elevation="9">
       <v-card-title 
-        :class="`headline pb-3 pt-3 ${!$vuetify.breakpoint.xs ? 'mb-7' : ''}`" 
-        style="border-left: 5px solid #e75d57;">
+        :class="`headline custom-border pb-3 pt-3 ${!xs ? 'mb-7' : ''}`" >
         Заявки на лiзинг
       </v-card-title>
       <v-data-table
@@ -132,14 +160,12 @@
         v-if="$store.state.leasingRequests.length > 0 && $store.state.user.agent"
         :headers="tableHeader"
         :items="$store.state.leasingRequests"
-        :class="`dashboard-leasing-request-table ${$vuetify.breakpoint.xs ? 'small' : ''} elevation-1 pb-3`"
+        :class="`dashboard-leasing-request-table ${xs ? 'small' : ''} elevation-1 pb-3`"
         :hide-default-footer="true"
         :items-per-page="5">
         <template v-slot:item.agent_reward="{ item }">
           <span style="white-space: nowrap">
-            {{ 
-              $formatSum(item.price_brutto)
-            }}
+            {{ $formatSum(item.price_brutto) }}
           </span>
         </template>
         <template v-slot:item.leasing_amount="{ item }">
@@ -163,16 +189,23 @@
         </template>
         <template v-slot:item.initials="{ item }">
           <span style="white-space: nowrap">
-            {{ item.client_type_id == 2 ? item.legal_info.company_name : item.last_name + ' ' + item.first_name[0] + '. ' + item.patronymic[0] + '.'  }}
+            {{ 
+              item.client_type_id == 2 
+                ? item.legal_info.company_name 
+                : item.last_name + ' ' + item.first_name[0] + '. ' + item.patronymic[0] + '.'  
+            }}
           </span>
         </template>
         <template v-slot:item.whole_object="{ item }">
           <v-btn 
             x-small 
-            style="white-space: nowrap; text-transform: lowercase; display: flex; text-align: center;" 
+            class="btn-hyperlink" 
             small dark 
             color="grey darken-3" 
-            :to="{ name: 'Графiки', params: {data: item.calculation, graph: item.graph_type, preview: true} }">
+            :to="{
+              name: 'Графiки', 
+              params: {data: item.calculation, graph: item.graph_type, preview: true}
+            }">
             {{ switchValue(item.graph_type) }}
           </v-btn>
         </template>
@@ -211,39 +244,52 @@
       </div>
     </v-card>
   </div>
+
+
+  <!-- Right-block -->
   <div class="right-block-wrapper">
+
     <!-- Agent info -->
       <v-card 
         v-show="!lowerThenMedium"
         :class="hasUserManager ? 'agent-info agent-info-active' : 'agent-info'" 
         elevation="8">
-        <div class="mt-4 mb-2 pl-4 mb-1 manager-title" style="position: relative; font-size: 0.95rem;">
-          {{ !requestRecieved ? '' : hasUserManager && !loading ? 'Ваш менеджер' : 'За Вами не закрiплений жоден з менеджерів!'}}
+        <div 
+          class="mt-4 mb-2 pl-4 mb-1 manager-title" >
+          {{ managerTitle }}
         </div>
-        <div v-if="loading" class="d-flex justify-center align-center">
+        <div 
+          v-if="loading" 
+          class="d-flex justify-center align-center">
           <v-progress-circular
             class="ma-3"
             indeterminate
             color="red">
           </v-progress-circular>
         </div>
-        <div v-if="hasUserManager && !loading && requestRecieved" class="manager-content d-flex flex-column">
-          <div style="display: flex; justify-content: center;">
+        <div 
+          v-if="hasUserManager && !loading && requestRecieved" 
+          class="manager-content d-flex flex-column">
+          <div class="d-flex justify-center">
             <div 
               v-if="agentData.photo == null" 
               class="manager-has-no-photo">
-              <span class="logo-letter">{{ agentData.name }}</span>
+              <span class="logo-letter">
+                {{ agentData.name }}
+              </span>
             </div>
             <div 
               v-if="agentData.photo != null" 
               class="manager-has-photo">
-              <img style="max-width: 100%; border-radius: 100%;" :src="agentData.photo" />
+              <img :src="agentData.photo" />
             </div>
           </div>
           <div class="manager-list-wrapper">
             <ul>
-              <li class="desktop-manager-name">{{ agentData.name }}</li>
-              <li style="font-weight: bold; font-family: Montserrat,sans-serif,Arial; font-size: 0.76rem">
+              <li class="desktop-manager-name">
+                {{ agentData.name }}
+              </li>
+              <li class="manager-phone">
                 <v-icon color="black" size="19" class="pr-1" v-text="'mdi-phone'"></v-icon>
                 {{ agentData.phone }}
               </li>
@@ -255,18 +301,25 @@
           </div>
         </div>
       </v-card>
+
+      <!-- News -->
       <v-card 
         v-show="!lowerThenMedium"
         class="dashboard__rigth-block" 
         elevation="8">
-        <v-card-title class="title pl-4 pb-2 pt-2" style="border-left: 4px solid #e75d57">
+        <v-card-title 
+          class="news-title title pl-4 pb-2 pt-2">
           Новини
         </v-card-title>
         <v-divider></v-divider>
-        <v-card-text v-if="news === null || news === 'undefined' || news.length === 0" class="pt-5 pb-5 text-center">
+        <v-card-text 
+          v-if="news === null || news === 'undefined' || news.length === 0" 
+          class="pt-5 pb-5 text-center">
           <span>Новини вiдсутнi</span>
         </v-card-text>
-        <v-card-text class="pb-0" v-if="news !== null || news !== 'undefined' || news.length > 0">
+        <v-card-text 
+          v-if="news !== null || news !== 'undefined' || news.length > 0"
+          class="pb-0">
           <v-hover 
             v-for="(item, key) in news"
             :key="key"
@@ -279,7 +332,11 @@
                 class="white--text align-end"
                 style="width: 100%"
                 :src="item['news_title_image']">
-                <v-card-title class="subtitle-1" style="padding-bottom: 4px;">{{ item.title }}</v-card-title>
+                <v-card-title 
+                  class="subtitle-1" 
+                  style="padding-bottom: 4px;">
+                  {{ item.title }}
+                </v-card-title>
               </v-img>
               <v-card-text>
                 <span>{{ item.description }}</span>
@@ -302,8 +359,12 @@
           <div style="text-align: right">
             <router-link 
               @click="$setRoute()"
-              :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" 
-              class="see-all-news" style="font-size: 1rem; text-decoration: underline" tag="span">
+              :to="{ 
+                name: 'Новини', 
+                path: '/news', 
+                params: {news: this.news, redirectFromDashboard: true}
+              }" 
+              class="see-all-news" tag="span">
               Всi новини
             </router-link>
           </div>
@@ -311,8 +372,10 @@
       </v-card>
     </div>
   </div>
+
+  <!-- News for small resolutions -->
   <v-card class="dashboard-news">
-    <v-card-title class="headline" style="border-left: 5px solid #e75d57">
+    <v-card-title class="dashboard-news__title headline">
       Новини
     </v-card-title>
     <v-card-text 
@@ -328,18 +391,21 @@
         <v-card 
           v-if="key < 2"
           class="news-card"
-          :style="$vuetify.breakpoint.xs ? 'width: 92%;' : 'width: 47%;'" 
-          :elevation="hover ? 5 : 2"
-          >
+          :style="xs ? 'width: 92%;' : 'width: 47%;'" 
+          :elevation="hover ? 5 : 2">
           <v-img
             class="white--text align-end"
             style="width: 100%; height: 200px;"
             :src="item['news_title_image']">
             <v-card-text 
               class="subtitle-1" 
-              style="font-size: 1rem">{{ item.title }}</v-card-text>
+              style="font-size: 1rem">
+              {{ item.title }}
+            </v-card-text>
           </v-img>
-          <v-card-text class="pb-0">{{ item.description }}</v-card-text>
+          <v-card-text class="pb-0">
+            {{ item.description }}
+          </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn 
@@ -353,11 +419,17 @@
         </v-card>
       </v-hover>
     </v-card-text>
-    <v-card-text class="pt-0" v-if="news !== null && news !== 'undefined' && news.length > 0">
+    <v-card-text 
+      v-if="news !== null && news !== 'undefined' && news.length > 0"
+      class="pt-0">
       <div style="text-align: center">
         <v-btn
           @click="$setRoute()" 
-          :to="{name: 'Новини', path: '/news', params: {news: this.news, redirectFromDashboard: true}}" 
+          :to="{
+            name: 'Новини', 
+            path: '/news', 
+            params: {news: this.news, redirectFromDashboard: true}
+          }" 
           tag="span"
           color="#e75d57"
           outlined>
@@ -435,6 +507,13 @@ export default {
     breakpointName() {
       return this.$vuetify.breakpoint.name
     },
+    managerTitle() {
+      return !this.requestRecieved 
+        ? '' 
+        : this.hasUserManager && !this.loading 
+          ? 'Ваш менеджер' 
+          : 'За Вами не закрiплений жоден з менеджерів!'
+    }
   },
 
 
@@ -592,6 +671,16 @@ export default {
 }
 
 .slider-action-btn-wrapper {
+
+  .slider-btn__wrapper {
+    display: inline-block; 
+    margin: 2.8rem 3.3rem;
+
+    &.xs {
+      margin: 1rem 2rem;
+    }
+  }
+
   height: 50%; 
   display: flex; 
   width: 100%; 
@@ -615,6 +704,12 @@ export default {
   width: 100%; 
   padding: 0 25px;
   margin-top: 15px;
+
+  .manager-phone {
+    font-weight: bold; 
+    font-family: Montserrat, sans-serif, Arial; 
+    font-size: 0.76rem
+  }
 
   ul {
     padding-left: 0!important;
@@ -669,6 +764,11 @@ export default {
   }
 
   .manager-has-photo {
+    img {
+      max-width: 100%; 
+      border-radius: 100%;
+    }
+
     display: flex; 
     text-align: center; 
     justify-content: center; 
@@ -684,6 +784,12 @@ export default {
   display: flex;
   flex-direction: row;
 
+  .content-logo {
+    display: inline-block; 
+    width: 70px; 
+    position: relaitve;
+  }
+
   span, div:hover {
     cursor: pointer;
   }
@@ -695,6 +801,18 @@ export default {
     width: 90%; 
     padding-top: 10; 
     align-items: center;
+
+    .email {
+      color: #bb433c; 
+      white-space: nowrap; 
+      display: inline-block;
+
+      &.xs {
+        text-align: center;
+        width: 100%;
+        font-size: 10px;
+      }
+    }
 
     .manager-data-name {
       font-size: 0.8rem; 
@@ -748,6 +866,8 @@ export default {
   align-items: center; 
   height: 2.2rem; 
   line-height: 1rem;
+  position: relative; 
+  font-size: 0.95rem;
 }
 
 .dashboard-wrapper {
@@ -773,6 +893,11 @@ export default {
   width: 100%!important; 
   margin-top: 35px; 
   box-shadow: 0px 1px 23px 0px #c2c0c0!important;
+
+  .dashboard-news__title {
+    border-left: 5px solid #e75d57;
+  }
+
   .dashboard-news__wrapper {
 
     flex-direction: row; 
@@ -785,6 +910,7 @@ export default {
     }
   }
 }
+
 .mobile-agent-not-manager {
   border-radius: 4px; 
   margin-bottom: 12px;
@@ -800,6 +926,7 @@ export default {
     font-size: 1rem;
   }
 }
+
 .mobile-agent-info {
   position: relative;
   border-radius: 4px; 
@@ -821,8 +948,14 @@ export default {
       left: 4px; 
       width: 60px; 
       height: 60px;
+
+      img {
+        max-width: 100%; 
+        border-radius: 100%;
+      }
     }
   }
+
   .mobile-manager-title {
     font-family: Montserrat,sans-serif,Arial;
     top: 0.8rem; 
@@ -834,6 +967,11 @@ export default {
     padding: 1px 10px; 
     border-radius: 0 0 5px 5px; 
     color: white;
+
+    &.xs {
+      font-size: 0.86rem; 
+      width: 60%;
+    }
   }
 
   ul {
@@ -895,6 +1033,10 @@ export default {
   margin-top: 15px;
   display: block;
 
+  .news-title {
+    border-left: 4px solid #e75d57;
+  }
+
   .v-divider {
     margin-bottom: 0!important;
   }
@@ -912,6 +1054,7 @@ export default {
   &.--small {
     height: 28px!important;
   }
+
   border-radius: 0!important;
   background: #e65048!important;
   color: white!important;
@@ -921,9 +1064,37 @@ export default {
   flex-direction: column;
   display: flex;
   width: 74%;
+  
+  .dashboard-table {
+    .custom-border {
+      border-left: 5px solid #e75d57;
+    }
+
+    .btn-hyperlink {
+      white-space: nowrap; 
+      text-transform: lowercase; 
+      display: flex; 
+      text-align: center;
+    }
+  }
 
   .carousel-wrapper-card {
     transition: height 0.2s ease;
+
+    .loader-wrapper {
+      position: relative; 
+      width: 100%; 
+      height: 100%;
+
+      .skeleton-loader {
+        position: absolute; 
+        top:0; 
+        bottom: 0; 
+        right: 0; 
+        left: 0;
+      }
+    }
+
     .v-responsive {
 
       .v-responsive__content {
@@ -955,6 +1126,11 @@ export default {
   .absent-slide {
       text-align: center;
       padding: 15px 10px;
+
+      .absent-slide__text {
+        font-size: 1.3rem; 
+        color: #727170;
+      }
     }
 
   .v-window {
@@ -997,8 +1173,9 @@ export default {
 
 .see-all-news {
   transition: font-size 0.14s ease, color 0.18s ease;
-  font-size: 1.25rem;
   color: #e65048; 
+  font-size: 1rem; 
+  text-decoration: underline;
   cursor: pointer;
 
   &:hover {

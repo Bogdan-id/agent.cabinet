@@ -4,17 +4,36 @@
       v-model="dialogToDelete"
       max-width="390">
       <v-card>
-        <v-card-title style="background: #424242; position: relative" class="white--text">
+        <v-card-title 
+          style="background: #424242; position: relative" 
+          class="white--text">
           Пiдтвердження
-          <v-btn @click="dialogToDelete = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
+          <v-btn 
+            @click="dialogToDelete = false" 
+            style="position: absolute; right: 4px; top: 6px;" 
+            icon>
+            <v-icon v-text="'mdi-close'" color="white"></v-icon>
+          </v-btn>
         </v-card-title>
         <div style="padding: 25px; font-size: 1.23rem; text-align: center;">
           <span>Слайдер буде видалено назавжди. Продовжити?</span>
         </div>
         <v-card-text>
           <div style="display: flex; justify-content: space-between;">
-            <span><v-btn @click="deleteSlider()" dark color="red lighten-1" :loading="deleteLoading">Так</v-btn></span>
-            <span><v-btn @click="dialogToDelete = false" dark color="grey darken-2">Нi</v-btn></span>
+            <span>
+              <v-btn 
+                @click="deleteSlider()" 
+                dark color="red lighten-1" 
+                :loading="deleteLoading">Так
+              </v-btn>
+            </span>
+            <span>
+              <v-btn 
+                @click="dialogToDelete = false" 
+                dark color="grey darken-2">
+                Нi
+              </v-btn>
+            </span>
           </div>
         </v-card-text>
       </v-card>
@@ -52,12 +71,20 @@
           :style="`background: url('${sliderImage}'); background-size: 100% 100%;`"
           class="slider-card"
           elevation="8">
-          <span v-show="sliderImageErr && sliderImageErr.length > 0" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
+          <span 
+            v-show="sliderImageErr && sliderImageErr.length > 0" 
+            class="add-image-text">
             Додайте зображення!
           </span>
           <div style="height: 50%;">
-            <div v-show="sliderImage !== null" :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
-              <h3><b>{{ sliderTitle || 'Заголовок матерiалу' }}</b></h3>
+            <div 
+              v-show="sliderImage !== null" 
+              :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
+              <h3>
+                <b>
+                  {{ sliderTitle || 'Заголовок матерiалу' }}
+                </b>
+              </h3>
               <p style="font-size: 0.88rem"> {{ sliderDescription || 'Контент матерiалу' }} </p>
             </div>
           </div>
@@ -73,7 +100,9 @@
                 @click="">Ознайомитись</v-btn>
             </span>
           </div>
-          <span v-show="sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+          <span 
+            v-show="sliderImage === null"
+            class="center-icon">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -89,7 +118,9 @@
               <span>Додати зображення</span>
             </v-tooltip>
           </span>
-          <span class="slider-delete-image-icon" v-show="sliderImage" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 25;">
+          <span 
+            class="slider-delete-image-icon" 
+            v-show="sliderImage">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -199,15 +230,24 @@
                 </template>
                 <span>Видалити слайдер</span>
               </v-tooltip>
-              <span v-show="sliderImageErr && sliderImageErr.length > 0 && editKey === key" style="font-size: 1.7rem; position: absolute; bottom: 100px; right: 50%; color: rgb(230, 80, 72); transform: translate(50%, -50%);">
+              <span 
+                v-show="sliderImageErr && sliderImageErr.length > 0 && editKey === key" 
+                class="add-image-text">
                 Додайте зображення!
               </span>
               <div style="height: 50%;">
                 <div 
                   v-show="item.slide_image || sliderImage !== null" 
                   :class="$vuetify.breakpoint.xs ? 'actions-block-text small-screen' : 'actions-block-text'">
-                  <h3 :style="sliderTitleSize"><b>{{ item.title || sliderTitle || 'Заголовок матерiалу' }}</b></h3>
-                  <p style="font-size: 0.88rem"> {{ item.description ||  sliderDescription || 'Короткый опис матерiалу' }} </p>
+                  <h3 
+                    :style="sliderTitleSize">
+                    <b>
+                      {{ item.title || sliderTitle || 'Заголовок матерiалу' }}
+                    </b>
+                  </h3>
+                  <p style="font-size: 0.88rem"> 
+                    {{ item.description ||  sliderDescription || 'Короткый опис матерiалу' }} 
+                  </p>
                 </div>
               </div>
               <div class="slider-action-btn-wrapper">
@@ -224,7 +264,9 @@
                   </v-btn>
                 </span>
               </div>
-              <span v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+              <span 
+                v-show="editMode && editKey == key && !item.slide_image && sliderImage === null" 
+                class="center-icon">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -240,7 +282,9 @@
                   <span>Додати зображення</span>
                 </v-tooltip>
               </span>
-              <span class="slider-delete-image-icon" v-show="editMode && editKey == key && item.slide_image" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 25;">
+              <span 
+                class="slider-delete-image-icon" 
+                v-show="editMode && editKey == key && item.slide_image">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -744,6 +788,23 @@ export default {
       right: 0;
       margin: 0 auto; 
       background-size: 100% 100%;
+
+      .center-icon {
+        position: absolute; 
+        left: 50%; 
+        top: 50%; 
+        transform: translate(-50%, -50%);
+      }
+
+      .add-image-text {
+        font-size: 1.7rem; 
+        position: absolute; 
+        bottom: 100px; 
+        right: 50%; 
+        color: rgb(230, 80, 72); 
+        transform: translate(50%, -50%);
+      }
+
       .actions-block-text {
         backdrop-filter: blur(5px); 
         padding: 0 15px; 
@@ -785,6 +846,11 @@ export default {
   .slider-delete-image-icon {
     opacity: 0;
     transition: opacity 0.4s ease;
+    position: absolute; 
+    left: 50%; 
+    top: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 25;
   }
   .slider-edit-button {
     opacity: 0;

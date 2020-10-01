@@ -108,6 +108,8 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('admin.home');
     $router->get('/user/activate/{id}', 'AgentController@activateUser');
     $router->get('/user/deactivate/{id}', 'AgentController@deactivateUser');
+    $router->get('/user/banned/{id}', 'AgentController@bannedUser');
+    $router->get('/user/getBanned', 'AgentController@getBannedUsers');
     $router->post('/agent/update/{id}', 'AgentController@adminUpdateAgent');
     $router->get('/agent/all', 'AgentController@getAgents');
     $router->get('/getDontActiveUsers', 'AgentController@getDontActiveUsers');

@@ -69,4 +69,23 @@ class AgentController extends Controller
             'status' => 200
         ]);
     }
+
+    public function bannedUser($id)
+    {
+        $user = User::find($id);
+        $user->is_active = 2;
+        $user->save();
+        //Mail::to($user->email)->send(new AgentRejectMail($user));
+
+        return response()->json([
+            'status' => 200
+        ]);
+    }
+
+    public function getBannedUsers()
+    {
+        $bannedUsers = User::banned()->get();
+
+        return response()->json($bannedUsers);
+    }
 }

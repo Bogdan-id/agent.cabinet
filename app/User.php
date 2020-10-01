@@ -53,6 +53,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Scope a query to only include banned users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBanned($query)
+    {
+        return $query->where('is_active', 2);
+    }
+
+
+    /**
      * Get the agent record associated with the user.
      */
     public function agent()

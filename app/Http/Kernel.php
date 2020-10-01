@@ -24,6 +24,8 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\DontActiveUser::class,
         \App\Http\Middleware\UserAgent::class,
         \App\Http\Middleware\DontUserAgent::class,
+        \App\Http\Middleware\BannedUser::class,
+        \App\Http\Middleware\DontBannedUser::class,
        // \App\Http\Middleware\IsAdmin::class
     ];
 
@@ -72,5 +74,7 @@ class Kernel extends HttpKernel
         'user_agent' => \App\Http\Middleware\UserAgent::class,
         'dont_user_agent' => \App\Http\Middleware\DontUserAgent::class,
         'isadmin' => \App\Http\Middleware\IsAdmin::class,
+        'banned_user' => \App\Http\Middleware\BannedUser::class,
+        'dont_banned_user' => \App\Http\Middleware\DontBannedUser::class,
     ];
 }

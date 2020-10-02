@@ -1,9 +1,9 @@
 <template>
   <div class="app">
-    <div class="label__block">
-      <div class="rhombus-1"></div>
-      <div class="rhombus-2"></div>
-      <div class="rhombus-3"></div>
+    <div class="label__block" style="background: repeating-linear-gradient(60deg, #808080, #707070 15%, #444444 20%)">
+      <div class="rhombus-1 --grey"></div>
+      <div class="rhombus-2 --grey"></div>
+      <div class="rhombus-3 --grey"></div>
         <div class="label__block-wrapper">
         <div class="label__logo-wrapper">
           <div class="label__logo"></div>
@@ -12,12 +12,11 @@
         <div class="label__header-wrapper">
           <h1 class="label__header">
             <alert-svg class="label__header-svg"></alert-svg>
-            Ваше звернення в обробці
+            Відмовлено у використанні
           </h1>
         </div>
-        <h1 class="title" style="margin: 18px 0 15px;">Чекайте</h1>
         <p class="subtitle-1">
-          Ми зв'яжемося з вами, найближчим часом
+          Вибачте, але наразі ми не можемо зареєструвати Вас у персональному кабінеті агента
         </p>
       </div>
     </div>

@@ -14,8 +14,8 @@
   text-align: center; 
   padding: 25px 25px 50px 25px;
   margin: 50px 0;
-  width: 580px; 
-  min-height: 350px;
+  width: 540px; 
+  min-height: 300px;
   margin-right: auto;
   margin-left: auto;
   margin-top: 120px;
@@ -45,7 +45,7 @@
   font-size: 28px;
   line-height: 52px;
   font-family: "Roboto", "sens-serif";
-  margin: 26px 0 0 0;
+  margin: 10px 0 0 0;
 }
 .label__header-wrapper {
   display: flex;
@@ -76,6 +76,12 @@
   bottom: 5%;
   right: 17%;
   z-index: 1;
+
+  &.--grey {
+    background: url('../assets/icons/rhombus-10x10-grey.png');
+    background-repeat: space;
+    transform: skewX(25deg) rotate(94deg);
+  }
 }
 .rhombus-2 {
   width: 20%; 
@@ -87,6 +93,12 @@
   top: 11%;
   left: 17%;
   z-index: 1;
+
+  &.--grey {
+    background: url('../assets/icons/rhombus-10x10-grey.png');
+    background-repeat: space;
+    transform: skewX(25deg) rotate(94deg);
+  }
 }
 .rhombus-3 {
   width: 20%; 
@@ -98,4 +110,10 @@
   bottom: -120px;
   left: 5%;
   z-index: 1;
+
+  &.--grey {
+    background: url('../assets/icons/rhombus-10x10-grey.png');
+    background-repeat: space;
+    transform: skewX(25deg) rotate(94deg);
+  }
 }

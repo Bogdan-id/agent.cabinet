@@ -9,6 +9,7 @@ import EditNews from '../components/admin/components/routes/EditNews'
 import Managers from '../components/admin/components/routes/Managers'
 import AdminNews from '../components/admin/components/routes/AdminNews'
 import Slider from '../components/admin/components/routes/slider'
+import RejectedUsers from '../components/admin/components/routes/RejectedUsers'
 
 /* Authenticate components */
 import Authorization from '../components/authentication/Authorization'
@@ -16,6 +17,7 @@ import Registration from '../components/authentication/Registration'
 import WaitAnswer from '../components/authentication/Wait-answer'
 import CompleteRegistration from '../components/authentication/CompleteRegistration'
 import ForgotPassword from '../components/authentication/ForgotPassword'
+import Rejected from '../components/authentication/Rejected.vue'
 
 /* Dashboard components */
 import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout"
@@ -123,6 +125,14 @@ const routes = [
         }
       },
       {
+        path: 'rejected-users',
+        name: 'rejected-users',
+        meta: {
+          title: 'Заблокованi користувачи'
+        },
+        component: RejectedUsers,
+      },
+      {
         path: 'reward-applications',
         name: 'reward-applications',
         component: RewardApplications,
@@ -177,6 +187,13 @@ const routes = [
     component: WaitAnswer,
     meta: {
       title: 'Очiкуйте зворотнього зв`язку'
+    }
+  },
+  {
+    path: '/banned',
+    component: Rejected,
+    meta: {
+      title: 'Вiдмовлено в користуваннi'
     }
   },
   { 

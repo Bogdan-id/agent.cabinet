@@ -95,6 +95,16 @@ Vue.prototype.$formatSum = (sum) => {
   }
 }
 
+Vue.prototype.$setRoute = () => {
+  setTimeout(() => {
+    const routeName = router.currentRoute.name
+
+    localStorage.setItem('route', routeName)
+  }, 0)
+  
+
+}
+
 new Vue({
 	store,
 	vuetify,

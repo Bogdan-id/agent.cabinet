@@ -41,6 +41,7 @@ export default {
     drawerState: null,
     nav: [
       {subj: 'Заявки на реєстрацію', link: 'application-for-registration', icon: 'mdi-account-check'},
+      {subj: 'Заблокованi користувачi', link: 'rejected-users', icon: 'mdi-account-cancel'},
 			{subj: 'Агенти', link: 'agents-edit', icon: 'mdi-face-agent'},
       {subj: 'Кориснi матерiали', link: 'Роздiл Кориснi матерiали', icon: 'mdi-bookmark'},
       {subj: 'Заявки на винагороду', link: 'reward-applications', icon: 'mdi-format-list-checks'},

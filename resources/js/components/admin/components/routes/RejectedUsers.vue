@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      Роздiл - Заявки на реєстрацію
+      Роздiл - Заблокованi користувачi
     </v-card-title>
     <v-card-text v-if="$store.state.adminLoader">
       <v-progress-circular
@@ -12,7 +12,7 @@
     <v-card-title 
       v-if="!tabledata.length > 0 && !$store.state.adminLoader"
       class="d-flex justify-center grey--text">
-      ( заявки вiдсутнi )
+      ( користувачi вiдсутнi )
     </v-card-title>
     <v-card-text>
       <v-data-table
@@ -32,14 +32,14 @@
               color="#e65048" x-small
               class="white--text"
               :style="btnStyle">
-              Пiдтвердити
+              Розбл. так активувати
             </v-btn>
             <v-btn
-              @click="toggleUser(`/banned/${item.id}`)"
+              @click="toggleUser(`/deactivate/${item.id}`)"
               color="grey darken-3" x-small
               class="white--text"
               :style="btnStyle">
-              Відхилити
+              Розблокувати
             </v-btn>
           </div>
         </template>
@@ -63,10 +63,10 @@ export default {
     tabledata: [],
   }),
   methods: {
-    getApplicationsToRegister() {
+    getRejectedUsers() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
-        .get('/admin/getDontActiveUsers')
+        .get('/admin/user/getBanned')
         .then(response => {
           console.log(response)
           this.createTableData(response.data)
@@ -110,7 +110,7 @@ export default {
       axios
         .get('/admin/user' + url)
         .then(response => {
-          this.getApplicationsToRegister()
+          this.getRejectedUsers()
           this.$store.commit('toggleAdminSpinner', false)
           if(response.status === 200) {
             this.$notify({
@@ -142,7 +142,7 @@ export default {
 
 
   created() {
-    this.getApplicationsToRegister()
+    this.getRejectedUsers()
   }
 }
 </script>

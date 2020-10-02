@@ -76,6 +76,12 @@
   bottom: 5%;
   right: 17%;
   z-index: 1;
+
+  &.--grey {
+    background: url('../assets/icons/rhombus-10x10-grey.png');
+    background-repeat: space;
+    transform: skewX(25deg) rotate(94deg);
+  }
 }
 .rhombus-2 {
   width: 20%; 
@@ -87,6 +93,12 @@
   top: 11%;
   left: 17%;
   z-index: 1;
+
+  &.--grey {
+    background: url('../assets/icons/rhombus-10x10-grey.png');
+    background-repeat: space;
+    transform: skewX(25deg) rotate(94deg);
+  }
 }
 .rhombus-3 {
   width: 20%; 
@@ -98,4 +110,10 @@
   bottom: -120px;
   left: 5%;
   z-index: 1;
+
+  &.--grey {
+    background: url('../assets/icons/rhombus-10x10-grey.png');
+    background-repeat: space;
+    transform: skewX(25deg) rotate(94deg);
+  }
 }

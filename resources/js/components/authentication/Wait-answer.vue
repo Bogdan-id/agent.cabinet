@@ -15,7 +15,7 @@
             Ваше звернення в обробці
           </h1>
         </div>
-        <h1 class="title">Чекайте</h1>
+        <h1 class="title" style="margin: 18px 0 15px;">Чекайте</h1>
         <p class="subtitle-1">
           Ми зв'яжемося з вами, найближчим часом
         </p>

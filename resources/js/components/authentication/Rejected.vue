@@ -4,13 +4,13 @@
       <div class="rhombus-1 --grey"></div>
       <div class="rhombus-2 --grey"></div>
       <div class="rhombus-3 --grey"></div>
-        <div class="label__block-wrapper" style="min-height: 300px;">
+        <div class="label__block-wrapper">
         <div class="label__logo-wrapper">
           <div class="label__logo"></div>
         </div>
         <div class="label__hr"></div>
         <div class="label__header-wrapper">
-          <h1 class="label__header" style="margin: 10px 0 0 0;">
+          <h1 class="label__header">
             <alert-svg class="label__header-svg"></alert-svg>
             Відмовлено у використанні
           </h1>

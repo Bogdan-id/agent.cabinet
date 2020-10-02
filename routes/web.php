@@ -23,7 +23,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/verification',  function () {
     return view('verification');
-})->middleware('auth', 'dont_user_active');
+})->middleware('auth', 'dont_user_active', 'dont_banned_user');
 
 Route::get('/banned',  function () {
         return view('banned_page');
@@ -31,7 +31,7 @@ Route::get('/banned',  function () {
 
 Route::get('/finish-register', function () {
     return view('create_agent');
-})->middleware(['auth', 'user_active', 'dont_user_agent']);
+})->middleware(['auth', 'user_active', 'dont_user_agent', 'dont_banned_user']);
 
 
     

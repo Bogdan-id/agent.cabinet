@@ -10,9 +10,20 @@
       </v-card-title>
       <v-card-text 
         class="calculator-data__custom-btn-wrapper" 
-        :style="`display: flex; ${$vuetify.breakpoint.xs ? 'flex-direction: column; align-items: center;' : 'justify-content: space-around;'} margin-top: 25px;`">
-        <span style="display: inline-block; padding: 10px 0;"><v-btn @click="openDialogToSave('email')" dark color="#e94949">Вiдправити на email</v-btn></span>
-        <span style="display: inline-block; padding: 10px 0;"><v-btn @click="openDialogToSave('pdf')" dark color="#e94949">Зберегти у форматi .pdf</v-btn></span>
+        :style="`display: flex; 
+          ${$vuetify.breakpoint.xs 
+            ? 'flex-direction: column; align-items: center;' 
+            : 'justify-content: space-around;'} margin-top: 25px;`">
+        <span style="display: inline-block; padding: 10px 0;">
+          <v-btn @click="openDialogToSave('email')" dark color="#e94949">
+            Вiдправити на email
+          </v-btn>
+        </span>
+        <span style="display: inline-block; padding: 10px 0;">
+          <v-btn @click="openDialogToSave('pdf')" dark color="#e94949">
+            Зберегти у форматi .pdf
+          </v-btn>
+        </span>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -21,7 +32,12 @@
     max-width="490">
     <v-card class="graphs-to-delete">
       <v-card-title style="background: #424242; position: relative" class="white--text">
-        <v-btn @click="dialogToSend = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon color="white" v-text="'mdi-close'"></v-icon></v-btn>
+        <v-btn 
+          @click="dialogToSend = false" 
+          style="position: absolute; right: 4px; top: 6px;" 
+          icon>
+          <v-icon color="white" v-text="'mdi-close'"></v-icon>
+        </v-btn>
         {{ formatToSave === 'email' ? 'Вiдправити на email' : 'Зберегти'}}
       </v-card-title>
       <v-card-text>
@@ -29,30 +45,45 @@
           <span style="line-height: 2rem; font-size: 0.93rem; color: black;">Оберiть тип графiку</span>
         </div>
         <v-checkbox
-          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('even')"
+          v-if="currentGraphToDownload 
+            && currentGraphToDownload.result_data 
+            && currentGraphToDownload.result_data.hasOwnProperty('even')"
           value="even"
           v-model="graphName"
           color="red darken-4">
           <template v-slot:label>
-            <span :style="graphName.indexOf('even') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Класичний</span>
+            <span 
+              :style="graphName.indexOf('even') !== -1 ? 'color: black;' : ''" 
+              class="graph-label-to-download">
+              Класичний
+            </span>
           </template>
         </v-checkbox>
         <v-checkbox
-          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
+          v-if="currentGraphToDownload 
+            && currentGraphToDownload.result_data 
+            && currentGraphToDownload.result_data.hasOwnProperty('annuity')"
           v-model="graphName"
           value="annuity"
           color="red darken-4">
           <template v-slot:label>
-            <span :style="graphName.indexOf('annuity') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Ануїтет</span>
+            <span 
+              :style="graphName.indexOf('annuity') !== -1 ? 'color: black;' 
+              : ''" class="graph-label-to-download">
+              Ануїтет
+            </span>
           </template>
         </v-checkbox>
         <v-checkbox
-          v-if="currentGraphToDownload && currentGraphToDownload.result_data && currentGraphToDownload.result_data.hasOwnProperty('irregular')"
+          v-if="currentGraphToDownload 
+            && currentGraphToDownload.result_data 
+            && currentGraphToDownload.result_data.hasOwnProperty('irregular')"
           value="irregular"
           v-model="graphName"
           color="red darken-4">
           <template v-slot:label>
-            <span :style="graphName.indexOf('irregular') !== -1 ? 'color: black;' : ''" class="graph-label-to-download">Iндивiдуальний</span>
+            <span :style="graphName.indexOf('irregular') !== -1 ? 'color: black;' : ''" 
+              class="graph-label-to-download">Iндивiдуальний</span>
           </template>
         </v-checkbox>
         <v-text-field 
@@ -66,16 +97,32 @@
           outlined dense>
         </v-text-field>
         <v-divider class="mt-0"></v-divider>
-        <v-btn 
-          style="border-radius: 0; text-transform: capitalize; border-color: rgb(224, 77, 69); font-size: 1rem; color: white;"
-          class="send-graph-btn"
-          @click="sendGraph()" 
-          color="#e04d45"
-          :loading="loading"
-          :disabled="graphName.length === 0"
-          >
-          {{ formatToSave === 'email' ? 'Вiдправити' : 'Зберегти' }}
-        </v-btn>
+        <v-card-actions>
+          <v-btn 
+            style="border-radius: 0; 
+              text-transform: capitalize; 
+              border-color: rgb(224, 77, 69); 
+              font-size: 1rem; color: white;"
+            class="send-graph-btn"
+            @click="sendGraph()" 
+            color="#e04d45"
+            :loading="loading"
+            :disabled="graphName.length === 0">
+            {{ formatToSave === 'email' ? 'Вiдправити' : 'Зберегти' }}
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-checkbox
+            @change="toggleAdvance()"
+            v-model="withoutAdvance"
+            label="Приховати аванс"
+            :true-value="true"
+            :false-value="false"
+            :disabled="graphName.length === 0"
+            color="grey darken-4"
+            dense
+            hide-details>
+          </v-checkbox>
+        </v-card-actions>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -85,7 +132,11 @@
     <v-card>
       <v-card-title style="background: #424242; position: relative" class="white--text">
         Заявка на лiзинг
-        <v-btn @click="leasingApplicationForm = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
+        <v-btn @click="leasingApplicationForm = false" 
+        style="position: absolute; right: 4px; top: 6px;" 
+        icon>
+        <v-icon v-text="'mdi-close'" color="white"></v-icon>
+      </v-btn>
       </v-card-title>
       <div class="complete-reg-form__title title">
         <div class="complete-reg-form__title-logo"></div>
@@ -99,9 +150,30 @@
               v-model="selectedGraph" 
               :error-messages="selectedGraphErr"
               :column="$vuetify.breakpoint.xs" :dense="$vuetify.breakpoint.xs">
-              <v-radio class="pl-2" v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('even')" label="Класичний" value="even"></v-radio>
-              <v-radio class="pl-2" v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('annuity')"  label="Ануїтет" value="annuity"></v-radio>
-              <v-radio class="pl-2" v-if="graphType && graphType.result_data && graphType.result_data && graphType.result_data.hasOwnProperty('irregular')"  label="Індивідуальний" value="irregular"></v-radio>
+              <v-radio class="pl-2" 
+                v-if="graphType 
+                  && graphType.result_data 
+                  && graphType.result_data 
+                  && graphType.result_data.hasOwnProperty('even')" 
+                label="Класичний" 
+                value="even">
+              </v-radio>
+              <v-radio class="pl-2" 
+                v-if="graphType 
+                  && graphType.result_data 
+                  && graphType.result_data 
+                  && graphType.result_data.hasOwnProperty('annuity')"  
+                label="Ануїтет" 
+                value="annuity">
+              </v-radio>
+              <v-radio class="pl-2" 
+                v-if="graphType 
+                  && graphType.result_data 
+                  && graphType.result_data 
+                  && graphType.result_data.hasOwnProperty('irregular')"  
+                label="Індивідуальний" 
+                value="irregular">
+              </v-radio>
             </v-radio-group>
           </v-col>
           <v-row>
@@ -358,7 +430,11 @@
     <v-card>
       <v-card-title style="color: white; background: #424242; position: relative">
         Видалення
-        <v-btn @click="deleteCalculationDialog = false" style="position: absolute; right: 4px; top: 6px;" icon><v-icon v-text="'mdi-close'" color="white"></v-icon></v-btn>
+        <v-btn 
+          @click="deleteCalculationDialog = false" 
+          style="position: absolute; right: 4px; top: 6px;" 
+          icon><v-icon v-text="'mdi-close'" color="white"></v-icon>
+        </v-btn>
       </v-card-title>
       <v-card-text>
         <div style="line-height: 1.5rem; font-size: 1.15rem; padding: 35px 10px 25px 10px; color: black">
@@ -564,6 +640,10 @@ export default {
     emailToSend: null,
     graphObj: null,
     dialogToSwitchBetweenTypesOfSave: false,
+
+    withoutAdvance: false,
+    objToEmail: null,
+    shiftedArr: [],
 
     select: selectItems,
     leasingApplicationForm: false,
@@ -782,21 +862,6 @@ export default {
               text: `${error.response.data.message || error.response.data.errors[0].msg}`,
             })
           })
-          // .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
-          // .then(response => {
-          //   this.edrpouLoading = false
-          //   if(response.status === 200 && response.data.companyShortName) {
-          //     this.legalInfo.companyName = response.data.companyShortName
-          //   } else if (response.data.status !== 200) {
-          //     this.getEdrpouErrorHandler(response.data.status)
-          //   }
-          // })
-          // .catch(error => {
-          //   this.$catchStatus(error.response.status)
-          //   console.log(error.response)
-          //   this.getEdrpouErrorHandler(error.response.status)
-          //   this.edrpouLoading = false
-          // })
       } else return
     },
     getEdrpouErrorHandler(status) {
@@ -819,6 +884,11 @@ export default {
           text: `Зверніться в технічну підтримку`,
         })
       }
+    },
+    toggleAdvance() {
+      let temp = this.currentGraphToDownload.result_data
+      this.objToEmail = this.$toggleAdvance(temp, this.withoutAdvance).objToEmail
+      this.shiftedArr = this.$toggleAdvance(temp, this.withoutAdvance).shiftedArr
     },
     deleteDoc(property, key) {
       let index = this.documentUrls[property]
@@ -1211,7 +1281,7 @@ export default {
         }
     },
     sendGraph() {
-      let graphs = this.currentGraphToDownload.result_data
+      let graphs = this.objToEmail || this.currentGraphToDownload.result_data
       let graph = graphs[Object.keys(graphs)[0] !== 'requestId' ? Object.keys(graphs)[0] : Object.keys(graphs)[1]]
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload

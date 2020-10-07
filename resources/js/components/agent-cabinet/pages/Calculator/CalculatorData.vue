@@ -1315,9 +1315,13 @@ export default {
           dataToSave[val] = graphs[val]
           dataToSave[val].agg = {}
           dataToSave[val].agg['avg'] = graphs[val]['offer-month-payment']
-          dataToSave[val].agg['payment-principal'] = graphs[val]['total-payment-principal']
           dataToSave[val].agg['interest'] = graphs[val]['total-interest']
-          dataToSave[val].agg['payment'] = graphs[val]['total-payment']
+          dataToSave[val].agg['payment-principal'] = this.objToEmail 
+            ? graphs[val]['total-payment-principal'] - dataToSave.prepaid
+            : graphs[val]['total-payment-principal']
+          dataToSave[val].agg['payment'] = this.objToEmail 
+            ? graphs[val]['total-payment'] - dataToSave.prepaid
+            : graphs[val]['total-payment']
         })
       !this.$v.$invalid
         ? this.sendData(dataToSave)

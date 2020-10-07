@@ -709,21 +709,7 @@ export default {
               text: `${error.response.data.message || error.response.data.errors[0].msg}`,
             })
           })
-          // .get(`/leasing-reqeust/company/${this.legalInfo.edrpou}`)
-          // .then(response => {
-          //   this.edrpouLoading = false
-          //   if(response.status === 200 && response.data.companyShortName) {
-          //     this.legalInfo.companyName = response.data.companyShortName
-          //   } else if (response.data.status !== 200) {
-          //     this.getEdrpouErrorHandler(response.data.status)
-          //   }
-          // })
-          // .catch(error => {
-          //   this.$catchStatus(error.response.status)
-          //   console.log(error.response)
-          //   this.getEdrpouErrorHandler(error.response.status)
-          //   this.edrpouLoading = false
-          // })
+          
       } else return
     },
     getEdrpouErrorHandler(status) {
@@ -829,9 +815,13 @@ export default {
           dataToSave[val] = graphs[val]
           dataToSave[val].agg = {}
           dataToSave[val].agg['avg'] = graphs[val]['offer-month-payment']
-          dataToSave[val].agg['payment-principal'] = graphs[val]['total-payment-principal']
           dataToSave[val].agg['interest'] = graphs[val]['total-interest']
-          dataToSave[val].agg['payment'] = graphs[val]['total-payment']
+          dataToSave[val].agg['payment-principal'] = this.objToEmail 
+            ? graphs[val]['total-payment-principal'] - dataToSave.prepaid
+            : graphs[val]['total-payment-principal']
+          dataToSave[val].agg['payment'] = this.objToEmail 
+            ? graphs[val]['total-payment'] - dataToSave.prepaid
+            : graphs[val]['total-payment']
         })
 
       if(this.formatToSave === 'email') dataToSave.email = this.emailToSend

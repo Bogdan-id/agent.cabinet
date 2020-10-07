@@ -101,9 +101,32 @@ Vue.prototype.$setRoute = () => {
 
     localStorage.setItem('route', routeName)
   }, 0)
-  
-
 }
+
+Vue.prototype.$toggleAdvance = (object, state) => {
+  let temp = object
+  let avoid = 'requestId'
+
+  let objToEmail = JSON.parse(JSON.stringify(temp))
+  let shiftedArr = []
+
+  if(state) {
+    Object.keys(objToEmail).forEach((v, i) => {
+      if(v !== avoid) shiftedArr[i] = objToEmail[v].graph.shift()
+    }) 
+
+  } else {
+    Object.keys(objToEmail).forEach((v, i) => {
+      if(v !== avoid) shiftedArr.length > 0 
+        ? objToEmail[v].graph.unshift(shiftedArr[i]) 
+        : false
+    }) 
+
+    objToEmail = null
+  }
+
+  return {objToEmail, shiftedArr}
+},
 
 new Vue({
 	store,

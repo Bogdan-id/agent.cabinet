@@ -17,6 +17,7 @@ use App\Repositories\CalculationRepository;
 use App\Models\Calculation;
 use App\Http\Requests\CalculateRequest;
 use App\Mail\OfferPdfMail;
+use App\Mail\CopyOfferPdfMail;
 use Mail;
 use App\Models\Agent;
 
@@ -147,6 +148,9 @@ class CalculateController extends Controller
         if(array_key_exists('email', $data)){
             $mpdf->Output("pdf/{$data['fileName']}", 'F');
             Mail::to($data['email'])->send(new OfferPdfMail($data, $data['fileName']));
+            if($agent->manager){
+                Mail::to($agent->manager->email)->send(new CopyOfferPdfMail($data, $data['fileName']));
+            }
             unlink(public_path("pdf/{$data['fileName']}"));
         }else{
             $mpdf->Output($data['fileName'], 'D');

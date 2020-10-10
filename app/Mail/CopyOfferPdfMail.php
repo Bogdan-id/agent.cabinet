@@ -42,7 +42,7 @@ class CopyOfferPdfMail extends Mailable
                         'mime' => 'application/pdf',
                     ])
                     ->with([
-                        'fio' => "{$agent->first_name} {$agent->last_name} {$agent->patronymic}", 
+                        'fio' => "{$agent->name}", 
                         'client_email' => $this->data['email']
                     ]);
     }

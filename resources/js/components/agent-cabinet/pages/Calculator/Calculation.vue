@@ -485,17 +485,20 @@
                 <div class="pb-1">
                   <span class="section-title" style="white-space: nowrap">Термiн фiнансування</span>
                 </div>
-                <v-select
+                <v-text-field
                   v-model="calcObj.leasingTerm"
                   :error-messages="leasingTermErr"
-                  :items="[12, 24, 36, 48, 60]"
+                  @mouseout="validateLeasingTerm()"
+                  @blur="validateLeasingTerm()"
+                  @input="keepOnlyDigits()"
+                  id="leasing-term"
                   color="red darken-4"
                   itemColor="red darken-4"
                   outlined :dense="mediumAndDown">
                   <template v-slot:append>
                     <span class="leasing-term-append-label">мiс</span>
                   </template>
-                </v-select>
+                </v-text-field>
               </v-col>
               <v-col 
                 :class="`pt-0 pb-0 ${mediumAndDown 
@@ -1282,6 +1285,39 @@ export default {
   },
 
   methods: {
+    validateLeasingTerm() {
+      let el = document.getElementById('leasing-term')
+      let e = new Event('blur', {bubbles: true})
+      let val = el.value
+      if(val > 60) {
+        this.calcObj.leasingTerm = 60
+        el.value = 60
+        el.dispatchEvent(e)
+      } else if(val < 12) {
+        this.calcObj.leasingTerm = 12
+        el.value = 12
+        el.dispatchEvent(e)
+      }
+    },
+    keepOnlyDigits() {
+      let el = document.getElementById('leasing-term')
+      let e = new Event('input', {bubbles: true})
+
+      let val = parseInt(el.value
+        .toString()
+        .replace(/[^\d]/g, ''))
+
+      let isNan = Number.isNaN(+el.value)
+      if(el.value && val !== +el.value) {
+        this.calcObj.leasingTerm = val
+        el.value = val
+        el.dispatchEvent(e)
+      } else if(isNan && !Number.isNaN(el.value)) {
+        this.calcObj.leasingTerm = ""
+        el.value = ""
+        el.dispatchEvent(e)
+      }
+    },
     closeAutocompletes() {
       this.$refs.markAutocomplete.blur();
       this.$refs.modelAutocomplete.blur();
@@ -1712,7 +1748,7 @@ export default {
 		syncValue(val, dataSelector) {
 			switch(dataSelector) {
 				case 'advance-payment': this.calcObj.advance = val; break
-				case 'leasing-term': this.calcObj.leasingTerm = val; break
+				// case 'leasing-term': this.calcObj.leasingTerm = val; break
 			}
 		},
 

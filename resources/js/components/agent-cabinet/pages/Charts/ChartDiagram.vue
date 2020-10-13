@@ -78,12 +78,9 @@
                       </span>
                     </template>
                     <template v-slot:item.offer_advance="{ item }">
-                      <span v-if="item.result_data.annuity">
-                        {{ 
-                          item.result_data.annuity['offer-advance']
-                            .toLocaleString()
-                            .replace(/,/g, ' ')
-                        }}
+                      <span 
+                        v-if="item.result_data.annuity"
+                        v-html="offerAdvance(item.request_data.advance, item.result_data.annuity['offer-advance'])">
                       </span>
                     </template>
                     <template v-slot:item.offer_month_payment="{ item }">
@@ -96,8 +93,9 @@
                       </span>
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
-                      <span v-if="item.result_data.annuity">
-                        {{ (item.result_data.annuity['offer-administrative-payment-per'] * 100).toFixed(2) }}
+                      <span 
+                        v-if="item.result_data.annuity"
+                        v-html="oneTimeCommision(item.result_data.annuity)">
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">
@@ -301,12 +299,9 @@
                       </span>
                     </template>
                     <template v-slot:item.offer_advance="{ item }">
-                      <span v-if="item.result_data.even">
-                        {{ 
-                          item.result_data.even['offer-advance']
-                            .toLocaleString()
-                            .replace(/,/g, ' ')
-                        }}
+                      <span 
+                        v-if="item.result_data.even"
+                        v-html="offerAdvance(item.request_data.advance, item.result_data.even['offer-advance'])">
                       </span>
                     </template>
                     <template v-slot:item.offer_month_payment="{ item }">
@@ -318,8 +313,9 @@
                       </span>
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
-                      <span v-if="item.result_data.even">
-                        {{ (item.result_data.even['offer-administrative-payment-per'] * 100).toFixed(2) }}
+                      <span 
+                        v-if="item.result_data.even"
+                        v-html="oneTimeCommision(item.result_data.even)">
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">
@@ -521,12 +517,9 @@
                       </span>
                     </template>
                     <template v-slot:item.offer_advance="{ item }">
-                      <span v-if="item.result_data.irregular">
-                        {{ 
-                          item.result_data.irregular['offer-advance']
-                            .toLocaleString()
-                            .replace(/,/g, ' ')
-                        }}
+                      <span 
+                        v-if="item.result_data.irregular"
+                        v-html="offerAdvance(item.request_data.advance, item.result_data.irregular['offer-advance'])">
                       </span>
                     </template>
                     <template v-slot:item.offer_month_payment="{ item }">
@@ -539,8 +532,9 @@
                       </span>
                     </template>
                     <template v-slot:item.one_time_commission="{ item }">
-                      <span v-if="item.result_data.irregular">
-                        {{ (item.result_data.irregular['offer-administrative-payment-per'] * 100).toFixed(2) }}
+                      <span 
+                        v-if="item.result_data.irregular"
+                        v-html="oneTimeCommision(item.result_data.irregular)">
                       </span>
                     </template>
                     <template v-slot:item.offer_rest="{ item }">
@@ -712,10 +706,10 @@ export default {
       { text: 'Предмет лiзингу', value: 'actions', align: 'center', sortable: false},
       { text: 'Вартiсть предмета лiзингу, грн', value: 'offerPriceNetto', align: 'end', sortable: false},
       { text: 'Вартість предмета лiзингу з реєстрацією, грн', value: 'offer_price_brutto', align: 'end', sortable: false },
-      { text: 'Авансовий платiж, грн', value: 'offer_advance', align: 'center', sortable: false},
+      { text: 'Авансовий платiж', value: 'offer_advance', align: 'center', sortable: false},
       { text: 'Термiн лiзингу, мiс', value: 'request_data.leasingTerm', align: 'end', sortable: false },
       { text: 'Валюта фiнансування', value: 'request_data.currency', align: 'end', sortable: false },
-      { text: 'Єдиноразова комiсiя, %', value: 'one_time_commission', align: 'end', sortable: false},
+      { text: 'Єдиноразова комiсiя', value: 'one_time_commission', align: 'end', sortable: false},
       { text: 'Залишкова вартiсть, грн', value: 'offer_rest', align: 'end', sortable: false },
       { text: 'Середньомiсячний платiж, грн', value: 'offer_month_payment', align: 'end', sortable: false },
     ],
@@ -736,6 +730,20 @@ export default {
       if(data.result_data.hasOwnProperty('annuity')) { this.annuity = data.result_data.annuity.graph}
       if(data.result_data.hasOwnProperty('irregular')) this.irregular = data.result_data.irregular.graph
       if(data.result_data.hasOwnProperty('even')) this.even = data.result_data.even.graph
+    },
+    oneTimeCommision(item) {
+      return `${
+        (item['offer-administrative-payment-per'] * 100).toFixed(2) + '%' 
+        + ` <span style="${this.amountStl}">
+        (${(item['offer-price-brutto'] / 100 * 
+        (item['offer-administrative-payment-per'] * 100)).toFixed(2)} грн)</span>`}`
+    },
+    offerAdvance(advance, offerAdvance) {
+      return `
+        ${advance || 0}% 
+        <span style="${this.amountStl}">(${offerAdvance
+          .toLocaleString()
+          .replace(/,/g, ' ')} грн)</span>`
     },
     changeActive() {
      
@@ -772,10 +780,14 @@ export default {
     },
     hasEven() {
       return this.even.length > 0
+    },
+    amountStl() {
+      return 'font-size: 0.8rem; font-weight: 400;'
     }
   },
   mounted() {
     this.graphData = this.$route.params.data
+    console.log(this.graphData)
     let firstGraphFromArray = Object.keys(this.graphData.result_data).filter(val => {
         if(val !== 'requestId') {
           return val
@@ -787,8 +799,6 @@ export default {
       .sort((a, b) => {
         return parseInt(a) - parseInt(b)
       })
-    console.log(firstGraphFromArray)
-    console.log(firstGraphFromArray[0])
     this.addObjects(this.graphData)
     this.currentTab = firstGraphFromArray[0]
     this.changeActive()

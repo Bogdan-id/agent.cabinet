@@ -6,6 +6,8 @@ const legalDocs = [
   {text: 'Наказ про призначення керівника (підписанта)', prop: 'orders'},
   {text: 'Паспорт / ID-карта керівника (підписанта)', prop: 'passports'},
   {text: 'Довідка про присвоєння ІПН керівника (підписанта)', prop: 'taxNumbers'},
+  {text: "Специфікація", prop: "specification"},
+  {text: "Анкета", prop: "questionnaire"}
 ]
 const personDocs = [
   {text: 'Паспорт громадянина України / ID-карта', prop: 'passports'},
@@ -13,6 +15,8 @@ const personDocs = [
   {text: 'Довідка про заробітну плату', prop: 'salary_certificates'},
   {text: 'Паспорт дружини (чоловіка) позичальника', prop: 'relatives_passports'},
   {text: 'Довідка про фінансові документи', prop: 'referenceOfFinancialDocuments'},
+  {text: "Специфікація", prop: "specification"},
+  {text: "Анкета", prop: "questionnaire"}
 ]
 
 export { legalDocs, personDocs }

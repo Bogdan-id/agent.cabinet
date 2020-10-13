@@ -66,17 +66,30 @@
       page-break-after: avoid;
     }
 
-    @page {
+    @page :first {
       header: page-header;
       footer: page-footer;
+      margin-footer: 8mm;
+    }
+
+    @page {
+      footer: page-number;
       margin-footer: 4mm;
     }
   </style>
 </head>
 <body>
 <htmlpagefooter name="page-footer">
-  <div style="text-align: center; font-size: 0.95rem; color: #5f6368">
-    <span style="color: #800000;">(044) 359 0 399</span>
+  <div style="text-align: center; font-size: 0.8rem; color: #5f6368">
+    <span style="font-size: 0.9rem; color: black;">Ваш менеджер:</span><br />
+    <span style="color: #800000;">{{ $manager['name'] }}</span><br />
+    <span style="color: #800000;">{{ $manager['email'] }}</span><br />
+    <span style="color: #800000;">{{ $manager['phone'] }}</span><br />
+  </div>
+</htmlpagefooter>
+<htmlpagefooter name="page-number">
+  <div style="text-align: center; font-size: 0.8rem; color: #5f6368">
+    <span style="color: #800000;"><span style="color: black;">Тел.</span> {{ $manager['phone'] }}</span>
   </div>
 </htmlpagefooter>
 @if($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ')

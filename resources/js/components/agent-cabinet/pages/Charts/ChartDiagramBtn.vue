@@ -790,6 +790,7 @@ export default {
       let rootCalcData = this.currentGraphToDownload
 
       let dataToSave = {
+        manager: this.$store.state.user.agent.manager,
         agentId: this.$store.state.user.agent.id,
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,

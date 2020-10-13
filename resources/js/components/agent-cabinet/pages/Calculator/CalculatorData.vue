@@ -949,7 +949,8 @@ export default {
       this.formatToSave = format
       this.dialogToSend = true
       this.currentGraphToDownload = this.graphObj
-      console.log(this.currentGraphToDownload)
+      // console.log(this.$store.state.user.agent)
+      // console.log(this.currentGraphToDownload)
     },
     openDeleteCalculationDialog(id) {
       this.deleteCalculationDialog = true
@@ -1285,9 +1286,9 @@ export default {
       let graph = graphs[Object.keys(graphs)[0] !== 'requestId' ? Object.keys(graphs)[0] : Object.keys(graphs)[1]]
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
-      // const [year, month, day] = this.currentGraphToDownload.created_at.substring(0, 10).split('-')
 
       let dataToSave = {
+        manager: this.$store.state.user.agent.manager,
         agentId: this.$store.state.user.agent.id,
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,

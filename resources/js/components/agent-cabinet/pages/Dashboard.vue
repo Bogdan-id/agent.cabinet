@@ -481,7 +481,7 @@ export default {
       return this.$store.state.agentData
     },
     hasUserManager() {
-      if(!this.$store.state.user.agent) return false
+      if(!this.$store.state?.user?.agent) return false
       return this.$store.state.user.agent.manager_id !== null
     },
     mdAndDown() {

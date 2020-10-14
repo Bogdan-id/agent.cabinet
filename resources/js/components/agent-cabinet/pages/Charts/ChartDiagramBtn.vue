@@ -68,9 +68,21 @@
           @blur="$v.emailToSend.$touch()"
           :error-messages="emailToSendErr"
           v-model="emailToSend"
+          color="black"
           label="Email"
           outlined dense>
         </v-text-field>
+        <!-- accept="" -->
+        <v-file-input
+          v-if="formatToSave === 'email'"
+          v-model="embededFilesToEmail"
+          class="email-embed-file"
+          :show-size="true"
+          label="Додати файли"
+          color="black"
+          item-color="black"
+          counter multiple small-chips>
+        </v-file-input>
         <v-divider class="mt-0"></v-divider>
         <v-card-actions>
           <v-btn 
@@ -476,6 +488,7 @@ export default {
     withoutAdvance: false,
     objToEmail: null,
     shiftedArr: [],
+    embededFilesToEmail: null,
     rules: [
       value => {
         if(value.length === 0) return true

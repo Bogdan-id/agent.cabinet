@@ -463,7 +463,7 @@
                   </span>
                   <div v-if="v === middleOfAdvanceRange" style="position: absolute; top: -34px;">
                     <div class="range-black-dot">
-                      <advance-hint style="position: absolute; right: -61px; margin-right: 1px; color: black; transform: translateX(-50%)"></advance-hint>
+                      <!-- <advance-hint style="position: absolute; right: -61px; margin-right: 1px; color: black; transform: translateX(-50%)"></advance-hint> -->
                       <div class="arrow-directions-wrapper">
                         <div class="arrow-directions-content">
                           <div :class="calcObj.advance <= 29 ? 'range-active-label' : ''" :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">

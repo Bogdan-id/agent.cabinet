@@ -329,7 +329,6 @@
           <v-checkbox
             :disabled="calcObj.leasingAmount === null || calcObj.leasingAmount === ''"
             v-model="discountPrice"
-            
             :value="true"
             :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 pt-0 white--text`"
             style="display: inline-block;"
@@ -349,18 +348,29 @@
             dark :dense="mediumAndDown">
           </v-checkbox>
         </v-col>
-        <v-col :class="`${mediumAndDown ? 'pb-0 pt-0' : ''}`" cols="12" md="4" sm="6" xs="12" v-if="discountPrice && calcObj.leasingAmount !== ''">
+        <v-col 
+          :class="`${mediumAndDown ? 'pb-0 pt-0' : ''}`" 
+          cols="12" md="4" sm="6" xs="12" 
+          v-if="discountPrice && calcObj.leasingAmount !== ''">
           <v-text-field
             id="discount-price"
             :error-messages="leasingAmountDkpErr"
             @input="
-            $v.calcObj.leasingAmountDkp.$touch();
-              amountToLocalStr('discount-price')"
+              maskToModel('discount-price', 15, 0, 'input');
+              keepOnlyDigits('discount-price');
+              $v.calcObj.leasingAmountDkp.$touch();"
             @blur="$v.calcObj.leasingAmountDkp.$touch()"
-            v-model="calcObj.leasingAmountDkp"
+            v-model="leasingAmountDkp"
             background-color="white"
+            label="знижка (%)"
             color="red darken-4"
             outlined :dense="mediumAndDown">
+            <template #append>
+              <span 
+                style="color: black; margin-top: 4px; white-space: nowrap;">
+                {{ leasingAmountDkp ? toSum() : 0 || calcObj.leasingAmountDkp }}
+              </span>
+            </template>
           </v-text-field>
         </v-col>
       </v-row>
@@ -479,7 +489,6 @@
             </div>
               </v-col>
             </v-row>
-
             <v-row>
               <v-col :class="`pb-0 pt-0 ${mediumAndDown ? '' : 'mt-6'} leasing-term-sm`" cols="12" md="4" xs="12" sm="5">
                 <div class="pb-1">
@@ -488,9 +497,9 @@
                 <v-text-field
                   v-model="calcObj.leasingTerm"
                   :error-messages="leasingTermErr"
-                  @mouseout="validateLeasingTerm()"
-                  @blur="validateLeasingTerm()"
-                  @input="keepOnlyDigits()"
+                  @mouseout="maskToModel('leasing-term', 60, 12, 'blur')"
+                  @blur="maskToModel('leasing-term', 60, 12, 'blur')"
+                  @input="keepOnlyDigits('leasing-term')"
                   id="leasing-term"
                   color="red darken-4"
                   itemColor="red darken-4"
@@ -869,6 +878,7 @@ export default {
     falsyLeasedAssertModel: null,
 
     category: null,
+    leasingAmountDkp: null,
 
     brandItems: [],
     modelItems: [],
@@ -1285,22 +1295,36 @@ export default {
   },
 
   methods: {
-    validateLeasingTerm() {
-      let el = document.getElementById('leasing-term')
-      let e = new Event('blur', {bubbles: true})
+    maskToModel(id, maxVal, minVal, event) {
+      let el = document.getElementById(id)
+      let e = new Event(event, {bubbles: true})
       let val = el.value
-      if(val > 60) {
-        this.calcObj.leasingTerm = 60
-        el.value = 60
+
+      if(val > maxVal) {
+        this.switchModel(id, maxVal)
+        el.value = maxVal
         el.dispatchEvent(e)
-      } else if(val < 12) {
-        this.calcObj.leasingTerm = 12
-        el.value = 12
+
+      } else if(val < minVal) {
+        this.switchModel(id, minVal)
+        el.value = minVal
         el.dispatchEvent(e)
       }
     },
-    keepOnlyDigits() {
-      let el = document.getElementById('leasing-term')
+
+    toSum() {
+      if(!this.leasingAmountDkp) return
+
+      let leasingAmount = parseInt(this.calcObj.leasingAmount.replace(/\s/g, ''))
+      let leasingAmountDkp = parseInt(this.leasingAmountDkp)
+
+      return this.$formatSum(
+        (leasingAmount - ((leasingAmount / 100) * leasingAmountDkp)).toFixed()
+      )
+    },
+
+    keepOnlyDigits(id) {
+      let el = document.getElementById(id)
       let e = new Event('input', {bubbles: true})
 
       let val = parseInt(el.value
@@ -1308,16 +1332,25 @@ export default {
         .replace(/[^\d]/g, ''))
 
       let isNan = Number.isNaN(+el.value)
-      if(el.value && val !== +el.value) {
-        this.calcObj.leasingTerm = val
-        el.value = val
+      if(el.value && val !== +el.value && !isNan) {
+        this.switchModel(id, val)
         el.dispatchEvent(e)
+        el.value = val
       } else if(isNan && !Number.isNaN(el.value)) {
-        this.calcObj.leasingTerm = ""
+        this.switchModel(id, val)
         el.value = ""
         el.dispatchEvent(e)
       }
     },
+
+    switchModel(id, val) {
+      if(id === 'leasing-term') {
+        this.calcObj.leasingTerm = val
+      } else if(id === 'discount-price') {
+        this.leasingAmountDkp = val
+      }
+    },
+
     closeAutocompletes() {
       this.$refs.markAutocomplete.blur();
       this.$refs.modelAutocomplete.blur();
@@ -1419,49 +1452,21 @@ export default {
 
     amountToLocalStr(id) {
       let el = document.getElementById(id)
-      let discountPriceEl = document.getElementById('discount-price')
       let inputEvent = new Event('input', {bubbles: true})
-      let temp = parseInt(el.value.replace(/\s/g, '' ))
-        .toLocaleString()
-        .replace(/,/g, ' ')
+      let temp = parseInt(el.value.replace(/\s/g, '' )).toLocaleString('ru')
       let tempWithoutSpaces = parseInt(temp.replace(/[^\d]/g, ''))
-      if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
 
+      if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
         if(id === 'discount-price' && this.calcObj.leasingAmount) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
           }
-
-        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
-          if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
-            this.calcObj.leasingAmountDkp = temp
-          }
-        }
+        } 
         el.value = temp
         el.dispatchEvent(inputEvent)
-
       } else if(el.value != temp.replace(/[^\d ]/g, '') && Number.isNaN(parseInt(temp))) {
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
-
-      } else {
-        if(id === 'discount-price' && this.calcObj.leasingAmount) {
-
-          if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
-            discountPriceEl.value = this.calcObj.leasingAmount
-            discountPriceEl.dispatchEvent(inputEvent)
-          } 
-
-        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
-          if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
-            discountPriceEl.value = this.calcObj.leasingAmount
-            discountPriceEl.dispatchEvent(inputEvent)
-
-          } else if (this.calcObj.leasingAmount === '') {
-            discountPriceEl.value = ''
-            discountPriceEl.dispatchEvent(inputEvent)
-          }
-        }
       }
     },
 
@@ -1893,9 +1898,14 @@ export default {
         delete this.calcObj.paymentPf
         Object.assign(this.calcObj, data)
 
-        this.calcObj.leasingAmountDkp = this.setIndentation(this.calcObj.leasingAmountDkp)
         this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
+
+        if(this.calcObj.leasingAmountDkp) {
+          let leasingAm = parseInt(this.calcObj.leasingAmount.replace(/\s/g, ''))
+          let leasingAmDkp = parseInt(this.calcObj.leasingAmountDkp.replace(/\s/g, ''))
+          this.leasingAmountDkp = 100 - (leasingAmDkp / leasingAm * 100)
+        }
         
         if(this.calcObj.leasingObjectType.value !== 11) {
           this.getMarksByType()
@@ -1927,6 +1937,9 @@ export default {
   },
 
   watch: {
+    leasingAmountDkp() {
+      this.calcObj.leasingAmountDkp = this.toSum()
+    },
     'calcObj.leasingAmountDkp': function (val) {
       if(val) this.discountPrice = true
     },

@@ -461,10 +461,10 @@
                     :style="`color: ${calcObj.advance == ((v - 1) * advanceRangeCell) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.78rem' : '0.725rem'}`">
                       {{ (v - 1) * advanceRangeCell + '%' }}
                   </span>
-                  <div v-if="v === middleOfAdvanceRange" style="position: absolute; top: -34px;">
-                    <div class="range-black-dot">
+                  <!-- <div v-if="v === middleOfAdvanceRange" style="position: absolute; top: -34px;"> -->
+                    <!-- <div class="range-black-dot"> -->
                       <!-- <advance-hint style="position: absolute; right: -61px; margin-right: 1px; color: black; transform: translateX(-50%)"></advance-hint> -->
-                      <div class="arrow-directions-wrapper">
+                      <!-- <div class="arrow-directions-wrapper">
                         <div class="arrow-directions-content">
                           <div :class="calcObj.advance <= 29 ? 'range-active-label' : ''" :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
                             <span style="white-space: nowrap; transition: color 0.4s">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
@@ -478,13 +478,25 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </div> -->
+                  <!-- </div> -->
                 </div>
                 <div
                   :style="`position: absolute; right:${xs ? '-20px;' : '-19px;'} ; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.78rem' : '0.725rem'}`">
                   {{ `70%` }}
                 </div>
+              </div>
+              <div style="text-align: center; margin-top: 4.2rem; position: relative;">
+                <v-scale-transition>
+                  <div style="position: absolute; width: 100%;" v-show="!showDocLabel">
+                    <span class="doc-label">БЕЗ ФIНАНСОВИХ ДОКУМЕНТIВ</span>
+                  </div>
+                </v-scale-transition>
+                <v-scale-transition>
+                  <div style="position: absolute; width: 100%;" v-show="showDocLabel">
+                    <span class="doc-label">З ФIНАНСОВИМИ ДОКУМЕНТАМИ</span>
+                  </div>
+                </v-scale-transition>
               </div>
             </div>
               </v-col>
@@ -849,7 +861,6 @@ import Cargo from '../../assets/svg-icons/cargo.vue'
 import Bus from '../../assets/svg-icons/bus.vue'
 import Trailer from '../../assets/svg-icons/trailer.vue'
 import Percent from '../../assets/svg-icons/percent'
-import advanceHint from '../../assets/svg-icons/avans-hint'
 
 export default {
   mixins: [validationMixin],
@@ -861,8 +872,7 @@ export default {
     Bus,
     Cargo,
     Trailer,
-    Percent,
-    advanceHint
+    Percent
   },
   data:() => ({
     franchiseDisabled: false,
@@ -876,6 +886,8 @@ export default {
     modelLoader: false,
     calculationLoader: false,
     falsyLeasedAssertModel: null,
+
+    dollarRate: null,
 
     category: null,
     leasingAmountDkp: null,
@@ -946,6 +958,25 @@ export default {
   },
 
   computed: {
+    showDocLabel() {
+      return this.calcObj.advance < 30 || (this.formForFinDoc &&  this.formForFinDoc.doc)
+    },
+    formForFinDoc() {
+      let leasingAmount = this.calcObj.leasingAmount
+      let leasingQuantity = this.calcObj.leasingQuantity
+      let advance = this.calcObj.advance
+
+      if(!this.fixedDollarSum || !leasingAmount || !leasingQuantity) return
+
+      let amount = parseInt(leasingAmount.replace(/\s/g, ''))
+      let finalSum = ((amount * leasingQuantity) - ((amount / 100) * advance)) + amount * 0.05
+
+      return {doc: finalSum > this.fixedDollarSum, sum: finalSum}
+    },
+    fixedDollarSum() {
+      if(!this.dollarRate) return
+      return this.dollarRate * 25000
+    },
     separateFranchise() {
       let objType = [1, 6, 5]
       let franchiseType = [3, 2]
@@ -1925,6 +1956,17 @@ export default {
       })
     },
 
+    getDollarRate() {
+      axios
+        .get('https://open-data-332145.herokuapp.com/nbu-currency')
+        .then(val => {
+          this.dollarRate = val.data
+            .find(v => v.r030 === 840).rate || 28
+          console.log(this.dollarRate)
+          console.log(this.fixedDollarSum)
+        })
+    },
+
     switchFranchiseFromRequest(value) {
       console.log({'switch-franchise': value})
       switch(value) {
@@ -1937,6 +1979,7 @@ export default {
   },
 
   watch: {
+    formForFinDoc(val) {console.log(val)},
     leasingAmountDkp() {
       this.calcObj.leasingAmountDkp = this.toSum()
     },
@@ -2113,6 +2156,7 @@ export default {
   },
 
   mounted() {
+    this.getDollarRate()
     window.addEventListener("click", this.closeAutocompletes)
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
@@ -2193,7 +2237,7 @@ export default {
     .range-black-dot {
       width: 14px;
       height: 14px;
-      background: #201600;
+      // background: #201600;
       border-radius: 100%;
       z-index: 1;
       position: relative;
@@ -2607,5 +2651,15 @@ input[type='checkbox'] {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
   padding: .5rem 1rem;
+}
+
+.doc-label {
+  color: #bc3851; 
+  font-size: 0.92rem; 
+  font-weight: 600;
+  line-height: 0.82rem;
+  border-bottom: 1px solid;
+  // left: 50%;
+  // transform: translate(-50%, 0);
 }
 </style>

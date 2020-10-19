@@ -81,6 +81,7 @@ Vue.prototype.$sortData = (items) => {
 },
 
 Vue.prototype.$formatSum = (sum) => {
+  if(!sum) return 0
   if(typeof sum === 'string') {
     return parseInt(sum
       .replace(/\s/g, '' ))

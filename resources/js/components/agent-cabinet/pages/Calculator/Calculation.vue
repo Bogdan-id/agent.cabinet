@@ -329,7 +329,6 @@
           <v-checkbox
             :disabled="calcObj.leasingAmount === null || calcObj.leasingAmount === ''"
             v-model="discountPrice"
-            
             :value="true"
             :class="`${mediumAndDown ? 'discount-price small' : 'discount-price'} mt-0 pt-0 white--text`"
             style="display: inline-block;"
@@ -349,18 +348,29 @@
             dark :dense="mediumAndDown">
           </v-checkbox>
         </v-col>
-        <v-col :class="`${mediumAndDown ? 'pb-0 pt-0' : ''}`" cols="12" md="4" sm="6" xs="12" v-if="discountPrice && calcObj.leasingAmount !== ''">
+        <v-col 
+          :class="`${mediumAndDown ? 'pb-0 pt-0' : ''}`" 
+          cols="12" md="4" sm="6" xs="12" 
+          v-if="discountPrice && calcObj.leasingAmount !== ''">
           <v-text-field
             id="discount-price"
             :error-messages="leasingAmountDkpErr"
             @input="
-            $v.calcObj.leasingAmountDkp.$touch();
-              amountToLocalStr('discount-price')"
+              maskToModel('discount-price', 15, 0, 'input');
+              keepOnlyDigits('discount-price');
+              $v.calcObj.leasingAmountDkp.$touch();"
             @blur="$v.calcObj.leasingAmountDkp.$touch()"
-            v-model="calcObj.leasingAmountDkp"
+            v-model="leasingAmountDkp"
             background-color="white"
+            label="знижка (%)"
             color="red darken-4"
             outlined :dense="mediumAndDown">
+            <template #append>
+              <span 
+                style="color: black; margin-top: 4px; white-space: nowrap;">
+                {{ leasingAmountDkp ? toSum() : 0 || calcObj.leasingAmountDkp }}
+              </span>
+            </template>
           </v-text-field>
         </v-col>
       </v-row>
@@ -451,10 +461,10 @@
                     :style="`color: ${calcObj.advance == ((v - 1) * advanceRangeCell) ? 'black; font-weight: bold;' : '#969599;' } font-size: ${xs ? '0.78rem' : '0.725rem'}`">
                       {{ (v - 1) * advanceRangeCell + '%' }}
                   </span>
-                  <div v-if="v === middleOfAdvanceRange" style="position: absolute; top: -34px;">
-                    <div class="range-black-dot">
-                      <advance-hint style="position: absolute; right: -61px; margin-right: 1px; color: black; transform: translateX(-50%)"></advance-hint>
-                      <div class="arrow-directions-wrapper">
+                  <!-- <div v-if="v === middleOfAdvanceRange" style="position: absolute; top: -34px;"> -->
+                    <!-- <div class="range-black-dot"> -->
+                      <!-- <advance-hint style="position: absolute; right: -61px; margin-right: 1px; color: black; transform: translateX(-50%)"></advance-hint> -->
+                      <!-- <div class="arrow-directions-wrapper">
                         <div class="arrow-directions-content">
                           <div :class="calcObj.advance <= 29 ? 'range-active-label' : ''" :style="`display: inline-block; margin-right: 1.2rem; text-align: right; font-size: ${xs ? '0.5rem;' : '0.7rem;'}`">
                             <span style="white-space: nowrap; transition: color 0.4s">З ФIНАНСОВИМИ</span> ДОКУМЕНТАМИ
@@ -468,34 +478,48 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </div> -->
+                  <!-- </div> -->
                 </div>
                 <div
                   :style="`position: absolute; right:${xs ? '-20px;' : '-19px;'} ; color: ${calcObj.advance == '70' ? 'black; font-weight: bold;' : '#969599;'} font-size: ${xs ? '0.78rem' : '0.725rem'}`">
                   {{ `70%` }}
                 </div>
               </div>
+              <div style="text-align: center; margin-top: 4.2rem; position: relative;">
+                <v-scale-transition>
+                  <div style="position: absolute; width: 100%;" v-show="!showDocLabel">
+                    <span class="doc-label">БЕЗ ФIНАНСОВИХ ДОКУМЕНТIВ</span>
+                  </div>
+                </v-scale-transition>
+                <v-scale-transition>
+                  <div style="position: absolute; width: 100%;" v-show="showDocLabel">
+                    <span class="doc-label">З ФIНАНСОВИМИ ДОКУМЕНТАМИ</span>
+                  </div>
+                </v-scale-transition>
+              </div>
             </div>
               </v-col>
             </v-row>
-
             <v-row>
               <v-col :class="`pb-0 pt-0 ${mediumAndDown ? '' : 'mt-6'} leasing-term-sm`" cols="12" md="4" xs="12" sm="5">
                 <div class="pb-1">
                   <span class="section-title" style="white-space: nowrap">Термiн фiнансування</span>
                 </div>
-                <v-select
+                <v-text-field
                   v-model="calcObj.leasingTerm"
                   :error-messages="leasingTermErr"
-                  :items="[12, 24, 36, 48, 60]"
+                  @mouseout="maskToModel('leasing-term', 60, 12, 'blur')"
+                  @blur="maskToModel('leasing-term', 60, 12, 'blur')"
+                  @input="keepOnlyDigits('leasing-term')"
+                  id="leasing-term"
                   color="red darken-4"
                   itemColor="red darken-4"
                   outlined :dense="mediumAndDown">
                   <template v-slot:append>
                     <span class="leasing-term-append-label">мiс</span>
                   </template>
-                </v-select>
+                </v-text-field>
               </v-col>
               <v-col 
                 :class="`pt-0 pb-0 ${mediumAndDown 
@@ -837,7 +861,6 @@ import Cargo from '../../assets/svg-icons/cargo.vue'
 import Bus from '../../assets/svg-icons/bus.vue'
 import Trailer from '../../assets/svg-icons/trailer.vue'
 import Percent from '../../assets/svg-icons/percent'
-import advanceHint from '../../assets/svg-icons/avans-hint'
 
 export default {
   mixins: [validationMixin],
@@ -849,8 +872,7 @@ export default {
     Bus,
     Cargo,
     Trailer,
-    Percent,
-    advanceHint
+    Percent
   },
   data:() => ({
     franchiseDisabled: false,
@@ -865,7 +887,10 @@ export default {
     calculationLoader: false,
     falsyLeasedAssertModel: null,
 
+    dollarRate: null,
+
     category: null,
+    leasingAmountDkp: null,
 
     brandItems: [],
     modelItems: [],
@@ -933,6 +958,25 @@ export default {
   },
 
   computed: {
+    showDocLabel() {
+      return this.calcObj.advance < 30 || (this.formForFinDoc &&  this.formForFinDoc.doc)
+    },
+    formForFinDoc() {
+      let leasingAmount = this.calcObj.leasingAmount
+      let leasingQuantity = this.calcObj.leasingQuantity
+      let advance = this.calcObj.advance
+
+      if(!this.fixedDollarSum || !leasingAmount || !leasingQuantity) return
+
+      let amount = parseInt(leasingAmount.replace(/\s/g, ''))
+      let finalSum = ((amount * leasingQuantity) - ((amount / 100) * advance)) + amount * 0.05
+
+      return {doc: finalSum > this.fixedDollarSum, sum: finalSum}
+    },
+    fixedDollarSum() {
+      if(!this.dollarRate) return
+      return this.dollarRate * 25000
+    },
     separateFranchise() {
       let objType = [1, 6, 5]
       let franchiseType = [3, 2]
@@ -1282,6 +1326,62 @@ export default {
   },
 
   methods: {
+    maskToModel(id, maxVal, minVal, event) {
+      let el = document.getElementById(id)
+      let e = new Event(event, {bubbles: true})
+      let val = el.value
+
+      if(val > maxVal) {
+        this.switchModel(id, maxVal)
+        el.value = maxVal
+        el.dispatchEvent(e)
+
+      } else if(val < minVal) {
+        this.switchModel(id, minVal)
+        el.value = minVal
+        el.dispatchEvent(e)
+      }
+    },
+
+    toSum() {
+      if(!this.leasingAmountDkp) return
+
+      let leasingAmount = parseInt(this.calcObj.leasingAmount.replace(/\s/g, ''))
+      let leasingAmountDkp = parseInt(this.leasingAmountDkp)
+
+      return this.$formatSum(
+        (leasingAmount - ((leasingAmount / 100) * leasingAmountDkp)).toFixed()
+      )
+    },
+
+    keepOnlyDigits(id) {
+      let el = document.getElementById(id)
+      let e = new Event('input', {bubbles: true})
+
+      let val = parseInt(el.value
+        .toString()
+        .replace(/[^\d]/g, ''))
+
+      let isNan = Number.isNaN(+el.value)
+      if(el.value && val !== +el.value && !isNan) {
+        this.switchModel(id, val)
+        el.dispatchEvent(e)
+        el.value = val
+      } else if(isNan && !Number.isNaN(el.value)) {
+        this.switchModel(id, val)
+        el.value = ""
+        el.dispatchEvent(e)
+      }
+    },
+
+    switchModel(id, val) {
+      if(id === 'leasing-term') {
+        this.calcObj.leasingTerm = val
+      } else if(id === 'discount-price') {
+        this.leasingAmountDkp = val
+      }
+    },
+
     closeAutocompletes() {
       this.$refs.markAutocomplete.blur();
       this.$refs.modelAutocomplete.blur();
@@ -1383,49 +1483,21 @@ export default {
 
     amountToLocalStr(id) {
       let el = document.getElementById(id)
-      let discountPriceEl = document.getElementById('discount-price')
       let inputEvent = new Event('input', {bubbles: true})
-      let temp = parseInt(el.value.replace(/\s/g, '' ))
-        .toLocaleString()
-        .replace(/,/g, ' ')
+      let temp = parseInt(el.value.replace(/\s/g, '' )).toLocaleString('ru')
       let tempWithoutSpaces = parseInt(temp.replace(/[^\d]/g, ''))
-      if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
 
+      if(el.value !== temp && !Number.isNaN(parseInt(temp))) {
         if(id === 'discount-price' && this.calcObj.leasingAmount) {
           if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
             temp = this.calcObj.leasingAmount
           }
-
-        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
-          if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
-            this.calcObj.leasingAmountDkp = temp
-          }
-        }
+        } 
         el.value = temp
         el.dispatchEvent(inputEvent)
-
       } else if(el.value != temp.replace(/[^\d ]/g, '') && Number.isNaN(parseInt(temp))) {
         el.value = temp.replace(/[^\d ]/g, '')
         el.dispatchEvent(inputEvent)
-
-      } else {
-        if(id === 'discount-price' && this.calcObj.leasingAmount) {
-
-          if(tempWithoutSpaces > parseInt(this.calcObj.leasingAmount.toString().replace(/[^\d]/g, '')) ){
-            discountPriceEl.value = this.calcObj.leasingAmount
-            discountPriceEl.dispatchEvent(inputEvent)
-          } 
-
-        } else if(id === 'leasing-amount' && this.calcObj.leasingAmountDkp) {
-          if(tempWithoutSpaces < parseInt(this.calcObj.leasingAmountDkp.toString().replace(/[^\d]/g, ''))){
-            discountPriceEl.value = this.calcObj.leasingAmount
-            discountPriceEl.dispatchEvent(inputEvent)
-
-          } else if (this.calcObj.leasingAmount === '') {
-            discountPriceEl.value = ''
-            discountPriceEl.dispatchEvent(inputEvent)
-          }
-        }
       }
     },
 
@@ -1712,7 +1784,7 @@ export default {
 		syncValue(val, dataSelector) {
 			switch(dataSelector) {
 				case 'advance-payment': this.calcObj.advance = val; break
-				case 'leasing-term': this.calcObj.leasingTerm = val; break
+				// case 'leasing-term': this.calcObj.leasingTerm = val; break
 			}
 		},
 
@@ -1857,9 +1929,14 @@ export default {
         delete this.calcObj.paymentPf
         Object.assign(this.calcObj, data)
 
-        this.calcObj.leasingAmountDkp = this.setIndentation(this.calcObj.leasingAmountDkp)
         this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
         this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
+
+        if(this.calcObj.leasingAmountDkp) {
+          let leasingAm = parseInt(this.calcObj.leasingAmount.replace(/\s/g, ''))
+          let leasingAmDkp = parseInt(this.calcObj.leasingAmountDkp.replace(/\s/g, ''))
+          this.leasingAmountDkp = 100 - (leasingAmDkp / leasingAm * 100)
+        }
         
         if(this.calcObj.leasingObjectType.value !== 11) {
           this.getMarksByType()
@@ -1879,6 +1956,17 @@ export default {
       })
     },
 
+    getDollarRate() {
+      axios
+        .get('https://open-data-332145.herokuapp.com/nbu-currency')
+        .then(val => {
+          this.dollarRate = val.data
+            .find(v => v.r030 === 840).rate || 28
+          console.log(this.dollarRate)
+          console.log(this.fixedDollarSum)
+        })
+    },
+
     switchFranchiseFromRequest(value) {
       console.log({'switch-franchise': value})
       switch(value) {
@@ -1891,6 +1979,10 @@ export default {
   },
 
   watch: {
+    formForFinDoc(val) {console.log(val)},
+    leasingAmountDkp() {
+      this.calcObj.leasingAmountDkp = this.toSum()
+    },
     'calcObj.leasingAmountDkp': function (val) {
       if(val) this.discountPrice = true
     },
@@ -2064,6 +2156,7 @@ export default {
   },
 
   mounted() {
+    this.getDollarRate()
     window.addEventListener("click", this.closeAutocompletes)
     if(this.$router.currentRoute.params.edit === true) {
       this.getUserCalculations()
@@ -2144,7 +2237,7 @@ export default {
     .range-black-dot {
       width: 14px;
       height: 14px;
-      background: #201600;
+      // background: #201600;
       border-radius: 100%;
       z-index: 1;
       position: relative;
@@ -2558,5 +2651,15 @@ input[type='checkbox'] {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
   padding: .5rem 1rem;
+}
+
+.doc-label {
+  color: #bc3851; 
+  font-size: 0.92rem; 
+  font-weight: 600;
+  line-height: 0.82rem;
+  border-bottom: 1px solid;
+  // left: 50%;
+  // transform: translate(-50%, 0);
 }
 </style>

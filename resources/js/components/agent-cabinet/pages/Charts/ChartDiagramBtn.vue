@@ -807,6 +807,7 @@ export default {
         agentId: this.$store.state.user.agent.id,
         mark: calcData.leasedAssertMark.name,
         model: calcData.leasedAssertModel.name,
+        leasingClientType: rootCalcData.full_request_data['client-type'],
         leasingObjType: calcData.leasingObjectType.label,
         // price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),
         term: calcData.leasingTerm,

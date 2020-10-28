@@ -1296,6 +1296,7 @@ export default {
         }
     },
     sendGraph() {
+      console.log(this.currentGraphToDownload)
       let graphs = this.objToEmail || this.currentGraphToDownload.result_data
       let graph = graphs[Object.keys(graphs)[0] !== 'requestId' ? Object.keys(graphs)[0] : Object.keys(graphs)[1]]
       let calcData = this.currentGraphToDownload.request_data
@@ -1305,6 +1306,7 @@ export default {
         manager: this.$store.state.user.agent.manager,
         agentId: this.$store.state.user.agent.id,
         mark: calcData.leasedAssertMark.name,
+        leasingClientType: rootCalcData.full_request_data['client-type'],
         model: calcData.leasedAssertModel.name,
         leasingObjType: calcData.leasingObjectType.label,
         // price: parseInt(calcData.leasingAmount.replace(/\s/g, '' )),

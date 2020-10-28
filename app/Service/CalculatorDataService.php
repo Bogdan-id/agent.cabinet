@@ -597,17 +597,21 @@ class CalculatorDataService
 
     private function getCommissionLkPr()
     {
-        // $programProducts = ['Renault', 'Nissan', 'Infiniti', 'Toyota', 'ГАЗ', 'Ravon', 'Peugeot', 'Citroen', 
-        //                     'Lexus', 'Mercedes-Benz', 'Fiat', 'Alfa Romeo', 'Mitsubishi', 'Opel'];
+        $programProducts = ['Peugeot', 'Citroen', 'Opel'];
         $agent = Agent::find($this->calculateRequest->agentId);
-       // $commissionLkPr = $agent->ab_size / 100;
-        // if(in_array($this->calculateRequest->leasedAssertMark['name'], $programProducts))
-        // {
+        if(in_array($this->calculateRequest->leasedAssertMark['name'], $programProducts))
+        {
+            $commissionLkPr = 0;
+            if((float)$agent->ab_size > 2.5 )
+            {
+                $commissionLkPr = ((float)$agent->ab_size - 2.5) / 100;
+            }
+        }else{
             $commissionLkPr = ($agent->ab_size - 1) / 100;
-            if($agent->ab_size === 0) $commissionLkPr = 0;
-           
-        //}
 
+            if($agent->ab_size === "0") $commissionLkPr = 0;
+        }
+    
         return $commissionLkPr;
     }
 

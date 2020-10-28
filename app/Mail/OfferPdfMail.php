@@ -35,13 +35,14 @@ class OfferPdfMail extends Mailable
         $subject = "Комерційна пропозиція від BEST Лізинг на {$this->data['mark']} {$this->data['model']} {$this->data['advance']}% {$this->data['term']}міс {$this->data['currency']}";
         $agent = Agent::find($this->data['agentId']);
         $user = User::find($agent->user_id);
-        return $this->from('agent.bestleasing@gmail.com')
+        $message = $this->from('agent.bestleasing@gmail.com')
                     ->view('emails.offer_pdf')
                     ->subject($subject)
                     ->attach("pdf/{$this->fileName}", [
                         'as' => "{$this->fileName}",
                         'mime' => 'application/pdf',
                     ])
+                    
                     ->with([
                         'fio' => "{$agent->first_name} {$agent->last_name} {$agent->patronymic}", 
                         'phone' => $user->phone,
@@ -50,7 +51,17 @@ class OfferPdfMail extends Mailable
                         'model' => $this->data['model'],
                         'price' => $this->data['offerNetto'],
                         'leasingObjectType' => $this->data['leasingObjType'],
+                        'leasingClientType' => $this->data['leasingClientType'],
                         'currency' => $this->data['currency'],
                     ]);
+                    if(array_key_exists('extraFiles', $this->data)){
+                        foreach($this->data['extraFiles'] as $file)
+                        {
+                            $message->attach($file);
+                        }
+                    }
+
+            return $message;
+                   
     }
 }

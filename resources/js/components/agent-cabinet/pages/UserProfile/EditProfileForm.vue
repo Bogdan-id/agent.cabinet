@@ -159,103 +159,103 @@
                   </v-checkbox>
                 </v-col>
               </v-row>
-              <div v-if="showPassportEditField">
-                <div class="row">
-                  <div class="col-md-4 pt-0">
-                    <v-select
-                      append-icon=""
-                      label="Тип паспорту"
-                      @change="clearPassportData()"
-                      v-model="user.passport_type_id"
-                      :items="pasportItems"
-                      item-text="text"
-                      item-value="value"
-                      outlined dense>
-                    </v-select>
+              <v-fade-transition>
+                <div v-if="showPassportEditField">
+                  <div class="row">
+                    <div class="col-md-4 pt-0">
+                      <v-select
+                        append-icon=""
+                        label="Тип паспорту"
+                        @change="clearPassportData()"
+                        v-model="user.passport_type_id"
+                        :items="pasportItems"
+                        item-text="text"
+                        item-value="value"
+                        outlined dense>
+                      </v-select>
+                    </div>
+                    <div class="col-md-4 pt-0 pb-0">
+                      <v-text-field v-if="!bioPassport && user.passport_type_id"
+                        :error-messages="passport_serieErr"
+                        @input="trimExceededLength('passport-serie', 2, (arg) => {return arg.replace(/[^\а-яА-Я]/g, '').toUpperCase()})"
+                        @blur="$v.user.passport_serie.$touch()"
+                        v-model="user.passport_serie"
+                        id="passport-serie"
+                        label="Серiя паспорту"
+                        outlined dense>
+                      </v-text-field>
+                      <v-text-field v-if="bioPassport  && user.passport_type_id"
+                        label="Номер УНЗР"
+                        :error-messages="passport_serieErr"
+                        @input="trimExceededLength('profile-unzr', 14)"
+                        v-mask="'########-#####'"
+                        id="profile-unzr"
+                        @blur="$v.user.passport_serie.$touch()"
+                        v-model="user.passport_serie"
+                        outlined dense>
+                      </v-text-field>
+                    </div>
+                    <div class="col-md-4 pt-0 pb-0">
+                      <v-text-field v-if="!bioPassport && user.passport_type_id"
+                        v-model="user.passport_number"
+                        :error-messages="passport_numberErr"
+                        @input="trimExceededLength('profile-passport-number', 6, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
+                        @blur="$v.user.passport_number.$touch()"
+                        id="profile-passport-number"
+                        label="Номер паспорту"
+                        outlined dense>
+                      </v-text-field>
+                      <v-text-field v-if="bioPassport && user.passport_type_id"
+                        v-model="user.passport_number"
+                        :error-messages="passport_numberErr"
+                        @input="trimExceededLength('profile-passport-bio-number', 9, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
+                        @blur="$v.user.passport_number.$touch()"
+                        id="profile-passport-bio-number"
+                        label="Номер документа"
+                        outlined dense>
+                      </v-text-field>
+                    </div>
                   </div>
-                  <div class="col-md-4 pt-0 pb-0">
-                    <v-text-field v-if="!bioPassport && user.passport_type_id"
-                      :error-messages="passport_serieErr"
-                      @input="trimExceededLength('passport-serie', 2, (arg) => {return arg.replace(/[^\а-яА-Я]/g, '').toUpperCase()})"
-                      @blur="$v.user.passport_serie.$touch()"
-                      v-model="user.passport_serie"
-                      id="passport-serie"
-                      label="Серiя паспорту"
-                      outlined dense>
-                    </v-text-field>
-                    <v-text-field v-if="bioPassport  && user.passport_type_id"
-                      label="Номер УНЗР"
-                      :error-messages="passport_serieErr"
-                      @input="trimExceededLength('profile-unzr', 14)"
-                      v-mask="'########-#####'"
-                      id="profile-unzr"
-                      @blur="$v.user.passport_serie.$touch()"
-                      v-model="user.passport_serie"
-                      outlined dense>
-                    </v-text-field>
+
+
+                  <div class="row">
+                    <div class="col-md-4 pb-0">
+                      <v-text-field
+                        :error-messages="innErr"
+                        @blur="$v.user.inn.$touch()"
+                        v-model="user.inn"
+                        v-mask="'##########'"
+                        label="ІПН"
+                        outlined dense>
+                      </v-text-field>
+                    </div>
+                    <div class="col-md-4 pb-0">
+                      <v-text-field
+                        :error-messages="card_numberErr"
+                        @blur="$v.user.card_number.$touch()"
+                        v-model="user.card_number"
+                        id="user-profile-card-number"
+                        v-mask="'#### #### #### ####'"
+                        label="Реквiзити картки"
+                        outlined dense>
+                      </v-text-field>
+                    </div>
                   </div>
-                  <div class="col-md-4 pt-0 pb-0">
-                    <v-text-field v-if="!bioPassport && user.passport_type_id"
-                      v-model="user.passport_number"
-                      :error-messages="passport_numberErr"
-                      @input="trimExceededLength('profile-passport-number', 6, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
-                      @blur="$v.user.passport_number.$touch()"
-                      id="profile-passport-number"
-                      label="Номер паспорту"
-                      outlined dense>
-                    </v-text-field>
-                    <v-text-field v-if="bioPassport && user.passport_type_id"
-                      v-model="user.passport_number"
-                      :error-messages="passport_numberErr"
-                      @input="trimExceededLength('profile-passport-bio-number', 9, (arg) => {return arg.replace(/[^\d]/g, '').toUpperCase()})"
-                      @blur="$v.user.passport_number.$touch()"
-                      id="profile-passport-bio-number"
-                      label="Номер документа"
-                      outlined dense>
-                    </v-text-field>
+                  <div class="row">
+                    <div class="col-md-8 pt-0 pb-0">
+                      <v-text-field
+                        :error-messages="ibanErr"
+                        @blur="$v.user.iban.$touch()"
+                        v-model="user.iban"
+                        @input=" trimExceededLength('profile-iban', 29)"
+                        id="profile-iban"
+                        label="IBAN"
+                        outlined dense>
+                      </v-text-field>
+                    </div>
                   </div>
                 </div>
-
-
-                <div class="row">
-                  <div class="col-md-4 pb-0">
-                    <v-text-field
-                      :error-messages="innErr"
-                      @blur="$v.user.inn.$touch()"
-                      v-model="user.inn"
-                      v-mask="'##########'"
-                      label="ІПН"
-                      outlined dense>
-                    </v-text-field>
-                  </div>
-                  <div class="col-md-4 pb-0">
-                    <v-text-field
-                      :error-messages="card_numberErr"
-                      @blur="$v.user.card_number.$touch()"
-                      v-model="user.card_number"
-                      id="user-profile-card-number"
-                      v-mask="'#### #### #### ####'"
-                      label="Реквiзити картки"
-                      outlined dense>
-                    </v-text-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-8 pt-0 pb-0">
-                    <v-text-field
-                      :error-messages="ibanErr"
-                      @blur="$v.user.iban.$touch()"
-                      v-model="user.iban"
-                      @input=" trimExceededLength('profile-iban', 29)"
-                      id="profile-iban"
-                      label="IBAN"
-                      outlined dense>
-                    </v-text-field>
-                  </div>
-                </div>
-
-
-              </div>
+              </v-fade-transition>
             </v-card-text>
           </v-card>
           <!--  -->
@@ -295,6 +295,41 @@
               </div>
             </v-card-text>
           </v-card>
+          <!-- <v-card class="mb-6 custom-border"> -->
+            <v-card-text class="mb-6 pa-0">
+              <v-row>
+                <v-col cols="12" md="5" class="pt-0">
+                  <v-card>
+                    <div class="wrap-collabsible">
+                      <input id="additional-conditions" class="toggle" type="checkbox">
+                      <label 
+                        @click="label = !label"
+                        for="additional-conditions" 
+                        class="lbl-toggle hide-arrow">
+                        <v-icon 
+                          :class="`cog ${label ? 'active' : ''}`" 
+                          v-text="'mdi-hammer-wrench'"
+                          color="white" :size="28">
+                        </v-icon>
+                        &nbsp;&nbsp;Налаштування (меню)
+                      </label>
+                      <div class="collapsible-content" style="overflow: hidden;">
+                        <v-card-text class="pt-0 pb-0">
+                          <v-checkbox
+                            :true-value="1"
+                            :false-value="0"
+                            label="Заявки на винагороду"
+                            v-model="user.show_menu_commission"
+                            color="dimgrey">
+                          </v-checkbox>
+                        </v-card-text>
+                      </div>
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          <!-- </v-card> -->
           <div class="text-center">
             <v-btn
               color="red darken-1"
@@ -320,6 +355,7 @@ import { required, minLength, email } from 'vuelidate/lib/validators'
 export default {
   mixins: [validationMixin],
   data: () => ({
+    label: false,
     user: {
       last_name: null,
       first_name: null,
@@ -343,6 +379,7 @@ export default {
       customUniversalOption: null,
       leasingAmountDkp: null,
       advance: null,
+      show_menu_commission: null
     },
     userBackUp: {},
 
@@ -408,10 +445,10 @@ export default {
     assignObject() {
       let user = {
         last_name: this.$store.state.user.agent.last_name,
-        first_name: this.$store.state.user.agent.first_name, // user
+        first_name: this.$store.state.user.agent.first_name,
         patronymic: this.$store.state.user.agent.patronymic,
-        phone: this.$store.state.user.user.phone, // user
-        email: this.$store.state.user.user.email, // user
+        phone: this.$store.state.user.user.phone,
+        email: this.$store.state.user.user.email,
         company_type: this.$store.state.user.agent.company_type,
         company_name: this.$store.state.user.agent.company_name,
         position: this.$store.state.user.agent.position,
@@ -425,6 +462,7 @@ export default {
         card_number: this.$store.state.user.agent && this.$store.state.user.agent.card_number ? this.cc_format(this.$store.state.user.agent.card_number) : null,
         purpose_of_payment: this.$store.state.user.agent.purpose_of_payment,
         iban: this.$store.state.user.agent.iban,
+        show_menu_commission: this.agent?.show_menu_commission,
         _token: this.getCsrf()
       }
       Object.assign(this.user, user)
@@ -459,7 +497,8 @@ export default {
     sendRequest() {
       let object = {}
       for (let val in this.user) {
-        if(this.user[val]) {
+        if(this.user[val] || this.user[val] === 0) {
+          console.log(this.user[val])
           object[val] = this.user[val]
         }
       }
@@ -583,6 +622,9 @@ export default {
     }
   },
   computed: {
+    agent() {
+      return this.$store?.state?.user?.agent || null
+    },
     last_nameErr() {
       const errors = []
 			if (!this.$v.user.last_name.$error) return errors
@@ -845,6 +887,12 @@ export default {
     },
   },
   watch: {
+    agent(v) {
+      console.log({AGENT: v})
+    },
+    'user.show_menu_commission': function(v) {
+      console.log(v)
+    },
     showPassportEditField(val) {
       if(!val) {
         if(this.$v.user.passport_serie.$invalid) this.user.passport_serie = ''
@@ -888,6 +936,26 @@ export default {
     .v-card__title {
       color: #727170!important;
       font-size: 1.15rem!important;
+    }
+  }
+  .cog {
+    transition: all 0.45s ease-out;
+    opacity: 1;
+    &.active {
+      // opacity: 0;
+    }
+  }
+  .lbl-toggle {
+    &.hide-arrow {
+      border-radius: 3px; 
+      margin-bottom: 0; 
+      background: #344b4bad; 
+      font-size: 0.95rem; 
+      padding: 0.43rem; 
+      position: relative;
+      &:before {
+        display: none!important;
+      }
     }
   }
 </style>

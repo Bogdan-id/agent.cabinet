@@ -115,16 +115,17 @@ export default new Vuex.Store({
 
   
   actions: {
-    getCurrentUser({commit/*, state*/}) {
+    getCurrentUser({commit, state}) {
       commit('toggleSpinner', true)
       axios.get('/getUserAgent')
         .then(response => {
-          console.log(response.data)
+          console.log({MainResponse: response.data})
 
           commit('addUserData', response.data)
           commit('addAgentData', response.data.agent.manager)
           commit('toggleSpinner', false)
           commit('checkIfUserHasAllNeccessaryFields')
+          console.log({'mainSTATE': state})
         })
         .catch(error => {
           console.log(error.response)

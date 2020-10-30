@@ -5,7 +5,7 @@
         <sidebar-link to="/dashboard" name="Головна" icon="homeSvg"/>
         <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="calculatorSvg"/>
         <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="leasingRequestSvg"/>
-        <sidebar-link to="/commission-requests" name="Заявки на винагороду" icon="rewardRequests"/>
+        <sidebar-link v-show="showMenuCommision" to="/commission-requests" name="Заявки на винагороду" icon="rewardRequests"/>
         <sidebar-link to="/useful-materials-categories" name="Кориснi матерiали" icon="usefulMaterialsSvg"/>
         <sidebar-link to="/reporting" name="Звiтнiсть" icon="fileChart"/>
         <!-- <sidebar-link to="/agent-profile" name="профiль" icon="ti-user"/> -->
@@ -53,7 +53,7 @@
           <v-icon v-text="'mdi-close'"></v-icon>
         </v-btn>
         <div
-          v-for="(item, key) in mobileLinks"
+          v-for="(item, key) in showLinks"
           :key="key"
           class="mobile-nav-block"
           style="padding: 10px 0; display: flex;">
@@ -111,13 +111,13 @@ export default {
     drawer: false,
     drawerState: null,
     mobileLinks: [
-    {path: "/dashboard", text: "Головна", icon: "homeSvg", iconPresent: true},
-    {path: "/calculator", text: "Калькулятор лізингу", icon: "calculatorSvg", iconPresent: true},
-    {path: "/leasing-requests", text: "Заявки на лiзинг", icon: "leasingRequestSvg", iconPresent: true},
-    {path: "/commission-requests", text: "Заявки на винагороду", icon: "rewardRequestsSvg", iconPresent: true},
-    {path: "/useful-materials-categories", text: "Кориснi матерiали", icon: "usefulMaterialsSvg", iconPresent: true},
-    {path: "/reporting", text: "Звiтнiсть", icon: 'ChartSvg'}
-  ],
+      {path: "/dashboard", text: "Головна", icon: "homeSvg", iconPresent: true},
+      {path: "/calculator", text: "Калькулятор лізингу", icon: "calculatorSvg", iconPresent: true},
+      {path: "/leasing-requests", text: "Заявки на лiзинг", icon: "leasingRequestSvg", iconPresent: true},
+      {path: "/commission-requests", text: "Заявки на винагороду", icon: "rewardRequestsSvg", iconPresent: true},
+      {path: "/useful-materials-categories", text: "Кориснi матерiали", icon: "usefulMaterialsSvg", iconPresent: true},
+      {path: "/reporting", text: "Звiтнiсть", icon: 'ChartSvg'}
+    ],
   }),
   methods: {
     // test() {
@@ -129,11 +129,24 @@ export default {
       }
     },
   },
+  computed: {
+    showMenuCommision() {
+      return this.$store?.state?.user?.agent?.show_menu_commission
+    },
+    showLinks() {
+      return this.mobileLinks.filter(v => {
+        return v.text !== "Заявки на винагороду" || v.text === "Заявки на винагороду" && this.showMenuCommision
+      })
+    }
+  },
   watch: {
     drawer(val) {
       this.drawerState = val
     },
   },
+  mounted() {
+    console.log({STORE: this.$store.state.agent})
+  }
 }
 </script>
 

@@ -75,13 +75,14 @@
         <!-- accept="" -->
         <v-file-input
           v-if="formatToSave === 'email'"
-          v-model="embededFilesToEmail"
+          @change="uploadExtraFiles(embEF)"
+          v-model="embEF"
           class="email-embed-file"
-          :show-size="true"
+          show-size
           label="Додати файли"
           color="black"
           item-color="black"
-          counter multiple small-chips>
+          multiple small-chips clearable counter>
         </v-file-input>
         <v-divider class="mt-0"></v-divider>
         <v-card-actions>
@@ -488,7 +489,8 @@ export default {
     withoutAdvance: false,
     objToEmail: null,
     shiftedArr: [],
-    embededFilesToEmail: null,
+    embEF: [],
+    eFlnks: [],
     rules: [
       value => {
         if(value.length === 0) return true
@@ -746,6 +748,7 @@ export default {
         })
       }
     },
+
     deleteDoc(property, key) {
       let index = this.documentUrls[property]
         .map( item => { return item.text; })
@@ -753,15 +756,9 @@ export default {
       this.documentUrls[property].splice(index, 1)
       console.log(this.documentUrls)
     },
+
     uploadDoc(document, selector) {
-      let formData = new FormData()
-      formData.append('doc', document)
-      axios
-        .post('/leasing-reqeust/document/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-        })
+      this.reqUpl(document)
         .then(response => {
           if(!this.documentUrls[selector]) this.documentUrls[selector] = []
 
@@ -779,6 +776,90 @@ export default {
           })
         })
     },
+
+    reqUpl(document, i, cb) {
+      let formData = new FormData()
+      formData.append('doc', document[i])
+      
+      return axios
+        .post('/leasing-reqeust/document/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(res => {
+          if(this.checkFunc(cb)) cb(document[i], res)
+          console.log(this.eFlnks)
+          return res
+        })
+        .catch(err => this.$notify({
+          group: 'error',
+          title: 'Помилка при завантаженнi',
+          text: err,
+        }))
+    },
+
+    uploadExtraFiles(files) {
+      this.eFlnks.length = 0
+      if(files.length === 0) return
+
+      let uplCb = (doc, res) => {
+        if(res.data && res.data.url) {
+          this.eFlnks.push({
+            name: doc.name,
+            url: res.data.url,
+            size: doc.size
+          })
+        }
+      }
+      let chSizeCb = (f, i) => this.reqUpl(f, i, uplCb)
+      let chSizeErrCb = i => this.embEF.splice(i, 1)
+      let extCb = i => this.embEF.splice(i, 1)
+
+      this.checkExt(files, extCb)
+      this.checkFS(files, chSizeCb, chSizeErrCb)
+    },
+
+    checkFS(fls, cb, errCb) {
+      let fIndexs = []
+      for (let [i, f] of fls.entries()) {
+        if(f.size <= 5242880) {cb(fls, i)}
+        else {
+          fIndexs.push(i)
+          this.$notify({
+            group: 'error',
+            title: 'Помилка розiр файлу не повинен перевищувати 5 mb',
+            text: ``,
+          })
+        }
+      }
+      fIndexs.sort((a, b) => b - a)
+        .forEach(i => errCb(i))
+    },
+
+    checkExt(fls, cb) {
+      const allowed = ['jpeg', 'png', 'jpg', 'gif', 'svg', 'pdf', 'docx', 'doc', 'xls', 'xlsx']
+      let fIndexs = []
+      for (let [i, f] of fls.entries()) {
+        let arr = f.name.split(".")
+        let ext = arr[arr.length - 1]
+        if(!allowed.includes(ext.toLowerCase())) {
+          fIndexs.push(i)
+          this.$notify({
+            group: 'error',
+            title: `Тип файлу ".${ext}" - не підтримується`,
+            text: `Можливi розширення - ${allowed.join(', ')}`
+          })
+        }
+      }
+      fIndexs.sort((a, b) => b - a)
+        .forEach(i => cb(i))
+    },
+
+    checkFunc(cb) {
+      if(typeof cb === 'function') return true
+    },
+
     async listenFileInput(selector) {
       let files = document.querySelector(`.${selector}`).files
       for await (let v of files) {
@@ -798,7 +879,6 @@ export default {
     sendGraph() {
       let graphs = this.objToEmail || this.currentGraphToDownload.result_data
       let graph = graphs[Object.keys(graphs)[0] !== 'requestId' ? Object.keys(graphs)[0] : Object.keys(graphs)[1]]
-      // console.log(Object.keys(graphs)[0])
       let calcData = this.currentGraphToDownload.request_data
       let rootCalcData = this.currentGraphToDownload
 
@@ -823,8 +903,6 @@ export default {
         _token: this.getCsrf()
       }
 
-      console.log(dataToSave)
-
       this.graphName
         .forEach(val => {
           dataToSave[val] = graphs[val]
@@ -839,7 +917,11 @@ export default {
             : graphs[val]['total-payment']
         })
 
+      if(this.eFlnks.length > 0) {
+        dataToSave.extraFiles = this.eFlnks
+      }
       if(this.formatToSave === 'email') dataToSave.email = this.emailToSend
+      console.log(dataToSave)
 
       !this.$v.$invalid
         ? this.sendData(dataToSave)

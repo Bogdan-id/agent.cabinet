@@ -100,13 +100,14 @@
         <!-- accept="" -->
         <v-file-input
           v-if="formatToSave === 'email'"
-          v-model="embededFilesToEmail"
+          @change="uploadExtraFiles(embEF)"
+          v-model="embEF"
           class="email-embed-file"
-          :show-size="true"
+          show-size
           label="Додати файли"
           color="black"
           item-color="black"
-          counter multiple small-chips>
+          multiple small-chips clearable counter>
         </v-file-input>
         <v-divider class="mt-0"></v-divider>
         <v-card-actions>
@@ -644,7 +645,8 @@ export default {
     legalDocs: legalDocs,
     personDocs: personDocs,
 
-    embededFilesToEmail: null,
+    embEF: [],
+    eFlnks: [],
 
     dialogWidth: 530,
     dialogToSend: false,
@@ -912,14 +914,7 @@ export default {
       console.log(this.documentUrls)
     },
     uploadDoc(document, selector) {
-      let formData = new FormData()
-      formData.append('doc', document)
-      axios
-        .post('/leasing-reqeust/document/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
+      this.reqUpl(document)
         .then(response => {
           if(!this.documentUrls[selector]) this.documentUrls[selector] = []
 
@@ -937,6 +932,87 @@ export default {
           this.$catchStatus(error.response.status)
         })
     },
+
+    reqUpl(document, i, cb) {
+      let formData = new FormData()
+      formData.append('doc', document[i])
+      
+      return axios
+        .post('/leasing-reqeust/document/upload', formData, {
+            headers: {'Content-Type': 'multipart/form-data'}
+        })
+        .then(res => {
+          if(this.checkFunc(cb)) cb(document[i], res)
+          return res
+        })
+        .catch(err => this.$notify({
+          group: 'error',
+          title: 'Помилка при завантаженнi',
+          text: err,
+        }))
+    },
+
+    uploadExtraFiles(files) {
+      this.eFlnks.length = 0
+      if(files.length === 0) return
+
+      let uplCb = (doc, res) => {
+        if(res.data && res.data.url) {
+          this.eFlnks.push({
+            name: doc.name,
+            url: res.data.url,
+            size: doc.size
+          })
+        }
+      }
+      let chSizeCb = (f, i) => this.reqUpl(f, i, uplCb)
+      let chSizeErrCb = i => this.embEF.splice(i, 1)
+      let extCb = i => this.embEF.splice(i, 1)
+
+      this.checkExt(files, extCb)
+      this.checkFS(files, chSizeCb, chSizeErrCb)
+    },
+
+    checkFS(fls, cb, errCb) {
+      let fIndexs = []
+      for (let [i, f] of fls.entries()) {
+        if(f.size <= 5242880) {cb(fls, i)}
+        else {
+          fIndexs.push(i)
+          this.$notify({
+            group: 'error',
+            title: 'Помилка розiр файлу не повинен перевищувати 5 mb',
+            text: ``,
+          })
+        }
+      }
+      fIndexs.sort((a, b) => b - a)
+        .forEach(i => errCb(i))
+    },
+
+    checkExt(fls, cb) {
+      const allowed = ['jpeg', 'png', 'jpg', 'gif', 'svg', 'pdf', 'docx', 'doc', 'xls', 'xlsx']
+      let fIndexs = []
+      for (let [i, f] of fls.entries()) {
+        let arr = f.name.split(".")
+        let ext = arr[arr.length - 1]
+        if(!allowed.includes(ext.toLowerCase())) {
+          fIndexs.push(i)
+          this.$notify({
+            group: 'error',
+            title: `Тип файлу ".${ext}" - не підтримується`,
+            text: `Можливi розширення - ${allowed.join(', ')}`
+          })
+        }
+      }
+      fIndexs.sort((a, b) => b - a)
+        .forEach(i => cb(i))
+    },
+
+    checkFunc(cb) {
+      if(typeof cb === 'function') return true
+    },
+
     async listenFileInput(selector) {
       let files = document.querySelector(`.${selector}`).files
       console.log(files)
@@ -1322,10 +1398,6 @@ export default {
         date: this.$formatDate(rootCalcData.created_at),
         _token: this.getCsrf()
       }
-
-      console.log(dataToSave)
-
-      if(this.formatToSave === 'email') dataToSave.email = this.emailToSend
       
       this.graphName
         .forEach(val => {
@@ -1340,6 +1412,13 @@ export default {
             ? graphs[val]['total-payment'] - dataToSave.prepaid
             : graphs[val]['total-payment']
         })
+      
+      console.log(dataToSave)
+      if(this.eFlnks.length > 0) {
+        dataToSave.extraFiles = this.eFlnks
+      }
+      if(this.formatToSave === 'email') dataToSave.email = this.emailToSend
+
       !this.$v.$invalid
         ? this.sendData(dataToSave)
         : this.highlightErrors()

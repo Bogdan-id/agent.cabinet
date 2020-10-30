@@ -78,6 +78,7 @@
           @change="uploadExtraFiles(embEF)"
           v-model="embEF"
           class="email-embed-file"
+          id="docs-input"
           show-size
           label="Додати файли"
           color="black"
@@ -1211,8 +1212,19 @@ export default {
         // equity: null,
       }
     },
+    temporaryResolve(e) {
+      e.isTrusted ? e.preventDefault() : false
+    }
   },
   watch: {
+    formatToSave(val) {
+      setTimeout(() => {
+        let el = document.getElementById('docs-input')
+        if(val === 'email') {
+            el.addEventListener('click', this.temporaryResolve)
+        }
+      }, 0)
+    },
     leasingApplicationForm(val) {
       this.$v.$reset()
       if(val === false) {

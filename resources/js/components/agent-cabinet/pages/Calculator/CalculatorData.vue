@@ -100,9 +100,8 @@
         <!-- accept="" -->
         <v-file-input
           v-if="formatToSave === 'email'"
-          @change="uploadExtraFiles(embEF); test('change')"
-          @input="test('input')"
-          @click="test('click')"
+          @change="uploadExtraFiles(embEF)"
+          id="docs-input"
           v-model="embEF"
           class="email-embed-file"
           show-size
@@ -1472,8 +1471,19 @@ export default {
     sortData(a, b) {
       return new Date(b.updated_at) - new Date(a.updated_at)
     },
+    temporaryResolve(e) {
+      e.isTrusted ? e.preventDefault() : false
+    }
   },
   watch: {
+    formatToSave(val) {
+      setTimeout(() => {
+        let el = document.getElementById('docs-input')
+        if(val === 'email') {
+            el.addEventListener('click', this.temporaryResolve)
+        }
+      }, 0)
+    },
     dialogToSend(value) {
       if(value === false) {
         this.formatToSave = null

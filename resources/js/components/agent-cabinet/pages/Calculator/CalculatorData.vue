@@ -100,7 +100,9 @@
         <!-- accept="" -->
         <v-file-input
           v-if="formatToSave === 'email'"
-          @change="uploadExtraFiles(embEF)"
+          @change="uploadExtraFiles(embEF); test('change')"
+          @input="test('input')"
+          @click="test('click')"
           v-model="embEF"
           class="email-embed-file"
           show-size
@@ -399,7 +401,7 @@
                         :key="key"
                         style="visibility: hidden; position: absolute; left: 0; top: 0;"
                         type="file"
-                        accept="image/x-png,image/gif,image/jpeg,image/jpg,image/svg+xml,application/msword,application/vnd.ms-excel,application/pdf"
+                        :accept="acceptedExt"
                         :ref="item.prop"
                         :class="item.prop"
                         @change="listenFileInput(item.prop)"
@@ -411,7 +413,7 @@
                         :key="key"
                         style="visibility: hidden; position: absolute; left: 0; top: 0;"
                         type="file"
-                        accept="image/x-png,image/gif,image/jpeg,image/jpg,image/svg+xml,application/msword,application/vnd.ms-excel,application/pdf"
+                        :accept="acceptedExt"
                         :ref="item.prop"
                         :class="item.prop"
                         @change="listenFileInput(item.prop)"
@@ -642,6 +644,7 @@ export default {
         return 'Розмiр документу не повинен перевищувати 5 MB!'
       }
     ],
+    acceptedExt: 'image/x-png,image/gif,image/jpeg,image/jpg,image/svg+xml, .doc, .docx, application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
     legalDocs: legalDocs,
     personDocs: personDocs,
 
@@ -859,6 +862,9 @@ export default {
     },
   },
   methods: {
+    test(event) {
+      console.log(event)
+    },
     getEdropu() {
       if(!this.$v.legalInfo.edrpou.$invalid && !this.edrpouLoading){
         this.edrpouLoading = true
@@ -914,7 +920,14 @@ export default {
       console.log(this.documentUrls)
     },
     uploadDoc(document, selector) {
-      this.reqUpl(document)
+      let formData = new FormData()
+      formData.append('doc', document)
+      axios
+        .post('/leasing-reqeust/document/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
         .then(response => {
           if(!this.documentUrls[selector]) this.documentUrls[selector] = []
 
@@ -953,6 +966,7 @@ export default {
     },
 
     uploadExtraFiles(files) {
+      console.log(files)
       this.eFlnks.length = 0
       if(files.length === 0) return
 

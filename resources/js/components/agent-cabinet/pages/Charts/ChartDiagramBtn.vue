@@ -371,19 +371,20 @@
                         :key="key"
                         style="visibility: hidden; position: absolute; left: 0; top: 0;"
                         type="file"
-                        accept="image/x-png,image/gif,image/jpeg,image/jpg,image/svg+xml,application/msword,application/vnd.ms-excel,application/pdf"
+                        :accept="acceptedExt"
                         :ref="item.prop"
                         :class="item.prop"
                         @change="listenFileInput(item.prop)"
                         multiple>
                     </div>
                     <div v-if="clientTypeId === 1">
+                      <!-- 'jpeg', 'png', 'jpg', 'gif', 'svg', 'pdf', 'docx', 'doc', 'xls', 'xlsx' -->
                       <input
                         v-for="(item, key) in personDocs"
                         :key="key"
                         style="visibility: hidden; position: absolute; left: 0; top: 0;"
                         type="file"
-                        accept="image/x-png,image/gif,image/jpeg,image/jpg,image/svg+xml,application/msword,application/vnd.ms-excel,application/pdf"
+                        :accept="acceptedExt"
                         :ref="item.prop"
                         :class="item.prop"
                         @change="listenFileInput(item.prop)"
@@ -484,6 +485,7 @@ export default {
   data: () => ({
     legalDocs: legalDocs,
     personDocs: personDocs,
+    acceptedExt: 'image/x-png,image/gif,image/jpeg,image/jpg,image/svg+xml, .doc, .docx, application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
     selectedGraph: null,
     documentUrls: {},
     withoutAdvance: false,
@@ -758,7 +760,14 @@ export default {
     },
 
     uploadDoc(document, selector) {
-      this.reqUpl(document)
+      let formData = new FormData()
+      formData.append('doc', document)
+      axios
+        .post('/leasing-reqeust/document/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
         .then(response => {
           if(!this.documentUrls[selector]) this.documentUrls[selector] = []
 

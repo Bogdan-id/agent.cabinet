@@ -949,7 +949,7 @@ export default {
     &.hide-arrow {
       border-radius: 3px; 
       margin-bottom: 0; 
-      background: #2f4f4fd2; 
+      background: #344b4bad; 
       font-size: 0.95rem; 
       padding: 0.43rem; 
       position: relative;

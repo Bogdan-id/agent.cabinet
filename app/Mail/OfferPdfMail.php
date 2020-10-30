@@ -57,7 +57,9 @@ class OfferPdfMail extends Mailable
                     if(array_key_exists('extraFiles', $this->data)){
                         foreach($this->data['extraFiles'] as $file)
                         {
-                            $message->attach($file);
+                            $message->attach($file['url'],  [
+                                'as' => "{$file['name']}"
+                            ]);
                         }
                     }
 

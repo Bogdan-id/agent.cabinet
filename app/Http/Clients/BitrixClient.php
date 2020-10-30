@@ -341,6 +341,26 @@ class BitrixClient
                     }
                 }
             }
+            if(array_key_exists('documents', $leasingRequest)  && array_key_exists('specification', $leasingRequest['documents'])){
+                foreach($leasingRequest['documents']['specification'] as $specification){
+                    $fields['UF_CRM_1604039135'][] = [
+                        'fileData' => [
+                            $specification['text'],
+                            base64_encode(file_get_contents($specification['url']))
+                        ]
+                    ];
+                }
+            }
+            if(array_key_exists('documents', $leasingRequest)  && array_key_exists('questionnaire', $leasingRequest['documents'])){
+                foreach($leasingRequest['documents']['questionnaire'] as $questionnaire){
+                    $fields['UF_CRM_1604039179'][] = [
+                        'fileData' => [
+                            $questionnaire['text'],
+                            base64_encode(file_get_contents($questionnaire['url']))
+                        ]
+                    ];
+                }
+            }
 
             $response = $this->client
             ->post("/rest/3/{$this->token}/crm.lead.add", [

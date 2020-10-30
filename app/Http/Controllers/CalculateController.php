@@ -152,6 +152,12 @@ class CalculateController extends Controller
                 Mail::to($agent->manager->email)->send(new CopyOfferPdfMail($data, $data['fileName']));
             }
             unlink(public_path("pdf/{$data['fileName']}"));
+            if(array_key_exists('extraFiles', $data)){
+                foreach($data['extraFiles'] as $file)
+                {
+                     unlink("{$file['url']}");
+                }
+            }
         }else{
             $mpdf->Output($data['fileName'], 'D');
         }

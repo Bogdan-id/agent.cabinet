@@ -39,7 +39,8 @@ class AgentUpdateRequest extends JsonRequest
             'iban' => 'string',
             'purpose_of_payment' => 'string',
             'phone' =>  'required|string',
-            'email' => 'required|string'
+            'email' => 'required|string',
+            'show_menu_commission' => 'required|boolean'
         ];
     }
 }

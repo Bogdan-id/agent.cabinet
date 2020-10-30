@@ -25,7 +25,8 @@ class Agent extends Model
        'iban',
        'purpose_of_payment',
        'user_id',
-       'oferta_accepted'
+       'oferta_accepted',
+       'show_menu_commission'
     ];
 
 

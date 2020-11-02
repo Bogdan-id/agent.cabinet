@@ -81,7 +81,7 @@
 <body>
 <htmlpagefooter name="page-footer">
   <div style="text-align: center; font-size: 0.8rem; color: #5f6368">
-    <span style="font-size: 0.9rem; color: black;">Ваш менеджер:</span><br />
+    <span style="font-size: 0.9rem; color: black;">Ваш менеджер по лiзингу:</span><br />
     <span style="color: #800000;">{{ $manager['name'] }}</span><br />
     <span style="color: #800000;">{{ $manager['email'] }}</span><br />
     <span style="color: #800000;">{{ $manager['phone'] }}</span><br />

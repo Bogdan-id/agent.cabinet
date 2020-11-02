@@ -959,7 +959,7 @@ export default {
 
   computed: {
     showDocLabel() {
-      return this.calcObj.advance < 30 || (this.formForFinDoc &&  this.formForFinDoc.doc)
+      return (this.calcObj.leasingObjectType.value !== 1 || this.calcObj.advance < 30) || (this.formForFinDoc &&  this.formForFinDoc.doc)
     },
     formForFinDoc() {
       let leasingAmount = this.calcObj.leasingAmount
@@ -2062,6 +2062,7 @@ export default {
     },
 
     'calcObj.leasingObjectType': function(value) {
+      console.log(this.calcObj.leasingObjectType.value)
       let lightCar = 'Легкові та комерційні авто'
       let edit = this.$router.currentRoute.params.edit
 

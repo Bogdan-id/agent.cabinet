@@ -168,7 +168,7 @@
           </v-row>
         </div>
       </div>
-      <v-row>
+      <v-row :class="mediumAndDown ? 'small' : ''">
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-autocomplete
             @click.stop
@@ -266,7 +266,7 @@
           </v-text-field>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row :class="mediumAndDown ? 'small' : ''">
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
           <v-text-field
             @input="amountToLocalStr('leasing-amount')"
@@ -323,7 +323,7 @@
           </v-text-field>
         </v-col>
       </v-row>
-      <v-row :class="`${mediumAndDown ? 'pb-0' : 'pb-2'}`">
+      <v-row>
         <v-col cols="12" class="pt-0 pb-0">
           <!--  -->
           <v-checkbox
@@ -349,7 +349,7 @@
           </v-checkbox>
         </v-col>
         <v-col 
-          :class="`${mediumAndDown ? 'pb-0 pt-1' : 'pt-1'}`" 
+          :class="`${mediumAndDown ? 'pb-0 pt-1 small' : 'pt-4'}`" 
           cols="12" md="4" sm="6" xs="12" 
           v-if="discountPrice && calcObj.leasingAmount !== ''">
           <v-text-field
@@ -2375,7 +2375,15 @@ export default {
       font-size: 1.28rem!important;
       font-weight: bold;
       &.v-label--active {
-        top: 0.12rem!important;
+        top: 0.42rem !important;
+        color: white!important;
+      }
+    }
+  }
+  .small {
+    label {
+      &.v-label--active {
+        top: 0.05rem!important;
         color: white!important;
       }
     }
@@ -2389,11 +2397,11 @@ export default {
   .v-input .v-input__slot {
     border-radius: 8px!important;
   }
-  .v-input .v-input__control {
-    .v-text-field__details {
-      margin-bottom: 0.25rem;
-    }
+
+  .v-input__slot {
+    margin-bottom: 2px;
   }
+  
   &.small {
     .v-select__selection, input {
       font-size: 1.1rem;
@@ -2402,6 +2410,11 @@ export default {
     .v-select__slot, .v-text-field__slot {
       label {
         font-size: 0.95rem!important;
+      }
+    }
+    .v-input .v-input__control {
+      .v-text-field__details {
+        margin-bottom: 0.25rem;
       }
     }
   }

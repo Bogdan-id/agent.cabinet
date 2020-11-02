@@ -261,7 +261,36 @@
         </template>
         <template #item.actions="{ item }">
           <div class="d-flex justify-center">
-            <v-tooltip bottom>
+            <div v-if="!showTooltip">
+              <v-btn
+                v-show="parseInt(item.status_id) === 5 && $store.state.userHasNeccessaryFields || parseInt(item.status_id) === 5 && !$store.state.userHasNeccessaryFields"
+                @click="showDialogToAgentReward(item)"
+                icon>
+                <v-icon
+                  color="red lighten-1">
+                  mdi-sack-percent
+                </v-icon>
+              </v-btn>
+              <v-icon
+                v-show="parseInt(item.status_id) === 7"
+                style="padding: 6px"
+                color="green darken-2">
+                mdi-sack-percent
+              </v-icon>
+              <v-icon
+                v-show="parseInt(item.status_id) === 6"
+                style="padding: 6px"
+                color="orange">
+                mdi-sack-percent
+              </v-icon>
+              <v-icon
+                v-show="item.status_id != 5 && item.status_id != 6 && item.status_id != 7"
+                style="padding: 6px"
+                >
+                mdi-sack-percent
+              </v-icon>
+            </div>
+            <v-tooltip bottom v-if="showTooltip">
               <template #activator="{ on }">
                 <v-btn
                   v-show="parseInt(item.status_id) === 5 && $store.state.userHasNeccessaryFields || parseInt(item.status_id) === 5 && !$store.state.userHasNeccessaryFields"
@@ -395,6 +424,9 @@ export default {
     },
   }),
   computed: {
+    showTooltip() {
+      return this.$store.state?.user?.agent?.show_menu_commission
+    },
     user() {
       return this.$store.state.user.agent
     },

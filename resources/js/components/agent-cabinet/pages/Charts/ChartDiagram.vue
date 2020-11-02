@@ -735,8 +735,8 @@ export default {
       return `${
         (item['offer-administrative-payment-per'] * 100).toFixed(2) + '%' 
         + ` <span style="${this.amountStl}">
-        (${(item['offer-price-brutto'] / 100 * 
-        (item['offer-administrative-payment-per'] * 100)).toFixed(2)} грн)</span>`}`
+        (${parseInt((item['offer-price-brutto'] / 100 * 
+        (item['offer-administrative-payment-per'] * 100)).toFixed()).toLocaleString("ru-RU")} грн)</span>`}`
     },
     offerAdvance(advance, offerAdvance) {
       return `

@@ -602,10 +602,10 @@ class CalculatorDataService
         if(in_array($this->calculateRequest->leasedAssertMark['name'], $programProducts))
         {
             $commissionLkPr = 0;
-            if((float)$agent->ab_size > 2.5 )
-            {
-                $commissionLkPr = ((float)$agent->ab_size - 2.5) / 100;
-            }
+            // if((float)$agent->ab_size > 2.5 )
+            // {
+            //     $commissionLkPr = ((float)$agent->ab_size - 2.5) / 100;
+            // }
         }else{
             $commissionLkPr = ($agent->ab_size - 1) / 100;
 

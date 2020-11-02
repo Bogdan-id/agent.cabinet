@@ -349,7 +349,7 @@
           </v-checkbox>
         </v-col>
         <v-col 
-          :class="`${mediumAndDown ? 'pb-0 pt-0' : ''}`" 
+          :class="`${mediumAndDown ? 'pb-0 pt-1' : 'pt-1'}`" 
           cols="12" md="4" sm="6" xs="12" 
           v-if="discountPrice && calcObj.leasingAmount !== ''">
           <v-text-field
@@ -2374,7 +2374,7 @@ export default {
       font-size: 1.28rem!important;
       font-weight: bold;
       &.v-label--active {
-        top: 0!important;
+        top: 0.12rem!important;
         color: white!important;
       }
     }
@@ -2390,7 +2390,7 @@ export default {
   }
   .v-input .v-input__control {
     .v-text-field__details {
-      margin-bottom: 0;
+      margin-bottom: 0.25rem;
     }
   }
   &.small {

@@ -716,7 +716,7 @@ export default {
           .then(response => {
             console.log(response)
             this.edrpouLoading = false
-            this.legalInfo.companyName = response.data.companyName
+            this.legalInfo.companyName = response.data.name
           })
           .catch(error => {
             console.log(error.response)

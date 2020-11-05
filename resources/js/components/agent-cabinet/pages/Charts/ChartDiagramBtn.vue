@@ -712,11 +712,11 @@ export default {
       if(!this.$v.legalInfo.edrpou.$invalid && !this.edrpouLoading){
         this.edrpouLoading = true
         axios
-          .get(`https://open-data-332145.herokuapp.com/get-company-name/${this.legalInfo.edrpou}`)
+          .post(`https://pacific-dawn-21711.herokuapp.com/get-edr-legal/`, {edrpou: this.legalInfo.edrpou})
           .then(response => {
             console.log(response)
             this.edrpouLoading = false
-            this.legalInfo.companyName = response.data.name
+            this.legalInfo.companyName = response.data[0].name
           })
           .catch(error => {
             console.log(error.response)

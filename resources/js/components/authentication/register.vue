@@ -151,7 +151,7 @@
 				</div>
 				<p class="app__login-footer">
 					Якщо у вас вже є доступ в особистий кабінет виконайте вхід на 
-					<a class="--link" href="/login">сторінці авторизації</a>
+					<a class="--link" href="/login#/authorization">сторінці авторизації</a>
 				</p>
 			</div>
 		</div>

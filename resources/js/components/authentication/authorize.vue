@@ -57,8 +57,8 @@
 						<div v-if="request" class="lds-dual-ring"></div>
 					</button>
 					<div class="app__sign-navigate">
-						<router-link class="app__sign-navigate-link --link" :to="{path: '/login/forget'}">Забули пароль?</router-link>
-						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
+						<a class="app__sign-navigate-link --link" href="/login#/forget">Забули пароль?</a>
+						<a class="app__sign-navigate-link --link" href="/register#/user">Реєстрація</a>
 					</div>
 				</div>
 			</div>
@@ -73,7 +73,6 @@ import { required } from 'vuelidate/lib/validators'
 import axios from 'axios'
 
 export default {
-	props: ['reload'],
 	mixins: [validationMixin],
 	data: () => ({
 		password: null,
@@ -118,43 +117,15 @@ export default {
 			}
 		},
 		checkUser() {
-			axios.get(`/getCurrentUser`)
-				.then(response => {
-					// user has registered account and the application is approved
-					if(response.data.is_active === 1) {
-						this.checkUserAgent()
-					// user has registered an account. Application at the verification stage
-					} else if(response.data.user.is_active === 0) {
-						this.$router.push('/verification')
-					}
-				})
-				.catch(error => {
-					console.log(error.response.statusText)
-				})
-		},
-		checkUserAgent() {
-      // user is tied to an agent. Pass to dashboard
-      axios.get(`/getUserAgent`)
-				.then(response => {
-					// user has registered account and the application is approved
-					if(response.data.agent !== null) {
-            this.$router.push('/home')
-          // Application approved. Fill the form (complete register)
-          } else {
-            this.$router.push('/finish-register')
-          }
-				})
-				.catch(error => {
-          this.$router.push('/finish-register')
-					console.log(error.response.statusText)
-				})
-		},
+      if(location.href.includes('agent')) this.$router.push({name: 'Головна'})
+    },
+    
 		signIn(userObj) {
 			this.request = true
 			axios.post(`/login`, userObj)
 			.then(() => {
 				this.request = false
-				this.$router.go()
+				this.$chHref('/agent#/')
 			})
 			.catch(e => {
 				this.request = false

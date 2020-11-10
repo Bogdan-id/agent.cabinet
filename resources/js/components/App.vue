@@ -53,13 +53,15 @@ export default {
       // user is tied to an agent. Pass to dashboard
       axios.get(`/getUserAgent`)
 				.then(response => {
-					// user has registered account and the application is approved
-					if(response.data.agent !== null) {
-            this.$chHref('/agent#/')
-          // Application approved. Fill the form (complete register)
-          } else {
-            this.$chHref('/finish-register#/')
-          }
+          // user has registered account and the application is approved
+          if(!/agent#\/.+/g.test(location.href)) {
+            if(response.data.agent !== null) {
+              this.$chHref('/agent#/')
+            // Application approved. Fill the form (complete register)
+            } else {
+              this.$chHref('/finish-register#/')
+            }
+          } else return
 				})
 				.catch(error => {
           this.$chHref('/finish-register#/')

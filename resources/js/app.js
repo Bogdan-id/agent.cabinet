@@ -21,15 +21,23 @@ Vue.use(PaperDashboard)
 Vue.use(VueMask)
 Vue.use(Notifications)
 
-var errorHandler401 = (error) => {
-  console.log(error)
-  error === 401
-    ? router.go()
-    : false
+function chHref(uri, cb) {
+  if(typeof cb === 'function') cb()
+  location.replace(new URL(location.href).origin + uri)
 }
 
-Vue.prototype.$catchStatus = (error) => {
-  return errorHandler401(error)
+function errorHandler401(status, errObj) {
+  if (status === 401) {
+    Vue.notify({ group: 'error', title: status, text: `З'єднання з сервером розiрвано` })
+    chHref('/login#/authorization')
+  } else {
+    Vue.notify({ group: 'error', title: status || 'Помилка', text: `${errObj.response.data.message}` || '' })
+  }
+}
+Vue.prototype.$chHref = chHref
+
+Vue.prototype.$catchStatus = (status, errObj) => {
+  return errorHandler401(status, errObj)
 }
 
 Vue.prototype.$sortByStatus = (data) => { 

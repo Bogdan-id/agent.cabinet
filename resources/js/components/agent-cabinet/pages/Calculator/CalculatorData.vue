@@ -936,12 +936,7 @@ export default {
           console.log(this.documentUrls)
         })
         .catch(error => {
-          console.log(error.response)
-          this.$notify({
-            message: 'Помилка',
-            type: 'error',
-          })
-          this.$catchStatus(error.response.status)
+          this.$catchStatus(error.response.status, error)
         })
     },
 
@@ -1076,13 +1071,7 @@ export default {
           }, 800)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          this.$notify({
-            group: 'error',
-            title: `Помилка - ${error.response.status}`,
-            text: `${error.response.data.message}`,
-          })
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.btnLoading = false
         })
     },
@@ -1272,14 +1261,8 @@ export default {
           }, 5000);
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
         })
     },
     requestObj(object) {
@@ -1374,12 +1357,7 @@ export default {
             console.log(error.response)
             this.loading = false
             if(error.response && error.response.status) {
-              this.$notify({
-                group: 'error',
-                title: 'Помилка',
-                text: `${error.response.status} \n ${error.response.data.message}`,
-              })
-              this.$catchStatus(error.response.status)
+              this.$catchStatus(error.response.status, error)
             }
           })
         }
@@ -1458,14 +1436,8 @@ export default {
           }, 1200)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`
-          })
         })
     },
     sortData(a, b) {

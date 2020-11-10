@@ -210,8 +210,7 @@
             .then(() => {
             })
             .catch(error => {
-              this.$catchStatus(error.response.status)
-              console.log(error.response)
+              this.$catchStatus(error.response.status, error)
             })
         }
       },
@@ -242,14 +241,8 @@
             }, 200);
           })
           .catch(error => {
-            this.$catchStatus(error.response.status)
-            console.log(error.response)
+            this.$catchStatus(error.response.status, error)
             this.loading = false
-            this.$notify({
-              group: 'error',
-              title: 'Помилка',
-              text: `${error.response.status} \n ${error.response.data.message}`,
-            })
           })
       },
       finalObj() {
@@ -298,12 +291,7 @@
             this.imageName = response.data.url
           })
           .catch(error => {
-            this.$catchStatus(error.response.status)
-            console.log(error.response)
-            this.$notify({
-              message: 'Помилка',
-              type: 'error',
-            })
+            this.$catchStatus(error.response.status, error)
           })
       },
       getCsrf() {

@@ -57,9 +57,8 @@ export default {
         }
       })
       .catch(error => {
-        this.$catchStatus(error.response.status)
+        this.$catchStatus(error.response.status, error)
         this.loading = false
-        console.log(error.response)
       })
   },
 }

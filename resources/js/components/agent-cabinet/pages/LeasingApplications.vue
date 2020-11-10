@@ -458,14 +458,8 @@ export default {
           this.getUserCalculations()
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
+          this.$catchStatus(error.response.status, error)
           this.requestToRewardLoading = false
-          console.log(error.response)
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response}`,
-          })
         })
     },
     showDialogToAgentReward(item) {
@@ -525,14 +519,8 @@ export default {
             }
           })
           .catch(error => {
-            this.$catchStatus(error.response.status)
-            console.log(error.response)
+            this.$catchStatus(error.response.status, error)
             this.loading = false
-            this.$notify({
-              group: 'error',
-              title: 'Помилка',
-              text: `${error.response.status} \n ${error.response.data.message}`,
-            })
           })
         }
     },

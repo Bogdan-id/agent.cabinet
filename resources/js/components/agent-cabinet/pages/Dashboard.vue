@@ -572,15 +572,8 @@ export default {
           }
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
+          this.$catchStatus(error.response.status, error)
           this.$store.commit('toggleSpinner', false)
-
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
         })
     },
 
@@ -601,9 +594,7 @@ export default {
           this.slides = response.data
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
         })
     },
 
@@ -614,8 +605,7 @@ export default {
           this.news = response.data
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error)
+          this.$catchStatus(error.response.status, error)
         })
     }
   },

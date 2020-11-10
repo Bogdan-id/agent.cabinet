@@ -2,7 +2,7 @@
   <div class="wrapper">
     <side-bar>
       <template slot="links">
-        <sidebar-link to="/dashboard" name="Головна" icon="homeSvg"/>
+        <sidebar-link to="/" name="Головна" icon="homeSvg"/>
         <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="calculatorSvg"/>
         <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="leasingRequestSvg"/>
         <sidebar-link v-show="showMenuCommision" to="/commission-requests" name="Заявки на винагороду" icon="rewardRequests"/>

@@ -778,12 +778,7 @@ export default {
           console.log(this.documentUrls)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-          this.$notify({
-            message: 'Помилка',
-            type: 'error',
-          })
+          this.$catchStatus(error.response.status, error)
         })
     },
 
@@ -966,14 +961,8 @@ export default {
           }, 1200)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`
-          })
         })
     },
     openDialogToSave(format){
@@ -1052,29 +1041,19 @@ export default {
           }, 2000);
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
         })
     },
     deleteIndividualFields(object) {
       if(object.phone === null || object.phone === 'undefined') delete object.phone
       if(object.email === null || object.email === 'undefined') delete object.email
       delete object.legal_info.inn
-      // delete object.legalInfo.monthlyIncome
-      // delete object.legalInfo.acquisitionTargetId
       return object
     },
     deleteLegalFields(object) {
       delete object.legal_info.edrpou,
       delete object.legal_info.companyName
-      // delete object.legalInfo.currencyBalance
-      // delete object.legalInfo.equity
       return object
     },
     getCsrf() {
@@ -1096,7 +1075,6 @@ export default {
       this.leasingApplicationForm = true
     },
     getDefaultProperties() {
-      // chart diagram btn
       console.log({DATA: this.data})
       let firstGraph = Object.keys(this.data.result_data)
         .filter(v => v !== 'requestId')[0]

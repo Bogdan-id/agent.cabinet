@@ -73,14 +73,8 @@ export default {
           this.$store.commit('toggleAdminSpinner', false)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.reponse)
+          this.$catchStatus(error.response.status, error)
           this.$store.commit('toggleAdminSpinner', false)
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: ''
-          })
         })
     },
 
@@ -121,14 +115,8 @@ export default {
           }
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.$store.commit('toggleAdminSpinner', false)
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: ''
-          })
         })
     },
   },

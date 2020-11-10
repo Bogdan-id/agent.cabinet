@@ -150,16 +150,9 @@ const routes = [
       }
     ]
   }, 
-  //Authentication (dashboard)
-  { 
-    path: '/', 
-    component: Authorization,
-    meta: {
-      title: 'Увiйти'
-    }
-  },
+  // Authentication
 	{ 
-    path: '/login', 
+    path: '/authorization', 
     component: Authorization, 
     props: true, 
     name: 'authorization',
@@ -168,7 +161,7 @@ const routes = [
     },
   },
   {
-    path: '/login/forget',
+    path: '/forget',
     name: 'Відновлення паролю',
     component: ForgotPassword,
     meta: {
@@ -176,15 +169,17 @@ const routes = [
     }
   },
   { 
-    path: '/register', 
+    path: '/user', 
     component: Registration,
+    name: 'Registration',
     meta: {
       title: 'Реєстрація'
     }
   },
   { 
-    path: '/verification', 
+    path: '/wait', 
     component: WaitAnswer,
+    name: 'Verification',
     meta: {
       title: 'Очiкуйте зворотнього зв`язку'
     }
@@ -197,8 +192,9 @@ const routes = [
     }
   },
   { 
-    path: '/finish-register', 
+    path: '/agent-form', 
     component: CompleteRegistration,
+    name: 'FinishRegister',
     meta: {
       title: 'Завершення реєстрації'
     }
@@ -206,16 +202,16 @@ const routes = [
 
   /* Головна */
 	{ 
-		path: '/home', 
+		path: '/', 
     component: DashboardLayout,
     name: 'Головна',
-    redirect: "/dashboard",
+    redirect: "/",
     meta: {
       title: 'Головна'
     },
 		children: [
       {
-        path: '/dashboard',
+        path: '/',
         name: 'Головна',
         component: Dashboard,
         meta: {

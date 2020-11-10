@@ -86,8 +86,7 @@ export default {
           this.getCurrentYear(res)
         })
         .catch(err => {
-          console.log(err.response)
-          this.$catchStatus(err.response.status)
+          this.$catchStatus(err.response.status, err)
         })
     },
 

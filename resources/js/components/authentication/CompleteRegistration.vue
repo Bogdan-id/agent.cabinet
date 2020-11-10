@@ -564,7 +564,7 @@ export default {
             if(response.status === 200) {
               const message = 'Зараз вас буде перенаправлено до остобистого кабiнету'
               this.simpleNotify('Успiшно', message, 'success')
-              setTimeout(() => { this.$router.go() }, 5000)
+              setTimeout(() => { this.$chHref('/agent#') }, 5000)
               this.request = false
             } else {
               const message = `Не вдалося зареєструвати. Оновiть сторінку і 
@@ -647,7 +647,7 @@ export default {
       .catch(error => {
         console.log(error.response)
         if(error.response.status == 401) {
-          this.$router.push({ name: 'authorization', params: { reload: true }})
+          this.$chRef('/login#/authorization')
         }
       })
     },

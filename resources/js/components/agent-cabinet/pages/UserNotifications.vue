@@ -86,14 +86,8 @@ export default {
           this.btnLoading = false
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.getAgentNotifications()
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
           this.btnLoading = false
         })
     },
@@ -101,12 +95,8 @@ export default {
     changeNotificationsStatus(object) {
       axios
         .post(`/agent/notifications/checking`, object)
-        .then(() => {
-          /* */
-        })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
         })
     },
 
@@ -129,8 +119,7 @@ export default {
           this.changeNotificationsStatus({notifications :notificationsArrIds})
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
         })
     },
 

@@ -1601,14 +1601,7 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
-
-          let message = error.response.statusText
-
-          this.notify('Помилка', message, 'error')
-
+          this.$catchStatus(error.response.status, error)
           this.$store.commit('toggleSpinner', false)
         })
     },
@@ -1625,16 +1618,8 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
-
-          let message = error.response.statusText
-
-          this.notify('Помилка', message, 'error')
-
+          this.$catchStatus(error.response.status, error)
           this.$store.commit('toggleSpinner', false)
-
           this.modelLoader = false
         })
     },
@@ -1741,12 +1726,7 @@ export default {
           })
           .catch(error => {
             this.calculationLoader = false
-
-            this.$catchStatus(error.response.status)
-
-            const message = error.response.statusText
-
-            this.notify('Помилка', message, 'error')
+            this.$catchStatus(error.response.status, error)
           })
     },
     valueTotal(value, min, max) {
@@ -1947,12 +1927,7 @@ export default {
         this.changeActiveClass()
       })
       .catch(error => {
-        this.$catchStatus(error.response.status)
-        this.$notify({
-          group: 'error',
-          title: 'Виникла помилка',
-          text: error.response.data.message,
-        })
+        this.$catchStatus(error.response.status, error)
       })
     },
 

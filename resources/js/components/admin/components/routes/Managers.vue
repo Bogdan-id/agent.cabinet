@@ -76,14 +76,8 @@ export default {
           })
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.managerLoading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
         })
     },
     getManagers() {
@@ -93,8 +87,7 @@ export default {
           this.managers = response.data
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error)
+          this.$catchStatus(error.response.status, error)
         })
     }
   },

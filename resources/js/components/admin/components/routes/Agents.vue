@@ -171,17 +171,8 @@ export default {
 
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
-
+          this.$catchStatus(error.response.status, error)
           this.$store.commit('toggleAdminSpinner', false)
-
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: ''
-          })
         })
     },
 
@@ -232,10 +223,7 @@ export default {
           this.managers = response.data
         })
         .catch(error => {
-
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
         })
     },
 
@@ -258,17 +246,8 @@ export default {
           this.getAgents()
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
-
+          this.$catchStatus(error.response.status, error)
           this.loading = false
-
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `Код: ${error.response.status} ${error.response.data.message}`
-          })
         })
     },
 
@@ -319,14 +298,8 @@ export default {
           this.getAgents()
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error.response.status, error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `Код: ${error.response.status} ${error.response.data.message}`
-          })
         })
     }
   },

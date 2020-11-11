@@ -111,7 +111,7 @@ export default {
     drawer: false,
     drawerState: null,
     mobileLinks: [
-      {path: "/dashboard", text: "Головна", icon: "homeSvg", iconPresent: true},
+      {path: "/", text: "Головна", icon: "homeSvg", iconPresent: true},
       {path: "/calculator", text: "Калькулятор лізингу", icon: "calculatorSvg", iconPresent: true},
       {path: "/leasing-requests", text: "Заявки на лiзинг", icon: "leasingRequestSvg", iconPresent: true},
       {path: "/commission-requests", text: "Заявки на винагороду", icon: "rewardRequestsSvg", iconPresent: true},

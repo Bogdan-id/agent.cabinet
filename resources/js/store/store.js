@@ -8,6 +8,11 @@ export default new Vuex.Store({
 	state: {
     user: {},
 
+    reportYears: {
+      agentCommissions: [],
+      leasingRequests: []
+    },
+
     agentData: {
       id: null,
       name: null,
@@ -32,6 +37,11 @@ export default new Vuex.Store({
     addUserData(state, value) {
       state.user = Object.assign({}, value)
       console.log(state.user)
+    },
+
+    addReportYears(state, value) {
+      state.reportYears.agentCommissions.push(...value.agentCommissions)
+      state.reportYears.leasingRequests.push(...value.leasingRequests)
     },
 
     addNotifications(state, val) {

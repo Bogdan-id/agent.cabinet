@@ -48,7 +48,7 @@ export default {
           // this.$chHref('/login#/user')
 					console.log(error.response.statusText)
 				})
-		},
+    },
 		checkUserAgent() {
       // user is tied to an agent. Pass to dashboard
       axios.get(`/getUserAgent`)
@@ -67,7 +67,34 @@ export default {
           this.$chHref('/finish-register#/')
 					console.log(error.response.statusText)
 				})
-		},
+    },
+    getAvailableYears() {
+      let urls = [
+        {url: `/reports/years/agent-commissions/${this.$store.state.user.agent.id}`, desc: "agentCommissions"},
+        {url: `/reports/years/leasing-requests/${this.$store.state.user.agent.id}`, desc: "leasingRequests"}
+      ]
+      return Promise.all(urls.map(obj => {
+        return axios
+          .get(obj.url)
+          .then(res => {return {[obj.desc]: res.data}})
+          .catch(err => {
+            this.$catchStatus(err.response.status, err)
+          })
+      })).then(obj => obj)
+    },
+  },
+
+  computed: {
+    agent() {
+      return this.$store.state.user.agent 
+    }
+  },
+  watch: {
+    agent(val) {
+      if(val) this.getAvailableYears()
+        .then(v => this.$store.commit('addReportYears', Object.assign({}, ...v)))
+        .then(() => console.log({REPORTSYEARS: {...this.$store.state.reportYears}}))
+    }
   },
   created() {
     this.routeController()

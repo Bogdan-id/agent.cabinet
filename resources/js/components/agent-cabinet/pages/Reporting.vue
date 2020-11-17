@@ -3,10 +3,10 @@
     <v-card-title class="pb-1">
       <v-select
         :items="[
-          {text: 'Звіт заявок на лізинг', value: 'leasingRequests'},
-          {text: 'Звiт заявок та виплат', value: 'agentCommissions'},
+          {text: 'Звіт заявок на лізинг', value: 'leasingRequestReport'},
+          {text: 'Звiт заявок та виплат', value: 'RequestsAndPaymentsReports'},
         ]"
-        @change="callGetLReq()"
+        @change="getReport()"
         item-text="text"
         item-value="value"
         style="max-width: 280px;"
@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import leasingRequests from './LeasingRequestReport'
-import agentCommissions from './RequestsAndPaymentsReports'
+import leasingRequestReport from './LeasingRequestReport'
+import RequestsAndPaymentsReports from './RequestsAndPaymentsReports'
 
 import axios from 'axios'
 
@@ -68,14 +68,14 @@ export default {
       {id: '12', name: 'Грудень'},
     ],
 
-    currentReport: 'leasingRequests',
+    currentReport: 'leasingRequestReport',
     currentYear: null,
     years: []
   }),
 
   components: {
-    agentCommissions,
-    leasingRequests
+    RequestsAndPaymentsReports,
+    leasingRequestReport
   },
 
   methods: {
@@ -116,33 +116,14 @@ export default {
     },
 
     callGetLReq() {
-      setTimeout(() => {this.$refs.chart.getLeasingRequests()}, 0)
-    },
-
-    initData() {
-      this.years = this.$store.state.reportYears[this.currentReport]
-      this.currentYear = this.years[0]
-      this.callGetLReq()
-    }
-  },
-
-  computed: {
-    reportYears() {
-      let years = this.$store.state.reportYears
-      return years.agentCommissions || years.leasingRequests
-    }
-  },
-
-  watch: {
-    reportYears() {
-      this.initData()
+      this.$nextTick(() => {
+        this.$refs.chart.getLeasingRequests()
+      })
     }
   },
 
   mounted() {
-    this.reportYears.length 
-      ? this.initData() 
-      : false
+    this.getReport()
   }
 }
 

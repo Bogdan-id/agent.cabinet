@@ -127,25 +127,17 @@
 						<div v-if="request" class="lds-dual-ring"></div>
 					</button>
 					<div class="app__sign-navigate">
-						<a class="app__sign-navigate-link --link" href="/login#/authorization">Авторизацiя</a>
-						<a class="app__sign-navigate-link --link" href="/register#/user">Реєстрація</a>
+						<a class="app__sign-navigate-link --link" href="/login">Авторизацiя</a>
+						<a class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
 					</div>
 				</div>
         <div v-show="showCaptcha" >
           <span>
-            <a style="display: inline-block;" 
-              class="app__sign-navigate-link --link" 
-              href="/login#/authorization">
-              Авторизацiя
-            </a>
+            <a style="display: inline-block;" class="app__sign-navigate-link --link" href="/login">Авторизацiя</a>
           </span>
           <span>&nbsp;|&nbsp;</span>
           <span>
-            <a style="display: inline-block;" 
-              class="app__sign-navigate-link --link" 
-              href="/register#/user">
-              Реєстрація
-            </a>
+            <a style="display: inline-block;" class="app__sign-navigate-link --link" href="/register">Реєстрація</a>
           </span>
         </div>
 			</div>
@@ -255,7 +247,7 @@ export default {
             })
           }
           setTimeout(() => {
-            this.$chHref('/login#/authorization')
+            this.$router.go()
           }, 1200)
           this.userId = null
           this.loading = false

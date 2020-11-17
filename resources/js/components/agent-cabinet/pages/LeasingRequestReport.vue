@@ -201,7 +201,8 @@ export default {
           this.buildGraph(response)
         })
         .catch(err => {
-          this.$catchStatus(err.response.status, err)
+          console.log(err.response)
+          this.$catchStatus(err.response.status)
         })
     },
   },

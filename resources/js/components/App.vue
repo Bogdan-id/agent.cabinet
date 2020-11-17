@@ -14,92 +14,32 @@
 
 
 <script>
-import axios from 'axios'
 export default {
   name: 'Головна',
+
   methods: {
-    routeController() {
-      if(location.href.includes('login') && !location.href.includes('forget')) {
-        this.$router.push({name: 'authorization'})
-        return
-      } else if(location.href.includes('verification')) {
-        this.$router.push({name: 'Verification'})
-        return
-      } else if(location.href.includes('finish-register')) {
-        this.$router.push({name: 'FinishRegister'})
-        return
-      } else if(location.href.includes('register')) {
-        this.$router.push({name: 'Registration'})
-        return
-      }
-			axios.get(`/getCurrentUser`)
-				.then(response => {
-					// user has registered account and the application is approved
-					if(response.data.is_active === 1) {
-						this.checkUserAgent()
-					// user has registered an account. Application at the verification stage
-					} else if(response.data.user.is_active === 0) {
-						this.$chHref('/verification#/')
-					} else {
-            this.$chHref('/login#/user')
-          }
-				})
-				.catch(error => {
-          // this.$chHref('/login#/user')
-					console.log(error.response.statusText)
-				})
-    },
-		checkUserAgent() {
-      // user is tied to an agent. Pass to dashboard
-      axios.get(`/getUserAgent`)
-				.then(response => {
-          // user has registered account and the application is approved
-          if(!/agent#\/.+/g.test(location.href)) {
-            if(response.data.agent !== null) {
-              this.$chHref('/agent#/')
-            // Application approved. Fill the form (complete register)
-            } else {
-              this.$chHref('/finish-register#/')
-            }
-          } else return
-				})
-				.catch(error => {
-          this.$chHref('/finish-register#/')
-					console.log(error.response.statusText)
-				})
-    },
-    getAvailableYears() {
-      let urls = [
-        {url: `/reports/years/agent-commissions/${this.$store.state.user.agent.id}`, desc: "agentCommissions"},
-        {url: `/reports/years/leasing-requests/${this.$store.state.user.agent.id}`, desc: "leasingRequests"}
-      ]
-      return Promise.all(urls.map(obj => {
-        return axios
-          .get(obj.url)
-          .then(res => {return {[obj.desc]: res.data}})
-          .catch(err => {
-            this.$catchStatus(err.response.status, err)
-          })
-      })).then(obj => obj)
-    },
+    goToRoute() {
+      // setTimeout(() => {
+      //   let route = localStorage.getItem('route')
+      //   let currentRoute = this.$router.currentRoute.name
+
+      //   const check = currentRoute !== 'Aдмiн'
+
+      //   route && check
+      //     ? this.$router.push({name: route})
+      //     : false
+      // }, 0)
+    } 
   },
 
-  computed: {
-    agent() {
-      return this.$store.state.user.agent 
-    }
-  },
-  watch: {
-    agent(val) {
-      if(val) this.getAvailableYears()
-        .then(v => this.$store.commit('addReportYears', Object.assign({}, ...v)))
-        .then(() => console.log({REPORTSYEARS: {...this.$store.state.reportYears}}))
-    }
-  },
   created() {
-    this.routeController()
     this.$store.dispatch('getCurrentUser')
   },
+
+  mounted() {
+    this.goToRoute()
+  },
+  
 }
 </script>
 

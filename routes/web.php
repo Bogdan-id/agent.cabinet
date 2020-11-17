@@ -13,13 +13,11 @@ use Illuminate\Routing\Router;
 |
 */
 
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('auth.login');
 });
 
 Auth::routes();
-
-Route::get('/agent', 'HomeController@index')->name('home');
 
 Route::get('/verification',  function () {
     return view('verification');
@@ -34,7 +32,13 @@ Route::get('/finish-register', function () {
 })->middleware(['auth', 'user_active', 'dont_user_agent', 'dont_banned_user']);
 
 
-    
+Route::group(
+        [
+            'prefix' => 'json',
+            //'middleware'=>['auth:sanctum', 'verified'],
+            //'namespace' => 'App\Http\Controllers'
+        ],
+        static function () {
 Route::get('/verification/accept/{id}', 'VerificationController@acceptAgent');
 Route::get('/verification/reject/{id}', 'VerificationController@rejectAgent');
 
@@ -85,12 +89,12 @@ Route::get('/reports/agent-commissions/{agentId}/{year}', 'ReportsController@age
 
 
 Route::get('/getCurrentUser', 'UserController@getCurrentUser');
-Route::get('json/slides', 'SliderController@getSlides');
-Route::get('json/slides/{slug}', 'SliderController@getSlide');
-Route::get('json/news', 'NewsController@getAllNews');
-Route::get('json/news/{slug}', 'NewsController@getNews');
-Route::get('json/useful-materials-categories/{slug}', 'UsefulMaterialsController@getMaterialsByCategory');
-Route::get('json/useful-materials-categories/{categorySlug}/{slug}', 'UsefulMaterialsController@getMaterialBySlug');
+Route::get('slides', 'SliderController@getSlides');
+Route::get('slides/{slug}', 'SliderController@getSlide');
+Route::get('news', 'NewsController@getAllNews');
+Route::get('news/{slug}', 'NewsController@getNews');
+Route::get('useful-materials-categories/{slug}', 'UsefulMaterialsController@getMaterialsByCategory');
+Route::get('useful-materials-categories/{categorySlug}/{slug}', 'UsefulMaterialsController@getMaterialBySlug');
 Route::post('/calculate', 'CalculateController@create');
 Route::get('/models', 'ModelController@index');
 Route::get('/mark', 'MarkController@index');
@@ -99,6 +103,8 @@ Route::get('/fire', function () {
         event(new \App\Events\NewDataEvent('data'));
         return 'ok';
     });
+}
+);
 Route::group([
     'prefix'        => 'admin',
     'namespace'     => '\App\\Admin\\Controllers',
@@ -150,3 +156,5 @@ Route::group([
     $router->get('agent-commission/paid/{id}', 'AgentCommisionController@paidAgentCommision')
                 ->where('id', '[0-9]+');
 });
+
+Route::any('/{vue}', 'HomeController@index')->name('home')->where('vue', '.*');

@@ -255,9 +255,8 @@ export default {
   methods: {
     toggleLegend() {
       let myLegendContainer = document.getElementById("legend")
-      if(!myLegendContainer) return
-      
       let legendItems = myLegendContainer.getElementsByTagName('li')
+
       myLegendContainer.innerHTML = this.chartInst.generateLegend()
 
       let legendClickCallback = (event) => {
@@ -366,7 +365,8 @@ export default {
           this.buildGraph(response)
         })
         .catch(err => {
-          this.$catchStatus(err.response.status, err)
+          console.log(err.response)
+          this.$catchStatus(err.response.status)
         })
     },
 
@@ -426,13 +426,12 @@ export default {
 
     setChartBreakPoint() {
       let {sm, xs, mdAndUp} = this.$vuetify.breakpoint
-      if(!this.data.__proto__.breakpoint) {
-        Object.defineProperty(this.data.__proto__, 'breakpoint', 
-          {
-            value: {sm, xs, mdAndUp},
-            writable: false
-          })
-      }
+    
+      Object.defineProperty(this.data.__proto__, 'breakpoint', 
+        {
+          value: {sm, xs, mdAndUp},
+          writable: false
+        })
     }
   },
 

@@ -79,12 +79,13 @@
   </style>
 </head>
 <body>
+@if(@isset($manager))
 <htmlpagefooter name="page-footer">
   <div style="text-align: center; font-size: 0.8rem; color: #5f6368">
     <span style="font-size: 0.9rem; color: black;">Ваш менеджер по лiзингу:</span><br />
-    <span style="color: #800000;">{{ $manager['name'] }}</span><br />
-    <span style="color: #800000;">{{ $manager['email'] }}</span><br />
-    <span style="color: #800000;">{{ $manager['phone'] }}</span><br />
+    <span style="color: #800000;">{{ $manager['name'] ?? null}}</span><br />
+    <span style="color: #800000;">{{ $manager['email'] ?? null}}</span><br />
+    <span style="color: #800000;">{{ $manager['phone'] ?? null}}</span><br />
   </div>
 </htmlpagefooter>
 <htmlpagefooter name="page-number">
@@ -92,6 +93,7 @@
     <span style="color: #800000;"><span style="color: black;">Тел.</span> {{ $manager['phone'] }}</span>
   </div>
 </htmlpagefooter>
+@endif
 @if($leasingObjType == 'СПЕЦІАЛЬНІ ТЗ')
   <div class="leasing-object-type-background" style="background: url('{{ storage_path('pdf/Specials.png') }}')">
 @elseif($leasingObjType == 'Вантажні авто' && $mark != 'ГАЗ')

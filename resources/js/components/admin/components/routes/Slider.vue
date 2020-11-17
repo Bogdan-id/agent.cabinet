@@ -557,8 +557,13 @@ export default {
           }, 1200)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status, error)
+          this.$catchStatus(error.response.status)
           this.deleteLoading = false
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
           this.stopEditMode()
         })
     },
@@ -597,7 +602,13 @@ export default {
           }
         })
         .catch(error => {
-          this.$catchStatus(error.response.status, error)
+          this.$catchStatus(error.response.status)
+          console.log(error.response)
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
         })
     },
     createSlider(id) {
@@ -633,8 +644,14 @@ export default {
           this.stopEditMode()
         })
         .catch(error => {
-          this.$catchStatus(error.response.status, error)
+          this.$catchStatus(error.response.status)
+          console.log(error)
           this.saveLoading = false
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${error.response.status} \n ${error.response.data.message}`,
+          })
           this.getSliders()
           this.stopEditMode()
         })
@@ -688,7 +705,8 @@ export default {
           sliderImageInput.value = null
         })
         .catch(error => {
-          this.$catchStatus(error.response.status, error)
+          this.$catchStatus(error.response.status)
+          console.log(error.response)
         })
     },
     async listenImageInput() {
@@ -732,7 +750,8 @@ export default {
         this.$store.commit('toggleAdminSpinner', false)
       })
       .catch(error => {
-        this.$catchStatus(error.response.status, error)
+        this.$catchStatus(error.response.status)
+        console.log(error)
         this.$store.commit('toggleAdminSpinner', false)
       })
     }
@@ -744,6 +763,7 @@ export default {
 </script>
 
 <style lang="scss">
+  .sliders-wrapper {}
   .slider-card-wrapper {
     position: relative;
     width: 100%;

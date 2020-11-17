@@ -226,7 +226,8 @@ export default {
       axios
         .post(`/agent/notifications/checking`, object)
         .catch(error => {
-          this.$catchStatus(error.response.status, error)
+          this.$catchStatus(error.response.status)
+          console.log(error.response)
         })
     },
 
@@ -306,11 +307,18 @@ export default {
       this.$store.commit('toggleSpinner', true)
       axios.post(`/logout`, token)
         .then(() => {
-          this.$chHref('/login#/authorization')
+          this.$router.go()
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status, error)
+          this.$catchStatus(error.response.status)
+
+          this.$notify({
+            message: error.response.data.message,
+            type: 'warning',
+            horizontalAlign: 'center'
+          })
+
           this.$store.commit('toggleSpinner', false)
         })
     },
@@ -323,7 +331,9 @@ export default {
           
         })
         .catch(error => {
-          this.$catchStatus(error.response.status, error)
+          this.$catchStatus(error.response.status)
+
+          console.log(error.response)
         })
     },
     capitalizeFirstLetter(string) {

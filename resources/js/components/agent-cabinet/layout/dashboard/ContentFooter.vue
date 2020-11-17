@@ -213,7 +213,15 @@ export default {
           }, 800)
         })
         .catch( err => {
-          this.$catchStatus(err.response, err)
+          console.log(err.response)
+
+          this.$notify({
+            group: 'error',
+            title: 'Помилка',
+            text: `${err.response.status} \n ${err.response.data.message}`,
+          })
+
+          this.$catchStatus(err.response)
         })
     },
 

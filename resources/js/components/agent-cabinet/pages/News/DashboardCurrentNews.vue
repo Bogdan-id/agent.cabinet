@@ -22,12 +22,42 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data: () => ({
     currentNews: null,
+    news: [],
   }),
+  methods: {
+    getAllNews() {
+      console.log('getAllNews')
+      this.news.splice(0)
+      axios
+        .get('/json/news')
+        .then(response => {
+          this.news.push(...response.data)
+          this.getCurrentNews()
+        })
+        .catch(error => {
+          this.$catchStatus(error.response.status)
+        })
+    },
+    getCurrentNews() {
+      console.log('getCurrentNews')
+      if(this.news.length) {
+        this.currentNews = this.news.filter(v => {
+          return v.slug === this.$route.params.slug
+        })[0]
+        console.log({CurrentNews: this.currentNews})
+      }
+    }
+  },
   created() {
-    this.currentNews = this.$route.params
+    if(Object.keys(this.$route.params).length > 1) {
+      this.currentNews = this.$route.params
+    } else {
+      this.getAllNews()
+    }
   },
   mounted() {
     document.body.scrollTop = document.documentElement.scrollTop = 0

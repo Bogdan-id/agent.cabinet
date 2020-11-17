@@ -100,7 +100,7 @@
           </label>
         </v-col>
       </v-row>
-      <v-row v-show="smallerThenMedium" class="pt-8">
+      <v-row v-show="smallerThenMedium" :class="mediumAndDown ? 'small pt-8' : 'pt-8'">
         <v-col class="pb-0">
           <v-select
             v-model="calcObj.leasingObjectType"

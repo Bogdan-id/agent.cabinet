@@ -1021,7 +1021,9 @@ export default {
     },
 
     user() {
-      return Object.keys(this.$store.state.user.agent).length > 0
+      return this.$store?.state?.user?.agent 
+        ? Object.keys(this.$store.state.user.agent).length > 0
+        : false
     },
 
     validationRules() {
@@ -1594,7 +1596,7 @@ export default {
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
 
-      axios.get(`/mark?category=${this.category}`)
+      axios.get(`/json/mark?category=${this.category}`)
         .then(response => {
 
           this.brandItems = response.data
@@ -1618,7 +1620,7 @@ export default {
       this.$store.commit('toggleSpinner', true)
       this.modelLoader = true
 
-      axios.get(`/models?category=${this.category}&mark=${this.calcObj.leasedAssertMark.value}`)
+      axios.get(`/json/models?category=${this.category}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
           this.modelItems = response.data
           this.modelLoader = false
@@ -1903,8 +1905,9 @@ export default {
     },
 
     getUserCalculations() {
+      console.log({CalculationID: this.$router.currentRoute.params.id})
       axios
-      .get(`/calculation/${this.$router.currentRoute.params.id}`)
+      .get(`/json/calculation/${this.$router.currentRoute.params.id}`)
       .then(response => {
         let data = response.data.request_data
         let advance = response.data.request_data.advance
@@ -2164,13 +2167,12 @@ export default {
       this.changeActiveClass()
       this.displayWindowSize()
       this.initAdvanceInputValue()
-      
       return
 
     } else {
       this.calcObj.leasingObjectType = {label: "Легкові та комерційні авто", value: 1}
     }
-
+    this.getUserCalculations()
     this.changeActiveClass()
     this.initFranchiseInput(null, false)
     this.getMarksByType()
@@ -2178,7 +2180,7 @@ export default {
     this.initAdvanceInputValue()
     
     this.calcObj._token = this.getCsrf()
-    this.calcObj.agentId = this.$store.state.user.agent.id
+    // this.calcObj.agentId = this.$store.state.user.agent.id
   },
   
   beforeDestroy() {

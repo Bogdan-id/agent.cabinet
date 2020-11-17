@@ -328,7 +328,7 @@ const routes = [
             ]
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             name: 'Редагувати',
             component: NewCalculation,
             meta: {

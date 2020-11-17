@@ -1346,8 +1346,9 @@ export default {
       if(this.userData){
         const agentId = this.$store.state.user.agent.id
         axios
-          .get(`calculations/agent/${agentId}`)
+          .get(`json/calculations/agent/${agentId}`)
           .then(response => {
+            console.log({calculatorResponse: response})
             this.loading = false
             if(response.data.length > 0)  {
               

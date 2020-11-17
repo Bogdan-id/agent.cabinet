@@ -30,7 +30,6 @@ export default {
   }),
   methods: {
     getAllNews() {
-      console.log('getAllNews')
       this.news.splice(0)
       axios
         .get('/json/news')
@@ -43,7 +42,6 @@ export default {
         })
     },
     getCurrentNews() {
-      console.log('getCurrentNews')
       if(this.news.length) {
         this.currentNews = this.news.filter(v => {
           return v.slug === this.$route.params.slug

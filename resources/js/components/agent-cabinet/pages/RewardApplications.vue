@@ -164,7 +164,7 @@ export default {
         this.object.agentId = id
         this.object._token = this.getCsrf()
         axios
-          .get(`/agent-commission/agent/${id}`)
+          .get(`/json/agent-commission/agent/${id}`)
           .then(response => {
             console.log(response.data)
             this.object.agentId = id

@@ -117,7 +117,7 @@ export default new Vuex.Store({
   actions: {
     getCurrentUser({commit, state}) {
       commit('toggleSpinner', true)
-      axios.get('/getUserAgent')
+      axios.get('/json/getUserAgent')
         .then(response => {
           console.log({MainResponse: response.data})
 

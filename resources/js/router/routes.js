@@ -318,7 +318,7 @@ const routes = [
             },
             children: [
               {
-                path: 'chart',
+                path: 'chart/:id',
                 name: 'Графiки',
                 component: ChartDiagram,
                 meta: {
@@ -336,7 +336,7 @@ const routes = [
             }
           },
           {
-            path: 'charts',
+            path: 'charts/:id',
             name: 'Графiки ', // indentation important
             component: ChartDiagram,
             meta: {

@@ -1317,7 +1317,7 @@ export default {
 
     toDetail(id) {
       let graphs = this.getGraphById(id)[0]
-      this.$router.push({name: 'Графiки ', params: {data: graphs}})
+      this.$router.push({name: 'Графiки ', params: {id: graphs.id, data: graphs}})
     },
     getGraphById(id) {
       return this.$store.state.graphs

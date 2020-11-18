@@ -211,7 +211,8 @@ export default {
           this.timer(120)
         })
         .catch(error => {
-          this.$catchStatus(error)
+          console.log(error.response)
+          this.loading = false
           if(error.response.status == 422) {
             this.$notify({
               group: 'error',
@@ -252,7 +253,12 @@ export default {
           this.loading = false
         })
         .catch(error => {
-          this.$catchStatus(error)
+          console.log(error.response)
+          this.$notify({
+            group: 'eror',
+            title: `${error.response.data.message}`,
+            text: '',
+          })
           this.loading = false
         })
     },

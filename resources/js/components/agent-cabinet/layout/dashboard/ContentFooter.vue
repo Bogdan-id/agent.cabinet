@@ -195,7 +195,7 @@ export default {
       this.sndMsgLodng = true
 
       axios
-        .post('/feedback/send', this.msgObj() )
+        .post('/json/feedback/send', this.msgObj() )
         .then( res => {
           console.log(res)
 

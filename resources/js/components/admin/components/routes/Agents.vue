@@ -231,7 +231,7 @@ export default {
 
     getManagers() {
       axios
-        .get('/getManagers')
+        .get('/json/getManagers')
         .then(response => {
           this.managers = response.data
           console.log({managers: response.data})

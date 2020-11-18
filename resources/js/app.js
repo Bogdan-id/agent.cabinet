@@ -21,12 +21,22 @@ Vue.use(PaperDashboard)
 Vue.use(VueMask)
 Vue.use(Notifications)
 
+const baseURL = new URL (location.href).origin
+
 function errorHandler401(error) {
+  if(error?.response?.status === 404) {
+    let pathName = new URL (location.href).pathname
+    pathName.includes('admin')
+      ? setTimeout(() => {location.replace(baseURL + '/login')}, 2000)
+      : false
+
+    return notify('Увага!', 'З\'єднання з сервером втрачено!')
+  }
+
   switch (error?.response?.status) {
     case 401: { 
       notify('Увага!', 'З\'єднання з сервером втрачено!'); 
       setTimeout(() => { router.go() }, 2000)}; break;
-
     case 500: notify('Помилка! ', 'Зверніться до технічної підтримки!'); 
       break;
 

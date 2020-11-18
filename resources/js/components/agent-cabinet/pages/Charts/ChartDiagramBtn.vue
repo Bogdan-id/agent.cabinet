@@ -719,13 +719,8 @@ export default {
             this.legalInfo.companyName = response.data[0].name
           })
           .catch(error => {
-            console.log(error.response)
             this.edrpouLoading = false
-            this.$notify({
-              group: 'error',
-              title: `Помилка - ${error.response.status}`,
-              text: `${error.response.data.message || error.response.data.errors[0].msg}`,
-            })
+            this.$catchStatus(error)
           })
           
       } else return
@@ -777,14 +772,7 @@ export default {
           this.documentUrls = Object.assign({}, this.documentUrls)
           console.log(this.documentUrls)
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-          this.$notify({
-            message: 'Помилка',
-            type: 'error',
-          })
-        })
+        .catch(error => this.$catchStatus(error))
     },
 
     reqUpl(document, i, cb) {
@@ -802,11 +790,7 @@ export default {
           console.log(this.eFlnks)
           return res
         })
-        .catch(err => this.$notify({
-          group: 'error',
-          title: 'Помилка при завантаженнi',
-          text: err,
-        }))
+        .catch(err => this.$catchStatus(err))
     },
 
     uploadExtraFiles(files) {
@@ -966,14 +950,8 @@ export default {
           }, 1200)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`
-          })
         })
     },
     openDialogToSave(format){
@@ -1052,14 +1030,8 @@ export default {
           }, 2000);
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
         })
     },
     deleteIndividualFields(object) {

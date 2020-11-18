@@ -94,10 +94,7 @@ export default {
           // this.getCurrentYear(res, e)
           this.getCurrentYear(res)
         })
-        .catch(err => {
-          console.log(err.response)
-          this.$catchStatus(err.response.status)
-        })
+        .catch(err => this.$catchStatus(err))
     },
 
     getReport(e) {

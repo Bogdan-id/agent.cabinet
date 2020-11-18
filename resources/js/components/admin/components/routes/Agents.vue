@@ -236,12 +236,7 @@ export default {
           this.managers = response.data
           console.log({managers: response.data})
         })
-        .catch(error => {
-
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
-        })
+        .catch(error => this.$catchStatus(error))
     },
 
     sendRequest(id) {
@@ -263,17 +258,8 @@ export default {
           this.getAgents()
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
-
+          this.$catchStatus(error)
           this.loading = false
-
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `Код: ${error.response.status} ${error.response.data.message}`
-          })
         })
     },
 
@@ -324,14 +310,8 @@ export default {
           this.getAgents()
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `Код: ${error.response.status} ${error.response.data.message}`
-          })
         })
     }
   },

@@ -128,9 +128,7 @@ export default {
 						this.$router.push('/verification')
 					}
 				})
-				.catch(error => {
-					console.log(error.response.statusText)
-				})
+				.catch(error => this.$catchStatus(error))
 		},
 		checkUserAgent() {
       // user is tied to an agent. Pass to dashboard
@@ -146,7 +144,7 @@ export default {
 				})
 				.catch(error => {
           this.$router.push('/finish-register')
-					console.log(error.response.statusText)
+					this.$catchStatus(error)
 				})
 		},
 		signIn(userObj) {
@@ -167,9 +165,7 @@ export default {
 					const error = 'Перевищено ліміт запитів. Спробуйте ще раз через 1-2 хвилини'
 					this.simpleNotify('Помилка', error, 'error')
 				} else {
-					this.consoleErrors(e)
-					const error = `Код помилки: ${e.response.status} \n ${e.response.data.message}`
-					this.simpleNotify('Помилка', error, 'error')
+					this.$catchStatus(e)
 				}
 			})
 		},

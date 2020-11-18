@@ -212,17 +212,7 @@ export default {
             this.clearMsgObj()
           }, 800)
         })
-        .catch( err => {
-          console.log(err.response)
-
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${err.response.status} \n ${err.response.data.message}`,
-          })
-
-          this.$catchStatus(err.response)
-        })
+        .catch(err => this.$catchStatus(err))
     },
 
     getCsrf() {

@@ -37,9 +37,7 @@ export default {
           this.news.push(...response.data)
           this.getCurrentNews()
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-        })
+        .catch(error => this.$catchStatus(error))
     },
     getCurrentNews() {
       if(this.news.length) {

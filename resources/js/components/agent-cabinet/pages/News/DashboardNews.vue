@@ -75,10 +75,7 @@ export default {
         .then(response => {
           this.news = response.data
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error)
-        })
+        .catch(error => this.$catchStatus(error))
     }
   },
   created() {

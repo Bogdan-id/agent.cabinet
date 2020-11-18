@@ -20,30 +20,6 @@
           <img width="40" :src="item.photo" />
         </template>
       </v-data-table>
-      <!-- <v-data-table
-        v-if="tabledata.length > 0"
-        color="black"
-        :headers="tableHeader"
-        :items="tabledata"
-        :hide-default-footer="true"
-        class="elevation-1 mr-3 ml-3">
-        <template v-slot:item.actions="{ item }">
-          <div class="d-flex justify-center">
-            <v-btn
-              @click="getAgentOperations(item.id);
-                findAgent(item.id)"
-              color="primary" x-small>
-              Змiнити
-            </v-btn>
-            &nbsp;
-            <v-btn
-              @click="deactivateUser(item.id)"
-              color="error" x-small>
-              Деактивувати
-            </v-btn>
-          </div>
-        </template>
-      </v-data-table> -->
     </v-card-text>
   </v-card>
 </template>
@@ -76,14 +52,8 @@ export default {
           })
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error)
           this.managerLoading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
         })
     },
     getManagers() {
@@ -92,10 +62,7 @@ export default {
         .then(response => {
           this.managers = response.data
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error)
-        })
+        .catch(error => this.$catchStatus(error))
     }
   },
   created() {

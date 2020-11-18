@@ -797,6 +797,7 @@ export default {
       await axios
         .get(`/json/calculation/${this.$router.currentRoute.params.id}`)
           .then(res => this.graphData = res.data)
+          .catch(error => this.$catchStatus(error))
     }
 
     let firstGraphFromArray = Object.keys(this.graphData.result_data).filter(val => {

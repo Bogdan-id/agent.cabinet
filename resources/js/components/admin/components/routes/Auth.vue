@@ -95,24 +95,11 @@ export default {
       axios.
         post('/admin/login', this.userObj)
         .then(() => {
-          // this.$notify({
-          //   group: 'success',
-          //   title: 'Успiшно',
-          //   text: '',
-          // })
-          // this.$router.go()
           this.loading = false
         })
         .catch(error => {
-          console.log(error.response)
+          this.$catchStatus(error)
           this.loading = false
-          // this.$router.go()
-          // this.$notify({
-          //   group: 'error',
-          //   title: 'Помилка',
-          //   text: `${error.response.status} \n ${error.response.data.message}`,
-          // })
-
         })
     },
     highlightErrors() {

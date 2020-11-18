@@ -209,10 +209,7 @@
             .post('/admin/image/delete', {image: this.imageToDelete})
             .then(() => {
             })
-            .catch(error => {
-              this.$catchStatus(error.response.status)
-              console.log(error.response)
-            })
+            .catch(error => this.$catchStatus(error))
         }
       },
       submit() {
@@ -242,14 +239,8 @@
             }, 200);
           })
           .catch(error => {
-            this.$catchStatus(error.response.status)
-            console.log(error.response)
+            this.$catchStatus(error)
             this.loading = false
-            this.$notify({
-              group: 'error',
-              title: 'Помилка',
-              text: `${error.response.status} \n ${error.response.data.message}`,
-            })
           })
       },
       finalObj() {
@@ -297,14 +288,7 @@
           .then(response => {
             this.imageName = response.data.url
           })
-          .catch(error => {
-            this.$catchStatus(error.response.status)
-            console.log(error.response)
-            this.$notify({
-              message: 'Помилка',
-              type: 'error',
-            })
-          })
+          .catch(error => this.$catchStatus(error))
       },
       getCsrf() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content')

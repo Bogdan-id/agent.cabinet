@@ -83,10 +83,7 @@ export default {
           })
         }
       })
-      .catch(error => {
-        console.log(error.response)
-        this.$catchStatus(error.response.status)
-      })
+      .catch(error => this.$catchStatus(error))
   },
 }
 </script>

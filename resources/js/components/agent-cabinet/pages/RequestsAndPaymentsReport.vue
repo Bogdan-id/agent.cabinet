@@ -364,10 +364,7 @@ export default {
           this.setMaxYAxes(response.data)
           this.buildGraph(response)
         })
-        .catch(err => {
-          console.log(err.response)
-          this.$catchStatus(err.response.status)
-        })
+        .catch(err => this.$catchStatus(err))
     },
 
     buildGraph(response) {

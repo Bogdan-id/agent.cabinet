@@ -574,8 +574,7 @@ export default {
             }
           })
           .catch(error => {
-            console.log(error.response)
-            this.simpleNotify('Помилка', error.response.statusText, 'warning')
+            this.$catchStatus(error)
             this.request = false
           })
       }
@@ -645,7 +644,6 @@ export default {
         this.searchContact()
       })
       .catch(error => {
-        console.log(error.response)
         if(error.response.status == 401) {
           this.$router.push({ name: 'authorization', params: { reload: true }})
         }
@@ -684,9 +682,7 @@ export default {
             this.companyName = response.data.company && response.data.company.company_name ? response.data.company.company_name : null
           }
         })
-        .catch(error => {
-          console.log(error.response)
-        })
+        .catch(error => this.$catchStatus(error))
     }
   },
   watch: {

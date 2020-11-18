@@ -422,14 +422,8 @@ export default {
           }, 800)
         })
         .catch(error => {
-          console.log(error.response)
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
+          this.$catchStatus(error)
           this.loading = false
-          this.$catchStatus(error.response.status)
         })
     },
     showMaterialCategorie() {
@@ -463,8 +457,7 @@ export default {
           this.getUsefulMaterials()
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error)
           this.$store.commit('toggleAdminSpinner', false)
           this.getUsefulMaterials()
         })
@@ -479,8 +472,7 @@ export default {
           this.$store.commit('toggleAdminSpinner', false)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.reponse)
+          this.$catchStatus(error)
           this.$store.commit('toggleAdminSpinner', false)
         })
     },
@@ -526,14 +518,8 @@ export default {
           }, 800)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
         })
     },
     makeCategory() {
@@ -559,14 +545,8 @@ export default {
             }, 800)
           })
           .catch(error => {
-            this.$catchStatus(error.response.status)
-            console.log(error.response)
+            this.$catchStatus(error)
             this.loading = false
-            this.$notify({
-              group: 'error',
-              title: 'Помилка',
-              text: `${error.response.status} \n ${error.response.data.message}`,
-            })
           })
       } else this.highlightErrors()
     },
@@ -592,14 +572,8 @@ export default {
             }, 800)
           })
           .catch(error => {
-            console.log(error.response)
-            this.$catchStatus(error.response.status)
+            this.$catchStatus(error)
             this.loading = false
-            this.$notify({
-              group: 'error',
-              title: 'Помилка',
-              text: `${error.response.status} \n ${error.response.data.message}`,
-            })
           })
       } else this.highlightErrors()
     },

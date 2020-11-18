@@ -557,13 +557,8 @@ export default {
           }, 1200)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
+          this.$catchStatus(error)
           this.deleteLoading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
           this.stopEditMode()
         })
     },
@@ -601,15 +596,7 @@ export default {
             this.sliders[this.editKey].slide_image = response.data.url
           }
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
-        })
+        .catch(error => this.$catchStatus(error))
     },
     createSlider(id) {
       if(this.sliders.length === this.maxSliderValue && !id) {
@@ -644,14 +631,8 @@ export default {
           this.stopEditMode()
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error)
           this.saveLoading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
+          this.$catchStatus(error)
           this.getSliders()
           this.stopEditMode()
         })
@@ -704,10 +685,7 @@ export default {
           let sliderImageInput = document.querySelector('.slider-image-input')
           sliderImageInput.value = null
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-        })
+        .catch(error => this.$catchStatus(error))
     },
     async listenImageInput() {
       let file = document.querySelector('.slider-image-input').files[0]
@@ -750,8 +728,7 @@ export default {
         this.$store.commit('toggleAdminSpinner', false)
       })
       .catch(error => {
-        this.$catchStatus(error.response.status)
-        console.log(error)
+        this.$catchStatus(error)
         this.$store.commit('toggleAdminSpinner', false)
       })
     }

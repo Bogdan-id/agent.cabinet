@@ -38,9 +38,7 @@ export default {
           this.slides.push(...response.data)
           this.getCurrentSlide()
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-        })
+        .catch(error => this.$catchStatus(error))
     },
     getCurrentSlide() {
       if(this.slides.length) {

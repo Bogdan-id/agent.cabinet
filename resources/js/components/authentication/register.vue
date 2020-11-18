@@ -260,7 +260,6 @@ export default {
 			})
 			.catch(e => {
         this.request = false
-        
         if(e.response.status == 422) {
           this.error422(e)
 
@@ -268,7 +267,7 @@ export default {
           this.error429(e)
 
         } else {
-          this.otherErrors(e)
+          this.$catchStatus(e)
         }
 			})
 		},

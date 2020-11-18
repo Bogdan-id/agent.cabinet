@@ -86,14 +86,8 @@ export default {
           this.btnLoading = false
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error)
           this.getAgentNotifications()
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
           this.btnLoading = false
         })
     },
@@ -104,10 +98,7 @@ export default {
         .then(() => {
           /* */
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-        })
+        .catch(error => this.$catchStatus(error))
     },
 
     changeActive(event) {
@@ -125,13 +116,9 @@ export default {
           let notificationsArrIds = this.$store.state.notifications.map(val => {
             return val.id
           })
-
           this.changeNotificationsStatus({notifications :notificationsArrIds})
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-        })
+        .catch(error => this.$catchStatus(error))
     },
 
     checkNotificationStatus() {

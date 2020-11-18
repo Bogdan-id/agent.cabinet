@@ -158,13 +158,7 @@ export default {
           this.getAgentComission()
         })
         .catch(error => {
-          console.log(error.response)
-          this.$catchStatus(error.response.status)
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
+          this.$catchStatus(error)
           this.loading = false
           this.getAgentComission()
         })
@@ -196,10 +190,7 @@ export default {
           console.log(response.data)
           this.filteredAgentComissions = response.data
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-        })
+        .catch(error => this.$catchStatus(error))
     },
     switchStatus(status) {
       if(status === 'paid') return 'Оплачено'

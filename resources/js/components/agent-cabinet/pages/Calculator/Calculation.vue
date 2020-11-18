@@ -1603,14 +1603,7 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
-
-          let message = error.response.statusText
-
-          this.notify('Помилка', message, 'error')
-
+          this.$catchStatus(error)
           this.$store.commit('toggleSpinner', false)
         })
     },
@@ -1627,16 +1620,8 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log(error.response)
-
-          let message = error.response.statusText
-
-          this.notify('Помилка', message, 'error')
-
+          this.$catchStatus(error)
           this.$store.commit('toggleSpinner', false)
-
           this.modelLoader = false
         })
     },
@@ -1744,11 +1729,7 @@ export default {
           })
           .catch(error => {
             this.calculationLoader = false
-
-            this.$catchStatus(error.res.status)
-
-            const message = error.res.statusText
-
+            this.$catchStatus(error)
             this.notify('Помилка', message, 'error')
           })
     },
@@ -1949,14 +1930,7 @@ export default {
 
           this.changeActiveClass()
       })
-      .catch(error => {
-        this.$catchStatus(error.response.status)
-        this.$notify({
-          group: 'error',
-          title: 'Виникла помилка',
-          text: error.response.data.message,
-        })
-      })
+      .catch(error => this.$catchStatus(error))
     },
 
     getDollarRate() {
@@ -1965,9 +1939,8 @@ export default {
         .then(val => {
           this.dollarRate = val.data
             .find(v => v.r030 === 840).rate || 28
-          console.log(this.dollarRate)
-          console.log(this.fixedDollarSum)
         })
+        .catch(error => this.$catchStatus(error))
     },
 
     switchFranchiseFromRequest(value) {

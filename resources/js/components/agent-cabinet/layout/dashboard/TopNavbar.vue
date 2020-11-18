@@ -225,10 +225,7 @@ export default {
 
       axios
         .post(`/json/agent/notifications/checking`, object)
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
-        })
+        .catch(error => this.$catchStatus(error))
     },
 
     toggleCustomSidebar() {
@@ -309,14 +306,7 @@ export default {
           this.$store.commit('toggleSpinner', false)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          this.$notify({
-            message: error.response.data.message,
-            type: 'warning',
-            horizontalAlign: 'center'
-          })
-
+          this.$catchStatus(error)
           this.$store.commit('toggleSpinner', false)
         })
     },
@@ -328,11 +318,7 @@ export default {
           this.$store.commit('addNotifications', response.data)
           
         })
-        .catch(error => {
-          this.$catchStatus(error.response.status)
-
-          console.log({'Get agent notification err': error.response})
-        })
+        .catch(error => this.$catchStatus(error))
     },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1)

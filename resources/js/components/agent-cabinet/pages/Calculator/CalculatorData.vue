@@ -870,18 +870,12 @@ export default {
         axios
           .post(`https://pacific-dawn-21711.herokuapp.com/get-edr-legals/`, {edrpou: this.legalInfo.edrpou})
           .then(response => {
-            console.log(response)
             this.edrpouLoading = false
             this.legalInfo.companyName = response.data[0].name
           })
           .catch(error => {
-            console.log(error.response)
             this.edrpouLoading = false
-            this.$notify({
-              group: 'error',
-              title: `Помилка - ${error.response.status}`,
-              text: `${error.response.data.message || error.response.data.errors[0].msg}`,
-            })
+            this.$catchStatus(error)
           })
       } else return
     },
@@ -935,14 +929,7 @@ export default {
           this.documentUrls = Object.assign({}, this.documentUrls)
           console.log(this.documentUrls)
         })
-        .catch(error => {
-          console.log(error.response)
-          this.$notify({
-            message: 'Помилка',
-            type: 'error',
-          })
-          this.$catchStatus(error.response.status)
-        })
+        .catch(error => this.$catchStatus(error))
     },
 
     reqUpl(document, i, cb) {
@@ -957,11 +944,7 @@ export default {
           if(this.checkFunc(cb)) cb(document[i], res)
           return res
         })
-        .catch(err => this.$notify({
-          group: 'error',
-          title: 'Помилка при завантаженнi',
-          text: err,
-        }))
+        .catch(err => this.$catchStatus(err))
     },
 
     uploadExtraFiles(files) {
@@ -1076,13 +1059,7 @@ export default {
           }, 800)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          this.$notify({
-            group: 'error',
-            title: `Помилка - ${error.response.status}`,
-            text: `${error.response.data.message}`,
-          })
-          console.log(error.response)
+          this.$catchStatus(error)
           this.btnLoading = false
         })
     },
@@ -1272,14 +1249,8 @@ export default {
           }, 5000);
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`,
-          })
+          this.$catchStatus(error)
         })
     },
     requestObj(object) {
@@ -1371,17 +1342,8 @@ export default {
             }
           })
           .catch(error => {
-            if(error) throw error
-            console.log(error.response)
             this.loading = false
-            if(error.response && error.response.status) {
-              this.$notify({
-                group: 'error',
-                title: 'Помилка',
-                text: `${error.response.status} \n ${error.response.data.message}`,
-              })
-              this.$catchStatus(error.response.status)
-            }
+            this.$catchStatus(error)
           })
         }
     },
@@ -1459,14 +1421,8 @@ export default {
           }, 1200)
         })
         .catch(error => {
-          this.$catchStatus(error.response.status)
-          console.log(error.response)
+          this.$catchStatus(error)
           this.loading = false
-          this.$notify({
-            group: 'error',
-            title: 'Помилка',
-            text: `${error.response.status} \n ${error.response.data.message}`
-          })
         })
     },
     sortData(a, b) {

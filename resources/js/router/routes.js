@@ -151,13 +151,6 @@ const routes = [
     ]
   }, 
   //Authentication (dashboard)
-  { 
-    path: '/', 
-    component: Authorization,
-    meta: {
-      title: 'Увiйти'
-    }
-  },
 	{ 
     path: '/login', 
     component: Authorization, 

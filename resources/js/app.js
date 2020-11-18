@@ -21,11 +21,28 @@ Vue.use(PaperDashboard)
 Vue.use(VueMask)
 Vue.use(Notifications)
 
-var errorHandler401 = (error) => {
-  console.log({'Global error handler': error})
-  error === 401
-    ? router.go()
-    : false
+function errorHandler401(error) {
+  switch (error?.response?.status) {
+    case 401: { 
+      notify('Увага!', 'З\'єднання з сервером втрачено!'); 
+      setTimeout(() => { router.go() }, 2000)}; break;
+
+    case 500: notify('Помилка! ', 'Зверніться до технічної підтримки!'); 
+      break;
+
+    case 422: notify('Помилка!', 'Данні введено невірно! Зверніться до технічної підтримки!');
+      break;
+    
+    default: notify(error?.response?.status || 'Помилка', error?.response?.data?.message || error?.response?.statusText || '')
+  }
+}
+
+function notify(title, text) {
+  Vue.notify({
+    group: 'error',
+    title: title,
+    text: text,
+  })
 }
 
 Vue.prototype.$catchStatus = (error) => {

@@ -194,7 +194,7 @@ export default {
       const agentId = this.$store.state.user.agent.id
 
       axios
-        .get(`/reports/leasing-requests/${agentId}/${this.currentYear}`)
+        .get(`/json/reports/leasing-requests/${agentId}/${this.currentYear}`)
         .then(response => {
           console.log(response)
 

@@ -100,7 +100,7 @@
           </label>
         </v-col>
       </v-row>
-      <v-row v-show="smallerThenMedium" class="pt-8">
+      <v-row v-show="smallerThenMedium" :class="mediumAndDown ? 'small pt-8' : 'pt-8'">
         <v-col class="pb-0">
           <v-select
             v-model="calcObj.leasingObjectType"
@@ -1021,7 +1021,9 @@ export default {
     },
 
     user() {
-      return Object.keys(this.$store.state.user.agent).length > 0
+      return this.$store?.state?.user?.agent 
+        ? Object.keys(this.$store.state.user.agent).length > 0
+        : false
     },
 
     validationRules() {
@@ -1594,7 +1596,7 @@ export default {
       this.brandItems = []
       this.$store.commit('toggleSpinner', true)
 
-      axios.get(`/mark?category=${this.category}`)
+      axios.get(`/json/mark?category=${this.category}`)
         .then(response => {
 
           this.brandItems = response.data
@@ -1618,7 +1620,7 @@ export default {
       this.$store.commit('toggleSpinner', true)
       this.modelLoader = true
 
-      axios.get(`/models?category=${this.category}&mark=${this.calcObj.leasedAssertMark.value}`)
+      axios.get(`/json/models?category=${this.category}&mark=${this.calcObj.leasedAssertMark.value}`)
         .then(response => {
           this.modelItems = response.data
           this.modelLoader = false
@@ -1731,20 +1733,21 @@ export default {
       this.calculationLoader = true
 
       axios
-        .post('/calculate', this.calcObj)
-          .then(response => {
+        .post('/json/calculate', this.calcObj)
+          .then(res => {
+            console.log({CalculationRES: res})
             this.calculationLoader = false
 
-            let data = response.data
+            let data = res.data
 
-            this.$router.push({name: 'Графiки', params: {data: data}})
+            this.$router.push({name: 'Графiки', params: {id: res.data.id, data: data}})
           })
           .catch(error => {
             this.calculationLoader = false
 
-            this.$catchStatus(error.response.status)
+            this.$catchStatus(error.res.status)
 
-            const message = error.response.statusText
+            const message = error.res.statusText
 
             this.notify('Помилка', message, 'error')
           })
@@ -1904,47 +1907,47 @@ export default {
 
     getUserCalculations() {
       axios
-      .get(`/calculation/${this.$router.currentRoute.params.id}`)
-      .then(response => {
-        let data = response.data.request_data
-        let advance = response.data.request_data.advance
+        .get(`/json/calculation/${this.$router.currentRoute.params.id}`)
+        .then(response => {
+          let data = response.data.request_data
+          let advance = response.data.request_data.advance
 
-        this.calcObj.calculation_id = response.data.id
-        this.calcObj.paymentPf = data.paymentPf
+          this.calcObj.calculation_id = response.data.id
+          this.calcObj.paymentPf = data.paymentPf
 
-        if(response.data.request_data.insuranceFranchise){
-          this.insuranceFranchise = this.switchFranchiseFromRequest(
-              data.insuranceFranchise
-          )
-        }
+          if(response.data.request_data.insuranceFranchise){
+            this.insuranceFranchise = this.switchFranchiseFromRequest(
+                data.insuranceFranchise
+            )
+          }
 
-        this.initAdvanceInputValue(advance)
+          this.initAdvanceInputValue(advance)
 
-        this.brandItems.push(data.leasedAssertMark)
-        this.modelItems.push(data.leasedAssertModel)
+          this.brandItems.push(data.leasedAssertMark)
+          this.modelItems.push(data.leasedAssertModel)
 
-        this.insuranceProgram = this.selects.insurancePrograms
-          .find(obj => obj.value === data.insuranceProgram)
+          this.insuranceProgram = this.selects.insurancePrograms
+            .find(obj => obj.value === data.insuranceProgram)
 
-        delete this.calcObj.paymentPf
-        Object.assign(this.calcObj, data)
+          delete this.calcObj.paymentPf
+          Object.assign(this.calcObj, data)
 
-        this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
-        this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
+          this.calcObj.leasingAmount = this.setIndentation(this.calcObj.leasingAmount)
+          this.calcObj.leasedAssertEngine = this.setIndentation(this.calcObj.leasedAssertEngine)
 
-        if(this.calcObj.leasingAmountDkp) {
-          let leasingAm = parseInt(this.calcObj.leasingAmount.replace(/\s/g, ''))
-          let leasingAmDkp = parseInt(this.calcObj.leasingAmountDkp.replace(/\s/g, ''))
-          this.leasingAmountDkp = 100 - (leasingAmDkp / leasingAm * 100)
-        }
-        
-        if(this.calcObj.leasingObjectType.value !== 11) {
-          this.getMarksByType()
-          this.getModelByMark()
+          if(this.calcObj.leasingAmountDkp) {
+            let leasingAm = parseInt(this.calcObj.leasingAmount.replace(/\s/g, ''))
+            let leasingAmDkp = parseInt(this.calcObj.leasingAmountDkp.replace(/\s/g, ''))
+            this.leasingAmountDkp = 100 - (leasingAmDkp / leasingAm * 100)
+          }
+          
+          if(this.calcObj.leasingObjectType.value !== 11) {
+            this.getMarksByType()
+            this.getModelByMark()
 
-        } else this.falsyLeasedAssertModel = this.calcObj.leasedAssertModel.name
+          } else this.falsyLeasedAssertModel = this.calcObj.leasedAssertModel.name
 
-        this.changeActiveClass()
+          this.changeActiveClass()
       })
       .catch(error => {
         this.$catchStatus(error.response.status)
@@ -2164,13 +2167,12 @@ export default {
       this.changeActiveClass()
       this.displayWindowSize()
       this.initAdvanceInputValue()
-      
       return
 
     } else {
       this.calcObj.leasingObjectType = {label: "Легкові та комерційні авто", value: 1}
     }
-
+    this.getUserCalculations()
     this.changeActiveClass()
     this.initFranchiseInput(null, false)
     this.getMarksByType()
@@ -2178,7 +2180,7 @@ export default {
     this.initAdvanceInputValue()
     
     this.calcObj._token = this.getCsrf()
-    this.calcObj.agentId = this.$store.state.user.agent.id
+    // this.calcObj.agentId = this.$store.state.user.agent.id
   },
   
   beforeDestroy() {

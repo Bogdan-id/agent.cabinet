@@ -54,7 +54,7 @@ export default {
     this.loading = true
     this.$store.commit('toggleSpinner', true)
     axios
-      .get('/useful-materials-categories/all/')
+      .get('/json/useful-materials-categories/all/')
       .then(response => {
         this.sections = response.data
         this.$store.commit('toggleSpinner', false)

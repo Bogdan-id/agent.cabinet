@@ -868,7 +868,7 @@ export default {
       if(!this.$v.legalInfo.edrpou.$invalid && !this.edrpouLoading){
         this.edrpouLoading = true
         axios
-          .post(`https://pacific-dawn-21711.herokuapp.com/get-edr-legal/`, {edrpou: this.legalInfo.edrpou})
+          .post(`https://pacific-dawn-21711.herokuapp.com/get-edr-legals/`, {edrpou: this.legalInfo.edrpou})
           .then(response => {
             console.log(response)
             this.edrpouLoading = false
@@ -1317,7 +1317,7 @@ export default {
 
     toDetail(id) {
       let graphs = this.getGraphById(id)[0]
-      this.$router.push({name: 'Графiки ', params: {data: graphs}})
+      this.$router.push({name: 'Графiки ', params: {id: graphs.id, data: graphs}})
     },
     getGraphById(id) {
       return this.$store.state.graphs
@@ -1346,8 +1346,9 @@ export default {
       if(this.userData){
         const agentId = this.$store.state.user.agent.id
         axios
-          .get(`calculations/agent/${agentId}`)
+          .get(`json/calculations/agent/${agentId}`)
           .then(response => {
+            console.log({calculatorResponse: response})
             this.loading = false
             if(response.data.length > 0)  {
               

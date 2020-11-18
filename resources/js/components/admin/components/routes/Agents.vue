@@ -166,6 +166,7 @@ export default {
         .get('/admin/agent/all')
         .then(response => {
           this.createTableData(response.data)
+          console.log({AgentData: response.data})
 
           this.$store.commit('toggleAdminSpinner', false)
 
@@ -185,10 +186,10 @@ export default {
         })
     },
 
-    async createTableData(object) {
+    createTableData(object) {
       let arr = []
 
-      await object.map(val => {
+      object.map(val => {
         let dataObj = {
           initials: `${val.last_name} ${val.first_name} ${val.patronymic}`,
           company_name: val.company_name,
@@ -204,6 +205,7 @@ export default {
       })
 
       this.tabledata = arr
+      console.log({arr: arr})
     },
 
     findAgent(id) {
@@ -211,6 +213,8 @@ export default {
         .find(value => {
           return value.id === id
         })
+      
+      console.log({tableData: data})
 
       if(Object.keys(data).length > 0) {
 
@@ -227,9 +231,10 @@ export default {
 
     getManagers() {
       axios
-        .get('/getManagers')
+        .get('/json/getManagers')
         .then(response => {
           this.managers = response.data
+          console.log({managers: response.data})
         })
         .catch(error => {
 

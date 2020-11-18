@@ -22,12 +22,41 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data: () => ({
-    offer: null
+    offer: null,
+    slides: []
   }),
+  methods: {
+    getAllSlides() {
+      this.slides.splice(0)
+      axios
+        .get('/json/slides')
+        .then(response => {
+          this.slides.push(...response.data)
+          this.getCurrentSlide()
+        })
+        .catch(error => {
+          this.$catchStatus(error.response.status)
+        })
+    },
+    getCurrentSlide() {
+      if(this.slides.length) {
+        this.offer = this.slides.filter(v => {
+          return v.slug === this.$route.params.slug
+        })[0]
+      }
+    }
+  },
   created() {
-    this.offer = this.$route.params
+    if(Object.keys(this.$route.params).length > 1) {
+      this.offer = this.$route.params
+    } else {
+      this.getAllSlides()
+    }
+      
   },
   mounted() {
     document.body.scrollTop = document.documentElement.scrollTop = 0

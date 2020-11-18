@@ -224,7 +224,7 @@ export default {
       console.log('Change notifcation status')
 
       axios
-        .post(`/agent/notifications/checking`, object)
+        .post(`/json/agent/notifications/checking`, object)
         .catch(error => {
           this.$catchStatus(error.response.status)
           console.log(error.response)
@@ -270,8 +270,6 @@ export default {
         card.classList.remove('show-card')
 
         if(this.notificationKeys.length === 0) return
-
-        console.log(this.notificationKeys)
 
         this.changeNotificationsStatus({notifications: this.notificationKeys})
 
@@ -324,7 +322,7 @@ export default {
     },
     getAgentNotifications() {
       axios
-        .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
+        .get(`/json/agent/notifications/${this.$store.state.user.agent.id}`)
         .then(response => {
 
           this.$store.commit('addNotifications', response.data)
@@ -333,7 +331,7 @@ export default {
         .catch(error => {
           this.$catchStatus(error.response.status)
 
-          console.log(error.response)
+          console.log({'Get agent notification err': error.response})
         })
     },
     capitalizeFirstLetter(string) {

@@ -691,7 +691,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import ChartButtons from './ChartDiagramBtn'
+
 export default {
   name: 'Графiки',
   components: {
@@ -785,9 +787,18 @@ export default {
       return 'font-size: 0.8rem; font-weight: 400;'
     }
   },
-  mounted() {
+  async mounted() {
     this.graphData = this.$route.params.data
     console.log(this.graphData)
+
+    if(Object.keys(this.$route.params).length > 1) {
+      this.graphData = this.$route.params.data
+    } else {
+      await axios
+        .get(`/json/calculation/${this.$router.currentRoute.params.id}`)
+          .then(res => this.graphData = res.data)
+    }
+
     let firstGraphFromArray = Object.keys(this.graphData.result_data).filter(val => {
         if(val !== 'requestId') {
           return val

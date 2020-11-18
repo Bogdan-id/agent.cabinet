@@ -65,7 +65,7 @@ const routes = [
             },
           },
           {
-            path: 'Редагувати матерiал',
+            path: 'edit-material',
             name: 'edit-material',
             component: EditMaterials,
             meta: {
@@ -107,7 +107,7 @@ const routes = [
             },
           },
           {
-            path: 'Редагувати новину',
+            path: 'edit-news',
             name: 'edit-news',
             component: EditNews,
             meta: {
@@ -206,9 +206,9 @@ const routes = [
 
   /* Головна */
 	{ 
-		path: '/home', 
+		path: '/', 
     component: DashboardLayout,
-    name: 'Головна',
+    name: 'Dashboard Layout',
     redirect: "/dashboard",
     meta: {
       title: 'Головна'
@@ -216,7 +216,7 @@ const routes = [
 		children: [
       {
         path: '/dashboard',
-        name: 'Головна',
+        name: 'Main',
         component: Dashboard,
         meta: {
           title: 'Головна'
@@ -257,7 +257,7 @@ const routes = [
         },
       },
       {
-        path: '/reporting',
+        path: '/reporting', // /reporting/:report?/:year?
         name: 'reporting',
         component: Reporting,
         meta: {
@@ -318,7 +318,7 @@ const routes = [
             },
             children: [
               {
-                path: 'chart',
+                path: 'chart/:id',
                 name: 'Графiки',
                 component: ChartDiagram,
                 meta: {
@@ -328,7 +328,7 @@ const routes = [
             ]
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             name: 'Редагувати',
             component: NewCalculation,
             meta: {
@@ -336,7 +336,7 @@ const routes = [
             }
           },
           {
-            path: 'charts',
+            path: 'charts/:id',
             name: 'Графiки ', // indentation important
             component: ChartDiagram,
             meta: {

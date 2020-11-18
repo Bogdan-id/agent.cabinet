@@ -456,7 +456,7 @@ export default {
     getMageterialCategories() {
       this.$store.commit('toggleAdminSpinner', true)
       axios
-        .get('/useful-materials-categories/all')
+        .get('/json/useful-materials-categories/all')
         .then(response => {
           this.categories = response.data
           this.$store.commit('toggleAdminSpinner', false)

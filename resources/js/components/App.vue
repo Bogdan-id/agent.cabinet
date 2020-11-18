@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'Головна',
+  name: 'Main',
 
   methods: {
     goToRoute() {

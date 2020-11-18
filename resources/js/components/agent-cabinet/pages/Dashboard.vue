@@ -201,8 +201,8 @@
             small dark 
             color="grey darken-3" 
             :to="{
-              name: 'Графiки', 
-              params: {data: item.calculation, graph: item.graph_type, preview: true}
+              name: 'Графiки ', 
+              params: {data: item.calculation, id: item.calculation_id, graph: item.graph_type, preview: true}
             }">
             {{ switchValue(item.graph_type) }}
           </v-btn>
@@ -442,9 +442,7 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'Головна',
-
-
+  name: 'Main',
   data: () => ({
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
@@ -557,9 +555,9 @@ export default {
       const agentId = this.$store.state.user.agent.id
 
       axios
-        .get(`/leasing-reqeust/agent/${agentId}`)
+        .get(`/json/leasing-reqeust/agent/${agentId}`)
         .then(response => {
-          console.log(response.data)
+          console.log({'User calculations': response.data})
           this.$store.commit('toggleSpinner', false)
 
           if(response.data.length > 0)  {

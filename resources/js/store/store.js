@@ -31,7 +31,6 @@ export default new Vuex.Store({
   mutations: {
     addUserData(state, value) {
       state.user = Object.assign({}, value)
-      console.log(state.user)
     },
 
     addNotifications(state, val) {
@@ -91,7 +90,6 @@ export default new Vuex.Store({
           })
 
         console.log({emptyARNeccessaryFields: emptyFields})
-        console.log(state.user.agent.company_type)
         state.userHasNeccessaryFields = emptyFields.length === 0
         
         return
@@ -108,7 +106,6 @@ export default new Vuex.Store({
     },
 
     toggleSidebar(state, value) {
-      console.log({value: value, sidebar: state.showSidebar})
       state.showSidebar = value || !state.showSidebar
     }
   },
@@ -117,18 +114,18 @@ export default new Vuex.Store({
   actions: {
     getCurrentUser({commit, state}) {
       commit('toggleSpinner', true)
-      axios.get('/getUserAgent')
+      axios.get('/json/getUserAgent')
         .then(response => {
-          console.log({MainResponse: response.data})
+          console.log({'Main response': response.data})
 
           commit('addUserData', response.data)
           commit('addAgentData', response.data.agent.manager)
           commit('toggleSpinner', false)
           commit('checkIfUserHasAllNeccessaryFields')
-          console.log({'mainSTATE': state})
+          console.log({'Main state': state})
         })
         .catch(error => {
-          console.log(error.response)
+          console.log({'User anent response error': error.response})
           
           commit('toggleSpinner', false)
         })

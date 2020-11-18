@@ -109,6 +109,9 @@ export default {
     drawer(val) {
       this.drawerState = val
     },
+    showMenuCommision() {
+      this.$forceUpdate()
+    }
   },
 }
 </script>

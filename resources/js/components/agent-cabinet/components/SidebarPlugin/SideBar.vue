@@ -114,19 +114,22 @@ export default {
   methods: {
     findActiveLink() {
       !this.showMenuCommision
-        ? this.links.forEach((v, i) => { this.clearLinkArr(v, i) })
+        ? this.clearMenu()
         : false
         
       setTimeout(() => {
         this.links.forEach((link, index) => { this.custNav(link, index) })
       }, 0)
     },
+    clearMenu() {
+      this.links.forEach((v, i) => { this.clearLinkArr(v, i) })
+    },
     custNav(link, index) {
       if (link.isActive() && this.cN !== link.name) {
           this.fI = index; this.cN = link.name
       } else if(link.isActive() && this.cN === link.name) {
         this.sI = index; this.activeLinkIndex = index
-        // console.log({firstIndex: this.fI, secondIndex: this.sI})
+        console.log({firstIndex: this.fI, secondIndex: this.sI})
         this.fI + 1 < this.sI && this.sI % 2 === 0
           ? this.activeLinkIndex -= 1 : false
       }
@@ -156,6 +159,7 @@ export default {
   },
   watch: {
     showMenuCommision(val) {
+      if(!val) this.clearMenu()
       this.findActiveLink()
       this.activeLinkIndex = -1
     }

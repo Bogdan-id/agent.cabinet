@@ -559,12 +559,12 @@ export default {
       }
       if(this.dataValid) {
         this.request = true
-        axios.post(`/agent/create`, object)
+        axios.post(`/json/agent/create`, object)
           .then((response) => {
             if(response.status === 200) {
               const message = 'Зараз вас буде перенаправлено до остобистого кабiнету'
               this.simpleNotify('Успiшно', message, 'success')
-              setTimeout(() => { this.$router.go() }, 5000)
+              setTimeout(() => { this.$chLocal('/') }, 5000)
               this.request = false
             } else {
               const message = `Не вдалося зареєструвати. Оновiть сторінку і 
@@ -639,7 +639,7 @@ export default {
       }
     },
     getCurrentUser() {
-      axios.get('/getCurrentUser').then(response => {
+      axios.get('/json/getCurrentUser').then(response => {
         this.knownUserData.first_name = response.data.name
         Object.assign(this.knownUserData, response.data)
         this.searchContact()
@@ -665,7 +665,7 @@ export default {
         _token: this.getCsrf()
       }
       axios
-        .post(`/agent/searchContact`, obj)
+        .post(`/json/agent/searchContact`, obj)
         .then(response => {
           if(Object.keys(response.data > 0)) {
             if(response.data.company && response.data.company.company_type) {

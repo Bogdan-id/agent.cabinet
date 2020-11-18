@@ -442,9 +442,7 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'Головна',
-
-
+  name: 'Main',
   data: () => ({
     tableHeader: [
       { text: 'Клієнт', value: 'initials', align: 'start', sortable: false},
@@ -559,7 +557,7 @@ export default {
       axios
         .get(`/json/leasing-reqeust/agent/${agentId}`)
         .then(response => {
-          console.log(response.data)
+          console.log({'User calculations': response.data})
           this.$store.commit('toggleSpinner', false)
 
           if(response.data.length > 0)  {

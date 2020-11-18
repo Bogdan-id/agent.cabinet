@@ -91,7 +91,7 @@ export default {
       {path: "/leasing-requests", text: "Заявки на лiзинг", icon: "leasingRequestSvg", iconPresent: true},
       {path: "/commission-requests", text: "Заявки на винагороду", icon: "rewardRequestsSvg", iconPresent: true},
       {path: "/useful-materials-categories", text: "Кориснi матерiали", icon: "usefulMaterialsSvg", iconPresent: true},
-      {path: "/reporting/leasing-request-report", text: "Звiтнiсть", icon: 'ChartSvg'} // /reporting/leasing-request-report
+      {path: "/reporting", text: "Звiтнiсть", icon: 'ChartSvg'} // /reporting/leasing-request-report
     ],
   }),
   methods: {

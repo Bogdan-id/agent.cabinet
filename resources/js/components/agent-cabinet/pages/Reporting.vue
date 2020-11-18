@@ -3,10 +3,10 @@
     <v-card-title class="pb-1">
       <v-select
         :items="[
-          {text: 'Звіт заявок на лізинг', value: 'leasingRequestReport'},
-          {text: 'Звiт заявок та виплат', value: 'RequestsAndPaymentsReports'},
+          {text: 'Звіт заявок на лізинг', value: 'leasing-request-report'},
+          {text: 'Звiт заявок та виплат', value: 'requests-and-payments-report'},
         ]"
-        @change="getReport()"
+        @change="getReport($event)"
         item-text="text"
         item-value="value"
         style="max-width: 280px;"
@@ -16,6 +16,7 @@
         dense>
       </v-select>
       <v-spacer></v-spacer>
+      <!-- <v-btn @click="test()">test</v-btn> -->
       <v-select
         @change="callGetLReq()"
         style="max-width: 170px;"
@@ -44,7 +45,7 @@
 
 <script>
 import leasingRequestReport from './LeasingRequestReport'
-import RequestsAndPaymentsReports from './RequestsAndPaymentsReports'
+import RequestsAndPaymentsReport from './RequestsAndPaymentsReport'
 
 import axios from 'axios'
 
@@ -68,21 +69,29 @@ export default {
       {id: '12', name: 'Грудень'},
     ],
 
-    currentReport: 'leasingRequestReport',
+    currentReport: 'leasing-request-report',
     currentYear: null,
     years: []
   }),
 
   components: {
-    RequestsAndPaymentsReports,
+    RequestsAndPaymentsReport,
     leasingRequestReport
   },
 
   methods: {
-    getAvailableYears(url) {
+    // test() {
+    //   this.$router.push({name: 'reporting', params: { year: 2020, report: 'requests-and-payments-report'}})
+    // },
+    getAvailableYears(url, e) {
       axios
         .get(url)
         .then(res => {
+          // console.log({res: res})
+          // this.years.splice(0)
+          // this.years.push(res.data)
+          // console.log(this.years)
+          // this.getCurrentYear(res, e)
           this.getCurrentYear(res)
         })
         .catch(err => {
@@ -91,27 +100,40 @@ export default {
         })
     },
 
-    getReport() {
+    getReport(e) {
+      console.log('getReport')
       let url = null
+      // if(!e) {
+      //   this.currentReport = this.$route.params.report
+      // }
 
-      if (this.currentReport === 'leasingRequestReport') {
-        url = `/reports/years/leasing-requests/${this.$store.state.user.agent.id}`
+      if (this.currentReport === 'leasing-request-report') {
+        url = `/json/reports/years/leasing-requests/${this.$store.state.user.agent.id}`
         this.getAvailableYears(url)
 
-      } else if(this.currentReport === 'RequestsAndPaymentsReports') {
-        url = `/reports/years/agent-commissions/${this.$store.state.user.agent.id}`
-        this.getAvailableYears(url)
+      } else if(this.currentReport === 'requests-and-payments-report') {
+        url = `/json/reports/years/agent-commissions/${this.$store.state.user.agent.id}`
+        this.getAvailableYears(url) 
       }
     },
 
-    getCurrentYear(res) {
+    getCurrentYear(res, e) {
       this.years = res.data.sort((a, b) => a - b)
 
       console.log({years: this.years})
 
-      this.currentYear = this.years[0]
-      console.log({currentYear: this.currentYear})
+      // if(!this.$route.params.year) {
+        this.currentYear = this.years[0]
+      // } else {
+      //   this.currentYear = +this.$route.params.year
+      //   console.log({'this.currentYear': this.currentYear})
+      // }
 
+      // let {report, year} = this.$route.params
+      // if(e) {
+      //   this.$router.push({name: 'reporting', params: {report: this.currentReport, year: this.currentYear} })
+      // }
+      
       this.callGetLReq()
     },
 
@@ -122,8 +144,27 @@ export default {
     }
   },
 
+  computed: {
+    user() {
+      return this.$store?.state?.user?.agent || false
+    }
+  },
+
+  watch: {
+    user(val) {
+      if(val && !this.years.length) {
+        this.getReport()
+      }
+    },
+
+    currentReport(val) {
+      console.log({currentReport: this.currentReport})
+    }
+  },
+
   mounted() {
-    this.getReport()
+    console.log({Params: this.$route.params})
+    this.user ? this.getReport() : false
   }
 }
 

@@ -204,7 +204,7 @@ export default {
         return 
       }
       axios
-        .post('/password/reset/sendSms', { phone: this.number, _token: this.getCsrf() })
+        .post('/json/password/reset/sendSms', { phone: this.number, _token: this.getCsrf() })
         .then(response => {
           this.loading = false
           this.userId = response.data.userId
@@ -231,7 +231,7 @@ export default {
         _token: this.getCsrf()
       }
       axios
-        .post('/password/reset/resetPassword', object)
+        .post('/json/password/reset/resetPassword', object)
         .then(response => {
           if(response.data.status === true) {
             this.$notify({

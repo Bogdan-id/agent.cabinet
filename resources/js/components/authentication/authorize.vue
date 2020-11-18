@@ -138,7 +138,7 @@ export default {
 				.then(response => {
 					// user has registered account and the application is approved
 					if(response.data.agent !== null) {
-            this.$router.push('/home')
+            this.$chLocal('/')
           // Application approved. Fill the form (complete register)
           } else {
             this.$router.push('/finish-register')
@@ -153,8 +153,8 @@ export default {
 			this.request = true
 			axios.post(`/login`, userObj)
 			.then(() => {
-				this.request = false
-				this.$router.go()
+        this.request = false
+        this.$chLocal('/')
 			})
 			.catch(e => {
 				this.request = false

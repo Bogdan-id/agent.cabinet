@@ -38,6 +38,9 @@ export default {
   data:() => ({
       linkHeight: 30.8,
       activeLinkIndex: 0,
+      fI: null,
+      sI: null,
+      cN: null,
       windowWidth: 0,
       isWindows: false,
       hasAutoHeight: false,
@@ -102,16 +105,38 @@ export default {
      * @returns {{transform: string}}
      */
     arrowMovePx() {
-      return this.linkHeight * this.activeLinkIndex;
-    }
+      return this.linkHeight * this.activeLinkIndex
+    },
+    showMenuCommision() {
+      return this.$store?.state?.user?.agent?.show_menu_commission
+    },
   },
   methods: {
     findActiveLink() {
-      this.links.forEach((link, index) => {
-        if (link.isActive()) {
-          this.activeLinkIndex = index
-        }
-      })
+      !this.showMenuCommision
+        ? this.links.forEach((v, i) => { this.clearLinkArr(v, i) })
+        : false
+        
+      setTimeout(() => {
+        this.links.forEach((link, index) => { this.custNav(link, index) })
+      }, 0)
+    },
+    custNav(link, index) {
+      if (link.isActive() && this.cN !== link.name) {
+          this.fI = index; this.cN = link.name
+      } else if(link.isActive() && this.cN === link.name) {
+        this.sI = index; this.activeLinkIndex = index
+        // console.log({firstIndex: this.fI, secondIndex: this.sI})
+        this.fI + 1 < this.sI && this.sI % 2 === 0
+          ? this.activeLinkIndex -= 1 : false
+      }
+    },
+    clearLinkArr(v, i) {
+      let hidedPN = ["Заявки на винагороду"]
+      if(v.name === hidedPN[0]) this.links.splice(i, 1)
+    },
+    materDashbNav(link, index) {
+      if(link.isActive()) this.activeLinkIndex = index
     },
     addLink(link) {
       const index = this.$slots.links.indexOf(link.$vnode)
@@ -128,6 +153,12 @@ export default {
     this.$watch("$route", this.findActiveLink, {
       immediate: true
     })
+  },
+  watch: {
+    showMenuCommision(val) {
+      this.findActiveLink()
+      this.activeLinkIndex = -1
+    }
   }
 }
 </script>

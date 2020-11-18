@@ -271,8 +271,6 @@ export default {
 
         if(this.notificationKeys.length === 0) return
 
-        console.log(this.notificationKeys)
-
         this.changeNotificationsStatus({notifications: this.notificationKeys})
 
         this.notificationKeys = []
@@ -333,7 +331,7 @@ export default {
         .catch(error => {
           this.$catchStatus(error.response.status)
 
-          console.log(error.response)
+          console.log({'Get agent notification err': error.response})
         })
     },
     capitalizeFirstLetter(string) {

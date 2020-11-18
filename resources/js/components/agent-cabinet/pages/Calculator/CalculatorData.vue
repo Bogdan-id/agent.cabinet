@@ -868,7 +868,7 @@ export default {
       if(!this.$v.legalInfo.edrpou.$invalid && !this.edrpouLoading){
         this.edrpouLoading = true
         axios
-          .post(`https://pacific-dawn-21711.herokuapp.com/get-edr-legal/`, {edrpou: this.legalInfo.edrpou})
+          .post(`https://pacific-dawn-21711.herokuapp.com/get-edr-legals/`, {edrpou: this.legalInfo.edrpou})
           .then(response => {
             console.log(response)
             this.edrpouLoading = false

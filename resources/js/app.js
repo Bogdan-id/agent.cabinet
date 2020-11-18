@@ -22,7 +22,7 @@ Vue.use(VueMask)
 Vue.use(Notifications)
 
 var errorHandler401 = (error) => {
-  console.log(error)
+  console.log({'Global error handler': error})
   error === 401
     ? router.go()
     : false
@@ -54,7 +54,6 @@ Vue.prototype.$formatDate = (data) => {
 }
 
 Vue.prototype.$changeLeasingRequestsObj = (obj, state) => {
-  console.log(state)
   return Object.keys(obj)
     .map(val => {
       obj[val].client = obj[val].client_type_id == 2 

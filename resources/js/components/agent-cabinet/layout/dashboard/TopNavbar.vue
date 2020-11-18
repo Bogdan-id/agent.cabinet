@@ -224,7 +224,7 @@ export default {
       console.log('Change notifcation status')
 
       axios
-        .post(`/agent/notifications/checking`, object)
+        .post(`/json/agent/notifications/checking`, object)
         .catch(error => {
           this.$catchStatus(error.response.status)
           console.log(error.response)
@@ -324,7 +324,7 @@ export default {
     },
     getAgentNotifications() {
       axios
-        .get(`/agent/notifications/${this.$store.state.user.agent.id}`)
+        .get(`/json/agent/notifications/${this.$store.state.user.agent.id}`)
         .then(response => {
 
           this.$store.commit('addNotifications', response.data)

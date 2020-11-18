@@ -5,9 +5,7 @@
     class="nav-item"
     v-bind="$attrs"
     tag="li">
-    <a 
-      v-if="!$vuetify.breakpoint.smAndDown" 
-      @click="$setRoute()"
+    <a v-if="!$vuetify.breakpoint.smAndDown" 
       class="nav-link">
       <slot>
         <component :is="icon"></component>
@@ -19,7 +17,6 @@
     <v-tooltip v-if="$vuetify.breakpoint.smAndDown" right color="grey darken-4">
       <template v-slot:activator="{ on }">
         <a 
-          @click="$setRoute()"
           v-on="on" 
           class="nav-link">
           <slot>

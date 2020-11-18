@@ -7,37 +7,12 @@
         <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="leasingRequestSvg"/>
         <sidebar-link v-show="showMenuCommision" to="/commission-requests" name="Заявки на винагороду" icon="rewardRequests"/>
         <sidebar-link to="/useful-materials-categories" name="Кориснi матерiали" icon="usefulMaterialsSvg"/>
-        <sidebar-link to="/reporting" name="Звiтнiсть" icon="fileChart"/>
+        <sidebar-link to="/reporting" params name="Звiтнiсть" icon="fileChart"/>
+        <!-- /reporting/leasing-request-report -->
         <!-- <sidebar-link to="/agent-profile" name="профiль" icon="ti-user"/> -->
         <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->
         <!-- <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/> -->
       </template>
-      <mobile-menu>
-        <li class="nav-item">
-          <a class="nav-link">
-            <i class="ti-panel"></i>
-            <p>Stats</p>
-          </a>
-        </li>
-        <drop-down 
-          class="nav-item"
-          title="5 Notifications"
-          title-classes="nav-link"
-          icon="ti-bell">
-          <a class="dropdown-item">Notification 1</a>
-          <a class="dropdown-item">Notification 2</a>
-          <a class="dropdown-item">Notification 3</a>
-          <a class="dropdown-item">Notification 4</a>
-          <a class="dropdown-item">Another notification</a>
-        </drop-down>
-        <li class="nav-item">
-          <a class="nav-link">
-            <i class="ti-settings"></i>
-            <p>Settings</p>
-          </a>
-        </li>
-        <li class="divider"></li>
-      </mobile-menu>
     </side-bar>
     
     <v-navigation-drawer
@@ -116,7 +91,7 @@ export default {
       {path: "/leasing-requests", text: "Заявки на лiзинг", icon: "leasingRequestSvg", iconPresent: true},
       {path: "/commission-requests", text: "Заявки на винагороду", icon: "rewardRequestsSvg", iconPresent: true},
       {path: "/useful-materials-categories", text: "Кориснi матерiали", icon: "usefulMaterialsSvg", iconPresent: true},
-      {path: "/reporting", text: "Звiтнiсть", icon: 'ChartSvg'}
+      {path: "/reporting/leasing-request-report", text: "Звiтнiсть", icon: 'ChartSvg'} // /reporting/leasing-request-report
     ],
   }),
   methods: {
@@ -144,9 +119,6 @@ export default {
       this.drawerState = val
     },
   },
-  mounted() {
-    console.log({STORE: this.$store.state.agent})
-  }
 }
 </script>
 

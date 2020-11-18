@@ -32,6 +32,11 @@ Vue.prototype.$catchStatus = (error) => {
   return errorHandler401(error)
 }
 
+Vue.prototype.$chLocal = (route) => {
+  let url = new URL (location.href).origin
+  location.replace(url + route)
+}
+
 Vue.prototype.$sortByStatus = (data) => { 
   return data.sort((a, b) => {
     return ('' + b.status).localeCompare(a.status)
@@ -95,13 +100,13 @@ Vue.prototype.$formatSum = (sum) => {
   }
 }
 
-Vue.prototype.$setRoute = () => {
-  setTimeout(() => {
-    const routeName = router.currentRoute.name
+// Vue.prototype.$setRoute = () => {
+//   setTimeout(() => {
+//     const routeName = router.currentRoute.name
 
-    localStorage.setItem('route', routeName)
-  }, 0)
-}
+//     localStorage.setItem('route', routeName)
+//   }, 0)
+// }
 
 Vue.prototype.$toggleAdvance = (object, state) => {
   let temp = object

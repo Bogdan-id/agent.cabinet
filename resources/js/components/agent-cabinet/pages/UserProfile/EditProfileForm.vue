@@ -504,7 +504,7 @@ export default {
       }
       this.loading = true
       axios 
-        .post(`/agent/update/${this.$store.state.user.agent.id}`, object)
+        .post(`/json/agent/update/${this.$store.state.user.agent.id}`, object)
         .then(() => {
           this.$notify({
             group: 'success',

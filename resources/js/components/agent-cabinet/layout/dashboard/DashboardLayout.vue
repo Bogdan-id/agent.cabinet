@@ -5,16 +5,11 @@
         <sidebar-link to="/dashboard" name="Головна" icon="homeSvg"/>
         <sidebar-link to="/calculator" name="Калькулятор лізингу" icon="calculatorSvg"/>
         <sidebar-link to="/leasing-requests" name="Заявки на лiзинг" icon="leasingRequestSvg"/>
-        <sidebar-link v-show="showMenuCommision" to="/commission-requests" name="Заявки на винагороду" icon="rewardRequests"/>
+        <sidebar-link v-if="showMenuCommision" to="/commission-requests" name="Заявки на винагороду" icon="rewardRequests"/>
         <sidebar-link to="/useful-materials-categories" name="Кориснi матерiали" icon="usefulMaterialsSvg"/>
         <sidebar-link to="/reporting" params name="Звiтнiсть" icon="fileChart"/>
-        <!-- /reporting/leasing-request-report -->
-        <!-- <sidebar-link to="/agent-profile" name="профiль" icon="ti-user"/> -->
-        <!-- <sidebar-link to="/maps" name="Map" icon="ti-map"/> -->
-        <!-- <sidebar-link to="/notifications" name="Notifications" icon="ti-bell"/> -->
       </template>
     </side-bar>
-    
     <v-navigation-drawer
       style="z-index: 3000; background: repeating-linear-gradient(60deg, #e2746f, #eb443d 35%, #f31d13 50%);"
       v-show="$vuetify.breakpoint.smAndDown"
@@ -44,7 +39,6 @@
     </v-navigation-drawer>
 
     <div class="main-panel" :style="$vuetify.breakpoint.smAndDown ? 'width: 100%' : ''" id="main-panel">
-      <!-- <v-btn @click="test()">test</v-btn> -->
       <top-navbar @listenDrawer="drawer = $event" :drawer="drawerState"></top-navbar>
       <dashboard-content @click.native="toggleSidebar">
       </dashboard-content>
@@ -91,13 +85,10 @@ export default {
       {path: "/leasing-requests", text: "Заявки на лiзинг", icon: "leasingRequestSvg", iconPresent: true},
       {path: "/commission-requests", text: "Заявки на винагороду", icon: "rewardRequestsSvg", iconPresent: true},
       {path: "/useful-materials-categories", text: "Кориснi матерiали", icon: "usefulMaterialsSvg", iconPresent: true},
-      {path: "/reporting", text: "Звiтнiсть", icon: 'ChartSvg'} // /reporting/leasing-request-report
+      {path: "/reporting", text: "Звiтнiсть", icon: 'ChartSvg'}
     ],
   }),
   methods: {
-    // test() {
-    //   this.showAgreement = true
-    // },
     toggleSidebar() {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);

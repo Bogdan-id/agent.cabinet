@@ -20,7 +20,7 @@ import ForgotPassword from '../components/authentication/ForgotPassword'
 import Rejected from '../components/authentication/Rejected.vue'
 
 /* Dashboard components */
-import DashboardLayout from "../components/agent-cabinet/layout/dashboard/DashboardLayout"
+import DashboardLayout from "../components/agent-cabinet/layout/DashboardLayout"
 import DashboardNews from '../components/agent-cabinet/pages/News/DashboardNews'
 import DashboardCurrentNews from "../components/agent-cabinet/pages/News/DashboardCurrentNews"
 import Dashboard from "../components/agent-cabinet/pages/Dashboard"

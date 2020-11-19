@@ -170,7 +170,7 @@
       </div>
       <v-row :class="mediumAndDown ? 'small' : ''">
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
-          <v-select
+          <v-autocomplete
             @change="getModelByMark()"
             v-model="calcObj.leasedAssertMark"
             :items="brandItems"
@@ -190,14 +190,14 @@
             :readonly="calcObj.leasingObjectType.value === 11"
             color="grey darken-2"
             outlined :dense="mediumAndDown">
-          </v-select>
+          </v-autocomplete>
         </v-col>
 
         <v-col 
           v-if="calcObj.leasingObjectType.value !== 11" 
           cols="12" md="3" sm="6" xs="12"  
           :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
-          <v-select
+          <v-autocomplete
             v-model="calcObj.leasedAssertModel"
             :error-messages="leasedAssertModelErr"
             :items="modelItems"
@@ -214,7 +214,7 @@
             :disabled="calcObj.leasedAssertMark === null"
             color="grey darken-2"
             outlined :dense="mediumAndDown">
-          </v-select>
+          </v-autocomplete>
         </v-col>
 
         <v-col

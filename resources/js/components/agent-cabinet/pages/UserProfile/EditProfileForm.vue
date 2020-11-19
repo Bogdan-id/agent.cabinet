@@ -462,12 +462,12 @@ export default {
         card_number: this.$store.state.user.agent && this.$store.state.user.agent.card_number ? this.cc_format(this.$store.state.user.agent.card_number) : null,
         purpose_of_payment: this.$store.state.user.agent.purpose_of_payment,
         iban: this.$store.state.user.agent.iban,
-        show_menu_commission: this.agent?.show_menu_commission,
+        show_menu_commission: this.agent.show_menu_commission,
         _token: this.getCsrf()
       }
       Object.assign(this.user, user)
       for (let value in this.user) {
-        if(!this.user[value]) {
+        if(!this.user[value] && this.user[value] !== 0) {
           this.user[value] = ''
         }
       }
@@ -498,7 +498,6 @@ export default {
       let object = {}
       for (let val in this.user) {
         if(this.user[val] || this.user[val] === 0) {
-          console.log(this.user[val])
           object[val] = this.user[val]
         }
       }
@@ -532,6 +531,7 @@ export default {
     },
     trimExceededLength(elId, maxLength, callback) {
       let el = document.getElementById(elId)
+      if(!el) return
       setTimeout(() => {
         let event = new Event('input', {bubbles: true})
         if(el.value && typeof callback === "function") {
@@ -617,7 +617,7 @@ export default {
   },
   computed: {
     agent() {
-      return this.$store?.state?.user?.agent || null
+      return this.$store.state.user.agent
     },
     last_nameErr() {
       const errors = []
@@ -757,14 +757,11 @@ export default {
         passport_number:
           (() => { 
           if(this.user.passport_type_id === 1 && this.showPassportEditField) {
-            // паспорт старого образца
             return {
               required,
               minLength: minLength(6),
-              // maxLength: maxLength(14)
             }
           } else if(this.user.passport_type_id === 2 && this.showPassportEditField) {
-            // id карточка
             return {
               required,
               minLength: minLength(9),
@@ -778,7 +775,6 @@ export default {
             } else return true
           })(),
         },
-        // birth: { required },
         card_number: { 
           lunValid: ((array) => {
             return number => {
@@ -793,7 +789,6 @@ export default {
               return sum % 10 === 0 && sum > 0;
             } 
           })([0, 2, 4, 6, 8, 1, 3, 5, 7, 9]) },
-        // purpose_of_payment: { required },
         iban: { 
           isValidIban: (input) => {
             if(!input || !this.showPassportEditField) return true
@@ -827,31 +822,6 @@ export default {
             }
           }
         },
-        // leasingCurrencyCourse: (() => { 
-        //   if(this.hasForeignCurrency) {
-        //     return null
-        //   } else return true
-        // })(),
-        // customStepOptionFirst: (() => {
-        //   if (this.hasIrregular && this.calcObj.customGraphicType === 3){
-        //     return null
-        //   } else return true
-        // })(),
-        // customStepOptionMiddle: (() => {
-        //   if (this.hasIrregular && this.calcObj.customGraphicType === 3){
-        //     return null
-        //   } else return true
-        // })(),
-        // customUniversalOption: (() => { 
-        //   if(this.hasIrregular && this.calcObj.customGraphicType === 5) {
-        //     return null
-        //   } else return true
-        // })(),
-        // leasingAmountDkp: (() => { 
-        //   if(this.discountPrice) {
-        //     return null
-        //   } else return true
-        // })(),
       }
     },
     userEditPassword() {
@@ -881,9 +851,6 @@ export default {
     },
   },
   watch: {
-    agent(v) {
-      console.log({AGENT: v})
-    },
     'user.show_menu_commission': function(v) {
       console.log(v)
     },
@@ -904,7 +871,7 @@ export default {
   mounted() {
     this.assignObject()
     this.checkIfUserHasRequisiteData()
-    delete this.user.agent
+    Object.assign(this.user, this.agent.show_menu_commission)
   },
 }
 </script>

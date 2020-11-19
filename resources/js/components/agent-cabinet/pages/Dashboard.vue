@@ -1192,7 +1192,6 @@ export default {
   cursor: pointer;
 
   &:hover {
-    font-size: 1.3rem;
     color: #e3706a;
   }
 }

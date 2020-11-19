@@ -247,7 +247,7 @@
         :headers="tableHeader"
         :items="$store.state.leasingRequests"
         item-key="updated_at"
-        :custom-sort="customSort"
+        :custom-sort="$sortByDate"
         :items-per-page="10"
         :class="`elevation-1 leasing-application-table ${$vuetify.breakpoint.xs ? 'small' : ''}`">
         <template v-slot:item.graph="{ item }">

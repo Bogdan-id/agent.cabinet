@@ -759,7 +759,7 @@ export default {
       let formData = new FormData()
       formData.append('doc', document)
       axios
-        .post('/leasing-reqeust/document/upload', formData, {
+        .post('/json/leasing-reqeust/document/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -780,7 +780,7 @@ export default {
       formData.append('doc', document[i])
       
       return axios
-        .post('/leasing-reqeust/document/upload', formData, {
+        .post('/json/leasing-reqeust/document/upload', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -931,7 +931,7 @@ export default {
     sendData(dataToSave) {
       this.loading = true
       axios
-        .post('/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
+        .post('/json/calculation/getPdf', dataToSave, this.formatToSave === 'pdf' ? { responseType: 'blob' } : false)
         .then(response => {
           if(this.formatToSave === 'pdf') {
             let index = response.headers['content-disposition'].indexOf('"') + 1
@@ -1016,7 +1016,7 @@ export default {
       this.loading = true
       let object = this.object()
       axios
-        .post('/leasing-reqeust/create', this.requestObj(object))
+        .post('/json/leasing-reqeust/create', this.requestObj(object))
         .then(() => {
           this.$notify({
             group: 'success',

@@ -1,4 +1,3 @@
-// require('bootstrap')
 import '@babel/polyfill';
 
 window.Vue = require('vue')
@@ -133,14 +132,6 @@ Vue.prototype.$formatSum = (sum) => {
       .replace(/,/g, ' ')
   }
 }
-
-// Vue.prototype.$setRoute = () => {
-//   setTimeout(() => {
-//     const routeName = router.currentRoute.name
-
-//     localStorage.setItem('route', routeName)
-//   }, 0)
-// }
 
 Vue.prototype.$toggleAdvance = (object, state) => {
   let temp = object

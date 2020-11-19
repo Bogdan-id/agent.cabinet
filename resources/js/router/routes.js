@@ -38,6 +38,8 @@ import UserNotifications from '../components/agent-cabinet/pages/UserNotificatio
 import DashboardSlider from '../components/agent-cabinet/pages/DashboardSlider'
 import Reporting from '../components/agent-cabinet/pages/Reporting'
 
+import NotFoundPage from '../components/agent-cabinet/pages/NotFoundPage.vue'
+
 const routes = [
   { 
     // Admin
@@ -150,6 +152,8 @@ const routes = [
       }
     ]
   }, 
+
+  {path: '*', component: NotFoundPage},
   //Authentication (dashboard)
 	{ 
     path: '/login', 

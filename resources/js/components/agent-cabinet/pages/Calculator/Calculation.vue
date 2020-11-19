@@ -170,8 +170,7 @@
       </div>
       <v-row :class="mediumAndDown ? 'small' : ''">
         <v-col cols="12" md="3" sm="6" xs="12"  :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
-          <v-autocomplete
-            @click.stop
+          <v-select
             @change="getModelByMark()"
             v-model="calcObj.leasedAssertMark"
             :items="brandItems"
@@ -191,15 +190,14 @@
             :readonly="calcObj.leasingObjectType.value === 11"
             color="grey darken-2"
             outlined :dense="mediumAndDown">
-          </v-autocomplete>
+          </v-select>
         </v-col>
 
         <v-col 
           v-if="calcObj.leasingObjectType.value !== 11" 
           cols="12" md="3" sm="6" xs="12"  
           :class="`pb-0 ${mediumAndDown ? 'pt-2' : ''}`">
-          <v-autocomplete
-            @click.stop
+          <v-select
             v-model="calcObj.leasedAssertModel"
             :error-messages="leasedAssertModelErr"
             :items="modelItems"
@@ -216,7 +214,7 @@
             :disabled="calcObj.leasedAssertMark === null"
             color="grey darken-2"
             outlined :dense="mediumAndDown">
-          </v-autocomplete>
+          </v-select>
         </v-col>
 
         <v-col
@@ -358,8 +356,8 @@
             @input="
               maskToModel('discount-price', 15, 0, 'input');
               keepOnlyDigits('discount-price');
-              $v.calcObj.leasingAmountDkp.$touch();"
-            @blur="$v.calcObj.leasingAmountDkp.$touch()"
+              $v.leasingAmountDkp.$touch();"
+            @blur="$v.leasingAmountDkp.$touch()"
             v-model="leasingAmountDkp"
             background-color="white"
             label="знижка (%)"
@@ -954,6 +952,11 @@ export default {
   validations() {
     return {
       calcObj: this.validationRules,
+      leasingAmountDkp: (() => { 
+        if(this.discountPrice) {
+          return { required }
+        } else return true
+      })(),
     }
   },
 
@@ -1070,11 +1073,6 @@ export default {
             return { required }
           } else return true
         })(),
-        leasingAmountDkp: (() => { 
-          if(this.discountPrice) {
-            return { required }
-          } else return true
-        })(),
         graphType: {
           hasIndex: (v) => {
             if(v === null) return false
@@ -1171,7 +1169,7 @@ export default {
     },
 
     leasingAmountDkpErr() {
-      if (!this.$v.calcObj.leasingAmountDkp.$error) return
+      if (!this.$v.leasingAmountDkp.$error) return
       return this.commonErr
     },
 
@@ -1275,7 +1273,7 @@ export default {
     },
 
     discountPriceErr() {
-      if (!this.$v.calcObj.leasingAmountDkp.$error) return
+      if (!this.$v.leasingAmountDkp.$error) return
       return this.commonErr
     },
 
@@ -1686,7 +1684,7 @@ export default {
     },
 
     submit() {
-      console.log({finalObj: this.calcObj, validation: this.$v})
+      console.log({finalObj: this.calcObj, validation: this.$v, discountPrice: this.discountPrice})
 
       this.checkIfHasIrregular()
       this.checkIfHasCurrency()
@@ -1890,6 +1888,7 @@ export default {
       axios
         .get(`/json/calculation/${this.$router.currentRoute.params.id}`)
         .then(response => {
+          console.log({getUserCalculations: response})
           let data = response.data.request_data
           let advance = response.data.request_data.advance
 
@@ -1957,7 +1956,7 @@ export default {
   watch: {
     formForFinDoc(val) {console.log(val)},
     leasingAmountDkp() {
-      this.calcObj.leasingAmountDkp = this.toSum()
+      Object.assign(this.calcObj, {leasingAmountDkp: this.toSum()})
     },
     'calcObj.leasingAmountDkp': function (val) {
       if(val) this.discountPrice = true
@@ -2119,12 +2118,8 @@ export default {
       this.changeActiveClass()
     },
 
-    user() {
-      if(this.user) {
-        this.calcObj.agentId = this.$store.state.user.agent.id
-      } else {
-        return
-      }
+    user(val) {
+      if(val) this.calcObj.agentId = this.$store.state.user.agent.id
     },
   },
 
@@ -2134,8 +2129,8 @@ export default {
 
   mounted() {
     this.getDollarRate()
-    window.addEventListener("click", this.closeAutocompletes)
-    if(this.$router.currentRoute.params.edit === true) {
+    // window.addEventListener("click", this.closeAutocompletes)
+    if(this.$router.currentRoute.params.edit) {
       this.getUserCalculations()
       this.changeActiveClass()
       this.displayWindowSize()
@@ -2145,7 +2140,7 @@ export default {
     } else {
       this.calcObj.leasingObjectType = {label: "Легкові та комерційні авто", value: 1}
     }
-    this.getUserCalculations()
+    this.$route.params.id ? this.getUserCalculations() : false
     this.changeActiveClass()
     this.initFranchiseInput(null, false)
     this.getMarksByType()

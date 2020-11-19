@@ -2119,7 +2119,7 @@ export default {
     },
 
     user(val) {
-      if(val) this.calcObj.agentId = this.$store.state.user.agent.id
+      if(val) Object.assign(this.calcObj, {agentId: this.$store.state.user.agent.id})
     },
   },
 
@@ -2148,7 +2148,7 @@ export default {
     this.initAdvanceInputValue()
     
     this.calcObj._token = this.getCsrf()
-    // this.calcObj.agentId = this.$store.state.user.agent.id
+    Object.assign(this.calcObj, {agentId: this.$store.state.user.agent.id})
   },
   
   beforeDestroy() {

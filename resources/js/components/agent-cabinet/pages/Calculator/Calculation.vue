@@ -1347,10 +1347,10 @@ export default {
       if(!this.leasingAmountDkp) return
 
       let leasingAmount = parseInt(this.calcObj.leasingAmount.replace(/\s/g, ''))
-      let leasingAmountDkp = parseInt(this.leasingAmountDkp)
+      let leasingAmountDkp = parseFloat(this.leasingAmountDkp)
 
       return this.$formatSum(
-        (leasingAmount - ((leasingAmount / 100) * leasingAmountDkp)).toFixed()
+        (leasingAmount - ((leasingAmount / 100) * leasingAmountDkp)).toFixed(1)
       )
     },
 
@@ -1358,15 +1358,18 @@ export default {
       let el = document.getElementById(id)
       let e = new Event('input', {bubbles: true})
 
-      let val = parseInt(el.value
+      let val = parseFloat(el.value
         .toString()
-        .replace(/[^\d]/g, ''))
+        .replace(/\.\./g, '.')
+        .replace(/[^\d.]/g, ''))
+      
+      if(val % 1 !== 0) val = parseFloat(val.toFixed(1))
 
       let isNan = Number.isNaN(+el.value)
       if(el.value && val !== +el.value && !isNan) {
+        el.value = val
         this.switchModel(id, val)
         el.dispatchEvent(e)
-        el.value = val
       } else if(isNan && !Number.isNaN(el.value)) {
         this.switchModel(id, val)
         el.value = ""
@@ -1918,7 +1921,7 @@ export default {
           if(this.calcObj.leasingAmountDkp) {
             let leasingAm = parseInt(this.calcObj.leasingAmount.replace(/\s/g, ''))
             let leasingAmDkp = parseInt(this.calcObj.leasingAmountDkp.replace(/\s/g, ''))
-            this.leasingAmountDkp = 100 - (leasingAmDkp / leasingAm * 100)
+            this.leasingAmountDkp = (100 - (leasingAmDkp / leasingAm * 100)).toFixed(1)
           }
           
           if(this.calcObj.leasingObjectType.value !== 11) {

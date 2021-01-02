@@ -23,7 +23,6 @@ Vue.use(Notifications)
 const baseURL = new URL (location.href).origin
 
 function errorHandler401(error) {
-  console.log({globalErrHandler: error})
   if(error?.response?.status === 404) {
     let pathName = new URL (location.href).pathname
     pathName.includes('admin')

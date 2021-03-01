@@ -598,7 +598,7 @@ export default {
       axios
         .get('/json/news')
         .then(response => {
-          this.news = response.data
+          this.news = response.data.reverse()
         })
         .catch(error => this.$catchStatus(error))
     }

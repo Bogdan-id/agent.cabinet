@@ -326,7 +326,9 @@
               </label>
                 <div class="collapsible-content">
                   <div class="content-inner">
-                    <div class="document-list" v-if="clientTypeId === 2">
+                    <div 
+                      class="document-list" 
+                      v-if="clientTypeId === 2">
                       <div 
                         v-for="(item, key) in legalDocs"
                         :key="key">
@@ -915,7 +917,7 @@ export default {
     uploadDoc(document, selector) {
       let formData = new FormData()
       formData.append('doc', document)
-      axios
+      this.axios
         .post('/json/leasing-reqeust/document/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -927,7 +929,6 @@ export default {
           this.documentUrls[selector].push({url: response.data.url, text: document.name, size: document.size})
 
           this.documentUrls = Object.assign({}, this.documentUrls)
-          console.log(this.documentUrls)
         })
         .catch(error => this.$catchStatus(error))
     },

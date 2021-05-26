@@ -20,7 +20,6 @@
         color="black"
         :headers="tableHeader"
         :items="tabledata"
-        :hide-default-footer="true"
         class="elevation-1 mr-3 ml-3">
         <template v-slot:item.created_at="{ item }">
           {{ $formatDate(item.created_at) }}
